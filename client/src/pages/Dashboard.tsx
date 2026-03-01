@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { ArrowRight, AlertCircle, BookOpen, Clock, Lock } from "lucide-react";
+import { Seo } from "../components/shared/Seo";
 
 export default function Dashboard() {
   const currentScore = 114;
@@ -14,6 +15,10 @@ export default function Dashboard() {
 
   return (
     <div className="container mx-auto max-w-6xl px-4 py-8 space-y-8">
+      <Seo 
+        title="Dashboard | 11+ Standard" 
+        description="View your child's 11+ readiness forecast, pace analysis, and priority focus areas." 
+      />
       
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>

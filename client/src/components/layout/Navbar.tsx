@@ -34,7 +34,10 @@ export default function Navbar() {
           ) : (
             <div className="flex items-center gap-6">
               <Link href="/app"><a className="text-sm font-medium text-primary transition-colors">Dashboard</a></Link>
-              <Link href="/app/practice"><a className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">Practice Bank</a></Link>
+              <Link href="/app/diagnostic"><a className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors hidden sm:block">Diagnostics</a></Link>
+              <Link href="/app/practice"><a className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">Practice</a></Link>
+              <Link href="/app/progress"><a className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors hidden md:block">Progress</a></Link>
+              <Link href="/app/account"><a className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors hidden md:block">Account</a></Link>
               <Button variant="outline" size="sm" asChild>
                 <Link href="/">Sign Out</Link>
               </Button>
