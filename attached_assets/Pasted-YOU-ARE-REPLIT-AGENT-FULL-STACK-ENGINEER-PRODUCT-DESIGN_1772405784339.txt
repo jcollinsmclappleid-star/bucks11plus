@@ -1,0 +1,716 @@
+YOU ARE REPLIT AGENT (FULL-STACK ENGINEER + PRODUCT DESIGNER + SEO IMPLEMENTER).
+Build an end-to-end, production-quality, premium web platform branded as:
+
+11+ Standard
+
+Tagline:
+“Bucks 11+ Readiness, Forecast & Targeted Practice”
+
+This is a parent-driven readiness assessment platform for Buckinghamshire’s 11+.
+It must feel like a professional school assessment portal (institutional authority), be highly visual (not text heavy), and be optimised for high conversion.
+
+DO NOT market it as “AI tutoring” or “AI-powered” in user-facing copy.
+AI may be used internally for content ops, but externally present as a structured readiness assessment system.
+
+===========================================================
+A) PRODUCT STRATEGY (NON-NEGOTIABLE)
+===========================================================
+
+Core loop:
+Landing → Start Free Diagnostic → Signup → Mandatory Readiness Profile (6 Qs) → Mini Diagnostic (10–12 Qs) → Visual Results (Band + Range + Gap to 121 + Top 3 Focus) → Upgrade (Monthly or 12-week pack) → Full Diagnostics + Practice Bank + PDF Reports + Progress → Retention via visible “gap closing”.
+
+Primary parent questions answered within 10 seconds:
+1) Are we on track for 121?
+2) How far off are we?
+3) What is holding us back?
+4) What should we do next (exactly)?
+
+Conversion psychology:
+- Use controlled tension: “Gap to 121”.
+- Provide hope/control: “If X improves by Y%, range shifts to…”
+- Provide authority: professional design + transparency pages.
+- Avoid manipulative scarcity; use timeline context (typical test window).
+
+===========================================================
+B) TECH STACK (REQUIRED)
+===========================================================
+
+- Next.js 14+ App Router
+- TypeScript
+- Tailwind CSS
+- Supabase: Postgres + Auth + RLS
+- Stripe Checkout: Monthly subscription + 12-week pack one-time purchase
+- Stripe webhook route to update entitlements
+- PDF generation: @react-pdf/renderer
+- Minimal internal analytics: events table (no external trackers required)
+
+Target deployment:
+- Must run in Replit.
+- Keep deployment-friendly for later Vercel migration (SSR pages, no Replit-specific storage assumptions).
+
+===========================================================
+C) BRAND + DESIGN SYSTEM (PREMIUM)
+===========================================================
+
+Brand name:
+11+ Standard
+
+Tone:
+Professional, measured, calm authority.
+
+Design rules:
+- Large whitespace, clean grid, strong typographic hierarchy
+- No gimmicks, no bright gradients, no celebratory animations
+- Colour-coded readiness bands (muted red / confident amber / calm green)
+- Visual-first: gauge, tiles, heat map, trend line
+
+Create brand assets in /public/brand as SVG:
+1) Wordmark: “11+ Standard”
+2) Stacked wordmark
+3) Icon seal mark (circle seal / standard mark motif)
+4) Favicon SVG
+
+Logo style guidance:
+- Institutional/assessment vibe
+- Simple seal mark: circle + minimal radial ticks + subtle target marker (like a benchmark seal)
+- Works in monochrome + colour
+- No childish shapes
+
+Typography:
+- Heading font: elegant serif (e.g., Libre Baskerville)
+- Body font: Inter (or similar)
+
+Tailwind tokens / CSS variables (define in globals.css):
+--brand-primary (deep navy)
+--brand-amber
+--brand-green
+--brand-red
+--neutral-0..900
+
+Components must use tokens, not hard-coded colours.
+
+===========================================================
+D) ROUTING / INFORMATION ARCHITECTURE
+===========================================================
+
+PUBLIC:
+- / (Landing)
+- /pricing
+- /how-it-works
+- /how-forecast-works (transparency + methodology)
+- /parent-hub (SEO hub index)
+- /parent-hub/[slug] (SEO article)
+- /about
+- /privacy
+- /safeguarding
+- /terms
+
+AUTH:
+- /sign-in
+- /sign-up
+
+APP (auth required):
+- /app (Dashboard)
+- /app/onboarding (Readiness profile questionnaire – mandatory on first login)
+- /app/diagnostic (Choose mini vs paid diagnostics)
+- /app/diagnostic/[mockId]/start
+- /app/test/[attemptId] (Test runner)
+- /app/results/[attemptId] (Results + upgrade prompts)
+- /app/practice (Recommended + all drills)
+- /app/practice/[drillId]/start
+- /app/progress (Trends + history)
+- /app/report/[attemptId] (PDF download)
+- /app/account (Billing)
+
+ADMIN (ADMIN_EMAIL only):
+- /admin
+- /admin/questions
+- /admin/qa
+- /admin/mocks
+- /admin/drills
+- /admin/articles
+- /admin/metrics
+
+===========================================================
+E) DATABASE SCHEMA (SUPABASE POSTGRES + RLS)
+===========================================================
+
+Provide SQL migrations in /supabase/migrations with:
+- extensions
+- tables
+- indexes
+- RLS enablement
+- policies
+
+Tables:
+
+1) profiles
+- id uuid pk references auth.users(id) on delete cascade
+- created_at timestamptz default now()
+- parent_name text null
+- child_initials text null
+- year_group text null (Year 4/5/6)
+- has_done_mock boolean default false
+- weekly_practice_hours text null (0-1,1-3,3+)
+- hardest_area text null (VR/NVR/Maths/Unsure)
+- targeting_bucks boolean default true
+- test_window text null (Sep/Oct/Unsure)
+- marketing_opt_in boolean default false
+
+2) entitlements
+- user_id uuid pk references auth.users(id) on delete cascade
+- tier text check in ('free','monthly','pack12')
+- status text check in ('active','inactive','expired')
+- expires_at timestamptz null
+- stripe_customer_id text null
+- stripe_subscription_id text null
+- updated_at timestamptz default now()
+
+3) questions
+- id uuid pk default gen_random_uuid()
+- section text check in ('VR','NVR','MATHS')
+- skill_id int check between 1 and 18
+- difficulty int check between 1 and 5
+- prompt text not null
+- options jsonb not null (array length 4-6)
+- correct_index int not null
+- explanation text not null
+- est_time_seconds int not null
+- tags text[] default '{}'
+- qa_status text check in ('draft','review','approved','rejected') default 'draft'
+- created_at timestamptz default now()
+
+4) mocks
+- id uuid pk default gen_random_uuid()
+- name text not null
+- region text default 'Bucks'
+- kind text check in ('mini','diagnostic','mock')
+- total_time_seconds int not null
+- structure jsonb not null
+  where structure = [
+    { section:'VR', time_limit_seconds: X, question_count: Y, skill_ids:[...], difficulty_mix:{1:0.3,2:0.3,3:0.25,4:0.1,5:0.05} },
+    { section:'NVR', ... },
+    { section:'MATHS', ... }
+  ]
+- published boolean default false
+- created_at timestamptz default now()
+
+5) drills
+- id uuid pk default gen_random_uuid()
+- name text not null
+- section text check in ('VR','NVR','MATHS')
+- skill_id int check between 1 and 18
+- difficulty_min int
+- difficulty_max int
+- question_count int
+- time_limit_seconds int
+- published boolean default false
+- created_at timestamptz default now()
+
+6) attempts
+- id uuid pk default gen_random_uuid()
+- user_id uuid references auth.users(id) on delete cascade
+- kind text check in ('mini','diagnostic','mock','drill')
+- mock_id uuid null references mocks(id)
+- drill_id uuid null references drills(id)
+- started_at timestamptz default now()
+- submitted_at timestamptz null
+- time_limit_seconds int not null
+- score_raw int default 0
+- score_total int default 0
+- accuracy numeric(5,2) default 0
+- metrics jsonb default '{}'::jsonb
+- forecast jsonb default '{}'::jsonb
+- created_at timestamptz default now()
+
+7) attempt_answers
+- id uuid pk default gen_random_uuid()
+- attempt_id uuid references attempts(id) on delete cascade
+- question_id uuid references questions(id)
+- selected_index int null
+- is_correct boolean null
+- time_spent_seconds int default 0
+
+8) events
+- id uuid pk default gen_random_uuid()
+- user_id uuid null
+- event_name text not null
+- props jsonb default '{}'::jsonb
+- created_at timestamptz default now()
+
+9) seo_articles
+- slug text pk
+- title text
+- description text
+- content_md text
+- published boolean default false
+- created_at timestamptz default now()
+
+Indexes:
+- attempts(user_id, created_at desc)
+- attempt_answers(attempt_id)
+- questions(skill_id, difficulty)
+- seo_articles(published)
+
+RLS policies:
+- profiles: user can select/update own profile
+- entitlements: user can select own entitlements
+- attempts/attempt_answers: user can select/insert/update own
+- events: user can insert/select own (or anonymous insert allowed without user_id)
+- questions: public select where qa_status='approved'
+- mocks/drills: public select where published=true
+- seo_articles: public select where published=true
+
+Admin writes:
+For writes to questions/mocks/drills/articles, enforce via server-side API routes verifying auth user email == ADMIN_EMAIL. Do not expose direct client writes to these tables.
+
+===========================================================
+F) TAXONOMY (FULL GL COVERAGE FOR BUCKS)
+===========================================================
+
+Implement constants file /lib/taxonomy.ts:
+
+Skill list (id, section, name):
+VR:
+1 Codes
+2 Letter Sequences
+3 Word Sequences
+4 Vocabulary Relationships
+5 Word Structure & Construction
+6 Verbal Logic
+
+NVR:
+7 Pattern Sequences
+8 Rotation & Reflection
+9 Shape Transformation
+10 Symmetry & Spatial Orientation
+11 Classification & Odd-One-Out
+
+Maths:
+12 Arithmetic Fluency
+13 Fractions & Decimals
+14 Ratio & Proportion
+15 Percentages
+16 Multi-step Word Problems
+17 Number Patterns & Intro Algebra
+18 Data Interpretation
+
+Also define section display order, and “expected_time_per_question” defaults per section to support pace penalties.
+
+===========================================================
+G) ONBOARDING FLOW (MANDATORY FOR CONVERSION)
+===========================================================
+
+When user logs in first time:
+- Redirect to /app/onboarding if profiles.year_group is null.
+
+Onboarding UI:
+- 6 questions, one per screen, progress bar.
+Questions:
+1) Year group
+2) Has completed full mock before? (Y/N)
+3) Weekly practice hours (0–1 / 1–3 / 3+)
+4) Hardest area (VR/NVR/Maths/Unsure)
+5) Targeting Bucks grammar? (Y/N)
+6) Expected test window (Sep/Oct/Unsure)
+
+After last question:
+- Show “Preparing your tailored assessment…” loading state 2–4 seconds.
+- Save profile answers.
+
+===========================================================
+H) MINI DIAGNOSTIC (FREE LEAD MAGNET)
+===========================================================
+
+Mini diagnostic mock:
+- 10–12 questions mixed across VR/NVR/Maths
+- total time ~ 12 minutes
+- show “Takes 12 minutes • Instant results” on start screen
+
+Free results for mini diagnostic:
+- Show gauge + band + range + gap to 121 (core emotional trigger)
+- Show only TOP 1 focus area (teaser)
+- Practice drills locked except a small sample (5 questions) for one skill
+- PDF download locked
+- Likelihood band locked (available only for paid full diagnostic)
+
+===========================================================
+I) PAID DIAGNOSTICS + MOCKS
+===========================================================
+
+Provide 2 published paid diagnostics initially (can be shorter mocks):
+- Diagnostic A: 35–45 questions, timed
+- Diagnostic B: 35–45 questions, timed
+Plus optionally one longer “Mock 1” (50–60 questions) if seed bank allows.
+
+Mocks defined via mocks.structure JSON so future additions don’t require code changes.
+
+===========================================================
+J) TEST RUNNER UI (PREMIUM + CLEAN)
+===========================================================
+
+Test runner requirements:
+- Minimal question card
+- Options list with clear selection state
+- Next/Back buttons
+- Section indicator
+- Timer (subtle)
+- Autosave answer selection each time
+- Track time spent per question:
+  start timestamp when question shown
+  accumulate when moving away or submitting
+
+No distractions, no heavy text.
+
+===========================================================
+K) ANALYTICS + FORECAST ENGINE (HIGH-CONVERSION + CREDIBLE)
+===========================================================
+
+Compute on submit (server-side in /lib/forecast):
+
+Required computed metrics:
+1) score_total (# questions)
+2) score_raw (# correct)
+3) accuracy_total = score_raw/score_total
+4) accuracy_by_section
+5) accuracy_by_skill
+6) avg_time_per_q overall + by section + by skill
+7) completion_ratio (answered/total)
+8) easy_miss_count (# incorrect where difficulty<=2)
+9) volatility_index:
+   - stddev(time_spent_seconds)
+   - correctness streak volatility (optional)
+10) pace_flags per section/skill (slow if avg_time > expected)
+
+FORECAST MODEL V1 (implement exactly; keep transparent):
+
+Constants:
+- BENCHMARK = 121
+- expected_time_per_q:
+  VR=35s, NVR=35s, Maths=45s (adjustable constants)
+
+Compute:
+accuracy_pct = accuracy_total*100
+
+penalty = 0
+
+If completion_ratio < 1:
+  penalty += (1 - completion_ratio) * 12   (up to 12 points)
+
+If avg_time_per_q > expected_time_overall:
+  over = (avg_time_per_q - expected_time_overall)
+  penalty += min(6, over/10)  (max 6 points)
+
+easy_penalty = min(6, easy_miss_count * 1.2)
+
+mid_score = round( 100 + (accuracy_pct - 50) * 0.7 - penalty - easy_penalty )
+
+Clamp mid_score 80..140.
+
+Range width:
+range_width = 4
+If volatility_index high: range_width += 2
+If only one full diagnostic/mock completed historically: range_width += 2
+If completion_ratio < 1: range_width += 2
+
+low = mid_score - range_width
+high = mid_score + range_width
+
+Band:
+- On Track if low >= 121
+- Borderline — Within Reach if low < 121 <= high
+- Clear Improvement Opportunity if high < 121
+
+Gap statement:
+- If high < 121: “Estimated gap to 121: {121-high}–{121-mid_score} marks”
+- If intersects: “Within 1–3 marks of 121”
+- If low > 121: “Above benchmark — maintain and improve consistency”
+
+Confidence:
+- Low if only mini diagnostic or 1 attempt total
+- Medium if 1 full diagnostic/mock
+- High if 2+ full diagnostics/mocks and low volatility
+
+Likelihood band (paid diagnostics only):
+- High likelihood if mid_score >= 125 AND confidence >= Medium
+- Moderate likelihood if 118–124
+- Low likelihood otherwise
+
+Impact scoring:
+For each skill:
+impact = (1 - accuracy_skill) * 100
++ (pace_flag ? 15 : 0)
++ (easy_miss_skill ? 10 : 0)
+Sort desc, take top 3.
+
+Improvement simulation (conversion/hope):
+For top impact skill:
+simulate +10% accuracy on that skill (cap 100).
+Adjust accuracy_total slightly and recompute mid_score delta approximately.
+Display:
+“If {skill} accuracy improves by ~10%, projected range shifts to X–Y.”
+
+Store in attempts.forecast JSON:
+{
+ benchmark: 121,
+ projected_low, projected_high, mid_score,
+ readiness_band, confidence,
+ likelihood_band (null for free mini),
+ gap_statement,
+ top_focus_skills: [{skill_id, name, impact, accuracy, pace_flag}],
+ simulation: {skill_id, uplift_pct:10, new_low, new_high}
+}
+
+===========================================================
+L) RESULTS PAGE (STRICT VISUAL HIERARCHY)
+===========================================================
+
+Results page must show in this order:
+
+1) HERO GAUGE
+- semi-circle with zones (red/amber/green)
+- show band
+- show projected range
+- show benchmark tick at 121
+- show gap statement (bold)
+- show confidence chip (small)
+- show likelihood band (paid only) as small chip below confidence
+
+2) HOPE / CONTROL LINE
+- show simulation line:
+  “If {skill} improves by 10%, projected range shifts to {new_low}–{new_high}.”
+
+3) TOP 3 FOCUS TILES
+Each tile:
+- skill name
+- accuracy %
+- pace icon if slow
+- small heat indicator
+- CTA: Start Drill (locked if free)
+
+4) SKILL HEAT MAP
+- 18 tiles grouped by section
+- tile background indicates accuracy band
+- border indicates pace
+- click tile takes to drill list filtered by skill
+
+5) TREND (SECONDARY)
+- small line chart showing mid_score over last attempts
+- show “Gap closing” metric:
+  “Gap reduced from 6 marks to 3 marks” if applicable
+
+6) UPGRADE PANEL (for free users)
+- title: “Unlock full readiness analysis”
+- bullet list (short, specific):
+  ✔ Full diagnostic (timed)
+  ✔ Likelihood band
+  ✔ Targeted practice bank
+  ✔ Printable readiness report
+  ✔ Progress tracking
+- pricing cards:
+  Monthly £39
+  12-week pack £99 (Most Popular)
+- CTA buttons start checkout
+
+===========================================================
+M) PRACTICE + RETENTION
+===========================================================
+
+Practice page structure:
+- “Recommended for you” (top 3)
+- “All drills” by section
+
+After each drill:
+- show quick feedback:
+  “Improving {skill} increases your forecast.”
+- update progress history
+
+Progress page:
+- primary chart: mid_score trend
+- show “distance to 121 over time” as a simple line or bars
+- list attempts with band + range
+
+===========================================================
+N) PDF REPORT (PAID)
+===========================================================
+
+Implement /app/report/[attemptId] generating PDF via @react-pdf/renderer.
+
+Brand the PDF with logo and “11+ Standard”.
+
+PDF sections:
+1) Title header + date + child initials
+2) Summary (band, range, benchmark, confidence, likelihood band)
+3) Skill profile table (grouped by section)
+4) Top 3 focus areas (bullets)
+5) 2-week action plan (Week 1/Week 2 checklists)
+6) Transparency note (indicative estimate)
+
+PDF must be clean, print-ready, headings/subheadings only.
+
+===========================================================
+O) STRIPE PAYMENTS + ENTITLEMENTS
+===========================================================
+
+Implement Stripe Checkout sessions:
+- monthly subscription product
+- one-time pack12 product
+
+Webhook:
+- /api/stripe/webhook (raw body)
+On checkout completed:
+- Upsert entitlements:
+  tier=monthly or pack12
+  status=active
+  expires_at = now()+12 weeks for pack12
+- store stripe ids.
+
+Gating rules:
+Free:
+- mini diagnostic + results teaser
+Paid:
+- full diagnostics/mocks
+- all drills
+- PDF
+- progress history
+- likelihood band
+
+Account page:
+- show current plan, expiry, manage billing link.
+
+===========================================================
+P) SEO + AUTHORITY PAGES (PARENT HUB)
+===========================================================
+
+Implement server-rendered Parent Hub:
+- /parent-hub lists articles
+- /parent-hub/[slug] renders markdown to HTML with proper headings
+- Include metadata title/description and OG tags
+
+Seed at least 15 articles in seo_articles (published=true) with:
+- title, description, markdown content
+- key takeaways box at top
+- FAQ section
+- CTA to start mini diagnostic
+
+Topics include:
+- Bucks 11+ qualifying score 121 explained
+- How the Bucks Secondary Transfer Test works
+- When is Bucks 11+
+- How much practice per week Year 5
+- Improving speed under timed conditions
+- Common mistakes preventing 121
+- VR codes strategy
+- Vocabulary relationships
+- NVR sequences tips
+- Rotation/reflection traps
+- Maths word problems
+- Fractions/decimals/ratio improvements
+- Data interpretation
+- Avoiding burnout
+- Choosing resources
+
+===========================================================
+Q) ADMIN PANEL (REQUIRED)
+===========================================================
+
+Admin auth:
+Only allow access if logged-in email matches ADMIN_EMAIL env var.
+
+Admin features:
+1) Questions CRUD
+- create/edit question with skill_id, difficulty, options, correct index, explanation, est_time
+2) QA queue
+- approve/reject questions
+3) Mocks builder
+- edit mock structure JSON with skill_ids and time limits
+4) Drills builder
+5) Articles editor (markdown)
+6) Metrics snapshot:
+- signups
+- mini completions
+- checkout started
+- checkout completed
+- conversion rate computed from events table
+
+===========================================================
+R) EVENT TRACKING (INTERNAL)
+===========================================================
+
+Log events to events table via a simple API route:
+- landing_view
+- start_free_diagnostic_clicked
+- signup_completed
+- onboarding_completed
+- mini_started
+- mini_completed
+- paywall_viewed
+- checkout_started
+- checkout_completed
+- diagnostic_started
+- diagnostic_completed
+- drill_started
+- drill_completed
+- pdf_downloaded
+
+Use these to compute basic funnel conversion in admin.
+
+===========================================================
+S) SEED DATA REQUIREMENTS (MINIMUM)
+===========================================================
+
+Seed scripts in /scripts:
+- seed_questions.ts  (>= 300 questions, approved)
+- seed_mocks.ts      (mini + 2 diagnostics published)
+- seed_drills.ts     (10 drills published)
+- seed_articles.ts   (15 SEO articles published)
+
+All seeded questions must be original placeholder content (no copyrighted text).
+Include explanations.
+
+===========================================================
+T) SETUP INSTRUCTIONS (MUST OUTPUT)
+===========================================================
+
+At the end, provide:
+
+1) Replit run steps
+2) Supabase migration commands
+3) Seed commands
+4) Required environment variables list
+5) Stripe setup steps:
+   - create products + price IDs
+   - webhook configuration
+6) How to test end-to-end:
+   - user flow from landing to purchase to PDF
+7) Admin access steps
+
+ENV VARS REQUIRED:
+NEXT_PUBLIC_SUPABASE_URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY
+SUPABASE_SERVICE_ROLE_KEY
+STRIPE_SECRET_KEY
+STRIPE_WEBHOOK_SECRET
+STRIPE_PRICE_ID_MONTHLY
+STRIPE_PRICE_ID_PACK12
+ADMIN_EMAIL
+APP_URL
+
+===========================================================
+U) ACCEPTANCE CRITERIA (MUST PASS)
+===========================================================
+
+A parent must be able to:
+- Land on site, click Start Free Diagnostic
+- Sign up
+- Complete onboarding questionnaire
+- Complete mini diagnostic
+- View visual results: gauge + gap + top focus + teaser heat map
+- Upgrade via Stripe (monthly or 12-week)
+- Unlock full diagnostics and drills
+- Download branded PDF report
+- See progress and gap reduction over time
+
+Everything must feel premium, modern, and authoritative as “11+ Standard”.
+
+NOW BUILD THE FULL APP END-TO-END IN THIS REPLIT PROJECT AND OUTPUT SETUP STEPS + FILE STRUCTURE + MIGRATIONS + SEEDS + STRIPE CONFIG GUIDE.
