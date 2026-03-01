@@ -2,7 +2,7 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { ArrowRight, AlertCircle, BookOpen, Clock, Lock } from "lucide-react";
+import { ArrowRight, AlertCircle, BookOpen, Clock, Lock, Target } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 
 export default function Dashboard() {
