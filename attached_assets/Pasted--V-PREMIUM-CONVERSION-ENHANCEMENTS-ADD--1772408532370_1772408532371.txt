@@ -1,0 +1,306 @@
+===========================================================
+V) PREMIUM CONVERSION ENHANCEMENTS (ADD ALL)
+===========================================================
+
+GOAL:
+Increase conversion by:
+1) Reducing perceived risk ("Is this really Bucks GL-aligned?")
+2) Increasing perceived value for paid plans
+3) Increasing perceived control ("What do I do next?")
+4) Creating reality-based urgency (without manipulation)
+
+-----------------------------------------------------------
+V1) HOMEPAGE HERO MUST LEAD WITH GL + BUCKS ALIGNMENT
+-----------------------------------------------------------
+
+Update landing page (/) hero to:
+
+Headline (H1):
+"GL-Aligned Bucks 11+ Diagnostics & Readiness Forecast"
+
+Subheadline:
+"Timed diagnostics designed around the GL-style reasoning structure used for the Buckinghamshire Secondary Transfer Test — forecasted against the 121 benchmark, with targeted practice that improves the highest-impact areas."
+
+Under subheadline show 3 short trust bullets (icons):
+✔ "Aligned to GL-style reasoning types (VR / NVR / Maths)"
+✔ "Timed to reflect exam pacing and pressure"
+✔ "Forecasted against the Bucks 121 benchmark"
+
+Primary CTA:
+"Start Free GL-Aligned Diagnostic"
+
+Secondary CTA:
+"How Our Forecast Works"
+
+Add a small trust disclaimer below CTAs:
+"Independent readiness assessment. Not affiliated with GL Assessment or Buckinghamshire Council."
+
+Add "Preview" block under hero:
+- Show blurred screenshot mockups of (1) readiness gauge, (2) heat map, (3) focus plan.
+- Overlay text: "Your results will appear like this — clear, visual, and action-led."
+
+-----------------------------------------------------------
+V2) ADD A "GL ALIGNMENT" SECTION (VISUAL)
+-----------------------------------------------------------
+
+On homepage, directly under hero, add a 3-card section titled:
+"Designed Around the Bucks GL-Style Test Structure"
+
+Cards:
+1) "Reasoning Coverage"
+   - "VR, NVR and Maths mapped to GL-style question families"
+2) "Timed Conditions"
+   - "Pace + completion are measured, not just accuracy"
+3) "121 Benchmark Context"
+   - "Projected range positioned directly against the Bucks qualifying score"
+
+Keep text minimal; use icons and short lines.
+
+-----------------------------------------------------------
+V3) REFRAME PAID VALUE STACK (MAKE IT FEEL PREMIUM)
+-----------------------------------------------------------
+
+Paid features must be expanded to justify cost and increase perceived value.
+
+PAID INCLUDES (must display in pricing + paywall):
+✔ Full timed diagnostics (multiple papers)
+✔ Full skill heat map (all 18 skills)
+✔ Likelihood band (High/Moderate/Low) – only for full diagnostics
+✔ Impact Simulator (see V4)
+✔ Structured 12-Week Preparation Plan (see V5)
+✔ Weekly Readiness Summary Email (see V6)
+✔ Report Archive (download previous reports anytime)
+✔ Progress tracking vs 121 (gap closing visual)
+
+Free includes:
+- Mini diagnostic only
+- Gauge + gap + top 1 focus skill teaser
+- No likelihood band
+- No plan, no simulator, no report archive, no weekly summary email
+
+-----------------------------------------------------------
+V4) IMPACT SIMULATOR (HIGH PERCEIVED VALUE, LOW COMPLEXITY)
+-----------------------------------------------------------
+
+Implement an "Impact Simulator" on results page for PAID users:
+
+UI:
+- A small card titled "If we improve..."
+- Dropdown: choose one of top 3 focus skills (default top 1)
+- Slider: +5% / +10% / +15% improvement
+- Output: "Projected range shifts to X–Y" and "Gap to 121 changes to …"
+
+Logic:
+- Use a simplified uplift model:
+  - increase selected skill accuracy by uplift_pct
+  - recompute approximate overall accuracy delta using weighting by question count in attempt
+  - recompute forecast mid_score and range with same penalty model
+- Store simulator outputs in forecast JSON so report can include it.
+
+Access:
+- Locked for FREE users with a small teaser: "Unlock simulator".
+
+-----------------------------------------------------------
+V5) STRUCTURED 12-WEEK PREPARATION PLAN (AUTO-GENERATED)
+-----------------------------------------------------------
+
+Generate a "12-Week Plan" for PAID users automatically after any full diagnostic.
+
+Plan Inputs:
+- Top 3 focus skills (impact-ranked)
+- Parent profile (year group, hours/week)
+- Pace flags
+
+Plan Output:
+- 12 weeks grouped into 3 phases:
+  Phase 1 (Weeks 1–4): Skill 1 focus + timing foundations
+  Phase 2 (Weeks 5–8): Skill 2 focus + mixed review
+  Phase 3 (Weeks 9–12): Skill 3 focus + full diagnostic cadence
+
+Each week shows:
+- 3 sessions x 15 min for top skill
+- 2 sessions x 15 min for second skill
+- 1 timed mixed drill
+- Every 3 weeks: full diagnostic re-test
+
+UI:
+- A clean “Plan” tab under /app/progress OR a section on results page.
+- Must be visual: week blocks, checkmarks, minimal text.
+
+Database:
+Add table `plans`:
+- id uuid pk
+- user_id uuid
+- attempt_id uuid (source attempt)
+- plan_json jsonb
+- created_at
+
+Show plan as view + allow PDF export inclusion.
+
+-----------------------------------------------------------
+V6) WEEKLY READINESS SUMMARY EMAIL (RETENTION)
+-----------------------------------------------------------
+
+Implement email sending for PAID users:
+- Use Resend (preferred) or Postmark.
+- Create env var: RESEND_API_KEY (or POSTMARK_API_KEY).
+- Add /api/cron/weekly-summary route that:
+  - selects PAID users
+  - pulls latest attempt forecast
+  - emails:
+    - projected range
+    - gap to 121
+    - top focus skill + 2 recommended sessions
+    - link to dashboard
+
+Scheduling:
+- For MVP, include manual trigger button in Admin Metrics.
+- Document how to later schedule via cron.
+
+Email must be minimal, professional, no marketing fluff.
+
+-----------------------------------------------------------
+V7) REPORT ARCHIVE + EXPORTS (PREMIUM FEEL)
+-----------------------------------------------------------
+
+Add /app/report-archive:
+- List of completed full diagnostics with date, band, range, gap
+- Download buttons for each PDF
+
+Paid only.
+Free users see a locked state: "Unlock report archive".
+
+PDF enhancements:
+- Include:
+  - forecast summary
+  - top 3 focus
+  - 12-week plan (summary)
+  - impact simulator example (if used)
+- Must remain structured headings, no long paragraphs.
+
+-----------------------------------------------------------
+V8) PRICING PAGE (VALUE FRAMING + TRUST)
+-----------------------------------------------------------
+
+Pricing cards:
+
+Card A: Monthly
+- £39 / month
+- "Ongoing readiness tracking"
+- Include 4 bullets.
+
+Card B: 12-Week Exam Pack (MOST POPULAR)
+- £99 one-time
+- "Complete preparation window"
+- Include 6 bullets including Plan + Weekly summaries + Report archive.
+- Add small line: "Designed to cover a typical focused preparation cycle."
+
+Add trust block beneath pricing:
+- "Independent readiness assessment"
+- "Not affiliated with GL Assessment or Buckinghamshire Council"
+- "Forecasts are indicative — methodology available"
+
+Add comparison section (short):
+Title: "Why diagnostics outperform generic practice"
+Bullets:
+- "Measures pace + completion, not just accuracy"
+- "Identifies highest impact weaknesses"
+- "Forecast contextualised to 121 benchmark"
+- "Creates a structured plan to improve efficiently"
+
+-----------------------------------------------------------
+V9) RESULTS PAGE COPY + LABEL CHANGES (LESS NEGATIVE, MORE CONTROL)
+-----------------------------------------------------------
+
+Replace negative language:
+- Replace "Needs Improvement" with:
+  "Clear Improvement Opportunity"
+
+Use emotional-but-controlled band labels:
+- On Track
+- Within Reach
+- Clear Improvement Opportunity
+
+Always show next action:
+Button: "Start Highest Impact Drill"
+
+Always show hope line:
+"If {skill} improves by 10%, range shifts to..."
+
+-----------------------------------------------------------
+V10) TIME-TO-VALUE + REDUCE DROP-OFF
+-----------------------------------------------------------
+
+Reduce steps:
+- Clicking "Start Free GL-Aligned Diagnostic" immediately opens sign-up modal (not separate page).
+- After sign-up, auto-redirect to onboarding question 1.
+- After onboarding, auto-start mini diagnostic with one click.
+
+Add progress indicators:
+- Onboarding: Step 1 of 6
+- Mini diagnostic: "Q 3 of 12"
+
+Add reassurance microcopy before test:
+"Designed around GL-style reasoning types used in Bucks."
+
+-----------------------------------------------------------
+V11) ADD "BUCKS GL ALIGNMENT" TRUST PAGES (SEO + ASSURANCE)
+-----------------------------------------------------------
+
+Add public page:
+- /bucks-gl-alignment
+Content (short, professional):
+- Explain mapping to VR/NVR/Maths reasoning families
+- Timed conditions modelling
+- Skill taxonomy
+- Disclaimer: independent, not affiliated
+
+Add internal link from hero and footer.
+
+-----------------------------------------------------------
+V12) ADMIN METRICS: FUNNEL DASHBOARD (CONVERSION CONTROL)
+-----------------------------------------------------------
+
+In /admin/metrics show:
+- landing_view count
+- start_free_diagnostic_clicked count
+- signup_completed count
+- onboarding_completed count
+- mini_completed count
+- paywall_viewed count
+- checkout_started count
+- checkout_completed count
+
+Compute conversion rates:
+- signup rate = signup_completed / landing_view
+- diagnostic completion = mini_completed / signup_completed
+- purchase conversion = checkout_completed / mini_completed
+
+Add date range filter (last 7 / 30 days).
+
+-----------------------------------------------------------
+V13) SEO: HOME + BUCKS PAGES MUST TARGET MONEY TERMS
+-----------------------------------------------------------
+
+Ensure metadata and copy target:
+- "Bucks 11+ practice"
+- "Bucks 11+ mock test"
+- "Bucks 11+ 121 score"
+- "GL 11+ Bucks"
+
+Add internal links from Parent Hub to:
+- /pricing
+- / (free diagnostic)
+- /bucks-gl-alignment
+- /how-forecast-works
+
+-----------------------------------------------------------
+V14) IMPLEMENTATION OUTPUT REQUIREMENT
+-----------------------------------------------------------
+
+At completion, provide:
+1) Updated route map
+2) SQL migrations including new plans table
+3) Seed updates (ensure articles include new trust pages links)
+4) Stripe + email setup instructions
+5) Visual QA checklist (mobile + desktop)

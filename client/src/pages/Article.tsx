@@ -15,10 +15,8 @@ export default function Article() {
         description={`Read about ${title} and how to prepare for the Bucks 11+ assessment.`} 
       />
 
-      <Link href="/parent-hub">
-        <a className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors mb-12">
-          <ArrowLeft className="h-4 w-4" /> Back to Parent Hub
-        </a>
+      <Link href="/parent-hub" className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors mb-12">
+        <ArrowLeft className="h-4 w-4" /> Back to Parent Hub
       </Link>
 
       <div className="space-y-4 mb-12">
@@ -65,9 +63,9 @@ export default function Article() {
         <div className="bg-primary text-primary-foreground p-8 rounded-2xl text-center">
           <h3 className="text-2xl font-bold font-serif mb-4">Stop guessing your child's readiness</h3>
           <p className="mb-6 opacity-90">Take our free 12-minute diagnostic to see their current trajectory toward the 121 standard.</p>
-          <a href="/app" className="inline-block bg-white text-primary px-8 py-3 rounded-md font-medium hover:bg-slate-100 transition-colors">
+          <Link href="/app" className="inline-block bg-white text-primary px-8 py-3 rounded-md font-medium hover:bg-slate-100 transition-colors">
             Start Free Diagnostic
-          </a>
+          </Link>
         </div>
       </div>
     </article>

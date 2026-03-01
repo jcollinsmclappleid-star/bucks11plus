@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, X } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 
 export default function Pricing() {
@@ -12,94 +12,131 @@ export default function Pricing() {
         description="Invest in targeted 11+ readiness. View our monthly subscription and 12-week intensive pack options." 
       />
       <div className="text-center max-w-3xl mx-auto mb-16">
-        <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4">Invest in Targeted Readiness</h1>
+        <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4 font-serif">Invest in Targeted Readiness</h1>
         <p className="text-xl text-muted-foreground">
           Stop guessing. Get the exact roadmap your child needs to reach the 121 Bucks standard.
         </p>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-        {/* Monthly */}
-        <Card className="border-border/60 shadow-sm flex flex-col">
+      <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        {/* Card A: Monthly */}
+        <Card className="border-border/60 shadow-sm flex flex-col hover:border-primary/30 transition-colors">
           <CardHeader>
-            <CardTitle className="text-2xl">Monthly Subscription</CardTitle>
-            <CardDescription>Flexible preparation on your timeline.</CardDescription>
+            <CardTitle className="text-2xl font-serif">Monthly Access</CardTitle>
+            <CardDescription className="text-base">Ongoing readiness tracking</CardDescription>
           </CardHeader>
           <CardContent className="flex-1">
-            <div className="mb-6">
-              <span className="text-4xl font-bold text-primary">£29</span>
-              <span className="text-muted-foreground">/month</span>
+            <div className="mb-8">
+              <span className="text-5xl font-bold text-primary">£39</span>
+              <span className="text-muted-foreground font-medium"> / month</span>
             </div>
-            <ul className="space-y-3">
-              {[
-                "Unlimited Practice Drills",
-                "2 Full Diagnostics per month",
-                "Advanced Readiness Forecast",
-                "Downloadable PDF Reports",
-                "Cancel anytime"
-              ].map((feature, i) => (
-                <li key={i} className="flex items-start gap-2">
-                  <CheckCircle2 className="h-5 w-5 text-brand-green shrink-0" />
-                  <span className="text-muted-foreground">{feature}</span>
-                </li>
-              ))}
-            </ul>
+            
+            <div className="space-y-4">
+              <h4 className="text-sm font-bold text-primary uppercase tracking-wider">Includes</h4>
+              <ul className="space-y-3">
+                {[
+                  "Full timed diagnostics (multiple papers)",
+                  "Full skill heat map (all 18 skills)",
+                  "Likelihood band (High/Moderate/Low)",
+                  "Impact Simulator"
+                ].map((feature, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <CheckCircle2 className="h-5 w-5 text-brand-green shrink-0 mt-0.5" />
+                    <span className="text-slate-700 font-medium">{feature}</span>
+                  </li>
+                ))}
+                
+                {/* Visual diff for missing premium features */}
+                {[
+                  "Structured 12-Week Preparation Plan",
+                  "Weekly Readiness Summary Email",
+                  "Report Archive & PDF Downloads"
+                ].map((feature, i) => (
+                  <li key={`missing-${i}`} className="flex items-start gap-3 opacity-50">
+                    <X className="h-5 w-5 text-slate-400 shrink-0 mt-0.5" />
+                    <span className="text-slate-500 line-through">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </CardContent>
           <CardFooter>
-            <Button className="w-full bg-primary text-primary-foreground" size="lg" asChild>
+            <Button className="w-full bg-slate-800 text-white hover:bg-slate-700 h-12 text-lg" asChild>
               <Link href="/sign-up">Subscribe Monthly</Link>
             </Button>
           </CardFooter>
         </Card>
 
-        {/* 12-Week Pack */}
-        <Card className="border-primary border-2 shadow-md relative flex flex-col">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-medium">
-            Most Popular
+        {/* Card B: 12-Week Pack */}
+        <Card className="border-brand-amber border-2 shadow-xl relative flex flex-col overflow-hidden">
+          <div className="absolute top-0 inset-x-0 h-1.5 bg-brand-amber"></div>
+          <div className="absolute top-0 right-0 bg-brand-amber text-amber-950 px-4 py-1.5 rounded-bl-lg font-bold text-sm shadow-sm">
+            MOST POPULAR
           </div>
-          <CardHeader>
-            <CardTitle className="text-2xl">12-Week Intensive</CardTitle>
-            <CardDescription>The complete run-up to the assessment.</CardDescription>
+          
+          <CardHeader className="pt-8">
+            <CardTitle className="text-2xl font-serif">12-Week Exam Pack</CardTitle>
+            <CardDescription className="text-base text-brand-primary/80">Complete preparation window</CardDescription>
           </CardHeader>
           <CardContent className="flex-1">
-            <div className="mb-6">
-              <span className="text-4xl font-bold text-primary">£75</span>
-              <span className="text-muted-foreground"> one-time</span>
+            <div className="mb-2">
+              <span className="text-5xl font-bold text-primary">£99</span>
+              <span className="text-muted-foreground font-medium"> one-time</span>
             </div>
-            <ul className="space-y-3">
-              {[
-                "Everything in Monthly",
-                "12 Full Diagnostics included",
-                "Weekly priority focus emails",
-                "Historical trend analysis",
-                "Saves 15% compared to monthly"
-              ].map((feature, i) => (
-                <li key={i} className="flex items-start gap-2">
-                  <CheckCircle2 className="h-5 w-5 text-brand-green shrink-0" />
-                  <span className="text-muted-foreground">{feature}</span>
-                </li>
-              ))}
-            </ul>
+            <p className="text-sm text-brand-primary/70 mb-8 font-medium bg-blue-50 px-3 py-1.5 rounded inline-block">Designed to cover a typical focused preparation cycle.</p>
+            
+            <div className="space-y-4">
+              <h4 className="text-sm font-bold text-primary uppercase tracking-wider">Everything in monthly, plus:</h4>
+              <ul className="space-y-3">
+                {[
+                  "Structured 12-Week Preparation Plan",
+                  "Weekly Readiness Summary Email",
+                  "Report Archive & PDF Downloads",
+                  "Full timed diagnostics (multiple papers)",
+                  "Full skill heat map (all 18 skills)",
+                  "Impact Simulator & Likelihood bands",
+                ].map((feature, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <CheckCircle2 className="h-5 w-5 text-brand-amber shrink-0 mt-0.5" />
+                    <span className="text-primary font-semibold">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </CardContent>
           <CardFooter>
-            <Button className="w-full bg-primary text-primary-foreground" size="lg" asChild>
+            <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-14 text-lg font-bold shadow-md" asChild>
               <Link href="/sign-up">Get 12-Week Pack</Link>
             </Button>
           </CardFooter>
         </Card>
       </div>
 
-      {/* SEO Text / FAQ Teaser */}
-      <div className="mt-24 max-w-3xl mx-auto prose prose-slate">
-        <h2 className="text-primary font-serif text-2xl font-bold">Frequently Asked Questions</h2>
-        <div className="space-y-6 mt-6">
-          <div>
-            <h3 className="text-lg font-semibold text-primary">How does the 11+ Standard forecast work?</h3>
-            <p className="text-muted-foreground">Our forecast engine maps your child's accuracy and pacing directly against historic Buckinghamshire GL Assessment benchmarks, focusing on the crucial 121 qualifying score.</p>
-          </div>
-          <div>
-            <h3 className="text-lg font-semibold text-primary">Can I just try it out?</h3>
-            <p className="text-muted-foreground">Yes, our <Link href="/app"><a className="text-brand-primary underline">Mini Diagnostic</a></Link> is completely free and takes only 12 minutes to give you a baseline readiness band.</p>
+      {/* V8 Trust Block */}
+      <div className="mt-12 text-center text-sm font-medium text-slate-500 space-y-1">
+        <p>Independent readiness assessment</p>
+        <p>Not affiliated with GL Assessment or Buckinghamshire Council</p>
+        <p>Forecasts are indicative — <Link href="/how-forecast-works" className="underline hover:text-primary">methodology available</Link></p>
+      </div>
+
+      {/* Comparison Section */}
+      <div className="mt-24 max-w-3xl mx-auto">
+        <div className="bg-slate-50 rounded-2xl p-8 md:p-12 border border-slate-200 shadow-inner">
+          <h2 className="text-2xl font-bold text-primary font-serif mb-8 text-center">Why diagnostics outperform generic practice</h2>
+          <div className="grid sm:grid-cols-2 gap-y-6 gap-x-12">
+            {[
+              "Measures pace + completion, not just accuracy",
+              "Identifies highest impact weaknesses",
+              "Forecast contextualised to 121 benchmark",
+              "Creates a structured plan to improve efficiently"
+            ].map((bullet, i) => (
+              <div key={i} className="flex gap-3">
+                <div className="mt-1 w-6 h-6 rounded-full bg-white flex items-center justify-center border border-slate-200 shadow-sm shrink-0">
+                  <div className="w-2 h-2 rounded-full bg-brand-primary"></div>
+                </div>
+                <span className="text-slate-700 font-medium">{bullet}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>

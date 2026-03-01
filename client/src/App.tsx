@@ -1,4 +1,4 @@
-import { Switch, Route } from "wouter";
+import { Switch, Route, Link } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -22,9 +22,11 @@ import DiagnosticStart from "./pages/DiagnosticStart";
 import Results from "./pages/Results";
 import Progress from "./pages/Progress";
 import Account from "./pages/Account";
+import ReportArchive from "./pages/ReportArchive";
 
 import HowItWorks from "./pages/HowItWorks";
 import Methodology from "./pages/Methodology";
+import GLAlignment from "./pages/GLAlignment";
 import About from "./pages/About";
 import Legal from "./pages/Legal";
 
@@ -47,24 +49,25 @@ function MainLayout({ children }: { children: React.ReactNode }) {
           <div>
             <h4 className="font-bold text-primary-foreground mb-4">Platform</h4>
             <ul className="space-y-2 text-sm">
-              <li><a href="/pricing" className="hover:text-white transition-colors">Pricing</a></li>
-              <li><a href="/how-it-works" className="hover:text-white transition-colors">How it works</a></li>
-              <li><a href="/parent-hub" className="hover:text-white transition-colors">Parent Hub</a></li>
+              <li><Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
+              <li><Link href="/how-it-works" className="hover:text-white transition-colors">How it works</Link></li>
+              <li><Link href="/parent-hub" className="hover:text-white transition-colors">Parent Hub</Link></li>
             </ul>
           </div>
           <div>
             <h4 className="font-bold text-primary-foreground mb-4">Transparency</h4>
             <ul className="space-y-2 text-sm">
-              <li><a href="/how-forecast-works" className="hover:text-white transition-colors">Methodology</a></li>
-              <li><a href="/about" className="hover:text-white transition-colors">About Us</a></li>
+              <li><Link href="/how-forecast-works" className="hover:text-white transition-colors">Methodology</Link></li>
+              <li><Link href="/bucks-gl-alignment" className="hover:text-white transition-colors">GL Alignment</Link></li>
+              <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
             </ul>
           </div>
           <div>
             <h4 className="font-bold text-primary-foreground mb-4">Legal</h4>
             <ul className="space-y-2 text-sm">
-              <li><a href="/terms" className="hover:text-white transition-colors">Terms of Service</a></li>
-              <li><a href="/privacy" className="hover:text-white transition-colors">Privacy Policy</a></li>
-              <li><a href="/safeguarding" className="hover:text-white transition-colors">Safeguarding</a></li>
+              <li><Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
+              <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
+              <li><Link href="/safeguarding" className="hover:text-white transition-colors">Safeguarding</Link></li>
             </ul>
           </div>
         </div>
@@ -89,6 +92,7 @@ function Router() {
             <Route path="/parent-hub/:slug" component={Article} />
             <Route path="/how-it-works" component={HowItWorks} />
             <Route path="/how-forecast-works" component={Methodology} />
+            <Route path="/bucks-gl-alignment" component={GLAlignment} />
             <Route path="/about" component={About} />
             <Route path="/sign-in" component={SignIn} />
             <Route path="/sign-up" component={SignUp} />
@@ -111,6 +115,7 @@ function Router() {
             <Route path="/app/results/:id" component={Results} />
             <Route path="/app/progress" component={Progress} />
             <Route path="/app/account" component={Account} />
+            <Route path="/app/report-archive" component={ReportArchive} />
             
             {/* Catch-all for mockup links that don't exist yet */}
             <Route component={NotFound} />

@@ -40,7 +40,7 @@ export default function SignIn() {
             </Button>
           </form>
           <div className="mt-8 text-center text-sm text-muted-foreground">
-            Don't have an account? <Link href="/sign-up"><a className="font-medium text-primary hover:underline">Sign up</a></Link>
+            Don't have an account? <Link href="/sign-up" className="font-medium text-primary hover:underline">Sign up</Link>
           </div>
         </CardContent>
       </Card>

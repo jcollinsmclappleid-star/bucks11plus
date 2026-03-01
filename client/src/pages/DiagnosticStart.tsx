@@ -12,8 +12,8 @@ export default function DiagnosticStart() {
       <Seo title="Start Diagnostic | 11+ Standard" description="Begin your 11+ diagnostic assessment." />
       
       <div className="mb-8">
-        <Link href="/app/diagnostic">
-          <a className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">← Back to Diagnostics</a>
+        <Link href="/app/diagnostic" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+          ← Back to Diagnostics
         </Link>
       </div>
 
@@ -49,6 +49,9 @@ export default function DiagnosticStart() {
 
           <div className="space-y-4">
             <h3 className="font-bold text-primary">Instructions for Parents:</h3>
+            <p className="text-sm text-brand-primary/80 font-medium bg-blue-50 px-3 py-2 rounded-md mb-4 inline-block border border-blue-100">
+              Designed around GL-style reasoning types used in Bucks.
+            </p>
             <ul className="space-y-3">
               <li className="flex gap-3 text-slate-700">
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-sm font-medium text-slate-600">1</span>

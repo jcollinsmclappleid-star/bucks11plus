@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Settings, CreditCard, User } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
+import { Link } from "wouter";
 
 export default function Account() {
   return (
@@ -45,7 +46,7 @@ export default function Account() {
                   <p className="text-sm text-muted-foreground">Limited to Mini Diagnostic and basic drills.</p>
                 </div>
                 <Button variant="outline" asChild>
-                  <a href="/pricing">Upgrade</a>
+                  <Link href="/pricing">Upgrade</Link>
                 </Button>
               </div>
             </CardContent>
