@@ -185,7 +185,7 @@ export default function Pricing() {
       <div className="mt-12 text-center text-sm font-medium text-slate-500 space-y-1">
         <p>Independent readiness assessment</p>
         <p>Not affiliated with GL Assessment or Buckinghamshire Council</p>
-        <p>Forecasts are indicative — <Link href="/how-forecast-works" className="underline hover:text-primary">methodology available</Link></p>
+        <p>Forecasts are indicative — <Link href="/how-forecast-works" className="underline hover:text-primary">how our forecast works</Link></p>
       </div>
 
       <div className="mt-16 max-w-2xl mx-auto">

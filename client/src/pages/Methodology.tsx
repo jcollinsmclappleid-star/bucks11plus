@@ -58,7 +58,7 @@ export default function Methodology() {
   return (
     <div className="min-h-[calc(100vh-4rem)]">
       <Seo
-        title="Forecast Methodology | 11+ Standard"
+        title="How Our Forecast Works | 11+ Standard"
         description="Transparency underpins our readiness modelling framework. Learn how performance data is interpreted and how readiness bands are derived."
       />
 
@@ -67,10 +67,10 @@ export default function Methodology() {
           <div className="flex items-center gap-2 text-sm text-slate-400 mb-6">
             <Link href="/" className="hover:text-primary transition-colors">Home</Link>
             <span>/</span>
-            <span className="text-slate-600">Methodology</span>
+            <span className="text-slate-600">How Our Forecast Works</span>
           </div>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary font-serif tracking-tight mb-5">
-            Forecast Methodology
+            How Our Forecast Works
           </h1>
           <p className="text-lg text-slate-600 leading-relaxed mb-3">
             Transparency underpins our readiness modelling framework. This page explains how performance data is interpreted and how readiness bands are derived.

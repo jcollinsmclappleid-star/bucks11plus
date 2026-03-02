@@ -182,7 +182,7 @@ export default function HowItWorks() {
             Are we on track for 121 under timed conditions?
           </p>
           <Link href="/how-forecast-works" className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80 transition-colors" data-testid="link-methodology">
-            Read our full forecast methodology
+            Read how our forecast works
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>
