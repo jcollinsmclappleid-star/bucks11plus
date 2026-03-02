@@ -17,7 +17,8 @@ export default function Navbar() {
         <nav className="flex items-center gap-6">
           {!user ? (
             <>
-              <Link href="/how-it-works" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors hidden sm:block">How it Works</Link>
+              <Link href="/how-it-works" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors hidden sm:block">How It Works</Link>
+              <Link href="/how-forecast-works" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors hidden md:block">Methodology</Link>
               <Link href="/pricing" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors hidden sm:block">Pricing</Link>
               <div className="flex items-center gap-3 ml-2">
                 <Button variant="ghost" asChild data-testid="link-signin">
