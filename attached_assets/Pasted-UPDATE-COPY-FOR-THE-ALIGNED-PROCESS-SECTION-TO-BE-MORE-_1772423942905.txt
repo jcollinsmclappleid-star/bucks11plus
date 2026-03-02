@@ -1,0 +1,142 @@
+UPDATE COPY FOR THE “ALIGNED / PROCESS” SECTION TO BE MORE CONVERSION-LED (KEEP PREMIUM, NOT WORDY)
+
+CONTEXT
+This is the section that currently includes:
+- Heading: “Aligned to GL-Style Reasoning Families Used in Bucks”
+- Subheading: “We independently model the assessment constraints to give you an honest baseline.”
+- Cards: “Reasoning Coverage”, “Timed Conditions”, “121 Context”
+- Process heading: “How It Works in Practice”
+- Steps 1–4: Diagnostic Benchmark, Readiness Forecast, Targeted Development, Measured Progression
+- CTA block: “Many families complete large volumes…” + “Are we on track for 121 under timed conditions?”
+
+OBJECTIVE
+Keep the same structure and components, but rewrite the copy so it:
+- Feels less academic (avoid “reasoning families”, “constraint profile”, “weighted modelling”)
+- Is clearer in plain English
+- Emphasises benefit + consequence (why it matters)
+- Remains calm, institutional, premium (no hype, no guarantees)
+- Stays concise (mobile-first)
+
+DO NOT change:
+- Layout
+- Icons
+- Button labels (unless specified below)
+Only update text content.
+
+===========================================================
+REPLACEMENT COPY (USE EXACTLY OR VERY CLOSE)
+===========================================================
+
+SECTION HEADING (replace)
+“Built Around the Bucks 11+ Structure”
+
+SECTION SUBHEADING (replace)
+“An independent readiness assessment that measures accuracy and speed under timed conditions — then shows what to focus on first.”
+
+CARD 1 TITLE (keep or adjust)
+“Coverage Across the Test”
+
+CARD 1 BODY (replace)
+“Verbal Reasoning, Non-Verbal Reasoning and Maths — mapped to the Bucks 11+ format so you are practising the right things.”
+
+CARD 2 TITLE (keep)
+“Timed Conditions”
+
+CARD 2 BODY (replace)
+“Speed and completion discipline are measured alongside accuracy — because timing often determines the outcome.”
+
+CARD 3 TITLE (keep)
+“121 Context”
+
+CARD 3 BODY (replace)
+“Results are positioned against the 121 qualifying threshold to provide clear context — without guesswork.”
+
+PROCESS SECTION EYEBROW (keep “THE PROCESS”)
+
+PROCESS HEADING (replace)
+“How It Works — In Practice”
+
+PROCESS SUBHEADING (replace)
+“In a competitive cohort, preparation must be measured — not assumed. We benchmark, diagnose, and direct effort.”
+
+STEP 1 TITLE (keep)
+“Diagnostic Benchmark”
+
+STEP 1 BODY (replace)
+“Start with a timed, GL-style diagnostic across Verbal Reasoning, Non-Verbal Reasoning and Maths — including section pacing.”
+
+STEP 1 BULLETS (replace)
+- “Clear baseline across key sub-skills”
+- “Pace indicators by section”
+- “Initial readiness band with 121 context”
+
+STEP 2 TITLE (keep)
+“Readiness Forecast”
+
+STEP 2 BODY (replace)
+“We model performance against qualifying benchmarks using difficulty-aware accuracy, pace analysis, and concentration of errors.”
+
+STEP 2 BULLETS (replace)
+- “Readiness band: Secure / Borderline / Development Required”
+- “Top 3 priorities identified (what to fix first)”
+- “Key risks surfaced (pace, hard-tier drop, volatility)”
+
+BOTTOM NOTE (replace)
+“Reduces uncertainty and prevents misplaced effort.”
+
+STEP 3 TITLE (keep)
+“Targeted Development”
+
+STEP 3 BODY (replace)
+“Practice is directed to the areas that most influence readiness — not broad repetition.”
+
+STEP 3 BULLETS (replace)
+- “Drills mapped to specific rule types”
+- “Visual NVR sequences and patterns”
+- “Timed section blocks with progressive difficulty”
+
+BOTTOM NOTE (replace)
+“Time is directed to what materially changes outcomes.”
+
+STEP 4 TITLE (keep)
+“Measured Progression”
+
+STEP 4 BODY (replace)
+“Progress is re-checked at structured milestones so improvement becomes visible and evidence-based.”
+
+STEP 4 BULLETS (replace)
+- “Accuracy changes tracked over time”
+- “Pace discipline and stability monitored”
+- “Movement between readiness bands made clear”
+
+BOTTOM NOTE (replace)
+“Progress becomes measurable — not assumed.”
+
+CTA BLOCK (keep structure, tighten copy slightly)
+Top line (keep or adjust to):
+“Many families complete large volumes of questions without knowing whether readiness is improving.”
+
+Question line (keep):
+“Are we on track for 121 under timed conditions?”
+
+Add one supporting line ABOVE buttons (new, 1 line, optional but recommended):
+“Replace uncertainty with a clear baseline and focused priorities.”
+
+Buttons:
+Keep “Start Free Diagnostic”
+Keep “See Full Process”
+
+FOOTNOTE (keep)
+“Independent readiness assessment. Not affiliated with GL Assessment or Buckinghamshire Council.”
+
+===========================================================
+QUALITY CHECKS
+===========================================================
+
+- Ensure no line breaks create awkward spacing on mobile.
+- Avoid long paragraphs; 1–2 short sentences max per block.
+- Remove jargon: “reasoning families”, “constraint profile”, “weighted modelling” (except Step 2, where “model” is ok).
+- Keep tone calm, professional, and precise.
+
+DELIVERABLE
+Commit copy changes to the relevant page/component and confirm all updated strings render correctly on mobile.

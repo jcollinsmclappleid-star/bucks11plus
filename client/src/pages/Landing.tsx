@@ -377,8 +377,8 @@ export default function Landing() {
         <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent"></div>
         <div className="container mx-auto max-w-6xl px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-primary mb-4 font-serif">Aligned to GL-Style Reasoning Families Used in Bucks</h2>
-            <p className="text-lg text-muted-foreground">We independently model the assessment constraints to give you an honest baseline.</p>
+            <h2 className="text-3xl font-bold text-primary mb-4 font-serif">Built Around the Bucks 11+ Structure</h2>
+            <p className="text-lg text-muted-foreground">An independent readiness assessment that measures accuracy and speed under timed conditions — then shows what to focus on first.</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
@@ -387,8 +387,8 @@ export default function Landing() {
                 <div className="mx-auto w-14 h-14 bg-brand-primary/5 text-brand-primary rounded-2xl flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300 border border-brand-primary/10">
                   <BarChart3 className="h-7 w-7" />
                 </div>
-                <h3 className="font-bold text-primary text-xl">Reasoning Coverage</h3>
-                <p className="text-muted-foreground">VR, NVR and Maths aligned to GL-style reasoning families used in Bucks.</p>
+                <h3 className="font-bold text-primary text-xl">Coverage Across the Test</h3>
+                <p className="text-muted-foreground">Verbal Reasoning, Non-Verbal Reasoning and Maths — mapped to the Bucks 11+ format so you are practising the right things.</p>
               </CardContent>
             </Card>
 
@@ -398,7 +398,7 @@ export default function Landing() {
                   <Clock className="h-7 w-7" />
                 </div>
                 <h3 className="font-bold text-primary text-xl">Timed Conditions</h3>
-                <p className="text-muted-foreground">Pace and completion rates are actively measured and penalized, not just raw accuracy.</p>
+                <p className="text-muted-foreground">Speed and completion discipline are measured alongside accuracy — because timing often determines the outcome.</p>
               </CardContent>
             </Card>
 
@@ -408,7 +408,7 @@ export default function Landing() {
                   <Target className="h-7 w-7" />
                 </div>
                 <h3 className="font-bold text-primary text-xl">121 Context</h3>
-                <p className="text-muted-foreground">Your child's projected range is positioned directly against the Bucks qualifying score.</p>
+                <p className="text-muted-foreground">Results are positioned against the 121 qualifying threshold to provide clear context — without guesswork.</p>
               </CardContent>
             </Card>
           </div>
@@ -421,10 +421,10 @@ export default function Landing() {
           <div className="text-center mb-6">
             <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">The Process</span>
             <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4">
-              How It Works in Practice
+              How It Works — In Practice
             </h2>
             <p className="text-lg text-slate-500 max-w-2xl mx-auto">
-              In a competitive cohort, effort alone is not enough. Preparation must be measured, directed and timed.
+              In a competitive cohort, preparation must be measured — not assumed. We benchmark, diagnose, and direct effort.
             </p>
           </div>
 
@@ -440,25 +440,22 @@ export default function Landing() {
                 </div>
               </div>
               <p className="text-slate-600 leading-relaxed mb-5">
-                Preparation begins with a timed GL-style diagnostic covering Verbal Reasoning, Non-Verbal Reasoning, Mathematical Reasoning and section pacing.
+                Start with a timed, GL-style diagnostic across Verbal Reasoning, Non-Verbal Reasoning and Maths — including section pacing.
               </p>
               <div className="space-y-2.5 mb-5">
                 <div className="flex items-start gap-2.5 text-sm text-slate-600">
                   <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
-                  <span>Skill-by-skill accuracy analysis across 18 sub-areas</span>
+                  <span>Clear baseline across key sub-skills</span>
                 </div>
                 <div className="flex items-start gap-2.5 text-sm text-slate-600">
                   <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
-                  <span>Pacing risk indicators per section</span>
+                  <span>Pace indicators by section</span>
                 </div>
                 <div className="flex items-start gap-2.5 text-sm text-slate-600">
                   <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
-                  <span>Initial readiness band relative to the 121 qualifying standard</span>
+                  <span>Initial readiness band with 121 context</span>
                 </div>
               </div>
-              <p className="text-xs text-slate-400 italic border-t border-slate-100 pt-3">
-                Without a structured benchmark, preparation often reinforces strengths and neglects weaknesses.
-              </p>
             </div>
 
             <div className="group relative bg-white rounded-2xl border border-slate-200 p-7 sm:p-8 hover:border-primary/20 hover:shadow-lg transition-all duration-300" data-testid="step-readiness-forecast">
@@ -472,24 +469,24 @@ export default function Landing() {
                 </div>
               </div>
               <p className="text-slate-600 leading-relaxed mb-5">
-                Performance is analysed through weighted modelling aligned to qualifying benchmarks. Accuracy is adjusted for difficulty, pacing is measured against section expectations, and error concentration within sub-skills is evaluated.
+                We model performance against qualifying benchmarks using difficulty-aware accuracy, pace analysis, and concentration of errors.
               </p>
               <div className="space-y-2.5 mb-5">
                 <div className="flex items-start gap-2.5 text-sm text-slate-600">
                   <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
-                  <span>Clear readiness band: Secure (Green) / Borderline (Amber) / Development Required (Red)</span>
+                  <span>Readiness band: Secure / Borderline / Development Required</span>
                 </div>
                 <div className="flex items-start gap-2.5 text-sm text-slate-600">
                   <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
-                  <span>Top three priority intervention areas identified</span>
+                  <span>Top 3 priorities identified (what to fix first)</span>
                 </div>
                 <div className="flex items-start gap-2.5 text-sm text-slate-600">
                   <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
-                  <span>Risk factors affecting qualification surfaced</span>
+                  <span>Key risks surfaced (pace, hard-tier drop, volatility)</span>
                 </div>
               </div>
               <p className="text-xs text-slate-400 italic border-t border-slate-100 pt-3">
-                This prevents misplaced effort and reduces uncertainty.
+                Reduces uncertainty and prevents misplaced effort.
               </p>
             </div>
 
@@ -504,24 +501,24 @@ export default function Landing() {
                 </div>
               </div>
               <p className="text-slate-600 leading-relaxed mb-5">
-                Practice is prescribed according to diagnosed gaps. Time is directed to areas that materially influence outcome rather than broad repetition.
+                Practice is directed to the areas that most influence readiness — not broad repetition.
               </p>
               <div className="space-y-2.5 mb-5">
                 <div className="flex items-start gap-2.5 text-sm text-slate-600">
                   <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
-                  <span>Skill-specific drills mapped to sub-rules</span>
+                  <span>Drills mapped to specific rule types</span>
                 </div>
                 <div className="flex items-start gap-2.5 text-sm text-slate-600">
                   <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
-                  <span>Visual Non-Verbal reasoning sequences</span>
+                  <span>Visual NVR sequences and patterns</span>
                 </div>
                 <div className="flex items-start gap-2.5 text-sm text-slate-600">
                   <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
-                  <span>Timed section simulations with progressive difficulty</span>
+                  <span>Timed section blocks with progressive difficulty</span>
                 </div>
               </div>
               <p className="text-xs text-slate-400 italic border-t border-slate-100 pt-3">
-                Time is directed to areas that materially influence outcome.
+                Time is directed to what materially changes outcomes.
               </p>
             </div>
 
@@ -536,24 +533,24 @@ export default function Landing() {
                 </div>
               </div>
               <p className="text-slate-600 leading-relaxed mb-5">
-                Improvement is reassessed at structured milestones. Progress becomes visible and evidence-based rather than assumed.
+                Progress is re-checked at structured milestones so improvement becomes visible and evidence-based.
               </p>
               <div className="space-y-2.5 mb-5">
                 <div className="flex items-start gap-2.5 text-sm text-slate-600">
                   <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
-                  <span>Accuracy progression tracked across attempts</span>
+                  <span>Accuracy changes tracked over time</span>
                 </div>
                 <div className="flex items-start gap-2.5 text-sm text-slate-600">
                   <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
-                  <span>Pacing discipline and volatility monitored</span>
+                  <span>Pace discipline and stability monitored</span>
                 </div>
                 <div className="flex items-start gap-2.5 text-sm text-slate-600">
                   <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
-                  <span>Movement between readiness bands visible over time</span>
+                  <span>Movement between readiness bands made clear</span>
                 </div>
               </div>
               <p className="text-xs text-slate-400 italic border-t border-slate-100 pt-3">
-                Progress becomes visible and evidence-based.
+                Progress becomes measurable — not assumed.
               </p>
             </div>
           </div>
@@ -562,8 +559,11 @@ export default function Landing() {
             <p className="text-slate-700 font-medium text-lg leading-relaxed mb-1">
               Many families complete large volumes of questions without knowing whether readiness is improving.
             </p>
-            <p className="text-primary font-serif text-xl sm:text-2xl font-bold mt-3 mb-5">
+            <p className="text-primary font-serif text-xl sm:text-2xl font-bold mt-3 mb-3">
               Are we on track for 121 under timed conditions?
+            </p>
+            <p className="text-slate-500 text-sm mb-5">
+              Replace uncertainty with a clear baseline and focused priorities.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Button size="lg" className="h-12 px-8 bg-primary text-primary-foreground shadow-md" asChild data-testid="button-start-diagnostic-process">
