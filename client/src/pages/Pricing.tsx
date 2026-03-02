@@ -342,51 +342,6 @@ export default function Pricing() {
         </div>
       </section>
 
-      <section className="py-20 md:py-28 border-b border-border/30">
-        <div className="container mx-auto max-w-3xl px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-6" data-testid="text-trajectory-title">What structured preparation looks like over 16 weeks</h2>
-          <p className="text-lg text-muted-foreground mb-12 max-w-2xl mx-auto">
-            When practice is directed by diagnostic data, effort concentrates on what matters most. This is an illustrative example — individual results vary.
-          </p>
-
-          <div className="bg-slate-50 rounded-2xl p-8 md:p-12 border border-slate-200 max-w-xl mx-auto">
-            <div className="flex items-end justify-between mb-8">
-              <div className="text-left">
-                <p className="text-sm text-muted-foreground font-medium mb-1">Week 1 — Baseline</p>
-                <p className="text-4xl font-bold text-slate-400">108</p>
-              </div>
-              <div className="flex-1 mx-6 relative h-16">
-                <svg className="w-full h-full" viewBox="0 0 200 60" preserveAspectRatio="none">
-                  <defs>
-                    <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
-                      <stop offset="0%" stopColor="#94a3b8" />
-                      <stop offset="100%" stopColor="#3b82f6" />
-                    </linearGradient>
-                  </defs>
-                  <path d="M 0 50 Q 50 45 100 30 T 200 10" fill="none" stroke="url(#lineGrad)" strokeWidth="3" strokeLinecap="round" />
-                  <circle cx="0" cy="50" r="4" fill="#94a3b8" />
-                  <circle cx="50" cy="42" r="3" fill="#64748b" />
-                  <circle cx="100" cy="30" r="3" fill="#64748b" />
-                  <circle cx="150" cy="18" r="3" fill="#3b82f6" />
-                  <circle cx="200" cy="10" r="4" fill="#3b82f6" />
-                </svg>
-              </div>
-              <div className="text-right">
-                <p className="text-sm text-muted-foreground font-medium mb-1">Week 16 — Forecast</p>
-                <p className="text-4xl font-bold text-blue-600">119</p>
-              </div>
-            </div>
-            <div className="h-px bg-slate-200 mb-4"></div>
-            <p className="text-sm text-muted-foreground">
-              121 is the Bucks qualifying benchmark. Diagnostic-led preparation focuses effort on closing the specific gaps that influence readiness most.
-            </p>
-            <p className="text-[11px] text-slate-400 mt-2 italic">
-              Illustrative example only. Improvement depends on starting level, consistency and individual factors. No outcomes are guaranteed.
-            </p>
-          </div>
-        </div>
-      </section>
-
       <section className="py-20 md:py-28 border-b border-border/30" id="demos">
         <div className="container mx-auto max-w-5xl px-4">
           <div className="text-center mb-14">
