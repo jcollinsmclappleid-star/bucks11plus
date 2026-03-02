@@ -6,7 +6,7 @@ import { Seo } from "../components/shared/Seo";
 import { useState, useRef } from "react";
 
 const showcaseTabs = [
-  { id: "forecast", label: "Forecast" },
+  { id: "forecast", label: "Readiness Forecast" },
   { id: "sections", label: "Section Breakdown" },
   { id: "analytics", label: "Analytics" },
   { id: "progress", label: "Progress" },
@@ -35,6 +35,9 @@ function ForecastPanel() {
         <h3 className="text-xl md:text-2xl font-bold text-primary font-serif">7 points gap to 121</h3>
         <p className="text-sm text-slate-500 leading-relaxed">
           Clear readiness band shows exactly where your child stands against the Bucks qualifying benchmark.
+        </p>
+        <p className="text-[11px] text-slate-400 italic pt-1">
+          Illustrative example. Scores are modelled from performance patterns and are not official standardised results.
         </p>
       </div>
     </div>
@@ -280,12 +283,12 @@ export default function Landing() {
       <section id="see-product" className="py-16 md:py-24 bg-slate-50 border-b border-border/30 relative">
         <div className="container mx-auto max-w-5xl px-4">
           <div className="text-center mb-8">
-            <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">What You'll See</span>
+            <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">Here's How We Show You</span>
             <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4" data-testid="text-showcase-title">
-              Real output from a 12-minute diagnostic
+              What the Diagnostic Reveals — In Detail
             </h2>
-            <p className="text-lg text-slate-500 max-w-2xl mx-auto">
-              Scroll through the examples below to see exactly what you and your child get — no sign-up needed to try it.
+            <p className="text-lg text-slate-500 max-w-2xl mx-auto leading-relaxed">
+              Explore a sample diagnostic report to see how performance is analysed across accuracy, pace, stability and skill type — and how priorities are set.
             </p>
           </div>
 
@@ -354,7 +357,23 @@ export default function Landing() {
         </div>
       </section>
 
-      <section className="py-20 bg-white border-b border-border/50 relative">
+      <section className="py-12 md:py-16 bg-white border-b border-border/30">
+        <div className="container mx-auto max-w-4xl px-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10 text-sm text-slate-500">
+            <span className="flex items-center gap-2 font-medium">
+              <CheckCircle2 className="h-4 w-4 text-primary/50" /> Independent assessment
+            </span>
+            <span className="flex items-center gap-2 font-medium">
+              <CheckCircle2 className="h-4 w-4 text-primary/50" /> Structured diagnostic methodology
+            </span>
+            <span className="flex items-center gap-2 font-medium">
+              <CheckCircle2 className="h-4 w-4 text-primary/50" /> Not affiliated with GL or Bucks Council
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 bg-slate-50 border-b border-border/50 relative">
         <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent"></div>
         <div className="container mx-auto max-w-6xl px-4">
           <div className="text-center mb-16">
