@@ -8,6 +8,26 @@ const shapes = ['circle', 'square', 'triangle', 'star', 'pentagon', 'arrow'] as 
 const baseStyle: SvgStroke = { strokeWidth: 3, stroke: '#111827', fill: 'none', dashed: false };
 const difficulties = ['easy', 'medium', 'hard'] as const;
 
+const stemTemplates = [
+  'Which shape comes next in the sequence?',
+  'What is the next item in this pattern?',
+  'Select the shape that continues the sequence.',
+  'Which option follows the pattern shown?',
+  'Identify the next shape in the series.',
+  'What comes next in this sequence?',
+];
+
+const shapePalettes: string[][] = [
+  ['circle', 'square', 'triangle'],
+  ['star', 'pentagon', 'arrow'],
+  ['triangle', 'star', 'circle'],
+  ['square', 'arrow', 'pentagon'],
+  ['circle', 'pentagon', 'star'],
+  ['triangle', 'arrow', 'square'],
+];
+
+const layoutVariantIds = ['grid', 'diagonal', 'circular', 'scattered', 'cross', 'zigzag'];
+
 function seededRandom(seed: number) {
   let s = seed;
   return () => {
@@ -20,6 +40,10 @@ function pick<T>(arr: readonly T[], rng: () => number): T {
   return arr[Math.floor(rng() * arr.length)];
 }
 
+function pickFrom<T>(arr: T[], rng: () => number): T {
+  return arr[Math.floor(rng() * arr.length)];
+}
+
 function pickOther<T>(arr: readonly T[], exclude: T, rng: () => number): T {
   const filtered = arr.filter(x => x !== exclude);
   return filtered[Math.floor(rng() * filtered.length)];
@@ -28,6 +52,12 @@ function pickOther<T>(arr: readonly T[], exclude: T, rng: () => number): T {
 function pickOther2<T>(arr: readonly T[], exclude1: T, exclude2: T, rng: () => number): T {
   const filtered = arr.filter(x => x !== exclude1 && x !== exclude2);
   if (filtered.length === 0) return pickOther(arr, exclude1, rng);
+  return filtered[Math.floor(rng() * filtered.length)];
+}
+
+function pickOther3<T>(arr: readonly T[], excludes: T[], rng: () => number): T {
+  const filtered = arr.filter(x => !excludes.includes(x));
+  if (filtered.length === 0) return pickOther(arr, excludes[0], rng);
   return filtered[Math.floor(rng() * filtered.length)];
 }
 
@@ -43,6 +73,28 @@ function shuffleWithCorrect<T>(correct: T, distractors: T[], rng: () => number):
 
 function makeElement(shape: string, x: number, y: number, size: number, rotation: number, fill: 'none' | 'solid' = 'none'): SvgElement {
   return { type: 'shape', shape, x, y, size, rotation, style: { ...baseStyle, fill } };
+}
+
+function getStemTemplate(index: number): string {
+  return stemTemplates[index % stemTemplates.length];
+}
+
+function getStemVariantId(index: number): string {
+  return `stem_seq_${(index % stemTemplates.length) + 1}`;
+}
+
+function getShapePalette(index: number): string[] {
+  return shapePalettes[index % shapePalettes.length];
+}
+
+function getShapePaletteId(index: number): string {
+  return `palette_${(index % shapePalettes.length) + 1}`;
+}
+
+function getDensityLevel(diff: string): 'low' | 'medium' | 'high' {
+  if (diff === 'easy') return 'low';
+  if (diff === 'medium') return 'medium';
+  return 'high';
 }
 
 const layoutPatterns = [
@@ -127,7 +179,8 @@ function generateRotationIncrement(startSeed: number, count: number): GeneratedQ
   for (let i = 0; i < count; i++) {
     const rng = seededRandom(startSeed * 7 + i * 131);
     rng(); rng(); rng();
-    const shape = pick(shapes, rng);
+    const palette = getShapePalette(i);
+    const shape = pickFrom(palette, rng);
     const increment = pick(increments, rng);
     const diff = pick(difficulties, rng);
     const startRotation = Math.floor(rng() * 360);
@@ -156,7 +209,7 @@ function generateRotationIncrement(startSeed: number, count: number): GeneratedQ
     questions.push({
       section: 'Non-Verbal Reasoning',
       type: 'sequence',
-      prompt: `Which shape comes next in the sequence?`,
+      prompt: getStemTemplate(i),
       options: labels,
       correctAnswer: labels[correctIndex],
       difficulty: diff,
@@ -177,6 +230,11 @@ function generateRotationIncrement(startSeed: number, count: number): GeneratedQ
       locale: 'en-GB',
       britishSpelling: true,
       version: 1,
+      stemVariantId: getStemVariantId(i),
+      layoutVariantId: 'single_element',
+      shapePaletteId: getShapePaletteId(i),
+      densityLevel: getDensityLevel(diff),
+      distractorStyleId: 'wrong_rotation',
     });
   }
   return questions;
@@ -188,7 +246,8 @@ function generateCountIncrement(startSeed: number, count: number): GeneratedQues
   for (let i = 0; i < count; i++) {
     const rng = seededRandom(startSeed * 13 + i * 257 + 99);
     rng(); rng(); rng();
-    const shape = shapes[i % shapes.length];
+    const palette = getShapePalette(i);
+    const shape = palette[i % palette.length];
     const diff = pick(difficulties, rng);
     const layoutIdx = i % layoutPatterns.length;
     const elemSize = 12 + Math.floor(rng() * 12);
@@ -235,7 +294,7 @@ function generateCountIncrement(startSeed: number, count: number): GeneratedQues
     questions.push({
       section: 'Non-Verbal Reasoning',
       type: 'sequence',
-      prompt: `Which shape comes next in the sequence?`,
+      prompt: getStemTemplate(i),
       options: labels,
       correctAnswer: labels[correctIndex],
       difficulty: diff,
@@ -256,6 +315,11 @@ function generateCountIncrement(startSeed: number, count: number): GeneratedQues
       locale: 'en-GB',
       britishSpelling: true,
       version: 1,
+      stemVariantId: getStemVariantId(i),
+      layoutVariantId: layoutVariantIds[layoutIdx],
+      shapePaletteId: getShapePaletteId(i),
+      densityLevel: getDensityLevel(diff),
+      distractorStyleId: 'wrong_count',
     });
   }
   return questions;
@@ -267,7 +331,8 @@ function generateFillToggle(startSeed: number, count: number): GeneratedQuestion
   for (let i = 0; i < count; i++) {
     const rng = seededRandom(startSeed * 11 + i * 179 + 37);
     rng(); rng(); rng();
-    const shape = shapes[i % shapes.length];
+    const palette = getShapePalette(i);
+    const shape = palette[i % palette.length];
     const diff = pick(difficulties, rng);
     const startFilled = rng() > 0.5;
     const baseSize = 22 + Math.floor(rng() * 10);
@@ -301,7 +366,7 @@ function generateFillToggle(startSeed: number, count: number): GeneratedQuestion
     questions.push({
       section: 'Non-Verbal Reasoning',
       type: 'sequence',
-      prompt: `Which shape comes next in the sequence?`,
+      prompt: getStemTemplate(i),
       options: labels,
       correctAnswer: labels[correctIndex],
       difficulty: diff,
@@ -322,6 +387,11 @@ function generateFillToggle(startSeed: number, count: number): GeneratedQuestion
       locale: 'en-GB',
       britishSpelling: true,
       version: 1,
+      stemVariantId: getStemVariantId(i),
+      layoutVariantId: 'single_element',
+      shapePaletteId: getShapePaletteId(i),
+      densityLevel: getDensityLevel(diff),
+      distractorStyleId: 'wrong_fill',
     });
   }
   return questions;
@@ -334,7 +404,8 @@ function generatePositionShift(startSeed: number, count: number): GeneratedQuest
   for (let i = 0; i < count; i++) {
     const rng = seededRandom(startSeed * 13 + i * 211 + 53);
     rng(); rng(); rng();
-    const shape = shapes[i % shapes.length];
+    const palette = getShapePalette(i);
+    const shape = palette[i % palette.length];
     const diff = pick(difficulties, rng);
     const direction = directions[i % directions.length];
     const startX = 10 + Math.floor(rng() * 15);
@@ -370,7 +441,7 @@ function generatePositionShift(startSeed: number, count: number): GeneratedQuest
     questions.push({
       section: 'Non-Verbal Reasoning',
       type: 'sequence',
-      prompt: `Which shape comes next in the sequence?`,
+      prompt: getStemTemplate(i),
       options: labels,
       correctAnswer: labels[correctIndex],
       difficulty: diff,
@@ -391,6 +462,11 @@ function generatePositionShift(startSeed: number, count: number): GeneratedQuest
       locale: 'en-GB',
       britishSpelling: true,
       version: 1,
+      stemVariantId: getStemVariantId(i),
+      layoutVariantId: 'position_shift',
+      shapePaletteId: getShapePaletteId(i),
+      densityLevel: getDensityLevel(diff),
+      distractorStyleId: 'wrong_position',
     });
   }
   return questions;
@@ -419,10 +495,14 @@ function generateShapeChange(startSeed: number, count: number): GeneratedQuestio
     );
 
     const correctFrame = frames[4];
+    const correctShape = seq[4];
+    const dist1Shape = pickOther(shapes, correctShape, rng);
+    const dist2Shape = pickOther2(shapes, correctShape, dist1Shape, rng);
+    const dist3Shape = pickOther3(shapes, [correctShape, dist1Shape, dist2Shape], rng);
     const distractors: SvgFrame[] = [
-      { elements: [makeElement(seq[3], 50, 50, shapeSize, 0)] },
-      { elements: [makeElement(seq[0], 50, 50, shapeSize, 0)] },
-      { elements: [makeElement(pickOther(shapes, seq[4], rng), 50, 50, shapeSize, 0)] },
+      { elements: [makeElement(dist1Shape, 50, 50, shapeSize, 0)] },
+      { elements: [makeElement(dist2Shape, 50, 50, shapeSize, 0)] },
+      { elements: [makeElement(dist3Shape, 50, 50, shapeSize, 0)] },
     ];
 
     const { options: answerOptions, correctIndex } = shuffleWithCorrect(correctFrame, distractors, rng);
@@ -431,7 +511,7 @@ function generateShapeChange(startSeed: number, count: number): GeneratedQuestio
     questions.push({
       section: 'Non-Verbal Reasoning',
       type: 'sequence',
-      prompt: `Which shape comes next in the sequence?`,
+      prompt: getStemTemplate(i),
       options: labels,
       correctAnswer: labels[correctIndex],
       difficulty: diff,
@@ -452,6 +532,11 @@ function generateShapeChange(startSeed: number, count: number): GeneratedQuestio
       locale: 'en-GB',
       britishSpelling: true,
       version: 1,
+      stemVariantId: getStemVariantId(i),
+      layoutVariantId: 'single_element',
+      shapePaletteId: getShapePaletteId(i),
+      densityLevel: getDensityLevel(diff),
+      distractorStyleId: 'wrong_shape',
     });
   }
   return questions;
@@ -463,7 +548,8 @@ function generateSizeProgression(startSeed: number, count: number): GeneratedQue
   for (let i = 0; i < count; i++) {
     const rng = seededRandom(startSeed * 7 + i * 131);
     rng(); rng(); rng();
-    const shape = pick(shapes, rng);
+    const palette = getShapePalette(i);
+    const shape = pickFrom(palette, rng);
     const diff = pick(difficulties, rng);
     const startSize = 12 + Math.floor(rng() * 6);
     const sizeStep = 4 + Math.floor(rng() * 4);
@@ -488,7 +574,7 @@ function generateSizeProgression(startSeed: number, count: number): GeneratedQue
     questions.push({
       section: 'Non-Verbal Reasoning',
       type: 'sequence',
-      prompt: `Which shape comes next in the sequence?`,
+      prompt: getStemTemplate(i),
       options: labels,
       correctAnswer: labels[correctIndex],
       difficulty: diff,
@@ -509,6 +595,11 @@ function generateSizeProgression(startSeed: number, count: number): GeneratedQue
       locale: 'en-GB',
       britishSpelling: true,
       version: 1,
+      stemVariantId: getStemVariantId(i),
+      layoutVariantId: 'single_element',
+      shapePaletteId: getShapePaletteId(i),
+      densityLevel: getDensityLevel(diff),
+      distractorStyleId: 'wrong_size',
     });
   }
   return questions;
@@ -552,7 +643,7 @@ function generateMultiProperty(startSeed: number, count: number): GeneratedQuest
     questions.push({
       section: 'Non-Verbal Reasoning',
       type: 'sequence',
-      prompt: `Which shape comes next in the sequence?`,
+      prompt: getStemTemplate(i),
       options: labels,
       correctAnswer: labels[correctIndex],
       difficulty: diff,
@@ -573,6 +664,11 @@ function generateMultiProperty(startSeed: number, count: number): GeneratedQuest
       locale: 'en-GB',
       britishSpelling: true,
       version: 1,
+      stemVariantId: getStemVariantId(i),
+      layoutVariantId: 'single_element',
+      shapePaletteId: getShapePaletteId(i),
+      densityLevel: getDensityLevel(diff),
+      distractorStyleId: 'multi_property',
     });
   }
   return questions;

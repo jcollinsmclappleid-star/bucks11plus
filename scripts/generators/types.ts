@@ -17,4 +17,10 @@ export interface GeneratedQuestion {
   locale: string;
   britishSpelling: boolean;
   version: number;
+  stemVariantId?: string;
+  layoutVariantId?: string;
+  shapePaletteId?: string;
+  distractorStyleId?: string;
+  densityLevel?: 'low' | 'medium' | 'high';
+  contextId?: string;
 }

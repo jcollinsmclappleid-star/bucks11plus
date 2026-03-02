@@ -1,0 +1,330 @@
+IMPLEMENT 10/10 PREMIUM PARENT ANALYTICS (MODEL + DASHBOARD HIERARCHY) — COPY EXACTLY
+
+GOAL
+Parents must instantly understand:
+1) Are we on track relative to qualifying-level benchmarks (without claiming to predict standardised scores)?
+2) What is the single primary constraint preventing stronger readiness?
+3) Is performance stable or fragile (confidence)?
+4) What will move readiness fastest (impact-weighted priorities)?
+5) Is progress real over time (trajectory)?
+6) Is timing/stamina a risk (pressure + fatigue)?
+
+This must feel assessment-grade, calm, and authoritative.
+No hype. British English. No promises. No “AI” language.
+
+DATA ASSUMPTIONS
+Per answer: attempt_id, user_id, attempt_type (diagnostic|drill), section (VR|NVR|MATHS), question_id, skill_id, sub_rule_id, difficulty(1–5), cognitive_load(1–10), is_correct, time_seconds, question_order
+Per attempt: started_at, ended_at, total_questions, completed_questions
+
+===========================================================
+A) METRIC MODEL (STORE PER ATTEMPT + ROLLING)
+===========================================================
+
+Compute metrics server-side at attempt completion and store in:
+- attempts.metrics JSONB (preferred), OR attempt_metrics table
+
+All outputs must be deterministic and auditable.
+
+-----------------------------------------------------------
+A1) WEIGHTED ACCURACY INDEX (WAI) 0..1
+-----------------------------------------------------------
+
+difficulty_weight = {1:0.85, 2:0.95, 3:1.00, 4:1.15, 5:1.30}
+load_weight = clamp(0.85 + (cognitive_load-1)*(0.15/9), 0.85, 1.00)
+
+For each answered question i:
+w_i = difficulty_weight[d_i] * load_weight[l_i]
+score_i = 1 if correct else 0
+
+WAI = sum(score_i * w_i) / sum(w_i)
+
+Also compute banded accuracy:
+Acc_easy   = % correct where difficulty<=2
+Acc_medium = % correct where difficulty==3
+Acc_hard   = % correct where difficulty>=4
+
+-----------------------------------------------------------
+A2) PACE DISCIPLINE INDEX (PDI) 0..100
+-----------------------------------------------------------
+
+benchmark_s = {VR:35, NVR:35, MATHS:45} seconds per question
+
+For each section s:
+MTQ_s = mean(time_seconds)
+pace_ratio_s = MTQ_s / benchmark_s
+PDI_s = clamp(100 - 125*(pace_ratio_s - 1)*100, 0, 100)
+(Interpretation: 1.00 => 100; 1.10 => ~87.5; 1.20 => ~75)
+
+Overall PDI = weighted mean of PDI_s by question count.
+
+Also compute:
+pace_sd_s = stddev(time_seconds)  (inconsistency)
+completion_rate_s = completed_questions_s / total_questions_s (if applicable)
+
+-----------------------------------------------------------
+A3) FATIGUE / STAMINA INDICATORS
+-----------------------------------------------------------
+
+Split the attempt into thirds by question_order (within each section AND overall):
+Acc_first_third, Acc_last_third
+MTQ_first_third, MTQ_last_third
+
+FatigueAccuracyDrop = Acc_last_third - Acc_first_third
+FatiguePaceDrift = MTQ_last_third - MTQ_first_third
+
+Flag fatigue if:
+FatigueAccuracyDrop <= -15 percentage points OR FatiguePaceDrift >= +6 seconds
+
+-----------------------------------------------------------
+A4) CONCENTRATION RISK (CR) 0..1 + Top Contributors
+-----------------------------------------------------------
+
+errors_total = count(incorrect)
+For each sub_rule_id r:
+errors_r = count(incorrect where sub_rule_id=r)
+
+CR = max(errors_r / errors_total) if errors_total>0 else 0
+
+Also compute:
+Top5ErrorSubrules = top 5 sub_rule_id by errors_r with:
+- errors_r
+- share_of_total_errors
+- weighted_accuracy_r
+- avg_time_r
+
+Convert to CR_score 0..100:
+CR_score = clamp(100 - CR*100, 0, 100)
+
+-----------------------------------------------------------
+A5) STABILITY INDEX (SI) 0..100 + CONFIDENCE
+-----------------------------------------------------------
+
+Use last N diagnostics (N=3, if available). Define RS per attempt (A6).
+sd = stddev(RS_t across last N diagnostics)
+
+SI = clamp(100 - sd*12, 0, 100)
+
+ForecastConfidence:
+- "High" if N>=3 AND SI>=70
+- "Moderate" if N>=2
+- "Emerging" if N==1 OR SI<50
+
+-----------------------------------------------------------
+A6) READINESS SCORE (RS) 0..100 + BAND
+-----------------------------------------------------------
+
+RS = (WAI*100)*0.60 + PDI*0.25 + SI*0.10 + CR_score*0.05
+
+Band logic (calm, benchmark-aligned, not a promised outcome):
+- Green (Secure): RS>=75 AND PDI>=70 AND Acc_hard>=40
+- Amber (Borderline): RS 60–74 OR PDI 55–69 OR Acc_hard 25–39
+- Red (Development Required): RS<60 OR PDI<55 OR Acc_hard<25
+
+-----------------------------------------------------------
+A7) PRESSURE PROFILE (TIMED vs PRACTICE) — OPTIONAL BUT PREMIUM
+-----------------------------------------------------------
+
+If user has both drill attempts and diagnostics:
+Compute for each skill/sub_rule:
+PracticeAcc = weighted accuracy in drills (last 14–30 days)
+TimedAcc = weighted accuracy in diagnostics (last 3)
+PressureDelta = PracticeAcc - TimedAcc
+
+Flag “Pressure Gap” if PressureDelta >= 15pp for any top skill/sub_rule.
+
+-----------------------------------------------------------
+A8) GAP VELOCITY / TRAJECTORY
+-----------------------------------------------------------
+
+For last N diagnostics (N>=2):
+GV_RS = RS_last - RS_first
+GV_per_day = GV_RS / days_between
+
+Also compute per-skill velocity:
+Acc_skill_last - Acc_skill_first
+
+Classify trend:
+- Improving if GV_RS >= +6
+- Stable if -5..+5
+- Declining if <= -6
+
+-----------------------------------------------------------
+A9) PRIMARY CONSTRAINT ENGINE (THE “WHY”)
+-----------------------------------------------------------
+
+Determine ONE PrimaryConstraint based on strongest limiting signal:
+
+Evaluate these candidate constraints (pick highest severity):
+1) Hard-Tier Collapse: Acc_hard < 35 OR (Acc_easy - Acc_hard) >= 35pp
+2) Pace Risk: PDI < 65 OR any section pace_ratio_s > 1.15
+3) Fatigue: fatigue flag true
+4) Concentration: CR >= 0.40 (>=40% of errors from one sub_rule)
+5) Volatility: SI < 60 with N>=2
+
+PrimaryConstraint must return:
+- key (e.g., "hard_tier", "pace", "fatigue", "concentration", "volatility")
+- short explanation (1 sentence)
+- recommended action type (drill focus / timed blocks / re-assessment cadence)
+
+Also return SecondaryContributors (next two highest).
+
+-----------------------------------------------------------
+A10) IMPACT-WEIGHTED PRIORITIES (THIS IS THE 10/10 DIFFERENTIATOR)
+-----------------------------------------------------------
+
+Instead of “lowest accuracy”, compute “impact on RS”.
+
+For each candidate target area T (sub_rule_id or skill_id):
+Estimate marginal RS gain if accuracy in T improves by +10pp (capped at 90%).
+
+Implement a simple simulation:
+- Recompute WAI’ assuming questions in T increase correct rate by +10pp (apply to weighted accuracy for that group).
+- Recompute RS’ using same PDI, SI, CR_score’ (CR_score may change if T is top error cluster).
+
+Impact10 = RS’ - RS
+
+Rank targets by Impact10 descending.
+
+Output Top 3 priorities:
+Each includes:
+- label (human readable)
+- current accuracy + avg time
+- Impact10 (e.g., “~+5 RS points”)
+- recommended drill type (timed/untimed, difficulty band)
+
+===========================================================
+B) DASHBOARD HIERARCHY (PARENT-FIRST, 10/10)
+===========================================================
+
+Implement 3 tabs (or sections) in this exact order:
+1) Summary
+2) Insights
+3) Detail
+
+The “Summary” must answer the parent in under 15 seconds.
+
+-----------------------------------------------------------
+B1) SUMMARY TAB (FIRST SCREEN)
+-----------------------------------------------------------
+
+B1.1 Executive Summary (3 sentences max; generated)
+Template:
+Sentence 1: Readiness alignment statement based on Band + RS + Confidence.
+Sentence 2: PrimaryConstraint (plain English).
+Sentence 3: What to do next (one action).
+
+Examples (generate dynamically):
+- “Current performance is approaching qualifying-level benchmarks, with moderate confidence based on repeated diagnostics. The primary constraint is pace under timed conditions, particularly in Verbal Reasoning. Next step: complete a 12-minute timed VR block focused on rotation and pacing, then re-test.”
+
+B1.2 Four tiles (top row)
+Tile 1: Readiness Band (Green/Amber/Red) + RS (0–100)
+Tile 2: Forecast Confidence (High/Moderate/Emerging) + SI (0–100)
+Tile 3: Pace Discipline (PDI overall + mini bars for VR/NVR/MATHS)
+Tile 4: Difficulty Tolerance (Acc_easy / Acc_medium / Acc_hard)
+
+B1.3 Top 3 Priorities (impact-weighted)
+Each card must show:
+- “Focus area” (skill/sub-rule)
+- “Current” (accuracy + avg time)
+- “Expected impact” (Impact10: “~+X readiness points”)
+- CTA button “Start recommended drill”
+
+B1.4 Risk Flags (only if triggered; max 3)
+Examples:
+- “Pace risk in Maths”
+- “Performance drops later in the paper”
+- “Errors concentrated in reflection rules”
+Tone: neutral and constructive.
+
+B1.5 Next Step CTA
+One button only (choose based on PrimaryConstraint):
+- If pace constraint: “Start timed section block”
+- If hard-tier constraint: “Start harder practice set”
+- If volatility/low confidence: “Take another diagnostic”
+- If concentration: “Start targeted drill (sub-rule)”
+- If fatigue: “Start stamina set (timed)”
+
+-----------------------------------------------------------
+B2) INSIGHTS TAB (THE “WHY”)
+-----------------------------------------------------------
+
+Section 1: Primary Constraint Breakdown
+- Show PrimaryConstraint title + 2 bullets explaining evidence (from metrics)
+- Show Secondary contributors
+
+Section 2: Pressure Profile (if available)
+- Drill vs Diagnostic accuracy comparison (by section and/or top skills)
+- Show PressureDelta and interpretation line
+
+Section 3: Pace Under Pressure
+- PDI per section + pace_ratio + drift
+- Interpretation: 1 line
+
+Section 4: Trajectory
+- RS over last N diagnostics (sparkline)
+- Trend label (Improving/Stable/Declining) + GV_RS
+
+Section 5: Fatigue Curve
+- Accuracy first vs last third
+- Pace drift first vs last third
+
+-----------------------------------------------------------
+B3) DETAIL TAB (PROOF + GRANULARITY)
+-----------------------------------------------------------
+
+D1: Sub-Rule Heatmap (Accuracy mode)
+- Rows grouped by skill; columns by sub_rule
+- Cell = weighted accuracy, tooltip: acc + avg time + attempts
+
+D2: Heatmap toggle: Time mode
+- Cell = avg time vs benchmark
+
+D3: Heatmap toggle: Volatility mode (if N>=2)
+- Cell = stddev of sub_rule accuracy across attempts
+
+D4: Download Report (PDF)
+Include: Summary tiles, Top 3 priorities, constraint explanation, heatmap summary.
+
+===========================================================
+C) MICROCOPY (STRICTLY SHORT)
+===========================================================
+
+Each metric/chart must have one interpretation line max.
+No wall of text.
+
+Examples:
+- “Accuracy adjusted for difficulty and cognitive load.”
+- “Pace compared to timed section expectations.”
+- “Stability reflects consistency across recent diagnostics.”
+- “Most errors are concentrated in two rule types.”
+
+===========================================================
+D) IMPLEMENTATION REQUIREMENTS
+===========================================================
+
+1) Compute metrics server-side (avoid client manipulation).
+2) Store attempt metrics at completion.
+3) Ensure reproducibility (same input => same metrics).
+4) Unit tests required for:
+- WAI calculation
+- PDI calculation
+- RS + band mapping
+- PrimaryConstraint selection
+- Impact simulation ranking
+5) Hide or label metrics when data insufficient (e.g., “Emerging confidence”).
+
+===========================================================
+E) NON-NEGOTIABLE UX PRINCIPLES (CONTENT ONLY)
+===========================================================
+
+- Parents see “Summary” first.
+- One primary constraint only.
+- Three priorities only.
+- One next action only.
+- Optional deeper detail available, not forced.
+
+DELIVER:
+- Code changes for metric computation and storage
+- Dashboard implementation per hierarchy above
+- Sample JSON output for a typical attempt.metrics payload
+- Screenshots or route list showing where each block renders

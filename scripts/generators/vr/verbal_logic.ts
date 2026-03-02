@@ -51,7 +51,8 @@ function generateSentenceCompletionQuestions(): GeneratedQuestion[] {
   ];
   const questions: GeneratedQuestion[] = [];
 
-  for (const item of items) {
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
     const options = shuffle([item.answer, ...item.distractors]);
     questions.push(makeQ({
       type: 'verbal_logic',
@@ -66,6 +67,8 @@ function generateSentenceCompletionQuestions(): GeneratedQuestion[] {
       estTimeSeconds: item.time,
       explanation: `The correct word to complete the sentence is '${item.answer}'.`,
       qaStatus: 'approved',
+      stemVariantId: `sentence_completion_${i}`,
+      distractorStyleId: 'semantic_distractor',
     }));
   }
   return questions;
@@ -151,7 +154,8 @@ function generateLogicalDeductionQuestions(): GeneratedQuestion[] {
   ];
   const questions: GeneratedQuestion[] = [];
 
-  for (const item of items) {
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
     const options = shuffle([item.answer, ...item.distractors]);
     questions.push(makeQ({
       type: 'verbal_logic',
@@ -166,6 +170,8 @@ function generateLogicalDeductionQuestions(): GeneratedQuestion[] {
       estTimeSeconds: item.time,
       explanation: item.explanation,
       qaStatus: 'approved',
+      stemVariantId: `logical_deduction_${i}`,
+      distractorStyleId: 'logical_fallacy',
     }));
   }
   return questions;

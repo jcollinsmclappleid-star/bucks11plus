@@ -149,12 +149,14 @@ export class DatabaseStorage implements IStorage {
       .where(eq(questionUsage.userId, userId));
 
     const usageMap = new Map(usageRows.map(u => [u.questionId, u]));
+    const freshnessCutoff = Date.now() - 14 * 24 * 60 * 60 * 1000;
 
     const scored = allQuestions.map(q => {
       const usage = usageMap.get(q.id);
       const served = usage?.servedCount || 0;
       const lastServed = usage?.lastServedAt?.getTime() || 0;
-      return { question: q, served, lastServed };
+      const freshBonus = lastServed < freshnessCutoff ? 5 : 0;
+      return { question: q, served, lastServed, freshBonus };
     });
 
     scored.sort((a, b) => {
@@ -162,26 +164,44 @@ export class DatabaseStorage implements IStorage {
       return a.lastServed - b.lastServed;
     });
 
-    const selected: Question[] = [];
-    const subRuleCounts = new Map<string, number>();
     const maxPerSubRule = Math.max(2, Math.ceil(diag.questionCount * 0.4));
+    const subRuleCounts = new Map<string, number>();
+    const selected: Question[] = [];
+    const candidates = [...scored];
 
-    for (const item of scored) {
-      if (selected.length >= diag.questionCount) break;
-      const sr = item.question.subRuleId || "";
-      const currentCount = subRuleCounts.get(sr) || 0;
-      if (sr && currentCount >= maxPerSubRule) continue;
-      selected.push(item.question);
-      subRuleCounts.set(sr, currentCount + 1);
-    }
+    while (selected.length < diag.questionCount && candidates.length > 0) {
+      let bestIdx = -1;
+      let bestScore = -Infinity;
 
-    if (selected.length < diag.questionCount) {
-      for (const item of scored) {
-        if (selected.length >= diag.questionCount) break;
-        if (!selected.find(s => s.id === item.question.id)) {
-          selected.push(item.question);
+      for (let i = 0; i < Math.min(candidates.length, 50); i++) {
+        const item = candidates[i];
+        const sr = item.question.subRuleId || '';
+        const srCount = subRuleCounts.get(sr) || 0;
+        if (sr && srCount >= maxPerSubRule && selected.length < diag.questionCount * 0.8) continue;
+
+        const diversityScore = this.scoreDiversity(item.question, selected) + item.freshBonus;
+        if (diversityScore > bestScore) {
+          bestScore = diversityScore;
+          bestIdx = i;
         }
       }
+
+      if (bestIdx === -1) {
+        for (let i = 0; i < candidates.length; i++) {
+          const diversityScore = this.scoreDiversity(candidates[i].question, selected);
+          if (diversityScore > bestScore) {
+            bestScore = diversityScore;
+            bestIdx = i;
+          }
+        }
+      }
+
+      if (bestIdx === -1) break;
+
+      const chosen = candidates.splice(bestIdx, 1)[0];
+      const sr = chosen.question.subRuleId || '';
+      subRuleCounts.set(sr, (subRuleCounts.get(sr) || 0) + 1);
+      selected.push(chosen.question);
     }
 
     const now = new Date();
@@ -202,6 +222,54 @@ export class DatabaseStorage implements IStorage {
     }
 
     return selected;
+  }
+
+  private extractVariety(q: Question): {
+    stemVariantId: string; layoutVariantId: string; shapePaletteId: string;
+    distractorStyleId: string; densityLevel: string; contextId: string;
+  } {
+    const rc = (q.renderConfig as any) || {};
+    return {
+      stemVariantId: rc.stemVariantId || '',
+      layoutVariantId: rc.layoutVariantId || '',
+      shapePaletteId: rc.shapePaletteId || '',
+      distractorStyleId: rc.distractorStyleId || '',
+      densityLevel: rc.densityLevel || '',
+      contextId: rc.contextId || '',
+    };
+  }
+
+  private scoreDiversity(candidate: Question, selected: Question[]): number {
+    if (selected.length === 0) return 100;
+    const cv = this.extractVariety(candidate);
+    let score = 100;
+    const recentWindow = selected.slice(-10);
+
+    for (const s of recentWindow) {
+      const sv = this.extractVariety(s);
+      if (cv.stemVariantId && cv.stemVariantId === sv.stemVariantId) score -= 15;
+      if (cv.layoutVariantId && cv.layoutVariantId === sv.layoutVariantId) score -= 10;
+      if (cv.shapePaletteId && cv.shapePaletteId === sv.shapePaletteId) score -= 10;
+      if (cv.distractorStyleId && cv.distractorStyleId === sv.distractorStyleId) score -= 5;
+      if (cv.contextId && cv.contextId === sv.contextId) score -= 5;
+    }
+
+    const last3 = selected.slice(-3);
+    if (last3.length >= 2) {
+      const allSameDiff = last3.every(s => s.difficulty === candidate.difficulty);
+      if (allSameDiff) score -= 20;
+    }
+
+    const last2 = selected.slice(-2);
+    if (last2.length >= 2) {
+      const allSameDensity = last2.every(s => {
+        const sv = this.extractVariety(s);
+        return cv.densityLevel && sv.densityLevel === cv.densityLevel;
+      });
+      if (allSameDensity && cv.densityLevel) score -= 10;
+    }
+
+    return score;
   }
 
   async getQuestionsForDrill(sectionId: string, userId: string, limit: number = 10): Promise<Question[]> {
@@ -235,9 +303,14 @@ export class DatabaseStorage implements IStorage {
       .where(eq(questionUsage.userId, userId));
     const usageMap = new Map(usageRows.map(u => [u.questionId, u]));
 
+    const freshnessCutoff = Date.now() - 14 * 24 * 60 * 60 * 1000;
+
     const scored = pool.map(q => {
       const usage = usageMap.get(q.id);
-      return { question: q, served: usage?.servedCount || 0, lastServed: usage?.lastServedAt?.getTime() || 0 };
+      const served = usage?.servedCount || 0;
+      const lastServed = usage?.lastServedAt?.getTime() || 0;
+      const freshBonus = lastServed < freshnessCutoff ? 5 : 0;
+      return { question: q, served, lastServed, freshBonus };
     });
 
     scored.sort((a, b) => {
@@ -252,41 +325,56 @@ export class DatabaseStorage implements IStorage {
       [candidatePool[i], candidatePool[j]] = [candidatePool[j], candidatePool[i]];
     }
     const remaining = scored.filter(s => s.served > minServed + 1);
-    const shuffled = [...candidatePool, ...remaining];
+    const allCandidates = [...candidatePool, ...remaining];
 
     const maxPerSubRule = 2;
     const subRuleCounts = new Map<string, number>();
-    const diverseSelected: typeof shuffled = [];
-    const overflow: typeof shuffled = [];
+    const selected: Question[] = [];
 
-    for (const item of shuffled) {
-      const sr = item.question.subRuleId || '__none__';
-      const count = subRuleCounts.get(sr) || 0;
-      if (count < maxPerSubRule) {
-        diverseSelected.push(item);
-        subRuleCounts.set(sr, count + 1);
-      } else {
-        overflow.push(item);
+    while (selected.length < limit && allCandidates.length > 0) {
+      let bestIdx = -1;
+      let bestScore = -Infinity;
+
+      for (let i = 0; i < Math.min(allCandidates.length, 50); i++) {
+        const item = allCandidates[i];
+        const sr = item.question.subRuleId || '__none__';
+        const srCount = subRuleCounts.get(sr) || 0;
+        if (srCount >= maxPerSubRule && selected.length < limit * 0.8) continue;
+
+        const diversityScore = this.scoreDiversity(item.question, selected) + item.freshBonus;
+        if (diversityScore > bestScore) {
+          bestScore = diversityScore;
+          bestIdx = i;
+        }
       }
-      if (diverseSelected.length >= limit) break;
+
+      if (bestIdx === -1) {
+        for (let i = 0; i < allCandidates.length; i++) {
+          const diversityScore = this.scoreDiversity(allCandidates[i].question, selected);
+          if (diversityScore > bestScore) {
+            bestScore = diversityScore;
+            bestIdx = i;
+          }
+        }
+      }
+
+      if (bestIdx === -1) break;
+
+      const chosen = allCandidates.splice(bestIdx, 1)[0];
+      const sr = chosen.question.subRuleId || '__none__';
+      subRuleCounts.set(sr, (subRuleCounts.get(sr) || 0) + 1);
+      selected.push(chosen.question);
     }
 
-    if (diverseSelected.length < limit) {
-      for (const item of overflow) {
-        diverseSelected.push(item);
-        if (diverseSelected.length >= limit) break;
-      }
-    }
-
-    for (let i = diverseSelected.length - 1; i > 0; i--) {
+    for (let i = selected.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [diverseSelected[i], diverseSelected[j]] = [diverseSelected[j], diverseSelected[i]];
+      [selected[i], selected[j]] = [selected[j], selected[i]];
     }
 
-    const selected = diverseSelected.slice(0, limit).map(s => s.question);
+    const finalSelected = selected.slice(0, limit);
 
     const now = new Date();
-    for (const q of selected) {
+    for (const q of finalSelected) {
       const existing = usageMap.get(q.id);
       if (existing) {
         await db.update(questionUsage)
@@ -297,7 +385,7 @@ export class DatabaseStorage implements IStorage {
       }
     }
 
-    return selected;
+    return finalSelected;
   }
 
   async createTestSession(data: { userId: string; diagnosticId: string }): Promise<TestSession> {

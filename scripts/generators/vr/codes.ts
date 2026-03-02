@@ -62,6 +62,8 @@ function generateLetterNumberCipherQuestions(): GeneratedQuestion[] {
       cognitiveLoad: cogLoad,
       estTimeSeconds: difficulty === 'easy' ? 30 : difficulty === 'medium' ? 45 : 60,
       explanation: `Each number represents a letter: ${word.split('').map(c => `${letterToNum(c)}=${c}`).join(', ')}, spelling ${word}.`,
+      stemVariantId: `letter_number_cipher_${i}`,
+      distractorStyleId: 'calculation_error',
     }));
   }
   return questions;
@@ -101,6 +103,8 @@ function generateAlphabeticShiftQuestions(): GeneratedQuestion[] {
       cognitiveLoad: cogLoad,
       estTimeSeconds: difficulty === 'easy' ? 35 : difficulty === 'medium' ? 50 : 65,
       explanation: `Shifting each letter of ${coded} back by ${shift} gives ${correct}.`,
+      stemVariantId: `alphabetic_shift_${i}`,
+      distractorStyleId: 'direction_error',
     }));
   }
   return questions;
@@ -138,6 +142,8 @@ function generateReverseCipherQuestions(): GeneratedQuestion[] {
       cognitiveLoad: cogLoad,
       estTimeSeconds: difficulty === 'easy' ? 20 : difficulty === 'medium' ? 30 : 40,
       explanation: `Reversing the letters of ${reversed} gives ${correct}.`,
+      stemVariantId: `reverse_cipher_${i}`,
+      distractorStyleId: 'reversal_error',
     }));
   }
   return questions;

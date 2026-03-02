@@ -47,7 +47,8 @@ function generateCompoundWordQuestions(): GeneratedQuestion[] {
   ];
   const questions: GeneratedQuestion[] = [];
 
-  for (const c of compounds) {
+  for (let i = 0; i < compounds.length; i++) {
+    const c = compounds[i];
     const options = shuffle([c.second, ...c.distractors]);
     questions.push(makeQ({
       type: 'word_structure',
@@ -61,6 +62,8 @@ function generateCompoundWordQuestions(): GeneratedQuestion[] {
       cognitiveLoad: c.cog,
       estTimeSeconds: c.time,
       explanation: `'${c.first}' + '${c.second}' makes the compound word '${c.first}${c.second}'.`,
+      stemVariantId: `compound_word_${i}`,
+      distractorStyleId: 'rhyme_distractor',
     }));
   }
   return questions;
@@ -91,7 +94,8 @@ function generateHiddenWordQuestions(): GeneratedQuestion[] {
   ];
   const questions: GeneratedQuestion[] = [];
 
-  for (const h of hiddens) {
+  for (let i = 0; i < hiddens.length; i++) {
+    const h = hiddens[i];
     const options = shuffle([h.hidden, ...h.distractors]);
     questions.push(makeQ({
       type: 'word_structure',
@@ -105,6 +109,8 @@ function generateHiddenWordQuestions(): GeneratedQuestion[] {
       cognitiveLoad: h.cog,
       estTimeSeconds: h.time,
       explanation: `The hidden word '${h.hidden}' can be found spanning across the words in the sentence.`,
+      stemVariantId: `hidden_word_${i}`,
+      distractorStyleId: 'partial_match',
     }));
   }
   return questions;
@@ -135,7 +141,8 @@ function generateAnagramQuestions(): GeneratedQuestion[] {
   ];
   const questions: GeneratedQuestion[] = [];
 
-  for (const a of anagrams) {
+  for (let i = 0; i < anagrams.length; i++) {
+    const a = anagrams[i];
     const options = shuffle([a.answer, ...a.distractors]);
     questions.push(makeQ({
       type: 'word_structure',
@@ -149,6 +156,8 @@ function generateAnagramQuestions(): GeneratedQuestion[] {
       cognitiveLoad: a.cog,
       estTimeSeconds: a.time,
       explanation: `The letters ${a.scrambled} can be rearranged to spell '${a.answer}'.`,
+      stemVariantId: `anagram_${i}`,
+      distractorStyleId: 'letter_swap_error',
     }));
   }
   return questions;

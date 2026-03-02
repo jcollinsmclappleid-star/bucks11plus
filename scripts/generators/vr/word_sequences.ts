@@ -22,6 +22,24 @@ function makeQ(partial: Omit<GeneratedQuestion, 'section' | 'renderType' | 'rend
   };
 }
 
+const alphabeticalStems = [
+  `Which word comes first in alphabetical order?`,
+  `Which of these words would appear first in a dictionary?`,
+  `If these words were sorted A–Z, which would be first?`,
+  `Which word is earliest in the alphabet?`,
+  `Arrange these alphabetically — which comes first?`,
+  `Which word would you find first in an alphabetical list?`,
+];
+
+const categoryStems = [
+  `Three of these words belong to the same group. Which word does NOT belong?`,
+  `Which word is the odd one out from this group?`,
+  `One word does not fit with the others. Which is it?`,
+  `Three of these words are related. Which one is different?`,
+  `Which word does not belong with the rest?`,
+  `Identify the word that is not part of the same category.`,
+];
+
 function generateAlphabeticalOrderQuestions(): GeneratedQuestion[] {
   const wordSets: { words: string[]; answer: string; diff: string; cog: number; time: number }[] = [
     { words: ['apple', 'banana', 'cherry', 'date'], answer: 'apple', diff: 'easy', cog: 2, time: 20 },
@@ -42,11 +60,13 @@ function generateAlphabeticalOrderQuestions(): GeneratedQuestion[] {
   ];
   const questions: GeneratedQuestion[] = [];
 
-  for (const ws of wordSets) {
+  for (let i = 0; i < wordSets.length; i++) {
+    const ws = wordSets[i];
+    const stemIdx = i % alphabeticalStems.length;
     const options = shuffle(ws.words);
     questions.push(makeQ({
       type: 'word_sequences',
-      prompt: `Which word comes first in alphabetical order?`,
+      prompt: alphabeticalStems[stemIdx],
       options,
       correctAnswer: ws.answer,
       difficulty: ws.diff,
@@ -56,6 +76,8 @@ function generateAlphabeticalOrderQuestions(): GeneratedQuestion[] {
       cognitiveLoad: ws.cog,
       estTimeSeconds: ws.time,
       explanation: `In alphabetical order, '${ws.answer}' comes first among the given words.`,
+      stemVariantId: `alphabetical_stem_${stemIdx}`,
+      distractorStyleId: 'alphabetical_confusion',
     }));
   }
   return questions;
@@ -81,11 +103,13 @@ function generateCategoryGroupingQuestions(): GeneratedQuestion[] {
   ];
   const questions: GeneratedQuestion[] = [];
 
-  for (const s of sets) {
+  for (let i = 0; i < sets.length; i++) {
+    const s = sets[i];
+    const stemIdx = i % categoryStems.length;
     const options = shuffle([...s.members, s.oddOne]);
     questions.push(makeQ({
       type: 'word_sequences',
-      prompt: `Three of these words belong to the same group. Which word does NOT belong?`,
+      prompt: categoryStems[stemIdx],
       options,
       correctAnswer: s.oddOne,
       difficulty: s.diff,
@@ -95,6 +119,8 @@ function generateCategoryGroupingQuestions(): GeneratedQuestion[] {
       cognitiveLoad: s.cog,
       estTimeSeconds: s.time,
       explanation: `'${s.members.join("', '")}' are all ${s.category}. '${s.oddOne}' does not belong to this group.`,
+      stemVariantId: `category_stem_${stemIdx}`,
+      distractorStyleId: 'category_confusion',
     }));
   }
   return questions;

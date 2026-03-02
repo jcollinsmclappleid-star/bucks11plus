@@ -24,6 +24,36 @@ function makeOptions(correct: string, distractors: string[]): string[] {
   return shuffle(Array.from(opts).slice(0, 4));
 }
 
+const multiStepContextIds = [
+  'shopping', 'travel', 'school', 'travel', 'school',
+  'cooking', 'school', 'sport', 'school', 'cooking',
+];
+
+const moneyContextIds = [
+  'shopping', 'shopping', 'shopping', 'travel', 'shopping',
+  'shopping', 'shopping', 'shopping', 'sport', 'school',
+];
+
+const timeContextIds = [
+  'time_schedule', 'travel', 'school', 'travel', 'school',
+  'cooking', 'sport', 'travel', 'time_schedule', 'sport',
+];
+
+const multiStepStemVariants = [
+  'stem_ms_1', 'stem_ms_2', 'stem_ms_3', 'stem_ms_4', 'stem_ms_5',
+  'stem_ms_6', 'stem_ms_1', 'stem_ms_2', 'stem_ms_3', 'stem_ms_4',
+];
+
+const moneyStemVariants = [
+  'stem_money_1', 'stem_money_2', 'stem_money_3', 'stem_money_4', 'stem_money_5',
+  'stem_money_6', 'stem_money_1', 'stem_money_2', 'stem_money_3', 'stem_money_4',
+];
+
+const timeStemVariants = [
+  'stem_time_1', 'stem_time_2', 'stem_time_3', 'stem_time_4', 'stem_time_5',
+  'stem_time_6', 'stem_time_1', 'stem_time_2', 'stem_time_3', 'stem_time_4',
+];
+
 export function generateWordProblemQuestions(): GeneratedQuestion[] {
   const questions: GeneratedQuestion[] = [];
 
@@ -39,7 +69,8 @@ export function generateWordProblemQuestions(): GeneratedQuestion[] {
     { prompt: 'A library has 1,250 books. It receives 380 new books and donates 145 old books. How many books does the library have now?', correct: '1485', distractors: ['1630', '1105', '1395'], d: 2 },
     { prompt: 'A factory produces 175 toys per hour. It operates for 8 hours a day, 5 days a week. How many toys are produced in a week?', correct: '7000', distractors: ['1400', '875', '8750'], d: 3 },
   ];
-  for (const p of multiStepProblems) {
+  for (let i = 0; i < multiStepProblems.length; i++) {
+    const p = multiStepProblems[i];
     questions.push({
       section: 'Mathematics', type: 'multiple_choice',
       prompt: p.prompt,
@@ -49,6 +80,9 @@ export function generateWordProblemQuestions(): GeneratedQuestion[] {
       skillId: 'maths.word_problems', subRuleId: 'maths.word_problems.multi_step',
       renderType: 'text', renderConfig: null,
       trapTypes: ['partial_calculation', 'wrong_operation'],
+      distractorStyleId: 'partial_calculation',
+      contextId: multiStepContextIds[i],
+      stemVariantId: multiStepStemVariants[i],
       cognitiveLoad: p.d, estTimeSeconds: 35 + p.d * 5,
       explanation: `Work through each step carefully to arrive at ${p.correct}.`,
       qaStatus: 'approved', locale: 'en-GB', britishSpelling: true, version: 1,
@@ -67,7 +101,8 @@ export function generateWordProblemQuestions(): GeneratedQuestion[] {
     { prompt: 'Harry has £50.00. He buys a football for £17.99 and shin pads for £8.50. How much money does he have left?', correct: '£23.51', distractors: ['£24.51', '£26.49', '£23.49'], d: 2 },
     { prompt: 'A school trip costs £135 per pupil. If 24 pupils go, what is the total cost?', correct: '£3240', distractors: ['£3340', '£3140', '£2700'], d: 3 },
   ];
-  for (const p of moneyProblems) {
+  for (let i = 0; i < moneyProblems.length; i++) {
+    const p = moneyProblems[i];
     questions.push({
       section: 'Mathematics', type: 'multiple_choice',
       prompt: p.prompt,
@@ -77,6 +112,9 @@ export function generateWordProblemQuestions(): GeneratedQuestion[] {
       skillId: 'maths.word_problems', subRuleId: 'maths.word_problems.money',
       renderType: 'text', renderConfig: null,
       trapTypes: ['decimal_error', 'wrong_operation'],
+      distractorStyleId: 'decimal_error',
+      contextId: moneyContextIds[i],
+      stemVariantId: moneyStemVariants[i],
       cognitiveLoad: p.d, estTimeSeconds: 25 + p.d * 5,
       explanation: `Calculate carefully with decimal values to get ${p.correct}.`,
       qaStatus: 'approved', locale: 'en-GB', britishSpelling: true, version: 1,
@@ -95,7 +133,8 @@ export function generateWordProblemQuestions(): GeneratedQuestion[] {
     { prompt: 'If it is 22:40 now, how many minutes until midnight?', correct: '80', distractors: ['120', '60', '100'], d: 2 },
     { prompt: 'A swimming session is from 16:45 to 18:10. How many minutes long is the session?', correct: '85', distractors: ['75', '95', '65'], d: 2 },
   ];
-  for (const p of timeProblems) {
+  for (let i = 0; i < timeProblems.length; i++) {
+    const p = timeProblems[i];
     questions.push({
       section: 'Mathematics', type: 'multiple_choice',
       prompt: p.prompt,
@@ -105,6 +144,9 @@ export function generateWordProblemQuestions(): GeneratedQuestion[] {
       skillId: 'maths.word_problems', subRuleId: 'maths.word_problems.time',
       renderType: 'text', renderConfig: null,
       trapTypes: ['60_minute_error', 'am_pm_confusion'],
+      distractorStyleId: '60_minute_error',
+      contextId: timeContextIds[i],
+      stemVariantId: timeStemVariants[i],
       cognitiveLoad: p.d, estTimeSeconds: 25 + p.d * 5,
       explanation: `The answer is ${p.correct}. Remember there are 60 minutes in an hour.`,
       qaStatus: 'approved', locale: 'en-GB', britishSpelling: true, version: 1,

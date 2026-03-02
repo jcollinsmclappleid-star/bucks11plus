@@ -22,6 +22,18 @@ function makeOptions(correct: string, distractors: string[]): string[] {
   return shuffle(Array.from(opts).slice(0, 4));
 }
 
+function contextFromTitle(title: string): string {
+  const t = title.toLowerCase();
+  if (t.includes('book') || t.includes('library')) return 'school';
+  if (t.includes('goal') || t.includes('swim') || t.includes('sport') || t.includes('football') || t.includes('exercise') || t.includes('cycling') || t.includes('cyclist')) return 'sport';
+  if (t.includes('ice cream') || t.includes('sandwich') || t.includes('cake') || t.includes('tuck') || t.includes('dinner') || t.includes('fruit')) return 'shopping';
+  if (t.includes('rain') || t.includes('temperature') || t.includes('sunshine') || t.includes('pond') || t.includes('electricity')) return 'weather';
+  if (t.includes('car') || t.includes('train') || t.includes('distance') || t.includes('speed') || t.includes('visitor')) return 'travel';
+  if (t.includes('pet') || t.includes('puppy') || t.includes('flower') || t.includes('plant')) return 'nature';
+  if (t.includes('pupil') || t.includes('class') || t.includes('school') || t.includes('quiz') || t.includes('spelling') || t.includes('attendance') || t.includes('house') || t.includes('club') || t.includes('subject') || t.includes('colour') || t.includes('saving')) return 'school';
+  return 'data';
+}
+
 export function generateDataInterpretationQuestions(): GeneratedQuestion[] {
   const questions: GeneratedQuestion[] = [];
 
@@ -51,6 +63,9 @@ export function generateDataInterpretationQuestions(): GeneratedQuestion[] {
       renderType: 'chart',
       renderConfig: { kind: 'chart.bar', title: c.title, xLabels: c.xLabels, values: c.values, yMax: c.yMax, questionText: c.questionText },
       trapTypes: ['wrong_category'],
+      distractorStyleId: 'wrong_category',
+      layoutVariantId: 'bar',
+      contextId: contextFromTitle(c.title),
       cognitiveLoad: 1, estTimeSeconds: 20,
       explanation: `Read the value directly from the bar chart: ${c.correct}.`,
       qaStatus: 'approved', locale: 'en-GB', britishSpelling: true, version: 1,
@@ -83,6 +98,9 @@ export function generateDataInterpretationQuestions(): GeneratedQuestion[] {
       renderType: 'chart',
       renderConfig: { kind: 'chart.bar', title: c.title, xLabels: c.xLabels, values: c.values, yMax: c.yMax, questionText: c.questionText },
       trapTypes: ['off_by_one', 'subtract_vs_add'],
+      distractorStyleId: 'off_by_one',
+      layoutVariantId: 'bar',
+      contextId: contextFromTitle(c.title),
       cognitiveLoad: c.d, estTimeSeconds: 25 + c.d * 5,
       explanation: `Read values from the chart and calculate: ${c.correct}.`,
       qaStatus: 'approved', locale: 'en-GB', britishSpelling: true, version: 1,
@@ -115,6 +133,9 @@ export function generateDataInterpretationQuestions(): GeneratedQuestion[] {
       renderType: 'chart',
       renderConfig: { kind: 'chart.line', title: c.title, xLabels: c.xLabels, values: c.values, yMax: c.yMax, questionText: c.questionText },
       trapTypes: ['wrong_category'],
+      distractorStyleId: 'wrong_category',
+      layoutVariantId: 'line',
+      contextId: contextFromTitle(c.title),
       cognitiveLoad: 1, estTimeSeconds: 20,
       explanation: `Read the value from the line chart: ${c.correct}.`,
       qaStatus: 'approved', locale: 'en-GB', britishSpelling: true, version: 1,
@@ -147,6 +168,9 @@ export function generateDataInterpretationQuestions(): GeneratedQuestion[] {
       renderType: 'chart',
       renderConfig: { kind: 'chart.table', title: c.title, headers: c.headers, rows: c.rows, questionText: c.questionText },
       trapTypes: ['off_by_one', 'wrong_category', 'subtract_vs_add'],
+      distractorStyleId: 'off_by_one',
+      layoutVariantId: 'table',
+      contextId: contextFromTitle(c.title),
       cognitiveLoad: c.d, estTimeSeconds: 30 + c.d * 5,
       explanation: `Read the relevant values from the table and calculate: ${c.correct}.`,
       qaStatus: 'approved', locale: 'en-GB', britishSpelling: true, version: 1,

@@ -4,7 +4,23 @@ type SvgStroke = { strokeWidth: number; stroke: string; fill: 'none' | 'solid'; 
 type SvgElement = { type: 'shape'; shape: string; x: number; y: number; size: number; rotation: number; style: SvgStroke };
 type SvgFrame = { elements: SvgElement[] };
 
-const shapes = ['circle', 'square', 'triangle', 'star', 'pentagon', 'arrow'] as const;
+const shapes = ['square', 'triangle', 'star', 'pentagon', 'arrow'] as const;
+
+const stemTemplates = [
+  'Which option completes the mirror image of the pattern?',
+  'Select the option that correctly mirrors the given pattern.',
+  'Which image shows the correct reflection of the pattern?',
+  'Identify the option that completes the symmetrical pattern.',
+] as const;
+
+const shapePalettes = [
+  ['square', 'triangle', 'star'],
+  ['pentagon', 'arrow', 'square'],
+  ['triangle', 'star', 'arrow'],
+  ['square', 'pentagon', 'triangle'],
+  ['arrow', 'star', 'pentagon'],
+  ['triangle', 'arrow', 'square'],
+] as const;
 const baseStyle: SvgStroke = { strokeWidth: 3, stroke: '#111827', fill: 'none', dashed: false };
 const difficulties = ['easy', 'medium', 'hard'] as const;
 
@@ -45,10 +61,14 @@ export function generateSymmetryQuestions(): GeneratedQuestion[] {
     rng(); rng(); rng();
     const diff = pick(difficulties, rng);
     const numElements = diff === 'easy' ? 2 : diff === 'medium' ? 3 : 4;
+    const palette = shapePalettes[i % shapePalettes.length];
+    const stemIdx = i % stemTemplates.length;
+    const stem = stemTemplates[stemIdx];
+    const densityLevel: 'low' | 'medium' | 'high' = diff === 'easy' ? 'low' : diff === 'medium' ? 'medium' : 'high';
 
     const leftElements: SvgElement[] = [];
     for (let e = 0; e < numElements; e++) {
-      const shape = pick(shapes, rng);
+      const shape = pick(palette, rng);
       const x = 10 + Math.floor(rng() * 35);
       const y = 15 + Math.floor(rng() * 70);
       const size = 12 + Math.floor(rng() * 10);
@@ -63,7 +83,7 @@ export function generateSymmetryQuestions(): GeneratedQuestion[] {
     const correctFrame: SvgFrame = { elements: correctElements };
 
     const distractor1: SvgFrame = {
-      elements: leftElements.map(el => ({ ...el, x: 100 - el.x })),
+      elements: leftElements.map(el => ({ ...el, x: 100 - el.x, rotation: (el.rotation + 45) % 360 })),
     };
 
     const distractor2: SvgFrame = {
@@ -78,16 +98,53 @@ export function generateSymmetryQuestions(): GeneratedQuestion[] {
         ...el,
         y: 100 - el.y,
         x: 100 - el.x,
+        rotation: (180 - el.rotation + 360) % 360,
       })),
     };
 
-    const { options: answerOptions, correctIndex } = shuffleWithCorrect(correctFrame, [distractor1, distractor2, distractor3], rng);
+    const distractorFrames = [distractor1, distractor2, distractor3];
+    const correctStr = JSON.stringify(correctFrame);
+    const validDistractors = distractorFrames.filter(d => JSON.stringify(d) !== correctStr);
+    const uniqueDistractors: SvgFrame[] = [];
+    const seenFrames = new Set<string>([correctStr]);
+    for (const d of validDistractors) {
+      const dStr = JSON.stringify(d);
+      if (!seenFrames.has(dStr)) {
+        uniqueDistractors.push(d);
+        seenFrames.add(dStr);
+      }
+    }
+    while (uniqueDistractors.length < 3) {
+      const offset = uniqueDistractors.length * 30 + 15;
+      const fallbackFrame: SvgFrame = {
+        elements: leftElements.map(el => ({
+          ...mirrorX(el),
+          size: el.size + 4,
+          rotation: (mirrorX(el).rotation + offset) % 360,
+        })),
+      };
+      const fbStr = JSON.stringify(fallbackFrame);
+      if (!seenFrames.has(fbStr)) {
+        uniqueDistractors.push(fallbackFrame);
+        seenFrames.add(fbStr);
+      } else {
+        uniqueDistractors.push({
+          elements: leftElements.map(el => ({
+            ...el, x: 100 - el.x, y: 100 - el.y,
+            rotation: (el.rotation + offset + 45) % 360,
+          })),
+        });
+        break;
+      }
+    }
+
+    const { options: answerOptions, correctIndex } = shuffleWithCorrect(correctFrame, uniqueDistractors.slice(0, 3), rng);
     const labels = ['A', 'B', 'C', 'D'];
 
     questions.push({
       section: 'Non-Verbal Reasoning',
       type: 'symmetry',
-      prompt: 'Which option completes the mirror image of the pattern?',
+      prompt: stem,
       options: labels,
       correctAnswer: labels[correctIndex],
       difficulty: diff,
@@ -107,6 +164,9 @@ export function generateSymmetryQuestions(): GeneratedQuestion[] {
       locale: 'en-GB',
       britishSpelling: true,
       version: 1,
+      stemVariantId: `symmetry_stem_${stemIdx}`,
+      shapePaletteId: `palette_${i % shapePalettes.length}`,
+      densityLevel,
     });
   }
 

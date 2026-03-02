@@ -61,6 +61,7 @@ function generateAlphabeticSkipQuestions(): GeneratedQuestion[] {
     const options = shuffle([answer, ...distractors.slice(0, 3)]);
     while (options.length < 4) options.push(toLetter(cfg.start + 6 * cfg.skip));
 
+    const skipIdx = configs.indexOf(cfg);
     questions.push(makeQ({
       type: 'letter_sequences',
       prompt: `What comes next in the sequence? ${shown}`,
@@ -73,6 +74,8 @@ function generateAlphabeticSkipQuestions(): GeneratedQuestion[] {
       cognitiveLoad: cfg.cog,
       estTimeSeconds: cfg.time,
       explanation: `The pattern skips ${cfg.skip - 1} letter${cfg.skip > 2 ? 's' : ''} each time. The next letter is ${answer}.`,
+      stemVariantId: `alphabetic_skip_${skipIdx}`,
+      distractorStyleId: 'skip_count_error',
     }));
   }
   return questions;
@@ -113,15 +116,29 @@ function generateAlternatingQuestions(): GeneratedQuestion[] {
     }
     const shown = seqAlt.slice(0, 5).join('  ') + '  ?';
     const answer = seqAlt[5];
-    const distractors = [
+    const rawDistractors = [
       toLetter(b + cfg.inc2),
       toLetter(a + cfg.inc1),
       toLetter(b - cfg.inc2),
-    ].filter(d => d !== answer);
-    const uniqueDistractors = Array.from(new Set(distractors)).filter(d => d !== answer).slice(0, 3);
-    while (uniqueDistractors.length < 3) uniqueDistractors.push(toLetter(a + 2 * cfg.inc1));
+      toLetter(a - cfg.inc1),
+      toLetter(b + 2 * cfg.inc2),
+      toLetter(a + 3 * cfg.inc1),
+    ];
+    const uniqueDistractors: string[] = [];
+    const seen = new Set<string>([answer]);
+    for (const d of rawDistractors) {
+      if (!seen.has(d)) { uniqueDistractors.push(d); seen.add(d); }
+      if (uniqueDistractors.length >= 3) break;
+    }
+    let fallback = 1;
+    while (uniqueDistractors.length < 3) {
+      const candidate = toLetter(a + fallback * 7);
+      if (!seen.has(candidate)) { uniqueDistractors.push(candidate); seen.add(candidate); }
+      fallback++;
+    }
     const options = shuffle([answer, ...uniqueDistractors.slice(0, 3)]);
 
+    const altIdx = configs.indexOf(cfg);
     questions.push(makeQ({
       type: 'letter_sequences',
       prompt: `What comes next in the sequence? ${shown}`,
@@ -134,6 +151,8 @@ function generateAlternatingQuestions(): GeneratedQuestion[] {
       cognitiveLoad: cfg.cog,
       estTimeSeconds: cfg.time,
       explanation: `This sequence alternates between two patterns. The next letter is ${answer}.`,
+      stemVariantId: `alternating_${altIdx}`,
+      distractorStyleId: 'alternating_pattern_error',
     }));
   }
   return questions;
@@ -165,15 +184,29 @@ function generateReversePatternQuestions(): GeneratedQuestion[] {
     for (let j = 0; j < 5; j++) seq.push(toLetter(cfg.start - j * cfg.step));
     const answer = toLetter(cfg.start - 5 * cfg.step);
     const shown = seq.join('  ') + '  ?';
-    const distractors = [
+    const rawD = [
       toLetter(cfg.start - 5 * cfg.step + 1),
       toLetter(cfg.start - 5 * cfg.step - 1),
       toLetter(cfg.start - 4 * cfg.step),
-    ].filter(d => d !== answer);
-    const uniqueD = Array.from(new Set(distractors)).slice(0, 3);
-    while (uniqueD.length < 3) uniqueD.push(toLetter(cfg.start - 6 * cfg.step));
+      toLetter(cfg.start - 6 * cfg.step),
+      toLetter(cfg.start - 5 * cfg.step + 2),
+      toLetter(cfg.start - 5 * cfg.step - 2),
+    ];
+    const uniqueD: string[] = [];
+    const seenD = new Set<string>([answer]);
+    for (const d of rawD) {
+      if (!seenD.has(d)) { uniqueD.push(d); seenD.add(d); }
+      if (uniqueD.length >= 3) break;
+    }
+    let fb = 1;
+    while (uniqueD.length < 3) {
+      const c = toLetter(cfg.start - 5 * cfg.step + fb * 3);
+      if (!seenD.has(c)) { uniqueD.push(c); seenD.add(c); }
+      fb++;
+    }
     const options = shuffle([answer, ...uniqueD.slice(0, 3)]);
 
+    const revIdx = configs.indexOf(cfg);
     questions.push(makeQ({
       type: 'letter_sequences',
       prompt: `What comes next in the sequence? ${shown}`,
@@ -186,6 +219,8 @@ function generateReversePatternQuestions(): GeneratedQuestion[] {
       cognitiveLoad: cfg.cog,
       estTimeSeconds: cfg.time,
       explanation: `The letters go backwards, decreasing by ${cfg.step} each time. The next letter is ${answer}.`,
+      stemVariantId: `reverse_pattern_${revIdx}`,
+      distractorStyleId: 'direction_error',
     }));
   }
   return questions;

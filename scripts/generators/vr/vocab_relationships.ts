@@ -34,6 +34,33 @@ function pickRandom<T>(arr: T[], count: number, exclude?: T[]): T[] {
   return result;
 }
 
+const synonymStems = [
+  (w: string) => `Which word is closest in meaning to '${w}'?`,
+  (w: string) => `Which word is the best synonym for '${w}'?`,
+  (w: string) => `Which word means the same as '${w}'?`,
+  (w: string) => `Select the word that has a similar meaning to '${w}'.`,
+  (w: string) => `Which of these words could replace '${w}' in a sentence?`,
+  (w: string) => `Find the word most similar in meaning to '${w}'.`,
+];
+
+const antonymStems = [
+  (w: string) => `Which word is most opposite in meaning to '${w}'?`,
+  (w: string) => `Which word is the best antonym for '${w}'?`,
+  (w: string) => `Which word means the opposite of '${w}'?`,
+  (w: string) => `Select the word that has the most different meaning from '${w}'.`,
+  (w: string) => `Which of these words is the reverse of '${w}'?`,
+  (w: string) => `Find the word most opposite in meaning to '${w}'.`,
+];
+
+const oddOneOutStems = [
+  `Which word is the odd one out?`,
+  `Which word doesn't belong with the others?`,
+  `Which word does not fit with the rest?`,
+  `One of these words is different. Which one?`,
+  `Which word is least like the others?`,
+  `Identify the word that does not match the group.`,
+];
+
 function generateSynonymMatchQuestions(): GeneratedQuestion[] {
   const questions: GeneratedQuestion[] = [];
   const allSynonyms = synonymsData.map(s => s.synonyms).flat();
@@ -45,10 +72,11 @@ function generateSynonymMatchQuestions(): GeneratedQuestion[] {
     const options = shuffle([correct, ...distractors]);
     const difficulty = i < 7 ? 'easy' : i < 14 ? 'medium' : 'hard';
     const cog = i < 7 ? 3 : i < 14 ? 5 : 7;
+    const stemIdx = i % synonymStems.length;
 
     questions.push(makeQ({
       type: 'vocab_relationships',
-      prompt: `Which word is closest in meaning to '${entry.word}'?`,
+      prompt: synonymStems[stemIdx](entry.word),
       options,
       correctAnswer: correct,
       difficulty,
@@ -59,6 +87,8 @@ function generateSynonymMatchQuestions(): GeneratedQuestion[] {
       estTimeSeconds: difficulty === 'easy' ? 20 : difficulty === 'medium' ? 30 : 40,
       explanation: `'${correct}' is a synonym of '${entry.word}'.`,
       qaStatus: 'approved',
+      stemVariantId: `synonym_stem_${stemIdx}`,
+      distractorStyleId: 'near_synonym_confusion',
     }));
   }
   return questions;
@@ -75,10 +105,11 @@ function generateAntonymMatchQuestions(): GeneratedQuestion[] {
     const options = shuffle([correct, ...distractors]);
     const difficulty = i < 7 ? 'easy' : i < 14 ? 'medium' : 'hard';
     const cog = i < 7 ? 3 : i < 14 ? 5 : 7;
+    const stemIdx = i % antonymStems.length;
 
     questions.push(makeQ({
       type: 'vocab_relationships',
-      prompt: `Which word is most opposite in meaning to '${entry.word}'?`,
+      prompt: antonymStems[stemIdx](entry.word),
       options,
       correctAnswer: correct,
       difficulty,
@@ -89,6 +120,8 @@ function generateAntonymMatchQuestions(): GeneratedQuestion[] {
       estTimeSeconds: difficulty === 'easy' ? 20 : difficulty === 'medium' ? 30 : 40,
       explanation: `'${correct}' is the opposite of '${entry.word}'.`,
       qaStatus: 'approved',
+      stemVariantId: `antonym_stem_${stemIdx}`,
+      distractorStyleId: 'antonym_confusion',
     }));
   }
   return questions;
@@ -120,11 +153,13 @@ function generateOddOneOutQuestions(): GeneratedQuestion[] {
     { words: ['serene', 'composed', 'placid'], oddOne: 'irate', reason: "'serene', 'composed' and 'placid' all mean calm. 'irate' means angry.", diff: 'hard', cog: 6, time: 40 },
   ];
 
-  for (const g of groups) {
+  for (let i = 0; i < groups.length; i++) {
+    const g = groups[i];
+    const stemIdx = i % oddOneOutStems.length;
     const options = shuffle([...g.words, g.oddOne]);
     questions.push(makeQ({
       type: 'vocab_relationships',
-      prompt: `Which word is the odd one out?`,
+      prompt: oddOneOutStems[stemIdx],
       options,
       correctAnswer: g.oddOne,
       difficulty: g.diff,
@@ -135,6 +170,8 @@ function generateOddOneOutQuestions(): GeneratedQuestion[] {
       estTimeSeconds: g.time,
       explanation: g.reason,
       qaStatus: 'approved',
+      stemVariantId: `odd_one_out_stem_${stemIdx}`,
+      distractorStyleId: 'semantic_similarity',
     }));
   }
   return questions;
