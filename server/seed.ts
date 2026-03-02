@@ -1,6 +1,154 @@
 import { db } from "./db";
 import { diagnostics, questions, articles, practiceSections } from "@shared/schema";
 import { sql } from "drizzle-orm";
+import type { NvrSequenceConfig, NvrTransformConfig, NvrClassificationConfig } from "@shared/contentTypes";
+
+const S = { strokeWidth: 3, stroke: "#111827", fill: "none" as const };
+const SF = { strokeWidth: 3, stroke: "#111827", fill: "solid" as const };
+
+const nvrSvgQuestions: Array<{
+  prompt: string;
+  options: string[];
+  correct: string;
+  section: string;
+  renderType: "svg";
+  renderConfig: NvrSequenceConfig | NvrTransformConfig | NvrClassificationConfig;
+}> = [
+  {
+    prompt: "Which shape completes the sequence?",
+    options: ["A", "B", "C", "D"],
+    correct: "C",
+    section: "Non-Verbal Reasoning",
+    renderType: "svg",
+    renderConfig: {
+      kind: "nvr.sequence",
+      frames: [
+        { elements: [{ type: "shape", shape: "triangle", x: 50, y: 50, size: 40, rotation: 0, style: S }] },
+        { elements: [{ type: "shape", shape: "triangle", x: 50, y: 50, size: 40, rotation: 90, style: S }] },
+        { elements: [{ type: "shape", shape: "triangle", x: 50, y: 50, size: 40, rotation: 180, style: S }] },
+        { elements: [{ type: "shape", shape: "triangle", x: 50, y: 50, size: 40, rotation: 270, style: S }] },
+      ],
+      questionIndex: 3,
+      answerOptions: [
+        { elements: [{ type: "shape", shape: "triangle", x: 50, y: 50, size: 40, rotation: 0, style: S }] },
+        { elements: [{ type: "shape", shape: "triangle", x: 50, y: 50, size: 40, rotation: 180, style: S }] },
+        { elements: [{ type: "shape", shape: "triangle", x: 50, y: 50, size: 40, rotation: 270, style: S }] },
+        { elements: [{ type: "shape", shape: "square", x: 50, y: 50, size: 40, rotation: 0, style: S }] },
+      ],
+    },
+  },
+  {
+    prompt: "Find the odd one out.",
+    options: ["A", "B", "C", "D"],
+    correct: "D",
+    section: "Non-Verbal Reasoning",
+    renderType: "svg",
+    renderConfig: {
+      kind: "nvr.classification",
+      group: [],
+      answerOptions: [
+        { elements: [{ type: "shape", shape: "circle", x: 50, y: 50, size: 36, rotation: 0, style: S }] },
+        { elements: [{ type: "shape", shape: "circle", x: 50, y: 50, size: 28, rotation: 0, style: S }] },
+        { elements: [{ type: "shape", shape: "circle", x: 50, y: 50, size: 44, rotation: 0, style: S }] },
+        { elements: [{ type: "shape", shape: "pentagon", x: 50, y: 50, size: 36, rotation: 0, style: S }] },
+      ],
+    },
+  },
+  {
+    prompt: "Which figure comes next in the sequence?",
+    options: ["A", "B", "C", "D"],
+    correct: "B",
+    section: "Non-Verbal Reasoning",
+    renderType: "svg",
+    renderConfig: {
+      kind: "nvr.sequence",
+      frames: [
+        { elements: [
+          { type: "shape", shape: "square", x: 30, y: 50, size: 20, rotation: 0, style: SF },
+        ] },
+        { elements: [
+          { type: "shape", shape: "square", x: 25, y: 50, size: 20, rotation: 0, style: SF },
+          { type: "shape", shape: "square", x: 55, y: 50, size: 20, rotation: 0, style: SF },
+        ] },
+        { elements: [
+          { type: "shape", shape: "square", x: 20, y: 50, size: 20, rotation: 0, style: SF },
+          { type: "shape", shape: "square", x: 50, y: 50, size: 20, rotation: 0, style: SF },
+          { type: "shape", shape: "square", x: 80, y: 50, size: 20, rotation: 0, style: SF },
+        ] },
+        { elements: [
+          { type: "shape", shape: "square", x: 15, y: 50, size: 16, rotation: 0, style: SF },
+          { type: "shape", shape: "square", x: 38, y: 50, size: 16, rotation: 0, style: SF },
+          { type: "shape", shape: "square", x: 61, y: 50, size: 16, rotation: 0, style: SF },
+          { type: "shape", shape: "square", x: 84, y: 50, size: 16, rotation: 0, style: SF },
+        ] },
+      ],
+      questionIndex: 3,
+      answerOptions: [
+        { elements: [
+          { type: "shape", shape: "square", x: 25, y: 50, size: 20, rotation: 0, style: SF },
+          { type: "shape", shape: "square", x: 55, y: 50, size: 20, rotation: 0, style: SF },
+          { type: "shape", shape: "square", x: 85, y: 50, size: 20, rotation: 0, style: SF },
+        ] },
+        { elements: [
+          { type: "shape", shape: "square", x: 15, y: 50, size: 16, rotation: 0, style: SF },
+          { type: "shape", shape: "square", x: 38, y: 50, size: 16, rotation: 0, style: SF },
+          { type: "shape", shape: "square", x: 61, y: 50, size: 16, rotation: 0, style: SF },
+          { type: "shape", shape: "square", x: 84, y: 50, size: 16, rotation: 0, style: SF },
+        ] },
+        { elements: [
+          { type: "shape", shape: "circle", x: 25, y: 50, size: 16, rotation: 0, style: SF },
+          { type: "shape", shape: "circle", x: 50, y: 50, size: 16, rotation: 0, style: SF },
+          { type: "shape", shape: "circle", x: 75, y: 50, size: 16, rotation: 0, style: SF },
+        ] },
+        { elements: [
+          { type: "shape", shape: "square", x: 50, y: 50, size: 40, rotation: 0, style: SF },
+        ] },
+      ],
+    },
+  },
+  {
+    prompt: "Which shape is the mirror image of the given shape?",
+    options: ["A", "B", "C", "D"],
+    correct: "B",
+    section: "Non-Verbal Reasoning",
+    renderType: "svg",
+    renderConfig: {
+      kind: "nvr.transform",
+      promptFrames: [
+        { elements: [
+          { type: "shape", shape: "arrow", x: 35, y: 50, size: 30, rotation: 45, style: S },
+          { type: "dot", x: 65, y: 30, r: 5, style: SF },
+        ] },
+        { elements: [
+          { type: "shape", shape: "arrow", x: 65, y: 50, size: 30, rotation: -45, style: S },
+          { type: "dot", x: 35, y: 30, r: 5, style: SF },
+        ] },
+        { elements: [
+          { type: "shape", shape: "star", x: 35, y: 50, size: 30, rotation: 0, style: S },
+          { type: "dot", x: 70, y: 30, r: 5, style: SF },
+        ] },
+      ],
+      answerOptions: [
+        { elements: [
+          { type: "shape", shape: "star", x: 65, y: 50, size: 30, rotation: 0, style: S },
+          { type: "dot", x: 35, y: 70, r: 5, style: SF },
+        ] },
+        { elements: [
+          { type: "shape", shape: "star", x: 65, y: 50, size: 30, rotation: 0, style: S },
+          { type: "dot", x: 30, y: 30, r: 5, style: SF },
+        ] },
+        { elements: [
+          { type: "shape", shape: "star", x: 35, y: 50, size: 30, rotation: 90, style: S },
+          { type: "dot", x: 70, y: 30, r: 5, style: SF },
+        ] },
+        { elements: [
+          { type: "shape", shape: "pentagon", x: 65, y: 50, size: 30, rotation: 0, style: S },
+          { type: "dot", x: 30, y: 30, r: 5, style: SF },
+        ] },
+      ],
+    },
+  },
+];
 
 export async function seedDatabase() {
   const [existing] = await db.select({ count: sql<number>`count(*)` }).from(diagnostics);
@@ -58,13 +206,6 @@ export async function seedDatabase() {
     { prompt: "Which word does not belong? CAT, DOG, FISH, TABLE, BIRD", options: ["CAT", "DOG", "FISH", "TABLE", "BIRD"], correct: "TABLE", section: "Verbal Reasoning" },
   ];
 
-  const nvrQuestions = [
-    { prompt: "Which shape completes the pattern? A series of rotating triangles is shown.", options: ["Triangle pointing up", "Triangle pointing right", "Triangle pointing down", "Triangle pointing left", "Square"], correct: "Triangle pointing down", section: "Non-Verbal Reasoning" },
-    { prompt: "Find the odd one out in the following shapes: Four circles and one hexagon.", options: ["Shape A", "Shape B", "Shape C", "Shape D", "Shape E"], correct: "Shape E", section: "Non-Verbal Reasoning" },
-    { prompt: "Which figure comes next in the sequence? Squares increasing by one each time.", options: ["3 squares", "4 squares", "5 squares", "6 squares", "7 squares"], correct: "5 squares", section: "Non-Verbal Reasoning" },
-    { prompt: "Which is the mirror image of the given shape?", options: ["Option A", "Option B", "Option C", "Option D", "Option E"], correct: "Option B", section: "Non-Verbal Reasoning" },
-  ];
-
   const mathsQuestions = [
     { prompt: "What is 347 + 258?", options: ["595", "605", "615", "585", "625"], correct: "605", section: "Maths" },
     { prompt: "A shop sells 3 apples for £1.20. How much do 5 apples cost?", options: ["£1.80", "£2.00", "£2.20", "£1.50", "£2.40"], correct: "£2.00", section: "Maths" },
@@ -72,34 +213,48 @@ export async function seedDatabase() {
     { prompt: "If a train travels 60 miles in 45 minutes, what is its speed in mph?", options: ["60 mph", "70 mph", "80 mph", "75 mph", "90 mph"], correct: "80 mph", section: "Maths" },
   ];
 
-  const allMiniQuestions = [...vrQuestions, ...nvrQuestions, ...mathsQuestions].map((q, i) => ({
-    id: `mini-q-${i + 1}`,
+  const textQuestions = [...vrQuestions, ...mathsQuestions].map((q, i) => ({
+    id: `mini-q-${i < 4 ? i + 1 : i + 5}`,
     diagnosticId: "mini-1",
     section: q.section,
-    type: q.section === "Verbal Reasoning" ? "verbal" : q.section === "Non-Verbal Reasoning" ? "spatial" : "numerical",
+    type: q.section === "Verbal Reasoning" ? "verbal" : "numerical",
     prompt: q.prompt,
     options: q.options,
     correctAnswer: q.correct,
     difficulty: "medium" as const,
     timeExpected: 60,
-    orderIndex: i,
+    orderIndex: i < 4 ? i : i + 4,
+    renderType: "text" as const,
+    renderConfig: {},
   }));
 
-  await db.insert(questions).values(allMiniQuestions);
+  const svgQuestions = nvrSvgQuestions.map((q, i) => ({
+    id: `mini-q-${i + 5}`,
+    diagnosticId: "mini-1",
+    section: q.section,
+    type: "spatial",
+    prompt: q.prompt,
+    options: q.options,
+    correctAnswer: q.correct,
+    difficulty: "medium" as const,
+    timeExpected: 60,
+    orderIndex: i + 4,
+    renderType: q.renderType,
+    renderConfig: q.renderConfig,
+  }));
+
+  await db.insert(questions).values([...textQuestions, ...svgQuestions]);
 
   const fullAQuestions = [
     ...vrQuestions,
     { prompt: "Which pair of words is most similar? HAPPY/GLAD or SAD/ANGRY", options: ["HAPPY/GLAD", "SAD/ANGRY", "Both equal", "Neither", "Cannot tell"], correct: "HAPPY/GLAD", section: "Verbal Reasoning" },
     { prompt: "Rearrange these letters to make a word: LOOHCS", options: ["SCHOOL", "CHOOSE", "STOOLS", "COLORS", "COOLS"], correct: "SCHOOL", section: "Verbal Reasoning" },
     { prompt: "Find the hidden word: The LAMP LASTED all night.", options: ["LAST", "AMPLE", "PLAST", "LAMP", "PAST"], correct: "PLAST", section: "Verbal Reasoning" },
-    ...nvrQuestions,
-    { prompt: "Which cube can be made from this net?", options: ["Cube A", "Cube B", "Cube C", "Cube D", "Cube E"], correct: "Cube C", section: "Non-Verbal Reasoning" },
-    { prompt: "Complete the grid pattern: 2x2 grid with one missing.", options: ["Pattern A", "Pattern B", "Pattern C", "Pattern D", "Pattern E"], correct: "Pattern A", section: "Non-Verbal Reasoning" },
-    { prompt: "Which shape is a rotation of the given figure?", options: ["Shape A", "Shape B", "Shape C", "Shape D", "Shape E"], correct: "Shape D", section: "Non-Verbal Reasoning" },
-    ...mathsQuestions,
+    ...nvrSvgQuestions,
     { prompt: "What is 15% of 240?", options: ["32", "34", "36", "38", "40"], correct: "36", section: "Maths" },
     { prompt: "A rectangle has a perimeter of 30cm and width of 5cm. What is its length?", options: ["10cm", "12cm", "15cm", "8cm", "20cm"], correct: "10cm", section: "Maths" },
     { prompt: "Complete: 2, 5, 11, 23, ___", options: ["35", "46", "47", "45", "48"], correct: "47", section: "Maths" },
+    ...mathsQuestions,
   ].map((q, i) => ({
     id: `full-a-q-${i + 1}`,
     diagnosticId: "full-a",
@@ -111,6 +266,8 @@ export async function seedDatabase() {
     difficulty: i < 7 ? "easy" as const : i < 14 ? "medium" as const : "hard" as const,
     timeExpected: 60,
     orderIndex: i,
+    renderType: ("renderType" in q ? q.renderType : "text") as string,
+    renderConfig: ("renderConfig" in q ? q.renderConfig : {}) as Record<string, unknown>,
   }));
 
   await db.insert(questions).values(fullAQuestions);
