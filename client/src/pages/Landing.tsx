@@ -53,7 +53,7 @@ export default function Landing() {
                 </Link>
               </Button>
               <Button size="lg" variant="outline" className="h-14 px-8 text-lg w-full sm:w-auto bg-white/5 border-white/20 text-white hover:bg-white/10 hover:text-white backdrop-blur-md" asChild>
-                 <Link href="/how-forecast-works">How Our Forecast Works</Link>
+                 <a href="#how-forecast-works">How Our Forecast Works</a>
               </Button>
             </div>
             <p className="text-xs text-white/50 mt-6 max-w-md mx-auto">
@@ -148,7 +148,7 @@ export default function Landing() {
         </div>
       </section>
 
-      <section className="py-20 md:py-28 bg-white relative overflow-hidden">
+      <section id="how-forecast-works" className="py-20 md:py-28 bg-white relative overflow-hidden">
         <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent"></div>
         <div className="container mx-auto max-w-6xl px-4">
           <div className="text-center mb-6">
