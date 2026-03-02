@@ -230,25 +230,29 @@ export default function Landing() {
               Buckinghamshire Secondary Transfer Test
             </div>
 
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-[1.1] font-serif max-w-4xl mx-auto">
-              Not Mock Papers. A Structured Readiness System for the Bucks 11+.
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-[1.08] font-serif max-w-4xl mx-auto">
+              The Readiness Standard <br className="hidden md:block" />
+              <span className="text-white/60">for the Bucks 11+</span>
             </h1>
 
             <p className="text-lg md:text-xl text-white/75 max-w-3xl mx-auto leading-relaxed">
               Identify the constraint limiting performance — accuracy, pace, stability, or rule-type weakness — and follow a targeted improvement plan.
             </p>
 
-            <div className="pt-2">
-              <p className="text-sm text-white/50 max-w-2xl mx-auto leading-relaxed">
+            <div className="pt-1">
+              <p className="text-sm text-white/45 max-w-2xl mx-auto leading-relaxed">
                 Diagnostic-led assessment, not question repetition. Modelled against the 121 qualifying standard.
               </p>
             </div>
 
-            <div className="pt-6">
+            <div className="pt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button size="lg" className="h-14 px-10 text-lg bg-brand-amber text-amber-950 hover:bg-amber-400 font-bold shadow-lg shadow-brand-amber/20 border-none" asChild>
                 <Link href="/free-diagnostic">
                   Start Free Diagnostic <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
+              </Button>
+              <Button size="lg" variant="outline" className="h-14 px-8 text-lg bg-white/5 border-white/20 text-white hover:bg-white/10 hover:text-white backdrop-blur-md" asChild>
+                <a href="#how-forecast-works">How It Works</a>
               </Button>
             </div>
 
