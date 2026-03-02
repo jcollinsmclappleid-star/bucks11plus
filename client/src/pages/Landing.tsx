@@ -242,18 +242,21 @@ export default function Landing() {
             </div>
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-[1.12] font-serif max-w-4xl mx-auto">
-              Bucks 11+ Preparation<br className="hidden md:block" />
-              <span className="text-white/55">Built on Diagnostics.</span>
+              Know Exactly Where They Stand <br className="hidden md:block" />
+              <span className="text-white/55">for the Bucks 11+.</span>
             </h1>
 
             <p className="text-lg md:text-xl text-white/65 max-w-3xl mx-auto leading-relaxed">
-              Take a free timed diagnostic. See exactly where your child stands against the 121 benchmark. Get a clear plan for what to work on — accuracy, pace, or specific question types.
+              A structured diagnostic system that reveals what is truly limiting performance — accuracy, pace, stability or specific rule types — and shows what to focus on first.
             </p>
 
-            <div className="pt-3 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm text-white/50">
-              <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5" /> Free diagnostic — no sign-up</span>
-              <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5" /> Readiness forecast vs 121</span>
-              <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5" /> Section-level gap analysis</span>
+            <div className="pt-4 max-w-xl mx-auto space-y-1">
+              <p className="text-sm text-white/45 leading-relaxed">
+                Replace uncertainty with structured clarity.
+              </p>
+              <p className="text-sm text-white/45 leading-relaxed">
+                Built for parents who prefer evidence over assumption.
+              </p>
             </div>
 
             <div className="pt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
