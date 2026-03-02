@@ -134,3 +134,5 @@ content/
 - Content calibration table ready for future p-value/difficulty tuning
 - Question variants table ready for future A/B testing
 - Stripe checkout uses `payment` mode with session_id verification
+- Section naming: "Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics" (not "Maths") — consistent across DB, seed, and generators
+- Practice section skillIds mapped to generator skill families (vr.vocab, nvr.sequence, maths.arithmetic, etc.)

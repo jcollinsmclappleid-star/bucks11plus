@@ -244,6 +244,9 @@ export async function registerRoutes(
         if (!question) continue;
 
         const isCorrect = ans.selectedAnswer === question.correctAnswer;
+        if (!isCorrect) {
+          console.log(`[scoring] Q ${question.id}: selected="${ans.selectedAnswer}" expected="${question.correctAnswer}" renderType=${question.renderType}`);
+        }
         if (isCorrect) correct++;
 
         if (!sectionResults[question.section]) {

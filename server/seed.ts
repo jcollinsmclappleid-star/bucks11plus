@@ -165,7 +165,7 @@ export async function seedDatabase() {
       duration: 12,
       questionCount: 12,
       requiredTier: "free",
-      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Maths"],
+      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
     },
     {
       id: "full-a",
@@ -175,7 +175,7 @@ export async function seedDatabase() {
       duration: 45,
       questionCount: 40,
       requiredTier: "pack12",
-      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Maths"],
+      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
     },
     {
       id: "full-b",
@@ -185,7 +185,7 @@ export async function seedDatabase() {
       duration: 45,
       questionCount: 40,
       requiredTier: "pack12",
-      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Maths"],
+      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
     },
     {
       id: "mock-1",
@@ -195,7 +195,7 @@ export async function seedDatabase() {
       duration: 50,
       questionCount: 50,
       requiredTier: "programme16",
-      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Maths"],
+      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
     },
   ]);
 
@@ -207,10 +207,10 @@ export async function seedDatabase() {
   ];
 
   const mathsQuestions = [
-    { prompt: "What is 347 + 258?", options: ["595", "605", "615", "585", "625"], correct: "605", section: "Maths" },
-    { prompt: "A shop sells 3 apples for £1.20. How much do 5 apples cost?", options: ["£1.80", "£2.00", "£2.20", "£1.50", "£2.40"], correct: "£2.00", section: "Maths" },
-    { prompt: "What is 3/4 of 120?", options: ["80", "90", "100", "85", "95"], correct: "90", section: "Maths" },
-    { prompt: "If a train travels 60 miles in 45 minutes, what is its speed in mph?", options: ["60 mph", "70 mph", "80 mph", "75 mph", "90 mph"], correct: "80 mph", section: "Maths" },
+    { prompt: "What is 347 + 258?", options: ["595", "605", "615", "585", "625"], correct: "605", section: "Mathematics" },
+    { prompt: "A shop sells 3 apples for £1.20. How much do 5 apples cost?", options: ["£1.80", "£2.00", "£2.20", "£1.50", "£2.40"], correct: "£2.00", section: "Mathematics" },
+    { prompt: "What is 3/4 of 120?", options: ["80", "90", "100", "85", "95"], correct: "90", section: "Mathematics" },
+    { prompt: "If a train travels 60 miles in 45 minutes, what is its speed in mph?", options: ["60 mph", "70 mph", "80 mph", "75 mph", "90 mph"], correct: "80 mph", section: "Mathematics" },
   ];
 
   const textQuestions = [...vrQuestions, ...mathsQuestions].map((q, i) => ({
@@ -251,9 +251,9 @@ export async function seedDatabase() {
     { prompt: "Rearrange these letters to make a word: LOOHCS", options: ["SCHOOL", "CHOOSE", "STOOLS", "COLORS", "COOLS"], correct: "SCHOOL", section: "Verbal Reasoning" },
     { prompt: "Find the hidden word: The LAMP LASTED all night.", options: ["LAST", "AMPLE", "PLAST", "LAMP", "PAST"], correct: "PLAST", section: "Verbal Reasoning" },
     ...nvrSvgQuestions,
-    { prompt: "What is 15% of 240?", options: ["32", "34", "36", "38", "40"], correct: "36", section: "Maths" },
-    { prompt: "A rectangle has a perimeter of 30cm and width of 5cm. What is its length?", options: ["10cm", "12cm", "15cm", "8cm", "20cm"], correct: "10cm", section: "Maths" },
-    { prompt: "Complete: 2, 5, 11, 23, ___", options: ["35", "46", "47", "45", "48"], correct: "47", section: "Maths" },
+    { prompt: "What is 15% of 240?", options: ["32", "34", "36", "38", "40"], correct: "36", section: "Mathematics" },
+    { prompt: "A rectangle has a perimeter of 30cm and width of 5cm. What is its length?", options: ["10cm", "12cm", "15cm", "8cm", "20cm"], correct: "10cm", section: "Mathematics" },
+    { prompt: "Complete: 2, 5, 11, 23, ___", options: ["35", "46", "47", "45", "48"], correct: "47", section: "Mathematics" },
     ...mathsQuestions,
   ].map((q, i) => ({
     id: `full-a-q-${i + 1}`,
@@ -336,15 +336,15 @@ export async function seedDatabase() {
   ]);
 
   await db.insert(practiceSections).values([
-    { title: "Word Analogies", category: "Verbal Reasoning", icon: "BookOpen", difficulty: "Medium", questionCount: 15, requiredTier: "free" },
-    { title: "Letter Sequences", category: "Verbal Reasoning", icon: "Type", difficulty: "Hard", questionCount: 12, requiredTier: "pack12" },
-    { title: "Hidden Words", category: "Verbal Reasoning", icon: "Search", difficulty: "Medium", questionCount: 10, requiredTier: "pack12" },
-    { title: "Pattern Recognition", category: "Non-Verbal Reasoning", icon: "Grid3x3", difficulty: "Medium", questionCount: 15, requiredTier: "free" },
-    { title: "Shape Sequences", category: "Non-Verbal Reasoning", icon: "Shapes", difficulty: "Hard", questionCount: 12, requiredTier: "pack12" },
-    { title: "Mirror Images", category: "Non-Verbal Reasoning", icon: "FlipHorizontal", difficulty: "Easy", questionCount: 10, requiredTier: "free" },
-    { title: "Arithmetic & Number", category: "Maths", icon: "Calculator", difficulty: "Medium", questionCount: 15, requiredTier: "free" },
-    { title: "Multi-step Word Problems", category: "Maths", icon: "Brain", difficulty: "Hard", questionCount: 12, requiredTier: "pack12" },
-    { title: "Fractions & Percentages", category: "Maths", icon: "Percent", difficulty: "Medium", questionCount: 10, requiredTier: "pack12" },
+    { title: "Word Analogies", category: "Verbal Reasoning", icon: "BookOpen", difficulty: "Medium", questionCount: 15, requiredTier: "free", skillId: "vr.vocab" },
+    { title: "Letter Sequences", category: "Verbal Reasoning", icon: "Type", difficulty: "Hard", questionCount: 12, requiredTier: "pack12", skillId: "vr.sequences" },
+    { title: "Hidden Words", category: "Verbal Reasoning", icon: "Search", difficulty: "Medium", questionCount: 10, requiredTier: "pack12", skillId: "vr.word_structure" },
+    { title: "Pattern Recognition", category: "Non-Verbal Reasoning", icon: "Grid3x3", difficulty: "Medium", questionCount: 15, requiredTier: "free", skillId: "nvr.sequence" },
+    { title: "Shape Sequences", category: "Non-Verbal Reasoning", icon: "Shapes", difficulty: "Hard", questionCount: 12, requiredTier: "pack12", skillId: "nvr.sequence" },
+    { title: "Mirror Images", category: "Non-Verbal Reasoning", icon: "FlipHorizontal", difficulty: "Easy", questionCount: 10, requiredTier: "free", skillId: "nvr.transform" },
+    { title: "Arithmetic & Number", category: "Mathematics", icon: "Calculator", difficulty: "Medium", questionCount: 15, requiredTier: "free", skillId: "maths.arithmetic" },
+    { title: "Multi-step Word Problems", category: "Mathematics", icon: "Brain", difficulty: "Hard", questionCount: 12, requiredTier: "pack12", skillId: "maths.word_problems" },
+    { title: "Fractions & Percentages", category: "Mathematics", icon: "Percent", difficulty: "Medium", questionCount: 10, requiredTier: "pack12", skillId: "maths.fractions" },
   ]);
 
   console.log("Seed data inserted successfully.");
