@@ -1,0 +1,69 @@
+Implement a “Perceived Variety Layer” to stop questions feeling repetitive, without changing the underlying skill/sub-rule taxonomy.
+
+GOAL
+Parents/children should not feel they are seeing the “same question again” due to repeated stems, layouts, palettes, contexts, or distractor styles—even when sub_rule_id differs.
+
+REQUIRED OUTPUT
+1) New metadata tags on each question capturing surface variety.
+2) Updated generators to assign those tags deterministically.
+3) Updated selection logic (drills + diagnostics) to enforce perceptual diversity constraints in addition to sub-rule diversity and anti-repeat.
+4) QA checks that fail any question set that violates diversity rules.
+
+A) ADD/USE VARIETY METADATA (do not break current schema—add fields or store in existing metadata JSON if preferred)
+For each question, store:
+- stem_variant_id (which wording template was used)
+- surface_variant_id (context/palette/theme identifier)
+- layout_variant_id (visual/layout pattern identifier, especially for NVR/chart)
+- distractor_style_id (type of distractor/trap used)
+- density_level (NVR only: low/medium/high)
+- shape_palette_id (NVR only: which set of shapes used)
+- content_pool (diagnostic|drill|general) OR equivalent flag to reduce drill/diagnostic overlap
+
+B) STEM VARIATION (VR + Maths)
+For repetitive sub-rules (e.g., odd one out, alphabetical order, category grouping, “which is correct”), create 6–10 interchangeable stem templates and rotate them.
+Constraint:
+- Within any set of 10 questions, do not repeat the same stem_variant_id.
+- Across a session, avoid repeating the same stem_variant_id back-to-back.
+
+C) NVR PERCEPTUAL VARIATION (SVG)
+Extend variety beyond sub-rules by enforcing:
+- shape_palette rotation (don’t reuse same palette in a single NVR block)
+- density rotation (prevent >2 consecutive low-density items)
+- layout rotation (avoid repeating same layout_variant_id within the same set)
+- axis safety for reflections (do not place elements exactly on reflection axes unless explicitly tagged as an “axis-trap” with non-ambiguous distractors)
+- option uniqueness guardrail: ALL answer options must be unique at render output (hash rendered config, reject duplicates)
+
+D) MATHS VARIETY
+- distractor_style rotation (off-by-one, wrong operation, place value, missed BODMAS, inversion, unit error, etc.)
+Constraint:
+- Within a drill, do not use the same distractor_style_id more than twice.
+- For word problems: rotate UK context categories (shopping, travel, school, sport, cooking, time schedules, money change, distance/time, measures).
+Constraint:
+- Avoid repeating the same context within a set.
+
+E) SELECTION ENGINE UPGRADE (DIVERSITY-AWARE)
+Update question selection for drills/diagnostics to be scoring/constraint-based:
+Hard constraints:
+- No repeated stem_variant_id within 10 questions
+- No repeated layout_variant_id within a set (best effort for large sets)
+- No repeated shape_palette_id within an NVR block
+- No more than 2 consecutive low-density NVR items
+- No repeated surface_variant_id/context within a set
+- No duplicated rendered answer options (must be 0% duplicate options)
+
+Soft constraints:
+- Difficulty rhythm control (avoid long streaks of easy/medium; enforce a pattern)
+- Reduce drill/diagnostic overlap: diagnostics exclude any question served in drills within last 14 days (or similar), or use separate pools where possible.
+
+Selection approach:
+- Generate candidate pool as usual (skill/sub-rule/difficulty)
+- Score candidates higher if their variety tags are not yet used in current set and not recently used by user
+- Pick highest scoring until set complete
+- Run a final validation pass; if constraints fail, re-sample.
+
+F) QA + REPORTING
+Add automated QA checks:
+- “Set Diversity Validator” that reports violations (stem repeats, palette repeats, low-density streaks, context repeats, distractor-style overuse, duplicate options)
+- Add a generator QA that rejects any NVR item where any answer options become identical after transforms/rendering.
+
+Implement this variety layer now and re-run the audit to confirm “questions feel different” improvements, especially in VR stem repetition, NVR palette/layout variation, and maths distractor plausibility.
