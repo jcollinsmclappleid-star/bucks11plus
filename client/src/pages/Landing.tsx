@@ -157,32 +157,32 @@ function ProgressPanel() {
         <svg viewBox="0 0 240 90" className="w-full h-24">
           <line x1="0" y1="22" x2="240" y2="22" stroke="#e2e8f0" strokeWidth="1" strokeDasharray="4" />
           <text x="228" y="18" fontSize="8" fill="#94a3b8">121</text>
-          <path d="M 20 70 L 80 55 L 150 38 L 220 15" fill="none" stroke="#3b82f6" strokeWidth="2.5" strokeLinecap="round" />
+          <path d="M 20 70 L 80 55 L 150 40 L 220 28" fill="none" stroke="#3b82f6" strokeWidth="2.5" strokeLinecap="round" />
           <circle cx="20" cy="70" r="4" fill="#94a3b8" />
           <circle cx="80" cy="55" r="4" fill="#64748b" />
-          <circle cx="150" cy="38" r="4" fill="#3b82f6" />
-          <circle cx="220" cy="15" r="4" fill="#22c55e" />
+          <circle cx="150" cy="40" r="4" fill="#3b82f6" />
+          <circle cx="220" cy="28" r="4" fill="#3b82f6" />
           <text x="10" y="82" fontSize="8" fill="#94a3b8">Wk 1</text>
-          <text x="68" y="67" fontSize="8" fill="#94a3b8">Wk 4</text>
-          <text x="138" y="50" fontSize="8" fill="#94a3b8">Wk 8</text>
-          <text x="205" y="10" fontSize="8" fill="#22c55e">Wk 12</text>
+          <text x="68" y="67" fontSize="8" fill="#94a3b8">Wk 6</text>
+          <text x="138" y="52" fontSize="8" fill="#94a3b8">Wk 12</text>
+          <text x="205" y="22" fontSize="8" fill="#3b82f6">Wk 16</text>
           <text x="14" y="66" fontSize="7" fill="#64748b">105</text>
-          <text x="74" y="51" fontSize="7" fill="#64748b">112</text>
-          <text x="144" y="34" fontSize="7" fill="#3b82f6">118</text>
-          <text x="214" y="27" fontSize="7" fill="#22c55e">124</text>
+          <text x="74" y="51" fontSize="7" fill="#64748b">110</text>
+          <text x="144" y="36" fontSize="7" fill="#3b82f6">114</text>
+          <text x="214" y="40" fontSize="7" fill="#3b82f6">117</text>
         </svg>
       </div>
       <div className="grid grid-cols-3 gap-3">
-        <div className="bg-green-50 border border-green-200 rounded-xl p-3 text-center">
-          <div className="text-xl font-bold text-green-700">+19</div>
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 text-center">
+          <div className="text-xl font-bold text-blue-700">+12</div>
           <div className="text-[10px] text-muted-foreground font-medium">Points gained</div>
         </div>
         <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 text-center">
-          <div className="text-sm font-bold text-blue-700">Stable</div>
-          <div className="text-[10px] text-muted-foreground font-medium">Forecast</div>
+          <div className="text-sm font-bold text-blue-700">Improving</div>
+          <div className="text-[10px] text-muted-foreground font-medium">Trend</div>
         </div>
-        <div className="bg-green-50 border border-green-200 rounded-xl p-3 text-center">
-          <div className="text-sm font-bold text-green-700">Green</div>
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-center">
+          <div className="text-sm font-bold text-amber-700">Borderline</div>
           <div className="text-[10px] text-muted-foreground font-medium">Band</div>
         </div>
       </div>
@@ -190,10 +190,10 @@ function ProgressPanel() {
         <div className="text-[10px] font-bold text-primary mb-1.5">Gap Velocity</div>
         <div className="flex items-center gap-3">
           <div className="text-sm text-red-500 font-medium line-through">16 pt gap</div>
-          <ArrowRight className="h-4 w-4 text-green-600" />
-          <div className="text-sm font-bold text-green-700">Above 121</div>
+          <ArrowRight className="h-4 w-4 text-blue-600" />
+          <div className="text-sm font-bold text-blue-700">4 pt gap</div>
         </div>
-        <div className="text-[10px] text-muted-foreground mt-1">Closing at ~4 points per diagnostic cycle</div>
+        <div className="text-[10px] text-muted-foreground mt-1">Gap narrowing at ~3 points per diagnostic cycle</div>
       </div>
     </div>
   );
@@ -242,21 +242,18 @@ export default function Landing() {
             </div>
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-[1.12] font-serif max-w-4xl mx-auto">
-              Know Exactly Where They Stand <br className="hidden md:block" />
-              <span className="text-white/55">for the Bucks 11+.</span>
+              Bucks 11+ Preparation<br className="hidden md:block" />
+              <span className="text-white/55">Built on Diagnostics.</span>
             </h1>
 
             <p className="text-lg md:text-xl text-white/65 max-w-3xl mx-auto leading-relaxed">
-              A structured diagnostic system that reveals what is truly limiting performance — accuracy, pace, stability or specific rule types — and shows what to focus on first.
+              Take a free timed diagnostic. See exactly where your child stands against the 121 benchmark. Get a clear plan for what to work on — accuracy, pace, or specific question types.
             </p>
 
-            <div className="pt-4 max-w-xl mx-auto space-y-1">
-              <p className="text-sm text-white/45 leading-relaxed">
-                Replace uncertainty with structured clarity.
-              </p>
-              <p className="text-sm text-white/45 leading-relaxed">
-                Built for parents who prefer evidence over assumption.
-              </p>
+            <div className="pt-3 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm text-white/50">
+              <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5" /> Free diagnostic — no sign-up</span>
+              <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5" /> Readiness forecast vs 121</span>
+              <span className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5" /> Section-level gap analysis</span>
             </div>
 
             <div className="pt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
