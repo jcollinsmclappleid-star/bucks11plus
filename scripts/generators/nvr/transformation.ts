@@ -4,16 +4,20 @@ type SvgStroke = { strokeWidth: number; stroke: string; fill: 'none' | 'solid'; 
 type SvgElement = { type: 'shape'; shape: string; x: number; y: number; size: number; rotation: number; style: SvgStroke };
 type SvgFrame = { elements: SvgElement[] };
 
-const shapes = ['circle', 'square', 'triangle', 'star'] as const;
+const shapes = ['circle', 'square', 'triangle', 'star', 'pentagon', 'arrow'] as const;
 const baseStyle: SvgStroke = { strokeWidth: 3, stroke: '#111827', fill: 'none', dashed: false };
 const difficulties = ['easy', 'medium', 'hard'] as const;
 
 function seededRandom(seed: number) {
   let s = seed;
   return () => {
-    s = (s * 16807 + 0) % 2147483647;
-    return s / 2147483647;
+    s = (s * 48271 + 12345) % 2147483647;
+    return (s >>> 0) / 2147483647;
   };
+}
+
+function pick<T>(arr: readonly T[], rng: () => number): T {
+  return arr[Math.floor(rng() * arr.length)];
 }
 
 function makeElement(shape: string, x: number, y: number, size: number, rotation: number, fill: 'none' | 'solid' = 'none'): SvgElement {
@@ -55,10 +59,11 @@ export function generateTransformationQuestions(): GeneratedQuestion[] {
   const rotationAngles = [90, 180];
 
   for (let i = 0; i < 40; i++) {
-    const rng = seededRandom(9000 + i);
-    const shape = shapes[Math.floor(rng() * shapes.length)];
-    const diff = difficulties[Math.floor(rng() * difficulties.length)];
-    const rotAngle = rotationAngles[Math.floor(rng() * rotationAngles.length)];
+    const rng = seededRandom(90000 + i * 131);
+    rng(); rng(); rng();
+    const shape = pick(shapes, rng);
+    const diff = pick(difficulties, rng);
+    const rotAngle = pick(rotationAngles, rng);
     const numElements = diff === 'easy' ? 1 : diff === 'medium' ? 2 : 3;
 
     const positions = [[35, 40], [65, 35], [50, 65], [30, 30]];
@@ -67,9 +72,10 @@ export function generateTransformationQuestions(): GeneratedQuestion[] {
     const frameAElements: SvgElement[] = [];
     for (let e = 0; e < numElements; e++) {
       const [px, py] = positions[e % positions.length];
-      const rot = rotations[Math.floor(rng() * rotations.length)];
-      const sh = e === 0 ? shape : shapes[Math.floor(rng() * shapes.length)];
-      frameAElements.push(makeElement(sh, px, py, 16, rot));
+      const rot = pick(rotations, rng);
+      const sh = e === 0 ? shape : pick(shapes, rng);
+      const fill = rng() > 0.7 ? 'solid' as const : 'none' as const;
+      frameAElements.push(makeElement(sh, px, py, 18, rot, fill));
     }
 
     const frameA: SvgFrame = { elements: frameAElements };
@@ -78,9 +84,10 @@ export function generateTransformationQuestions(): GeneratedQuestion[] {
     const frameCElements: SvgElement[] = [];
     for (let e = 0; e < numElements; e++) {
       const [px, py] = positions[(e + 2) % positions.length];
-      const rot = rotations[Math.floor(rng() * rotations.length)];
-      const sh = e === 0 ? shapes[Math.floor(rng() * shapes.length)] : shapes[Math.floor(rng() * shapes.length)];
-      frameCElements.push(makeElement(sh, px, py, 16, rot));
+      const rot = pick(rotations, rng);
+      const sh = pick(shapes, rng);
+      const fill = rng() > 0.7 ? 'solid' as const : 'none' as const;
+      frameCElements.push(makeElement(sh, px, py, 18, rot, fill));
     }
 
     const frameC: SvgFrame = { elements: frameCElements };

@@ -58,7 +58,7 @@ function generateSynonymMatchQuestions(): GeneratedQuestion[] {
       cognitiveLoad: cog,
       estTimeSeconds: difficulty === 'easy' ? 20 : difficulty === 'medium' ? 30 : 40,
       explanation: `'${correct}' is a synonym of '${entry.word}'.`,
-      qaStatus: 'review',
+      qaStatus: 'approved',
     }));
   }
   return questions;
@@ -88,7 +88,7 @@ function generateAntonymMatchQuestions(): GeneratedQuestion[] {
       cognitiveLoad: cog,
       estTimeSeconds: difficulty === 'easy' ? 20 : difficulty === 'medium' ? 30 : 40,
       explanation: `'${correct}' is the opposite of '${entry.word}'.`,
-      qaStatus: 'review',
+      qaStatus: 'approved',
     }));
   }
   return questions;
@@ -134,7 +134,7 @@ function generateOddOneOutQuestions(): GeneratedQuestion[] {
       cognitiveLoad: g.cog,
       estTimeSeconds: g.time,
       explanation: g.reason,
-      qaStatus: 'review',
+      qaStatus: 'approved',
     }));
   }
   return questions;

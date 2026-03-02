@@ -15,13 +15,20 @@ async function seedQuestions() {
   const data: GeneratedQuestion[] = JSON.parse(fs.readFileSync(seedPath, "utf-8"));
   console.log(`Loading ${data.length} questions from seed file...`);
 
-  const existing = await db.select({ id: questions.id }).from(questions);
+  const forceReseed = process.argv.includes("--force");
+
   const existingWithSkill = await db.select({ id: questions.id, skillId: questions.skillId }).from(questions);
   const seededCount = existingWithSkill.filter(q => q.skillId && q.skillId !== "").length;
 
-  if (seededCount > 100) {
-    console.log(`Already have ${seededCount} skill-tagged questions. Skipping seed.`);
+  if (seededCount > 100 && !forceReseed) {
+    console.log(`Already have ${seededCount} skill-tagged questions. Use --force to replace them.`);
     process.exit(0);
+  }
+
+  if (forceReseed && seededCount > 0) {
+    console.log(`Force mode: deleting ${seededCount} existing skill-tagged questions...`);
+    await db.delete(questions).where(sql`skill_id IS NOT NULL AND skill_id != ''`);
+    console.log("Deleted existing questions.");
   }
 
   let inserted = 0;

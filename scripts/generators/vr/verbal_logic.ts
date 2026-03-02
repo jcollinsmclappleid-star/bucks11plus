@@ -65,7 +65,7 @@ function generateSentenceCompletionQuestions(): GeneratedQuestion[] {
       cognitiveLoad: item.cog,
       estTimeSeconds: item.time,
       explanation: `The correct word to complete the sentence is '${item.answer}'.`,
-      qaStatus: 'review',
+      qaStatus: 'approved',
     }));
   }
   return questions;
@@ -165,7 +165,7 @@ function generateLogicalDeductionQuestions(): GeneratedQuestion[] {
       cognitiveLoad: item.cog,
       estTimeSeconds: item.time,
       explanation: item.explanation,
-      qaStatus: 'review',
+      qaStatus: 'approved',
     }));
   }
   return questions;

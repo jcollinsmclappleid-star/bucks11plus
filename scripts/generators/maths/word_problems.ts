@@ -51,7 +51,7 @@ export function generateWordProblemQuestions(): GeneratedQuestion[] {
       trapTypes: ['partial_calculation', 'wrong_operation'],
       cognitiveLoad: p.d, estTimeSeconds: 35 + p.d * 5,
       explanation: `Work through each step carefully to arrive at ${p.correct}.`,
-      qaStatus: 'review', locale: 'en-GB', britishSpelling: true, version: 1,
+      qaStatus: 'approved', locale: 'en-GB', britishSpelling: true, version: 1,
     });
   }
 
@@ -79,7 +79,7 @@ export function generateWordProblemQuestions(): GeneratedQuestion[] {
       trapTypes: ['decimal_error', 'wrong_operation'],
       cognitiveLoad: p.d, estTimeSeconds: 25 + p.d * 5,
       explanation: `Calculate carefully with decimal values to get ${p.correct}.`,
-      qaStatus: 'review', locale: 'en-GB', britishSpelling: true, version: 1,
+      qaStatus: 'approved', locale: 'en-GB', britishSpelling: true, version: 1,
     });
   }
 
@@ -107,7 +107,7 @@ export function generateWordProblemQuestions(): GeneratedQuestion[] {
       trapTypes: ['60_minute_error', 'am_pm_confusion'],
       cognitiveLoad: p.d, estTimeSeconds: 25 + p.d * 5,
       explanation: `The answer is ${p.correct}. Remember there are 60 minutes in an hour.`,
-      qaStatus: 'review', locale: 'en-GB', britishSpelling: true, version: 1,
+      qaStatus: 'approved', locale: 'en-GB', britishSpelling: true, version: 1,
     });
   }
 

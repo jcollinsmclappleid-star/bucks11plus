@@ -113,7 +113,7 @@ content/
 - GET /api/articles, GET /api/articles/:slug, GET /api/progress
 
 ## Question Engine
-- 900+ questions (300 VR + 300 NVR + 300 Maths) generated via scripts/generators
+- 940 questions (300 VR + 340 NVR + 300 Maths) generated via scripts/generators
 - NVR questions use SVG render_config (NvrSequenceConfig, NvrTransformConfig, NvrClassificationConfig)
 - Data interpretation uses chart render_config (ChartBarConfig, ChartLineConfig, ChartTableConfig)
 - Anti-repeat: question_usage tracks served_count + last_served_at per user per question

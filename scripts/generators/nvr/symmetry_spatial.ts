@@ -4,16 +4,20 @@ type SvgStroke = { strokeWidth: number; stroke: string; fill: 'none' | 'solid'; 
 type SvgElement = { type: 'shape'; shape: string; x: number; y: number; size: number; rotation: number; style: SvgStroke };
 type SvgFrame = { elements: SvgElement[] };
 
-const shapes = ['circle', 'square', 'triangle', 'star'] as const;
+const shapes = ['circle', 'square', 'triangle', 'star', 'pentagon', 'arrow'] as const;
 const baseStyle: SvgStroke = { strokeWidth: 3, stroke: '#111827', fill: 'none', dashed: false };
 const difficulties = ['easy', 'medium', 'hard'] as const;
 
 function seededRandom(seed: number) {
   let s = seed;
   return () => {
-    s = (s * 16807 + 0) % 2147483647;
-    return s / 2147483647;
+    s = (s * 48271 + 12345) % 2147483647;
+    return (s >>> 0) / 2147483647;
   };
+}
+
+function pick<T>(arr: readonly T[], rng: () => number): T {
+  return arr[Math.floor(rng() * arr.length)];
 }
 
 function makeElement(shape: string, x: number, y: number, size: number, rotation: number, fill: 'none' | 'solid' = 'none'): SvgElement {
@@ -37,18 +41,19 @@ export function generateSymmetryQuestions(): GeneratedQuestion[] {
   const questions: GeneratedQuestion[] = [];
 
   for (let i = 0; i < 40; i++) {
-    const rng = seededRandom(11000 + i);
-    const diff = difficulties[Math.floor(rng() * difficulties.length)];
+    const rng = seededRandom(110000 + i * 131);
+    rng(); rng(); rng();
+    const diff = pick(difficulties, rng);
     const numElements = diff === 'easy' ? 2 : diff === 'medium' ? 3 : 4;
 
     const leftElements: SvgElement[] = [];
     for (let e = 0; e < numElements; e++) {
-      const shape = shapes[Math.floor(rng() * shapes.length)];
+      const shape = pick(shapes, rng);
       const x = 10 + Math.floor(rng() * 35);
       const y = 15 + Math.floor(rng() * 70);
-      const size = 10 + Math.floor(rng() * 10);
+      const size = 12 + Math.floor(rng() * 10);
       const rotation = Math.floor(rng() * 8) * 45;
-      const fill = rng() > 0.5 ? 'solid' as const : 'none' as const;
+      const fill = rng() > 0.6 ? 'solid' as const : 'none' as const;
       leftElements.push(makeElement(shape, x, y, size, rotation, fill));
     }
 
