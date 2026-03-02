@@ -224,53 +224,49 @@ export default function Landing() {
         </div>
 
         <div className="container mx-auto max-w-5xl px-4 relative z-10">
-          <div className="text-center space-y-8">
+          <div className="text-center space-y-6">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 text-white text-sm font-medium border border-white/20 backdrop-blur-md shadow-sm">
-              <span className="flex h-2 w-2 rounded-full bg-brand-amber animate-pulse"></span>
-              Buckinghamshire 11+ Ready
+              <span className="flex h-2 w-2 rounded-full bg-brand-amber"></span>
+              Buckinghamshire Secondary Transfer Test
             </div>
 
-            <h1 className="text-5xl md:text-7xl font-bold text-white tracking-tight leading-[1.1] font-serif">
-              Bucks 11+ Diagnostics <br className="hidden md:block" />
-              <span className="text-white/80 font-sans tracking-normal text-4xl md:text-6xl mt-4 block">Aligned to GL-Style Reasoning Families</span>
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-[1.1] font-serif max-w-4xl mx-auto">
+              Not Mock Papers. A Structured Readiness System for the Bucks 11+.
             </h1>
 
-            <p className="text-xl text-white/70 max-w-3xl mx-auto leading-relaxed">
-              Timed diagnostics aligned to GL-style reasoning families used in Bucks — forecasted against the 121 benchmark, with targeted practice that improves the highest-impact areas.
+            <p className="text-lg md:text-xl text-white/75 max-w-3xl mx-auto leading-relaxed">
+              Identify the constraint limiting performance — accuracy, pace, stability, or rule-type weakness — and follow a targeted improvement plan.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-white/90 text-sm font-medium pt-4">
-              <span className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-brand-amber" /> Aligned to GL-style reasoning types (VR / NVR / Maths)</span>
-              <span className="hidden sm:inline text-white/30">|</span>
-              <span className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-brand-amber" /> Timed to reflect exam pacing and pressure</span>
-              <span className="hidden sm:inline text-white/30">|</span>
-              <span className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-brand-amber" /> Forecasted against the Bucks 121 benchmark</span>
+            <div className="pt-2">
+              <p className="text-sm text-white/50 max-w-2xl mx-auto leading-relaxed">
+                Diagnostic-led assessment, not question repetition. Modelled against the 121 qualifying standard.
+              </p>
             </div>
 
-            <div className="pt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Button size="lg" className="h-14 px-8 text-lg bg-brand-amber text-amber-950 hover:bg-amber-400 w-full sm:w-auto font-bold shadow-lg shadow-brand-amber/20 border-none" asChild>
+            <div className="pt-6">
+              <Button size="lg" className="h-14 px-10 text-lg bg-brand-amber text-amber-950 hover:bg-amber-400 font-bold shadow-lg shadow-brand-amber/20 border-none" asChild>
                 <Link href="/free-diagnostic">
                   Start Free Diagnostic <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" className="h-14 px-8 text-lg w-full sm:w-auto bg-white/5 border-white/20 text-white hover:bg-white/10 hover:text-white backdrop-blur-md" asChild>
-                <a href="#see-product">See What You Get <ArrowRight className="ml-2 h-5 w-5" /></a>
-              </Button>
             </div>
-            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6">
-              <Link href="/free-diagnostic" className="text-white/60 hover:text-white text-sm font-medium transition-colors">
+
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6">
+              <Link href="/free-diagnostic" className="text-white/50 hover:text-white text-sm font-medium transition-colors">
                 Free Diagnostic
               </Link>
               <span className="hidden sm:inline text-white/20">|</span>
-              <Link href="/pricing" className="text-white/60 hover:text-white text-sm font-medium transition-colors">
+              <Link href="/pricing" className="text-white/50 hover:text-white text-sm font-medium transition-colors">
                 Practice Pack — £99
               </Link>
               <span className="hidden sm:inline text-white/20">|</span>
-              <Link href="/pricing" className="text-brand-amber hover:text-amber-300 text-sm font-bold transition-colors">
+              <Link href="/pricing" className="text-brand-amber/80 hover:text-brand-amber text-sm font-bold transition-colors">
                 Structured Programme — £249
               </Link>
             </div>
-            <p className="text-xs text-white/50 mt-4 max-w-md mx-auto">
+
+            <p className="text-xs text-white/35 mt-2 max-w-md mx-auto">
               Independent readiness assessment. Not affiliated with GL Assessment or Buckinghamshire Council.
             </p>
           </div>
