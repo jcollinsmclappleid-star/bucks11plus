@@ -10,8 +10,19 @@ export default function Navbar() {
     <header className="border-b border-border/40 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 sticky top-0 z-50">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between max-w-6xl">
         <Link href="/" className="flex items-center gap-3 group">
-          <img src="/logo.png" alt="11+ Standard Logo" className="w-8 h-8 object-contain" />
-          <span className="font-serif font-bold text-xl tracking-tight text-primary">11+ Standard</span>
+          <svg viewBox="0 0 48 48" className="w-8 h-8 shrink-0" aria-hidden="true">
+            <circle cx="24" cy="24" r="22" fill="none" stroke="currentColor" strokeWidth="2" className="text-primary/30" />
+            <circle cx="24" cy="24" r="18" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-primary/15" />
+            <line x1="24" y1="6" x2="24" y2="10" stroke="currentColor" strokeWidth="1.5" className="text-primary/30" />
+            <line x1="24" y1="38" x2="24" y2="42" stroke="currentColor" strokeWidth="1.5" className="text-primary/30" />
+            <line x1="6" y1="24" x2="10" y2="24" stroke="currentColor" strokeWidth="1.5" className="text-primary/30" />
+            <line x1="38" y1="24" x2="42" y2="24" stroke="currentColor" strokeWidth="1.5" className="text-primary/30" />
+            <circle cx="24" cy="24" r="3" fill="currentColor" className="text-primary/40" />
+          </svg>
+          <div className="flex flex-col leading-none">
+            <span className="font-serif font-bold text-lg text-primary tracking-tight">11+</span>
+            <span className="text-[9px] font-sans font-semibold uppercase tracking-[0.2em] text-primary/50 mt-0.5">Standard</span>
+          </div>
         </Link>
 
         <nav className="flex items-center gap-6">

@@ -216,64 +216,72 @@ export default function Landing() {
         description="Timed diagnostics aligned to GL-style reasoning families used in Bucks for the Buckinghamshire Secondary Transfer Test."
       />
 
-      <section className="relative overflow-hidden pt-20 pb-24 md:pt-32 md:pb-40 border-b border-border/50">
-        <div className="absolute inset-0 z-0">
-          <img
-            src="/hero-bg.png"
-            alt="Abstract dark navy background with subtle light accents"
-            className="w-full h-full object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/95 to-primary"></div>
-        </div>
+      <section className="relative overflow-hidden pt-20 pb-24 md:pt-32 md:pb-40 border-b border-border/50" style={{ backgroundColor: '#0d1f30' }}>
+        <div className="absolute inset-0 z-0 hero-texture"></div>
+        <div className="absolute inset-0 z-0 hero-vignette"></div>
+        <div className="absolute inset-0 z-0" style={{ background: 'radial-gradient(ellipse 50% 40% at 50% 35%, rgba(255,255,255,0.04) 0%, transparent 100%)' }}></div>
 
         <div className="container mx-auto max-w-5xl px-4 relative z-10">
           <div className="text-center space-y-6">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 text-white text-sm font-medium border border-white/20 backdrop-blur-md shadow-sm">
-              <span className="flex h-2 w-2 rounded-full bg-brand-amber"></span>
-              Buckinghamshire Secondary Transfer Test
+
+            <div className="flex flex-col items-center gap-1 mb-2">
+              <svg viewBox="0 0 48 48" className="w-12 h-12 md:w-14 md:h-14" aria-hidden="true">
+                <circle cx="24" cy="24" r="22" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="2" />
+                <circle cx="24" cy="24" r="18" fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth="1.5" />
+                <line x1="24" y1="6" x2="24" y2="10" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" />
+                <line x1="24" y1="38" x2="24" y2="42" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" />
+                <line x1="6" y1="24" x2="10" y2="24" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" />
+                <line x1="38" y1="24" x2="42" y2="24" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" />
+                <circle cx="24" cy="24" r="3" fill="rgba(255,255,255,0.35)" />
+              </svg>
+              <div className="mt-2">
+                <span className="block text-white font-serif font-bold text-2xl md:text-3xl leading-none tracking-tight">11+</span>
+                <span className="block text-white/60 text-[11px] md:text-xs font-sans font-semibold uppercase tracking-[0.25em] mt-1">Standard</span>
+              </div>
+              <span className="text-white/30 text-[10px] md:text-[11px] font-sans font-medium tracking-wide mt-1.5">Bucks 11+ Readiness &amp; Forecast</span>
             </div>
 
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-[1.08] font-serif max-w-4xl mx-auto">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-[1.12] font-serif max-w-4xl mx-auto">
               Know Exactly Where They Stand <br className="hidden md:block" />
-              <span className="text-white/60">for the Bucks 11+.</span>
+              <span className="text-white/55">for the Bucks 11+.</span>
             </h1>
 
-            <p className="text-lg md:text-xl text-white/75 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg md:text-xl text-white/65 max-w-3xl mx-auto leading-relaxed">
               A structured diagnostic system that reveals what is truly holding performance back — speed, difficulty tolerance, stability or specific rule types — and shows what to fix first.
             </p>
 
-            <div className="pt-3 max-w-2xl mx-auto border border-white/10 rounded-lg bg-white/[0.04] backdrop-blur-sm px-5 py-3.5">
-              <p className="text-sm text-white/65 leading-relaxed">
-                Not generic practice papers. Each diagnostic analyses accuracy, pace under time pressure, performance consistency and skill gaps — then builds a focused improvement plan tailored to <span className="text-white/90 font-semibold">your child</span>.
+            <div className="pt-3 max-w-2xl mx-auto border border-white/8 rounded-lg bg-white/[0.03] px-5 py-3.5">
+              <p className="text-sm text-white/55 leading-relaxed">
+                Not generic practice papers. Each diagnostic analyses accuracy, pace under time pressure, performance consistency and skill gaps — then builds a focused improvement plan tailored to <span className="text-white/80 font-semibold">your child</span>.
               </p>
             </div>
 
             <div className="pt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Button size="lg" className="h-14 px-10 text-lg bg-brand-amber text-amber-950 hover:bg-amber-400 font-bold shadow-lg shadow-brand-amber/20 border-none" asChild>
+              <Button size="lg" className="h-14 px-10 text-lg bg-brand-amber text-white hover:bg-brand-amber/90 font-bold shadow-lg shadow-brand-amber/15 border-none" asChild>
                 <Link href="/free-diagnostic">
                   Start Free Diagnostic <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" className="h-14 px-8 text-lg bg-white/5 border-white/20 text-white hover:bg-white/10 hover:text-white backdrop-blur-md" asChild>
+              <Button size="lg" variant="outline" className="h-14 px-8 text-lg bg-white/[0.03] border-white/15 text-white/80 hover:bg-white/[0.06] hover:text-white" asChild>
                 <a href="#how-forecast-works">How It Works</a>
               </Button>
             </div>
 
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6">
-              <Link href="/free-diagnostic" className="text-white/50 hover:text-white text-sm font-medium transition-colors">
+              <Link href="/free-diagnostic" className="text-white/40 hover:text-white/70 text-sm font-medium transition-colors">
                 Free Diagnostic
               </Link>
-              <span className="hidden sm:inline text-white/20">|</span>
-              <Link href="/pricing" className="text-white/50 hover:text-white text-sm font-medium transition-colors">
+              <span className="hidden sm:inline text-white/15">|</span>
+              <Link href="/pricing" className="text-white/40 hover:text-white/70 text-sm font-medium transition-colors">
                 Practice Pack — £99
               </Link>
-              <span className="hidden sm:inline text-white/20">|</span>
-              <Link href="/pricing" className="text-brand-amber/80 hover:text-brand-amber text-sm font-bold transition-colors">
+              <span className="hidden sm:inline text-white/15">|</span>
+              <Link href="/pricing" className="text-brand-amber/70 hover:text-brand-amber text-sm font-semibold transition-colors">
                 Structured Programme — £249
               </Link>
             </div>
 
-            <p className="text-xs text-white/35 mt-2 max-w-md mx-auto">
+            <p className="text-[11px] text-white/25 mt-2 max-w-md mx-auto">
               Independent readiness assessment. Not affiliated with GL Assessment or Buckinghamshire Council.
             </p>
           </div>

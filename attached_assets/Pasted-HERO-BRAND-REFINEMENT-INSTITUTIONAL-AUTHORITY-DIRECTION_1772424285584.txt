@@ -1,0 +1,150 @@
+HERO & BRAND REFINEMENT – INSTITUTIONAL AUTHORITY DIRECTION
+
+OBJECTIVE
+Refine the visual identity to feel like an independent assessment authority,
+not a tutoring website or school prospectus.
+
+Do NOT introduce literal school buildings or photography.
+Do NOT add aspirational stock imagery.
+
+The tone must feel:
+Measured.
+Structured.
+Calm.
+Institutional.
+Independent.
+
+--------------------------------------------------------
+1. HERO BACKGROUND REFINEMENT
+--------------------------------------------------------
+
+Remove:
+- Lens flare
+- Bright glow streaks
+- Overly tech-style lighting effects
+
+Keep:
+- Deep navy base
+
+Enhance with:
+- Subtle structured texture overlay (3–5% opacity)
+  Options:
+    • Fine academic grid pattern
+    • Very faint exam-paper horizontal lines
+    • Soft geometric line architecture motif (non-literal)
+
+Texture must:
+- Be monochrome
+- Be barely noticeable
+- Never compete with text
+- Add depth, not decoration
+
+Add:
+- Very soft radial light gradient behind headline only
+- Slight vignette toward outer edges
+
+No animation.
+No parallax.
+Static only.
+
+--------------------------------------------------------
+2. COLOUR CALIBRATION
+--------------------------------------------------------
+
+Primary background:
+Deep midnight navy (#0B1C2D–#0F2236 range)
+
+Accent:
+Muted amber (less orange, more restrained gold)
+Avoid bright or saturated tones.
+
+Goal:
+Academic, not startup.
+
+--------------------------------------------------------
+3. LOGO REFINEMENT (INCREASE GRAVITAS)
+--------------------------------------------------------
+
+Typography structure:
+
+Line 1:
+11+  (larger, heavier weight)
+
+Line 2:
+STANDARD  (small caps OR increased letter spacing + lighter weight)
+
+Increase:
+- Letter spacing slightly on STANDARD
+- Vertical spacing between lines
+
+Icon:
+Keep circular precision motif.
+Increase stroke thickness slightly.
+Simplify internal details if overly intricate.
+It should feel closer to a seal than an app icon.
+
+No gradients inside logo.
+Flat, strong, confident.
+
+--------------------------------------------------------
+4. HEADER MICRO POSITIONING (OPTIONAL BUT RECOMMENDED)
+--------------------------------------------------------
+
+Under logo in hero only, small restrained line:
+
+“Bucks 11+ Readiness & Forecast”
+
+Low contrast.
+Subtle.
+Not dominant.
+
+Purpose:
+Clarifies positioning instantly.
+
+--------------------------------------------------------
+5. TYPOGRAPHY REFINEMENT
+--------------------------------------------------------
+
+Headlines:
+Increase line-height slightly for authority.
+Avoid overly tight kerning.
+
+Body:
+Keep readable, not light-weight.
+
+Avoid:
+Playful font weights.
+Overly rounded fonts.
+
+Tone:
+Institutional sans-serif.
+
+--------------------------------------------------------
+6. REMOVE VISUAL ELEMENTS THAT FEEL:
+--------------------------------------------------------
+
+- EdTech startup
+- Private tutor marketing
+- School brochure
+- Overly emotional
+- Overly animated
+
+This is an independent readiness modelling system.
+
+--------------------------------------------------------
+7. FINAL CHECK CRITERIA
+--------------------------------------------------------
+
+When viewing hero, it should feel like:
+
+An assessment body.
+A structured readiness standard.
+A measured analytical system.
+
+If it feels like:
+“Admissions marketing” → too aspirational.
+“Startup SaaS” → too tech.
+“Tutoring flyer” → too soft.
+
+We want:
+Calm authority.
