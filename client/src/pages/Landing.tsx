@@ -231,17 +231,17 @@ export default function Landing() {
             </div>
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-[1.08] font-serif max-w-4xl mx-auto">
-              The Readiness Standard <br className="hidden md:block" />
-              <span className="text-white/60">for the Bucks 11+</span>
+              Know Exactly Where They Stand <br className="hidden md:block" />
+              <span className="text-white/60">for the Bucks 11+.</span>
             </h1>
 
             <p className="text-lg md:text-xl text-white/75 max-w-3xl mx-auto leading-relaxed">
-              Identify the constraint limiting performance — accuracy, pace, stability, or rule-type weakness — and follow a targeted improvement plan.
+              A structured diagnostic system that reveals what is truly holding performance back — speed, difficulty tolerance, stability or specific rule types — and shows what to fix first.
             </p>
 
-            <div className="pt-3 max-w-2xl mx-auto border border-white/10 rounded-lg bg-white/[0.04] backdrop-blur-sm px-5 py-3">
+            <div className="pt-3 max-w-2xl mx-auto border border-white/10 rounded-lg bg-white/[0.04] backdrop-blur-sm px-5 py-3.5">
               <p className="text-sm text-white/65 leading-relaxed">
-                Not generic practice papers. Each diagnostic models <span className="text-white/90 font-semibold">your child's</span> specific constraint profile — hard-tier accuracy, pace under pressure, concentration decay, rule-type gaps — and builds a targeted improvement pathway unique to them.
+                Not generic practice papers. Each diagnostic analyses accuracy, pace under time pressure, performance consistency and skill gaps — then builds a focused improvement plan tailored to <span className="text-white/90 font-semibold">your child</span>.
               </p>
             </div>
 
