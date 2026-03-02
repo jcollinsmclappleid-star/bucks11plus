@@ -24,8 +24,8 @@ export default function Navbar() {
                 <Button variant="ghost" asChild data-testid="link-signin">
                   <Link href="/sign-in">Sign In</Link>
                 </Button>
-                <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm" data-testid="link-signup">
-                  <Link href="/sign-up">Start Free Diagnostic</Link>
+                <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm" data-testid="link-free-diagnostic">
+                  <Link href="/free-diagnostic">Start Free Diagnostic</Link>
                 </Button>
               </div>
             </>

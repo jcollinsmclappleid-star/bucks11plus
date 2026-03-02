@@ -7,7 +7,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import type { Diagnostic } from "@shared/schema";
 
-const FREE_DIAGNOSTIC_ID = "baseline-mini";
+const FREE_DIAGNOSTIC_ID = "mini-1";
 
 export default function FreeDiagnosticStart() {
   const [, setLocation] = useLocation();

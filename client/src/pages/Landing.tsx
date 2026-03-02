@@ -257,7 +257,20 @@ export default function Landing() {
                 <a href="#see-product">See What You Get <ArrowRight className="ml-2 h-5 w-5" /></a>
               </Button>
             </div>
-            <p className="text-xs text-white/50 mt-6 max-w-md mx-auto">
+            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6">
+              <Link href="/free-diagnostic" className="text-white/60 hover:text-white text-sm font-medium transition-colors">
+                Free Diagnostic
+              </Link>
+              <span className="hidden sm:inline text-white/20">|</span>
+              <Link href="/pricing" className="text-white/60 hover:text-white text-sm font-medium transition-colors">
+                Practice Pack — £99
+              </Link>
+              <span className="hidden sm:inline text-white/20">|</span>
+              <Link href="/pricing" className="text-brand-amber hover:text-amber-300 text-sm font-bold transition-colors">
+                Structured Programme — £249
+              </Link>
+            </div>
+            <p className="text-xs text-white/50 mt-4 max-w-md mx-auto">
               Independent readiness assessment. Not affiliated with GL Assessment or Buckinghamshire Council.
             </p>
           </div>
