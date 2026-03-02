@@ -133,6 +133,16 @@ export default function Programme() {
   const { enrolment, milestones = [], plans = [], currentWeek = 1, daysRemaining = 0 } = programme;
   const currentPlan = plans.find(p => p.week === currentWeek);
   const planData: WeeklyPlanData | null = currentPlan?.planJson || null;
+
+  // Defensive check for nested objects in planData
+  const safePlanData = planData ? {
+    ...planData,
+    focusSkills: planData.focusSkills || [],
+    secondarySkills: planData.secondarySkills || [],
+    mixed: planData.mixed || { sessions: 0, durationMin: 0, mode: 'N/A' },
+    retest: planData.retest || { due: false }
+  } : null;
+
   const forecast = progress?.latestForecast || 0;
   const gap = 121 - forecast;
   const gv = progress?.gapVelocity;
@@ -253,9 +263,9 @@ export default function Programme() {
             <CardDescription>{planData ? `Phase: ${planData.phase}` : 'Loading plan...'}</CardDescription>
           </CardHeader>
           <CardContent className="p-6 space-y-4">
-            {planData ? (
+            {safePlanData ? (
               <>
-                {planData.focusSkills.map((skill, i) => (
+                {safePlanData.focusSkills.map((skill: any, i: number) => (
                   <div key={i} className="p-4 bg-blue-50/50 rounded-lg border border-blue-100 flex justify-between items-center">
                     <div>
                       <div className="font-bold text-sm text-primary">{skill.sessions}x {skill.durationMin}m {skill.skill}</div>
@@ -266,7 +276,7 @@ export default function Programme() {
                     </Button>
                   </div>
                 ))}
-                {planData.secondarySkills.map((skill, i) => (
+                {safePlanData.secondarySkills.map((skill: any, i: number) => (
                   <div key={i} className="p-4 bg-slate-50 rounded-lg border border-slate-100 flex justify-between items-center">
                     <div>
                       <div className="font-bold text-sm text-slate-700">{skill.sessions}x {skill.durationMin}m {skill.skill}</div>
@@ -279,14 +289,14 @@ export default function Programme() {
                 ))}
                 <div className="p-4 bg-amber-50/50 rounded-lg border border-amber-100 flex justify-between items-center">
                   <div>
-                    <div className="font-bold text-sm text-amber-800">{planData.mixed.sessions}x {planData.mixed.durationMin}m Mixed Drill ({planData.mixed.mode})</div>
+                    <div className="font-bold text-sm text-amber-800">{safePlanData.mixed.sessions}x {safePlanData.mixed.durationMin}m Mixed Drill ({safePlanData.mixed.mode})</div>
                     <div className="text-xs text-muted-foreground mt-1">Cross-skill timed practice</div>
                   </div>
                   <Button size="sm" variant="outline" asChild>
                     <Link href="/app/practice"><PlayCircle className="h-4 w-4 mr-1" /> Start</Link>
                   </Button>
                 </div>
-                {planData.retest.due && (
+                {safePlanData.retest.due && (
                   <div className="p-4 bg-green-50 rounded-lg border border-green-100">
                     <div className="font-bold text-sm text-green-800">Re-test due this week</div>
                     <div className="text-xs text-muted-foreground mt-1">Take a diagnostic to recalibrate your forecast</div>
