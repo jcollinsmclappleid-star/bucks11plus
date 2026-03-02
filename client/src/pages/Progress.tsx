@@ -4,16 +4,40 @@ import { TrendingUp, AlertCircle, Calendar, CheckCircle2, Lock, ArrowRight, Down
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { Seo } from "../components/shared/Seo";
+import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "../lib/auth";
+import { Skeleton } from "@/components/ui/skeleton";
 
-const data = [
-  { date: 'Week 1', score: 105, target: 121 },
-  { date: 'Week 2', score: 108, target: 121 },
-  { date: 'Week 3', score: 110, target: 121 },
-  { date: 'Week 4', score: 114, target: 121 },
-];
+type ProgressData = {
+  trajectory: { date: string; score: number }[];
+  velocity: number;
+  velocityText: string;
+  insight: string;
+  insightHighlight: string;
+};
 
 export default function Progress() {
-  const isPremium = false; // Mock state
+  const { user } = useAuth();
+  const { data: progress, isLoading } = useQuery<ProgressData>({
+    queryKey: ["/api/progress"],
+  });
+
+  const isPremium = user?.subscriptionTier === 'premium';
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto max-w-5xl px-4 py-8 space-y-8">
+        <Skeleton className="h-12 w-64" />
+        <div className="grid md:grid-cols-3 gap-6">
+          <Skeleton className="md:col-span-2 h-[400px]" />
+          <div className="space-y-6">
+            <Skeleton className="h-32" />
+            <Skeleton className="h-32" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto max-w-5xl px-4 py-8 space-y-8">
@@ -35,7 +59,7 @@ export default function Progress() {
           <CardContent className="p-6">
             <div className="h-[300px] w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={data} margin={{ top: 15, right: 20, bottom: 5, left: 0 }}>
+                <LineChart data={progress?.trajectory || []} margin={{ top: 15, right: 20, bottom: 5, left: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
                   <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{fill: '#64748b', fontSize: 12}} dy={10} />
                   <YAxis domain={[90, 130]} axisLine={false} tickLine={false} tick={{fill: '#64748b', fontSize: 12}} dx={-10} />
@@ -59,8 +83,11 @@ export default function Progress() {
                 </div>
                 <h3 className="font-bold text-lg font-serif">Velocity</h3>
               </div>
-              <p className="text-4xl font-bold text-primary mb-2">+9 <span className="text-sm font-medium text-muted-foreground uppercase tracking-wide">points</span></p>
-              <p className="text-sm text-slate-600">Improvement over last 4 weeks. Excellent trajectory.</p>
+              <p className="text-4xl font-bold text-primary mb-2" data-testid="text-velocity">
+                {progress?.velocity !== undefined ? (progress.velocity > 0 ? `+${progress.velocity}` : progress.velocity) : '0'} 
+                <span className="text-sm font-medium text-muted-foreground uppercase tracking-wide ml-2">points</span>
+              </p>
+              <p className="text-sm text-slate-600" data-testid="text-velocity-desc">{progress?.velocityText}</p>
             </CardContent>
           </Card>
           
@@ -73,8 +100,8 @@ export default function Progress() {
                 </div>
                 <h3 className="font-bold text-lg font-serif">Insight</h3>
               </div>
-              <p className="text-sm text-slate-700 leading-relaxed font-medium">
-                At the current rate of improvement, the 121 benchmark will be reached in approximately <strong className="text-blue-900">3.5 weeks</strong>. Maintain current practice volume.
+              <p className="text-sm text-slate-700 leading-relaxed font-medium" data-testid="text-insight">
+                {progress?.insight} <strong className="text-blue-900">{progress?.insightHighlight}</strong>.
               </p>
             </CardContent>
           </Card>
@@ -91,7 +118,7 @@ export default function Progress() {
             Structured 12-Week Preparation Plan
           </h2>
           {isPremium && (
-            <Button variant="outline" className="gap-2 shadow-sm">
+            <Button variant="outline" className="gap-2 shadow-sm" data-testid="button-download-plan">
               <Download className="h-4 w-4" /> Download PDF Plan
             </Button>
           )}
@@ -107,7 +134,7 @@ export default function Progress() {
                 <p className="text-lg text-slate-600 max-w-lg mb-8 leading-relaxed">
                   Premium users receive an auto-generated, week-by-week schedule targeting their exact weaknesses to efficiently close the gap to 121.
                 </p>
-                <Button size="lg" className="bg-primary shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all text-lg h-14 px-8" asChild>
+                <Button size="lg" className="bg-primary shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all text-lg h-14 px-8" asChild data-testid="button-upgrade-plan">
                   <Link href="/pricing">Upgrade to View Plan <ArrowRight className="ml-2 h-5 w-5" /></Link>
                 </Button>
              </div>

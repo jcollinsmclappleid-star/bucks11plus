@@ -1,30 +1,68 @@
-import { Link, useParams } from "wouter";
+import { Link, useParams, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { AlertCircle, Clock, CheckCircle2 } from "lucide-react";
+import { AlertCircle, Clock, CheckCircle2, Loader2 } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { Diagnostic, TestSession } from "@shared/schema";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 
 export default function DiagnosticStart() {
   const { id } = useParams();
+  const [, setLocation] = useLocation();
+
+  const { data: diagnostic, isLoading } = useQuery<Diagnostic>({
+    queryKey: [`/api/diagnostics/${id}`],
+  });
+
+  const startSessionMutation = useMutation({
+    mutationFn: async () => {
+      const res = await apiRequest("POST", "/api/test-sessions", { diagnosticId: id });
+      return res.json() as Promise<TestSession>;
+    },
+    onSuccess: (session) => {
+      queryClient.invalidateQueries({ queryKey: ["/api/test-sessions"] });
+      setLocation(`/app/test/${session.id}`);
+    },
+  });
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (!diagnostic) {
+    return (
+      <div className="container mx-auto max-w-3xl px-4 py-16 text-center">
+        <h1 className="text-2xl font-bold">Diagnostic not found</h1>
+        <Link href="/app/diagnostic" className="text-primary hover:underline mt-4 block">
+          Back to Diagnostics
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto max-w-3xl px-4 py-16">
-      <Seo title="Start Diagnostic | 11+ Standard" description="Begin your 11+ diagnostic assessment." />
+      <Seo title={`Start ${diagnostic.title} | 11+ Standard`} description={`Begin your ${diagnostic.title} diagnostic assessment.`} />
       
       <div className="mb-8">
-        <Link href="/app/diagnostic" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+        <Link href="/app/diagnostic" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors" data-testid="link-back-diagnostics">
           ← Back to Diagnostics
         </Link>
       </div>
 
-      <Card className="border-border/60 shadow-lg overflow-hidden">
+      <Card className="border-border/60 shadow-lg overflow-hidden" data-testid={`card-diagnostic-start-${diagnostic.id}`}>
         <div className="bg-primary p-8 text-center border-b border-primary-foreground/10">
           <Badge className="bg-white/20 text-white hover:bg-white/20 mb-4 inline-flex">Diagnostic Assessment</Badge>
-          <h1 className="text-3xl md:text-4xl font-bold text-primary-foreground font-serif tracking-tight">
-            {id === 'mini-1' ? 'Mini Diagnostic' : 'Diagnostic A'}
+          <h1 className="text-3xl md:text-4xl font-bold text-primary-foreground font-serif tracking-tight" data-testid="text-diagnostic-title">
+            {diagnostic.title}
           </h1>
           <p className="text-primary-foreground/80 mt-4 max-w-lg mx-auto">
-            This assessment is designed to measure both your child's accuracy and pacing across core 11+ topics.
+            {diagnostic.subtitle}
           </p>
         </div>
 
@@ -32,12 +70,12 @@ export default function DiagnosticStart() {
           <div className="grid sm:grid-cols-3 gap-6 text-center">
             <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
               <Clock className="h-6 w-6 text-primary mx-auto mb-2" />
-              <div className="font-bold text-xl text-primary">{id === 'mini-1' ? '12' : '45'}</div>
+              <div className="font-bold text-xl text-primary" data-testid="text-duration">{diagnostic.duration}</div>
               <div className="text-sm text-muted-foreground">Minutes</div>
             </div>
             <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
               <CheckCircle2 className="h-6 w-6 text-primary mx-auto mb-2" />
-              <div className="font-bold text-xl text-primary">{id === 'mini-1' ? '12' : '45'}</div>
+              <div className="font-bold text-xl text-primary" data-testid="text-question-count">{diagnostic.questionCount}</div>
               <div className="text-sm text-muted-foreground">Questions</div>
             </div>
             <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
@@ -69,8 +107,21 @@ export default function DiagnosticStart() {
           </div>
 
           <div className="pt-6 border-t border-border/50 text-center">
-            <Button size="lg" className="h-14 px-12 text-lg bg-primary w-full sm:w-auto" asChild>
-              <Link href={`/app/test/${id}`}>Begin Assessment Now</Link>
+            <Button 
+              size="lg" 
+              className="h-14 px-12 text-lg bg-primary w-full sm:w-auto"
+              onClick={() => startSessionMutation.mutate()}
+              disabled={startSessionMutation.isPending}
+              data-testid="button-begin-assessment"
+            >
+              {startSessionMutation.isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Starting...
+                </>
+              ) : (
+                "Begin Assessment Now"
+              )}
             </Button>
           </div>
         </CardContent>

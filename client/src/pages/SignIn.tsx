@@ -1,17 +1,34 @@
 import { Link, useLocation } from "wouter";
+import { useState } from "react";
+import { useAuth } from "../lib/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Seo } from "../components/shared/Seo";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function SignIn() {
   const [, setLocation] = useLocation();
+  const { login } = useAuth();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Mock login, go to dashboard
-    setLocation("/app");
+    setError(null);
+    setIsLoading(true);
+
+    try {
+      await login(username, password);
+      setLocation("/app");
+    } catch (err: any) {
+      setError(err.message || "Invalid username or password");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -23,20 +40,45 @@ export default function SignIn() {
           <CardDescription>Sign in to your parent dashboard</CardDescription>
         </CardHeader>
         <CardContent>
+          {error && (
+            <Alert variant="destructive" className="mb-6">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="email">Email Address</Label>
-              <Input id="email" type="email" placeholder="parent@example.com" required />
+              <Label htmlFor="username">Username</Label>
+              <Input
+                id="username"
+                type="text"
+                placeholder="Your username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+                data-testid="input-username"
+              />
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label htmlFor="password">Password</Label>
                 <a href="#" className="text-sm font-medium text-brand-primary hover:underline">Forgot password?</a>
               </div>
-              <Input id="password" type="password" required />
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                data-testid="input-password"
+              />
             </div>
-            <Button type="submit" className="w-full h-12 text-lg bg-primary">
-              Sign In
+            <Button
+              type="submit"
+              className="w-full h-12 text-lg bg-primary"
+              disabled={isLoading}
+              data-testid="button-signin"
+            >
+              {isLoading ? "Signing In..." : "Sign In"}
             </Button>
           </form>
           <div className="mt-8 text-center text-sm text-muted-foreground">

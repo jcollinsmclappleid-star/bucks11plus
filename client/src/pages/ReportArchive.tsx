@@ -1,17 +1,22 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
-import { CheckCircle2, X, Download, FileText, Lock } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Download, FileText, Lock } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
+import { useQuery } from "@tanstack/react-query";
+import { type TestSession } from "@shared/schema";
+import { useAuth } from "../lib/auth";
+import { Skeleton } from "@/components/ui/skeleton";
+import { format } from "date-fns";
 
 export default function ReportArchive() {
-  const isPremium = false; // Mock state
+  const { user } = useAuth();
+  const { data: sessions, isLoading } = useQuery<TestSession[]>({
+    queryKey: ["/api/test-sessions"],
+  });
 
-  const reports = [
-    { id: 1, date: "Oct 12, 2023", name: "Diagnostic B", score: 118, band: "Within Reach", type: "Full" },
-    { id: 2, date: "Sep 28, 2023", name: "Diagnostic A", score: 114, band: "Clear Improvement", type: "Full" },
-    { id: 3, date: "Sep 14, 2023", name: "Mini Diagnostic", score: 105, band: "Clear Improvement", type: "Mini" },
-  ];
+  const isPremium = user?.subscriptionTier === 'premium';
+  const completedSessions = sessions?.filter(s => s.completedAt) || [];
 
   return (
     <div className="container mx-auto max-w-5xl px-4 py-8 space-y-8">
@@ -32,42 +37,59 @@ export default function ReportArchive() {
             <p className="text-slate-600 max-w-md mb-6">
               Premium users can download highly detailed PDF reports for every diagnostic, perfect for sharing with tutors or keeping offline records.
             </p>
-            <Button size="lg" className="bg-primary shadow-lg" asChild>
+            <Button size="lg" className="bg-primary shadow-lg" asChild data-testid="button-upgrade-reports">
               <Link href="/pricing">Upgrade to Premium</Link>
             </Button>
           </div>
         )}
 
         <div className={`space-y-4 ${!isPremium ? 'opacity-40 pointer-events-none select-none' : ''}`}>
-          {reports.map((report) => (
-            <Card key={report.id} className="border-border/60 shadow-sm hover:shadow-md transition-shadow">
-              <CardContent className="p-6 flex flex-col md:flex-row items-center justify-between gap-6">
-                <div className="flex items-center gap-6 w-full md:w-auto">
-                  <div className="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center text-slate-500 shrink-0 border border-slate-200">
-                    <FileText className="h-6 w-6" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-lg text-primary">{report.name}</h3>
-                    <div className="flex items-center gap-3 text-sm text-muted-foreground mt-1">
-                      <span>{report.date}</span>
-                      <span>•</span>
-                      <span className="font-medium text-slate-700">{report.type} Assessment</span>
+          {isLoading ? (
+            Array(3).fill(0).map((_, i) => (
+              <Skeleton key={i} className="h-24 w-full" />
+            ))
+          ) : completedSessions.length === 0 ? (
+            <div className="text-center py-12 bg-slate-50 rounded-xl border border-dashed border-slate-300">
+              <p className="text-muted-foreground">No completed assessments found.</p>
+              <Button variant="link" asChild>
+                <Link href="/app/diagnostics">Take a diagnostic</Link>
+              </Button>
+            </div>
+          ) : (
+            completedSessions.map((report) => (
+              <Card key={report.id} className="border-border/60 shadow-sm hover:shadow-md transition-shadow">
+                <CardContent className="p-6 flex flex-col md:flex-row items-center justify-between gap-6">
+                  <div className="flex items-center gap-6 w-full md:w-auto">
+                    <div className="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center text-slate-500 shrink-0 border border-slate-200">
+                      <FileText className="h-6 w-6" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg text-primary" data-testid={`text-report-name-${report.id}`}>
+                        Diagnostic {report.diagnosticId.toUpperCase()}
+                      </h3>
+                      <div className="flex items-center gap-3 text-sm text-muted-foreground mt-1">
+                        <span data-testid={`text-report-date-${report.id}`}>
+                          {report.completedAt ? format(new Date(report.completedAt), 'MMM d, yyyy') : 'N/A'}
+                        </span>
+                        <span>•</span>
+                        <span className="font-medium text-slate-700">Assessment Report</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-                
-                <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-end">
-                  <div className="text-right hidden sm:block">
-                    <div className="font-bold text-primary text-xl">{report.score}</div>
-                    <div className="text-xs text-muted-foreground">{report.band}</div>
+                  
+                  <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-end">
+                    <div className="text-right hidden sm:block">
+                      <div className="font-bold text-primary text-xl" data-testid={`text-report-score-${report.id}`}>{report.forecastScore}</div>
+                      <div className="text-xs text-muted-foreground" data-testid={`text-report-band-${report.id}`}>{report.band}</div>
+                    </div>
+                    <Button variant="outline" className="gap-2 shrink-0" data-testid={`button-download-report-${report.id}`}>
+                      <Download className="h-4 w-4" /> Download PDF
+                    </Button>
                   </div>
-                  <Button variant="outline" className="gap-2 shrink-0">
-                    <Download className="h-4 w-4" /> Download PDF
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                </CardContent>
+              </Card>
+            ))
+          )}
         </div>
       </div>
     </div>

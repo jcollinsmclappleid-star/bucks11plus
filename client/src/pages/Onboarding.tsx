@@ -3,18 +3,59 @@ import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useAuth } from "@/lib/auth";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Onboarding() {
   const [, setLocation] = useLocation();
+  const { user } = useAuth();
+  const { toast } = useToast();
   const [step, setStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const totalSteps = 4;
 
-  const handleNext = () => {
+  const [formData, setFormData] = useState({
+    childName: "",
+    childYear: "",
+    practiceHours: "",
+    difficultyAreas: [] as string[],
+  });
+
+  const handleNext = async () => {
     if (step < totalSteps) {
       setStep(prev => prev + 1);
     } else {
-      setLocation("/app"); // Proceed to dashboard after completion
+      if (!formData.childName) {
+        toast({
+          variant: "destructive",
+          title: "Required",
+          description: "Please enter your child's name",
+        });
+        return;
+      }
+
+      setIsSubmitting(true);
+      try {
+        await apiRequest("PUT", "/api/user/onboarding", formData);
+        await queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
+        setLocation("/app");
+      } catch (error: any) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: error.message || "Failed to save onboarding data",
+        });
+      } finally {
+        setIsSubmitting(false);
+      }
     }
+  };
+
+  const updateData = (key: string, value: any) => {
+    setFormData(prev => ({ ...prev, [key]: value }));
   };
 
   return (
@@ -34,7 +75,16 @@ export default function Onboarding() {
                 <h2 className="text-2xl font-bold text-primary font-serif">What year group is your child in?</h2>
                 <div className="space-y-3">
                   {["Year 4", "Year 5", "Year 6"].map(opt => (
-                    <Button key={opt} variant="outline" className="w-full h-14 text-lg" onClick={handleNext}>
+                    <Button
+                      key={opt}
+                      variant={formData.childYear === opt ? "default" : "outline"}
+                      className="w-full h-14 text-lg"
+                      onClick={() => {
+                        updateData("childYear", opt);
+                        setStep(2);
+                      }}
+                      data-testid={`button-year-${opt.replace(" ", "-").toLowerCase()}`}
+                    >
                       {opt}
                     </Button>
                   ))}
@@ -47,7 +97,16 @@ export default function Onboarding() {
                 <h2 className="text-2xl font-bold text-primary font-serif">Weekly practice hours?</h2>
                 <div className="space-y-3">
                   {["0 - 1 hours", "1 - 3 hours", "3+ hours"].map(opt => (
-                    <Button key={opt} variant="outline" className="w-full h-14 text-lg" onClick={handleNext}>
+                    <Button
+                      key={opt}
+                      variant={formData.practiceHours === opt ? "default" : "outline"}
+                      className="w-full h-14 text-lg"
+                      onClick={() => {
+                        updateData("practiceHours", opt);
+                        setStep(3);
+                      }}
+                      data-testid={`button-practice-${opt.replace(/ /g, "-").toLowerCase()}`}
+                    >
                       {opt}
                     </Button>
                   ))}
@@ -60,7 +119,16 @@ export default function Onboarding() {
                 <h2 className="text-2xl font-bold text-primary font-serif">Which area feels hardest right now?</h2>
                 <div className="space-y-3">
                   {["Verbal Reasoning", "Non-Verbal Reasoning", "Maths", "Unsure"].map(opt => (
-                    <Button key={opt} variant="outline" className="w-full h-14 text-lg" onClick={handleNext}>
+                    <Button
+                      key={opt}
+                      variant={formData.difficultyAreas.includes(opt) ? "default" : "outline"}
+                      className="w-full h-14 text-lg"
+                      onClick={() => {
+                        updateData("difficultyAreas", [opt]);
+                        setStep(4);
+                      }}
+                      data-testid={`button-area-${opt.replace(/ /g, "-").toLowerCase()}`}
+                    >
                       {opt}
                     </Button>
                   ))}
@@ -75,10 +143,26 @@ export default function Onboarding() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <h2 className="text-2xl font-bold text-primary font-serif">Profile Complete</h2>
-                <p className="text-muted-foreground">We're tailoring the forecast engine to your child's profile.</p>
-                <Button className="w-full h-14 text-lg bg-primary text-primary-foreground mt-4" onClick={handleNext}>
-                  Go to Dashboard
+                <h2 className="text-2xl font-bold text-primary font-serif">Almost there!</h2>
+                <p className="text-muted-foreground">Please enter your child's name to personalize their dashboard.</p>
+                <div className="space-y-2 text-left">
+                  <Label htmlFor="childName">Child's Name</Label>
+                  <Input
+                    id="childName"
+                    placeholder="Enter name"
+                    value={formData.childName}
+                    onChange={(e) => updateData("childName", e.target.value)}
+                    className="h-12"
+                    data-testid="input-child-name"
+                  />
+                </div>
+                <Button
+                  className="w-full h-14 text-lg bg-primary text-primary-foreground mt-4"
+                  onClick={handleNext}
+                  disabled={isSubmitting || !formData.childName}
+                  data-testid="button-complete-onboarding"
+                >
+                  {isSubmitting ? "Saving..." : "Go to Dashboard"}
                 </Button>
               </div>
             )}

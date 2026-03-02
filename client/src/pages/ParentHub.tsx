@@ -1,29 +1,12 @@
 import { Link } from "wouter";
+import { useQuery } from "@tanstack/react-query";
+import { type Article } from "@shared/schema";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ParentHub() {
-  const articles = [
-    {
-      slug: "understanding-the-bucks-121-benchmark",
-      title: "Understanding the Bucks 121 Benchmark",
-      excerpt: "What does the 121 score actually mean, and how is it standardized across different age groups in Buckinghamshire?",
-      category: "Methodology",
-      readTime: "5 min read"
-    },
-    {
-      slug: "verbal-reasoning-speed-strategies",
-      title: "Pacing Strategies for Verbal Reasoning",
-      excerpt: "With only 35 seconds per question on average, pacing in the VR section is critical. Learn how to stop your child from getting stuck.",
-      category: "Practice Advice",
-      readTime: "4 min read"
-    },
-    {
-      slug: "how-to-structure-the-final-12-weeks",
-      title: "Structuring the Final 12 Weeks of 11+ Prep",
-      excerpt: "A week-by-week guide to balancing mock exams, targeted drills, and rest before the September test dates.",
-      category: "Planning",
-      readTime: "7 min read"
-    }
-  ];
+  const { data: articles, isLoading } = useQuery<Article[]>({
+    queryKey: ["/api/articles"],
+  });
 
   return (
     <div className="container mx-auto max-w-5xl px-4 py-16">
@@ -36,26 +19,36 @@ export default function ParentHub() {
 
       <div className="grid md:grid-cols-3 gap-12">
         <div className="md:col-span-2 space-y-12">
-          {articles.map((article) => (
-            <article key={article.slug} className="group cursor-pointer">
-              <Link href={`/parent-hub/${article.slug}`} className="block space-y-3">
-                <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                  <span className="font-medium text-brand-primary">{article.category}</span>
-                  <span>•</span>
-                  <span>{article.readTime}</span>
-                </div>
-                <h2 className="text-2xl font-bold text-primary group-hover:text-brand-amber transition-colors font-serif">
-                  {article.title}
-                </h2>
-                <p className="text-muted-foreground leading-relaxed">
-                  {article.excerpt}
-                </p>
-                <div className="text-brand-primary font-medium text-sm flex items-center gap-1">
-                  Read article <span className="group-hover:translate-x-1 transition-transform">→</span>
-                </div>
-              </Link>
-            </article>
-          ))}
+          {isLoading ? (
+            Array(3).fill(0).map((_, i) => (
+              <div key={i} className="space-y-3">
+                <Skeleton className="h-4 w-48" />
+                <Skeleton className="h-8 w-full" />
+                <Skeleton className="h-20 w-full" />
+              </div>
+            ))
+          ) : (
+            articles?.map((article) => (
+              <article key={article.slug} className="group cursor-pointer">
+                <Link href={`/parent-hub/${article.slug}`} className="block space-y-3" data-testid={`link-article-${article.slug}`}>
+                  <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                    <span className="font-medium text-brand-primary" data-testid={`text-article-category-${article.slug}`}>{article.category}</span>
+                    <span>•</span>
+                    <span data-testid={`text-article-readtime-${article.slug}`}>{article.readTime}</span>
+                  </div>
+                  <h2 className="text-2xl font-bold text-primary group-hover:text-brand-amber transition-colors font-serif" data-testid={`text-article-title-${article.slug}`}>
+                    {article.title}
+                  </h2>
+                  <p className="text-muted-foreground leading-relaxed" data-testid={`text-article-excerpt-${article.slug}`}>
+                    {article.excerpt}
+                  </p>
+                  <div className="text-brand-primary font-medium text-sm flex items-center gap-1">
+                    Read article <span className="group-hover:translate-x-1 transition-transform">→</span>
+                  </div>
+                </Link>
+              </article>
+            ))
+          )}
         </div>
 
         <aside className="space-y-8">
@@ -68,7 +61,7 @@ export default function ParentHub() {
               <p className="text-sm text-muted-foreground mb-4">
                 Stop guessing. Find out exactly where your child stands relative to the 121 standard in just 12 minutes.
               </p>
-              <Link href="/sign-up" className="block w-full py-2.5 px-4 bg-primary text-primary-foreground text-center rounded-md font-medium hover:bg-primary/90 transition-colors shadow-sm">
+              <Link href="/sign-up" className="block w-full py-2.5 px-4 bg-primary text-primary-foreground text-center rounded-md font-medium hover:bg-primary/90 transition-colors shadow-sm" data-testid="link-start-diagnostic-sidebar">
                 Start Diagnostic
               </Link>
             </div>
@@ -77,10 +70,10 @@ export default function ParentHub() {
           <div>
             <h3 className="font-bold text-primary mb-4">Categories</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Methodology (4)</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Practice Advice (12)</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Planning (5)</a></li>
-              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Wellbeing (3)</a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Methodology</a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Practice Advice</a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Planning</a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Wellbeing</a></li>
             </ul>
           </div>
         </aside>

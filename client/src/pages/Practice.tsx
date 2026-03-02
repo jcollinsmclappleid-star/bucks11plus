@@ -4,33 +4,18 @@ import { Badge } from "@/components/ui/badge";
 import { Lock, PlayCircle, BookOpen } from "lucide-react";
 import { Link } from "wouter";
 import { Seo } from "../components/shared/Seo";
+import { useQuery } from "@tanstack/react-query";
+import { type PracticeSection } from "@shared/schema";
+import { useAuth } from "../lib/auth";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Practice() {
-  const sections = [
-    {
-      name: "Verbal Reasoning",
-      drills: [
-        { name: "Verbal Logic", difficulty: "Hard", questions: 15, locked: false },
-        { name: "Word Sequences", difficulty: "Medium", questions: 20, locked: true },
-        { name: "Vocabulary Relationships", difficulty: "Medium", questions: 20, locked: true },
-      ]
-    },
-    {
-      name: "Non-Verbal Reasoning",
-      drills: [
-        { name: "Pattern Sequences", difficulty: "Medium", questions: 15, locked: false },
-        { name: "Shape Transformation", difficulty: "Hard", questions: 15, locked: true },
-      ]
-    },
-    {
-      name: "Maths",
-      drills: [
-        { name: "Multi-step Word Problems", difficulty: "Hard", questions: 10, locked: false },
-        { name: "Fractions & Decimals", difficulty: "Medium", questions: 20, locked: true },
-        { name: "Data Interpretation", difficulty: "Easy", questions: 25, locked: true },
-      ]
-    }
-  ];
+  const { user } = useAuth();
+  const { data: sections, isLoading } = useQuery<PracticeSection[]>({
+    queryKey: ["/api/practice-sections"],
+  });
+
+  const categories = sections ? Array.from(new Set(sections.map(s => s.category))) : [];
 
   return (
     <div className="container mx-auto max-w-5xl px-4 py-8 space-y-8">
@@ -44,44 +29,71 @@ export default function Practice() {
           <h1 className="text-3xl font-bold text-primary font-serif">Practice Bank</h1>
           <p className="text-muted-foreground mt-2">Targeted drills to close your specific gaps to 121.</p>
         </div>
-        <Button variant="outline" className="gap-2">
-          <Lock className="h-4 w-4" /> Unlock All Drills
-        </Button>
+        {user?.subscriptionTier !== 'premium' && (
+          <Button variant="outline" className="gap-2" asChild data-testid="button-unlock-all">
+            <Link href="/pricing"><Lock className="h-4 w-4" /> Unlock All Drills</Link>
+          </Button>
+        )}
       </div>
 
       <div className="space-y-12">
-        {sections.map((section, idx) => (
-          <section key={idx}>
-            <h2 className="text-xl font-bold text-primary mb-4 flex items-center gap-2">
-              <BookOpen className="h-5 w-5 text-brand-primary" /> {section.name}
-            </h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {section.drills.map((drill, i) => (
-                <Card key={i} className={`relative overflow-hidden ${drill.locked ? 'bg-slate-50/50' : 'hover:border-primary/50 transition-colors'}`}>
-                  {drill.locked && (
-                    <div className="absolute inset-0 bg-background/40 backdrop-blur-[1px] z-10 flex items-center justify-center">
-                      <Lock className="h-8 w-8 text-slate-400" />
-                    </div>
-                  )}
-                  <CardHeader className="pb-2">
-                    <div className="flex justify-between items-start mb-2">
-                      <Badge variant={drill.difficulty === 'Hard' ? 'destructive' : drill.difficulty === 'Medium' ? 'default' : 'secondary'} className={drill.difficulty === 'Hard' ? 'bg-red-100 text-red-800' : drill.difficulty === 'Medium' ? 'bg-amber-100 text-amber-800' : 'bg-green-100 text-green-800'}>
-                        {drill.difficulty}
-                      </Badge>
-                      <span className="text-xs font-medium text-muted-foreground">{drill.questions} Qs</span>
-                    </div>
-                    <CardTitle className="text-lg leading-tight">{drill.name}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <Button variant={drill.locked ? 'outline' : 'default'} className="w-full mt-4 bg-primary" disabled={drill.locked}>
-                      {drill.locked ? 'Locked' : <><PlayCircle className="mr-2 h-4 w-4" /> Start Drill</>}
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </section>
-        ))}
+        {isLoading ? (
+          Array(3).fill(0).map((_, idx) => (
+            <section key={idx}>
+              <Skeleton className="h-8 w-48 mb-4" />
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {Array(3).fill(0).map((_, i) => (
+                  <Skeleton key={i} className="h-48 w-full" />
+                ))}
+              </div>
+            </section>
+          ))
+        ) : (
+          categories.map((category, idx) => (
+            <section key={idx}>
+              <h2 className="text-xl font-bold text-primary mb-4 flex items-center gap-2">
+                <BookOpen className="h-5 w-5 text-brand-primary" /> {category}
+              </h2>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {sections?.filter(s => s.category === category).map((drill, i) => {
+                  const isLocked = drill.requiredTier === 'premium' && user?.subscriptionTier !== 'premium';
+                  return (
+                    <Card key={i} className={`relative overflow-hidden ${isLocked ? 'bg-slate-50/50' : 'hover:border-primary/50 transition-colors'}`}>
+                      {isLocked && (
+                        <div className="absolute inset-0 bg-background/40 backdrop-blur-[1px] z-10 flex items-center justify-center">
+                          <Lock className="h-8 w-8 text-slate-400" />
+                        </div>
+                      )}
+                      <CardHeader className="pb-2">
+                        <div className="flex justify-between items-start mb-2">
+                          <Badge 
+                            variant={drill.difficulty === 'Hard' ? 'destructive' : drill.difficulty === 'Medium' ? 'default' : 'secondary'} 
+                            className={drill.difficulty === 'Hard' ? 'bg-red-100 text-red-800' : drill.difficulty === 'Medium' ? 'bg-amber-100 text-amber-800' : 'bg-green-100 text-green-800'}
+                            data-testid={`badge-difficulty-${drill.id}`}
+                          >
+                            {drill.difficulty}
+                          </Badge>
+                          <span className="text-xs font-medium text-muted-foreground" data-testid={`text-questions-${drill.id}`}>{drill.questionCount} Qs</span>
+                        </div>
+                        <CardTitle className="text-lg leading-tight" data-testid={`text-drill-title-${drill.id}`}>{drill.title}</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <Button 
+                          variant={isLocked ? 'outline' : 'default'} 
+                          className="w-full mt-4 bg-primary" 
+                          disabled={isLocked}
+                          data-testid={`button-start-drill-${drill.id}`}
+                        >
+                          {isLocked ? 'Locked' : <><PlayCircle className="mr-2 h-4 w-4" /> Start Drill</>}
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
+            </section>
+          ))
+        )}
       </div>
     </div>
   );

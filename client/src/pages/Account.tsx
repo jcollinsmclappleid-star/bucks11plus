@@ -4,8 +4,13 @@ import { Badge } from "@/components/ui/badge";
 import { Settings, CreditCard, User } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 import { Link } from "wouter";
+import { useAuth } from "../lib/auth";
 
 export default function Account() {
+  const { user } = useAuth();
+
+  if (!user) return null;
+
   return (
     <div className="container mx-auto max-w-4xl px-4 py-8 space-y-8">
       <Seo title="Account | 11+ Standard" description="Manage your account settings and subscription." />
@@ -40,14 +45,20 @@ export default function Account() {
               <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-100">
                 <div>
                   <div className="flex items-center gap-3 mb-1">
-                    <span className="font-bold text-primary text-lg">Free Tier</span>
+                    <span className="font-bold text-primary text-lg capitalize">{user.subscriptionTier} Tier</span>
                     <Badge variant="secondary" className="bg-slate-200">Active</Badge>
                   </div>
-                  <p className="text-sm text-muted-foreground">Limited to Mini Diagnostic and basic drills.</p>
+                  <p className="text-sm text-muted-foreground">
+                    {user.subscriptionTier === 'premium' 
+                      ? "Full access to all diagnostics, drills, and the 12-week plan."
+                      : "Limited to Mini Diagnostic and basic drills."}
+                  </p>
                 </div>
-                <Button variant="outline" asChild>
-                  <Link href="/pricing">Upgrade</Link>
-                </Button>
+                {user.subscriptionTier !== 'premium' && (
+                  <Button variant="outline" asChild>
+                    <Link href="/pricing">Upgrade</Link>
+                  </Button>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -60,8 +71,12 @@ export default function Account() {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
+                  <label className="text-xs font-medium text-muted-foreground">Child Name</label>
+                  <div className="font-medium text-primary">{user.childName || 'Not set'}</div>
+                </div>
+                <div className="space-y-1">
                   <label className="text-xs font-medium text-muted-foreground">Year Group</label>
-                  <div className="font-medium text-primary">Year 5</div>
+                  <div className="font-medium text-primary">{user.childYear || 'Not set'}</div>
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs font-medium text-muted-foreground">Targeting</label>
@@ -72,12 +87,18 @@ export default function Account() {
                   <div className="font-medium text-primary">September</div>
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-medium text-muted-foreground">Hardest Area</label>
-                  <div className="font-medium text-primary">Verbal Reasoning</div>
+                  <label className="text-xs font-medium text-muted-foreground">Practice Hours</label>
+                  <div className="font-medium text-primary">{user.practiceHours || 'Not set'}</div>
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-medium text-muted-foreground">Hardest Areas</label>
+                  <div className="font-medium text-primary">{(user.difficultyAreas || []).join(', ') || 'None selected'}</div>
                 </div>
               </div>
               <div className="pt-4 mt-2 border-t border-border/50">
-                <Button variant="outline" size="sm">Retake Onboarding Questionnaire</Button>
+                <Button variant="outline" size="sm" asChild>
+                  <Link href="/app/onboarding">Retake Onboarding Questionnaire</Link>
+                </Button>
               </div>
             </CardContent>
           </Card>
