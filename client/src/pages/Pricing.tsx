@@ -114,10 +114,18 @@ export default function Pricing() {
           <h1 className="text-4xl md:text-6xl font-bold text-white tracking-tight leading-[1.12] font-serif mb-6" data-testid="text-pricing-hero-title">
             Give your child the clarity they deserve ahead of the Bucks 11+
           </h1>
-          <p className="text-xl md:text-2xl text-white/60 max-w-3xl mx-auto leading-relaxed mb-8">
+          <p className="text-xl md:text-2xl text-white/60 max-w-3xl mx-auto leading-relaxed mb-10">
             Know exactly where they stand. See precisely what to work on. Track real progress — not just effort.
           </p>
-          <p className="text-[11px] text-white/25 mt-2">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
+            <Button size="lg" className="h-14 px-8 text-lg bg-brand-amber text-white hover:bg-brand-amber/90 w-full sm:w-auto font-bold shadow-lg shadow-brand-amber/15 border-none" asChild data-testid="button-hero-programme">
+              <a href="#tiers">View Plans &amp; Pricing <ArrowRight className="ml-2 h-5 w-5" /></a>
+            </Button>
+            <Button size="lg" variant="outline" className="h-14 px-8 text-lg w-full sm:w-auto bg-white/[0.03] border-white/15 text-white/80 hover:bg-white/[0.06] hover:text-white" asChild data-testid="button-hero-diagnostic">
+              <Link href="/free-diagnostic">Try Free Diagnostic First</Link>
+            </Button>
+          </div>
+          <p className="text-[11px] text-white/25">
             Independent readiness assessment · Not affiliated with GL Assessment or Buckinghamshire Council
           </p>
         </div>
