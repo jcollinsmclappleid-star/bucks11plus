@@ -1,7 +1,7 @@
 import { Link, useLocation, useSearch } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { CheckCircle2, Loader2, ArrowRight, Target, TrendingUp, BarChart3, Eye, Shield, HelpCircle, ChevronDown, AlertTriangle, BookOpen, Clock, Sparkles, Star, Quote } from "lucide-react";
+import { CheckCircle2, Loader2, ArrowRight, Target, TrendingUp, BarChart3, Eye, Shield, HelpCircle, ChevronDown, AlertTriangle, BookOpen, Clock, Sparkles } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 import { useAuth } from "../lib/auth";
 import { useState, useEffect, useRef } from "react";
@@ -98,20 +98,6 @@ export default function Pricing() {
     }
   ];
 
-  const testimonials = [
-    {
-      quote: "We'd been doing Bond papers for months with no idea if it was actually helping. After the first diagnostic, we could see exactly where the gaps were. Within 3 weeks, her scores started climbing in the areas that mattered most.",
-      attribution: "Parent of Year 5 student, Chesham"
-    },
-    {
-      quote: "The forecast gave us confidence we hadn't felt before. Instead of anxious guessing, we had a clear picture of where our son stood and a realistic plan to improve. It took so much stress out of the process.",
-      attribution: "Parent of Year 5 student, High Wycombe"
-    },
-    {
-      quote: "The structured programme was exactly what we needed. Each week we knew what to focus on, and the milestone diagnostics showed real, measurable progress. By the time the test came, we felt genuinely prepared.",
-      attribution: "Parent of Year 6 student, Amersham"
-    }
-  ];
 
   return (
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
@@ -161,61 +147,6 @@ export default function Pricing() {
                 <a href="#tiers">View Programme &amp; Enrol</a>
               </Button>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-20 md:py-28 bg-slate-50 border-b border-border/30">
-        <div className="container mx-auto max-w-4xl px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4" data-testid="text-problem-title">The problem with 11+ preparation today</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Most parents preparing for the Bucks 11+ share the same frustrations.
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
-            {[
-              { icon: HelpCircle, text: "You don't know where your child actually stands — just a vague sense of 'probably fine' or 'probably not'" },
-              { icon: BookOpen, text: "Workbooks and past papers feel like busywork — no way to tell if the practice is actually moving the needle" },
-              { icon: Clock, text: "Time is running out and you're not sure if you're focusing on the right areas" },
-              { icon: AlertTriangle, text: "The fear of leaving gaps undiscovered until it's too late to fix them" },
-            ].map((item, i) => (
-              <div key={i} className="flex gap-4 p-5 bg-white rounded-xl border border-slate-200 shadow-sm">
-                <item.icon className="h-6 w-6 text-brand-red shrink-0 mt-0.5" />
-                <p className="text-slate-700 leading-relaxed">{item.text}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-20 md:py-28 border-b border-border/30">
-        <div className="container mx-auto max-w-4xl px-4">
-          <div className="text-center mb-14">
-            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4" data-testid="text-solution-title">A different approach: diagnostic-led preparation</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Instead of guessing, start with clarity. Our diagnostics tell you exactly where the gaps are — then guide practice to close them.
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 gap-8 max-w-3xl mx-auto">
-            {[
-              { icon: Eye, title: "See exactly where gaps are", desc: "Timed diagnostics aligned to GL-style reasoning families pinpoint your child's specific weaknesses" },
-              { icon: Target, title: "Practice only what matters", desc: "Targeted drills focus on the highest-impact areas — no wasted effort on topics they've already mastered" },
-              { icon: TrendingUp, title: "Track real progress, not just effort", desc: "Forecast scores, pace metrics, and milestone diagnostics show whether preparation is actually working" },
-              { icon: BarChart3, title: "Know your child's realistic readiness", desc: "A clear forecast against the 121 Bucks benchmark — not a vague guess, but a data-driven assessment" },
-            ].map((item, i) => (
-              <div key={i} className="flex gap-4">
-                <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center shrink-0">
-                  <item.icon className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-primary mb-1">{item.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </section>
@@ -352,6 +283,61 @@ export default function Pricing() {
                 </Button>
               </CardFooter>
             </Card>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 md:py-28 bg-white border-b border-border/30">
+        <div className="container mx-auto max-w-4xl px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4" data-testid="text-problem-title">The problem with 11+ preparation today</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Most parents preparing for the Bucks 11+ share the same frustrations.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
+            {[
+              { icon: HelpCircle, text: "You don't know where your child actually stands — just a vague sense of 'probably fine' or 'probably not'" },
+              { icon: BookOpen, text: "Workbooks and past papers feel like busywork — no way to tell if the practice is actually moving the needle" },
+              { icon: Clock, text: "Time is running out and you're not sure if you're focusing on the right areas" },
+              { icon: AlertTriangle, text: "The fear of leaving gaps undiscovered until it's too late to fix them" },
+            ].map((item, i) => (
+              <div key={i} className="flex gap-4 p-5 bg-white rounded-xl border border-slate-200 shadow-sm">
+                <item.icon className="h-6 w-6 text-brand-red shrink-0 mt-0.5" />
+                <p className="text-slate-700 leading-relaxed">{item.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 md:py-28 border-b border-border/30">
+        <div className="container mx-auto max-w-4xl px-4">
+          <div className="text-center mb-14">
+            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4" data-testid="text-solution-title">A different approach: diagnostic-led preparation</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Instead of guessing, start with clarity. Our diagnostics tell you exactly where the gaps are — then guide practice to close them.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-8 max-w-3xl mx-auto">
+            {[
+              { icon: Eye, title: "See exactly where gaps are", desc: "Timed diagnostics aligned to GL-style reasoning families pinpoint your child's specific weaknesses" },
+              { icon: Target, title: "Practice only what matters", desc: "Targeted drills focus on the highest-impact areas — no wasted effort on topics they've already mastered" },
+              { icon: TrendingUp, title: "Track real progress, not just effort", desc: "Forecast scores, pace metrics, and milestone diagnostics show whether preparation is actually working" },
+              { icon: BarChart3, title: "Know your child's realistic readiness", desc: "A clear forecast against the 121 Bucks benchmark — not a vague guess, but a data-driven assessment" },
+            ].map((item, i) => (
+              <div key={i} className="flex gap-4">
+                <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center shrink-0">
+                  <item.icon className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-primary mb-1">{item.title}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -555,28 +541,59 @@ export default function Pricing() {
       </section>
 
       <section className="py-20 md:py-28 bg-slate-50 border-b border-border/30">
-        <div className="container mx-auto max-w-5xl px-4">
+        <div className="container mx-auto max-w-4xl px-4">
           <div className="text-center mb-14">
-            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4" data-testid="text-testimonials-title">What parents say</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4" data-testid="text-trust-title">Built on Transparent Principles</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              We believe parents deserve honesty about what a diagnostic system can and cannot do.
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            {testimonials.map((t, i) => (
-              <Card key={i} className="border-border/60 shadow-sm" data-testid={`card-testimonial-${i}`}>
-                <CardContent className="pt-6">
-                  <Quote className="h-8 w-8 text-brand-amber/40 mb-4" />
-                  <p className="text-slate-700 leading-relaxed mb-6 text-sm italic">"{t.quote}"</p>
-                  <div className="flex items-center gap-2">
-                    <div className="flex gap-0.5">
-                      {[...Array(5)].map((_, j) => (
-                        <Star key={j} className="h-4 w-4 fill-brand-amber text-brand-amber" />
-                      ))}
-                    </div>
-                  </div>
-                  <p className="text-xs text-muted-foreground mt-2 font-medium">{t.attribution}</p>
-                </CardContent>
-              </Card>
-            ))}
+          <div className="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
+            <div className="bg-white rounded-xl border border-slate-200 p-6" data-testid="trust-methodology">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-lg bg-primary/5 flex items-center justify-center shrink-0">
+                  <BarChart3 className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-primary text-sm mb-1.5">Open Methodology</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed">Our forecast model, scoring logic and GL-style alignment are fully documented. No black boxes.</p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-white rounded-xl border border-slate-200 p-6" data-testid="trust-independent">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-lg bg-primary/5 flex items-center justify-center shrink-0">
+                  <Shield className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-primary text-sm mb-1.5">Fully Independent</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed">Not affiliated with GL Assessment, any school, or Buckinghamshire Council. Our only obligation is to accuracy.</p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-white rounded-xl border border-slate-200 p-6" data-testid="trust-no-guarantees">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-lg bg-primary/5 flex items-center justify-center shrink-0">
+                  <CheckCircle2 className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-primary text-sm mb-1.5">No Outcome Guarantees</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed">We provide structured diagnostics and targeted practice. We never guarantee scores, places, or outcomes.</p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-white rounded-xl border border-slate-200 p-6" data-testid="trust-data">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-lg bg-primary/5 flex items-center justify-center shrink-0">
+                  <Eye className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-primary text-sm mb-1.5">Try Before You Commit</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed">The free diagnostic gives you a genuine baseline with no account required. See the quality of the analysis before deciding.</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
