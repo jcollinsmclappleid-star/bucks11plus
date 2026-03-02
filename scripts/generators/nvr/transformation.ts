@@ -4,7 +4,8 @@ type SvgStroke = { strokeWidth: number; stroke: string; fill: 'none' | 'solid'; 
 type SvgElement = { type: 'shape'; shape: string; x: number; y: number; size: number; rotation: number; style: SvgStroke };
 type SvgFrame = { elements: SvgElement[] };
 
-const shapes = ['circle', 'square', 'triangle', 'star', 'pentagon', 'arrow'] as const;
+const allShapes = ['circle', 'square', 'triangle', 'star', 'pentagon', 'arrow'] as const;
+const asymmetricShapes = ['triangle', 'star', 'pentagon', 'arrow'] as const;
 const baseStyle: SvgStroke = { strokeWidth: 3, stroke: '#111827', fill: 'none', dashed: false };
 const difficulties = ['easy', 'medium', 'hard'] as const;
 
@@ -61,7 +62,7 @@ export function generateTransformationQuestions(): GeneratedQuestion[] {
   for (let i = 0; i < 40; i++) {
     const rng = seededRandom(90000 + i * 131);
     rng(); rng(); rng();
-    const shape = pick(shapes, rng);
+    const shape = pick(asymmetricShapes, rng);
     const diff = pick(difficulties, rng);
     const rotAngle = pick(rotationAngles, rng);
     const numElements = diff === 'easy' ? 1 : diff === 'medium' ? 2 : 3;
@@ -73,7 +74,7 @@ export function generateTransformationQuestions(): GeneratedQuestion[] {
     for (let e = 0; e < numElements; e++) {
       const [px, py] = positions[e % positions.length];
       const rot = pick(rotations, rng);
-      const sh = e === 0 ? shape : pick(shapes, rng);
+      const sh = e === 0 ? shape : pick(asymmetricShapes, rng);
       const fill = rng() > 0.7 ? 'solid' as const : 'none' as const;
       frameAElements.push(makeElement(sh, px, py, 18, rot, fill));
     }
@@ -85,7 +86,7 @@ export function generateTransformationQuestions(): GeneratedQuestion[] {
     for (let e = 0; e < numElements; e++) {
       const [px, py] = positions[(e + 2) % positions.length];
       const rot = pick(rotations, rng);
-      const sh = pick(shapes, rng);
+      const sh = pick(asymmetricShapes, rng);
       const fill = rng() > 0.7 ? 'solid' as const : 'none' as const;
       frameCElements.push(makeElement(sh, px, py, 18, rot, fill));
     }
