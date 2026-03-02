@@ -1,22 +1,223 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, CheckCircle2, Target, Clock, BarChart3, Lock, Zap, Search, Wrench, TrendingUp } from "lucide-react";
+import { ArrowRight, CheckCircle2, Target, Clock, BarChart3, Zap, Search, Wrench, TrendingUp, ChevronLeft, ChevronRight } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
+import { useState, useRef } from "react";
+
+const showcaseTabs = [
+  { id: "forecast", label: "Forecast" },
+  { id: "sections", label: "Section Breakdown" },
+  { id: "analytics", label: "Analytics" },
+  { id: "progress", label: "Progress" },
+] as const;
+
+type TabId = (typeof showcaseTabs)[number]["id"];
+
+function ForecastPanel() {
+  return (
+    <div className="flex flex-col items-center gap-6" data-testid="showcase-forecast">
+      <div className="relative w-40 h-40 md:w-52 md:h-52">
+        <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="40" className="stroke-slate-200" strokeWidth="10" fill="none" />
+          <circle cx="50" cy="50" r="40" className="stroke-brand-amber" strokeWidth="10" fill="none" strokeDasharray="251.2" strokeDashoffset={251.2 - (251.2 * (114 / 141))} />
+          <line x1="50" y1="4" x2="50" y2="14" className="stroke-primary/60" strokeWidth="1.5" transform={`rotate(${(121/141)*360} 50 50)`} />
+        </svg>
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <span className="text-4xl md:text-5xl font-bold text-primary">114</span>
+          <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1">Est. Score</span>
+        </div>
+      </div>
+      <div className="text-center space-y-3 max-w-sm">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-amber-50 text-amber-700 text-sm font-bold border border-amber-200">
+          Borderline (Amber)
+        </div>
+        <h3 className="text-xl md:text-2xl font-bold text-primary font-serif">7 points gap to 121</h3>
+        <p className="text-sm text-slate-500 leading-relaxed">
+          Clear readiness band shows exactly where your child stands against the Bucks qualifying benchmark.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function SectionsPanel() {
+  const sections = [
+    { name: "Verbal Reasoning", score: 72, color: "bg-amber-500", items: "18/25" },
+    { name: "Non-Verbal Reasoning", score: 58, color: "bg-red-500", items: "14/24" },
+    { name: "Mathematics", score: 80, color: "bg-green-500", items: "20/25" },
+  ];
+  return (
+    <div className="space-y-5 w-full max-w-md mx-auto" data-testid="showcase-sections">
+      <div className="text-center mb-2">
+        <h3 className="text-lg font-bold text-primary font-serif">Section-by-Section Accuracy</h3>
+        <p className="text-xs text-muted-foreground mt-1">See exactly where strengths and gaps lie</p>
+      </div>
+      {sections.map((s, i) => (
+        <div key={i} className="bg-white rounded-xl border border-slate-200 p-4">
+          <div className="flex justify-between items-center mb-2">
+            <span className="font-semibold text-primary text-sm">{s.name}</span>
+            <span className="text-xs text-muted-foreground">{s.items} correct</span>
+          </div>
+          <div className="h-2.5 bg-slate-100 rounded-full overflow-hidden">
+            <div className={`h-full rounded-full ${s.color} transition-all duration-700`} style={{ width: `${s.score}%` }}></div>
+          </div>
+          <div className="flex justify-between mt-1.5">
+            <span className="text-xs font-bold text-primary">{s.score}%</span>
+            <span className={`text-[10px] font-bold ${s.score >= 75 ? "text-green-600" : s.score >= 65 ? "text-amber-600" : "text-red-600"}`}>
+              {s.score >= 75 ? "On Track" : s.score >= 65 ? "Borderline" : "Focus Area"}
+            </span>
+          </div>
+        </div>
+      ))}
+      <div className="bg-red-50 border border-red-200 rounded-lg p-3 flex items-start gap-2">
+        <Target className="h-4 w-4 text-red-500 mt-0.5 shrink-0" />
+        <div>
+          <p className="text-xs font-bold text-red-800">Priority Focus: Non-Verbal Reasoning</p>
+          <p className="text-[11px] text-red-600 mt-0.5">Spatial sequences and pattern rotation need targeted practice</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AnalyticsPanel() {
+  return (
+    <div className="space-y-4 w-full max-w-md mx-auto" data-testid="showcase-analytics">
+      <div className="text-center mb-2">
+        <h3 className="text-lg font-bold text-primary font-serif">Parent Analytics</h3>
+        <p className="text-xs text-muted-foreground mt-1">10 metrics that tell you what's really happening</p>
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-center">
+          <div className="text-2xl font-bold text-primary">78</div>
+          <div className="text-[10px] text-muted-foreground font-medium">Readiness Score</div>
+          <div className="text-[10px] font-bold text-amber-700 mt-0.5">Borderline</div>
+        </div>
+        <div className="bg-white border border-slate-200 rounded-xl p-3 text-center">
+          <div className="text-2xl font-bold text-primary">82</div>
+          <div className="text-[10px] text-muted-foreground font-medium">Pace Discipline</div>
+          <div className="text-[10px] font-bold text-green-600 mt-0.5">Good</div>
+        </div>
+        <div className="bg-white border border-slate-200 rounded-xl p-3 text-center">
+          <div className="text-2xl font-bold text-primary">0.72</div>
+          <div className="text-[10px] text-muted-foreground font-medium">Weighted Accuracy</div>
+        </div>
+        <div className="bg-white border border-slate-200 rounded-xl p-3 text-center">
+          <div className="text-2xl font-bold text-primary">68</div>
+          <div className="text-[10px] text-muted-foreground font-medium">Forecast Stability</div>
+        </div>
+      </div>
+      <div className="bg-white border border-slate-200 rounded-xl p-3">
+        <div className="text-[10px] font-bold text-primary mb-2">Fatigue Analysis</div>
+        <div className="flex gap-2 items-end">
+          <div className="flex-1">
+            <div className="flex items-end gap-1 h-12">
+              <div className="flex-1 bg-green-400 rounded-t" style={{ height: "100%" }}></div>
+              <div className="flex-1 bg-green-300 rounded-t" style={{ height: "85%" }}></div>
+              <div className="flex-1 bg-amber-400 rounded-t" style={{ height: "65%" }}></div>
+            </div>
+            <div className="flex text-[8px] text-muted-foreground mt-1 gap-1">
+              <span className="flex-1 text-center">Start</span>
+              <span className="flex-1 text-center">Mid</span>
+              <span className="flex-1 text-center">End</span>
+            </div>
+          </div>
+          <div className="text-right">
+            <div className="text-xs font-bold text-amber-600">-11%</div>
+            <div className="text-[9px] text-muted-foreground">accuracy drop</div>
+          </div>
+        </div>
+      </div>
+      <div className="bg-white border border-slate-200 rounded-xl p-3">
+        <div className="text-[10px] font-bold text-primary mb-1.5">Top 3 Priorities</div>
+        {["NVR: Spatial sequences", "VR: Letter patterns", "Maths: Ratio problems"].map((p, i) => (
+          <div key={i} className="flex items-center gap-1.5 text-[11px] text-slate-600 py-0.5">
+            <div className={`w-1.5 h-1.5 rounded-full ${i === 0 ? "bg-red-500" : i === 1 ? "bg-amber-500" : "bg-amber-400"}`}></div>
+            {p}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ProgressPanel() {
+  return (
+    <div className="space-y-4 w-full max-w-md mx-auto" data-testid="showcase-progress">
+      <div className="text-center mb-2">
+        <h3 className="text-lg font-bold text-primary font-serif">Progress Tracking</h3>
+        <p className="text-xs text-muted-foreground mt-1">Watch the gap close over time</p>
+      </div>
+      <div className="bg-white border border-slate-200 rounded-xl p-4">
+        <div className="text-xs font-bold text-primary mb-3">Score Trajectory</div>
+        <svg viewBox="0 0 240 90" className="w-full h-24">
+          <line x1="0" y1="22" x2="240" y2="22" stroke="#e2e8f0" strokeWidth="1" strokeDasharray="4" />
+          <text x="228" y="18" fontSize="8" fill="#94a3b8">121</text>
+          <path d="M 20 70 L 80 55 L 150 38 L 220 15" fill="none" stroke="#3b82f6" strokeWidth="2.5" strokeLinecap="round" />
+          <circle cx="20" cy="70" r="4" fill="#94a3b8" />
+          <circle cx="80" cy="55" r="4" fill="#64748b" />
+          <circle cx="150" cy="38" r="4" fill="#3b82f6" />
+          <circle cx="220" cy="15" r="4" fill="#22c55e" />
+          <text x="10" y="82" fontSize="8" fill="#94a3b8">Wk 1</text>
+          <text x="68" y="67" fontSize="8" fill="#94a3b8">Wk 4</text>
+          <text x="138" y="50" fontSize="8" fill="#94a3b8">Wk 8</text>
+          <text x="205" y="10" fontSize="8" fill="#22c55e">Wk 12</text>
+          <text x="14" y="66" fontSize="7" fill="#64748b">105</text>
+          <text x="74" y="51" fontSize="7" fill="#64748b">112</text>
+          <text x="144" y="34" fontSize="7" fill="#3b82f6">118</text>
+          <text x="214" y="27" fontSize="7" fill="#22c55e">124</text>
+        </svg>
+      </div>
+      <div className="grid grid-cols-3 gap-3">
+        <div className="bg-green-50 border border-green-200 rounded-xl p-3 text-center">
+          <div className="text-xl font-bold text-green-700">+19</div>
+          <div className="text-[10px] text-muted-foreground font-medium">Points gained</div>
+        </div>
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 text-center">
+          <div className="text-sm font-bold text-blue-700">Stable</div>
+          <div className="text-[10px] text-muted-foreground font-medium">Forecast</div>
+        </div>
+        <div className="bg-green-50 border border-green-200 rounded-xl p-3 text-center">
+          <div className="text-sm font-bold text-green-700">Green</div>
+          <div className="text-[10px] text-muted-foreground font-medium">Band</div>
+        </div>
+      </div>
+      <div className="bg-white border border-slate-200 rounded-xl p-3">
+        <div className="text-[10px] font-bold text-primary mb-1.5">Gap Velocity</div>
+        <div className="flex items-center gap-3">
+          <div className="text-sm text-red-500 font-medium line-through">16 pt gap</div>
+          <ArrowRight className="h-4 w-4 text-green-600" />
+          <div className="text-sm font-bold text-green-700">Above 121</div>
+        </div>
+        <div className="text-[10px] text-muted-foreground mt-1">Closing at ~4 points per diagnostic cycle</div>
+      </div>
+    </div>
+  );
+}
 
 export default function Landing() {
+  const [activeTab, setActiveTab] = useState<TabId>("forecast");
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const scrollTabs = (dir: "left" | "right") => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: dir === "left" ? -120 : 120, behavior: "smooth" });
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
-      <Seo 
-        title="GL-Style Aligned Bucks 11+ Diagnostics | 11+ Standard" 
-        description="Timed diagnostics aligned to GL-style reasoning families used in Bucks for the Buckinghamshire Secondary Transfer Test." 
+      <Seo
+        title="GL-Style Aligned Bucks 11+ Diagnostics | 11+ Standard"
+        description="Timed diagnostics aligned to GL-style reasoning families used in Bucks for the Buckinghamshire Secondary Transfer Test."
       />
-      
+
       <section className="relative overflow-hidden pt-20 pb-24 md:pt-32 md:pb-40 border-b border-border/50">
         <div className="absolute inset-0 z-0">
-          <img 
-            src="/hero-bg.png" 
-            alt="Abstract dark navy background with subtle light accents" 
+          <img
+            src="/hero-bg.png"
+            alt="Abstract dark navy background with subtle light accents"
             className="w-full h-full object-cover object-center"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/95 to-primary"></div>
@@ -28,16 +229,16 @@ export default function Landing() {
               <span className="flex h-2 w-2 rounded-full bg-brand-amber animate-pulse"></span>
               Buckinghamshire 11+ Ready
             </div>
-            
+
             <h1 className="text-5xl md:text-7xl font-bold text-white tracking-tight leading-[1.1] font-serif">
               Bucks 11+ Diagnostics <br className="hidden md:block" />
               <span className="text-white/80 font-sans tracking-normal text-4xl md:text-6xl mt-4 block">Aligned to GL-Style Reasoning Families</span>
             </h1>
-            
+
             <p className="text-xl text-white/70 max-w-3xl mx-auto leading-relaxed">
               Timed diagnostics aligned to GL-style reasoning families used in Bucks — forecasted against the 121 benchmark, with targeted practice that improves the highest-impact areas.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-white/90 text-sm font-medium pt-4">
               <span className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-brand-amber" /> Aligned to GL-style reasoning types (VR / NVR / Maths)</span>
               <span className="hidden sm:inline text-white/30">|</span>
@@ -53,67 +254,101 @@ export default function Landing() {
                 </Link>
               </Button>
               <Button size="lg" variant="outline" className="h-14 px-8 text-lg w-full sm:w-auto bg-white/5 border-white/20 text-white hover:bg-white/10 hover:text-white backdrop-blur-md" asChild>
-                 <a href="#how-forecast-works">How Our Forecast Works</a>
+                <a href="#see-product">See What You Get <ArrowRight className="ml-2 h-5 w-5" /></a>
               </Button>
             </div>
             <p className="text-xs text-white/50 mt-6 max-w-md mx-auto">
               Independent readiness assessment. Not affiliated with GL Assessment or Buckinghamshire Council.
             </p>
           </div>
-
-          <div className="mt-24 relative max-w-4xl mx-auto hidden md:block">
-            <div className="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-transparent z-10 rounded-xl pointer-events-none"></div>
-            <div className="bg-white/5 border border-white/10 p-2 rounded-2xl backdrop-blur-sm shadow-2xl relative overflow-hidden group">
-              
-              <div className="flex gap-4 opacity-40 blur-[2px] transition-all duration-700 group-hover:blur-0 group-hover:opacity-100 scale-[0.98] group-hover:scale-100 origin-bottom">
-                 <div className="w-1/3 bg-white rounded-lg p-6 shadow-lg border border-slate-200 flex flex-col items-center">
-                    <div className="w-24 h-24 rounded-full border-8 border-brand-amber border-t-slate-100 flex items-center justify-center mb-4">
-                      <span className="text-2xl font-bold text-primary">114</span>
-                    </div>
-                    <div className="h-3 w-3/4 bg-slate-200 rounded-full mb-2"></div>
-                    <div className="h-2 w-1/2 bg-slate-100 rounded-full"></div>
-                 </div>
-                 <div className="w-1/3 bg-white rounded-lg p-6 shadow-lg border border-slate-200">
-                    <div className="flex justify-between items-center mb-4">
-                      <div className="h-4 w-1/2 bg-primary rounded-full"></div>
-                      <div className="h-4 w-8 bg-red-400 rounded-full"></div>
-                    </div>
-                    <div className="space-y-3">
-                      <div className="h-8 bg-slate-50 rounded border border-slate-100"></div>
-                      <div className="h-8 bg-slate-50 rounded border border-slate-100"></div>
-                      <div className="h-8 bg-slate-50 rounded border border-slate-100"></div>
-                    </div>
-                 </div>
-                 <div className="w-1/3 bg-white rounded-lg p-6 shadow-lg border border-slate-200">
-                    <div className="h-4 w-2/3 bg-primary rounded-full mb-6"></div>
-                    <div className="flex gap-2 mb-4">
-                      <div className="h-10 w-10 bg-brand-green/20 rounded-md"></div>
-                      <div className="flex-1 space-y-2">
-                        <div className="h-3 w-full bg-slate-200 rounded-full"></div>
-                        <div className="h-3 w-2/3 bg-slate-200 rounded-full"></div>
-                      </div>
-                    </div>
-                 </div>
-              </div>
-              <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none group-hover:opacity-0 transition-opacity duration-500">
-                <div className="bg-primary/90 text-white px-6 py-3 rounded-full font-medium shadow-xl border border-white/10 flex items-center gap-3 backdrop-blur-md">
-                   <Target className="h-5 w-5 text-brand-amber" />
-                   Your results will appear like this — clear, visual, and action-led.
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
-      <section className="py-20 bg-slate-50 border-b border-border/50 relative">
+      <section id="see-product" className="py-16 md:py-24 bg-slate-50 border-b border-border/30 relative">
+        <div className="container mx-auto max-w-5xl px-4">
+          <div className="text-center mb-8">
+            <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">What You'll See</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4" data-testid="text-showcase-title">
+              Real output from a 12-minute diagnostic
+            </h2>
+            <p className="text-lg text-slate-500 max-w-2xl mx-auto">
+              Scroll through the examples below to see exactly what you and your child get — no sign-up needed to try it.
+            </p>
+          </div>
+
+          <div className="relative mb-6">
+            <button
+              onClick={() => scrollTabs("left")}
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white border border-slate-200 rounded-full shadow-sm flex items-center justify-center md:hidden"
+              aria-label="Scroll tabs left"
+            >
+              <ChevronLeft className="h-4 w-4 text-slate-500" />
+            </button>
+            <div
+              ref={scrollRef}
+              className="flex gap-2 overflow-x-auto scrollbar-hide px-10 md:px-0 md:justify-center snap-x snap-mandatory"
+              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            >
+              {showcaseTabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`px-5 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap transition-all snap-center ${
+                    activeTab === tab.id
+                      ? "bg-primary text-white shadow-md"
+                      : "bg-white text-slate-600 border border-slate-200 hover:border-primary/30 hover:text-primary"
+                  }`}
+                  data-testid={`tab-${tab.id}`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+            <button
+              onClick={() => scrollTabs("right")}
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white border border-slate-200 rounded-full shadow-sm flex items-center justify-center md:hidden"
+              aria-label="Scroll tabs right"
+            >
+              <ChevronRight className="h-4 w-4 text-slate-500" />
+            </button>
+          </div>
+
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 md:p-10 relative min-h-[380px]">
+            <div className="absolute top-3 right-3 bg-slate-100 text-slate-400 text-[9px] font-bold uppercase px-2 py-0.5 rounded tracking-wider">
+              Example Data
+            </div>
+
+            {activeTab === "forecast" && <ForecastPanel />}
+            {activeTab === "sections" && <SectionsPanel />}
+            {activeTab === "analytics" && <AnalyticsPanel />}
+            {activeTab === "progress" && <ProgressPanel />}
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
+            <Button size="lg" className="h-13 px-8 bg-brand-amber text-amber-950 hover:bg-amber-400 font-bold shadow-md border-none" asChild data-testid="button-try-diagnostic-showcase">
+              <Link href="/free-diagnostic">
+                Try It Free — 12 Minutes <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+            </Button>
+            <span className="text-sm text-muted-foreground flex items-center gap-1">
+              <Zap className="h-4 w-4 text-brand-amber" /> No sign-up required
+            </span>
+          </div>
+
+          <p className="text-xs text-slate-400 text-center mt-4 italic">
+            Example based on sample student data. Your child's real results will populate after their diagnostic.
+          </p>
+        </div>
+      </section>
+
+      <section className="py-20 bg-white border-b border-border/50 relative">
         <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent"></div>
         <div className="container mx-auto max-w-6xl px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-primary mb-4 font-serif">Aligned to GL-Style Reasoning Families Used in Bucks</h2>
             <p className="text-lg text-muted-foreground">We independently model the assessment constraints to give you an honest baseline.</p>
           </div>
-          
+
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="bg-white border-border/50 shadow-sm hover:shadow-md transition-shadow group">
               <CardContent className="p-8 text-center space-y-4">
@@ -124,7 +359,7 @@ export default function Landing() {
                 <p className="text-muted-foreground">VR, NVR and Maths aligned to GL-style reasoning families used in Bucks.</p>
               </CardContent>
             </Card>
-            
+
             <Card className="bg-white border-border/50 shadow-sm hover:shadow-md transition-shadow group">
               <CardContent className="p-8 text-center space-y-4">
                 <div className="mx-auto w-14 h-14 bg-brand-primary/5 text-brand-primary rounded-2xl flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300 border border-brand-primary/10">
@@ -148,7 +383,7 @@ export default function Landing() {
         </div>
       </section>
 
-      <section id="how-forecast-works" className="py-20 md:py-28 bg-white relative overflow-hidden">
+      <section id="how-forecast-works" className="py-20 md:py-28 bg-slate-50 relative overflow-hidden">
         <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent"></div>
         <div className="container mx-auto max-w-6xl px-4">
           <div className="text-center mb-6">
@@ -308,60 +543,6 @@ export default function Landing() {
                 </Link>
               </Button>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-20 md:py-24 px-4 bg-slate-50 relative">
-        <div className="container mx-auto max-w-5xl">
-          <div className="text-center mb-10">
-            <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">Example Output</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4">What your diagnostic reveals</h2>
-            <p className="text-lg text-slate-500 max-w-2xl mx-auto">
-              After just 12 minutes, you'll see exactly where your child stands against the Bucks 121 qualifying benchmark.
-            </p>
-          </div>
-
-          <div className="bg-white rounded-3xl border border-slate-200 p-6 md:p-10 shadow-sm relative">
-            <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12">
-               <div className="relative w-44 h-44 md:w-56 md:h-56 flex-shrink-0">
-                  <svg className="w-full h-full -rotate-90 filter drop-shadow-sm" viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="40" className="stroke-slate-200" strokeWidth="12" fill="none" />
-                    <circle
-                      cx="50" cy="50" r="40"
-                      className="stroke-brand-amber transition-all duration-1000 ease-out"
-                      strokeWidth="12"
-                      fill="none"
-                      strokeDasharray="251.2"
-                      strokeDashoffset={251.2 - (251.2 * (114 / 141))}
-                    />
-                    <line x1="50" y1="2" x2="50" y2="15" className="stroke-primary" strokeWidth="2" transform={`rotate(${(121/141)*360} 50 50)`} />
-                  </svg>
-                  <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                    <span className="text-4xl md:text-5xl font-bold text-primary">114</span>
-                    <span className="text-[10px] md:text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1">Est. Score</span>
-                  </div>
-               </div>
-
-               <div className="max-w-lg space-y-4 text-center md:text-left">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-amber-50 text-amber-700 text-sm font-bold border border-amber-200 shadow-sm">
-                    Borderline (Amber)
-                  </div>
-                  <h3 className="text-2xl md:text-3xl font-bold text-primary font-serif">7 points gap to 121</h3>
-                  <p className="text-base md:text-lg text-slate-600 leading-relaxed">
-                    Your current readiness band indicates progress, but targeted practice in identified weak areas is required to secure the qualifying benchmark.
-                  </p>
-                  <div className="pt-2 flex flex-col sm:flex-row items-center gap-4 justify-center md:justify-start">
-                    <Button className="bg-primary shadow-md" asChild>
-                       <Link href="/free-diagnostic">Start Free Diagnostic</Link>
-                    </Button>
-                    <span className="text-sm font-medium text-slate-400 flex items-center gap-1">
-                      <Zap className="h-4 w-4 text-brand-amber" /> 12 mins
-                    </span>
-                  </div>
-               </div>
-            </div>
-            <p className="text-xs text-slate-400 text-center mt-6 italic">Example based on sample student data</p>
           </div>
         </div>
       </section>
