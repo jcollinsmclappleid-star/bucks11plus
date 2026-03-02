@@ -247,12 +247,15 @@ export default function Landing() {
             </h1>
 
             <p className="text-lg md:text-xl text-white/65 max-w-3xl mx-auto leading-relaxed">
-              A structured diagnostic system that reveals what is truly holding performance back — speed, difficulty tolerance, stability or specific rule types — and shows what to fix first.
+              A structured diagnostic system that reveals what is truly limiting performance — accuracy, pace, stability or specific rule types — and shows what to focus on first.
             </p>
 
-            <div className="pt-3 max-w-2xl mx-auto border border-white/8 rounded-lg bg-white/[0.03] px-5 py-3.5">
-              <p className="text-sm text-white/55 leading-relaxed">
-                Not generic practice papers. Each diagnostic analyses accuracy, pace under time pressure, performance consistency and skill gaps — then builds a focused improvement plan tailored to <span className="text-white/80 font-semibold">your child</span>.
+            <div className="pt-4 max-w-xl mx-auto space-y-1">
+              <p className="text-sm text-white/45 leading-relaxed">
+                Replace uncertainty with structured clarity.
+              </p>
+              <p className="text-sm text-white/45 leading-relaxed">
+                Built for parents who prefer evidence over assumption.
               </p>
             </div>
 
