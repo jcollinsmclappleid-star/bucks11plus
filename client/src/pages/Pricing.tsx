@@ -565,6 +565,23 @@ export default function Pricing() {
         </div>
       </section>
 
+      <section className="py-16 md:py-20 border-b border-border/30">
+        <div className="container mx-auto max-w-3xl px-4 text-center">
+          <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif mb-3" data-testid="text-mid-cta-title">Ready to get started?</h2>
+          <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
+            Choose a plan above, or try the free diagnostic to see where your child stands first.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Button size="lg" className="h-13 px-8 text-base bg-brand-amber text-white hover:bg-brand-amber/90 w-full sm:w-auto font-bold shadow-lg shadow-brand-amber/15 border-none" asChild data-testid="button-mid-cta-tiers">
+              <a href="#tiers">View Plans &amp; Pricing <ArrowRight className="ml-2 h-5 w-5" /></a>
+            </Button>
+            <Button size="lg" variant="outline" className="h-13 px-8 text-base w-full sm:w-auto" asChild data-testid="button-mid-cta-diagnostic">
+              <Link href="/free-diagnostic">Try Free Diagnostic</Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
       <section className="py-20 md:py-28 border-b border-border/30">
         <div className="container mx-auto max-w-3xl px-4">
           <div className="text-center mb-14">
