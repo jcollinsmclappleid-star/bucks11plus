@@ -29,6 +29,8 @@ import ProgrammeCompletion from "./pages/ProgrammeCompletion";
 import CheckoutSuccess from "./pages/CheckoutSuccess";
 import DrillRunner from "./pages/DrillRunner";
 import ParentAnalytics from "./pages/ParentAnalytics";
+import FreeDiagnosticStart from "./pages/FreeDiagnosticStart";
+import GuestResults from "./pages/GuestResults";
 
 import HowItWorks from "./pages/HowItWorks";
 import Methodology from "./pages/Methodology";
@@ -89,6 +91,43 @@ function MainLayout({ children }: { children: React.ReactNode }) {
   );
 }
 
+function AuthGate({ children }: { children: React.ReactNode }) {
+  const { user, isLoading } = useAuth();
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+      </div>
+    );
+  }
+  if (!user) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] px-4 text-center" data-testid="auth-gate">
+        <div className="max-w-md space-y-6">
+          <div className="mx-auto w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <h2 className="text-2xl font-bold text-primary font-serif">Sign in to continue</h2>
+          <p className="text-muted-foreground">Please sign in or create an account to access your dashboard, diagnostics, and progress tracking.</p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Link href="/sign-in">
+              <button className="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground px-6 py-2.5 text-sm font-medium hover:bg-primary/90 transition-colors w-full sm:w-auto" data-testid="button-sign-in">
+                Sign In
+              </button>
+            </Link>
+            <Link href="/sign-up">
+              <button className="inline-flex items-center justify-center rounded-md border border-input bg-background px-6 py-2.5 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors w-full sm:w-auto" data-testid="button-sign-up">
+                Create Account
+              </button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  return <>{children}</>;
+}
+
 function AdminGuard({ children }: { children: React.ReactNode }) {
   const { user, isLoading } = useAuth();
   if (isLoading) return null;
@@ -100,7 +139,9 @@ function Router() {
   return (
     <Switch>
       <Route path="/app/test/:id" component={TestRunner} />
-      <Route path="/app/drill/:sectionId" component={DrillRunner} />
+      <Route path="/app/drill/:sectionId">
+        <AuthGate><DrillRunner /></AuthGate>
+      </Route>
       
       <Route path="*">
         <MainLayout>
@@ -115,6 +156,8 @@ function Router() {
             <Route path="/about" component={About} />
             <Route path="/sign-in" component={SignIn} />
             <Route path="/sign-up" component={SignUp} />
+            <Route path="/free-diagnostic" component={FreeDiagnosticStart} />
+            <Route path="/free-results/:id" component={GuestResults} />
             
             <Route path="/terms">
               <Legal type="terms" />
@@ -126,19 +169,45 @@ function Router() {
               <Legal type="safeguarding" />
             </Route>
 
-            <Route path="/app" component={Dashboard} />
-            <Route path="/app/onboarding" component={Onboarding} />
-            <Route path="/app/practice" component={Practice} />
-            <Route path="/app/diagnostic" component={Diagnostics} />
-            <Route path="/app/diagnostic/:id/start" component={DiagnosticStart} />
-            <Route path="/app/results/:id" component={Results} />
-            <Route path="/app/progress" component={Progress} />
-            <Route path="/app/account" component={Account} />
-            <Route path="/app/report-archive" component={ReportArchive} />
-            <Route path="/app/programme" component={Programme} />
-            <Route path="/app/programme/summary" component={ProgrammeCompletion} />
-            <Route path="/app/analytics" component={ParentAnalytics} />
-            <Route path="/app/checkout-success" component={CheckoutSuccess} />
+            <Route path="/app">
+              <AuthGate><Dashboard /></AuthGate>
+            </Route>
+            <Route path="/app/onboarding">
+              <AuthGate><Onboarding /></AuthGate>
+            </Route>
+            <Route path="/app/practice">
+              <AuthGate><Practice /></AuthGate>
+            </Route>
+            <Route path="/app/diagnostic">
+              <AuthGate><Diagnostics /></AuthGate>
+            </Route>
+            <Route path="/app/diagnostic/:id/start">
+              <AuthGate><DiagnosticStart /></AuthGate>
+            </Route>
+            <Route path="/app/results/:id">
+              <AuthGate><Results /></AuthGate>
+            </Route>
+            <Route path="/app/progress">
+              <AuthGate><Progress /></AuthGate>
+            </Route>
+            <Route path="/app/account">
+              <AuthGate><Account /></AuthGate>
+            </Route>
+            <Route path="/app/report-archive">
+              <AuthGate><ReportArchive /></AuthGate>
+            </Route>
+            <Route path="/app/programme">
+              <AuthGate><Programme /></AuthGate>
+            </Route>
+            <Route path="/app/programme/summary">
+              <AuthGate><ProgrammeCompletion /></AuthGate>
+            </Route>
+            <Route path="/app/analytics">
+              <AuthGate><ParentAnalytics /></AuthGate>
+            </Route>
+            <Route path="/app/checkout-success">
+              <AuthGate><CheckoutSuccess /></AuthGate>
+            </Route>
 
             <Route path="/admin/questions/new">
               <AdminGuard><QuestionEditor /></AdminGuard>

@@ -33,7 +33,7 @@ export interface IStorage {
   getQuestionsByDiagnostic(diagnosticId: string): Promise<Question[]>;
   selectQuestionsForSession(userId: string, diagnosticId: string): Promise<Question[]>;
 
-  createTestSession(data: { userId: string; diagnosticId: string }): Promise<TestSession>;
+  createTestSession(data: { userId?: string | null; diagnosticId: string; guestToken?: string | null }): Promise<TestSession>;
   getTestSession(id: string): Promise<TestSession | undefined>;
   getUserTestSessions(userId: string): Promise<TestSession[]>;
   completeTestSession(id: string, results: {
@@ -388,10 +388,11 @@ export class DatabaseStorage implements IStorage {
     return finalSelected;
   }
 
-  async createTestSession(data: { userId: string; diagnosticId: string }): Promise<TestSession> {
+  async createTestSession(data: { userId?: string | null; diagnosticId: string; guestToken?: string | null }): Promise<TestSession> {
     const [session] = await db.insert(testSessions).values({
-      userId: data.userId,
+      userId: data.userId ?? null,
       diagnosticId: data.diagnosticId,
+      guestToken: data.guestToken ?? null,
     }).returning();
     return session;
   }

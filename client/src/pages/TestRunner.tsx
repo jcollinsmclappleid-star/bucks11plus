@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { useState, useEffect, useCallback } from "react";
-import { useLocation, useParams } from "wouter";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { useLocation, useParams, useSearch } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -14,42 +14,76 @@ const LABELS = ["A", "B", "C", "D", "E", "F"];
 export default function TestRunner() {
   const { id } = useParams<{ id: string }>();
   const [, setLocation] = useLocation();
+  const search = useSearch();
+  const isGuest = new URLSearchParams(search).get("guest") === "true";
+
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [timeLeft, setTimeLeft] = useState(0);
   const [answers, setAnswers] = useState<Array<{ questionId: string, selectedAnswer: string, timeTaken: number }>>([]);
   const [questionStartTime, setQuestionStartTime] = useState<number>(Date.now());
   const [svgSelectedIndex, setSvgSelectedIndex] = useState<number | null>(null);
 
+  const guestQuestions = useMemo(() => {
+    if (!isGuest) return null;
+    try {
+      const stored = sessionStorage.getItem("guestQuestions");
+      return stored ? JSON.parse(stored) as Question[] : null;
+    } catch { return null; }
+  }, [isGuest]);
+
+  const guestTitle = isGuest ? (sessionStorage.getItem("guestDiagnosticTitle") || "Free Diagnostic") : "";
+  const guestDuration = isGuest ? parseInt(sessionStorage.getItem("guestDiagnosticDuration") || "12", 10) : 0;
+
   const { data: session, isLoading: sessionLoading } = useQuery<TestSession>({
     queryKey: [`/api/test-sessions/${id}`],
+    enabled: !isGuest,
   });
 
   const { data: diagnostic, isLoading: diagLoading } = useQuery<Diagnostic>({
     queryKey: [`/api/diagnostics/${session?.diagnosticId}`],
-    enabled: !!session?.diagnosticId,
+    enabled: !isGuest && !!session?.diagnosticId,
   });
 
-  const { data: questions, isLoading: questionsLoading } = useQuery<Question[]>({
+  const { data: fetchedQuestions, isLoading: questionsLoading } = useQuery<Question[]>({
     queryKey: [`/api/diagnostics/${session?.diagnosticId}/questions`],
-    enabled: !!session?.diagnosticId,
+    enabled: !isGuest && !!session?.diagnosticId,
   });
+
+  const questions = isGuest ? guestQuestions : fetchedQuestions;
+  const diagnosticTitle = isGuest ? guestTitle : (diagnostic?.title || "");
+  const diagnosticDuration = isGuest ? guestDuration : (diagnostic?.duration || 0);
 
   const submitMutation = useMutation({
     mutationFn: async (finalAnswers: typeof answers) => {
-      const res = await apiRequest("POST", `/api/test-sessions/${id}/submit`, { answers: finalAnswers });
-      return res.json();
+      if (isGuest) {
+        const guestToken = sessionStorage.getItem("guestToken") || "";
+        const res = await fetch(`/api/guest/submit/${id}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ answers: finalAnswers, guestToken }),
+        });
+        if (!res.ok) throw new Error("Submit failed");
+        return res.json();
+      } else {
+        const res = await apiRequest("POST", `/api/test-sessions/${id}/submit`, { answers: finalAnswers });
+        return res.json();
+      }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/test-sessions"] });
-      setLocation(`/app/results/${id}`);
+      if (isGuest) {
+        setLocation(`/free-results/${id}`);
+      } else {
+        queryClient.invalidateQueries({ queryKey: ["/api/test-sessions"] });
+        setLocation(`/app/results/${id}`);
+      }
     }
   });
 
   useEffect(() => {
-    if (diagnostic?.duration) {
-      setTimeLeft(diagnostic.duration * 60);
+    if (diagnosticDuration) {
+      setTimeLeft(diagnosticDuration * 60);
     }
-  }, [diagnostic]);
+  }, [diagnosticDuration]);
 
   const handleFinish = useCallback(() => {
     submitMutation.mutate(answers);
@@ -112,7 +146,11 @@ export default function TestRunner() {
     return () => window.removeEventListener("keydown", handler);
   }, [questions, currentQuestionIndex, handleNext]);
 
-  if (sessionLoading || diagLoading || questionsLoading || !questions || !diagnostic) {
+  const isLoading = isGuest
+    ? !questions
+    : (sessionLoading || diagLoading || questionsLoading || !questions || !diagnostic);
+
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-slate-50 flex flex-col p-8">
         <Skeleton className="h-12 w-full mb-8" />
@@ -121,8 +159,8 @@ export default function TestRunner() {
     );
   }
 
-  const question = questions[currentQuestionIndex];
-  const totalQuestions = questions.length;
+  const question = questions![currentQuestionIndex];
+  const totalQuestions = questions!.length;
   const currentQuestionNumber = currentQuestionIndex + 1;
 
   const mins = Math.floor(timeLeft / 60);
@@ -139,14 +177,14 @@ export default function TestRunner() {
         <div className="flex items-center gap-4">
           <div className="font-serif font-bold text-primary">11+ Standard</div>
           <div className="h-4 w-px bg-border"></div>
-          <div className="text-sm font-medium text-muted-foreground">{diagnostic.title}</div>
+          <div className="text-sm font-medium text-muted-foreground">{diagnosticTitle}</div>
         </div>
 
         <div className={`font-mono text-lg font-medium px-3 py-1 rounded ${timeLeft < 60 ? 'bg-red-50 text-red-600' : 'bg-slate-100 text-slate-700'}`}>
           {timeString}
         </div>
 
-        <Button variant="ghost" size="sm" onClick={() => setLocation("/app")} data-testid="button-exit">
+        <Button variant="ghost" size="sm" onClick={() => setLocation(isGuest ? "/" : "/app")} data-testid="button-exit">
           Exit
         </Button>
       </header>

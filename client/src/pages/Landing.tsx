@@ -48,7 +48,7 @@ export default function Landing() {
 
             <div className="pt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button size="lg" className="h-14 px-8 text-lg bg-brand-amber text-amber-950 hover:bg-amber-400 w-full sm:w-auto font-bold shadow-lg shadow-brand-amber/20 border-none" asChild>
-                <Link href="/sign-up">
+                <Link href="/free-diagnostic">
                   Start Free Diagnostic <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
@@ -300,7 +300,7 @@ export default function Landing() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Button size="lg" className="h-12 px-8 bg-primary text-primary-foreground shadow-md" asChild data-testid="button-start-diagnostic-process">
-                <Link href="/sign-up">Start Free Diagnostic</Link>
+                <Link href="/free-diagnostic">Start Free Diagnostic</Link>
               </Button>
               <Button variant="outline" className="h-12 px-6" asChild data-testid="link-how-it-works-detail">
                 <Link href="/how-it-works">
@@ -350,7 +350,7 @@ export default function Landing() {
                   </p>
                   <div className="pt-4 flex items-center gap-4">
                     <Button className="bg-primary shadow-md" asChild>
-                       <Link href="/sign-up">Start Free Diagnostic</Link>
+                       <Link href="/free-diagnostic">Start Free Diagnostic</Link>
                     </Button>
                     <span className="text-sm font-medium text-slate-400 flex items-center gap-1">
                       <Zap className="h-4 w-4 text-brand-amber" /> 12 mins

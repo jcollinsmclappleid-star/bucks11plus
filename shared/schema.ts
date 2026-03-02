@@ -86,7 +86,7 @@ export const questionVariants = pgTable("question_variants", {
 
 export const testSessions = pgTable("test_sessions", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  userId: varchar("user_id").notNull(),
+  userId: varchar("user_id"),
   diagnosticId: varchar("diagnostic_id").notNull(),
   startedAt: timestamp("started_at").notNull().defaultNow(),
   completedAt: timestamp("completed_at"),
@@ -96,6 +96,7 @@ export const testSessions = pgTable("test_sessions", {
   sectionScores: jsonb("section_scores"),
   paceData: jsonb("pace_data"),
   metrics: jsonb("metrics"),
+  guestToken: text("guest_token"),
 });
 
 export const testAnswers = pgTable("test_answers", {

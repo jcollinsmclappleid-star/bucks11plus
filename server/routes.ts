@@ -182,6 +182,148 @@ export async function registerRoutes(
     }
   });
 
+  app.post("/api/guest/start-diagnostic", async (req, res, next) => {
+    try {
+      const { diagnosticId } = req.body;
+      if (!diagnosticId) return res.status(400).json({ message: "diagnosticId required" });
+
+      const diag = await storage.getDiagnostic(diagnosticId);
+      if (!diag) return res.status(404).json({ message: "Diagnostic not found" });
+
+      if (diag.requiredTier !== "free") {
+        return res.status(403).json({ message: "Only free diagnostics are available without an account" });
+      }
+
+      const crypto = await import("crypto");
+      const guestToken = crypto.randomBytes(32).toString("hex");
+
+      const session = await storage.createTestSession({
+        userId: null,
+        diagnosticId,
+        guestToken,
+      });
+
+      const guestId = `guest-${session.id}`;
+      const qs = await storage.selectQuestionsForSession(guestId, diagnosticId);
+      const safe = qs.map(({ correctAnswer, ...q }) => q);
+
+      res.status(201).json({ session, guestToken, questions: safe });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.post("/api/guest/submit/:id", async (req, res, next) => {
+    try {
+      const { answers, guestToken } = req.body;
+      if (!Array.isArray(answers)) return res.status(400).json({ message: "answers array required" });
+      if (!guestToken) return res.status(400).json({ message: "guestToken required" });
+
+      const session = await storage.getTestSession(req.params.id);
+      if (!session) return res.status(404).json({ message: "Session not found" });
+      if (session.guestToken !== guestToken) return res.status(403).json({ message: "Invalid guest token" });
+      if (session.completedAt) return res.status(400).json({ message: "Session already completed" });
+
+      const allQuestions = await storage.getQuestionsByDiagnostic(session.diagnosticId);
+      const questionMap = new Map(allQuestions.map(q => [q.id, q]));
+
+      let correct = 0;
+      const sectionResults: Record<string, { correct: number; total: number; totalTime: number }> = {};
+
+      for (let idx = 0; idx < answers.length; idx++) {
+        const ans = answers[idx];
+        const question = questionMap.get(ans.questionId);
+        if (!question) continue;
+
+        const isCorrect = ans.selectedAnswer === question.correctAnswer;
+        if (isCorrect) correct++;
+
+        if (!sectionResults[question.section]) {
+          sectionResults[question.section] = { correct: 0, total: 0, totalTime: 0 };
+        }
+        sectionResults[question.section].total++;
+        sectionResults[question.section].totalTime += ans.timeTaken || 0;
+        if (isCorrect) sectionResults[question.section].correct++;
+
+        await storage.createTestAnswer({
+          sessionId: session.id,
+          questionId: ans.questionId,
+          selectedAnswer: ans.selectedAnswer,
+          isCorrect,
+          timeTaken: ans.timeTaken || 0,
+          questionOrder: idx,
+        });
+      }
+
+      const total = answers.length;
+      const rawPercent = total > 0 ? (correct / total) * 100 : 0;
+      const forecastScore = Math.round(90 + (rawPercent / 100) * 51);
+      let band = "Clear Improvement Opportunity";
+      if (forecastScore >= 121) band = "On Track";
+      else if (forecastScore >= 115) band = "Within Reach";
+
+      const sectionScores = Object.entries(sectionResults).map(([name, data]) => ({
+        name,
+        score: Math.round((data.correct / data.total) * 100),
+        avgTime: Math.round(data.totalTime / data.total),
+        total: data.total,
+        correct: data.correct,
+      }));
+
+      const paceData = Object.entries(sectionResults).map(([name, data]) => ({
+        name,
+        avg: Math.round(data.totalTime / data.total),
+        expected: name === 'Mathematics' ? 45 : 35,
+      }));
+
+      const completed = await storage.completeTestSession(session.id, {
+        totalScore: correct,
+        forecastScore,
+        band,
+        sectionScores,
+        paceData,
+      });
+
+      res.json(completed);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.get("/api/guest/results/:id", async (req, res, next) => {
+    try {
+      const { token } = req.query;
+      if (!token) return res.status(400).json({ message: "token query param required" });
+
+      const session = await storage.getTestSession(req.params.id);
+      if (!session) return res.status(404).json({ message: "Session not found" });
+      if (session.guestToken !== token) return res.status(403).json({ message: "Invalid token" });
+
+      res.json(session);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.post("/api/guest/claim/:id", requireAuth, async (req, res, next) => {
+    try {
+      const session = await storage.getTestSession(req.params.id);
+      if (!session) return res.status(404).json({ message: "Session not found" });
+      if (session.userId && session.userId !== req.user!.id) {
+        return res.status(403).json({ message: "Session already claimed" });
+      }
+
+      const [updated] = await db.update(testSessions)
+        .set({ userId: req.user!.id, guestToken: null })
+        .where(eq(testSessions.id, req.params.id))
+        .returning();
+
+      res.json(updated);
+    } catch (error) {
+      next(error);
+    }
+  });
+
   app.post("/api/test-sessions", requireAuth, async (req, res, next) => {
     try {
       const { diagnosticId } = req.body;

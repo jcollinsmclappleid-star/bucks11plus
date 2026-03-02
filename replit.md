@@ -44,7 +44,9 @@ client/src/
 │   ├── Practice.tsx      # Drill sections (links to DrillRunner)
 │   ├── DrillRunner.tsx   # Practice drill runner with immediate feedback
 │   ├── Programme.tsx / ProgrammeCompletion.tsx / CheckoutSuccess.tsx
-│   ├── Pricing.tsx       # 3-tier pricing
+│   ├── Pricing.tsx       # Conversion-focused sales page with interactive demo previews + auto-checkout
+│   ├── FreeDiagnosticStart.tsx # Guest diagnostic start (no auth required)
+│   ├── GuestResults.tsx  # Guest results with conversion upsell + blurred locked features
 │   ├── ParentHub.tsx / Article.tsx
 │   ├── admin/
 │   │   ├── QuestionList.tsx  # Filterable question table + stats + QA queue
@@ -89,6 +91,15 @@ content/
 - **articles**: id, title, slug, excerpt, content, category, readTime, publishedAt
 - **programme_enrolments / programme_milestones / weekly_plans**: Programme tracking tables
 - **stripe.*** (managed by stripe-replit-sync)
+
+## Guest Diagnostic Flow
+- Guest sessions stored in `test_sessions` with `guestToken` column and nullable `userId`
+- API endpoints: POST /api/guest/start-diagnostic, POST /api/guest/submit/:id, GET /api/guest/results/:id?token=xxx, POST /api/guest/claim/:id
+- Token stored in sessionStorage + URL param fallback for GuestResults resilience
+- Flow A: Landing → /free-diagnostic → TestRunner (guest) → /free-results/:id → sign-up?guestSession=xxx → checkout
+- Flow B: /pricing → sign-up?redirect=checkout&tier=pack12 → onboarding → /pricing?autoCheckout=pack12 → Stripe
+- Pricing page has 3 interactive demo previews (Results, Analytics, Progress) with DemoCard component
+- SignUp handles guestSession claiming + redirect to checkout after onboarding
 
 ## API Routes
 ### Auth

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation } from "wouter";
+import { useLocation, useSearch } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -11,6 +11,10 @@ import { useToast } from "@/hooks/use-toast";
 
 export default function Onboarding() {
   const [, setLocation] = useLocation();
+  const search = useSearch();
+  const searchParams = new URLSearchParams(search);
+  const redirectParam = searchParams.get("redirect");
+  const tierParam = searchParams.get("tier");
   const { user } = useAuth();
   const { toast } = useToast();
   const [step, setStep] = useState(1);
@@ -41,7 +45,11 @@ export default function Onboarding() {
       try {
         await apiRequest("PUT", "/api/user/onboarding", formData);
         await queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
-        setLocation("/app");
+        if (redirectParam === "checkout" && tierParam) {
+          setLocation(`/pricing?autoCheckout=${tierParam}`);
+        } else {
+          setLocation("/app");
+        }
       } catch (error: any) {
         toast({
           variant: "destructive",
