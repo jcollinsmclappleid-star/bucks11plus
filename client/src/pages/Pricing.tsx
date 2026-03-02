@@ -123,28 +123,48 @@ export default function Pricing() {
         description="Diagnostic-led 11+ preparation for the Buckinghamshire Secondary Transfer Test. See where your child stands, close the gaps that matter, and track real progress."
       />
 
-      <section className="relative overflow-hidden pt-20 pb-24 md:pt-28 md:pb-36 border-b border-border/50">
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-primary via-primary/95 to-primary"></div>
-        </div>
+      <section className="relative overflow-hidden pt-20 pb-24 md:pt-28 md:pb-36 border-b border-border/50" style={{ backgroundColor: '#0d1f30' }}>
+        <div className="absolute inset-0 z-0 hero-texture"></div>
+        <div className="absolute inset-0 z-0 hero-vignette"></div>
+        <div className="absolute inset-0 z-0" style={{ background: 'radial-gradient(ellipse 50% 40% at 50% 35%, rgba(255,255,255,0.04) 0%, transparent 100%)' }}></div>
         <div className="container mx-auto max-w-4xl px-4 relative z-10 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-white tracking-tight leading-[1.1] font-serif mb-6" data-testid="text-pricing-hero-title">
+          <h1 className="text-4xl md:text-6xl font-bold text-white tracking-tight leading-[1.12] font-serif mb-6" data-testid="text-pricing-hero-title">
             Give your child the clarity they deserve ahead of the Bucks 11+
           </h1>
-          <p className="text-xl md:text-2xl text-white/70 max-w-3xl mx-auto leading-relaxed mb-8">
+          <p className="text-xl md:text-2xl text-white/60 max-w-3xl mx-auto leading-relaxed mb-8">
             Know exactly where they stand. See precisely what to work on. Track real progress — not just effort.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-            <Button size="lg" className="h-14 px-8 text-lg bg-brand-amber text-amber-950 hover:bg-amber-400 w-full sm:w-auto font-bold shadow-lg shadow-brand-amber/20 border-none" onClick={() => handleCheckout("programme16")} disabled={loading === "programme16"} data-testid="button-hero-programme">
-              {loading === "programme16" ? <Loader2 className="h-5 w-5 animate-spin" /> : <>Get the Structured Programme <ArrowRight className="ml-2 h-5 w-5" /></>}
-            </Button>
-            <Button size="lg" variant="outline" className="h-14 px-8 text-lg w-full sm:w-auto bg-white/5 border-white/20 text-white hover:bg-white/10 hover:text-white backdrop-blur-md" asChild>
-              <Link href="/free-diagnostic">Try Free Diagnostic First</Link>
-            </Button>
-          </div>
-          <p className="text-xs text-white/40 mt-6">
+          <p className="text-[11px] text-white/25 mt-2">
             Independent readiness assessment · Not affiliated with GL Assessment or Buckinghamshire Council
           </p>
+        </div>
+      </section>
+
+      <section className="py-14 md:py-20 bg-white border-b border-border/30">
+        <div className="container mx-auto max-w-4xl px-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif text-center mb-10" data-testid="text-pricing-dual-path">
+            How Would You Like to Begin?
+          </h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="rounded-2xl border border-slate-200 bg-white p-7 sm:p-8 flex flex-col" data-testid="card-pricing-path-diagnostic">
+              <h3 className="text-xl font-bold text-primary font-serif mb-3">Start With a Diagnostic</h3>
+              <p className="text-slate-600 text-sm leading-relaxed mb-6 flex-1">
+                Take a 12-minute timed assessment to understand current readiness, pace and performance profile before committing.
+              </p>
+              <Button variant="outline" className="w-full h-12 text-sm font-semibold" asChild data-testid="button-pricing-path-diagnostic">
+                <Link href="/free-diagnostic">Start Free Diagnostic</Link>
+              </Button>
+            </div>
+            <div className="rounded-2xl border-2 border-primary/20 bg-slate-50 p-7 sm:p-8 flex flex-col" data-testid="card-pricing-path-programme">
+              <h3 className="text-xl font-bold text-primary font-serif mb-3">Begin the Structured Programme</h3>
+              <p className="text-slate-600 text-sm leading-relaxed mb-6 flex-1">
+                For families who already want a complete 12–16 week preparation plan aligned to the Bucks 11+. Includes diagnostics, targeted drills and milestone tracking.
+              </p>
+              <Button className="w-full h-12 text-sm font-semibold bg-primary text-primary-foreground" onClick={() => handleCheckout("programme16")} disabled={loading === "programme16"} data-testid="button-pricing-path-programme">
+                {loading === "programme16" ? <Loader2 className="h-5 w-5 animate-spin" /> : "View Programme & Enrol"}
+              </Button>
+            </div>
+          </div>
         </div>
       </section>
 
