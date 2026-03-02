@@ -117,7 +117,8 @@ content/
 - NVR questions use SVG render_config (NvrSequenceConfig, NvrTransformConfig, NvrClassificationConfig)
 - Data interpretation uses chart render_config (ChartBarConfig, ChartLineConfig, ChartTableConfig)
 - Anti-repeat: question_usage tracks served_count + last_served_at per user per question
-- Selection prioritizes unseen → least recent → lowest count, caps sub_rule_id at 40%
+- Selection prioritizes unseen → least recent → lowest count, max 2 per sub_rule_id per 10-question drill
+- DrillRunner uses session-unique query key (useRef + staleTime:0) so every drill start fetches fresh questions
 - QA workflow: draft → review → approved/rejected via admin interface
 
 ## Design System

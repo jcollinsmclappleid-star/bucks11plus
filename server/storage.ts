@@ -253,7 +253,37 @@ export class DatabaseStorage implements IStorage {
     }
     const remaining = scored.filter(s => s.served > minServed + 1);
     const shuffled = [...candidatePool, ...remaining];
-    const selected = shuffled.slice(0, limit).map(s => s.question);
+
+    const maxPerSubRule = 2;
+    const subRuleCounts = new Map<string, number>();
+    const diverseSelected: typeof shuffled = [];
+    const overflow: typeof shuffled = [];
+
+    for (const item of shuffled) {
+      const sr = item.question.subRuleId || '__none__';
+      const count = subRuleCounts.get(sr) || 0;
+      if (count < maxPerSubRule) {
+        diverseSelected.push(item);
+        subRuleCounts.set(sr, count + 1);
+      } else {
+        overflow.push(item);
+      }
+      if (diverseSelected.length >= limit) break;
+    }
+
+    if (diverseSelected.length < limit) {
+      for (const item of overflow) {
+        diverseSelected.push(item);
+        if (diverseSelected.length >= limit) break;
+      }
+    }
+
+    for (let i = diverseSelected.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [diverseSelected[i], diverseSelected[j]] = [diverseSelected[j], diverseSelected[i]];
+    }
+
+    const selected = diverseSelected.slice(0, limit).map(s => s.question);
 
     const now = new Date();
     for (const q of selected) {

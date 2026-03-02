@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useLocation, useParams } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
@@ -27,9 +27,11 @@ export default function DrillRunner() {
   const [questionStartTime, setQuestionStartTime] = useState<number>(Date.now());
   const [results, setResults] = useState<Array<{ questionId: string; isCorrect: boolean; timeTaken: number }>>([]);
   const [finished, setFinished] = useState(false);
+  const sessionKey = useRef(Date.now());
 
   const { data: questions, isLoading } = useQuery<Question[]>({
-    queryKey: [`/api/practice-sections/${sectionId}/questions`],
+    queryKey: [`/api/practice-sections/${sectionId}/questions`, sessionKey.current],
+    staleTime: 0,
   });
 
   const checkMutation = useMutation({

@@ -25,6 +25,12 @@ function pickOther<T>(arr: readonly T[], exclude: T, rng: () => number): T {
   return filtered[Math.floor(rng() * filtered.length)];
 }
 
+function pickOther2<T>(arr: readonly T[], exclude1: T, exclude2: T, rng: () => number): T {
+  const filtered = arr.filter(x => x !== exclude1 && x !== exclude2);
+  if (filtered.length === 0) return pickOther(arr, exclude1, rng);
+  return filtered[Math.floor(rng() * filtered.length)];
+}
+
 function shuffleWithCorrect<T>(correct: T, distractors: T[], rng: () => number): { options: T[]; correctIndex: number } {
   const all = [correct, ...distractors];
   for (let i = all.length - 1; i > 0; i--) {
@@ -39,6 +45,81 @@ function makeElement(shape: string, x: number, y: number, size: number, rotation
   return { type: 'shape', shape, x, y, size, rotation, style: { ...baseStyle, fill } };
 }
 
+const layoutPatterns = [
+  (n: number, rng: () => number) => {
+    const positions: [number, number][] = [];
+    const cols = Math.ceil(Math.sqrt(n));
+    const spacing = 70 / Math.max(cols, 2);
+    const ox = 15 + rng() * 5;
+    const oy = 15 + rng() * 5;
+    for (let i = 0; i < n; i++) {
+      positions.push([ox + (i % cols) * spacing, oy + Math.floor(i / cols) * spacing]);
+    }
+    return positions;
+  },
+  (n: number, rng: () => number) => {
+    const positions: [number, number][] = [];
+    const step = 70 / Math.max(n - 1, 1);
+    const ox = 15 + rng() * 5;
+    const oy = 15 + rng() * 5;
+    for (let i = 0; i < n; i++) {
+      positions.push([ox + i * step, oy + i * step]);
+    }
+    return positions;
+  },
+  (n: number, rng: () => number) => {
+    const positions: [number, number][] = [];
+    const cx = 50;
+    const cy = 50;
+    const r = 25 + rng() * 5;
+    for (let i = 0; i < n; i++) {
+      const angle = (2 * Math.PI * i) / Math.max(n, 1) + rng() * 0.3;
+      positions.push([cx + r * Math.cos(angle), cy + r * Math.sin(angle)]);
+    }
+    return positions;
+  },
+  (n: number, rng: () => number) => {
+    const positions: [number, number][] = [];
+    const used = new Set<string>();
+    for (let i = 0; i < n; i++) {
+      let x: number, y: number, key: string;
+      let attempts = 0;
+      do {
+        x = 15 + rng() * 70;
+        y = 15 + rng() * 70;
+        key = `${Math.round(x / 10)}_${Math.round(y / 10)}`;
+        attempts++;
+      } while (used.has(key) && attempts < 30);
+      used.add(key);
+      positions.push([x, y]);
+    }
+    return positions;
+  },
+  (n: number, rng: () => number) => {
+    const positions: [number, number][] = [];
+    const cx = 50;
+    const cy = 50;
+    if (n > 0) positions.push([cx, cy]);
+    const dirs: [number, number][] = [[0, -20], [20, 0], [0, 20], [-20, 0]];
+    for (let i = 1; i < n; i++) {
+      const d = dirs[(i - 1) % 4];
+      const scale = 0.8 + rng() * 0.4;
+      positions.push([cx + d[0] * scale, cy + d[1] * scale]);
+    }
+    return positions;
+  },
+  (n: number, rng: () => number) => {
+    const positions: [number, number][] = [];
+    const step = 70 / Math.max(n - 1, 1);
+    const ox = 15 + rng() * 5;
+    const mid = 50;
+    for (let i = 0; i < n; i++) {
+      positions.push([ox + i * step, mid + (i % 2 === 0 ? -10 : 10) + rng() * 5]);
+    }
+    return positions;
+  },
+];
+
 function generateRotationIncrement(startSeed: number, count: number): GeneratedQuestion[] {
   const questions: GeneratedQuestion[] = [];
   const increments = [45, 60, 90, 120];
@@ -49,22 +130,24 @@ function generateRotationIncrement(startSeed: number, count: number): GeneratedQ
     const shape = pick(shapes, rng);
     const increment = pick(increments, rng);
     const diff = pick(difficulties, rng);
-    const startRotation = Math.floor(rng() * 8) * 45;
-    const shapeSize = 24 + Math.floor(rng() * 10);
+    const startRotation = Math.floor(rng() * 360);
+    const shapeSize = 22 + Math.floor(rng() * 14);
+    const xOff = 45 + Math.floor(rng() * 10);
+    const yOff = 45 + Math.floor(rng() * 10);
     const wrongShape1 = pickOther(shapes, shape, rng);
-    const wrongShape2 = pickOther(shapes, shape, rng);
+    const wrongShape2 = pickOther2(shapes, shape, wrongShape1, rng);
 
     const frames: SvgFrame[] = [];
     for (let f = 0; f < 5; f++) {
-      frames.push({ elements: [makeElement(shape, 50, 50, shapeSize, (startRotation + increment * f) % 360)] });
+      frames.push({ elements: [makeElement(shape, xOff, yOff, shapeSize, (startRotation + increment * f) % 360)] });
     }
 
     const correctRotation = (startRotation + increment * 4) % 360;
     const correctFrame = frames[4];
     const distractors: SvgFrame[] = [
-      { elements: [makeElement(wrongShape1, 50, 50, shapeSize, correctRotation)] },
-      { elements: [makeElement(shape, 50, 50, shapeSize + 8, (correctRotation + 90) % 360)] },
-      { elements: [makeElement(wrongShape2, 50, 50, shapeSize - 4, (correctRotation + increment) % 360)] },
+      { elements: [makeElement(wrongShape1, xOff, yOff, shapeSize, correctRotation)] },
+      { elements: [makeElement(shape, xOff, yOff, shapeSize + 8, (correctRotation + 90) % 360)] },
+      { elements: [makeElement(wrongShape2, xOff, yOff, shapeSize - 4, (correctRotation + increment) % 360)] },
     ];
 
     const { options: answerOptions, correctIndex } = shuffleWithCorrect(correctFrame, distractors, rng);
@@ -103,30 +186,48 @@ function generateCountIncrement(startSeed: number, count: number): GeneratedQues
   const questions: GeneratedQuestion[] = [];
 
   for (let i = 0; i < count; i++) {
-    const rng = seededRandom(startSeed * 7 + i * 131);
+    const rng = seededRandom(startSeed * 13 + i * 257 + 99);
     rng(); rng(); rng();
-    const shape = pick(shapes, rng);
+    const shape = shapes[i % shapes.length];
     const diff = pick(difficulties, rng);
-    const positions = [
-      [50, 50], [30, 30], [70, 30], [30, 70], [70, 70],
-      [50, 30], [50, 70], [30, 50], [70, 50],
-    ];
+    const layoutIdx = i % layoutPatterns.length;
+    const elemSize = 12 + Math.floor(rng() * 12);
+    const elemRotation = Math.floor(rng() * 4) * 45;
 
     const frames: SvgFrame[] = [];
     for (let f = 0; f < 5; f++) {
-      const elements: SvgElement[] = [];
-      for (let e = 0; e <= f; e++) {
-        const [px, py] = positions[e % positions.length];
-        elements.push(makeElement(shape, px, py, 16, 0));
-      }
+      const n = f + 1;
+      const positions = layoutPatterns[layoutIdx](n, rng);
+      const elements: SvgElement[] = positions.map(([px, py]) =>
+        makeElement(shape, Math.round(px), Math.round(py), elemSize, elemRotation)
+      );
       frames.push({ elements });
     }
 
     const correctFrame = frames[4];
-    const wrongShape = pickOther(shapes, shape, rng);
-    const d1: SvgFrame = { elements: correctFrame.elements.slice(0, 3) };
-    const d2: SvgFrame = { elements: [...correctFrame.elements, makeElement(shape, 50, 50, 16, 0)] };
-    const d3: SvgFrame = { elements: correctFrame.elements.map(el => makeElement(wrongShape, el.x, el.y, 16, 0)) };
+    const wrongShape1 = pickOther(shapes, shape, rng);
+    const wrongShape2 = pickOther2(shapes, shape, wrongShape1, rng);
+
+    const d1Positions = layoutPatterns[(layoutIdx + 2) % layoutPatterns.length](3, rng);
+    const d1: SvgFrame = {
+      elements: d1Positions.map(([px, py]) =>
+        makeElement(wrongShape1, Math.round(px), Math.round(py), elemSize + 4, elemRotation + 30)
+      ),
+    };
+
+    const d2Positions = layoutPatterns[(layoutIdx + 3) % layoutPatterns.length](5, rng);
+    const d2: SvgFrame = {
+      elements: d2Positions.map(([px, py]) =>
+        makeElement(wrongShape2, Math.round(px), Math.round(py), elemSize - 2, elemRotation + 60)
+      ),
+    };
+
+    const d3Positions = layoutPatterns[(layoutIdx + 1) % layoutPatterns.length](6, rng);
+    const d3: SvgFrame = {
+      elements: d3Positions.map(([px, py]) =>
+        makeElement(shape, Math.round(px), Math.round(py), elemSize + 6, elemRotation + 90)
+      ),
+    };
 
     const { options: answerOptions, correctIndex } = shuffleWithCorrect(correctFrame, [d1, d2, d3], rng);
     const labels = ['A', 'B', 'C', 'D'];
@@ -164,27 +265,34 @@ function generateFillToggle(startSeed: number, count: number): GeneratedQuestion
   const questions: GeneratedQuestion[] = [];
 
   for (let i = 0; i < count; i++) {
-    const rng = seededRandom(startSeed * 7 + i * 131);
+    const rng = seededRandom(startSeed * 11 + i * 179 + 37);
     rng(); rng(); rng();
-    const shape = pick(shapes, rng);
+    const shape = shapes[i % shapes.length];
     const diff = pick(difficulties, rng);
     const startFilled = rng() > 0.5;
-    const shapeSize = 26 + Math.floor(rng() * 8);
+    const baseSize = 22 + Math.floor(rng() * 10);
+    const sizeStep = 2 + Math.floor(rng() * 3);
+    const xOff = 44 + Math.floor(rng() * 12);
+    const yOff = 44 + Math.floor(rng() * 12);
+    const rotBase = Math.floor(rng() * 8) * 45;
 
     const frames: SvgFrame[] = [];
     for (let f = 0; f < 5; f++) {
       const filled = (f % 2 === 0) === startFilled;
-      frames.push({ elements: [makeElement(shape, 50, 50, shapeSize, 0, filled ? 'solid' : 'none')] });
+      const sz = baseSize + sizeStep * f;
+      frames.push({ elements: [makeElement(shape, xOff, yOff, sz, rotBase, filled ? 'solid' : 'none')] });
     }
 
     const correctFrame = frames[4];
     const correctFill = correctFrame.elements[0].style.fill;
     const wrongFill: 'solid' | 'none' = correctFill === 'solid' ? 'none' : 'solid';
-    const wrongShape = pickOther(shapes, shape, rng);
+    const wrongShape1 = pickOther(shapes, shape, rng);
+    const wrongShape2 = pickOther2(shapes, shape, wrongShape1, rng);
+    const correctSize = baseSize + sizeStep * 4;
     const distractors: SvgFrame[] = [
-      { elements: [makeElement(shape, 50, 50, shapeSize, 0, wrongFill)] },
-      { elements: [makeElement(wrongShape, 50, 50, shapeSize, 0, correctFill)] },
-      { elements: [makeElement(wrongShape, 50, 50, shapeSize + 6, 0, wrongFill)] },
+      { elements: [makeElement(shape, xOff, yOff, correctSize, rotBase, wrongFill)] },
+      { elements: [makeElement(wrongShape1, xOff, yOff, correctSize - 4, rotBase + 45, correctFill)] },
+      { elements: [makeElement(wrongShape2, xOff, yOff, correctSize + 4, rotBase + 90, wrongFill)] },
     ];
 
     const { options: answerOptions, correctIndex } = shuffleWithCorrect(correctFrame, distractors, rng);
@@ -209,7 +317,7 @@ function generateFillToggle(startSeed: number, count: number): GeneratedQuestion
       trapTypes: ['partial_rule', 'wrong_fill', 'wrong_shape'],
       cognitiveLoad: diff === 'easy' ? 2 : diff === 'medium' ? 3 : 4,
       estTimeSeconds: diff === 'easy' ? 15 : diff === 'medium' ? 25 : 35,
-      explanation: `The ${shape} alternates between filled and outlined each step.`,
+      explanation: `The ${shape} alternates between filled and outlined each step, while growing in size.`,
       qaStatus: 'approved',
       locale: 'en-GB',
       britishSpelling: true,
@@ -221,36 +329,43 @@ function generateFillToggle(startSeed: number, count: number): GeneratedQuestion
 
 function generatePositionShift(startSeed: number, count: number): GeneratedQuestion[] {
   const questions: GeneratedQuestion[] = [];
+  const directions: Array<'horizontal' | 'vertical' | 'diagonal'> = ['horizontal', 'vertical', 'diagonal'];
 
   for (let i = 0; i < count; i++) {
-    const rng = seededRandom(startSeed * 7 + i * 131);
+    const rng = seededRandom(startSeed * 13 + i * 211 + 53);
     rng(); rng(); rng();
-    const shape = pick(shapes, rng);
+    const shape = shapes[i % shapes.length];
     const diff = pick(difficulties, rng);
-    const horizontal = rng() > 0.5;
-    const startPos = 15;
-    const step = 17;
-    const shapeSize = 18 + Math.floor(rng() * 6);
-    const wrongShape = pickOther(shapes, shape, rng);
+    const direction = directions[i % directions.length];
+    const startX = 10 + Math.floor(rng() * 15);
+    const startY = 10 + Math.floor(rng() * 15);
+    const stepX = direction === 'vertical' ? 0 : (10 + Math.floor(rng() * 8));
+    const stepY = direction === 'horizontal' ? 0 : (10 + Math.floor(rng() * 8));
+    const shapeSize = 16 + Math.floor(rng() * 10);
+    const rotStep = Math.floor(rng() * 4) * 15;
+    const wrongShape1 = pickOther(shapes, shape, rng);
+    const wrongShape2 = pickOther2(shapes, shape, wrongShape1, rng);
 
     const frames: SvgFrame[] = [];
     for (let f = 0; f < 5; f++) {
-      const x = horizontal ? startPos + step * f : 50;
-      const y = horizontal ? 50 : startPos + step * f;
-      frames.push({ elements: [makeElement(shape, x, y, shapeSize, 0)] });
+      const x = startX + stepX * f;
+      const y = startY + stepY * f;
+      frames.push({ elements: [makeElement(shape, x, y, shapeSize, rotStep * f)] });
     }
 
     const correctFrame = frames[4];
     const cx = correctFrame.elements[0].x;
     const cy = correctFrame.elements[0].y;
+    const cRot = correctFrame.elements[0].rotation;
     const distractors: SvgFrame[] = [
-      { elements: [makeElement(wrongShape, cx, cy, shapeSize, 0)] },
-      { elements: [makeElement(shape, horizontal ? cx + step : cx, horizontal ? cy : cy + step, shapeSize, 0)] },
-      { elements: [makeElement(shape, horizontal ? cx - step : cx, horizontal ? cy : cy - step, shapeSize + 6, 0)] },
+      { elements: [makeElement(wrongShape1, cx, cy, shapeSize, cRot)] },
+      { elements: [makeElement(shape, cx + stepX, cy + stepY, shapeSize + 4, cRot + 45)] },
+      { elements: [makeElement(wrongShape2, cx - stepX, cy - stepY, shapeSize - 3, cRot)] },
     ];
 
     const { options: answerOptions, correctIndex } = shuffleWithCorrect(correctFrame, distractors, rng);
     const labels = ['A', 'B', 'C', 'D'];
+    const dirLabel = direction === 'horizontal' ? 'right' : direction === 'vertical' ? 'down' : 'diagonally';
 
     questions.push({
       section: 'Non-Verbal Reasoning',
@@ -271,7 +386,7 @@ function generatePositionShift(startSeed: number, count: number): GeneratedQuest
       trapTypes: ['reversed_direction', 'wrong_shape', 'wrong_position'],
       cognitiveLoad: diff === 'easy' ? 2 : diff === 'medium' ? 3 : 4,
       estTimeSeconds: diff === 'easy' ? 20 : diff === 'medium' ? 30 : 40,
-      explanation: `The ${shape} moves ${horizontal ? 'right' : 'down'} by a fixed amount each step.`,
+      explanation: `The ${shape} moves ${dirLabel} by a fixed amount each step.`,
       qaStatus: 'approved',
       locale: 'en-GB',
       britishSpelling: true,
