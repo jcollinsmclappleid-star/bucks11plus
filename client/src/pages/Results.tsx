@@ -1,7 +1,7 @@
 import { Link, useParams } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, Download, BarChart2, Target, SlidersHorizontal, Sparkles, Clock, Loader2 } from "lucide-react";
+import { ArrowRight, Download, BarChart2, Target, SlidersHorizontal, Sparkles, Clock, Loader2, CheckCircle2 } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState } from "react";
@@ -22,15 +22,35 @@ type TestSession = {
   paceData: { name: string; avg: number; expected: number }[] | null;
 };
 
+type Milestone = {
+  id: string;
+  week: number;
+  title: string;
+  completedAt: string | null;
+  linkedDiagnosticId: string | null;
+};
+
+type ProgrammeData = {
+  enrolled: boolean;
+  milestones?: Milestone[];
+  currentWeek?: number;
+};
+
 export default function Results() {
   const { id } = useParams<{ id: string }>();
-  const { user } = useAuth();
+  const { user, isProgramme, hasPaidAccess } = useAuth();
   const target = 121;
 
   const { data: session, isLoading } = useQuery<TestSession>({
     queryKey: [`/api/test-sessions/${id}`],
     queryFn: getQueryFn({ on401: "throw" }),
     enabled: !!id,
+  });
+
+  const { data: programme } = useQuery<ProgrammeData>({
+    queryKey: ["/api/programme"],
+    queryFn: getQueryFn({ on401: "returnNull" }),
+    enabled: isProgramme(),
   });
 
   const [simulatorValue, setSimulatorValue] = useState([10]);
@@ -41,11 +61,16 @@ export default function Results() {
   const sectionScores = session?.sectionScores || [];
   const paceData = session?.paceData || [];
 
-  const simulatedBoost = Math.round(simulatorValue[0] * 0.4);
+  const activeSkill = selectedSkill || sectionScores[0]?.name || "";
+  const skillScore = sectionScores.find(s => s.name === activeSkill)?.score || 0;
+  const skillWeight = 1 / Math.max(sectionScores.length, 1);
+  const simulatedBoost = Math.round(simulatorValue[0] * skillWeight * 0.51);
   const newMin = currentScore + simulatedBoost;
   const newMax = Math.min(currentScore + 5 + simulatedBoost, 141);
 
-  const isPremium = user?.subscriptionTier !== "free";
+  const matchingMilestone = programme?.milestones?.find(
+    m => !m.completedAt && m.linkedDiagnosticId === session?.diagnosticId
+  );
 
   if (isLoading) {
     return (
@@ -70,6 +95,16 @@ export default function Results() {
     <div className="container mx-auto max-w-5xl px-4 py-8 space-y-8">
       <Seo title="Assessment Results | 11+ Standard" description="View your recent diagnostic results and updated readiness forecast." />
 
+      {matchingMilestone && (
+        <div className="bg-green-50 border border-green-200 rounded-xl p-4 flex items-center gap-3" data-testid="banner-milestone">
+          <CheckCircle2 className="h-6 w-6 text-green-600 shrink-0" />
+          <div>
+            <p className="font-bold text-green-800">Programme Milestone: {matchingMilestone.title}</p>
+            <p className="text-sm text-green-600">This attempt can be linked to your Week {matchingMilestone.week} milestone.</p>
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-border/60 pb-6">
         <div>
           <h1 className="text-3xl font-bold text-primary font-serif" data-testid="text-results-title">Diagnostic Results</h1>
@@ -78,9 +113,11 @@ export default function Results() {
           </p>
         </div>
         <div className="flex gap-3">
-          <Button variant="outline" className="gap-2" asChild>
-            <Link href="/pricing"><Download className="h-4 w-4" /> PDF Report (Premium)</Link>
-          </Button>
+          {hasPaidAccess() && (
+            <Button variant="outline" className="gap-2" data-testid="button-download-pdf">
+              <Download className="h-4 w-4" /> PDF Report
+            </Button>
+          )}
           <Button asChild>
             <Link href="/app" data-testid="button-go-dashboard">Go to Dashboard</Link>
           </Button>
@@ -130,21 +167,27 @@ export default function Results() {
             </div>
 
             <div className="w-full bg-white p-6 rounded-2xl border border-border shadow-sm text-left mt-4 relative overflow-hidden">
-              {!isPremium && (
-                <div className="absolute top-0 right-0 bg-brand-amber text-amber-950 text-[10px] uppercase font-bold tracking-wider px-3 py-1 rounded-bl-lg shadow-sm">
-                  Premium Feature
+              {!hasPaidAccess() && (
+                <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-10 flex flex-col items-center justify-center p-6 text-center">
+                  <SlidersHorizontal className="h-8 w-8 text-slate-400 mb-2" />
+                  <p className="font-bold text-primary mb-2">Impact Simulator</p>
+                  <p className="text-sm text-muted-foreground mb-3">Unlock with Practice Pack or Programme</p>
+                  <Button size="sm" asChild>
+                    <Link href="/pricing">View Plans</Link>
+                  </Button>
                 </div>
               )}
               <div className="flex items-center gap-2 mb-4">
                 <SlidersHorizontal className="h-5 w-5 text-primary" />
                 <h4 className="font-bold text-primary text-lg font-serif">Impact Simulator</h4>
+                {isProgramme() && <span className="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded font-medium">Multi-variable</span>}
               </div>
 
               <div className="space-y-5">
                 <div className="space-y-2">
                   <label className="text-xs font-medium text-slate-500 uppercase tracking-wide">If we improve</label>
-                  <Select value={selectedSkill || sectionScores[0]?.name || ""} onValueChange={setSelectedSkill}>
-                    <SelectTrigger className="w-full bg-slate-50">
+                  <Select value={activeSkill} onValueChange={setSelectedSkill}>
+                    <SelectTrigger className="w-full bg-slate-50" data-testid="select-skill">
                       <SelectValue placeholder="Select skill" />
                     </SelectTrigger>
                     <SelectContent>
@@ -179,7 +222,14 @@ export default function Results() {
                   <p className="text-sm text-slate-700">
                     Projected range shifts to <strong className="text-primary text-lg">{newMin}–{newMax}</strong>
                   </p>
-                  <p className="text-xs text-muted-foreground mt-1">Gap to 121 reduces to {121 - newMax > 0 ? 121 - newMax : 0} points.</p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Gap to 121 reduces to {121 - newMax > 0 ? 121 - newMax : 0} points.
+                  </p>
+                  {isProgramme() && (
+                    <p className="text-xs text-blue-600 font-medium mt-2">
+                      {activeSkill} at {skillScore}% → {Math.min(skillScore + simulatorValue[0], 100)}% with targeted practice
+                    </p>
+                  )}
                 </div>
               </div>
             </div>

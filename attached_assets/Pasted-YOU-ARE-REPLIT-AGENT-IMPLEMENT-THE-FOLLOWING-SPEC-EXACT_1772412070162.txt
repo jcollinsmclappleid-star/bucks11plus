@@ -1,0 +1,523 @@
+YOU ARE REPLIT AGENT. IMPLEMENT THE FOLLOWING SPEC EXACTLY.
+This is a PREMIUM build: visual NVR + visual data interpretation + rule-tagged content + anti-repeat + QA tooling.
+No “text-only NVR”. Use SVG rendering via deterministic render_config JSON.
+
+===========================================================
+0) HIGH-LEVEL OUTCOME
+===========================================================
+
+Build a production-quality question engine + content system for 11+ Standard that supports:
+
+- Rule-tagged questions (skill_id + sub_rule_id + trap_types)
+- Render types: text | svg | chart
+- SVG rendering for NVR questions and SVG chart rendering for data interpretation
+- Anti-repeat via question_usage table
+- Admin QA: preview question exactly as it appears to user (including SVG/charts)
+- Generators: rules/templates to seed premium content to at least 900 questions
+- Diagnostics/drills that select questions by: section, skill_id, sub_rule_id, difficulty mix, and anti-repeat
+
+===========================================================
+1) DATABASE: MIGRATIONS (SUPABASE POSTGRES)
+===========================================================
+
+Create a new migration file containing all changes below.
+
+-----------------------------------------------------------
+1.1 ALTER questions TABLE (add premium content fields)
+-----------------------------------------------------------
+
+ALTER TABLE questions
+ADD COLUMN sub_rule_id text NOT NULL DEFAULT '',
+ADD COLUMN render_type text NOT NULL DEFAULT 'text', -- 'text'|'svg'|'chart'
+ADD COLUMN render_config jsonb NOT NULL DEFAULT '{}'::jsonb,
+ADD COLUMN trap_types text[] NOT NULL DEFAULT '{}'::text[],
+ADD COLUMN cognitive_load smallint NOT NULL DEFAULT 3, -- 1..10
+ADD COLUMN locale text NOT NULL DEFAULT 'en-GB',
+ADD COLUMN british_spelling boolean NOT NULL DEFAULT true,
+ADD COLUMN version int NOT NULL DEFAULT 1,
+ADD COLUMN quality_score smallint NOT NULL DEFAULT 0, -- 0..100 (optional scoring)
+ADD COLUMN notes text;
+
+Add CHECK constraints:
+- render_type in ('text','svg','chart')
+- cognitive_load between 1 and 10
+- quality_score between 0 and 100
+- sub_rule_id <> '' for qa_status='approved' (enforce via trigger or QA rule in admin; DB CHECK can be complex—ok to enforce in admin save/approve logic)
+
+Indexes:
+CREATE INDEX IF NOT EXISTS idx_questions_skill_subrule ON questions(skill_id, sub_rule_id);
+CREATE INDEX IF NOT EXISTS idx_questions_render_type ON questions(render_type);
+CREATE INDEX IF NOT EXISTS idx_questions_qa_status ON questions(qa_status);
+CREATE INDEX IF NOT EXISTS idx_questions_difficulty_load ON questions(difficulty, cognitive_load);
+
+-----------------------------------------------------------
+1.2 CREATE question_usage (anti-repeat)
+-----------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS question_usage (
+  user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  question_id uuid NOT NULL REFERENCES questions(id) ON DELETE CASCADE,
+  served_count int NOT NULL DEFAULT 0,
+  last_served_at timestamptz,
+  PRIMARY KEY (user_id, question_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_question_usage_last_served ON question_usage(user_id, last_served_at DESC);
+
+RLS:
+- Enable RLS.
+- Policy: user can select/insert/update their own rows (user_id = auth.uid()).
+
+-----------------------------------------------------------
+1.3 CREATE content_calibration (future-proof; implement now)
+-----------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS content_calibration (
+  question_id uuid PRIMARY KEY REFERENCES questions(id) ON DELETE CASCADE,
+  p_value numeric(4,3),              -- % correct as 0.000..1.000
+  avg_time_seconds int,
+  sample_size int NOT NULL DEFAULT 0,
+  last_calibrated_at timestamptz
+);
+
+RLS:
+- Public read not required; admin only via server routes.
+
+-----------------------------------------------------------
+1.4 OPTIONAL: CREATE question_variants (for later; create now)
+-----------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS question_variants (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  question_id uuid NOT NULL REFERENCES questions(id) ON DELETE CASCADE,
+  variant_prompt text,
+  variant_options jsonb,
+  variant_render_config jsonb,
+  is_active boolean NOT NULL DEFAULT true,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+
+Index:
+CREATE INDEX IF NOT EXISTS idx_question_variants_qid ON question_variants(question_id);
+
+RLS:
+- Admin only via server routes.
+
+===========================================================
+2) TYPES + VALIDATION (STRICT)
+===========================================================
+
+Create /lib/content/types.ts and export strict TS types for render_config schemas.
+
+-----------------------------------------------------------
+2.1 Common types
+-----------------------------------------------------------
+
+export type RenderType = "text" | "svg" | "chart";
+
+export type SvgStroke = {
+  strokeWidth: number;         // e.g. 3
+  stroke: string;              // use neutral token e.g. "#111827"
+  fill: "none" | "solid";
+  dashed?: boolean;
+  opacity?: number;
+};
+
+export type SvgShape = "circle" | "square" | "triangle" | "pentagon" | "arrow" | "star";
+
+export type SvgElement =
+  | { type: "shape"; shape: SvgShape; x: number; y: number; size: number; rotation: number; style: SvgStroke }
+  | { type: "line"; x1: number; y1: number; x2: number; y2: number; style: SvgStroke }
+  | { type: "dot"; x: number; y: number; r: number; style: SvgStroke };
+
+export type SvgFrame = {
+  elements: SvgElement[];
+};
+
+-----------------------------------------------------------
+2.2 NVR configs
+-----------------------------------------------------------
+
+export type NvrSequenceConfig = {
+  kind: "nvr.sequence";
+  frames: SvgFrame[];              // includes final unknown as empty frame or placeholder
+  questionIndex: number;           // which frame is "?"
+  answerOptions: SvgFrame[];       // 4 options
+};
+
+export type NvrTransformConfig = {
+  kind: "nvr.transform";
+  promptFrames: SvgFrame[];        // e.g. A -> B, then C -> ?
+  answerOptions: SvgFrame[];
+};
+
+export type NvrClassificationConfig = {
+  kind: "nvr.classification";
+  group: SvgFrame[];               // 4-6 frames, one is odd
+  answerOptions: SvgFrame[];       // can be labels or frames; use frames for consistency
+};
+
+-----------------------------------------------------------
+2.3 Chart configs (Skill 18)
+-----------------------------------------------------------
+
+export type ChartBarConfig = {
+  kind: "chart.bar";
+  title: string;
+  xLabels: string[];
+  values: number[];
+  yMax: number;
+  questionText: string;            // e.g. "How many more ...?"
+};
+
+export type ChartLineConfig = {
+  kind: "chart.line";
+  title: string;
+  xLabels: string[];
+  values: number[];
+  yMax: number;
+  questionText: string;
+};
+
+export type ChartTableConfig = {
+  kind: "chart.table";
+  title: string;
+  headers: string[];
+  rows: (string | number)[][];
+  questionText: string;
+};
+
+export type RenderConfig =
+  | NvrSequenceConfig
+  | NvrTransformConfig
+  | NvrClassificationConfig
+  | ChartBarConfig
+  | ChartLineConfig
+  | ChartTableConfig;
+
+Add runtime validation:
+- Use zod in /lib/content/validate.ts
+- Validate render_config shape before saving/approving questions in admin.
+
+===========================================================
+3) SVG RENDERING ENGINE (PREMIUM UI)
+===========================================================
+
+Implement SVG rendering with consistent visual style.
+
+-----------------------------------------------------------
+3.1 Rendering rules (premium)
+-----------------------------------------------------------
+
+- All SVG viewBox: 0 0 100 100
+- Default strokeWidth: 3
+- Stroke colour: neutral dark (no bright colours)
+- Fill: none or muted solid (e.g. light grey) ONLY when rule requires shading
+- Consistent padding (elements must not touch edges)
+
+-----------------------------------------------------------
+3.2 Components
+-----------------------------------------------------------
+
+Create components:
+
+/components/render/VisualPrompt.tsx
+- Receives: render_type, render_config
+- Switch:
+  - "svg" -> <SvgQuestion .../>
+  - "chart" -> <ChartQuestion .../>
+  - "text" -> null
+
+/components/render/SvgQuestion.tsx
+- Supports NvrSequenceConfig, NvrTransformConfig, NvrClassificationConfig
+- Uses reusable components:
+  - <SvgFrameView frame={...} />
+  - <SvgOptionGrid options={...} />
+
+/components/render/SvgFrameView.tsx
+- Renders a SvgFrame as inline SVG using primitives
+- Applies rotation transforms around center (50,50)
+- Implements shapes:
+  - circle, square, triangle, pentagon, arrow, star
+- Ensures consistent sizing
+
+/components/render/SvgOptionGrid.tsx
+- Renders 4 options (2x2 grid), each in a selectable button card
+- Selected state: subtle border highlight only
+
+/components/render/ChartQuestion.tsx
+- Switch chart kind:
+  - chart.bar -> <BarChartSvg .../>
+  - chart.line -> <LineChartSvg .../>
+  - chart.table -> <TableView .../>
+
+Implement:
+/components/render/charts/BarChartSvg.tsx
+/components/render/charts/LineChartSvg.tsx
+/components/render/charts/TableView.tsx
+
+Charts must look exam-like:
+- single neutral colour for bars/line
+- clear axes
+- clean tick marks
+- readable labels
+
+===========================================================
+4) QUESTION OBJECT MODEL + ADMIN QA PREVIEW
+===========================================================
+
+-----------------------------------------------------------
+4.1 Admin Question Editor Updates
+-----------------------------------------------------------
+
+In /admin/questions create editor fields for:
+- section
+- skill_id
+- sub_rule_id (REQUIRED before approval)
+- difficulty (1..5)
+- cognitive_load (1..10)
+- render_type (text|svg|chart)
+- render_config (JSON editor with schema validation + errors)
+- prompt
+- options (array editor)
+- correct_index
+- explanation
+- trap_types (multi-select or comma list)
+- est_time_seconds
+- qa_status
+
+When saving:
+- Validate: exactly 1 correct index
+- Validate: options length 4..6
+- Validate: if render_type != text then render_config.kind must match
+- Validate: if render_type==svg then prompt must be short and instructions clear
+- Validate: locale en-GB and british spelling true (enforce by editorial; field present)
+
+-----------------------------------------------------------
+4.2 Admin QA Preview Panel (MUST)
+-----------------------------------------------------------
+
+In QA queue view, each question row has "Preview" button that opens a modal showing exactly the end-user rendering:
+
+- Prompt (text)
+- VisualPrompt (SVG or chart)
+- Options (text or SVG thumbnails depending on render_type)
+- Correct answer highlight toggle (admin-only)
+- Explanation
+- Metadata chips: skill_id, sub_rule_id, difficulty, cognitive_load, trap_types
+
+Allow Approve/Reject within preview modal.
+
+Approval gating rules:
+- sub_rule_id must be non-empty
+- explanation must be non-empty
+- for svg/chart render, render_config must validate successfully
+
+===========================================================
+5) GENERATION + SEEDING (PREMIUM CONTENT)
+===========================================================
+
+Implement generator scripts that produce a premium bank with:
+- Target total: 900 questions minimum
+- Balanced: ~300 VR, ~300 NVR(SVG), ~300 Maths (incl chart)
+- Per skill target: ~50 questions each
+- Balanced by sub_rule_id coverage
+
+-----------------------------------------------------------
+5.1 File structure
+-----------------------------------------------------------
+
+/scripts/generators/
+  vr/
+    codes.ts
+    letter_sequences.ts
+    word_sequences.ts
+    vocab_relationships.ts
+    word_structure.ts
+    verbal_logic.ts
+  nvr/
+    sequence.ts
+    rotation_reflection.ts
+    transformation.ts
+    symmetry_spatial.ts
+    classification.ts
+  maths/
+    arithmetic.ts
+    fractions_decimals.ts
+    ratio_proportion.ts
+    percentages.ts
+    word_problems.ts
+    number_patterns.ts
+    data_interpretation.ts
+
+/scripts/generate_seed.ts
+- builds all questions into scripts/questions.seed.json
+
+/scripts/seed_questions.ts
+- inserts approved questions into Supabase questions table
+
+-----------------------------------------------------------
+5.2 Generator requirements
+-----------------------------------------------------------
+
+Each generated question must include:
+- skill_id
+- sub_rule_id (from the matrix)
+- difficulty
+- cognitive_load
+- trap_types
+- render_type
+- render_config (for svg/chart)
+- options + correct_index
+- explanation
+- est_time_seconds
+- qa_status:
+  - default "review" for semi-automated skills (vocab, word problems, verbal logic)
+  - default "approved" for fully automatable rule-engine questions if validations pass
+
+-----------------------------------------------------------
+5.3 NVR SVG Generation (REQUIRED)
+-----------------------------------------------------------
+
+Implement rule engines that output NvrSequenceConfig or NvrTransformConfig.
+
+Minimum NVR sub_rule_id set to implement at MVP:
+- nvr.sequence.rotation_increment
+- nvr.sequence.count_increment
+- nvr.sequence.fill_toggle
+- nvr.sequence.position_shift
+- nvr.transform.rotate_90
+- nvr.transform.rotate_180
+- nvr.transform.reflect_x
+- nvr.transform.reflect_y
+- nvr.transform.rotate_plus_reflect (hard)
+- nvr.classification.odd_one_out_attribute
+- nvr.symmetry.mirror_completion
+
+For each NVR question:
+- create correct frame
+- create distractors via trap_types:
+  - wrong_rotation
+  - wrong_axis
+  - partial_rule
+  - reversed_direction
+- Ensure options are visually distinct and plausible
+
+-----------------------------------------------------------
+5.4 Data Interpretation SVG Chart Generation (REQUIRED)
+-----------------------------------------------------------
+
+Implement Skill 18 with render_type "chart" using:
+- chart.bar
+- chart.line
+- chart.table
+
+Sub rules:
+- maths.data.bar_single_step
+- maths.data.bar_two_step
+- maths.data.line_single_step
+- maths.data.table_two_step
+
+Distractors:
+- off_by_one reading
+- wrong category label
+- subtract vs add error
+
+Use UK context labels where appropriate (months, days, simple items).
+
+===========================================================
+6) QUESTION SELECTION FOR DIAGNOSTICS/DRILLS (ANTI-REPEAT + COVERAGE)
+===========================================================
+
+Update diagnostic builder selection logic:
+- Select questions by section/skill mix defined in mocks.structure
+- Within each selection:
+  - prioritize questions user has never seen (question_usage missing)
+  - then least recently served
+  - then lowest served_count
+- Ensure within one attempt:
+  - do not repeat same question_id
+  - limit overconcentration of one sub_rule_id (cap e.g. max 40% of a skill block)
+
+After assembling a paper:
+- upsert question_usage served_count += 1 and last_served_at = now() for each question served
+
+Implement server-side selection (API route) to prevent client manipulation.
+
+===========================================================
+7) UI: USER TEST RUNNER MUST SUPPORT VISUAL OPTIONS
+===========================================================
+
+In test runner:
+- If question.render_type == 'text':
+  show prompt + text options
+- If 'svg' and render_config includes answerOptions:
+  render SVG options grid with selectable cards
+- If 'chart':
+  render chart at top and show text options (or if chart config is paired with numeric options, still render as text options)
+
+Ensure accessibility:
+- options are keyboard selectable
+- ARIA labels include "Option A/B/C/D"
+
+===========================================================
+8) QUALITY REQUIREMENTS (PREMIUM)
+===========================================================
+
+Hard requirements:
+- British English (en-GB) across prompts/explanations
+- No US spellings
+- Clean punctuation and consistent formatting
+- Explanations must justify answer, not just state it
+- Distractors must be plausible (trap-based)
+
+Build editorial QA checklist in admin QA view:
+- Ambiguity check
+- UK language check
+- Distractor plausibility check
+- Explanation clarity check
+- Difficulty label check
+- Visual layout check (SVG spacing, stroke weight, alignment)
+
+===========================================================
+9) WHAT ELSE MUST BE BUILT (CONTENT THAT MAKES IT FEEL OFFICIAL)
+===========================================================
+
+Add these content assets (not optional):
+
+9.1 Wordbanks (UK curated)
+Create /content/wordbanks:
+- uk_vocab_y4.json
+- uk_vocab_y5.json
+- uk_vocab_y6.json
+- uk_synonyms.json
+- uk_antonyms.json
+
+Use these to generate Skill 4/5 safely and consistently.
+Mark those generated questions as "review" until approved.
+
+9.2 Style guide constants
+/lib/content/style.ts:
+- defaultStrokeWidth=3
+- neutralStroke="#111827"
+- fillMuted="#E5E7EB"
+- viewBox="0 0 100 100"
+
+All renderers must reference these constants.
+
+===========================================================
+10) IMPLEMENTATION OUTPUT
+===========================================================
+
+When finished, output:
+
+- File tree of new modules
+- SQL migration(s) content
+- Seed generation command
+- Seed insertion command
+- Env vars required
+- How to validate SVG render_config in admin
+- How to preview and approve questions
+- How question_usage affects selection
+
+BUILD THIS NOW.

@@ -26,7 +26,7 @@ export async function seedDatabase() {
       type: "full",
       duration: 45,
       questionCount: 40,
-      requiredTier: "monthly",
+      requiredTier: "pack12",
       sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Maths"],
     },
     {
@@ -36,7 +36,7 @@ export async function seedDatabase() {
       type: "full",
       duration: 45,
       questionCount: 40,
-      requiredTier: "monthly",
+      requiredTier: "pack12",
       sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Maths"],
     },
     {
@@ -46,7 +46,7 @@ export async function seedDatabase() {
       type: "mock",
       duration: 50,
       questionCount: 50,
-      requiredTier: "pack",
+      requiredTier: "programme16",
       sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Maths"],
     },
   ]);
@@ -180,14 +180,14 @@ export async function seedDatabase() {
 
   await db.insert(practiceSections).values([
     { title: "Word Analogies", category: "Verbal Reasoning", icon: "BookOpen", difficulty: "Medium", questionCount: 15, requiredTier: "free" },
-    { title: "Letter Sequences", category: "Verbal Reasoning", icon: "Type", difficulty: "Hard", questionCount: 12, requiredTier: "monthly" },
-    { title: "Hidden Words", category: "Verbal Reasoning", icon: "Search", difficulty: "Medium", questionCount: 10, requiredTier: "monthly" },
+    { title: "Letter Sequences", category: "Verbal Reasoning", icon: "Type", difficulty: "Hard", questionCount: 12, requiredTier: "pack12" },
+    { title: "Hidden Words", category: "Verbal Reasoning", icon: "Search", difficulty: "Medium", questionCount: 10, requiredTier: "pack12" },
     { title: "Pattern Recognition", category: "Non-Verbal Reasoning", icon: "Grid3x3", difficulty: "Medium", questionCount: 15, requiredTier: "free" },
-    { title: "Shape Sequences", category: "Non-Verbal Reasoning", icon: "Shapes", difficulty: "Hard", questionCount: 12, requiredTier: "monthly" },
+    { title: "Shape Sequences", category: "Non-Verbal Reasoning", icon: "Shapes", difficulty: "Hard", questionCount: 12, requiredTier: "pack12" },
     { title: "Mirror Images", category: "Non-Verbal Reasoning", icon: "FlipHorizontal", difficulty: "Easy", questionCount: 10, requiredTier: "free" },
     { title: "Arithmetic & Number", category: "Maths", icon: "Calculator", difficulty: "Medium", questionCount: 15, requiredTier: "free" },
-    { title: "Multi-step Word Problems", category: "Maths", icon: "Brain", difficulty: "Hard", questionCount: 12, requiredTier: "monthly" },
-    { title: "Fractions & Percentages", category: "Maths", icon: "Percent", difficulty: "Medium", questionCount: 10, requiredTier: "monthly" },
+    { title: "Multi-step Word Problems", category: "Maths", icon: "Brain", difficulty: "Hard", questionCount: 12, requiredTier: "pack12" },
+    { title: "Fractions & Percentages", category: "Maths", icon: "Percent", difficulty: "Medium", questionCount: 10, requiredTier: "pack12" },
   ]);
 
   console.log("Seed data inserted successfully.");

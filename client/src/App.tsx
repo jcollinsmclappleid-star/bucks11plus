@@ -24,6 +24,9 @@ import Results from "./pages/Results";
 import Progress from "./pages/Progress";
 import Account from "./pages/Account";
 import ReportArchive from "./pages/ReportArchive";
+import Programme from "./pages/Programme";
+import ProgrammeCompletion from "./pages/ProgrammeCompletion";
+import CheckoutSuccess from "./pages/CheckoutSuccess";
 
 import HowItWorks from "./pages/HowItWorks";
 import Methodology from "./pages/Methodology";
@@ -31,7 +34,6 @@ import GLAlignment from "./pages/GLAlignment";
 import About from "./pages/About";
 import Legal from "./pages/Legal";
 
-// Layout wrapper for pages that need Navbar
 function MainLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-background font-sans flex flex-col">
@@ -40,7 +42,6 @@ function MainLayout({ children }: { children: React.ReactNode }) {
         {children}
       </main>
       
-      {/* Simple Footer for SEO / Authority */}
       <footer className="bg-primary text-primary-foreground/70 py-12 mt-auto">
         <div className="container mx-auto max-w-6xl px-4 grid md:grid-cols-4 gap-8">
           <div>
@@ -80,10 +81,8 @@ function MainLayout({ children }: { children: React.ReactNode }) {
 function Router() {
   return (
     <Switch>
-      {/* Routes WITHOUT Navbar (Test Runner) */}
       <Route path="/app/test/:id" component={TestRunner} />
       
-      {/* Routes WITH Navbar */}
       <Route path="*">
         <MainLayout>
           <Switch>
@@ -117,8 +116,10 @@ function Router() {
             <Route path="/app/progress" component={Progress} />
             <Route path="/app/account" component={Account} />
             <Route path="/app/report-archive" component={ReportArchive} />
+            <Route path="/app/programme" component={Programme} />
+            <Route path="/app/programme/summary" component={ProgrammeCompletion} />
+            <Route path="/app/checkout-success" component={CheckoutSuccess} />
             
-            {/* Catch-all for mockup links that don't exist yet */}
             <Route component={NotFound} />
           </Switch>
         </MainLayout>

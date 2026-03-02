@@ -8,8 +8,19 @@ import { useQuery } from "@tanstack/react-query";
 import { Diagnostic, TestSession } from "@shared/schema";
 import { useAuth } from "@/lib/auth";
 
+function tierLabel(tier: string): string {
+  switch (tier) {
+    case "free": return "Free";
+    case "pack12": return "Practice Pack";
+    case "programme16": return "Programme";
+    default: return tier;
+  }
+}
+
+const TIER_RANK: Record<string, number> = { free: 0, pack12: 1, programme16: 2 };
+
 export default function Diagnostics() {
-  const { user } = useAuth();
+  const { user, hasPaidAccess } = useAuth();
   const { data: diagnostics, isLoading: loadingDiags } = useQuery<Diagnostic[]>({
     queryKey: ["/api/diagnostics"],
   });
@@ -27,11 +38,11 @@ export default function Diagnostics() {
   }
 
   const completedIds = new Set(sessions?.filter(s => s.completedAt).map(s => s.diagnosticId));
+  const userRank = TIER_RANK[user?.subscriptionTier || "free"] || 0;
 
   const isLocked = (diag: Diagnostic) => {
-    if (diag.requiredTier === "free") return false;
-    if (user?.subscriptionTier === "premium") return false;
-    return true;
+    const requiredRank = TIER_RANK[diag.requiredTier] || 0;
+    return requiredRank > userRank;
   };
 
   return (
@@ -43,9 +54,9 @@ export default function Diagnostics() {
           <h1 className="text-3xl font-bold text-primary font-serif">Diagnostics & Mocks</h1>
           <p className="text-muted-foreground mt-2">Take full-length, timed assessments to recalibrate your forecast.</p>
         </div>
-        {user?.subscriptionTier !== 'premium' && (
+        {!hasPaidAccess() && (
           <Button className="bg-brand-amber text-amber-950 hover:bg-brand-amber/90" asChild>
-            <Link href="/pricing" data-testid="link-pricing">Unlock Premium Mocks</Link>
+            <Link href="/pricing" data-testid="link-pricing">Unlock Full Diagnostics</Link>
           </Button>
         )}
       </div>
@@ -60,7 +71,7 @@ export default function Diagnostics() {
               {locked && (
                 <div className="absolute inset-0 bg-background/40 backdrop-blur-[1px] z-10 flex flex-col items-center justify-center p-6 text-center">
                   <Lock className="h-8 w-8 text-slate-400 mb-2" />
-                  <p className="text-sm font-medium text-slate-600 mb-4">Requires Monthly or 12-Week Pack</p>
+                  <p className="text-sm font-medium text-slate-600 mb-4">Requires {tierLabel(diag.requiredTier)}</p>
                   <Button variant="outline" size="sm" asChild data-testid={`button-upgrade-${diag.id}`}>
                     <Link href="/pricing">View Upgrade Options</Link>
                   </Button>
@@ -69,7 +80,7 @@ export default function Diagnostics() {
               <CardHeader>
                 <div className="flex justify-between items-start mb-2">
                   <Badge variant={diag.requiredTier === 'free' ? 'default' : 'secondary'} className={diag.requiredTier === 'free' ? 'bg-primary' : 'bg-slate-200 text-slate-700'}>
-                    {diag.requiredTier === 'free' ? 'Free' : 'Premium'}
+                    {tierLabel(diag.requiredTier)}
                   </Badge>
                   {completed && <Badge variant="outline" className="text-brand-green border-brand-green">Completed</Badge>}
                 </div>

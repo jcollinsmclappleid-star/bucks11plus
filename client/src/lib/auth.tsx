@@ -12,6 +12,8 @@ type User = {
   practiceHours: string | null;
   difficultyAreas: string[] | null;
   subscriptionTier: string;
+  subscriptionExpiresAt: string | null;
+  stripeCustomerId: string | null;
   onboardingCompleted: boolean;
 };
 
@@ -21,6 +23,10 @@ type AuthContextType = {
   login: (username: string, password: string) => Promise<void>;
   register: (username: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  isPack12: () => boolean;
+  isProgramme: () => boolean;
+  hasPaidAccess: () => boolean;
+  tierLabel: () => string;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -81,8 +87,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await logoutMutation.mutateAsync();
   };
 
+  const isPack12 = () => user?.subscriptionTier === "pack12";
+  const isProgramme = () => user?.subscriptionTier === "programme16";
+  const hasPaidAccess = () => user?.subscriptionTier === "pack12" || user?.subscriptionTier === "programme16";
+
+  const tierLabel = () => {
+    if (!user) return "Free";
+    switch (user.subscriptionTier) {
+      case "pack12": return "Practice Pack";
+      case "programme16": return "Structured Programme";
+      default: return "Free";
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user: user ?? null, isLoading, login, register, logout }}>
+    <AuthContext.Provider value={{ user: user ?? null, isLoading, login, register, logout, isPack12, isProgramme, hasPaidAccess, tierLabel }}>
       {children}
     </AuthContext.Provider>
   );

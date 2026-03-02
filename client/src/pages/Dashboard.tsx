@@ -29,7 +29,7 @@ type ProgressData = {
 };
 
 export default function Dashboard() {
-  const { user } = useAuth();
+  const { user, hasPaidAccess, isProgramme, tierLabel } = useAuth();
   const target = 121;
 
   const { data: sessions, isLoading: sessionsLoading } = useQuery<TestSession[]>({
@@ -51,8 +51,6 @@ export default function Dashboard() {
 
   const sectionScores: { name: string; score: number; avgTime: number }[] = latest?.sectionScores || [];
   const paceData: { name: string; avg: number; expected: number }[] = latest?.paceData || [];
-
-  const isPremium = user?.subscriptionTier !== "free";
 
   if (sessionsLoading) {
     return (
@@ -209,7 +207,7 @@ export default function Dashboard() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
-            {!isPremium && (
+            {!hasPaidAccess() && (
               <Card className="border-dashed border-2 bg-slate-50/50">
                 <CardContent className="flex flex-col items-center justify-center p-8 text-center min-h-[200px] space-y-4">
                   <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
@@ -252,6 +250,18 @@ export default function Dashboard() {
                 </div>
               </CardContent>
             </Card>
+
+            {isProgramme() && hasData && (
+              <Card className="border-primary/20 bg-gradient-to-br from-blue-50 to-white">
+                <CardContent className="p-6 space-y-3">
+                  <h3 className="font-bold text-primary font-serif">Your Programme</h3>
+                  <p className="text-sm text-muted-foreground">Access your 16-week structured roadmap, milestones, and weekly plans.</p>
+                  <Button className="w-full" asChild data-testid="button-go-programme">
+                    <Link href="/app/programme">View Programme Dashboard <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
           </div>
         </>
       )}

@@ -3,6 +3,9 @@ import { type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, requireAuth } from "./auth";
 import { onboardingSchema } from "@shared/schema";
+import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
+import { sql } from "drizzle-orm";
+import { db } from "./db";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -18,6 +21,121 @@ export async function registerRoutes(
       }
       const user = await storage.updateUserOnboarding(req.user!.id, parsed.data);
       const { password: _, ...safeUser } = user;
+      res.json(safeUser);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.get("/api/stripe/publishable-key", async (_req, res, next) => {
+    try {
+      const key = await getStripePublishableKey();
+      res.json({ publishableKey: key });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.post("/api/checkout", requireAuth, async (req, res, next) => {
+    try {
+      const { tier } = req.body;
+      if (!tier || !["pack12", "programme16"].includes(tier)) {
+        return res.status(400).json({ message: "Invalid tier" });
+      }
+
+      const stripe = await getUncachableStripeClient();
+      const user = req.user!;
+
+      let customerId = user.stripeCustomerId;
+      if (!customerId) {
+        const customer = await stripe.customers.create({
+          metadata: { userId: user.id },
+        });
+        await storage.updateUserStripeInfo(user.id, customer.id);
+        customerId = customer.id;
+      }
+
+      const pricesResult = await db.execute(
+        sql`SELECT pr.id as price_id, p.metadata FROM stripe.prices pr JOIN stripe.products p ON pr.product = p.id WHERE p.active = true AND pr.active = true`
+      );
+
+      const targetTier = tier;
+      const priceRow = pricesResult.rows.find((r: any) => {
+        const meta = typeof r.metadata === 'string' ? JSON.parse(r.metadata) : r.metadata;
+        return meta?.tier === targetTier;
+      });
+
+      if (!priceRow) {
+        return res.status(404).json({ message: "Price not found. Products may not be seeded yet." });
+      }
+
+      const host = req.get('host');
+      const protocol = req.protocol;
+
+      const session = await stripe.checkout.sessions.create({
+        customer: customerId,
+        payment_method_types: ['card'],
+        line_items: [{ price: (priceRow as any).price_id, quantity: 1 }],
+        mode: 'payment',
+        success_url: `${protocol}://${host}/app/checkout-success?tier=${tier}&session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${protocol}://${host}/pricing`,
+        metadata: {
+          userId: user.id,
+          tier: tier,
+        },
+      });
+
+      res.json({ url: session.url });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.post("/api/checkout/complete", requireAuth, async (req, res, next) => {
+    try {
+      const { tier, session_id } = req.body;
+      if (!tier || !["pack12", "programme16"].includes(tier)) {
+        return res.status(400).json({ message: "Invalid tier" });
+      }
+
+      if (session_id) {
+        const stripe = await getUncachableStripeClient();
+        const checkoutSession = await stripe.checkout.sessions.retrieve(session_id);
+        if (checkoutSession.payment_status !== "paid") {
+          return res.status(400).json({ message: "Payment not confirmed" });
+        }
+        const sessionUserId = checkoutSession.metadata?.userId;
+        if (sessionUserId && sessionUserId !== req.user!.id) {
+          return res.status(403).json({ message: "Session does not belong to this user" });
+        }
+      }
+
+      const currentUser = await storage.getUser(req.user!.id);
+      if (!currentUser) return res.status(404).json({ message: "User not found" });
+
+      const TIER_RANK: Record<string, number> = { free: 0, pack12: 1, programme16: 2 };
+      const currentRank = TIER_RANK[currentUser.subscriptionTier] || 0;
+      const newRank = TIER_RANK[tier] || 0;
+      if (newRank <= currentRank) {
+        const { password: _, ...safeUser } = currentUser;
+        return res.json(safeUser);
+      }
+
+      const weeksMap: Record<string, number> = { pack12: 12, programme16: 16 };
+      const weeks = weeksMap[tier];
+      const expiresAt = new Date(Date.now() + weeks * 7 * 24 * 60 * 60 * 1000);
+
+      await storage.updateUserSubscription(req.user!.id, tier, expiresAt);
+
+      if (tier === "programme16") {
+        const existing = await storage.getProgrammeEnrolment(req.user!.id);
+        if (!existing) {
+          await storage.createProgrammeEnrolment(req.user!.id);
+        }
+      }
+
+      const user = await storage.getUser(req.user!.id);
+      const { password: _, ...safeUser } = user!;
       res.json(safeUser);
     } catch (error) {
       next(error);
@@ -45,6 +163,16 @@ export async function registerRoutes(
 
   app.get("/api/diagnostics/:id/questions", requireAuth, async (req, res, next) => {
     try {
+      const diag = await storage.getDiagnostic(req.params.id);
+      if (!diag) return res.status(404).json({ message: "Diagnostic not found" });
+
+      const TIER_RANK: Record<string, number> = { free: 0, pack12: 1, programme16: 2 };
+      const userRank = TIER_RANK[req.user!.subscriptionTier] || 0;
+      const requiredRank = TIER_RANK[diag.requiredTier] || 0;
+      if (userRank < requiredRank) {
+        return res.status(403).json({ message: "Upgrade required to access this diagnostic" });
+      }
+
       const qs = await storage.getQuestionsByDiagnostic(req.params.id);
       const safe = qs.map(({ correctAnswer, ...q }) => q);
       res.json(safe);
@@ -57,6 +185,17 @@ export async function registerRoutes(
     try {
       const { diagnosticId } = req.body;
       if (!diagnosticId) return res.status(400).json({ message: "diagnosticId required" });
+
+      const diag = await storage.getDiagnostic(diagnosticId);
+      if (!diag) return res.status(404).json({ message: "Diagnostic not found" });
+
+      const TIER_RANK: Record<string, number> = { free: 0, pack12: 1, programme16: 2 };
+      const userRank = TIER_RANK[req.user!.subscriptionTier] || 0;
+      const requiredRank = TIER_RANK[diag.requiredTier] || 0;
+      if (userRank < requiredRank) {
+        return res.status(403).json({ message: "Upgrade required to access this diagnostic" });
+      }
+
       const session = await storage.createTestSession({
         userId: req.user!.id,
         diagnosticId,
@@ -94,14 +233,10 @@ export async function registerRoutes(
       const session = await storage.getTestSession(req.params.id);
       if (!session) return res.status(404).json({ message: "Session not found" });
 
-      const diagnostic = await storage.getDiagnostic(session.diagnosticId);
-      if (!diagnostic) return res.status(404).json({ message: "Diagnostic not found" });
-
       const allQuestions = await storage.getQuestionsByDiagnostic(session.diagnosticId);
       const questionMap = new Map(allQuestions.map(q => [q.id, q]));
 
       let correct = 0;
-      let total = answers.length;
       const sectionResults: Record<string, { correct: number; total: number; totalTime: number }> = {};
 
       for (const ans of answers) {
@@ -127,6 +262,7 @@ export async function registerRoutes(
         });
       }
 
+      const total = answers.length;
       const rawPercent = total > 0 ? (correct / total) * 100 : 0;
       const forecastScore = Math.round(90 + (rawPercent / 100) * 51);
       let band = "Clear Improvement Opportunity";
@@ -164,17 +300,48 @@ export async function registerRoutes(
   app.get("/api/progress", requireAuth, async (req, res, next) => {
     try {
       const sessions = await storage.getUserTestSessions(req.user!.id);
-      const completed = sessions.filter(s => s.completedAt);
+      const completed = sessions.filter(s => s.completedAt).reverse();
 
-      const trajectory = completed
-        .reverse()
-        .map((s, i) => ({
-          date: `Attempt ${i + 1}`,
-          score: s.forecastScore || 0,
-          target: 121,
-        }));
+      const trajectory = completed.map((s, i) => ({
+        date: `Attempt ${i + 1}`,
+        score: s.forecastScore || 0,
+        target: 121,
+      }));
 
       const latest = completed.length > 0 ? completed[completed.length - 1] : null;
+
+      let gapVelocity = null;
+      let forecastStability = null;
+
+      if (completed.length >= 2) {
+        const oldest = completed[0];
+        const newest = completed[completed.length - 1];
+        const oldGap = Math.abs(121 - (oldest.forecastScore || 0));
+        const newGap = Math.abs(121 - (newest.forecastScore || 0));
+        gapVelocity = {
+          oldGap,
+          newGap,
+          change: oldGap - newGap,
+          attempts: completed.length,
+          improving: newGap < oldGap,
+        };
+
+        const scores = completed.map(s => s.forecastScore || 0);
+        const mean = scores.reduce((a, b) => a + b, 0) / scores.length;
+        const variance = scores.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / scores.length;
+        const stdDev = Math.sqrt(variance);
+
+        const recentScores = scores.slice(-3);
+        const recentMean = recentScores.reduce((a, b) => a + b, 0) / recentScores.length;
+        const recentVariance = recentScores.reduce((a, b) => a + Math.pow(b - recentMean, 2), 0) / recentScores.length;
+        const recentStdDev = Math.sqrt(recentVariance);
+
+        forecastStability = {
+          stdDev: Math.round(stdDev * 10) / 10,
+          status: recentStdDev <= 2 ? "Stable" : recentStdDev <= 5 ? "Improving" : "Variable",
+          trend: recentStdDev < stdDev ? "improving" : "steady",
+        };
+      }
 
       res.json({
         trajectory,
@@ -184,6 +351,111 @@ export async function registerRoutes(
         velocity: completed.length >= 2
           ? (completed[completed.length - 1].forecastScore || 0) - (completed[0].forecastScore || 0)
           : 0,
+        gapVelocity,
+        forecastStability,
+      });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.get("/api/programme", requireAuth, async (req, res, next) => {
+    try {
+      if (req.user!.subscriptionTier !== "programme16") {
+        return res.json({ enrolled: false });
+      }
+      const enrolment = await storage.getProgrammeEnrolment(req.user!.id);
+      if (!enrolment) {
+        return res.json({ enrolled: false });
+      }
+
+      const milestones = await storage.getProgrammeMilestones(req.user!.id);
+      const plans = await storage.getWeeklyPlans(req.user!.id);
+
+      const now = new Date();
+      const msElapsed = now.getTime() - enrolment.startAt.getTime();
+      const currentWeek = Math.min(16, Math.max(1, Math.ceil(msElapsed / (7 * 24 * 60 * 60 * 1000))));
+      const daysRemaining = Math.max(0, Math.ceil((enrolment.endAt.getTime() - now.getTime()) / (24 * 60 * 60 * 1000)));
+
+      if (currentWeek !== enrolment.currentWeek) {
+        await storage.updateEnrolmentWeek(enrolment.id, currentWeek);
+      }
+
+      const existingWeeks = new Set(plans.map(p => p.week));
+      if (!existingWeeks.has(currentWeek)) {
+        const sessions = await storage.getUserTestSessions(req.user!.id);
+        const latestCompleted = sessions.find(s => s.completedAt);
+        await storage.generateWeeklyPlan(req.user!.id, enrolment.id, currentWeek, latestCompleted || null);
+      }
+
+      const updatedPlans = await storage.getWeeklyPlans(req.user!.id);
+
+      res.json({
+        enrolled: true,
+        enrolment: { ...enrolment, currentWeek },
+        milestones,
+        plans: updatedPlans,
+        currentWeek,
+        daysRemaining,
+      });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.post("/api/programme/milestones/:id/complete", requireAuth, async (req, res, next) => {
+    try {
+      if (req.user!.subscriptionTier !== "programme16") {
+        return res.status(403).json({ message: "Programme access required" });
+      }
+      const { sessionId } = req.body;
+      const milestone = await storage.completeMilestone(req.params.id, sessionId);
+      res.json(milestone);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.get("/api/programme/completion-summary", requireAuth, async (req, res, next) => {
+    try {
+      if (req.user!.subscriptionTier !== "programme16") {
+        return res.status(403).json({ message: "Programme access required" });
+      }
+      const sessions = await storage.getUserTestSessions(req.user!.id);
+      const completed = sessions.filter(s => s.completedAt).reverse();
+
+      if (completed.length < 2) {
+        return res.json({ available: false, message: "Not enough data for summary" });
+      }
+
+      const baseline = completed[0];
+      const final = completed[completed.length - 1];
+
+      const baselineSections: any[] = (baseline.sectionScores as any) || [];
+      const finalSections: any[] = (final.sectionScores as any) || [];
+
+      const sectionComparison = finalSections.map(fs => {
+        const bs = baselineSections.find(b => b.name === fs.name);
+        return {
+          name: fs.name,
+          baselineScore: bs?.score || 0,
+          finalScore: fs.score,
+          improvement: fs.score - (bs?.score || 0),
+        };
+      });
+
+      const strongest = [...sectionComparison].sort((a, b) => b.finalScore - a.finalScore);
+      const risks = sectionComparison.filter(s => s.finalScore < 70);
+
+      res.json({
+        available: true,
+        baselineForecast: baseline.forecastScore,
+        finalForecast: final.forecastScore,
+        gapReduction: Math.abs(121 - (baseline.forecastScore || 0)) - Math.abs(121 - (final.forecastScore || 0)),
+        sectionComparison,
+        strongestSkills: strongest.slice(0, 2).map(s => s.name),
+        remainingRisks: risks.map(s => s.name),
+        totalAttempts: completed.length,
       });
     } catch (error) {
       next(error);

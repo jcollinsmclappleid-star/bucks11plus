@@ -7,9 +7,15 @@ import { Link } from "wouter";
 import { useAuth } from "../lib/auth";
 
 export default function Account() {
-  const { user } = useAuth();
+  const { user, tierLabel, hasPaidAccess } = useAuth();
 
   if (!user) return null;
+
+  const tierDescriptions: Record<string, string> = {
+    free: "Limited to Mini Diagnostic and basic drills.",
+    pack12: "Full access to all diagnostics, drills, PDF reports, and progress tracking for 12 weeks.",
+    programme16: "Full access including 16-week structured roadmap, milestone diagnostics, advanced analytics, and weekly plans.",
+  };
 
   return (
     <div className="container mx-auto max-w-4xl px-4 py-8 space-y-8">
@@ -21,7 +27,6 @@ export default function Account() {
 
       <div className="grid md:grid-cols-3 gap-8">
         
-        {/* Sidebar Nav */}
         <div className="flex md:flex-col gap-2 overflow-x-auto pb-2 md:pb-0">
           <Button variant="secondary" className="justify-start gap-2 text-primary font-medium w-full">
             <User className="h-4 w-4" /> Profile Details
@@ -34,7 +39,6 @@ export default function Account() {
           </Button>
         </div>
 
-        {/* Main Content Area */}
         <div className="md:col-span-2 space-y-6">
           <Card className="border-border/60 shadow-sm">
             <CardHeader>
@@ -45,17 +49,20 @@ export default function Account() {
               <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-100">
                 <div>
                   <div className="flex items-center gap-3 mb-1">
-                    <span className="font-bold text-primary text-lg capitalize">{user.subscriptionTier} Tier</span>
+                    <span className="font-bold text-primary text-lg" data-testid="text-tier-name">{tierLabel()}</span>
                     <Badge variant="secondary" className="bg-slate-200">Active</Badge>
                   </div>
                   <p className="text-sm text-muted-foreground">
-                    {user.subscriptionTier === 'premium' 
-                      ? "Full access to all diagnostics, drills, and the 12-week plan."
-                      : "Limited to Mini Diagnostic and basic drills."}
+                    {tierDescriptions[user.subscriptionTier] || "Limited access."}
                   </p>
+                  {user.subscriptionExpiresAt && (
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Access expires: {new Date(user.subscriptionExpiresAt).toLocaleDateString()}
+                    </p>
+                  )}
                 </div>
-                {user.subscriptionTier !== 'premium' && (
-                  <Button variant="outline" asChild>
+                {!hasPaidAccess() && (
+                  <Button variant="outline" asChild data-testid="button-upgrade-account">
                     <Link href="/pricing">Upgrade</Link>
                   </Button>
                 )}

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Lock, PlayCircle, BookOpen } from "lucide-react";
 import { Link } from "wouter";
@@ -9,13 +9,16 @@ import { type PracticeSection } from "@shared/schema";
 import { useAuth } from "../lib/auth";
 import { Skeleton } from "@/components/ui/skeleton";
 
+const TIER_RANK: Record<string, number> = { free: 0, pack12: 1, programme16: 2 };
+
 export default function Practice() {
-  const { user } = useAuth();
+  const { user, hasPaidAccess } = useAuth();
   const { data: sections, isLoading } = useQuery<PracticeSection[]>({
     queryKey: ["/api/practice-sections"],
   });
 
   const categories = sections ? Array.from(new Set(sections.map(s => s.category))) : [];
+  const userRank = TIER_RANK[user?.subscriptionTier || "free"] || 0;
 
   return (
     <div className="container mx-auto max-w-5xl px-4 py-8 space-y-8">
@@ -29,7 +32,7 @@ export default function Practice() {
           <h1 className="text-3xl font-bold text-primary font-serif">Practice Bank</h1>
           <p className="text-muted-foreground mt-2">Targeted drills to close your specific gaps to 121.</p>
         </div>
-        {user?.subscriptionTier !== 'premium' && (
+        {!hasPaidAccess() && (
           <Button variant="outline" className="gap-2" asChild data-testid="button-unlock-all">
             <Link href="/pricing"><Lock className="h-4 w-4" /> Unlock All Drills</Link>
           </Button>
@@ -56,7 +59,8 @@ export default function Practice() {
               </h2>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {sections?.filter(s => s.category === category).map((drill, i) => {
-                  const isLocked = drill.requiredTier === 'premium' && user?.subscriptionTier !== 'premium';
+                  const requiredRank = TIER_RANK[drill.requiredTier] || 0;
+                  const isLocked = requiredRank > userRank;
                   return (
                     <Card key={i} className={`relative overflow-hidden ${isLocked ? 'bg-slate-50/50' : 'hover:border-primary/50 transition-colors'}`}>
                       {isLocked && (

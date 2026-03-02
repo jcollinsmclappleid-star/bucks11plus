@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, integer, boolean, timestamp, jsonb, real } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, integer, boolean, timestamp, jsonb } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -13,6 +13,8 @@ export const users = pgTable("users", {
   practiceHours: text("practice_hours"),
   difficultyAreas: text("difficulty_areas").array(),
   subscriptionTier: text("subscription_tier").notNull().default("free"),
+  subscriptionExpiresAt: timestamp("subscription_expires_at"),
+  stripeCustomerId: text("stripe_customer_id"),
   onboardingCompleted: boolean("onboarding_completed").notNull().default(false),
 });
 
@@ -83,6 +85,41 @@ export const articles = pgTable("articles", {
   publishedAt: timestamp("published_at").notNull().defaultNow(),
 });
 
+export const programmeEnrolments = pgTable("programme_enrolments", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull(),
+  status: text("status").notNull().default("active"),
+  startAt: timestamp("start_at").notNull().defaultNow(),
+  endAt: timestamp("end_at").notNull(),
+  currentWeek: integer("current_week").notNull().default(1),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const programmeMilestones = pgTable("programme_milestones", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull(),
+  enrolmentId: varchar("enrolment_id").notNull(),
+  week: integer("week").notNull(),
+  milestoneType: text("milestone_type").notNull(),
+  title: text("title").notNull(),
+  description: text("description"),
+  dueAt: timestamp("due_at"),
+  completedAt: timestamp("completed_at"),
+  linkedDiagnosticId: varchar("linked_diagnostic_id"),
+  linkedSessionId: varchar("linked_session_id"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const weeklyPlans = pgTable("weekly_plans", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull(),
+  enrolmentId: varchar("enrolment_id").notNull(),
+  week: integer("week").notNull(),
+  phase: text("phase").notNull(),
+  planJson: jsonb("plan_json").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -110,4 +147,7 @@ export type TestSession = typeof testSessions.$inferSelect;
 export type TestAnswer = typeof testAnswers.$inferSelect;
 export type Article = typeof articles.$inferSelect;
 export type PracticeSection = typeof practiceSections.$inferSelect;
+export type ProgrammeEnrolment = typeof programmeEnrolments.$inferSelect;
+export type ProgrammeMilestone = typeof programmeMilestones.$inferSelect;
+export type WeeklyPlan = typeof weeklyPlans.$inferSelect;
 export type OnboardingData = z.infer<typeof onboardingSchema>;
