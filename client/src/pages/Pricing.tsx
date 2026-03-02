@@ -60,13 +60,10 @@ export default function Pricing() {
   }, [user, search]);
 
   const handleCheckout = async (tier: "pack12" | "programme16") => {
-    if (!user) {
-      navigate(`/sign-up?redirect=checkout&tier=${tier}`);
-      return;
-    }
     setLoading(tier);
     try {
-      const res = await apiRequest("POST", "/api/checkout", { tier });
+      const endpoint = user ? "/api/checkout" : "/api/guest/checkout";
+      const res = await apiRequest("POST", endpoint, { tier });
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
@@ -160,8 +157,8 @@ export default function Pricing() {
               <p className="text-slate-600 text-sm leading-relaxed mb-6 flex-1">
                 For families who already want a complete 12–16 week preparation plan aligned to the Bucks 11+. Includes diagnostics, targeted drills and milestone tracking.
               </p>
-              <Button className="w-full h-12 text-sm font-semibold bg-primary text-primary-foreground" onClick={() => handleCheckout("programme16")} disabled={loading === "programme16"} data-testid="button-pricing-path-programme">
-                {loading === "programme16" ? <Loader2 className="h-5 w-5 animate-spin" /> : "View Programme & Enrol"}
+              <Button className="w-full h-12 text-sm font-semibold bg-primary text-primary-foreground" asChild data-testid="button-pricing-path-programme">
+                <a href="#tiers">View Programme &amp; Enrol</a>
               </Button>
             </div>
           </div>
@@ -223,7 +220,7 @@ export default function Pricing() {
         </div>
       </section>
 
-      <section className="py-20 md:py-28 bg-slate-50 border-b border-border/30" id="plans">
+      <section className="py-20 md:py-28 bg-slate-50 border-b border-border/30" id="tiers">
         <div className="container mx-auto max-w-6xl px-4">
           <div className="text-center mb-14">
             <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4" data-testid="text-tiers-title">What your child gets</h2>

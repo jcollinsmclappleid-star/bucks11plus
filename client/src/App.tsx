@@ -158,6 +158,7 @@ function Router() {
             <Route path="/sign-up" component={SignUp} />
             <Route path="/free-diagnostic" component={FreeDiagnosticStart} />
             <Route path="/free-results/:id" component={GuestResults} />
+            <Route path="/checkout-success" component={CheckoutSuccess} />
             
             <Route path="/terms">
               <Legal type="terms" />

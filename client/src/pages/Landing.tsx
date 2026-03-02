@@ -312,7 +312,7 @@ export default function Landing() {
                 For families who already want a complete 12–16 week preparation plan aligned to the Bucks 11+. Includes diagnostics, targeted drills and milestone tracking.
               </p>
               <Button className="w-full h-12 text-sm font-semibold bg-primary text-primary-foreground" asChild data-testid="button-path-programme">
-                <Link href="/pricing">View Programme &amp; Enrol</Link>
+                <Link href="/pricing#tiers">View Programme &amp; Enrol</Link>
               </Button>
             </div>
           </div>

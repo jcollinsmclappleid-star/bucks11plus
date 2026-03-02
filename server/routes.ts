@@ -92,6 +92,48 @@ export async function registerRoutes(
     }
   });
 
+  app.post("/api/guest/checkout", async (req, res, next) => {
+    try {
+      const { tier } = req.body;
+      if (!tier || !["pack12", "programme16"].includes(tier)) {
+        return res.status(400).json({ message: "Invalid tier" });
+      }
+
+      const stripe = await getUncachableStripeClient();
+
+      const pricesResult = await db.execute(
+        sql`SELECT pr.id as price_id, p.metadata FROM stripe.prices pr JOIN stripe.products p ON pr.product = p.id WHERE p.active = true AND pr.active = true`
+      );
+
+      const priceRow = pricesResult.rows.find((r: any) => {
+        const meta = typeof r.metadata === 'string' ? JSON.parse(r.metadata) : r.metadata;
+        return meta?.tier === tier;
+      });
+
+      if (!priceRow) {
+        return res.status(404).json({ message: "Price not found. Products may not be seeded yet." });
+      }
+
+      const host = req.get('host');
+      const protocol = req.protocol;
+
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        line_items: [{ price: (priceRow as any).price_id, quantity: 1 }],
+        mode: 'payment',
+        success_url: `${protocol}://${host}/checkout-success?tier=${tier}&session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${protocol}://${host}/pricing`,
+        metadata: {
+          tier: tier,
+        },
+      });
+
+      res.json({ url: session.url });
+    } catch (error) {
+      next(error);
+    }
+  });
+
   app.post("/api/checkout/complete", requireAuth, async (req, res, next) => {
     try {
       const { tier, session_id } = req.body;
