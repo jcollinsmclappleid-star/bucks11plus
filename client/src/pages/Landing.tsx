@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, CheckCircle2, Target, Clock, BarChart3, Lock, Zap } from "lucide-react";
+import { ArrowRight, CheckCircle2, Target, Clock, BarChart3, Lock, Zap, Search, Wrench, TrendingUp } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 
 export default function Landing() {
@@ -12,7 +12,6 @@ export default function Landing() {
         description="Timed diagnostics aligned to GL-style reasoning families used in Bucks for the Buckinghamshire Secondary Transfer Test." 
       />
       
-      {/* V1: HOMEPAGE HERO WITH IMAGE */}
       <section className="relative overflow-hidden pt-20 pb-24 md:pt-32 md:pb-40 border-b border-border/50">
         <div className="absolute inset-0 z-0">
           <img 
@@ -20,7 +19,6 @@ export default function Landing() {
             alt="Abstract dark navy background with subtle light accents" 
             className="w-full h-full object-cover object-center"
           />
-          {/* Gradient overlay to ensure text readability */}
           <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/95 to-primary"></div>
         </div>
 
@@ -42,9 +40,9 @@ export default function Landing() {
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-white/90 text-sm font-medium pt-4">
               <span className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-brand-amber" /> Aligned to GL-style reasoning types (VR / NVR / Maths)</span>
-              <span className="hidden sm:inline text-white/30">•</span>
+              <span className="hidden sm:inline text-white/30">|</span>
               <span className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-brand-amber" /> Timed to reflect exam pacing and pressure</span>
-              <span className="hidden sm:inline text-white/30">•</span>
+              <span className="hidden sm:inline text-white/30">|</span>
               <span className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-brand-amber" /> Forecasted against the Bucks 121 benchmark</span>
             </div>
 
@@ -63,7 +61,6 @@ export default function Landing() {
             </p>
           </div>
 
-          {/* V1: Preview Block */}
           <div className="mt-24 relative max-w-4xl mx-auto hidden md:block">
             <div className="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-transparent z-10 rounded-xl pointer-events-none"></div>
             <div className="bg-white/5 border border-white/10 p-2 rounded-2xl backdrop-blur-sm shadow-2xl relative overflow-hidden group">
@@ -109,7 +106,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* V2: GL ALIGNMENT SECTION */}
       <section className="py-20 bg-slate-50 border-b border-border/50 relative">
         <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent"></div>
         <div className="container mx-auto max-w-6xl px-4">
@@ -151,20 +147,183 @@ export default function Landing() {
           </div>
         </div>
       </section>
-      
-      {/* Visual Teaser Section */}
-      <section className="py-24 px-4 bg-white relative">
+
+      <section className="py-20 md:py-28 bg-white relative overflow-hidden">
+        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent"></div>
+        <div className="container mx-auto max-w-6xl px-4">
+          <div className="text-center mb-6">
+            <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">The Process</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4">
+              How It Works in Practice
+            </h2>
+            <p className="text-lg text-slate-500 max-w-2xl mx-auto">
+              In a competitive cohort, effort alone is not enough. Preparation must be measured, directed and timed.
+            </p>
+          </div>
+
+          <div className="mt-14 grid md:grid-cols-2 gap-6 lg:gap-8">
+            <div className="group relative bg-white rounded-2xl border border-slate-200 p-7 sm:p-8 hover:border-primary/20 hover:shadow-lg transition-all duration-300" data-testid="step-diagnostic-benchmark">
+              <div className="flex items-center gap-4 mb-5">
+                <div className="w-12 h-12 rounded-xl bg-primary text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
+                  <Search className="h-5 w-5" />
+                </div>
+                <div>
+                  <span className="text-[11px] font-bold text-primary/40 uppercase tracking-widest">Step 1</span>
+                  <h3 className="text-xl font-bold text-primary font-serif leading-tight">Diagnostic Benchmark</h3>
+                </div>
+              </div>
+              <p className="text-slate-600 leading-relaxed mb-5">
+                Preparation begins with a timed GL-style diagnostic covering Verbal Reasoning, Non-Verbal Reasoning, Mathematical Reasoning and section pacing.
+              </p>
+              <div className="space-y-2.5 mb-5">
+                <div className="flex items-start gap-2.5 text-sm text-slate-600">
+                  <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
+                  <span>Skill-by-skill accuracy analysis across 18 sub-areas</span>
+                </div>
+                <div className="flex items-start gap-2.5 text-sm text-slate-600">
+                  <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
+                  <span>Pacing risk indicators per section</span>
+                </div>
+                <div className="flex items-start gap-2.5 text-sm text-slate-600">
+                  <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
+                  <span>Initial readiness band relative to the 121 qualifying standard</span>
+                </div>
+              </div>
+              <p className="text-xs text-slate-400 italic border-t border-slate-100 pt-3">
+                Without a structured benchmark, preparation often reinforces strengths and neglects weaknesses.
+              </p>
+            </div>
+
+            <div className="group relative bg-white rounded-2xl border border-slate-200 p-7 sm:p-8 hover:border-primary/20 hover:shadow-lg transition-all duration-300" data-testid="step-readiness-forecast">
+              <div className="flex items-center gap-4 mb-5">
+                <div className="w-12 h-12 rounded-xl bg-primary text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
+                  <Target className="h-5 w-5" />
+                </div>
+                <div>
+                  <span className="text-[11px] font-bold text-primary/40 uppercase tracking-widest">Step 2</span>
+                  <h3 className="text-xl font-bold text-primary font-serif leading-tight">Readiness Forecast</h3>
+                </div>
+              </div>
+              <p className="text-slate-600 leading-relaxed mb-5">
+                Performance is analysed through weighted modelling aligned to qualifying benchmarks. Accuracy is adjusted for difficulty, pacing is measured against section expectations, and error concentration within sub-skills is evaluated.
+              </p>
+              <div className="space-y-2.5 mb-5">
+                <div className="flex items-start gap-2.5 text-sm text-slate-600">
+                  <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
+                  <span>Clear readiness band: Secure (Green) / Borderline (Amber) / Development Required (Red)</span>
+                </div>
+                <div className="flex items-start gap-2.5 text-sm text-slate-600">
+                  <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
+                  <span>Top three priority intervention areas identified</span>
+                </div>
+                <div className="flex items-start gap-2.5 text-sm text-slate-600">
+                  <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
+                  <span>Risk factors affecting qualification surfaced</span>
+                </div>
+              </div>
+              <p className="text-xs text-slate-400 italic border-t border-slate-100 pt-3">
+                This prevents misplaced effort and reduces uncertainty.
+              </p>
+            </div>
+
+            <div className="group relative bg-white rounded-2xl border border-slate-200 p-7 sm:p-8 hover:border-primary/20 hover:shadow-lg transition-all duration-300" data-testid="step-targeted-development">
+              <div className="flex items-center gap-4 mb-5">
+                <div className="w-12 h-12 rounded-xl bg-primary text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
+                  <Wrench className="h-5 w-5" />
+                </div>
+                <div>
+                  <span className="text-[11px] font-bold text-primary/40 uppercase tracking-widest">Step 3</span>
+                  <h3 className="text-xl font-bold text-primary font-serif leading-tight">Targeted Development</h3>
+                </div>
+              </div>
+              <p className="text-slate-600 leading-relaxed mb-5">
+                Practice is prescribed according to diagnosed gaps. Time is directed to areas that materially influence outcome rather than broad repetition.
+              </p>
+              <div className="space-y-2.5 mb-5">
+                <div className="flex items-start gap-2.5 text-sm text-slate-600">
+                  <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
+                  <span>Skill-specific drills mapped to sub-rules</span>
+                </div>
+                <div className="flex items-start gap-2.5 text-sm text-slate-600">
+                  <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
+                  <span>Visual Non-Verbal reasoning sequences</span>
+                </div>
+                <div className="flex items-start gap-2.5 text-sm text-slate-600">
+                  <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
+                  <span>Timed section simulations with progressive difficulty</span>
+                </div>
+              </div>
+              <p className="text-xs text-slate-400 italic border-t border-slate-100 pt-3">
+                Time is directed to areas that materially influence outcome.
+              </p>
+            </div>
+
+            <div className="group relative bg-white rounded-2xl border border-slate-200 p-7 sm:p-8 hover:border-primary/20 hover:shadow-lg transition-all duration-300" data-testid="step-measured-progression">
+              <div className="flex items-center gap-4 mb-5">
+                <div className="w-12 h-12 rounded-xl bg-primary text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
+                  <TrendingUp className="h-5 w-5" />
+                </div>
+                <div>
+                  <span className="text-[11px] font-bold text-primary/40 uppercase tracking-widest">Step 4</span>
+                  <h3 className="text-xl font-bold text-primary font-serif leading-tight">Measured Progression</h3>
+                </div>
+              </div>
+              <p className="text-slate-600 leading-relaxed mb-5">
+                Improvement is reassessed at structured milestones. Progress becomes visible and evidence-based rather than assumed.
+              </p>
+              <div className="space-y-2.5 mb-5">
+                <div className="flex items-start gap-2.5 text-sm text-slate-600">
+                  <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
+                  <span>Accuracy progression tracked across attempts</span>
+                </div>
+                <div className="flex items-start gap-2.5 text-sm text-slate-600">
+                  <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
+                  <span>Pacing discipline and volatility monitored</span>
+                </div>
+                <div className="flex items-start gap-2.5 text-sm text-slate-600">
+                  <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
+                  <span>Movement between readiness bands visible over time</span>
+                </div>
+              </div>
+              <p className="text-xs text-slate-400 italic border-t border-slate-100 pt-3">
+                Progress becomes visible and evidence-based.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-12 rounded-2xl bg-gradient-to-br from-primary/[0.03] to-primary/[0.07] border border-primary/10 p-7 sm:p-10 text-center">
+            <p className="text-slate-700 font-medium text-lg leading-relaxed mb-1">
+              Many families complete large volumes of questions without knowing whether readiness is improving.
+            </p>
+            <p className="text-primary font-serif text-xl sm:text-2xl font-bold mt-3 mb-5">
+              Are we on track for 121 under timed conditions?
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Button size="lg" className="h-12 px-8 bg-primary text-primary-foreground shadow-md" asChild data-testid="button-start-diagnostic-process">
+                <Link href="/sign-up">Start Free Diagnostic</Link>
+              </Button>
+              <Button variant="outline" className="h-12 px-6" asChild data-testid="link-how-it-works-detail">
+                <Link href="/how-it-works">
+                  See Full Process <ArrowRight className="ml-1.5 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-24 px-4 bg-slate-50 relative">
         <div className="container mx-auto max-w-5xl">
-          <div className="bg-slate-50 rounded-3xl border border-slate-200 p-2 md:p-8 overflow-hidden shadow-[inset_0_2px_20px_rgba(0,0,0,0.02)] relative">
+          <div className="bg-white rounded-3xl border border-slate-200 p-2 md:p-8 overflow-hidden shadow-sm relative">
             <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none mix-blend-multiply">
                  <img src="/logo.png" alt="" className="w-64 h-64 grayscale object-contain" />
             </div>
 
-            <div className="aspect-[16/9] md:aspect-[21/9] bg-white rounded-2xl flex flex-col md:flex-row items-center justify-center border border-slate-200 shadow-sm overflow-hidden p-8 gap-12 relative z-10">
+            <div className="aspect-[16/9] md:aspect-[21/9] bg-slate-50 rounded-2xl flex flex-col md:flex-row items-center justify-center border border-slate-100 shadow-inner overflow-hidden p-8 gap-12 relative z-10">
                
                <div className="relative w-56 h-56 flex-shrink-0">
                   <svg className="w-full h-full -rotate-90 filter drop-shadow-sm" viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="40" className="stroke-slate-100" strokeWidth="12" fill="none" />
+                    <circle cx="50" cy="50" r="40" className="stroke-slate-200" strokeWidth="12" fill="none" />
                     <circle 
                       cx="50" cy="50" r="40" 
                       className="stroke-brand-amber transition-all duration-1000 ease-out" 
@@ -183,11 +342,11 @@ export default function Landing() {
 
                <div className="max-w-lg space-y-5">
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-amber-50 text-amber-700 text-sm font-bold border border-amber-200 shadow-sm">
-                    Confident Amber Band
+                    Borderline (Amber)
                   </div>
                   <h3 className="text-3xl font-bold text-primary font-serif">7 points gap to 121</h3>
                   <p className="text-lg text-slate-600 leading-relaxed">
-                    Your current readiness band indicates confident progress, but targeted VR practice is required to secure the benchmark.
+                    Your current readiness band indicates progress, but targeted practice in identified weak areas is required to secure the qualifying benchmark.
                   </p>
                   <div className="pt-4 flex items-center gap-4">
                     <Button className="bg-primary shadow-md" asChild>
@@ -203,7 +362,7 @@ export default function Landing() {
         </div>
       </section>
 
-      <div className="py-6 text-center">
+      <div className="py-6 text-center bg-white">
         <p className="text-xs text-slate-400" data-testid="text-disclaimer">
           Independent readiness assessment. Not affiliated with GL Assessment or Buckinghamshire Council.
         </p>
