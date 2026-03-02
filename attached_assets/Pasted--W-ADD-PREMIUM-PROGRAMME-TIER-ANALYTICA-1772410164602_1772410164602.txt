@@ -1,0 +1,417 @@
+===========================================================
+W) ADD PREMIUM PROGRAMME TIER (ANALYTICAL + STRUCTURED) — IMPLEMENT NOW
+===========================================================
+
+OBJECTIVE:
+Add a premium one-time programme tier that justifies higher pricing by packaging:
+- Structured 16-week roadmap (programme-led)
+- Milestone diagnostics (scheduled, guided)
+- Deeper analytics (gap velocity, stability)
+- Premium deliverables (report archive, weekly briefings)
+- Advanced simulator (multi-variable)
+
+Brand tone remains institutional and calm.
+
+-----------------------------------------------------------
+W1) PRICING + PRODUCT STRUCTURE (3 TIERS + ANCHORING)
+-----------------------------------------------------------
+
+Implement 3-tier pricing:
+
+1) FREE
+- Mini diagnostic only (10–12 Q)
+- Results: gauge + range + gap + TOP 1 focus teaser
+- No likelihood band
+- No PDF report
+- No report archive
+- No programme dashboard
+- No weekly emails
+- Limited sample drill only (5 Q)
+
+2) PRACTICE PACK (self-directed)
+- £99 one-time for 12 weeks
+- Full diagnostics access (at least 2 full diagnostics)
+- Full drill bank (10+ drills)
+- PDF report for each full diagnostic
+- Progress tracking (trend line)
+- Likelihood band unlocked on full diagnostics
+- Impact simulator (single-variable: +10% on top skill)
+- Report archive unlocked for the 12-week duration
+
+3) STRUCTURED READINESS PROGRAMME (premium)
+- RECOMMENDED LAUNCH PRICE: £349 one-time for 16 weeks
+- Everything in £99 pack PLUS:
+  A) 16-week structured programme roadmap (visual)
+  B) 4 milestone diagnostics (baseline + 3 checkpoints) with reminders
+  C) Advanced impact simulator (multi-variable)
+  D) Gap velocity metric + forecast stability metric
+  E) Weekly readiness email summary (automated)
+  F) “Programme Completion Summary” PDF at end
+
+IMPORTANT:
+Keep £99 tier for anchoring. Do not launch with only £349.
+
+Stripe:
+- Add 3 price IDs:
+  STRIPE_PRICE_ID_PACK12 (99, one-time)
+  STRIPE_PRICE_ID_PROGRAMME16 (349, one-time)
+  STRIPE_PRICE_ID_MONTHLY optional (keep if desired, but 3-tier one-time is cleaner for premium positioning)
+
+If you keep monthly, ensure it does not cannibalise:
+- Monthly is optional; the main focus is Pack12 and Programme16.
+
+-----------------------------------------------------------
+W2) ENTITLEMENTS MODEL (EXPAND)
+-----------------------------------------------------------
+
+Update entitlements table usage to support:
+- tier: free | pack12 | programme16 | monthly
+- status: active/inactive/expired
+- expires_at: timestamp
+- programme_start_at: timestamp (NEW)
+- programme_end_at: timestamp (NEW)
+
+If you prefer not to alter entitlements, add a separate table:
+
+programme_enrolments (RECOMMENDED):
+- user_id uuid pk
+- status text (active|completed|expired)
+- start_at timestamptz
+- end_at timestamptz
+- current_week int default 1
+- last_milestone_completed_at timestamptz null
+- created_at timestamptz default now()
+
+This keeps programme logic clean.
+
+Update gating helpers:
+- isPaidPack12(user) true if tier=pack12 and active and now < expires_at
+- isProgramme(user) true if programme_enrolments.active and now < end_at
+- paidAccess = pack12 OR programme16 OR monthly
+
+-----------------------------------------------------------
+W3) DATABASE: ADD PROGRAMME TABLES
+-----------------------------------------------------------
+
+Add migrations for:
+
+1) programme_enrolments
+- user_id uuid pk references auth.users(id) on delete cascade
+- status text check in ('active','completed','expired') default 'active'
+- start_at timestamptz not null
+- end_at timestamptz not null
+- current_week int default 1
+- created_at timestamptz default now()
+
+2) programme_milestones
+- id uuid pk default gen_random_uuid()
+- user_id uuid references auth.users(id) on delete cascade
+- week int not null
+- milestone_type text check in ('diagnostic','mock','review')
+- title text not null
+- description text null
+- due_at timestamptz null
+- completed_at timestamptz null
+- linked_mock_id uuid null references mocks(id)
+- linked_attempt_id uuid null references attempts(id)
+- created_at timestamptz default now()
+
+3) plans (weekly plan objects generated from analytics)
+- id uuid pk default gen_random_uuid()
+- user_id uuid references auth.users(id) on delete cascade
+- week int not null
+- plan_json jsonb not null
+- created_at timestamptz default now()
+
+Indexes:
+- programme_milestones(user_id, week)
+- plans(user_id, week)
+
+RLS:
+- user can read/write their own programme records
+- admin can read all for support
+
+-----------------------------------------------------------
+W4) PROGRAMME DESIGN (16 WEEKS, 4 PHASES)
+-----------------------------------------------------------
+
+Implement 16-week programme logic exactly.
+
+Phase mapping (for UI labels):
+- Phase 1 (Weeks 1–4): Baseline & Foundation
+- Phase 2 (Weeks 5–8): Targeted Skill Elevation
+- Phase 3 (Weeks 9–12): Exam Conditioning
+- Phase 4 (Weeks 13–16): Benchmark Consolidation
+
+Milestone schedule (REQUIRED):
+Week 1: Baseline Diagnostic (Mock ID: diagnostic_a)
+Week 6: Progress Diagnostic (Mock ID: diagnostic_b)
+Week 12: Full Mock Simulation (Mock ID: mock_1)  (if not available, reuse diagnostic_b but label as Mock)
+Week 16: Final Readiness Assessment (Mock ID: mock_2 OR diagnostic_a) (create a second mock if possible)
+
+When user purchases Programme16:
+- Create programme_enrolments row:
+  start_at = now()
+  end_at = now() + 16 weeks
+  current_week = 1
+- Create 4 milestone rows (weeks 1,6,12,16) linked to mock IDs.
+- Pre-generate weekly plan rows for weeks 1–2 at minimum; generate future weeks on demand.
+
+-----------------------------------------------------------
+W5) UI: ADD PROGRAMME OVERVIEW (PREMIUM TAB)
+-----------------------------------------------------------
+
+Add new route for paid users:
+- /app/programme
+
+If user is programme enrollee:
+Show “Programme Overview” page with:
+
+1) Header:
+"Structured Readiness Programme (16 weeks)"
+- current week badge
+- days remaining badge
+- current projected range and gap to 121
+
+2) Roadmap timeline (VISUAL):
+- 16 week horizontal/vertical timeline
+- phase labels
+- milestone markers at week 1,6,12,16
+- completed milestones ticked
+- next milestone highlighted with CTA:
+  “Start Week 6 Diagnostic”
+
+3) This Week Focus:
+- top focus skill (from latest full attempt)
+- 3 session checklist tiles
+- 1 mixed timed drill
+- CTA: “Start recommended drill”
+
+4) Analytics summary (premium-only):
+- Gap velocity (see W7)
+- Forecast stability (see W7)
+
+For non-programme paid users:
+Show upsell panel:
+"Upgrade to the Structured Programme"
+with bullet value + CTA.
+
+-----------------------------------------------------------
+W6) UI: RESULTS PAGE PREMIUM UPGRADES
+-----------------------------------------------------------
+
+On /app/results/[attemptId]:
+
+If user has programme16:
+- Show “Add to programme” banner:
+  - "Milestone completed" if attempt matches milestone week mock
+  - Mark milestone completed_at and link attempt_id
+- Show “Week Plan updated” message
+- Show Advanced simulator (see W8)
+
+If user is pack12 only:
+- keep basic simulator (single-variable)
+
+If free:
+- teaser only
+
+-----------------------------------------------------------
+W7) ADD PREMIUM METRICS: GAP VELOCITY + FORECAST STABILITY
+-----------------------------------------------------------
+
+Implement two new derived metrics stored in attempts.metrics or computed for dashboard:
+
+1) Gap Velocity:
+- For last N full diagnostics (exclude mini, exclude drills):
+  gap_mid = abs(121 - mid_score)
+- velocity = change in gap_mid from oldest to newest / number of weeks
+- Display:
+  “Gap velocity: improving by ~X marks per diagnostic”
+OR
+  “Gap reduced from 7 → 3 marks”
+
+Logic:
+- Use latest and previous full diagnostic attempts.
+- If only 1 full attempt, show “Velocity available after next diagnostic”.
+
+2) Forecast Stability:
+- Measure range width + volatility_index across last attempts
+- Stability improving if:
+  range_width decreasing and volatility decreasing
+- Display as simple status chip:
+  “Stability: Improving / Variable / Stable”
+
+These must be shown on /app/programme and /app/progress for programme users.
+
+-----------------------------------------------------------
+W8) ADVANCED IMPACT SIMULATOR (PROGRAMME ONLY)
+-----------------------------------------------------------
+
+Upgrade simulator for programme16 users:
+
+UI:
+Card: "Impact Simulator"
+Inputs:
+- Skill dropdown (top 5 impacted skills)
+- Accuracy uplift slider: +5% / +10% / +15%
+- Pace improvement slider: -0s / -5s / -10s per question
+
+Output:
+- new projected range
+- new gap statement
+- “most likely band shifts to…”
+
+Logic:
+- Adjust skill accuracy by uplift
+- Adjust avg_time_per_q by pace reduction (clamp)
+- Recompute penalties and mid_score using existing model
+- Widen range same as base, but show confidence unchanged
+
+Store last chosen simulator settings per user in:
+simulator_preferences table (optional) OR local storage.
+
+Free/Pack12:
+- Only single-variable uplift slider, no pace slider.
+
+-----------------------------------------------------------
+W9) WEEKLY PLAN GENERATION (PROGRAMME CORE VALUE)
+-----------------------------------------------------------
+
+Generate weekly plan objects (plans table) based on latest attempt forecast.
+
+Plan JSON structure example:
+{
+  week: 3,
+  phase: "Baseline & Foundation",
+  focus_skills: [{skill_id, sessions:3, duration_min:15}],
+  secondary_skills: [{skill_id, sessions:2, duration_min:15}],
+  mixed: {sessions:1, duration_min:20, mode:"timed"},
+  retest: {due: false}
+}
+
+Rules:
+- focus_skills[0] = top impact skill
+- secondary_skills[0] = second impact skill
+- mixed session uses questions across top 3 skills
+- every 3 weeks schedule a retest (or align to milestone)
+
+UI representation:
+- Week card with checkboxes (client-side state acceptable) and “Start session” buttons.
+
+Generate:
+- Weeks 1–2 at purchase time
+- Generate subsequent weeks when user reaches them or on weekly email job.
+
+-----------------------------------------------------------
+W10) PROGRAMME REMINDERS + TIMELINE CONTEXT (NON-MANIPULATIVE URGENCY)
+-----------------------------------------------------------
+
+Add “Timeline context” to programme page:
+- Show typical Bucks test window information (static text)
+- If user profile indicates Sep/Oct window:
+  show “Approx. X weeks until typical test window”
+This is informational, not scarcity.
+
+Milestone reminders:
+- On login, if next milestone due within 7 days:
+  show banner: “Week 6 diagnostic due — start now (20–30 mins)”
+
+-----------------------------------------------------------
+W11) WEEKLY READINESS EMAIL (PROGRAMME ONLY, OPTIONAL FOR PACK12)
+-----------------------------------------------------------
+
+Implement weekly email sending for programme16 users (and optionally pack12).
+
+Email contents:
+- current projected range + gap
+- this week’s focus skill + 2 recommended sessions
+- next milestone date and link
+- “stability” status
+
+Implementation:
+- Use Resend or Postmark
+- Add env var RESEND_API_KEY
+- Add admin button: “Send weekly summaries now”
+- Document cron scheduling later
+
+-----------------------------------------------------------
+W12) PROGRAMME COMPLETION SUMMARY (PREMIUM DELIVERABLE)
+-----------------------------------------------------------
+
+At Week 16 milestone completion:
+Generate a special PDF:
+"11+ Standard — Programme Completion Summary"
+
+Include:
+- baseline vs final projected range
+- gap reduction
+- strongest skills
+- remaining risks
+- recommended final 4-week maintenance checklist (if exam still ahead)
+
+Trigger:
+- When milestone week 16 attempt submitted, mark programme_enrolments.status='completed'
+- Generate summary PDF on demand from /app/programme/summary
+
+-----------------------------------------------------------
+W13) PRICING PAGE UPDATES (VALUE STACK + ANCHOR)
+-----------------------------------------------------------
+
+Pricing page must present 3 cards:
+
+FREE: Mini diagnostic
+PACK (12 weeks): £99
+- “Self-directed practice and diagnostics”
+PROGRAMME (16 weeks): £349 (Most Comprehensive)
+- “Structured roadmap + milestone diagnostics + advanced analytics”
+
+Programme card must list (short bullets):
+✔ 16-week roadmap + milestones
+✔ Advanced simulator
+✔ Weekly readiness briefings
+✔ Full report archive
+✔ Gap velocity + stability tracking
+✔ Completion summary
+
+Add “Why it’s priced this way” microcopy:
+"Designed to replace fragmented mocks and generic practice with a structured, benchmark-led preparation cycle."
+
+-----------------------------------------------------------
+W14) STRIPE IMPLEMENTATION FOR PROGRAMME16
+-----------------------------------------------------------
+
+Add Stripe product and env var:
+STRIPE_PRICE_ID_PROGRAMME16
+
+On webhook success for programme16:
+- Set entitlement tier='programme16', status='active'
+- Set expires_at = now()+16 weeks
+- Create programme_enrolments rows + milestones + plan week 1–2
+
+Gating:
+- Programme users have full paid access + programme features.
+
+-----------------------------------------------------------
+W15) ADMIN SUPPORT
+-----------------------------------------------------------
+
+Admin:
+- View programme enrolments list
+- View user progress summary (latest range, gap, plan week)
+- Ability to extend programme end_at by X days (support tool)
+- Ability to mark milestone complete (support tool)
+
+-----------------------------------------------------------
+W16) ACCEPTANCE TESTS FOR PROGRAMME16
+-----------------------------------------------------------
+
+Must demonstrate end-to-end:
+1) User buys Programme16
+2) Programme overview appears with 16-week timeline and milestones
+3) Week plan visible
+4) Completing milestone diagnostic marks milestone complete
+5) Advanced simulator appears
+6) Weekly email can be triggered from admin
+7) Completion summary PDF is available after week 16 milestone
+
+IMPLEMENT ALL ABOVE NOW.
