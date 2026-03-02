@@ -28,6 +28,7 @@ import Programme from "./pages/Programme";
 import ProgrammeCompletion from "./pages/ProgrammeCompletion";
 import CheckoutSuccess from "./pages/CheckoutSuccess";
 import DrillRunner from "./pages/DrillRunner";
+import ParentAnalytics from "./pages/ParentAnalytics";
 
 import HowItWorks from "./pages/HowItWorks";
 import Methodology from "./pages/Methodology";
@@ -136,6 +137,7 @@ function Router() {
             <Route path="/app/report-archive" component={ReportArchive} />
             <Route path="/app/programme" component={Programme} />
             <Route path="/app/programme/summary" component={ProgrammeCompletion} />
+            <Route path="/app/analytics" component={ParentAnalytics} />
             <Route path="/app/checkout-success" component={CheckoutSuccess} />
 
             <Route path="/admin/questions/new">

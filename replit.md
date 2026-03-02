@@ -35,7 +35,8 @@ client/src/
 ├── pages/
 │   ├── Landing.tsx       # Marketing landing page (GL-style aligned disclaimer)
 │   ├── SignIn.tsx / SignUp.tsx / Onboarding.tsx
-│   ├── Dashboard.tsx     # Readiness forecast & priority focus
+│   ├── Dashboard.tsx     # Readiness forecast & priority focus (links to analytics)
+│   ├── ParentAnalytics.tsx # 3-tab premium analytics (Summary/Insights/Detail)
 │   ├── Diagnostics.tsx   # Available assessments (tier-gated)
 │   ├── DiagnosticStart.tsx / TestRunner.tsx (visual questions + exam paper layout)
 │   ├── Results.tsx       # Post-test + tiered impact simulator
@@ -52,6 +53,7 @@ client/src/
 
 server/
 ├── index.ts / db.ts / auth.ts / routes.ts / storage.ts / seed.ts
+├── metrics.ts           # Analytics engine (WAI, PDI, fatigue, CR, SI, RS, constraint, impact priorities)
 ├── stripeClient.ts / webhookHandlers.ts / stripe-seed.ts
 ├── vite.ts / static.ts
 
@@ -81,8 +83,8 @@ content/
 - **content_calibration**: questionId (PK), pValue, avgTimeSeconds, sampleSize, lastCalibratedAt
 - **question_variants**: id, questionId, variantPrompt, variantOptions, variantRenderConfig, isActive
 - **diagnostics**: id, title, subtitle, type, duration, questionCount, requiredTier, sections[]
-- **test_sessions**: id, userId, diagnosticId, startedAt, completedAt, totalScore, forecastScore, band, sectionScores, paceData
-- **test_answers**: id, sessionId, questionId, selectedAnswer, isCorrect, timeTaken
+- **test_sessions**: id, userId, diagnosticId, startedAt, completedAt, totalScore, forecastScore, band, sectionScores, paceData, metrics (jsonb — stores WAI, PDI, CR, RS, fatigue, band etc.)
+- **test_answers**: id, sessionId, questionId, selectedAnswer, isCorrect, timeTaken, questionOrder (position in attempt for fatigue calculation)
 - **practice_sections**: id, title, category, icon, difficulty, questionCount, requiredTier, skillId
 - **articles**: id, title, slug, excerpt, content, category, readTime, publishedAt
 - **programme_enrolments / programme_milestones / weekly_plans**: Programme tracking tables
@@ -108,6 +110,10 @@ content/
 ### Admin (requireAdmin)
 - GET /api/admin/questions, GET /api/admin/questions/qa-queue, GET /api/admin/questions/stats
 - GET/POST/PUT/DELETE /api/admin/questions/:id, POST /api/admin/questions/:id/approve|reject
+
+### Analytics (Parent Hub Premium)
+- GET /api/analytics — Full analytics payload (WAI, PDI, fatigue, CR, SI, RS, constraint, priorities, pressure, trajectory)
+- GET /api/analytics/detail — Sub-rule heatmap data (accuracy, time, volatility)
 
 ### Content
 - GET /api/articles, GET /api/articles/:slug, GET /api/progress

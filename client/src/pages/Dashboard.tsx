@@ -202,6 +202,13 @@ export default function Dashboard() {
                     <BookOpen className="mr-2 h-4 w-4" /> Start Practice Drill
                   </Link>
                 </Button>
+                {hasData && (
+                  <Button variant="ghost" className="w-full mt-1 text-xs" asChild>
+                    <Link href="/app/analytics" data-testid="link-analytics">
+                      View Detailed Readiness Analytics
+                    </Link>
+                  </Button>
+                )}
               </CardContent>
             </Card>
           </div>

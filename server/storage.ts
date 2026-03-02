@@ -37,11 +37,11 @@ export interface IStorage {
   getTestSession(id: string): Promise<TestSession | undefined>;
   getUserTestSessions(userId: string): Promise<TestSession[]>;
   completeTestSession(id: string, results: {
-    totalScore: number; forecastScore: number; band: string; sectionScores: any; paceData: any;
+    totalScore: number; forecastScore: number; band: string; sectionScores: any; paceData: any; metrics?: any;
   }): Promise<TestSession>;
 
   createTestAnswer(data: {
-    sessionId: string; questionId: string; selectedAnswer: string | null; isCorrect: boolean; timeTaken: number;
+    sessionId: string; questionId: string; selectedAnswer: string | null; isCorrect: boolean; timeTaken: number; questionOrder?: number;
   }): Promise<TestAnswer>;
   getSessionAnswers(sessionId: string): Promise<TestAnswer[]>;
 
@@ -408,7 +408,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async completeTestSession(id: string, results: {
-    totalScore: number; forecastScore: number; band: string; sectionScores: any; paceData: any;
+    totalScore: number; forecastScore: number; band: string; sectionScores: any; paceData: any; metrics?: any;
   }): Promise<TestSession> {
     const [session] = await db.update(testSessions)
       .set({
@@ -418,6 +418,7 @@ export class DatabaseStorage implements IStorage {
         band: results.band,
         sectionScores: results.sectionScores,
         paceData: results.paceData,
+        metrics: results.metrics || null,
       })
       .where(eq(testSessions.id, id))
       .returning();
@@ -425,7 +426,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createTestAnswer(data: {
-    sessionId: string; questionId: string; selectedAnswer: string | null; isCorrect: boolean; timeTaken: number;
+    sessionId: string; questionId: string; selectedAnswer: string | null; isCorrect: boolean; timeTaken: number; questionOrder?: number;
   }): Promise<TestAnswer> {
     const [answer] = await db.insert(testAnswers).values(data).returning();
     return answer;

@@ -2,10 +2,11 @@ import type { Express } from "express";
 import { type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, requireAuth } from "./auth";
-import { onboardingSchema } from "@shared/schema";
+import { onboardingSchema, testSessions, testAnswers, questions } from "@shared/schema";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
-import { sql } from "drizzle-orm";
+import { sql, eq, and, desc, inArray } from "drizzle-orm";
 import { db } from "./db";
+import { computeAttemptMetrics, computeFullAnalytics, type AnswerRecord, type DrillAnswerRecord, type HistoricalMetrics } from "./metrics";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -238,15 +239,16 @@ export async function registerRoutes(
 
       let correct = 0;
       const sectionResults: Record<string, { correct: number; total: number; totalTime: number }> = {};
+      const answerRecords: AnswerRecord[] = [];
 
-      for (const ans of answers) {
+      const diffMap: Record<string, number> = { easy: 2, medium: 3, hard: 4 };
+
+      for (let idx = 0; idx < answers.length; idx++) {
+        const ans = answers[idx];
         const question = questionMap.get(ans.questionId);
         if (!question) continue;
 
         const isCorrect = ans.selectedAnswer === question.correctAnswer;
-        if (!isCorrect) {
-          console.log(`[scoring] Q ${question.id}: selected="${ans.selectedAnswer}" expected="${question.correctAnswer}" renderType=${question.renderType}`);
-        }
         if (isCorrect) correct++;
 
         if (!sectionResults[question.section]) {
@@ -262,6 +264,19 @@ export async function registerRoutes(
           selectedAnswer: ans.selectedAnswer,
           isCorrect,
           timeTaken: ans.timeTaken || 0,
+          questionOrder: idx,
+        });
+
+        answerRecords.push({
+          questionId: ans.questionId,
+          section: question.section,
+          skillId: question.skillId || '',
+          subRuleId: question.subRuleId || '',
+          difficulty: diffMap[question.difficulty] ?? 3,
+          cognitiveLoad: question.cognitiveLoad ?? 3,
+          isCorrect,
+          timeSeconds: ans.timeTaken || 0,
+          questionOrder: idx,
         });
       }
 
@@ -283,8 +298,16 @@ export async function registerRoutes(
       const paceData = Object.entries(sectionResults).map(([name, data]) => ({
         name,
         avg: Math.round(data.totalTime / data.total),
-        expected: 35,
+        expected: name === 'Mathematics' ? 45 : 35,
       }));
+
+      const priorSessions = await storage.getUserTestSessions(req.user!.id);
+      const historicalRS = priorSessions
+        .filter(s => s.completedAt && s.id !== session.id && s.metrics)
+        .map(s => (s.metrics as any)?.rs ?? 0)
+        .filter((rs: number) => rs > 0);
+
+      const metrics = computeAttemptMetrics(answerRecords, historicalRS);
 
       const completed = await storage.completeTestSession(session.id, {
         totalScore: correct,
@@ -292,9 +315,163 @@ export async function registerRoutes(
         band,
         sectionScores,
         paceData,
+        metrics,
       });
 
       res.json(completed);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.get("/api/analytics", requireAuth, async (req, res, next) => {
+    try {
+      const userId = req.user!.id;
+      const sessions = await storage.getUserTestSessions(userId);
+      const completed = sessions.filter(s => s.completedAt).sort(
+        (a, b) => new Date(a.startedAt).getTime() - new Date(b.startedAt).getTime()
+      );
+
+      if (completed.length === 0) {
+        return res.json({ available: false, message: "Complete a diagnostic to see analytics." });
+      }
+
+      const latestSession = completed[completed.length - 1];
+      const latestAnswerRows = await storage.getSessionAnswers(latestSession.id);
+      const answerQuestionIds = latestAnswerRows.map(a => a.questionId);
+
+      let questionRows: any[] = [];
+      if (answerQuestionIds.length > 0) {
+        questionRows = await db.select().from(questions)
+          .where(inArray(questions.id, answerQuestionIds));
+      }
+      const qMap = new Map(questionRows.map((q: any) => [q.id, q]));
+
+      const diffMap: Record<string, number> = { easy: 2, medium: 3, hard: 4 };
+
+      const latestAnswers: AnswerRecord[] = latestAnswerRows.map((a, idx) => {
+        const q = qMap.get(a.questionId);
+        return {
+          questionId: a.questionId,
+          section: q?.section || '',
+          skillId: q?.skillId || '',
+          subRuleId: q?.subRuleId || '',
+          difficulty: diffMap[q?.difficulty] ?? 3,
+          cognitiveLoad: q?.cognitiveLoad ?? 3,
+          isCorrect: a.isCorrect ?? false,
+          timeSeconds: a.timeTaken ?? 0,
+          questionOrder: a.questionOrder ?? idx,
+        };
+      });
+
+      const historicalMetrics: HistoricalMetrics[] = completed
+        .filter(s => s.metrics && s.id !== latestSession.id)
+        .map(s => ({
+          rs: (s.metrics as any)?.rs ?? 0,
+          completedAt: (s.completedAt ?? s.startedAt).toISOString(),
+        }));
+
+      const drillAnswers: DrillAnswerRecord[] = [];
+
+      const allDiagnosticAnswers: AnswerRecord[] = [];
+      for (const sess of completed.slice(-3)) {
+        const rows = await storage.getSessionAnswers(sess.id);
+        for (const r of rows) {
+          const q = qMap.get(r.questionId) || questionRows.find((qq: any) => qq.id === r.questionId);
+          if (!q && answerQuestionIds.indexOf(r.questionId) === -1) {
+            const [qq] = await db.select().from(questions).where(eq(questions.id, r.questionId));
+            if (qq) qMap.set(qq.id, qq);
+          }
+          const qq = qMap.get(r.questionId);
+          allDiagnosticAnswers.push({
+            questionId: r.questionId,
+            section: qq?.section || '',
+            skillId: qq?.skillId || '',
+            subRuleId: qq?.subRuleId || '',
+            difficulty: diffMap[qq?.difficulty] ?? 3,
+            cognitiveLoad: qq?.cognitiveLoad ?? 3,
+            isCorrect: r.isCorrect ?? false,
+            timeSeconds: r.timeTaken ?? 0,
+            questionOrder: r.questionOrder ?? 0,
+          });
+        }
+      }
+
+      const analytics = computeFullAnalytics(latestAnswers, historicalMetrics, drillAnswers, allDiagnosticAnswers);
+      res.json({ available: true, ...analytics });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.get("/api/analytics/detail", requireAuth, async (req, res, next) => {
+    try {
+      const userId = req.user!.id;
+      const sessions = await storage.getUserTestSessions(userId);
+      const completed = sessions.filter(s => s.completedAt).sort(
+        (a, b) => new Date(a.startedAt).getTime() - new Date(b.startedAt).getTime()
+      );
+
+      if (completed.length === 0) {
+        return res.json({ available: false });
+      }
+
+      const diffMap: Record<string, number> = { easy: 2, medium: 3, hard: 4 };
+      const subRuleData: Record<string, {
+        skillId: string;
+        attempts: number;
+        correct: number;
+        totalWeight: number;
+        correctWeight: number;
+        times: number[];
+        accuracyHistory: number[];
+      }> = {};
+
+      for (const sess of completed.slice(-5)) {
+        const rows = await storage.getSessionAnswers(sess.id);
+        const sessionSubRuleAcc: Record<string, { correct: number; total: number }> = {};
+        for (const r of rows) {
+          const [q] = await db.select().from(questions).where(eq(questions.id, r.questionId));
+          if (!q) continue;
+          const sr = q.subRuleId || 'unknown';
+          if (!subRuleData[sr]) subRuleData[sr] = { skillId: q.skillId, attempts: 0, correct: 0, totalWeight: 0, correctWeight: 0, times: [], accuracyHistory: [] };
+          subRuleData[sr].attempts++;
+          if (r.isCorrect) subRuleData[sr].correct++;
+
+          const dw = ({ 1: 0.85, 2: 0.95, 3: 1.0, 4: 1.15, 5: 1.3 } as Record<number, number>)[diffMap[q.difficulty] ?? 3] ?? 1.0;
+          subRuleData[sr].totalWeight += dw;
+          if (r.isCorrect) subRuleData[sr].correctWeight += dw;
+          subRuleData[sr].times.push(r.timeTaken ?? 0);
+
+          if (!sessionSubRuleAcc[sr]) sessionSubRuleAcc[sr] = { correct: 0, total: 0 };
+          sessionSubRuleAcc[sr].total++;
+          if (r.isCorrect) sessionSubRuleAcc[sr].correct++;
+        }
+        for (const [sr, data] of Object.entries(sessionSubRuleAcc)) {
+          if (subRuleData[sr]) {
+            subRuleData[sr].accuracyHistory.push(data.total > 0 ? Math.round((data.correct / data.total) * 100) : 0);
+          }
+        }
+      }
+
+      const meanArr = (arr: number[]) => arr.length > 0 ? arr.reduce((a, b) => a + b, 0) / arr.length : 0;
+      const stddevArr = (arr: number[]) => {
+        if (arr.length < 2) return 0;
+        const m = meanArr(arr);
+        return Math.sqrt(arr.reduce((s, v) => s + (v - m) ** 2, 0) / arr.length);
+      };
+
+      const heatmap = Object.entries(subRuleData).map(([subRuleId, d]) => ({
+        subRuleId,
+        skillId: d.skillId,
+        weightedAccuracy: d.totalWeight > 0 ? Math.round((d.correctWeight / d.totalWeight) * 100 * 10) / 10 : 0,
+        rawAccuracy: d.attempts > 0 ? Math.round((d.correct / d.attempts) * 100) : 0,
+        avgTime: Math.round(meanArr(d.times) * 10) / 10,
+        attempts: d.attempts,
+        volatility: Math.round(stddevArr(d.accuracyHistory) * 10) / 10,
+      }));
+
+      res.json({ available: true, heatmap });
     } catch (error) {
       next(error);
     }

@@ -95,6 +95,7 @@ export const testSessions = pgTable("test_sessions", {
   band: text("band"),
   sectionScores: jsonb("section_scores"),
   paceData: jsonb("pace_data"),
+  metrics: jsonb("metrics"),
 });
 
 export const testAnswers = pgTable("test_answers", {
@@ -104,6 +105,7 @@ export const testAnswers = pgTable("test_answers", {
   selectedAnswer: text("selected_answer"),
   isCorrect: boolean("is_correct"),
   timeTaken: integer("time_taken"),
+  questionOrder: integer("question_order"),
 });
 
 export const practiceSections = pgTable("practice_sections", {
