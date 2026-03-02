@@ -1,0 +1,10 @@
+export const defaultStrokeWidth = 3;
+export const neutralStroke = "#111827";
+export const fillMuted = "#E5E7EB";
+export const viewBox = "0 0 100 100";
+export const framePadding = 8;
+export const optionBorderDefault = "#D1D5DB";
+export const optionBorderSelected = "#1E3A5F";
+export const optionBgSelected = "#F0F4FF";
+export const examCardBg = "#FFFFFF";
+export const examCardBorder = "#E2E8F0";

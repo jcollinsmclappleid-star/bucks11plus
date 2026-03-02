@@ -7,7 +7,7 @@ export default function HowItWorks() {
   const steps = [
     {
       title: "1. The Free Mini Diagnostic",
-      description: "A fast, 12-minute assessment covering core Buckinghamshire GL style questions across Verbal Reasoning, Non-Verbal Reasoning, and Maths.",
+      description: "A fast, 12-minute assessment aligned to GL-style reasoning families used in Bucks, covering Verbal Reasoning, Non-Verbal Reasoning, and Maths.",
       icon: Search,
       benefits: ["No commitment required", "Instant baseline score", "Identifies initial gap to 121"]
     },
@@ -67,6 +67,12 @@ export default function HowItWorks() {
         <Button size="lg" className="h-14 px-8 text-lg bg-primary text-primary-foreground" asChild>
           <Link href="/app">Start Free Diagnostic</Link>
         </Button>
+      </div>
+
+      <div className="mt-12 text-center">
+        <p className="text-xs text-slate-400" data-testid="text-disclaimer">
+          Independent readiness assessment. Not affiliated with GL Assessment or Buckinghamshire Council.
+        </p>
       </div>
     </div>
   );

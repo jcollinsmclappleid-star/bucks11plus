@@ -27,12 +27,17 @@ import ReportArchive from "./pages/ReportArchive";
 import Programme from "./pages/Programme";
 import ProgrammeCompletion from "./pages/ProgrammeCompletion";
 import CheckoutSuccess from "./pages/CheckoutSuccess";
+import DrillRunner from "./pages/DrillRunner";
 
 import HowItWorks from "./pages/HowItWorks";
 import Methodology from "./pages/Methodology";
 import GLAlignment from "./pages/GLAlignment";
 import About from "./pages/About";
 import Legal from "./pages/Legal";
+
+import QuestionList from "./pages/admin/QuestionList";
+import QuestionEditor from "./pages/admin/QuestionEditor";
+import { useAuth } from "./lib/auth";
 
 function MainLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -60,7 +65,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
             <h4 className="font-bold text-primary-foreground mb-4">Transparency</h4>
             <ul className="space-y-2 text-sm">
               <li><Link href="/how-forecast-works" className="hover:text-white transition-colors">Methodology</Link></li>
-              <li><Link href="/bucks-gl-alignment" className="hover:text-white transition-colors">GL Alignment</Link></li>
+              <li><Link href="/bucks-gl-alignment" className="hover:text-white transition-colors">GL-Style Alignment</Link></li>
               <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
             </ul>
           </div>
@@ -73,15 +78,28 @@ function MainLayout({ children }: { children: React.ReactNode }) {
             </ul>
           </div>
         </div>
+        <div className="container mx-auto max-w-6xl px-4 mt-8 pt-6 border-t border-primary-foreground/10">
+          <p className="text-xs text-primary-foreground/40 text-center" data-testid="text-footer-disclaimer">
+            Independent readiness assessment. Not affiliated with GL Assessment or Buckinghamshire Council.
+          </p>
+        </div>
       </footer>
     </div>
   );
+}
+
+function AdminGuard({ children }: { children: React.ReactNode }) {
+  const { user, isLoading } = useAuth();
+  if (isLoading) return null;
+  if (!user?.isAdmin) return <NotFound />;
+  return <>{children}</>;
 }
 
 function Router() {
   return (
     <Switch>
       <Route path="/app/test/:id" component={TestRunner} />
+      <Route path="/app/drill/:sectionId" component={DrillRunner} />
       
       <Route path="*">
         <MainLayout>
@@ -119,6 +137,16 @@ function Router() {
             <Route path="/app/programme" component={Programme} />
             <Route path="/app/programme/summary" component={ProgrammeCompletion} />
             <Route path="/app/checkout-success" component={CheckoutSuccess} />
+
+            <Route path="/admin/questions/new">
+              <AdminGuard><QuestionEditor /></AdminGuard>
+            </Route>
+            <Route path="/admin/questions/:id">
+              <AdminGuard><QuestionEditor /></AdminGuard>
+            </Route>
+            <Route path="/admin/questions">
+              <AdminGuard><QuestionList /></AdminGuard>
+            </Route>
             
             <Route component={NotFound} />
           </Switch>

@@ -41,6 +41,9 @@ export default function Navbar() {
               <Link href="/app/account" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors hidden md:block" data-testid="link-account">
                 {user.childName || user.username}
               </Link>
+              {user.isAdmin && (
+                <Link href="/admin/questions" className="text-sm font-medium text-amber-600 hover:text-amber-800 transition-colors" data-testid="link-admin">Admin</Link>
+              )}
               <Button
                 variant="outline"
                 size="sm"

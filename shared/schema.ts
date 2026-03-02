@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, integer, boolean, timestamp, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, integer, boolean, timestamp, jsonb, smallint, numeric, primaryKey } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -16,6 +16,7 @@ export const users = pgTable("users", {
   subscriptionExpiresAt: timestamp("subscription_expires_at"),
   stripeCustomerId: text("stripe_customer_id"),
   onboardingCompleted: boolean("onboarding_completed").notNull().default(false),
+  isAdmin: boolean("is_admin").notNull().default(false),
 });
 
 export const diagnostics = pgTable("diagnostics", {
@@ -31,7 +32,7 @@ export const diagnostics = pgTable("diagnostics", {
 
 export const questions = pgTable("questions", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  diagnosticId: varchar("diagnostic_id").notNull(),
+  diagnosticId: varchar("diagnostic_id"),
   section: text("section").notNull(),
   type: text("type").notNull(),
   prompt: text("prompt").notNull(),
@@ -40,6 +41,47 @@ export const questions = pgTable("questions", {
   difficulty: text("difficulty").notNull().default("medium"),
   timeExpected: integer("time_expected").notNull().default(60),
   orderIndex: integer("order_index").notNull().default(0),
+  skillId: text("skill_id").notNull().default(""),
+  subRuleId: text("sub_rule_id").notNull().default(""),
+  renderType: text("render_type").notNull().default("text"),
+  renderConfig: jsonb("render_config").notNull().default({}),
+  trapTypes: text("trap_types").array().notNull().default(sql`'{}'::text[]`),
+  cognitiveLoad: smallint("cognitive_load").notNull().default(3),
+  locale: text("locale").notNull().default("en-GB"),
+  britishSpelling: boolean("british_spelling").notNull().default(true),
+  version: integer("version").notNull().default(1),
+  qualityScore: smallint("quality_score").notNull().default(0),
+  qaStatus: text("qa_status").notNull().default("draft"),
+  estTimeSeconds: integer("est_time_seconds").notNull().default(30),
+  explanation: text("explanation"),
+  notes: text("notes"),
+});
+
+export const questionUsage = pgTable("question_usage", {
+  userId: varchar("user_id").notNull(),
+  questionId: varchar("question_id").notNull(),
+  servedCount: integer("served_count").notNull().default(0),
+  lastServedAt: timestamp("last_served_at"),
+}, (t) => [
+  primaryKey({ columns: [t.userId, t.questionId] }),
+]);
+
+export const contentCalibration = pgTable("content_calibration", {
+  questionId: varchar("question_id").primaryKey(),
+  pValue: numeric("p_value", { precision: 4, scale: 3 }),
+  avgTimeSeconds: integer("avg_time_seconds"),
+  sampleSize: integer("sample_size").notNull().default(0),
+  lastCalibratedAt: timestamp("last_calibrated_at"),
+});
+
+export const questionVariants = pgTable("question_variants", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  questionId: varchar("question_id").notNull(),
+  variantPrompt: text("variant_prompt"),
+  variantOptions: jsonb("variant_options"),
+  variantRenderConfig: jsonb("variant_render_config"),
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
 export const testSessions = pgTable("test_sessions", {
@@ -72,6 +114,7 @@ export const practiceSections = pgTable("practice_sections", {
   difficulty: text("difficulty").notNull(),
   questionCount: integer("question_count").notNull(),
   requiredTier: text("required_tier").notNull().default("free"),
+  skillId: text("skill_id"),
 });
 
 export const articles = pgTable("articles", {
@@ -150,4 +193,7 @@ export type PracticeSection = typeof practiceSections.$inferSelect;
 export type ProgrammeEnrolment = typeof programmeEnrolments.$inferSelect;
 export type ProgrammeMilestone = typeof programmeMilestones.$inferSelect;
 export type WeeklyPlan = typeof weeklyPlans.$inferSelect;
+export type QuestionUsage = typeof questionUsage.$inferSelect;
+export type ContentCalibration = typeof contentCalibration.$inferSelect;
+export type QuestionVariant = typeof questionVariants.$inferSelect;
 export type OnboardingData = z.infer<typeof onboardingSchema>;

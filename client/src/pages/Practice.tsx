@@ -82,14 +82,25 @@ export default function Practice() {
                         <CardTitle className="text-lg leading-tight" data-testid={`text-drill-title-${drill.id}`}>{drill.title}</CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <Button 
-                          variant={isLocked ? 'outline' : 'default'} 
-                          className="w-full mt-4 bg-primary" 
-                          disabled={isLocked}
-                          data-testid={`button-start-drill-${drill.id}`}
-                        >
-                          {isLocked ? 'Locked' : <><PlayCircle className="mr-2 h-4 w-4" /> Start Drill</>}
-                        </Button>
+                        {isLocked ? (
+                          <Button 
+                            variant="outline" 
+                            className="w-full mt-4" 
+                            disabled
+                            data-testid={`button-start-drill-${drill.id}`}
+                          >
+                            Locked
+                          </Button>
+                        ) : (
+                          <Button 
+                            variant="default" 
+                            className="w-full mt-4 bg-primary" 
+                            asChild
+                            data-testid={`button-start-drill-${drill.id}`}
+                          >
+                            <Link href={`/app/drill/${drill.id}`}><PlayCircle className="mr-2 h-4 w-4" /> Start Drill</Link>
+                          </Button>
+                        )}
                       </CardContent>
                     </Card>
                   );

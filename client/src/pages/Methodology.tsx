@@ -16,10 +16,10 @@ export default function Methodology() {
 
       <h2 className="text-primary font-serif">The 121 Benchmark</h2>
       <p>
-        In Buckinghamshire, the GL Assessment is standardized. While the exact raw score needed fluctuates year to year based on the cohort's performance, achieving a standardized score of <strong>121</strong> is required to qualify for a grammar school place. 
+        In Buckinghamshire, the 11+ uses a GL-style standardized assessment. While the exact raw score needed fluctuates year to year based on the cohort's performance, achieving a standardized score of <strong>121</strong> is required to qualify for a grammar school place. 
       </p>
       <p>
-        Our forecast engine does not try to guess the standardized score (as that requires knowing the performance of thousands of other children). Instead, we map <strong>raw accuracy and completion pace</strong> against historical requirements for reaching 121.
+        Our forecast engine does not try to guess the standardized score (as that requires knowing the performance of thousands of other children). Instead, we independently map <strong>raw accuracy and completion pace</strong> against historical requirements for reaching 121.
       </p>
 
       <h2 className="text-primary font-serif">Pace Penalties</h2>
@@ -50,6 +50,12 @@ export default function Methodology() {
           <h3 className="font-bold text-red-900">Focus Red (Gap to Close)</h3>
           <p className="text-red-800 text-sm mt-1">Significant gap to the 121 standard. Requires foundational work rather than just mock exam repetition.</p>
         </div>
+      </div>
+
+      <div className="not-prose mt-12 pt-6 border-t border-slate-200">
+        <p className="text-xs text-slate-400" data-testid="text-disclaimer">
+          Independent readiness assessment. Not affiliated with GL Assessment or Buckinghamshire Council.
+        </p>
       </div>
     </div>
   );

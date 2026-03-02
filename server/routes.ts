@@ -173,7 +173,7 @@ export async function registerRoutes(
         return res.status(403).json({ message: "Upgrade required to access this diagnostic" });
       }
 
-      const qs = await storage.getQuestionsByDiagnostic(req.params.id);
+      const qs = await storage.selectQuestionsForSession(req.user!.id, req.params.id);
       const safe = qs.map(({ correctAnswer, ...q }) => q);
       res.json(safe);
     } catch (error) {
@@ -485,6 +485,134 @@ export async function registerRoutes(
     try {
       const sections = await storage.getPracticeSections();
       res.json(sections);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.get("/api/practice-sections/:id/questions", requireAuth, async (req, res, next) => {
+    try {
+      const qs = await storage.getQuestionsForDrill(req.params.id, req.user!.id, 10);
+      const safe = qs.map(({ correctAnswer, ...q }) => q);
+      res.json(safe);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.post("/api/practice-sections/:id/check-answer", requireAuth, async (req, res, next) => {
+    try {
+      const { questionId, selectedAnswer } = req.body;
+      const question = await storage.getQuestion(questionId);
+      if (!question) return res.status(404).json({ message: "Question not found" });
+      const isCorrect = selectedAnswer === question.correctAnswer;
+      res.json({ isCorrect, correctAnswer: question.correctAnswer, explanation: question.explanation });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  const requireAdmin = (req: any, res: any, next: any) => {
+    if (!req.isAuthenticated() || !req.user?.isAdmin) {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+    next();
+  };
+
+  app.get("/api/admin/questions", requireAdmin, async (req, res, next) => {
+    try {
+      const filters: any = {};
+      if (req.query.section) filters.section = req.query.section;
+      if (req.query.skillId) filters.skillId = req.query.skillId;
+      if (req.query.difficulty) filters.difficulty = req.query.difficulty;
+      if (req.query.qaStatus) filters.qaStatus = req.query.qaStatus;
+      if (req.query.renderType) filters.renderType = req.query.renderType;
+      const qs = await storage.getAllQuestions(filters);
+      res.json(qs);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.get("/api/admin/questions/qa-queue", requireAdmin, async (req, res, next) => {
+    try {
+      const qs = await storage.getQuestionsByQaStatus("review");
+      res.json(qs);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.get("/api/admin/questions/stats", requireAdmin, async (_req, res, next) => {
+    try {
+      const all = await storage.getAllQuestions();
+      const stats = {
+        total: all.length,
+        byStatus: { draft: 0, review: 0, approved: 0, rejected: 0 } as Record<string, number>,
+        bySection: {} as Record<string, number>,
+        byRenderType: {} as Record<string, number>,
+      };
+      for (const q of all) {
+        stats.byStatus[q.qaStatus] = (stats.byStatus[q.qaStatus] || 0) + 1;
+        stats.bySection[q.section] = (stats.bySection[q.section] || 0) + 1;
+        stats.byRenderType[q.renderType] = (stats.byRenderType[q.renderType] || 0) + 1;
+      }
+      res.json(stats);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.get("/api/admin/questions/:id", requireAdmin, async (req, res, next) => {
+    try {
+      const q = await storage.getQuestion(req.params.id);
+      if (!q) return res.status(404).json({ message: "Question not found" });
+      res.json(q);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.post("/api/admin/questions", requireAdmin, async (req, res, next) => {
+    try {
+      const q = await storage.createQuestion(req.body);
+      res.status(201).json(q);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.put("/api/admin/questions/:id", requireAdmin, async (req, res, next) => {
+    try {
+      const q = await storage.updateQuestion(req.params.id, req.body);
+      res.json(q);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.delete("/api/admin/questions/:id", requireAdmin, async (req, res, next) => {
+    try {
+      await storage.deleteQuestion(req.params.id);
+      res.json({ success: true });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.post("/api/admin/questions/:id/approve", requireAdmin, async (req, res, next) => {
+    try {
+      const q = await storage.approveQuestion(req.params.id);
+      res.json(q);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.post("/api/admin/questions/:id/reject", requireAdmin, async (req, res, next) => {
+    try {
+      const q = await storage.rejectQuestion(req.params.id);
+      res.json(q);
     } catch (error) {
       next(error);
     }

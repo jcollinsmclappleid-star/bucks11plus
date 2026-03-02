@@ -8,8 +8,8 @@ export default function Landing() {
   return (
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
       <Seo 
-        title="GL-Aligned Bucks 11+ Diagnostics | 11+ Standard" 
-        description="Timed diagnostics designed around the GL-style reasoning structure used for the Buckinghamshire Secondary Transfer Test." 
+        title="GL-Style Aligned Bucks 11+ Diagnostics | 11+ Standard" 
+        description="Timed diagnostics aligned to GL-style reasoning families used in Bucks for the Buckinghamshire Secondary Transfer Test." 
       />
       
       {/* V1: HOMEPAGE HERO WITH IMAGE */}
@@ -32,12 +32,12 @@ export default function Landing() {
             </div>
             
             <h1 className="text-5xl md:text-7xl font-bold text-white tracking-tight leading-[1.1] font-serif">
-              GL-Aligned Bucks 11+ <br className="hidden md:block" />
-              <span className="text-white/80 font-sans tracking-normal text-4xl md:text-6xl mt-4 block">Diagnostics & Readiness Forecast</span>
+              Bucks 11+ Diagnostics <br className="hidden md:block" />
+              <span className="text-white/80 font-sans tracking-normal text-4xl md:text-6xl mt-4 block">Aligned to GL-Style Reasoning Families</span>
             </h1>
             
             <p className="text-xl text-white/70 max-w-3xl mx-auto leading-relaxed">
-              Timed diagnostics designed around the GL-style reasoning structure used for the Buckinghamshire Secondary Transfer Test — forecasted against the 121 benchmark, with targeted practice that improves the highest-impact areas.
+              Timed diagnostics aligned to GL-style reasoning families used in Bucks — forecasted against the 121 benchmark, with targeted practice that improves the highest-impact areas.
             </p>
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-white/90 text-sm font-medium pt-4">
@@ -51,7 +51,7 @@ export default function Landing() {
             <div className="pt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button size="lg" className="h-14 px-8 text-lg bg-brand-amber text-amber-950 hover:bg-amber-400 w-full sm:w-auto font-bold shadow-lg shadow-brand-amber/20 border-none" asChild>
                 <Link href="/sign-up">
-                  Start Free GL-Aligned Diagnostic <ArrowRight className="ml-2 h-5 w-5" />
+                  Start Free Diagnostic <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
               <Button size="lg" variant="outline" className="h-14 px-8 text-lg w-full sm:w-auto bg-white/5 border-white/20 text-white hover:bg-white/10 hover:text-white backdrop-blur-md" asChild>
@@ -114,8 +114,8 @@ export default function Landing() {
         <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent"></div>
         <div className="container mx-auto max-w-6xl px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-primary mb-4 font-serif">Designed Around the Bucks GL-Style Test Structure</h2>
-            <p className="text-lg text-muted-foreground">We mirror the real assessment constraints to give you an honest baseline.</p>
+            <h2 className="text-3xl font-bold text-primary mb-4 font-serif">Aligned to GL-Style Reasoning Families Used in Bucks</h2>
+            <p className="text-lg text-muted-foreground">We independently model the assessment constraints to give you an honest baseline.</p>
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
@@ -125,7 +125,7 @@ export default function Landing() {
                   <BarChart3 className="h-7 w-7" />
                 </div>
                 <h3 className="font-bold text-primary text-xl">Reasoning Coverage</h3>
-                <p className="text-muted-foreground">VR, NVR and Maths strictly mapped to historic GL-style question families.</p>
+                <p className="text-muted-foreground">VR, NVR and Maths aligned to GL-style reasoning families used in Bucks.</p>
               </CardContent>
             </Card>
             
@@ -202,6 +202,12 @@ export default function Landing() {
           </div>
         </div>
       </section>
+
+      <div className="py-6 text-center">
+        <p className="text-xs text-slate-400" data-testid="text-disclaimer">
+          Independent readiness assessment. Not affiliated with GL Assessment or Buckinghamshire Council.
+        </p>
+      </div>
     </div>
   );
 }

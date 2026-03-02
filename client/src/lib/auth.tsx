@@ -15,6 +15,7 @@ type User = {
   subscriptionExpiresAt: string | null;
   stripeCustomerId: string | null;
   onboardingCompleted: boolean;
+  isAdmin: boolean;
 };
 
 type AuthContextType = {

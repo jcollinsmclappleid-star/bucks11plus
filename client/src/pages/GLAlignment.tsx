@@ -4,22 +4,22 @@ export default function GLAlignment() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
       <Seo 
-        title="Bucks GL Alignment | 11+ Standard" 
-        description="Learn how our assessment structure accurately mirrors the Buckinghamshire GL 11+ test." 
+        title="GL-Style Alignment | 11+ Standard" 
+        description="Learn how our independently developed assessment structure is aligned to GL-style reasoning families used in Bucks." 
       />
-      <h1 className="text-4xl md:text-5xl font-bold text-primary font-serif tracking-tight">GL-Aligned Assessment Structure</h1>
+      <h1 className="text-4xl md:text-5xl font-bold text-primary font-serif tracking-tight">Aligned to GL-Style Reasoning Families</h1>
       <p className="text-xl text-muted-foreground lead">
-        Our diagnostics are built specifically to reflect the reality of the Buckinghamshire Secondary Transfer Test.
+        Our independently developed diagnostics are aligned to the GL-style reasoning families used in the Buckinghamshire Secondary Transfer Test.
       </p>
 
       <hr className="my-8" />
 
-      <h2 className="text-primary font-serif">Mapping to GL Reasoning Families</h2>
+      <h2 className="text-primary font-serif">Aligned to GL-Style Reasoning Families</h2>
       <p>
-        The Buckinghamshire test is provided by GL Assessment. It covers three main domains: Verbal Reasoning, Non-Verbal Reasoning (including Spatial), and Mathematics. We map our question bank directly to the historical skill families tested by GL in Bucks.
+        The Buckinghamshire test uses a GL-style format covering three main domains: Verbal Reasoning, Non-Verbal Reasoning (including Spatial), and Mathematics. We independently align our question bank to the historical GL-style reasoning families used in Bucks.
       </p>
       <ul>
-        <li><strong>Verbal Reasoning:</strong> Focuses heavily on vocabulary breadth, word structure, and specific code-breaking logic unique to GL.</li>
+        <li><strong>Verbal Reasoning:</strong> Focuses heavily on vocabulary breadth, word structure, and specific code-breaking logic typical of GL-style assessments.</li>
         <li><strong>Non-Verbal Reasoning:</strong> Covers pattern sequences, matrices, and spatial transformations (rotation/reflection).</li>
         <li><strong>Mathematics:</strong> Emphasizes arithmetic fluency under pressure and multi-step word problems linked to the Key Stage 2 curriculum.</li>
       </ul>
@@ -33,6 +33,12 @@ export default function GLAlignment() {
         <h3 className="text-primary font-serif mt-0 mb-2 text-xl">Independent Readiness Tool</h3>
         <p className="text-sm text-slate-600 mb-0 leading-relaxed">
           11+ Standard is an independent readiness assessment platform. We are not affiliated with, endorsed by, or connected to GL Assessment, Buckinghamshire Council, or The Buckinghamshire Grammar Schools (TBGS). Our forecasts are indicative based on our proprietary modelling of historical test conditions.
+        </p>
+      </div>
+
+      <div className="not-prose mt-6 pt-6 border-t border-slate-200">
+        <p className="text-xs text-slate-400" data-testid="text-disclaimer">
+          Independent readiness assessment. Not affiliated with GL Assessment or Buckinghamshire Council.
         </p>
       </div>
     </div>

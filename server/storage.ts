@@ -1,8 +1,8 @@
-import { eq, desc, and, sql } from "drizzle-orm";
+import { eq, desc, and, sql, asc, ne, inArray, isNull } from "drizzle-orm";
 import { db } from "./db";
 import {
   users, diagnostics, questions, testSessions, testAnswers, articles, practiceSections,
-  programmeEnrolments, programmeMilestones, weeklyPlans,
+  programmeEnrolments, programmeMilestones, weeklyPlans, questionUsage, contentCalibration,
   type User, type InsertUser, type Diagnostic, type Question,
   type TestSession, type TestAnswer, type Article, type PracticeSection,
   type ProgrammeEnrolment, type ProgrammeMilestone, type WeeklyPlan,
@@ -31,6 +31,7 @@ export interface IStorage {
   getDiagnostics(): Promise<Diagnostic[]>;
   getDiagnostic(id: string): Promise<Diagnostic | undefined>;
   getQuestionsByDiagnostic(diagnosticId: string): Promise<Question[]>;
+  selectQuestionsForSession(userId: string, diagnosticId: string): Promise<Question[]>;
 
   createTestSession(data: { userId: string; diagnosticId: string }): Promise<TestSession>;
   getTestSession(id: string): Promise<TestSession | undefined>;
@@ -47,6 +48,7 @@ export interface IStorage {
   getArticles(): Promise<Article[]>;
   getArticleBySlug(slug: string): Promise<Article | undefined>;
   getPracticeSections(): Promise<PracticeSection[]>;
+  getQuestionsForDrill(sectionId: string, userId: string, limit?: number): Promise<Question[]>;
 
   createProgrammeEnrolment(userId: string): Promise<ProgrammeEnrolment>;
   getProgrammeEnrolment(userId: string): Promise<ProgrammeEnrolment | undefined>;
@@ -56,6 +58,15 @@ export interface IStorage {
   completeMilestone(milestoneId: string, sessionId: string): Promise<ProgrammeMilestone>;
   getWeeklyPlans(userId: string): Promise<WeeklyPlan[]>;
   generateWeeklyPlan(userId: string, enrolmentId: string, week: number, latestSession?: TestSession | null): Promise<WeeklyPlan>;
+
+  getAllQuestions(filters?: { section?: string; skillId?: string; difficulty?: string; qaStatus?: string; renderType?: string }): Promise<Question[]>;
+  getQuestion(id: string): Promise<Question | undefined>;
+  createQuestion(data: Partial<Question>): Promise<Question>;
+  updateQuestion(id: string, data: Partial<Question>): Promise<Question>;
+  deleteQuestion(id: string): Promise<void>;
+  approveQuestion(id: string): Promise<Question>;
+  rejectQuestion(id: string): Promise<Question>;
+  getQuestionsByQaStatus(status: string): Promise<Question[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -117,6 +128,138 @@ export class DatabaseStorage implements IStorage {
     return db.select().from(questions)
       .where(eq(questions.diagnosticId, diagnosticId))
       .orderBy(questions.orderIndex);
+  }
+
+  async selectQuestionsForSession(userId: string, diagnosticId: string): Promise<Question[]> {
+    const diag = await this.getDiagnostic(diagnosticId);
+    if (!diag) return [];
+
+    const allQuestions = await db.select().from(questions)
+      .where(and(
+        eq(questions.diagnosticId, diagnosticId),
+        eq(questions.qaStatus, "approved")
+      ))
+      .orderBy(questions.orderIndex);
+
+    if (allQuestions.length === 0) {
+      return this.getQuestionsByDiagnostic(diagnosticId);
+    }
+
+    const usageRows = await db.select().from(questionUsage)
+      .where(eq(questionUsage.userId, userId));
+
+    const usageMap = new Map(usageRows.map(u => [u.questionId, u]));
+
+    const scored = allQuestions.map(q => {
+      const usage = usageMap.get(q.id);
+      const served = usage?.servedCount || 0;
+      const lastServed = usage?.lastServedAt?.getTime() || 0;
+      return { question: q, served, lastServed };
+    });
+
+    scored.sort((a, b) => {
+      if (a.served !== b.served) return a.served - b.served;
+      return a.lastServed - b.lastServed;
+    });
+
+    const selected: Question[] = [];
+    const subRuleCounts = new Map<string, number>();
+    const maxPerSubRule = Math.max(2, Math.ceil(diag.questionCount * 0.4));
+
+    for (const item of scored) {
+      if (selected.length >= diag.questionCount) break;
+      const sr = item.question.subRuleId || "";
+      const currentCount = subRuleCounts.get(sr) || 0;
+      if (sr && currentCount >= maxPerSubRule) continue;
+      selected.push(item.question);
+      subRuleCounts.set(sr, currentCount + 1);
+    }
+
+    if (selected.length < diag.questionCount) {
+      for (const item of scored) {
+        if (selected.length >= diag.questionCount) break;
+        if (!selected.find(s => s.id === item.question.id)) {
+          selected.push(item.question);
+        }
+      }
+    }
+
+    const now = new Date();
+    for (const q of selected) {
+      const existing = usageMap.get(q.id);
+      if (existing) {
+        await db.update(questionUsage)
+          .set({ servedCount: (existing.servedCount || 0) + 1, lastServedAt: now })
+          .where(and(eq(questionUsage.userId, userId), eq(questionUsage.questionId, q.id)));
+      } else {
+        await db.insert(questionUsage).values({
+          userId,
+          questionId: q.id,
+          servedCount: 1,
+          lastServedAt: now,
+        });
+      }
+    }
+
+    return selected;
+  }
+
+  async getQuestionsForDrill(sectionId: string, userId: string, limit: number = 10): Promise<Question[]> {
+    const [section] = await db.select().from(practiceSections).where(eq(practiceSections.id, sectionId));
+    if (!section) return [];
+
+    const sectionName = section.category;
+    const skillFilter = section.skillId;
+
+    let pool: Question[];
+    if (skillFilter) {
+      pool = await db.select().from(questions)
+        .where(and(
+          eq(questions.skillId, skillFilter),
+          eq(questions.qaStatus, "approved")
+        ));
+    } else {
+      pool = await db.select().from(questions)
+        .where(and(
+          eq(questions.section, sectionName),
+          eq(questions.qaStatus, "approved")
+        ));
+    }
+
+    if (pool.length === 0) {
+      pool = await db.select().from(questions)
+        .where(eq(questions.section, sectionName));
+    }
+
+    const usageRows = await db.select().from(questionUsage)
+      .where(eq(questionUsage.userId, userId));
+    const usageMap = new Map(usageRows.map(u => [u.questionId, u]));
+
+    const scored = pool.map(q => {
+      const usage = usageMap.get(q.id);
+      return { question: q, served: usage?.servedCount || 0, lastServed: usage?.lastServedAt?.getTime() || 0 };
+    });
+
+    scored.sort((a, b) => {
+      if (a.served !== b.served) return a.served - b.served;
+      return a.lastServed - b.lastServed;
+    });
+
+    const selected = scored.slice(0, limit).map(s => s.question);
+
+    const now = new Date();
+    for (const q of selected) {
+      const existing = usageMap.get(q.id);
+      if (existing) {
+        await db.update(questionUsage)
+          .set({ servedCount: (existing.servedCount || 0) + 1, lastServedAt: now })
+          .where(and(eq(questionUsage.userId, userId), eq(questionUsage.questionId, q.id)));
+      } else {
+        await db.insert(questionUsage).values({ userId, questionId: q.id, servedCount: 1, lastServedAt: now });
+      }
+    }
+
+    return selected;
   }
 
   async createTestSession(data: { userId: string; diagnosticId: string }): Promise<TestSession> {
@@ -283,6 +426,57 @@ export class DatabaseStorage implements IStorage {
     }).returning();
 
     return plan;
+  }
+
+  async getAllQuestions(filters?: { section?: string; skillId?: string; difficulty?: string; qaStatus?: string; renderType?: string }): Promise<Question[]> {
+    let query = db.select().from(questions);
+    const conditions = [];
+
+    if (filters?.section) conditions.push(eq(questions.section, filters.section));
+    if (filters?.skillId) conditions.push(eq(questions.skillId, filters.skillId));
+    if (filters?.difficulty) conditions.push(eq(questions.difficulty, filters.difficulty));
+    if (filters?.qaStatus) conditions.push(eq(questions.qaStatus, filters.qaStatus));
+    if (filters?.renderType) conditions.push(eq(questions.renderType, filters.renderType));
+
+    if (conditions.length > 0) {
+      return db.select().from(questions).where(and(...conditions)).orderBy(questions.section, questions.skillId, questions.orderIndex);
+    }
+    return db.select().from(questions).orderBy(questions.section, questions.skillId, questions.orderIndex);
+  }
+
+  async getQuestion(id: string): Promise<Question | undefined> {
+    const [q] = await db.select().from(questions).where(eq(questions.id, id));
+    return q;
+  }
+
+  async createQuestion(data: Partial<Question>): Promise<Question> {
+    const [q] = await db.insert(questions).values(data as any).returning();
+    return q;
+  }
+
+  async updateQuestion(id: string, data: Partial<Question>): Promise<Question> {
+    const [q] = await db.update(questions).set(data as any).where(eq(questions.id, id)).returning();
+    return q;
+  }
+
+  async deleteQuestion(id: string): Promise<void> {
+    await db.delete(questions).where(eq(questions.id, id));
+  }
+
+  async approveQuestion(id: string): Promise<Question> {
+    const [q] = await db.update(questions).set({ qaStatus: "approved" }).where(eq(questions.id, id)).returning();
+    return q;
+  }
+
+  async rejectQuestion(id: string): Promise<Question> {
+    const [q] = await db.update(questions).set({ qaStatus: "rejected" }).where(eq(questions.id, id)).returning();
+    return q;
+  }
+
+  async getQuestionsByQaStatus(status: string): Promise<Question[]> {
+    return db.select().from(questions)
+      .where(eq(questions.qaStatus, status))
+      .orderBy(questions.section, questions.skillId);
   }
 }
 
