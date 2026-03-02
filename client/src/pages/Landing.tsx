@@ -312,43 +312,46 @@ export default function Landing() {
         </div>
       </section>
 
-      <section className="py-24 px-4 bg-slate-50 relative">
+      <section className="py-20 md:py-24 px-4 bg-slate-50 relative">
         <div className="container mx-auto max-w-5xl">
-          <div className="bg-white rounded-3xl border border-slate-200 p-2 md:p-8 overflow-hidden shadow-sm relative">
-            <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none mix-blend-multiply">
-                 <img src="/logo.png" alt="" className="w-64 h-64 grayscale object-contain" />
-            </div>
+          <div className="text-center mb-10">
+            <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">Example Output</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4">What your diagnostic reveals</h2>
+            <p className="text-lg text-slate-500 max-w-2xl mx-auto">
+              After just 12 minutes, you'll see exactly where your child stands against the Bucks 121 qualifying benchmark.
+            </p>
+          </div>
 
-            <div className="aspect-[16/9] md:aspect-[21/9] bg-slate-50 rounded-2xl flex flex-col md:flex-row items-center justify-center border border-slate-100 shadow-inner overflow-hidden p-8 gap-12 relative z-10">
-               
-               <div className="relative w-56 h-56 flex-shrink-0">
+          <div className="bg-white rounded-3xl border border-slate-200 p-6 md:p-10 shadow-sm relative">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12">
+               <div className="relative w-44 h-44 md:w-56 md:h-56 flex-shrink-0">
                   <svg className="w-full h-full -rotate-90 filter drop-shadow-sm" viewBox="0 0 100 100">
                     <circle cx="50" cy="50" r="40" className="stroke-slate-200" strokeWidth="12" fill="none" />
-                    <circle 
-                      cx="50" cy="50" r="40" 
-                      className="stroke-brand-amber transition-all duration-1000 ease-out" 
-                      strokeWidth="12" 
-                      fill="none" 
-                      strokeDasharray="251.2" 
-                      strokeDashoffset={251.2 - (251.2 * (114 / 141))} 
+                    <circle
+                      cx="50" cy="50" r="40"
+                      className="stroke-brand-amber transition-all duration-1000 ease-out"
+                      strokeWidth="12"
+                      fill="none"
+                      strokeDasharray="251.2"
+                      strokeDashoffset={251.2 - (251.2 * (114 / 141))}
                     />
                     <line x1="50" y1="2" x2="50" y2="15" className="stroke-primary" strokeWidth="2" transform={`rotate(${(121/141)*360} 50 50)`} />
                   </svg>
                   <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                    <span className="text-5xl font-bold text-primary">114</span>
-                    <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1">Est. Score</span>
+                    <span className="text-4xl md:text-5xl font-bold text-primary">114</span>
+                    <span className="text-[10px] md:text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1">Est. Score</span>
                   </div>
                </div>
 
-               <div className="max-w-lg space-y-5">
+               <div className="max-w-lg space-y-4 text-center md:text-left">
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-amber-50 text-amber-700 text-sm font-bold border border-amber-200 shadow-sm">
                     Borderline (Amber)
                   </div>
-                  <h3 className="text-3xl font-bold text-primary font-serif">7 points gap to 121</h3>
-                  <p className="text-lg text-slate-600 leading-relaxed">
+                  <h3 className="text-2xl md:text-3xl font-bold text-primary font-serif">7 points gap to 121</h3>
+                  <p className="text-base md:text-lg text-slate-600 leading-relaxed">
                     Your current readiness band indicates progress, but targeted practice in identified weak areas is required to secure the qualifying benchmark.
                   </p>
-                  <div className="pt-4 flex items-center gap-4">
+                  <div className="pt-2 flex flex-col sm:flex-row items-center gap-4 justify-center md:justify-start">
                     <Button className="bg-primary shadow-md" asChild>
                        <Link href="/free-diagnostic">Start Free Diagnostic</Link>
                     </Button>
@@ -358,6 +361,7 @@ export default function Landing() {
                   </div>
                </div>
             </div>
+            <p className="text-xs text-slate-400 text-center mt-6 italic">Example based on sample student data</p>
           </div>
         </div>
       </section>
