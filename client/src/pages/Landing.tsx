@@ -239,9 +239,9 @@ export default function Landing() {
               Identify the constraint limiting performance — accuracy, pace, stability, or rule-type weakness — and follow a targeted improvement plan.
             </p>
 
-            <div className="pt-1">
-              <p className="text-sm text-white/45 max-w-2xl mx-auto leading-relaxed">
-                Diagnostic-led assessment, not question repetition. Modelled against the 121 qualifying standard.
+            <div className="pt-3 max-w-2xl mx-auto border border-white/10 rounded-lg bg-white/[0.04] backdrop-blur-sm px-5 py-3">
+              <p className="text-sm text-white/65 leading-relaxed">
+                Not generic practice papers. Each diagnostic models <span className="text-white/90 font-semibold">your child's</span> specific constraint profile — hard-tier accuracy, pace under pressure, concentration decay, rule-type gaps — and builds a targeted improvement pathway unique to them.
               </p>
             </div>
 
