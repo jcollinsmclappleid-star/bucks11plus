@@ -20,6 +20,11 @@ function pick<T>(arr: readonly T[], rng: () => number): T {
   return arr[Math.floor(rng() * arr.length)];
 }
 
+function pickOther<T>(arr: readonly T[], exclude: T, rng: () => number): T {
+  const filtered = arr.filter(x => x !== exclude);
+  return filtered[Math.floor(rng() * filtered.length)];
+}
+
 function shuffleWithCorrect<T>(correct: T, distractors: T[], rng: () => number): { options: T[]; correctIndex: number } {
   const all = [correct, ...distractors];
   for (let i = all.length - 1; i > 0; i--) {
@@ -46,17 +51,20 @@ function generateRotationIncrement(startSeed: number, count: number): GeneratedQ
     const diff = pick(difficulties, rng);
     const startRotation = Math.floor(rng() * 8) * 45;
     const shapeSize = 24 + Math.floor(rng() * 10);
+    const wrongShape1 = pickOther(shapes, shape, rng);
+    const wrongShape2 = pickOther(shapes, shape, rng);
 
     const frames: SvgFrame[] = [];
     for (let f = 0; f < 5; f++) {
       frames.push({ elements: [makeElement(shape, 50, 50, shapeSize, (startRotation + increment * f) % 360)] });
     }
 
+    const correctRotation = (startRotation + increment * 4) % 360;
     const correctFrame = frames[4];
     const distractors: SvgFrame[] = [
-      { elements: [makeElement(shape, 50, 50, shapeSize, (startRotation + increment * 5) % 360)] },
-      { elements: [makeElement(shape, 50, 50, shapeSize, (startRotation + increment * 3) % 360)] },
-      { elements: [makeElement(shape, 50, 50, shapeSize, startRotation)] },
+      { elements: [makeElement(wrongShape1, 50, 50, shapeSize, correctRotation)] },
+      { elements: [makeElement(shape, 50, 50, shapeSize + 8, (correctRotation + 90) % 360)] },
+      { elements: [makeElement(wrongShape2, 50, 50, shapeSize - 4, (correctRotation + increment) % 360)] },
     ];
 
     const { options: answerOptions, correctIndex } = shuffleWithCorrect(correctFrame, distractors, rng);
@@ -78,10 +86,10 @@ function generateRotationIncrement(startSeed: number, count: number): GeneratedQ
         questionIndex: 4,
         answerOptions,
       },
-      trapTypes: ['wrong_rotation', 'reversed_direction'],
+      trapTypes: ['wrong_rotation', 'wrong_shape', 'wrong_size'],
       cognitiveLoad: diff === 'easy' ? 2 : diff === 'medium' ? 3 : 4,
       estTimeSeconds: diff === 'easy' ? 20 : diff === 'medium' ? 30 : 40,
-      explanation: `The ${shape} rotates by ${increment}° each step. The correct answer continues this pattern.`,
+      explanation: `The ${shape} rotates by ${increment}° each step. The correct answer continues this pattern with the same shape and rotation.`,
       qaStatus: 'approved',
       locale: 'en-GB',
       britishSpelling: true,
@@ -115,10 +123,10 @@ function generateCountIncrement(startSeed: number, count: number): GeneratedQues
     }
 
     const correctFrame = frames[4];
+    const wrongShape = pickOther(shapes, shape, rng);
     const d1: SvgFrame = { elements: correctFrame.elements.slice(0, 3) };
     const d2: SvgFrame = { elements: [...correctFrame.elements, makeElement(shape, 50, 50, 16, 0)] };
-    const otherShape = pick(shapes.filter(s => s !== shape), rng);
-    const d3: SvgFrame = { elements: correctFrame.elements.map(el => makeElement(otherShape, el.x, el.y, 16, 0)) };
+    const d3: SvgFrame = { elements: correctFrame.elements.map(el => makeElement(wrongShape, el.x, el.y, 16, 0)) };
 
     const { options: answerOptions, correctIndex } = shuffleWithCorrect(correctFrame, [d1, d2, d3], rng);
     const labels = ['A', 'B', 'C', 'D'];
@@ -139,10 +147,10 @@ function generateCountIncrement(startSeed: number, count: number): GeneratedQues
         questionIndex: 4,
         answerOptions,
       },
-      trapTypes: ['partial_rule', 'wrong_count'],
+      trapTypes: ['partial_rule', 'wrong_count', 'wrong_shape'],
       cognitiveLoad: diff === 'easy' ? 2 : diff === 'medium' ? 3 : 4,
       estTimeSeconds: diff === 'easy' ? 20 : diff === 'medium' ? 30 : 40,
-      explanation: `One more ${shape} is added in each step. The next frame should have 5 shapes.`,
+      explanation: `One more ${shape} is added in each step. The next frame should have 5 ${shape}s.`,
       qaStatus: 'approved',
       locale: 'en-GB',
       britishSpelling: true,
@@ -170,12 +178,13 @@ function generateFillToggle(startSeed: number, count: number): GeneratedQuestion
     }
 
     const correctFrame = frames[4];
-    const wrongFill: 'solid' | 'none' = correctFrame.elements[0].style.fill === 'solid' ? 'none' : 'solid';
-    const otherShape = pick(shapes.filter(s => s !== shape), rng);
+    const correctFill = correctFrame.elements[0].style.fill;
+    const wrongFill: 'solid' | 'none' = correctFill === 'solid' ? 'none' : 'solid';
+    const wrongShape = pickOther(shapes, shape, rng);
     const distractors: SvgFrame[] = [
       { elements: [makeElement(shape, 50, 50, shapeSize, 0, wrongFill)] },
-      { elements: [makeElement(otherShape, 50, 50, shapeSize, 0, correctFrame.elements[0].style.fill)] },
-      { elements: [makeElement(shape, 50, 50, shapeSize, 90, wrongFill)] },
+      { elements: [makeElement(wrongShape, 50, 50, shapeSize, 0, correctFill)] },
+      { elements: [makeElement(wrongShape, 50, 50, shapeSize + 6, 0, wrongFill)] },
     ];
 
     const { options: answerOptions, correctIndex } = shuffleWithCorrect(correctFrame, distractors, rng);
@@ -197,7 +206,7 @@ function generateFillToggle(startSeed: number, count: number): GeneratedQuestion
         questionIndex: 4,
         answerOptions,
       },
-      trapTypes: ['partial_rule', 'wrong_fill'],
+      trapTypes: ['partial_rule', 'wrong_fill', 'wrong_shape'],
       cognitiveLoad: diff === 'easy' ? 2 : diff === 'medium' ? 3 : 4,
       estTimeSeconds: diff === 'easy' ? 15 : diff === 'medium' ? 25 : 35,
       explanation: `The ${shape} alternates between filled and outlined each step.`,
@@ -222,6 +231,7 @@ function generatePositionShift(startSeed: number, count: number): GeneratedQuest
     const startPos = 15;
     const step = 17;
     const shapeSize = 18 + Math.floor(rng() * 6);
+    const wrongShape = pickOther(shapes, shape, rng);
 
     const frames: SvgFrame[] = [];
     for (let f = 0; f < 5; f++) {
@@ -231,10 +241,12 @@ function generatePositionShift(startSeed: number, count: number): GeneratedQuest
     }
 
     const correctFrame = frames[4];
+    const cx = correctFrame.elements[0].x;
+    const cy = correctFrame.elements[0].y;
     const distractors: SvgFrame[] = [
-      { elements: [makeElement(shape, horizontal ? startPos + step * 3 : 50, horizontal ? 50 : startPos + step * 3, shapeSize, 0)] },
-      { elements: [makeElement(shape, horizontal ? startPos + step * 5 : 50, horizontal ? 50 : startPos + step * 5, shapeSize, 0)] },
-      { elements: [makeElement(shape, horizontal ? correctFrame.elements[0].x : 30, horizontal ? 30 : correctFrame.elements[0].y, shapeSize, 0)] },
+      { elements: [makeElement(wrongShape, cx, cy, shapeSize, 0)] },
+      { elements: [makeElement(shape, horizontal ? cx + step : cx, horizontal ? cy : cy + step, shapeSize, 0)] },
+      { elements: [makeElement(shape, horizontal ? cx - step : cx, horizontal ? cy : cy - step, shapeSize + 6, 0)] },
     ];
 
     const { options: answerOptions, correctIndex } = shuffleWithCorrect(correctFrame, distractors, rng);
@@ -256,10 +268,10 @@ function generatePositionShift(startSeed: number, count: number): GeneratedQuest
         questionIndex: 4,
         answerOptions,
       },
-      trapTypes: ['reversed_direction', 'partial_rule'],
+      trapTypes: ['reversed_direction', 'wrong_shape', 'wrong_position'],
       cognitiveLoad: diff === 'easy' ? 2 : diff === 'medium' ? 3 : 4,
       estTimeSeconds: diff === 'easy' ? 20 : diff === 'medium' ? 30 : 40,
-      explanation: `The ${shape} moves ${horizontal ? 'horizontally' : 'vertically'} by a fixed amount each step.`,
+      explanation: `The ${shape} moves ${horizontal ? 'right' : 'down'} by a fixed amount each step.`,
       qaStatus: 'approved',
       locale: 'en-GB',
       britishSpelling: true,
@@ -295,7 +307,7 @@ function generateShapeChange(startSeed: number, count: number): GeneratedQuestio
     const distractors: SvgFrame[] = [
       { elements: [makeElement(seq[3], 50, 50, shapeSize, 0)] },
       { elements: [makeElement(seq[0], 50, 50, shapeSize, 0)] },
-      { elements: [makeElement(pick(shapes.filter(s => s !== seq[4]), rng), 50, 50, shapeSize, 0)] },
+      { elements: [makeElement(pickOther(shapes, seq[4], rng), 50, 50, shapeSize, 0)] },
     ];
 
     const { options: answerOptions, correctIndex } = shuffleWithCorrect(correctFrame, distractors, rng);
@@ -340,17 +352,19 @@ function generateSizeProgression(startSeed: number, count: number): GeneratedQue
     const diff = pick(difficulties, rng);
     const startSize = 12 + Math.floor(rng() * 6);
     const sizeStep = 4 + Math.floor(rng() * 4);
+    const wrongShape = pickOther(shapes, shape, rng);
 
     const frames: SvgFrame[] = [];
     for (let f = 0; f < 5; f++) {
       frames.push({ elements: [makeElement(shape, 50, 50, startSize + sizeStep * f, 0)] });
     }
 
+    const correctSize = startSize + sizeStep * 4;
     const correctFrame = frames[4];
     const distractors: SvgFrame[] = [
       { elements: [makeElement(shape, 50, 50, startSize + sizeStep * 3, 0)] },
-      { elements: [makeElement(shape, 50, 50, startSize + sizeStep * 5, 0)] },
-      { elements: [makeElement(shape, 50, 50, startSize, 0)] },
+      { elements: [makeElement(wrongShape, 50, 50, correctSize, 0)] },
+      { elements: [makeElement(shape, 50, 50, correctSize + sizeStep * 2, 0)] },
     ];
 
     const { options: answerOptions, correctIndex } = shuffleWithCorrect(correctFrame, distractors, rng);
@@ -372,10 +386,74 @@ function generateSizeProgression(startSeed: number, count: number): GeneratedQue
         questionIndex: 4,
         answerOptions,
       },
-      trapTypes: ['wrong_size', 'partial_rule'],
+      trapTypes: ['wrong_size', 'wrong_shape', 'partial_rule'],
       cognitiveLoad: diff === 'easy' ? 2 : diff === 'medium' ? 3 : 4,
       estTimeSeconds: diff === 'easy' ? 20 : diff === 'medium' ? 30 : 40,
       explanation: `The ${shape} grows by ${sizeStep} units each step.`,
+      qaStatus: 'approved',
+      locale: 'en-GB',
+      britishSpelling: true,
+      version: 1,
+    });
+  }
+  return questions;
+}
+
+function generateMultiProperty(startSeed: number, count: number): GeneratedQuestion[] {
+  const questions: GeneratedQuestion[] = [];
+
+  for (let i = 0; i < count; i++) {
+    const rng = seededRandom(startSeed * 7 + i * 131);
+    rng(); rng(); rng();
+    const diff = pick(difficulties, rng);
+    const shapeOrder = [pick(shapes, rng), pick(shapes, rng), pick(shapes, rng), pick(shapes, rng), pick(shapes, rng)];
+    const fills: ('none' | 'solid')[] = [
+      rng() > 0.5 ? 'solid' : 'none',
+      rng() > 0.5 ? 'solid' : 'none',
+      rng() > 0.5 ? 'solid' : 'none',
+      rng() > 0.5 ? 'solid' : 'none',
+      rng() > 0.5 ? 'solid' : 'none',
+    ];
+    const baseSz = 20 + Math.floor(rng() * 8);
+    const szStep = 3 + Math.floor(rng() * 3);
+
+    const frames: SvgFrame[] = [];
+    for (let f = 0; f < 5; f++) {
+      frames.push({ elements: [makeElement(shapeOrder[f], 50, 50, baseSz + szStep * f, 0, fills[f])] });
+    }
+
+    const correctFrame = frames[4];
+    const wrongShape = pickOther(shapes, shapeOrder[4], rng);
+    const wrongFill: 'none' | 'solid' = fills[4] === 'solid' ? 'none' : 'solid';
+    const distractors: SvgFrame[] = [
+      { elements: [makeElement(wrongShape, 50, 50, baseSz + szStep * 4, 0, fills[4])] },
+      { elements: [makeElement(shapeOrder[4], 50, 50, baseSz + szStep * 3, 0, wrongFill)] },
+      { elements: [makeElement(wrongShape, 50, 50, baseSz + szStep * 5, 0, wrongFill)] },
+    ];
+
+    const { options: answerOptions, correctIndex } = shuffleWithCorrect(correctFrame, distractors, rng);
+    const labels = ['A', 'B', 'C', 'D'];
+
+    questions.push({
+      section: 'Non-Verbal Reasoning',
+      type: 'sequence',
+      prompt: `Which shape comes next in the sequence?`,
+      options: labels,
+      correctAnswer: labels[correctIndex],
+      difficulty: diff,
+      skillId: 'nvr.sequence',
+      subRuleId: 'nvr.sequence.multi_property',
+      renderType: 'svg',
+      renderConfig: {
+        kind: 'nvr.sequence' as const,
+        frames: frames.slice(0, 4),
+        questionIndex: 4,
+        answerOptions,
+      },
+      trapTypes: ['wrong_shape', 'wrong_size', 'wrong_fill'],
+      cognitiveLoad: diff === 'easy' ? 3 : diff === 'medium' ? 4 : 5,
+      estTimeSeconds: diff === 'easy' ? 25 : diff === 'medium' ? 35 : 45,
+      explanation: `Multiple properties change each step: shape, size, and fill. Track all of them to find the correct answer.`,
       qaStatus: 'approved',
       locale: 'en-GB',
       britishSpelling: true,
@@ -393,5 +471,6 @@ export function generateSequenceQuestions(): GeneratedQuestion[] {
     ...generatePositionShift(4000, 20),
     ...generateShapeChange(5500, 20),
     ...generateSizeProgression(6500, 20),
+    ...generateMultiProperty(7500, 20),
   ];
 }

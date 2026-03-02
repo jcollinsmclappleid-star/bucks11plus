@@ -245,7 +245,15 @@ export class DatabaseStorage implements IStorage {
       return a.lastServed - b.lastServed;
     });
 
-    const selected = scored.slice(0, limit).map(s => s.question);
+    const minServed = scored.length > 0 ? scored[0].served : 0;
+    const candidatePool = scored.filter(s => s.served <= minServed + 1);
+    for (let i = candidatePool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [candidatePool[i], candidatePool[j]] = [candidatePool[j], candidatePool[i]];
+    }
+    const remaining = scored.filter(s => s.served > minServed + 1);
+    const shuffled = [...candidatePool, ...remaining];
+    const selected = shuffled.slice(0, limit).map(s => s.question);
 
     const now = new Date();
     for (const q of selected) {
