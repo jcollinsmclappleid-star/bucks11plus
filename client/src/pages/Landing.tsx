@@ -291,6 +291,34 @@ export default function Landing() {
         </div>
       </section>
 
+      <section className="py-14 md:py-20 bg-white border-b border-border/30">
+        <div className="container mx-auto max-w-4xl px-4">
+          <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif text-center mb-10" data-testid="text-dual-path-title">
+            How Would You Like to Begin?
+          </h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="rounded-2xl border border-slate-200 bg-white p-7 sm:p-8 flex flex-col" data-testid="card-path-diagnostic">
+              <h3 className="text-xl font-bold text-primary font-serif mb-3">Start With a Diagnostic</h3>
+              <p className="text-slate-600 text-sm leading-relaxed mb-6 flex-1">
+                Take a 12-minute timed assessment to understand current readiness, pace and performance profile before committing.
+              </p>
+              <Button variant="outline" className="w-full h-12 text-sm font-semibold" asChild data-testid="button-path-diagnostic">
+                <Link href="/free-diagnostic">Start Free Diagnostic</Link>
+              </Button>
+            </div>
+            <div className="rounded-2xl border-2 border-primary/20 bg-slate-50 p-7 sm:p-8 flex flex-col" data-testid="card-path-programme">
+              <h3 className="text-xl font-bold text-primary font-serif mb-3">Begin the Structured Programme</h3>
+              <p className="text-slate-600 text-sm leading-relaxed mb-6 flex-1">
+                For families who already want a complete 12–16 week preparation plan aligned to the Bucks 11+. Includes diagnostics, targeted drills and milestone tracking.
+              </p>
+              <Button className="w-full h-12 text-sm font-semibold bg-primary text-primary-foreground" asChild data-testid="button-path-programme">
+                <Link href="/pricing">View Programme &amp; Enrol</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section id="see-product" className="py-16 md:py-24 bg-slate-50 border-b border-border/30 relative">
         <div className="container mx-auto max-w-5xl px-4">
           <div className="text-center mb-8">
