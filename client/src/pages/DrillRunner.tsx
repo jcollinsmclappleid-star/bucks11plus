@@ -29,10 +29,22 @@ export default function DrillRunner() {
   const [finished, setFinished] = useState(false);
   const sessionKey = useRef(Date.now());
 
-  const { data: questions, isLoading } = useQuery<Question[]>({
-    queryKey: [`/api/practice-sections/${sectionId}/questions`, sessionKey.current],
+  const { data: questions, isLoading, error } = useQuery<Question[]>({
+    queryKey: [`/api/practice-sections/${sectionId}/questions`],
     staleTime: 0,
   });
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-8">
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8 max-w-md w-full text-center space-y-6">
+          <h1 className="text-2xl font-bold text-red-600 font-serif">Error Loading Drill</h1>
+          <p className="text-muted-foreground">{(error as any).message || "An unexpected error occurred."}</p>
+          <Button onClick={() => setLocation("/app/practice")}>Back to Practice</Button>
+        </div>
+      </div>
+    );
+  }
 
   const checkMutation = useMutation({
     mutationFn: async ({ questionId, selectedAnswer }: { questionId: string; selectedAnswer: string }) => {
@@ -87,11 +99,23 @@ export default function DrillRunner() {
     return () => window.removeEventListener("keydown", handler);
   }, [questions, currentQuestionIndex, feedback, handleSelect]);
 
-  if (isLoading || !questions) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-slate-50 flex flex-col p-8">
         <Skeleton className="h-12 w-full mb-8" />
         <Skeleton className="flex-1 w-full" />
+      </div>
+    );
+  }
+
+  if (!questions || questions.length === 0) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-8">
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8 max-w-md w-full text-center space-y-6">
+          <h1 className="text-2xl font-bold text-primary font-serif">No Questions Found</h1>
+          <p className="text-muted-foreground">We couldn't find any questions for this section. Please try another one.</p>
+          <Button onClick={() => setLocation("/app/practice")}>Back to Practice</Button>
+        </div>
       </div>
     );
   }

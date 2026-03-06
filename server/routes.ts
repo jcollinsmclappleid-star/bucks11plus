@@ -856,11 +856,17 @@ export async function registerRoutes(
 
   app.get("/api/practice-sections/:id/questions", requireAuth, async (req, res, next) => {
     try {
-      const qs = await storage.getQuestionsForDrill(req.params.id, req.user!.id, 10);
+      const sectionId = req.params.id;
+      console.log(`[Drill] Fetching questions for section: ${sectionId}`);
+      
+      const qs = await storage.getQuestionsForDrill(sectionId, req.user!.id, 10);
+      console.log(`[Drill] Found ${qs.length} questions for section ${sectionId}`);
+      
       const safe = qs.map(({ correctAnswer, ...q }) => q);
       res.json(safe);
     } catch (error) {
-      next(error);
+      console.error(`[Drill] Error fetching questions:`, error);
+      res.status(500).json({ message: "Failed to load practice questions" });
     }
   });
 

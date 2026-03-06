@@ -303,12 +303,15 @@ export class DatabaseStorage implements IStorage {
     }
 
     if (pool.length === 0) {
+      console.log(`[Drill] No questions found for skill ${skillFilter} or section ${sectionName} with approved status. Checking all statuses.`);
       pool = await db.select().from(questions)
         .where(eq(questions.section, sectionName));
     }
 
+    console.log(`[Drill] Pool size for ${sectionName}: ${pool.length}`);
+
     if (pool.length === 0) {
-      console.error(`No questions found for section ${sectionName} or skill ${skillFilter}`);
+      console.error(`[Drill] ABSOLUTELY NO questions found for section ${sectionName}`);
       return [];
     }
 

@@ -13,6 +13,8 @@ function tierLabel(tier: string): string {
     case "free": return "Free";
     case "pack12": return "Practice Pack";
     case "programme16": return "Programme";
+    case "pack": return "Practice Pack";
+    case "monthly": return "Programme";
     default: return tier;
   }
 }
