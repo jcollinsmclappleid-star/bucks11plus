@@ -299,6 +299,11 @@ export class DatabaseStorage implements IStorage {
         .where(eq(questions.section, sectionName));
     }
 
+    if (pool.length === 0) {
+      console.error(`No questions found for section ${sectionName} or skill ${skillFilter}`);
+      return [];
+    }
+
     const usageRows = await db.select().from(questionUsage)
       .where(eq(questionUsage.userId, userId));
     const usageMap = new Map(usageRows.map(u => [u.questionId, u]));
