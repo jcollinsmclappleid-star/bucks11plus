@@ -286,6 +286,14 @@ export class DatabaseStorage implements IStorage {
           eq(questions.skillId, skillFilter),
           eq(questions.qaStatus, "approved")
         ));
+      
+      if (pool.length === 0) {
+        pool = await db.select().from(questions)
+          .where(and(
+            eq(questions.section, sectionName),
+            eq(questions.qaStatus, "approved")
+          ));
+      }
     } else {
       pool = await db.select().from(questions)
         .where(and(
