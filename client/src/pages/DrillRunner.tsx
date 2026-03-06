@@ -32,6 +32,7 @@ export default function DrillRunner() {
   const { data: questions, isLoading, error } = useQuery<Question[]>({
     queryKey: [`/api/practice-sections/${sectionId}/questions`],
     staleTime: 0,
+    gcTime: 0,
   });
 
   if (error) {

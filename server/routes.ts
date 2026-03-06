@@ -856,6 +856,10 @@ export async function registerRoutes(
 
   app.get("/api/practice-sections/:id/questions", requireAuth, async (req, res, next) => {
     try {
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
+      
       const sectionId = req.params.id;
       console.log(`[Drill] Fetching questions for section: ${sectionId}`);
       
