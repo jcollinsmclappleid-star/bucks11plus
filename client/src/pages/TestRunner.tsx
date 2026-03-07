@@ -22,6 +22,7 @@ export default function TestRunner() {
   const [answers, setAnswers] = useState<Array<{ questionId: string, selectedAnswer: string, timeTaken: number }>>([]);
   const [questionStartTime, setQuestionStartTime] = useState<number>(Date.now());
   const [svgSelectedIndex, setSvgSelectedIndex] = useState<number | null>(null);
+  const [animKey, setAnimKey] = useState(0);
 
   const guestQuestions = useMemo(() => {
     if (!isGuest) return null;
@@ -119,6 +120,7 @@ export default function TestRunner() {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
       setQuestionStartTime(Date.now());
+      setAnimKey(prev => prev + 1);
     } else {
       submitMutation.mutate(newAnswers);
     }
@@ -152,7 +154,7 @@ export default function TestRunner() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-50 flex flex-col p-8">
+      <div className="min-h-screen exam-paper-bg flex flex-col p-8">
         <Skeleton className="h-12 w-full mb-8" />
         <Skeleton className="flex-1 w-full" />
       </div>
@@ -167,20 +169,22 @@ export default function TestRunner() {
   const secs = timeLeft % 60;
   const timeString = `${mins}:${secs.toString().padStart(2, '0')}`;
 
+  const timerClass = timeLeft < 60 ? "timer-pill timer-pill-danger" : timeLeft < 180 ? "timer-pill timer-pill-warning" : "timer-pill timer-pill-normal";
+
   const renderType = (question.renderType || "text") as "text" | "svg" | "chart";
   const renderConfig = question.renderConfig as RenderConfig | null;
   const isSvgWithVisualOptions = renderType === "svg" && renderConfig && "answerOptions" in renderConfig;
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
-      <header className="bg-white border-b border-border/50 px-4 py-3 flex items-center justify-between sticky top-0 z-10">
+    <div className="min-h-screen exam-paper-bg flex flex-col font-sans">
+      <header className="premium-header px-4 py-3 flex items-center justify-between sticky top-0 z-10">
         <div className="flex items-center gap-4">
-          <div className="font-serif font-bold text-primary">11+ Standard</div>
-          <div className="h-4 w-px bg-border"></div>
+          <div className="font-serif font-bold text-primary text-lg tracking-tight">11+ Standard</div>
+          <div className="h-5 w-px bg-border/60"></div>
           <div className="text-sm font-medium text-muted-foreground">{diagnosticTitle}</div>
         </div>
 
-        <div className={`font-mono text-lg font-medium px-3 py-1 rounded ${timeLeft < 60 ? 'bg-red-50 text-red-600' : 'bg-slate-100 text-slate-700'}`}>
+        <div className={timerClass} data-testid="text-timer">
           {timeString}
         </div>
 
@@ -190,17 +194,19 @@ export default function TestRunner() {
       </header>
 
       <main className="flex-1 max-w-3xl mx-auto w-full p-4 md:p-8 flex flex-col">
-        <div className="mb-8 space-y-2">
-          <div className="flex justify-between text-sm font-medium text-muted-foreground">
-            <span data-testid="text-section">{question.section}</span>
+        <div className="mb-8 space-y-3">
+          <div className="flex justify-between items-center text-sm font-medium text-muted-foreground">
+            <span className="section-badge" data-testid="text-section">{question.section}</span>
             <span data-testid="text-progress">Question {currentQuestionNumber} of {totalQuestions}</span>
           </div>
-          <Progress value={(currentQuestionNumber / totalQuestions) * 100} className="h-2" />
+          <div className="progress-premium">
+            <Progress value={(currentQuestionNumber / totalQuestions) * 100} className="h-2" />
+          </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8 flex-1 flex flex-col">
-          <div className="mb-8 prose prose-slate max-w-none">
-            <p className="text-lg text-primary font-medium leading-relaxed" data-testid="text-question-prompt">
+        <div className="premium-card p-8 flex-1 flex flex-col question-fade-in" key={animKey}>
+          <div className="mb-8">
+            <p className="text-xl text-primary font-medium leading-relaxed tracking-[-0.01em]" data-testid="text-question-prompt">
               {question.prompt}
             </p>
           </div>
@@ -228,12 +234,12 @@ export default function TestRunner() {
                   disabled={submitMutation.isPending}
                   data-testid={`button-option-${i}`}
                   aria-label={`Option ${LABELS[i]}`}
-                  className="w-full text-left px-6 py-4 rounded-lg border-2 transition-all flex items-center gap-4 border-border/50 hover:border-primary/30 text-slate-700 hover:bg-slate-50"
+                  className="option-button"
                 >
-                  <div className="w-6 h-6 rounded-full border flex items-center justify-center text-xs font-medium border-slate-300">
+                  <div className="option-badge">
                     {LABELS[i]}
                   </div>
-                  <span className="font-medium text-lg">{opt}</span>
+                  <span className="font-medium text-lg text-slate-700">{opt}</span>
                 </button>
               ))}
             </div>
@@ -241,7 +247,7 @@ export default function TestRunner() {
         </div>
 
         <div className="mt-6 flex justify-center items-center">
-          <p className="text-sm text-muted-foreground italic">
+          <p className="text-sm text-muted-foreground/70 italic">
             Select an option to move to the next question
           </p>
         </div>

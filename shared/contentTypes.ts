@@ -1,14 +1,16 @@
 export type RenderType = "text" | "svg" | "chart";
 
+export type FillPattern = "none" | "solid" | "hatched" | "crosshatched" | "dotted" | "striped";
+
 export type SvgStroke = {
   strokeWidth: number;
   stroke: string;
-  fill: "none" | "solid";
+  fill: FillPattern;
   dashed?: boolean;
   opacity?: number;
 };
 
-export type SvgShape = "circle" | "square" | "triangle" | "pentagon" | "arrow" | "star";
+export type SvgShape = "circle" | "square" | "triangle" | "pentagon" | "arrow" | "star" | "hexagon" | "diamond" | "cross" | "parallelogram" | "trapezoid" | "semicircle" | "right_triangle" | "kite";
 
 export type SvgElement =
   | { type: "shape"; shape: SvgShape; x: number; y: number; size: number; rotation: number; style: SvgStroke }

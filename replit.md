@@ -139,10 +139,14 @@ content/
 - QA workflow: draft → review → approved/rejected via admin interface
 
 ## Design System
-- **Colors**: Deep navy primary, amber accent, green success, red danger
+- **Colors**: Deep navy primary (#0d1f30), amber accent, green success, red danger
 - **Typography**: Libre Baskerville (serif headings) + Inter (UI body)
-- **SVG Style**: viewBox 0 0 100 100, strokeWidth 3, stroke #111827, fill muted #E5E7EB
-- **Exam Paper Layout**: White card, border-slate-200, rounded-xl, p-8, shadow-sm
+- **SVG Style**: viewBox 0 0 100 100, strokeWidth 2.5, stroke #1E293B, fill muted #E2E8F0
+- **SVG Shapes**: circle, square, triangle, pentagon, arrow, star, hexagon, diamond, cross, parallelogram, trapezoid, semicircle, right_triangle, kite
+- **SVG Fill Patterns**: none, solid, hatched, crosshatched, dotted, striped
+- **NVR Frames**: 120px × 120px cards with subtle shadows, numbered labels, clean borders
+- **Test UI**: Premium exam-paper background (gradient), premium-card with layered shadows, pill-shaped timer (3 states: normal/warning/danger), option buttons with branded letter badges and hover lift, question fade-in animations, section badge pills
+- **CSS Classes**: exam-paper-bg, premium-card, premium-header, timer-pill[-normal/-warning/-danger], option-button, option-badge, option-correct/incorrect/dimmed, section-badge, progress-premium, question-fade-in, feedback-enter, feedback-correct/incorrect, drill-complete-card
 - **Monetization**: Free → Practice Pack £99 → Structured Programme £249
 
 ## Key Patterns

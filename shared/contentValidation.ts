@@ -3,12 +3,12 @@ import { z } from "zod";
 const svgStrokeSchema = z.object({
   strokeWidth: z.number(),
   stroke: z.string(),
-  fill: z.enum(["none", "solid"]),
+  fill: z.enum(["none", "solid", "hatched", "crosshatched", "dotted", "striped"]),
   dashed: z.boolean().optional(),
   opacity: z.number().optional(),
 });
 
-const svgShapeSchema = z.enum(["circle", "square", "triangle", "pentagon", "arrow", "star"]);
+const svgShapeSchema = z.enum(["circle", "square", "triangle", "pentagon", "arrow", "star", "hexagon", "diamond", "cross", "parallelogram", "trapezoid", "semicircle", "right_triangle", "kite"]);
 
 const svgElementSchema = z.discriminatedUnion("type", [
   z.object({

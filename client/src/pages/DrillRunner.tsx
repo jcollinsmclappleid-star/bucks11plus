@@ -15,6 +15,7 @@ const LABELS = ["A", "B", "C", "D", "E", "F"];
 type FeedbackState = {
   isCorrect: boolean;
   correctAnswer: string;
+  selectedAnswer: string;
   explanation: string | null;
 } | null;
 
@@ -27,6 +28,7 @@ export default function DrillRunner() {
   const [questionStartTime, setQuestionStartTime] = useState<number>(Date.now());
   const [results, setResults] = useState<Array<{ questionId: string; isCorrect: boolean; timeTaken: number }>>([]);
   const [finished, setFinished] = useState(false);
+  const [animKey, setAnimKey] = useState(0);
   const sessionKey = useRef(Date.now());
 
   const { data: questions, isLoading, error } = useQuery<Question[]>({
@@ -37,8 +39,8 @@ export default function DrillRunner() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-8">
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8 max-w-md w-full text-center space-y-6">
+      <div className="min-h-screen exam-paper-bg flex flex-col items-center justify-center p-8">
+        <div className="drill-complete-card max-w-md w-full text-center space-y-6">
           <h1 className="text-2xl font-bold text-red-600 font-serif">Error Loading Drill</h1>
           <p className="text-muted-foreground">{(error as any).message || "An unexpected error occurred."}</p>
           <Button onClick={() => setLocation("/app/practice")}>Back to Practice</Button>
@@ -54,7 +56,7 @@ export default function DrillRunner() {
     },
     onSuccess: (data, variables) => {
       const timeTaken = Math.round((Date.now() - questionStartTime) / 1000);
-      setFeedback({ isCorrect: data.isCorrect, correctAnswer: data.correctAnswer, explanation: data.explanation });
+      setFeedback({ isCorrect: data.isCorrect, correctAnswer: data.correctAnswer, selectedAnswer: variables.selectedAnswer, explanation: data.explanation });
       setResults(prev => [...prev, { questionId: variables.questionId, isCorrect: data.isCorrect, timeTaken }]);
     }
   });
@@ -72,6 +74,7 @@ export default function DrillRunner() {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
       setQuestionStartTime(Date.now());
+      setAnimKey(prev => prev + 1);
     } else {
       setFinished(true);
     }
@@ -102,7 +105,7 @@ export default function DrillRunner() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-50 flex flex-col p-8">
+      <div className="min-h-screen exam-paper-bg flex flex-col p-8">
         <Skeleton className="h-12 w-full mb-8" />
         <Skeleton className="flex-1 w-full" />
       </div>
@@ -111,8 +114,8 @@ export default function DrillRunner() {
 
   if (!questions || questions.length === 0) {
     return (
-      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-8">
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8 max-w-md w-full text-center space-y-6">
+      <div className="min-h-screen exam-paper-bg flex flex-col items-center justify-center p-8">
+        <div className="drill-complete-card max-w-md w-full text-center space-y-6">
           <h1 className="text-2xl font-bold text-primary font-serif">No Questions Found</h1>
           <p className="text-muted-foreground">We couldn't find any questions for this section. Please try another one.</p>
           <Button onClick={() => setLocation("/app/practice")}>Back to Practice</Button>
@@ -127,12 +130,14 @@ export default function DrillRunner() {
     const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
 
     return (
-      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-8">
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8 max-w-md w-full text-center space-y-6">
+      <div className="min-h-screen exam-paper-bg flex flex-col items-center justify-center p-8">
+        <div className="drill-complete-card max-w-md w-full text-center space-y-6">
           <h1 className="text-2xl font-bold text-primary font-serif" data-testid="text-drill-complete">Drill Complete!</h1>
           <div className="text-5xl font-bold text-primary" data-testid="text-drill-score">{pct}%</div>
           <p className="text-muted-foreground" data-testid="text-drill-summary">{correct} out of {total} correct</p>
-          <Progress value={pct} className="h-3" />
+          <div className="progress-premium">
+            <Progress value={pct} className="h-3" />
+          </div>
           <div className="flex gap-3 justify-center">
             <Button onClick={() => setLocation("/app/practice")} data-testid="button-back-practice">Back to Practice</Button>
             <Button variant="outline" onClick={() => setLocation("/app")} data-testid="button-back-dashboard">Dashboard</Button>
@@ -150,12 +155,19 @@ export default function DrillRunner() {
   const renderConfig = question.renderConfig as RenderConfig | null;
   const isSvgWithVisualOptions = renderType === "svg" && renderConfig && "answerOptions" in renderConfig;
 
+  const getOptionClass = (opt: string) => {
+    if (!feedback) return "option-button";
+    if (opt === feedback.correctAnswer) return "option-button option-correct";
+    if (opt === feedback.selectedAnswer && !feedback.isCorrect) return "option-button option-incorrect";
+    return "option-button option-dimmed";
+  };
+
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
-      <header className="bg-white border-b border-border/50 px-4 py-3 flex items-center justify-between sticky top-0 z-10">
+    <div className="min-h-screen exam-paper-bg flex flex-col font-sans">
+      <header className="premium-header px-4 py-3 flex items-center justify-between sticky top-0 z-10">
         <div className="flex items-center gap-4">
-          <div className="font-serif font-bold text-primary">11+ Standard</div>
-          <div className="h-4 w-px bg-border"></div>
+          <div className="font-serif font-bold text-primary text-lg tracking-tight">11+ Standard</div>
+          <div className="h-5 w-px bg-border/60"></div>
           <div className="text-sm font-medium text-muted-foreground">Practice Drill</div>
         </div>
         <Button variant="ghost" size="sm" onClick={() => setLocation("/app/practice")} data-testid="button-exit-drill">
@@ -164,17 +176,19 @@ export default function DrillRunner() {
       </header>
 
       <main className="flex-1 max-w-3xl mx-auto w-full p-4 md:p-8 flex flex-col">
-        <div className="mb-8 space-y-2">
-          <div className="flex justify-between text-sm font-medium text-muted-foreground">
-            <span data-testid="text-drill-section">{question.section}</span>
+        <div className="mb-8 space-y-3">
+          <div className="flex justify-between items-center text-sm font-medium text-muted-foreground">
+            <span className="section-badge" data-testid="text-drill-section">{question.section}</span>
             <span data-testid="text-drill-progress">Question {currentQuestionNumber} of {totalQuestions}</span>
           </div>
-          <Progress value={(currentQuestionNumber / totalQuestions) * 100} className="h-2" />
+          <div className="progress-premium">
+            <Progress value={(currentQuestionNumber / totalQuestions) * 100} className="h-2" />
+          </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8 flex-1 flex flex-col">
-          <div className="mb-8 prose prose-slate max-w-none">
-            <p className="text-lg text-primary font-medium leading-relaxed" data-testid="text-drill-prompt">
+        <div className="premium-card p-8 flex-1 flex flex-col question-fade-in" key={animKey}>
+          <div className="mb-8">
+            <p className="text-xl text-primary font-medium leading-relaxed tracking-[-0.01em]" data-testid="text-drill-prompt">
               {question.prompt}
             </p>
           </div>
@@ -203,25 +217,19 @@ export default function DrillRunner() {
                   disabled={!!feedback || checkMutation.isPending}
                   data-testid={`button-drill-option-${i}`}
                   aria-label={`Option ${LABELS[i]}`}
-                  className={`w-full text-left px-6 py-4 rounded-lg border-2 transition-all flex items-center gap-4 ${
-                    feedback
-                      ? opt === feedback.correctAnswer
-                        ? "border-green-500 bg-green-50"
-                        : "border-border/50 text-slate-400"
-                      : "border-border/50 hover:border-primary/30 text-slate-700 hover:bg-slate-50"
-                  }`}
+                  className={getOptionClass(opt)}
                 >
-                  <div className="w-6 h-6 rounded-full border flex items-center justify-center text-xs font-medium border-slate-300">
+                  <div className="option-badge">
                     {LABELS[i]}
                   </div>
-                  <span className="font-medium text-lg">{opt}</span>
+                  <span className="font-medium text-lg text-slate-700">{opt}</span>
                 </button>
               ))}
             </div>
           )}
 
           {feedback && (
-            <div className={`mt-6 p-4 rounded-lg flex items-start gap-3 ${feedback.isCorrect ? "bg-green-50 border border-green-200" : "bg-red-50 border border-red-200"}`} data-testid="drill-feedback">
+            <div className={`mt-6 flex items-start gap-3 feedback-enter ${feedback.isCorrect ? "feedback-correct" : "feedback-incorrect"}`} data-testid="drill-feedback">
               {feedback.isCorrect ? (
                 <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 shrink-0" />
               ) : (
