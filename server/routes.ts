@@ -593,7 +593,7 @@ export async function registerRoutes(
   app.get("/api/analytics", requireAuth, async (req, res, next) => {
     try {
       if (req.user!.subscriptionTier !== "programme16") {
-        return res.json({ available: false, gated: true, message: "Premium Parent Analytics is included with the Structured Readiness Programme." });
+        return res.json({ available: false, gated: true, message: "Premium Parent Analytics is included with the Young Scholar Programme." });
       }
       const userId = req.user!.id;
       const sessions = await storage.getUserTestSessions(userId);

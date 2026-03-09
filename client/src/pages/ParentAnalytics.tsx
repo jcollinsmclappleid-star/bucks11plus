@@ -568,7 +568,7 @@ export default function ParentAnalytics() {
         <div className="text-center mb-10">
           <h1 className="text-3xl font-bold text-primary font-serif mb-3" data-testid="heading-analytics-gated">Premium Parent Analytics</h1>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Deep readiness insights exclusively for Structured Programme families.
+            Deep readiness insights exclusively for Young Scholar Programme families.
           </p>
         </div>
 
@@ -577,7 +577,7 @@ export default function ParentAnalytics() {
             <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
               <Shield className="h-8 w-8 text-primary" />
             </div>
-            <h2 className="text-2xl font-bold text-primary font-serif mb-2">Included with the Structured Programme</h2>
+            <h2 className="text-2xl font-bold text-primary font-serif mb-2">Included with the Young Scholar Programme</h2>
             <p className="text-muted-foreground max-w-md mb-6">
               Upgrade to unlock readiness scoring, pace discipline analysis, fatigue profiling, gap velocity tracking, and personalised improvement priorities.
             </p>

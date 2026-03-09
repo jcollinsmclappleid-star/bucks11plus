@@ -29,7 +29,7 @@ async function seedStripeProducts() {
   console.log(`Created Practice Pack: ${pack12.id}`);
 
   const programme16 = await stripe.products.create({
-    name: 'Structured Readiness Programme',
+    name: 'Young Scholar Programme',
     description: '16-week structured programme with milestone diagnostics, advanced analytics, weekly plans, and completion summary. Everything in Practice Pack plus guided preparation roadmap.',
     metadata: {
       tier: 'programme16',
@@ -43,7 +43,7 @@ async function seedStripeProducts() {
     currency: 'gbp',
   });
 
-  console.log(`Created Structured Programme: ${programme16.id}`);
+  console.log(`Created Young Scholar Programme: ${programme16.id}`);
   console.log('Stripe products seeded successfully.');
 }
 

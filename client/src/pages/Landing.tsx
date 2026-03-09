@@ -280,7 +280,7 @@ export default function Landing() {
               </Link>
               <span className="hidden sm:inline text-white/15">|</span>
               <Link href="/pricing" className="text-brand-amber/70 hover:text-brand-amber text-sm font-semibold transition-colors">
-                Structured Programme — £249
+                Young Scholar Programme — £249
               </Link>
             </div>
 
@@ -330,9 +330,10 @@ export default function Landing() {
               <ul className="space-y-3 flex-1">
                 {[
                   "1,000+ practice questions across VR, NVR & Maths",
-                  "Unlimited practice papers (fresh questions every time)",
+                  "Easy & Medium drills + 6 Hard challenge drills",
                   "2 full timed diagnostics (40 questions each)",
-                  "17 targeted skill drills covering all exam areas",
+                  "Unlimited practice papers (fresh questions every time)",
+                  "Badge-based Accomplishments system",
                   "PDF reports & full report archive",
                   "12 weeks of access",
                 ].map((f, i) => (
@@ -351,17 +352,18 @@ export default function Landing() {
               <div className="absolute top-0 right-0 bg-brand-amber text-amber-950 px-3 py-1 rounded-bl-lg font-bold text-xs">
                 RECOMMENDED
               </div>
-              <p className="text-sm font-semibold text-brand-amber uppercase tracking-wider mb-2">Structured Programme</p>
+              <p className="text-sm font-semibold text-brand-amber uppercase tracking-wider mb-2">Young Scholar Programme</p>
               <h3 className="text-xl font-bold text-primary font-serif mb-4">£249</h3>
               <p className="text-xs text-slate-500 mb-3 font-medium">Everything in Practice Pack, plus:</p>
               <ul className="space-y-3 flex-1">
                 {[
+                  "All 17 Hard challenge drills unlocked",
                   "16-week guided preparation roadmap",
                   "4 milestone diagnostics with auto-tracking",
                   "Weekly personalised task plans",
                   "Mock exam simulation (50 questions, timed)",
-                  "Gap velocity & forecast stability analytics",
-                  "Programme completion summary",
+                  "Premium Parent Analytics dashboard",
+                  "Full Accomplishments & gamification rewards",
                   "16 weeks of access",
                 ].map((f, i) => (
                   <li key={i} className="flex items-start gap-2.5">
@@ -371,7 +373,7 @@ export default function Landing() {
                 ))}
               </ul>
               <Button className="w-full mt-6 h-11 text-sm font-bold bg-brand-amber text-white hover:bg-brand-amber/90 border-none" asChild data-testid="button-included-programme">
-                <Link href="/pricing#tiers">Get Structured Programme</Link>
+                <Link href="/pricing#tiers">Get Young Scholar Programme</Link>
               </Button>
             </div>
           </div>
@@ -394,7 +396,7 @@ export default function Landing() {
               </Button>
             </div>
             <div className="rounded-2xl border-2 border-primary/20 bg-slate-50 p-7 sm:p-8 flex flex-col" data-testid="card-path-programme">
-              <h3 className="text-xl font-bold text-primary font-serif mb-3">Begin the Structured Programme</h3>
+              <h3 className="text-xl font-bold text-primary font-serif mb-3">Begin the Young Scholar Programme</h3>
               <p className="text-slate-600 text-sm leading-relaxed mb-6 flex-1">
                 For families who already want a complete 12–16 week preparation plan aligned to the Bucks 11+. Includes diagnostics, targeted drills and milestone tracking.
               </p>

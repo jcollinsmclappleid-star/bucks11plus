@@ -96,7 +96,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!user) return "Free";
     switch (user.subscriptionTier) {
       case "pack12": return "Practice Pack";
-      case "programme16": return "Structured Programme";
+      case "programme16": return "Young Scholar Programme";
       default: return "Free";
     }
   };

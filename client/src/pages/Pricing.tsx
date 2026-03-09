@@ -102,7 +102,7 @@ export default function Pricing() {
     },
     {
       q: "What happens after I pay?",
-      a: "You get immediate access to everything in your plan. Start with a full diagnostic to establish your child's baseline, then follow the targeted practice recommendations. For the Structured Programme, your 16-week roadmap is generated automatically based on your child's results."
+      a: "You get immediate access to everything in your plan. Start with a full diagnostic to establish your child's baseline, then follow the targeted practice recommendations. For the Young Scholar Programme, your 16-week roadmap is generated automatically based on your child's results."
     }
   ];
 
@@ -155,7 +155,7 @@ export default function Pricing() {
               </Button>
             </div>
             <div className="rounded-2xl border-2 border-primary/20 bg-slate-50 p-7 sm:p-8 flex flex-col" data-testid="card-pricing-path-programme">
-              <h3 className="text-xl font-bold text-primary font-serif mb-3">Begin the Structured Programme</h3>
+              <h3 className="text-xl font-bold text-primary font-serif mb-3">Begin the Young Scholar Programme</h3>
               <p className="text-slate-600 text-sm leading-relaxed mb-6 flex-1">
                 For families who already want a complete 12–16 week preparation plan aligned to the Bucks 11+. Includes diagnostics, targeted drills and milestone tracking.
               </p>
@@ -227,11 +227,13 @@ export default function Pricing() {
                 <ul className="space-y-3">
                   {[
                     "1,000+ questions across VR, NVR & Maths",
-                    "Easy & Medium difficulty drills (13 targeted sections)",
+                    "Easy & Medium drills (13 sections)",
+                    "6 Hard challenge drills included",
                     "2 full timed diagnostics (40 questions each)",
                     "Practice papers (Quick & Full)",
                     "PDF reports & full report archive",
                     "Impact simulator & progress tracking",
+                    "Badge-based Accomplishments system",
                     "12 weeks of access",
                   ].map((feature, i) => (
                     <li key={i} className="flex items-start gap-3">
@@ -260,7 +262,7 @@ export default function Pricing() {
               </div>
 
               <CardHeader className="pt-8 pb-4">
-                <p className="text-sm font-semibold text-brand-amber uppercase tracking-wider mb-1">Structured Programme</p>
+                <p className="text-sm font-semibold text-brand-amber uppercase tracking-wider mb-1">Young Scholar Programme</p>
                 <CardTitle className="text-2xl font-serif">A complete preparation pathway</CardTitle>
               </CardHeader>
               <CardContent className="flex-1">
@@ -275,7 +277,7 @@ export default function Pricing() {
                 <p className="text-sm text-slate-500 mb-4 font-medium">Everything in Practice Pack, plus:</p>
                 <ul className="space-y-3">
                   {[
-                    "All 17 Hard-level challenge drills unlocked",
+                    "All 17 Hard challenge drills unlocked",
                     "Mock exam simulation (50 questions, timed)",
                     "16-week guided preparation roadmap",
                     "4 milestone diagnostics with auto-tracking",
@@ -283,6 +285,7 @@ export default function Pricing() {
                     "Premium Parent Analytics dashboard",
                     "Gap velocity & forecast stability metrics",
                     "Fatigue & pressure profiling",
+                    "Full Accomplishments & gamification rewards",
                     "16 weeks of access",
                   ].map((feature, i) => (
                     <li key={i} className="flex items-start gap-3">
@@ -299,7 +302,7 @@ export default function Pricing() {
                   disabled={loading === "programme16"}
                   data-testid="button-get-programme16"
                 >
-                  {loading === "programme16" ? <Loader2 className="h-5 w-5 animate-spin" /> : "Get Structured Programme"}
+                  {loading === "programme16" ? <Loader2 className="h-5 w-5 animate-spin" /> : "Get Young Scholar Programme"}
                 </Button>
               </CardFooter>
             </Card>
@@ -325,11 +328,12 @@ export default function Pricing() {
                     { feature: "1 sample practice drill", free: true, pack: true, prog: true },
                     { feature: "1,000+ practice questions", free: false, pack: true, prog: true },
                     { feature: "Easy & Medium drills (13 sections)", free: false, pack: true, prog: true },
+                    { feature: "Hard challenge drills", free: false, pack: "6 sections", prog: "All 17" },
+                    { feature: "Badge-based Accomplishments", free: false, pack: true, prog: true },
                     { feature: "Full timed diagnostics (40 questions)", free: false, pack: true, prog: true },
                     { feature: "Practice papers (Quick & Full)", free: false, pack: true, prog: true },
                     { feature: "PDF reports & report archive", free: false, pack: true, prog: true },
                     { feature: "Impact simulator & progress tracking", free: false, pack: true, prog: true },
-                    { feature: "Hard-level challenge drills (17 sections)", free: false, pack: false, prog: true },
                     { feature: "Mock exam simulation (50 questions)", free: false, pack: false, prog: true },
                     { feature: "16-week guided roadmap", free: false, pack: false, prog: true },
                     { feature: "4 milestone diagnostics with auto-tracking", free: false, pack: false, prog: true },
@@ -339,7 +343,7 @@ export default function Pricing() {
                     { feature: "Fatigue & pressure profiling", free: false, pack: false, prog: true },
                     { feature: "Access duration", free: "1 use", pack: "12 weeks", prog: "16 weeks" },
                   ].map((row, i) => (
-                    <tr key={i} className={`border-b border-slate-100 ${i >= 10 ? "bg-amber-50/30" : ""}`} data-testid={`comparison-row-${i}`}>
+                    <tr key={i} className={`border-b border-slate-100 ${i >= 12 ? "bg-amber-50/30" : ""}`} data-testid={`comparison-row-${i}`}>
                       <td className="py-3 px-4 text-slate-700 font-medium">{row.feature}</td>
                       {["free", "pack", "prog"].map((tier) => {
                         const val = row[tier as keyof typeof row];
@@ -364,62 +368,7 @@ export default function Pricing() {
         </div>
       </section>
 
-      <section className="py-20 md:py-28 bg-white border-b border-border/30">
-        <div className="container mx-auto max-w-4xl px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4" data-testid="text-problem-title">The problem with 11+ preparation today</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Most parents preparing for the Bucks 11+ share the same frustrations.
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
-            {[
-              { icon: HelpCircle, text: "You don't know where your child actually stands — just a vague sense of 'probably fine' or 'probably not'" },
-              { icon: BookOpen, text: "Workbooks and past papers feel like busywork — no way to tell if the practice is actually moving the needle" },
-              { icon: Clock, text: "Time is running out and you're not sure if you're focusing on the right areas" },
-              { icon: AlertTriangle, text: "The fear of leaving gaps undiscovered until it's too late to fix them" },
-            ].map((item, i) => (
-              <div key={i} className="flex gap-4 p-5 bg-white rounded-xl border border-slate-200 shadow-sm">
-                <item.icon className="h-6 w-6 text-brand-red shrink-0 mt-0.5" />
-                <p className="text-slate-700 leading-relaxed">{item.text}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-20 md:py-28 border-b border-border/30">
-        <div className="container mx-auto max-w-4xl px-4">
-          <div className="text-center mb-14">
-            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4" data-testid="text-solution-title">A different approach: diagnostic-led preparation</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Instead of guessing, start with clarity. Our diagnostics tell you exactly where the gaps are — then guide practice to close them.
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 gap-8 max-w-3xl mx-auto">
-            {[
-              { icon: Eye, title: "See exactly where gaps are", desc: "Timed diagnostics aligned to GL-style reasoning families pinpoint your child's specific weaknesses" },
-              { icon: Target, title: "Practice only what matters", desc: "Targeted drills focus on the highest-impact areas — no wasted effort on topics they've already mastered" },
-              { icon: TrendingUp, title: "Track real progress, not just effort", desc: "Forecast scores, pace metrics, and milestone diagnostics show whether preparation is actually working" },
-              { icon: BarChart3, title: "Know your child's realistic readiness", desc: "A clear forecast against the 121 Bucks benchmark — not a vague guess, but a data-driven assessment" },
-            ].map((item, i) => (
-              <div key={i} className="flex gap-4">
-                <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center shrink-0">
-                  <item.icon className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-primary mb-1">{item.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-20 md:py-28 border-b border-border/30" id="demos">
+      <section className="py-20 md:py-28 bg-white border-b border-border/30" id="demos">
         <div className="container mx-auto max-w-5xl px-4">
           <div className="text-center mb-14">
             <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4" data-testid="text-demos-title">See what you'll get</h2>
@@ -580,6 +529,61 @@ export default function Pricing() {
 
       <section className="py-20 md:py-28 bg-slate-50 border-b border-border/30">
         <div className="container mx-auto max-w-4xl px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4" data-testid="text-problem-title">The problem with 11+ preparation today</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Most parents preparing for the Bucks 11+ share the same frustrations.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
+            {[
+              { icon: HelpCircle, text: "You don't know where your child actually stands — just a vague sense of 'probably fine' or 'probably not'" },
+              { icon: BookOpen, text: "Workbooks and past papers feel like busywork — no way to tell if the practice is actually moving the needle" },
+              { icon: Clock, text: "Time is running out and you're not sure if you're focusing on the right areas" },
+              { icon: AlertTriangle, text: "The fear of leaving gaps undiscovered until it's too late to fix them" },
+            ].map((item, i) => (
+              <div key={i} className="flex gap-4 p-5 bg-slate-50 rounded-xl border border-slate-200 shadow-sm">
+                <item.icon className="h-6 w-6 text-brand-red shrink-0 mt-0.5" />
+                <p className="text-slate-700 leading-relaxed">{item.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 md:py-28 border-b border-border/30">
+        <div className="container mx-auto max-w-4xl px-4">
+          <div className="text-center mb-14">
+            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4" data-testid="text-solution-title">A different approach: diagnostic-led preparation</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Instead of guessing, start with clarity. Our diagnostics tell you exactly where the gaps are — then guide practice to close them.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-8 max-w-3xl mx-auto">
+            {[
+              { icon: Eye, title: "See exactly where gaps are", desc: "Timed diagnostics aligned to GL-style reasoning families pinpoint your child's specific weaknesses" },
+              { icon: Target, title: "Practice only what matters", desc: "Targeted drills focus on the highest-impact areas — no wasted effort on topics they've already mastered" },
+              { icon: TrendingUp, title: "Track real progress, not just effort", desc: "Forecast scores, pace metrics, and milestone diagnostics show whether preparation is actually working" },
+              { icon: BarChart3, title: "Know your child's realistic readiness", desc: "A clear forecast against the 121 Bucks benchmark — not a vague guess, but a data-driven assessment" },
+            ].map((item, i) => (
+              <div key={i} className="flex gap-4">
+                <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center shrink-0">
+                  <item.icon className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-primary mb-1">{item.title}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 md:py-28 bg-white border-b border-border/30">
+        <div className="container mx-auto max-w-4xl px-4">
           <div className="text-center mb-14">
             <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4" data-testid="text-trust-title">Built on Transparent Principles</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -698,7 +702,7 @@ export default function Pricing() {
               disabled={loading === "programme16"}
               data-testid="button-cta-programme"
             >
-              {loading === "programme16" ? <Loader2 className="h-5 w-5 animate-spin" /> : <>Structured Programme — £249 <ArrowRight className="ml-2 h-5 w-5" /></>}
+              {loading === "programme16" ? <Loader2 className="h-5 w-5 animate-spin" /> : <>Young Scholar Programme — £249 <ArrowRight className="ml-2 h-5 w-5" /></>}
             </Button>
             <Button
               size="lg"

@@ -39,7 +39,7 @@ export default function CheckoutSuccess() {
     }
   }, [user, isLoading, tier]);
 
-  const tierLabel = tier === "programme16" ? "Structured Readiness Programme" : "Practice Pack";
+  const tierLabel = tier === "programme16" ? "Young Scholar Programme" : "Practice Pack";
 
   if (processing) {
     return (

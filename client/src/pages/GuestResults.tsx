@@ -191,7 +191,7 @@ export default function GuestResults() {
               </div>
               <p className="text-sm text-slate-600 mb-4">12 weeks of targeted practice that moves the needle</p>
               <ul className="space-y-2 mb-6">
-                {["1,000+ questions across VR, NVR & Maths", "Easy & Medium difficulty drills (13 sections)", "2 full timed diagnostics (40 questions each)", "Practice papers (Quick & Full)", "PDF reports & full report archive", "Impact simulator & progress tracking"].map((f, i) => (
+                {["1,000+ questions across VR, NVR & Maths", "Easy & Medium drills (13 sections)", "6 Hard challenge drills included", "2 full timed diagnostics (40 questions each)", "Practice papers (Quick & Full)", "PDF reports & full report archive", "Impact simulator & progress tracking", "Badge-based Accomplishments system"].map((f, i) => (
                   <li key={i} className="flex items-center gap-2 text-sm text-slate-700">
                     <BarChart3 className="h-4 w-4 text-primary shrink-0" />
                     {f}
@@ -210,12 +210,12 @@ export default function GuestResults() {
             </div>
             <CardContent className="p-6">
               <div className="flex justify-between items-start mb-4">
-                <h3 className="text-xl font-bold text-primary font-serif">Structured Programme</h3>
+                <h3 className="text-xl font-bold text-primary font-serif">Young Scholar Programme</h3>
                 <span className="text-2xl font-bold text-primary">£249</span>
               </div>
               <p className="text-sm text-slate-600 mb-4">16-week guided roadmap with milestone tracking</p>
               <ul className="space-y-2 mb-6">
-                {["Everything in Practice Pack, plus:", "All 17 Hard-level challenge drills unlocked", "Mock exam simulation (50 questions, timed)", "16-week guided preparation roadmap", "4 milestone diagnostics with auto-tracking", "Weekly personalised task plans", "Premium Parent Analytics dashboard", "Gap velocity & forecast stability metrics", "Fatigue & pressure profiling"].map((f, i) => (
+                {["Everything in Practice Pack, plus:", "All 17 Hard challenge drills unlocked", "Mock exam simulation (50 questions, timed)", "16-week guided preparation roadmap", "4 milestone diagnostics with auto-tracking", "Weekly personalised task plans", "Premium Parent Analytics dashboard", "Gap velocity & forecast stability metrics", "Fatigue & pressure profiling", "Full Accomplishments & gamification rewards"].map((f, i) => (
                   <li key={i} className="flex items-center gap-2 text-sm text-slate-700">
                     <TrendingUp className="h-4 w-4 text-brand-amber shrink-0" />
                     {f}
@@ -223,7 +223,7 @@ export default function GuestResults() {
                 ))}
               </ul>
               <Button className="w-full bg-primary" asChild data-testid="button-upsell-programme16">
-                <Link href={`/sign-up?redirect=checkout&tier=programme16&guestSession=${id}`}>Get Structured Programme</Link>
+                <Link href={`/sign-up?redirect=checkout&tier=programme16&guestSession=${id}`}>Get Young Scholar Programme</Link>
               </Button>
             </CardContent>
           </Card>
@@ -243,7 +243,7 @@ export default function GuestResults() {
         <div className="absolute inset-0 bg-white/60 backdrop-blur-[2px] z-10 flex flex-col items-center justify-center p-6 text-center">
           <Lock className="h-10 w-10 text-slate-300 mb-3" />
           <h3 className="text-xl font-bold text-primary mb-2">Premium Analytics Dashboard</h3>
-          <p className="text-xs font-semibold text-brand-amber uppercase tracking-wide mb-2">Included with Structured Programme</p>
+          <p className="text-xs font-semibold text-brand-amber uppercase tracking-wide mb-2">Included with Young Scholar Programme</p>
           <p className="text-sm text-muted-foreground mb-4 max-w-md">
             See detailed readiness metrics, pace discipline analysis, fatigue indicators, and personalised improvement priorities.
           </p>

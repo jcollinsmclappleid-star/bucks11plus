@@ -149,11 +149,11 @@ export default function Programme() {
             <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center">
               <Lock className="h-10 w-10 text-primary" />
             </div>
-            <h1 className="text-3xl font-bold text-primary font-serif">Structured Readiness Programme</h1>
+            <h1 className="text-3xl font-bold text-primary font-serif">Young Scholar Programme</h1>
             <p className="text-muted-foreground max-w-lg text-lg">
               {hasPaidAccess()
-                ? "Upgrade to the Structured Programme to access your personalised 16-week roadmap with milestone diagnostics, gap velocity tracking, and weekly auto-generated plans."
-                : "The Structured Programme provides a guided 16-week roadmap with milestone diagnostics and advanced analytics to ensure your child is fully prepared."
+                ? "Upgrade to the Young Scholar Programme to access your personalised 16-week roadmap with milestone diagnostics, gap velocity tracking, and weekly auto-generated plans."
+                : "The Young Scholar Programme provides a guided 16-week roadmap with milestone diagnostics and advanced analytics to ensure your child is fully prepared."
               }
             </p>
             <Button size="lg" className="bg-primary text-lg h-14 px-8" asChild data-testid="button-upgrade-programme">
@@ -245,7 +245,7 @@ export default function Programme() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-border/60 pb-6">
         <div>
           <h1 className="text-3xl font-bold text-primary font-serif" data-testid="text-programme-title">
-            Structured Readiness Programme
+            Young Scholar Programme
           </h1>
           <p className="text-muted-foreground mt-1">16-week guided preparation roadmap</p>
         </div>
