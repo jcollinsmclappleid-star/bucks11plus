@@ -52,6 +52,7 @@ import QualifyingScore from "./pages/seo/QualifyingScore";
 import Timeline from "./pages/seo/Timeline";
 import SecondaryTransfer from "./pages/seo/SecondaryTransfer";
 import TownGuide from "./pages/seo/TownGuide";
+import { towns } from "./data/towns";
 import { useAuth } from "./lib/auth";
 
 function MainLayout({ children }: { children: React.ReactNode }) {
@@ -195,7 +196,11 @@ function Router() {
             <Route path="/how-to-pass-bucks-11-plus" component={HowToPass} />
             <Route path="/bucks-11-plus-registration" component={Registration} />
             <Route path="/bucks-11-plus-mistakes" component={CommonMistakes} />
-            <Route path="/bucks-11-plus-:town" component={TownGuide} />
+            {towns.map(t => (
+              <Route key={t.slug} path={`/bucks-11-plus-${t.slug}`}>
+                <TownGuide townSlug={t.slug} />
+              </Route>
+            ))}
             <Route path="/checkout-success" component={CheckoutSuccess} />
             
             <Route path="/terms">

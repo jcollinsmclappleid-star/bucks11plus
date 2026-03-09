@@ -1,4 +1,4 @@
-import { Link, useParams } from "wouter";
+import { Link } from "wouter";
 import { Seo } from "../../components/shared/Seo";
 import { ContentCTA } from "../../components/shared/ContentCTA";
 import { Disclaimer } from "../../components/shared/Disclaimer";
@@ -7,9 +7,8 @@ import { getTownBySlug } from "../../data/towns";
 import { ExternalLink } from "lucide-react";
 import NotFound from "../not-found";
 
-export default function TownGuide() {
-  const params = useParams<{ town: string }>();
-  const town = getTownBySlug(params.town || "");
+export default function TownGuide({ townSlug }: { townSlug: string }) {
+  const town = getTownBySlug(townSlug);
 
   if (!town) return <NotFound />;
 
