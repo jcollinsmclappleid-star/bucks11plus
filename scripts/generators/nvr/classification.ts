@@ -177,7 +177,8 @@ export function generateClassificationQuestions(): GeneratedQuestion[] {
     const rng = seededRandom(60000 + i * 313);
     rng(); rng(); rng();
 
-    const diff = pick(difficulties, rng);
+    const diffWeights: Array<typeof difficulties[number]> = ['easy', 'medium', 'medium', 'hard', 'hard', 'hard'];
+    const diff = pick(diffWeights, rng);
     const config = getDifficultyConfig(diff);
     const rule = getRuleForDifficulty(diff, rng);
     const stemIdx = i % stemVariants.length;

@@ -160,7 +160,8 @@ export function generateTransformationQuestions(): GeneratedQuestion[] {
 
       const defs = getTransformDefs(rng);
       const def = defs[i % defs.length];
-      const diff = pick(difficulties, rng);
+      const diffWeights: Array<typeof difficulties[number]> = ['easy', 'medium', 'medium', 'hard', 'hard', 'hard'];
+      const diff = pick(diffWeights, rng);
       const config = getDifficultyConfig(diff);
       const stemIdx = i % stemTemplates.length;
 

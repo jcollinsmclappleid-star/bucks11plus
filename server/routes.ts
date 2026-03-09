@@ -1081,15 +1081,6 @@ export async function registerRoutes(
     }
   });
 
-  app.get("/api/leaderboard", requireAuth, async (req, res, next) => {
-    try {
-      const leaderboard = await storage.getLeaderboard(req.user!.id);
-      res.json(leaderboard);
-    } catch (error) {
-      next(error);
-    }
-  });
-
   const requireAdmin = (req: any, res: any, next: any) => {
     if (!req.isAuthenticated() || !req.user?.isAdmin) {
       return res.status(403).json({ message: "Admin access required" });

@@ -131,11 +131,11 @@ content/
 - GET /api/admin/questions, GET /api/admin/questions/qa-queue, GET /api/admin/questions/stats
 - GET/POST/PUT/DELETE /api/admin/questions/:id, POST /api/admin/questions/:id/approve|reject
 
-### Badges & Leaderboard
+### Accomplishments (Badges)
 - GET /api/badges — all badge definitions
 - GET /api/badges/mine — current user's earned badges (requireAuth)
-- GET /api/leaderboard — top 50 users by forecast score with badge counts
 - Badge evaluation runs automatically after diagnostic submission (evaluateAndAwardBadges)
+- Accomplishments page at /app/badges — shows earned badges by category with progress bar
 
 ### Analytics (Parent Hub Premium)
 - GET /api/analytics — Full analytics payload (WAI, PDI, fatigue, CR, SI, RS, constraint, priorities, pressure, trajectory)
@@ -145,7 +145,8 @@ content/
 - GET /api/articles, GET /api/articles/:slug, GET /api/progress
 
 ## Question Engine
-- 1000 questions (300 VR + 400 NVR + 300 Maths) generated via scripts/generators
+- ~1013 questions (321 VR + 400 NVR + 292 Maths) generated via scripts/generators
+- Difficulty distribution: ~20% easy / 39% medium / 41% hard (GL-realistic harder skew)
 - NVR questions use SVG render_config (NvrSequenceConfig, NvrTransformConfig, NvrClassificationConfig)
 - Data interpretation uses chart render_config (ChartBarConfig, ChartLineConfig, ChartTableConfig)
 - Anti-repeat: question_usage tracks served_count + last_served_at per user per question

@@ -123,7 +123,8 @@ export function generateRotationReflectionQuestions(): GeneratedQuestion[] {
         const rng = seededRandom(50000 + transformDefs.indexOf(def) * 10000 + i * 173 + seedOffset);
         rng(); rng(); rng();
 
-        const diff = pick(difficulties, rng);
+        const diffWeights: Array<typeof difficulties[number]> = ['easy', 'medium', 'medium', 'hard', 'hard', 'hard'];
+        const diff = pick(diffWeights, rng);
         const config = getDifficultyConfig(diff);
         const stemIdx = i % stemTemplates.length;
 

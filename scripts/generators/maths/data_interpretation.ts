@@ -52,13 +52,14 @@ export function generateDataInterpretationQuestions(): GeneratedQuestion[] {
     { title: 'Library Visits in Leeds', xLabels: ['Jan', 'Feb', 'Mar', 'Apr'], values: [120, 95, 110, 130], yMax: 150, questionText: 'In which month were there the most library visits?', correct: 'Apr', distractors: ['Jan', 'Mar', 'Feb'], d: 1 },
     { title: 'Pets Owned by Class 5B', xLabels: ['Dog', 'Cat', 'Fish', 'Rabbit', 'Hamster'], values: [9, 7, 4, 3, 5], yMax: 12, questionText: 'How many pupils own a cat?', correct: '7', distractors: ['9', '5', '4'], d: 1 },
   ];
-  for (const c of barSingleStep) {
+  for (let idx = 0; idx < barSingleStep.length; idx++) {
+    const c = barSingleStep[idx];
     questions.push({
       section: 'Mathematics', type: 'multiple_choice',
       prompt: c.questionText,
       options: makeOptions(c.correct, c.distractors),
       correctAnswer: c.correct,
-      difficulty: 'easy',
+      difficulty: idx < 3 ? 'easy' : 'medium',
       skillId: 'maths.data', subRuleId: 'maths.data.bar_single_step',
       renderType: 'chart',
       renderConfig: { kind: 'chart.bar', title: c.title, xLabels: c.xLabels, values: c.values, yMax: c.yMax, questionText: c.questionText },
@@ -93,7 +94,7 @@ export function generateDataInterpretationQuestions(): GeneratedQuestion[] {
       prompt: c.questionText,
       options: makeOptions(c.correct, c.distractors),
       correctAnswer: c.correct,
-      difficulty: c.d <= 2 ? 'medium' : 'hard',
+      difficulty: c.d <= 1 ? 'medium' : 'hard',
       skillId: 'maths.data', subRuleId: 'maths.data.bar_two_step',
       renderType: 'chart',
       renderConfig: { kind: 'chart.bar', title: c.title, xLabels: c.xLabels, values: c.values, yMax: c.yMax, questionText: c.questionText },
@@ -122,13 +123,14 @@ export function generateDataInterpretationQuestions(): GeneratedQuestion[] {
     { title: 'Weight of Puppy (kg)', xLabels: ['Month 1', 'Month 2', 'Month 3', 'Month 4', 'Month 5', 'Month 6'], values: [2, 3, 5, 7, 9, 11], yMax: 14, questionText: 'How much did the puppy weigh in Month 4?', correct: '7', distractors: ['5', '9', '6'], d: 1 },
     { title: 'Electricity Usage in Norwich (kWh)', xLabels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'], values: [350, 320, 280, 220, 180, 150], yMax: 400, questionText: 'In which month was the usage 280 kWh?', correct: 'Mar', distractors: ['Feb', 'Apr', 'Jan'], d: 1 },
   ];
-  for (const c of lineSingleStep) {
+  for (let idx = 0; idx < lineSingleStep.length; idx++) {
+    const c = lineSingleStep[idx];
     questions.push({
       section: 'Mathematics', type: 'multiple_choice',
       prompt: c.questionText,
       options: makeOptions(c.correct, c.distractors),
       correctAnswer: c.correct,
-      difficulty: 'easy',
+      difficulty: idx < 3 ? 'easy' : 'medium',
       skillId: 'maths.data', subRuleId: 'maths.data.line_single_step',
       renderType: 'chart',
       renderConfig: { kind: 'chart.line', title: c.title, xLabels: c.xLabels, values: c.values, yMax: c.yMax, questionText: c.questionText },
@@ -163,7 +165,7 @@ export function generateDataInterpretationQuestions(): GeneratedQuestion[] {
       prompt: c.questionText,
       options: makeOptions(c.correct, c.distractors),
       correctAnswer: c.correct,
-      difficulty: c.d <= 2 ? 'medium' : 'hard',
+      difficulty: c.d <= 1 ? 'medium' : 'hard',
       skillId: 'maths.data', subRuleId: 'maths.data.table_two_step',
       renderType: 'chart',
       renderConfig: { kind: 'chart.table', title: c.title, headers: c.headers, rows: c.rows, questionText: c.questionText },

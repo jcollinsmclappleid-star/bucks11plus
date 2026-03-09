@@ -144,19 +144,21 @@ function buildDistractorFrame(
 
     switch (distortionType) {
       case 'partial':
-        if (idx === 0) {
-          result = { ...result, rotation: (result.rotation + pick([45, 90, -45], rng)) % 360 };
+        result = { ...result, rotation: (result.rotation + pick([45, 90, -45, -90, 135, 180], rng)) % 360 };
+        if (rng() > 0.4) {
+          result = { ...result, size: result.size + pick([4, -4, 6, -6], rng) };
         }
         break;
       case 'wrong_rule':
-        result = { ...result, size: result.size + pick([3, -3, 5], rng) };
-        if (rng() > 0.5) {
-          result = { ...result, style: { ...result.style, fill: pick(allFills, rng) } };
-        }
+        result = { ...result, size: result.size + pick([5, -5, 8, -8, 10], rng) };
+        result = { ...result, style: { ...result.style, fill: pick(allFills, rng) } };
         break;
       case 'overshoot':
-        result = { ...result, rotation: (result.rotation + pick([30, 60, -30], rng)) % 360 };
-        result = { ...result, size: result.size + pick([2, -2], rng) };
+        result = { ...result, rotation: (result.rotation + pick([60, 120, -60, -120, 180], rng)) % 360 };
+        result = { ...result, size: result.size + pick([4, -4, 7, -7], rng) };
+        if (rng() > 0.5) {
+          result = { ...result, shape: pick(simpleShapes, rng) };
+        }
         break;
     }
     return result;
@@ -171,7 +173,8 @@ function generateCompoundSequence(startSeed: number, count: number): GeneratedQu
     const rng = seededRandom(startSeed + i * 257);
     rng(); rng(); rng();
 
-    const diff = pick(difficulties, rng);
+    const diffCycle: Array<typeof difficulties[number]> = ['easy', 'medium', 'medium', 'hard', 'hard', 'hard', 'hard', 'hard', 'medium', 'hard'];
+    const diff = diffCycle[i % diffCycle.length];
     const config = getDifficultyConfig(diff);
     const numRules = diff === 'easy' ? 1 : diff === 'medium' ? 2 : 3;
     const rule = buildRules(rng, numRules);
@@ -236,9 +239,15 @@ function generateCompoundSequence(startSeed: number, count: number): GeneratedQu
 }
 
 export function generateSequenceQuestions(): GeneratedQuestion[] {
-  return [
-    ...generateCompoundSequence(20000, 50),
-    ...generateCompoundSequence(25000, 50),
-    ...generateCompoundSequence(30000, 50),
+  const all = [
+    ...generateCompoundSequence(20000, 80),
+    ...generateCompoundSequence(25000, 80),
+    ...generateCompoundSequence(30000, 80),
+    ...generateCompoundSequence(35000, 80),
+    ...generateCompoundSequence(40000, 80),
   ];
+  const easy = all.filter(q => q.difficulty === 'easy').slice(0, 10);
+  const medium = all.filter(q => q.difficulty === 'medium').slice(0, 15);
+  const hard = all.filter(q => q.difficulty === 'hard').slice(0, 25);
+  return [...easy, ...medium, ...hard];
 }

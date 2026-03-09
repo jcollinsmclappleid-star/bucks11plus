@@ -47,7 +47,8 @@ export function generateSymmetryQuestions(): GeneratedQuestion[] {
     const rng = seededRandom(110000 + i * 179);
     rng(); rng(); rng();
 
-    const diff = pick(difficulties, rng);
+    const diffWeights: Array<typeof difficulties[number]> = ['easy', 'medium', 'medium', 'hard', 'hard', 'hard'];
+    const diff = pick(diffWeights, rng);
     const config = getSymmetryConfig(diff);
     const stemIdx = i % stemTemplates.length;
 

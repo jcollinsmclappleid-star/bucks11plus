@@ -73,8 +73,6 @@ export interface IStorage {
   getUserBadges(userId: string): Promise<(UserBadge & { badge: Badge })[]>;
   awardBadge(userId: string, badgeId: string, sessionId?: string): Promise<UserBadge | null>;
   evaluateAndAwardBadges(userId: string, sessionId?: string): Promise<Badge[]>;
-  getLeaderboard(currentUserId?: string): Promise<{ odId: string; displayName: string; score: number; badgeCount: number; rank: number; isMe: boolean }[]>;
-
   getAllQuestions(filters?: { section?: string; skillId?: string; difficulty?: string; qaStatus?: string; renderType?: string }): Promise<Question[]>;
   getQuestion(id: string): Promise<Question | undefined>;
   createQuestion(data: Partial<Question>): Promise<Question>;
@@ -1190,47 +1188,6 @@ export class DatabaseStorage implements IStorage {
     return newlyEarned;
   }
 
-  async getLeaderboard(currentUserId?: string): Promise<{ odId: string; displayName: string; score: number; badgeCount: number; rank: number; isMe: boolean }[]> {
-    const result = await db.execute(sql`
-      WITH latest_scores AS (
-        SELECT DISTINCT ON (user_id) user_id, forecast_score
-        FROM test_sessions
-        WHERE completed_at IS NOT NULL AND user_id IS NOT NULL AND forecast_score IS NOT NULL
-        ORDER BY user_id, completed_at DESC
-      ),
-      badge_counts AS (
-        SELECT user_id, COUNT(*) as badge_count
-        FROM user_badges
-        GROUP BY user_id
-      )
-      SELECT
-        u.id as user_id,
-        COALESCE(u.child_name, u.username) as child_name,
-        COALESCE(ls.forecast_score, 0) as score,
-        COALESCE(bc.badge_count, 0) as badge_count,
-        ROW_NUMBER() OVER (ORDER BY COALESCE(ls.forecast_score, 0) DESC, COALESCE(bc.badge_count, 0) DESC) as rank
-      FROM users u
-      LEFT JOIN latest_scores ls ON u.id = ls.user_id
-      LEFT JOIN badge_counts bc ON u.id = bc.user_id
-      WHERE ls.forecast_score IS NOT NULL
-      ORDER BY rank
-      LIMIT 50
-    `);
-
-    return result.rows.map((r: any) => {
-      const fullName = r.child_name || 'Anonymous';
-      const isMe = currentUserId ? r.user_id === currentUserId : false;
-      const displayName = isMe ? fullName : (fullName.length > 1 ? fullName[0] + '*'.repeat(Math.min(fullName.length - 1, 6)) : fullName);
-      return {
-        odId: `entry-${r.rank}`,
-        displayName,
-        score: Number(r.score),
-        badgeCount: Number(r.badge_count),
-        rank: Number(r.rank),
-        isMe,
-      };
-    });
-  }
 }
 
 export const storage = new DatabaseStorage();

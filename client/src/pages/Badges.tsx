@@ -92,11 +92,11 @@ export default function Badges() {
 
   return (
     <div className="container mx-auto max-w-6xl px-4 py-8 space-y-8">
-      <Seo title="Badges | 11+ Standard" description="Track your achievements and earn badges as you prepare for the 11+ exam." />
+      <Seo title="Accomplishments | 11+ Standard" description="Track your achievements and earn badges as you prepare for the 11+ exam." />
 
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-primary font-serif" data-testid="text-badges-title">Achievements</h1>
+          <h1 className="text-3xl font-bold text-primary font-serif" data-testid="text-badges-title">Accomplishments</h1>
           <p className="text-muted-foreground mt-1">Earn badges as you practise and improve.</p>
         </div>
         <div className="flex items-center gap-4">
@@ -108,11 +108,6 @@ export default function Badges() {
             <div className="text-3xl font-bold text-muted-foreground">{totalBadges}</div>
             <div className="text-xs text-muted-foreground">Total</div>
           </div>
-          <Link href="/app/leaderboard">
-            <button className="ml-4 px-4 py-2 bg-primary text-primary-foreground rounded-md text-sm font-medium hover:bg-primary/90 transition-colors" data-testid="button-view-leaderboard">
-              View Leaderboard
-            </button>
-          </Link>
         </div>
       </div>
 

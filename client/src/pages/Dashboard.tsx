@@ -308,11 +308,11 @@ export default function Dashboard() {
                   <Trophy className="h-6 w-6 text-amber-600" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-bold text-primary">Badges & Leaderboard</h3>
-                  <p className="text-sm text-muted-foreground">Earn achievements and see how you compare.</p>
+                  <h3 className="font-bold text-primary">Accomplishments</h3>
+                  <p className="text-sm text-muted-foreground">Earn badges and track your achievements.</p>
                 </div>
                 <Button variant="outline" asChild data-testid="link-badges">
-                  <Link href="/app/badges">View Badges <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                  <Link href="/app/badges">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
                 </Button>
               </CardContent>
             </Card>
