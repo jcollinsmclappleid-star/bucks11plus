@@ -183,6 +183,25 @@ export const programmeTasks = pgTable("programme_tasks", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
+export const badges = pgTable("badges", {
+  id: varchar("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  icon: text("icon").notNull(),
+  category: text("category").notNull(),
+  tier: text("tier").notNull().default("bronze"),
+  criteria: jsonb("criteria").notNull(),
+  sortOrder: integer("sort_order").notNull().default(0),
+});
+
+export const userBadges = pgTable("user_badges", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull(),
+  badgeId: varchar("badge_id").notNull(),
+  earnedAt: timestamp("earned_at").notNull().defaultNow(),
+  sessionId: varchar("session_id"),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -217,4 +236,6 @@ export type QuestionUsage = typeof questionUsage.$inferSelect;
 export type ContentCalibration = typeof contentCalibration.$inferSelect;
 export type QuestionVariant = typeof questionVariants.$inferSelect;
 export type ProgrammeTask = typeof programmeTasks.$inferSelect;
+export type Badge = typeof badges.$inferSelect;
+export type UserBadge = typeof userBadges.$inferSelect;
 export type OnboardingData = z.infer<typeof onboardingSchema>;

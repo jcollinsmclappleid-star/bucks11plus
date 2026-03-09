@@ -362,6 +362,12 @@ export async function registerRoutes(
 
       await storage.migrateGuestUsage(req.params.id, req.user!.id);
 
+      try {
+        await storage.evaluateAndAwardBadges(req.user!.id, session.id);
+      } catch (err) {
+        console.error("[Badges] Failed to evaluate badges on guest claim:", err);
+      }
+
       res.json(updated);
     } catch (error) {
       next(error);
@@ -571,7 +577,14 @@ export async function registerRoutes(
         }
       }
 
-      res.json(completed);
+      let newBadges: any[] = [];
+      try {
+        newBadges = await storage.evaluateAndAwardBadges(req.user!.id, session.id);
+      } catch (err) {
+        console.error("[Badges] Failed to evaluate badges:", err);
+      }
+
+      res.json({ ...completed, newBadges });
     } catch (error) {
       next(error);
     }
@@ -1049,6 +1062,33 @@ export async function registerRoutes(
     }
   });
 
+
+  app.get("/api/badges", async (_req, res, next) => {
+    try {
+      const allBadges = await storage.getAllBadges();
+      res.json(allBadges);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.get("/api/badges/mine", requireAuth, async (req, res, next) => {
+    try {
+      const earned = await storage.getUserBadges(req.user!.id);
+      res.json(earned);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.get("/api/leaderboard", requireAuth, async (req, res, next) => {
+    try {
+      const leaderboard = await storage.getLeaderboard(req.user!.id);
+      res.json(leaderboard);
+    } catch (error) {
+      next(error);
+    }
+  });
 
   const requireAdmin = (req: any, res: any, next: any) => {
     if (!req.isAuthenticated() || !req.user?.isAdmin) {

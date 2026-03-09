@@ -39,6 +39,8 @@ import GLAlignment from "./pages/GLAlignment";
 import About from "./pages/About";
 import Legal from "./pages/Legal";
 
+import Badges from "./pages/Badges";
+import Leaderboard from "./pages/Leaderboard";
 import QuestionList from "./pages/admin/QuestionList";
 import QuestionEditor from "./pages/admin/QuestionEditor";
 import { useAuth } from "./lib/auth";
@@ -206,6 +208,12 @@ function Router() {
             </Route>
             <Route path="/app/analytics">
               <AuthGate><ParentAnalytics /></AuthGate>
+            </Route>
+            <Route path="/app/badges">
+              <AuthGate><Badges /></AuthGate>
+            </Route>
+            <Route path="/app/leaderboard">
+              <AuthGate><Leaderboard /></AuthGate>
             </Route>
             <Route path="/app/checkout-success">
               <AuthGate><CheckoutSuccess /></AuthGate>

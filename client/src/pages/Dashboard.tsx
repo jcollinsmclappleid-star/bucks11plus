@@ -2,7 +2,7 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { ArrowRight, AlertCircle, BookOpen, Clock, Lock, Target, Loader2, FileText, TrendingUp } from "lucide-react";
+import { ArrowRight, AlertCircle, BookOpen, Clock, Lock, Target, Loader2, FileText, TrendingUp, Trophy } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 import { useAuth } from "../lib/auth";
 import { useQuery } from "@tanstack/react-query";
@@ -298,6 +298,21 @@ export default function Dashboard() {
                 </div>
                 <Button variant="outline" asChild data-testid="link-progress-tracking">
                   <Link href="/app/progress">View Progress <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="border-border/60 shadow-sm bg-gradient-to-r from-amber-50/50 to-violet-50/50">
+              <CardContent className="p-6 flex items-center gap-4">
+                <div className="h-12 w-12 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
+                  <Trophy className="h-6 w-6 text-amber-600" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-bold text-primary">Badges & Leaderboard</h3>
+                  <p className="text-sm text-muted-foreground">Earn achievements and see how you compare.</p>
+                </div>
+                <Button variant="outline" asChild data-testid="link-badges">
+                  <Link href="/app/badges">View Badges <ArrowRight className="ml-2 h-4 w-4" /></Link>
                 </Button>
               </CardContent>
             </Card>

@@ -91,6 +91,8 @@ content/
 - **articles**: id, title, slug, excerpt, content, category, readTime, publishedAt
 - **programme_enrolments / programme_milestones / weekly_plans**: Programme tracking tables
 - **programme_tasks**: id (serial), userId, enrolmentId, week, taskType (drill/diagnostic), title, description, skillId, targetCount, completedCount, status (pending/completed), completedAt — weekly task checklist for programme users
+- **badges**: id, name, description, icon, category (milestone/score/accuracy/streak/improvement/speed), tier (bronze/silver/gold/platinum), criteria (jsonb), sortOrder
+- **user_badges**: id, userId, badgeId, earnedAt, sessionId — tracks earned badges per user
 - **stripe.*** (managed by stripe-replit-sync)
 
 ## Guest Diagnostic Flow
@@ -128,6 +130,12 @@ content/
 ### Admin (requireAdmin)
 - GET /api/admin/questions, GET /api/admin/questions/qa-queue, GET /api/admin/questions/stats
 - GET/POST/PUT/DELETE /api/admin/questions/:id, POST /api/admin/questions/:id/approve|reject
+
+### Badges & Leaderboard
+- GET /api/badges — all badge definitions
+- GET /api/badges/mine — current user's earned badges (requireAuth)
+- GET /api/leaderboard — top 50 users by forecast score with badge counts
+- Badge evaluation runs automatically after diagnostic submission (evaluateAndAwardBadges)
 
 ### Analytics (Parent Hub Premium)
 - GET /api/analytics — Full analytics payload (WAI, PDI, fatigue, CR, SI, RS, constraint, priorities, pressure, trajectory)

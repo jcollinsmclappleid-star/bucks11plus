@@ -48,6 +48,7 @@ export default function Navbar() {
               {isProgramme() && (
                 <Link href="/app/programme" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors hidden sm:block" data-testid="link-programme">Programme</Link>
               )}
+              <Link href="/app/badges" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors hidden md:block" data-testid="link-badges">Badges</Link>
               <Link href="/app/progress" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors hidden md:block" data-testid="link-progress">Progress</Link>
               <Link href="/app/report-archive" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors hidden lg:block" data-testid="link-reports">Reports</Link>
               <Link href="/app/account" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors hidden md:block" data-testid="link-account">

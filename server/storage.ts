@@ -3,11 +3,11 @@ import { db } from "./db";
 import {
   users, diagnostics, questions, testSessions, testAnswers, articles, practiceSections,
   programmeEnrolments, programmeMilestones, weeklyPlans, questionUsage, contentCalibration,
-  programmeTasks,
+  programmeTasks, badges, userBadges,
   type User, type InsertUser, type Diagnostic, type Question,
   type TestSession, type TestAnswer, type Article, type PracticeSection,
   type ProgrammeEnrolment, type ProgrammeMilestone, type WeeklyPlan,
-  type ProgrammeTask, type OnboardingData,
+  type ProgrammeTask, type OnboardingData, type Badge, type UserBadge,
 } from "@shared/schema";
 
 const PHASE_MAP: Record<number, string> = {
@@ -68,6 +68,12 @@ export interface IStorage {
   incrementTaskProgress(userId: string, taskType: string, skillId?: string): Promise<void>;
 
   migrateGuestUsage(guestSessionId: string, userId: string): Promise<void>;
+
+  getAllBadges(): Promise<Badge[]>;
+  getUserBadges(userId: string): Promise<(UserBadge & { badge: Badge })[]>;
+  awardBadge(userId: string, badgeId: string, sessionId?: string): Promise<UserBadge | null>;
+  evaluateAndAwardBadges(userId: string, sessionId?: string): Promise<Badge[]>;
+  getLeaderboard(currentUserId?: string): Promise<{ odId: string; displayName: string; score: number; badgeCount: number; rank: number; isMe: boolean }[]>;
 
   getAllQuestions(filters?: { section?: string; skillId?: string; difficulty?: string; qaStatus?: string; renderType?: string }): Promise<Question[]>;
   getQuestion(id: string): Promise<Question | undefined>;
@@ -1063,6 +1069,167 @@ export class DatabaseStorage implements IStorage {
     return db.select().from(questions)
       .where(eq(questions.qaStatus, status))
       .orderBy(questions.section, questions.skillId);
+  }
+
+  async getAllBadges(): Promise<Badge[]> {
+    return db.select().from(badges).orderBy(badges.sortOrder);
+  }
+
+  async getUserBadges(userId: string): Promise<(UserBadge & { badge: Badge })[]> {
+    const rows = await db.select().from(userBadges)
+      .innerJoin(badges, eq(userBadges.badgeId, badges.id))
+      .where(eq(userBadges.userId, userId))
+      .orderBy(desc(userBadges.earnedAt));
+
+    return rows.map(r => ({
+      ...r.user_badges,
+      badge: r.badges,
+    }));
+  }
+
+  async awardBadge(userId: string, badgeId: string, sessionId?: string): Promise<UserBadge | null> {
+    const result = await db.insert(userBadges).values({
+      userId,
+      badgeId,
+      sessionId: sessionId || null,
+    }).onConflictDoNothing().returning();
+    return result.length > 0 ? result[0] : null;
+  }
+
+  async evaluateAndAwardBadges(userId: string, sessionId?: string): Promise<Badge[]> {
+    const allBadges = await this.getAllBadges();
+    const existingBadges = await db.select().from(userBadges)
+      .where(eq(userBadges.userId, userId));
+    const earnedIds = new Set(existingBadges.map(b => b.badgeId));
+
+    const sessions = await this.getUserTestSessions(userId);
+    const completed = sessions.filter(s => s.completedAt);
+
+    const newlyEarned: Badge[] = [];
+
+    for (const badge of allBadges) {
+      if (earnedIds.has(badge.id)) continue;
+
+      const criteria = badge.criteria as any;
+      let earned = false;
+
+      switch (criteria.type) {
+        case 'diagnostics_completed':
+          earned = completed.length >= criteria.count;
+          break;
+
+        case 'forecast_score':
+          earned = completed.some(s => (s.forecastScore || 0) >= criteria.score);
+          break;
+
+        case 'perfect_section':
+          earned = completed.some(s => {
+            const scores = s.sectionScores as any[];
+            return scores?.some((sec: any) => sec.score === 100 && sec.total >= 3);
+          });
+          break;
+
+        case 'accuracy_percent': {
+          earned = completed.some(s => {
+            const scores = s.sectionScores as any[];
+            if (!scores || scores.length === 0) return false;
+            const totalCorrect = scores.reduce((sum: number, sec: any) => sum + (sec.correct || 0), 0);
+            const totalQ = scores.reduce((sum: number, sec: any) => sum + (sec.total || 0), 0);
+            return totalQ > 0 && (totalCorrect / totalQ) * 100 >= criteria.percent;
+          });
+          break;
+        }
+
+        case 'active_days': {
+          const uniqueDays = new Set(
+            completed.map(s => new Date(s.startedAt).toISOString().split('T')[0])
+          );
+          earned = uniqueDays.size >= criteria.count;
+          break;
+        }
+
+        case 'score_improvement': {
+          if (completed.length >= 2) {
+            const scores = completed
+              .filter(s => s.forecastScore)
+              .map(s => s.forecastScore!);
+            if (scores.length >= 2) {
+              const firstScore = scores[scores.length - 1];
+              const bestScore = Math.max(...scores);
+              earned = (bestScore - firstScore) >= criteria.points;
+            }
+          }
+          break;
+        }
+
+        case 'all_under_pace': {
+          earned = completed.some(s => {
+            const pace = s.paceData as any[];
+            return pace?.length > 0 && pace.every((p: any) => p.avg <= p.expected);
+          });
+          break;
+        }
+
+        case 'avg_time_under': {
+          earned = completed.some(s => {
+            const pace = s.paceData as any[];
+            if (!pace || pace.length === 0) return false;
+            const totalAvg = pace.reduce((sum: number, p: any) => sum + p.avg, 0) / pace.length;
+            return totalAvg <= criteria.seconds;
+          });
+          break;
+        }
+      }
+
+      if (earned) {
+        const result = await this.awardBadge(userId, badge.id, sessionId);
+        if (result) newlyEarned.push(badge);
+      }
+    }
+
+    return newlyEarned;
+  }
+
+  async getLeaderboard(currentUserId?: string): Promise<{ odId: string; displayName: string; score: number; badgeCount: number; rank: number; isMe: boolean }[]> {
+    const result = await db.execute(sql`
+      WITH latest_scores AS (
+        SELECT DISTINCT ON (user_id) user_id, forecast_score
+        FROM test_sessions
+        WHERE completed_at IS NOT NULL AND user_id IS NOT NULL AND forecast_score IS NOT NULL
+        ORDER BY user_id, completed_at DESC
+      ),
+      badge_counts AS (
+        SELECT user_id, COUNT(*) as badge_count
+        FROM user_badges
+        GROUP BY user_id
+      )
+      SELECT
+        u.id as user_id,
+        COALESCE(u.child_name, u.username) as child_name,
+        COALESCE(ls.forecast_score, 0) as score,
+        COALESCE(bc.badge_count, 0) as badge_count,
+        ROW_NUMBER() OVER (ORDER BY COALESCE(ls.forecast_score, 0) DESC, COALESCE(bc.badge_count, 0) DESC) as rank
+      FROM users u
+      LEFT JOIN latest_scores ls ON u.id = ls.user_id
+      LEFT JOIN badge_counts bc ON u.id = bc.user_id
+      WHERE ls.forecast_score IS NOT NULL
+      ORDER BY rank
+      LIMIT 50
+    `);
+
+    return result.rows.map((r: any) => {
+      const fullName = r.child_name || 'Anonymous';
+      const isMe = currentUserId ? r.user_id === currentUserId : false;
+      const displayName = isMe ? fullName : (fullName.length > 1 ? fullName[0] + '*'.repeat(Math.min(fullName.length - 1, 6)) : fullName);
+      return {
+        odId: `entry-${r.rank}`,
+        displayName,
+        score: Number(r.score),
+        badgeCount: Number(r.badge_count),
+        rank: Number(r.rank),
+        isMe,
+      };
+    });
   }
 }
 
