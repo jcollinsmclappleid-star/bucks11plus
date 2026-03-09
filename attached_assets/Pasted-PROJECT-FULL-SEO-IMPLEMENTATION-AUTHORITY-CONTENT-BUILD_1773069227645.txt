@@ -1,0 +1,411 @@
+PROJECT: FULL SEO IMPLEMENTATION + AUTHORITY CONTENT BUILD  
+DOMAIN: bucks11plustest.co.uk  
+PRODUCT BRAND: 11+ Standard  
+
+OBJECTIVE  
+Reconfigure the site SEO, structure, and informational content to align with the domain bucks11plustest.co.uk.
+
+The website should function as:
+
+1. An informational authority hub about the Buckinghamshire 11+ system  
+2. A readiness platform offering diagnostics and preparation tools  
+
+The site must remain clearly independent and non-affiliated with official exam administrators.
+
+The SEO architecture should follow a pillar + cluster strategy to capture Buckinghamshire parent search traffic.
+
+Design requirements:
+
+• Maintain current visual design system  
+• Maintain typography and colour palette  
+• Maintain existing layout components  
+• Content must integrate into existing UI blocks  
+• Avoid long unstructured paragraphs  
+• Use structured sections and clear headings  
+
+------------------------------------------------------------
+
+GLOBAL SEO CONFIGURATION
+
+Update site metadata.
+
+Site Title  
+Bucks 11 Plus Test Guide | Buckinghamshire Grammar School 11+ Preparation
+
+Meta Description  
+Independent guide to the Buckinghamshire 11+ grammar school test. Learn how the Secondary Transfer Test works, the qualifying score, grammar schools involved, and assess readiness with a structured diagnostic.
+
+Primary Keyword Targets  
+bucks 11 plus test  
+buckinghamshire 11+  
+bucks grammar school test  
+buckinghamshire secondary transfer test  
+bucks grammar schools  
+11 plus bucks  
+qualifying score 121 bucks
+
+Ensure homepage content naturally references these phrases.
+
+------------------------------------------------------------
+
+TECHNICAL SEO CONFIGURATION
+
+Implement the following.
+
+1. Canonical Tags  
+Ensure every page includes a canonical link referencing its own URL.
+
+2. Sitemap  
+Generate sitemap.xml including all pages and cluster pages.
+
+3. Robots.txt  
+Allow indexing of all informational pages and core platform pages.
+
+4. Structured Data  
+Add schema markup for:
+
+• FAQPage  
+• Article  
+• WebSite  
+• BreadcrumbList
+
+5. Heading Hierarchy  
+Each page must follow:
+
+H1: page title  
+H2: section headings  
+H3: sub sections
+
+6. Internal Linking  
+All informational pages must link to:
+
+• diagnostic tool  
+• pillar guide page
+
+7. Page Speed  
+Avoid heavy images. Compress images and maintain fast loading.
+
+------------------------------------------------------------
+
+NAVIGATION STRUCTURE
+
+Update main navigation.
+
+Home  
+How It Works  
+Practice / Programme  
+About the Bucks 11+  
+Grammar Schools  
+FAQ  
+Start Diagnostic
+
+------------------------------------------------------------
+
+PILLAR AUTHORITY PAGE
+
+URL  
+/buckinghamshire-11-plus-guide
+
+Title  
+The Buckinghamshire 11+ Grammar School Test: Complete Parent Guide
+
+Meta Description  
+Learn how the Buckinghamshire Secondary Transfer Test works, the qualifying score required, grammar schools involved, and how parents prepare effectively.
+
+CONTENT STRUCTURE
+
+SECTION: Overview of the Bucks 11+
+
+Explain the Buckinghamshire Secondary Transfer Test.
+
+Mention that it is administered by The Buckinghamshire Grammar Schools (TBGS), a company formed by the thirteen grammar schools in Buckinghamshire.
+
+Children typically take the test in Year 6.
+
+Explain that the results determine qualification for grammar school admission consideration.
+
+------------------------------------------------------------
+
+SECTION: The 13 Buckinghamshire Grammar Schools
+
+List schools clearly.
+
+Aylesbury Grammar School  
+Aylesbury High School  
+Beaconsfield High School  
+Burnham Grammar School  
+Chesham Grammar School  
+Dr Challoner's Grammar School  
+Dr Challoner's High School  
+John Hampden Grammar School  
+Royal Grammar School High Wycombe  
+Sir Henry Floyd Grammar School  
+Sir William Borlase's Grammar School  
+Wycombe High School  
+The Royal Latin School
+
+Each item must link to the official school website.
+
+------------------------------------------------------------
+
+SECTION: How the Bucks 11+ Test Works
+
+Explain:
+
+• children take the exam in Year 6  
+• scores are standardised  
+• qualifying score is 121  
+
+Explain clearly that qualifying does not guarantee a school place.
+
+------------------------------------------------------------
+
+SECTION: What the Test Contains
+
+Explain that the test evaluates:
+
+• verbal reasoning  
+• non-verbal reasoning  
+• mathematical reasoning
+
+Questions are timed and multiple-choice.
+
+------------------------------------------------------------
+
+SECTION: Admissions Timeline
+
+Add a table:
+
+Registration opens – May to June (Year 5)  
+Registration deadline – Late June  
+Test dates – September (Year 6)  
+Results released – October  
+Secondary school application deadline – 31 October
+
+------------------------------------------------------------
+
+SECTION: Understanding Standardised Scores
+
+Explain:
+
+raw score  
+age standardisation  
+cohort comparison  
+why pass mark is 121
+
+Avoid suggesting the platform predicts official results.
+
+------------------------------------------------------------
+
+SECTION: Preparing for the Bucks 11+
+
+Explain typical preparation approaches.
+
+Introduce diagnostic readiness assessment.
+
+Add CTA:
+
+Start Free Diagnostic
+
+------------------------------------------------------------
+
+CLUSTER PAGES
+
+Create the following pages.
+
+1. Grammar Schools Directory
+
+URL  
+/bucks-grammar-schools
+
+Include short description for each grammar school and link to official site.
+
+------------------------------------------------------------
+
+2. Qualifying Score Explanation
+
+URL  
+/bucks-11-plus-qualifying-score
+
+Explain:
+
+meaning of score 121  
+standardisation process  
+why scores vary annually
+
+------------------------------------------------------------
+
+3. Bucks 11+ Timeline
+
+URL  
+/bucks-11-plus-timeline
+
+Explain full registration and admissions timeline.
+
+------------------------------------------------------------
+
+4. Secondary Transfer Test Guide
+
+URL  
+/buckinghamshire-secondary-transfer-test
+
+Explain official purpose and structure of the exam.
+
+------------------------------------------------------------
+
+ADDITIONAL HIGH-VALUE SEO PAGES
+
+Create three additional high-traffic informational pages.
+
+------------------------------------------------------------
+
+PAGE 1
+
+URL  
+/how-to-pass-bucks-11-plus
+
+Title  
+How to Pass the Bucks 11 Plus Test
+
+Content sections:
+
+• understanding the 121 qualifying score  
+• common preparation mistakes  
+• importance of speed and accuracy  
+• when to start preparing
+
+------------------------------------------------------------
+
+PAGE 2
+
+URL  
+/bucks-11-plus-registration
+
+Title  
+How to Register for the Bucks 11 Plus Test
+
+Explain:
+
+who can register  
+registration process  
+deadlines  
+testing arrangements
+
+------------------------------------------------------------
+
+PAGE 3
+
+URL  
+/bucks-11-plus-mistakes
+
+Title  
+Common Mistakes Parents Make Preparing for the Bucks 11+
+
+Examples:
+
+starting preparation too late  
+focusing only on practice papers  
+ignoring timing pressure  
+not understanding standardisation
+
+------------------------------------------------------------
+
+FAQ SECTION
+
+Add FAQ schema to pillar page.
+
+Questions:
+
+What score is needed to pass the Bucks 11+?  
+How many grammar schools are in Buckinghamshire?  
+Who runs the Buckinghamshire Secondary Transfer Test?  
+Does scoring 121 guarantee a grammar school place?  
+When do children take the Bucks 11+ test?
+
+------------------------------------------------------------
+
+LEGAL AND TRUST PAGES
+
+Create the following pages.
+
+------------------------------------------------------------
+
+PRIVACY POLICY
+
+URL  
+/privacy-policy
+
+Include sections:
+
+information collected  
+cookies  
+analytics  
+data storage  
+contact information
+
+Explain that the site collects limited data related to diagnostic usage.
+
+------------------------------------------------------------
+
+TERMS OF SERVICE
+
+URL  
+/terms-of-service
+
+Include:
+
+platform usage terms  
+educational disclaimer  
+no guarantee of exam results  
+intellectual property  
+user responsibilities
+
+------------------------------------------------------------
+
+SAFEGUARDING POLICY
+
+URL  
+/safeguarding
+
+Explain commitment to child safety.
+
+Include:
+
+• platform designed for parental use  
+• no direct child data collection without parental supervision  
+• compliance with UK safeguarding expectations
+
+------------------------------------------------------------
+
+DISCLAIMER
+
+Add to all informational pages:
+
+This website is an independent educational resource designed to help families understand the Buckinghamshire 11+ system.
+
+It is not affiliated with The Buckinghamshire Grammar Schools, GL Assessment, or any individual grammar school.
+
+------------------------------------------------------------
+
+INTERNAL LINKING STRUCTURE
+
+Homepage → Buckinghamshire guide  
+Authority page → diagnostic tool  
+Cluster pages → authority page  
+Cluster pages → diagnostic tool
+
+------------------------------------------------------------
+
+FINAL SEO OBJECTIVE
+
+The site should target search traffic for:
+
+bucks 11 plus test  
+buckinghamshire grammar school test  
+bucks secondary transfer test  
+buckinghamshire grammar schools  
+qualifying score 121 bucks
+
+------------------------------------------------------------
+
+Ensure all new pages match existing UI components and visual style.

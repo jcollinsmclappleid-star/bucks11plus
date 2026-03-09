@@ -1,0 +1,168 @@
+LOCAL SEO IMPLEMENTATION  
+PROJECT: bucks11plustest.co.uk
+
+OBJECTIVE
+
+Implement location-based SEO pages targeting towns within Buckinghamshire to capture local parent search traffic related to the 11+ grammar school system.
+
+These pages should:
+
+• rank for local 11+ searches  
+• provide useful informational content  
+• link users to the readiness diagnostic tool
+
+Pages must match the current website design and component structure.
+
+Avoid duplicate content. Each page must contain unique text relevant to the location.
+
+------------------------------------------------------------
+
+LOCATION PAGE STRUCTURE
+
+Each location page should follow this template:
+
+URL structure
+
+/bucks-11-plus-[town]
+
+Example
+
+/bucks-11-plus-high-wycombe
+
+------------------------------------------------------------
+
+PAGE TITLE FORMAT
+
+Bucks 11 Plus Guide for Parents in [Town]
+
+Example
+
+Bucks 11 Plus Guide for Parents in High Wycombe
+
+------------------------------------------------------------
+
+META DESCRIPTION FORMAT
+
+Guide for families in [Town] preparing for the Buckinghamshire 11+ grammar school test. Learn how the Secondary Transfer Test works and assess readiness.
+
+------------------------------------------------------------
+
+CONTENT STRUCTURE
+
+SECTION 1 — Introduction
+
+Explain that families in the specific town often prepare for the Buckinghamshire grammar school test.
+
+Mention that children in the area may apply to nearby grammar schools.
+
+Example
+
+Families in High Wycombe often prepare for the Buckinghamshire 11+ grammar school test because several grammar schools are located nearby.
+
+------------------------------------------------------------
+
+SECTION 2 — Nearby Grammar Schools
+
+List relevant nearby grammar schools for that town.
+
+For example (High Wycombe):
+
+Royal Grammar School High Wycombe  
+Wycombe High School  
+John Hampden Grammar School
+
+Each school should link to the official school website.
+
+------------------------------------------------------------
+
+SECTION 3 — How the Bucks 11+ Works
+
+Briefly explain the Buckinghamshire Secondary Transfer Test and the qualifying score of 121.
+
+Link internally to:
+
+/buckinghamshire-11-plus-guide
+
+------------------------------------------------------------
+
+SECTION 4 — Preparing for the Test
+
+Explain that preparation focuses on:
+
+verbal reasoning  
+non-verbal reasoning  
+mathematical reasoning
+
+Explain that many families use practice questions and diagnostic assessments.
+
+Add link to:
+
+Start Free Diagnostic
+
+------------------------------------------------------------
+
+SECTION 5 — Why Local Families Research the Test Early
+
+Explain that many parents begin researching the 11+ during Year 4 or Year 5.
+
+Encourage early understanding of the admissions process.
+
+------------------------------------------------------------
+
+INITIAL LOCATION PAGES TO CREATE
+
+Create pages for the following towns.
+
+High Wycombe  
+Aylesbury  
+Beaconsfield  
+Amersham  
+Chesham  
+Gerrards Cross  
+Marlow  
+Princes Risborough
+
+------------------------------------------------------------
+
+SEO REQUIREMENTS
+
+Each page must include:
+
+H1 page title  
+H2 structured sections  
+Internal links to pillar guide  
+Internal links to diagnostic tool  
+Unique meta title and description
+
+Ensure all pages include schema markup where applicable.
+
+------------------------------------------------------------
+
+DISCLAIMER
+
+Add to bottom of page:
+
+This website is an independent educational resource designed to help families understand the Buckinghamshire 11+ system.
+
+It is not affiliated with The Buckinghamshire Grammar Schools, GL Assessment or any individual grammar school.
+
+------------------------------------------------------------
+
+INTERNAL LINKING
+
+Each location page must link to:
+
+/buckinghamshire-11-plus-guide  
+/how-to-pass-bucks-11-plus  
+/start-diagnostic
+
+------------------------------------------------------------
+
+EXPECTED SEO RESULT
+
+These pages should capture searches such as:
+
+11 plus preparation High Wycombe  
+Bucks grammar school test Aylesbury  
+11 plus preparation Buckinghamshire  
+grammar school test near Beaconsfield
