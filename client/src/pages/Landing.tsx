@@ -291,6 +291,93 @@ export default function Landing() {
         </div>
       </section>
 
+      <section className="py-14 md:py-20 bg-white border-b border-border/30" data-testid="section-whats-included">
+        <div className="container mx-auto max-w-5xl px-4">
+          <div className="text-center mb-10">
+            <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">What's Included</span>
+            <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif mb-3" data-testid="text-whats-included-title">
+              Concrete content at every level
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              No vague promises — here's exactly what your child gets access to.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 flex flex-col" data-testid="card-included-free">
+              <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">Free</p>
+              <h3 className="text-xl font-bold text-primary font-serif mb-4">£0</h3>
+              <ul className="space-y-3 flex-1">
+                {[
+                  "1 timed mini diagnostic (12 questions)",
+                  "Basic readiness forecast vs 121",
+                  "1 sample practice drill",
+                ].map((f, i) => (
+                  <li key={i} className="flex items-start gap-2.5">
+                    <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0 mt-0.5" />
+                    <span className="text-slate-700 text-sm">{f}</span>
+                  </li>
+                ))}
+              </ul>
+              <Button variant="outline" className="w-full mt-6 h-11 text-sm font-semibold" asChild data-testid="button-included-free">
+                <Link href="/free-diagnostic">Start Free Diagnostic</Link>
+              </Button>
+            </div>
+
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 flex flex-col" data-testid="card-included-pack">
+              <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">Practice Pack</p>
+              <h3 className="text-xl font-bold text-primary font-serif mb-4">£99</h3>
+              <ul className="space-y-3 flex-1">
+                {[
+                  "1,000+ practice questions across VR, NVR & Maths",
+                  "Unlimited practice papers (fresh questions every time)",
+                  "2 full timed diagnostics (40 questions each)",
+                  "17 targeted skill drills covering all exam areas",
+                  "PDF reports & full report archive",
+                  "12 weeks of access",
+                ].map((f, i) => (
+                  <li key={i} className="flex items-start gap-2.5">
+                    <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0 mt-0.5" />
+                    <span className="text-slate-700 text-sm">{f}</span>
+                  </li>
+                ))}
+              </ul>
+              <Button className="w-full mt-6 h-11 text-sm font-semibold bg-primary text-primary-foreground" asChild data-testid="button-included-pack">
+                <Link href="/pricing#tiers">Get Practice Pack</Link>
+              </Button>
+            </div>
+
+            <div className="rounded-2xl border-2 border-brand-amber bg-amber-50/30 p-6 flex flex-col relative overflow-hidden" data-testid="card-included-programme">
+              <div className="absolute top-0 right-0 bg-brand-amber text-amber-950 px-3 py-1 rounded-bl-lg font-bold text-xs">
+                RECOMMENDED
+              </div>
+              <p className="text-sm font-semibold text-brand-amber uppercase tracking-wider mb-2">Structured Programme</p>
+              <h3 className="text-xl font-bold text-primary font-serif mb-4">£249</h3>
+              <p className="text-xs text-slate-500 mb-3 font-medium">Everything in Practice Pack, plus:</p>
+              <ul className="space-y-3 flex-1">
+                {[
+                  "16-week guided preparation roadmap",
+                  "4 milestone diagnostics with auto-tracking",
+                  "Weekly personalised task plans",
+                  "Mock exam simulation (50 questions, timed)",
+                  "Gap velocity & forecast stability analytics",
+                  "Programme completion summary",
+                  "16 weeks of access",
+                ].map((f, i) => (
+                  <li key={i} className="flex items-start gap-2.5">
+                    <CheckCircle2 className="h-4 w-4 text-brand-amber shrink-0 mt-0.5" />
+                    <span className="text-primary text-sm font-medium">{f}</span>
+                  </li>
+                ))}
+              </ul>
+              <Button className="w-full mt-6 h-11 text-sm font-bold bg-brand-amber text-white hover:bg-brand-amber/90 border-none" asChild data-testid="button-included-programme">
+                <Link href="/pricing#tiers">Get Structured Programme</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="py-14 md:py-20 bg-white border-b border-border/30">
         <div className="container mx-auto max-w-4xl px-4">
           <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif text-center mb-10" data-testid="text-dual-path-title">
@@ -300,7 +387,7 @@ export default function Landing() {
             <div className="rounded-2xl border border-slate-200 bg-white p-7 sm:p-8 flex flex-col" data-testid="card-path-diagnostic">
               <h3 className="text-xl font-bold text-primary font-serif mb-3">Start With a Diagnostic</h3>
               <p className="text-slate-600 text-sm leading-relaxed mb-6 flex-1">
-                Take a 12-minute timed assessment to understand current readiness, pace and performance profile before committing.
+                Take an 8-minute timed assessment to understand current readiness, pace and performance profile before committing.
               </p>
               <Button variant="outline" className="w-full h-12 text-sm font-semibold" asChild data-testid="button-path-diagnostic">
                 <Link href="/free-diagnostic">Start Free Diagnostic</Link>

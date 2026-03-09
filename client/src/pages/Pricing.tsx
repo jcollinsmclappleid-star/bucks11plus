@@ -183,10 +183,10 @@ export default function Pricing() {
                 </p>
                 <ul className="space-y-3">
                   {[
-                    "Mini diagnostic (12 minutes)",
-                    "Basic forecast gauge",
+                    "1 timed mini diagnostic (12 questions)",
+                    "Basic readiness forecast vs 121",
                     "Top focus area revealed",
-                    "Sample practice drill",
+                    "1 sample practice drill",
                   ].map((feature, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <CheckCircle2 className="h-5 w-5 text-brand-green shrink-0 mt-0.5" />
@@ -218,12 +218,12 @@ export default function Pricing() {
                 </p>
                 <ul className="space-y-3">
                   {[
-                    "Full timed diagnostics (multiple papers)",
-                    "Complete drill bank (all skills)",
-                    "PDF reports & report archive",
-                    "Progress tracking over time",
-                    "Likelihood band assessment",
-                    "Single-variable impact simulator",
+                    "1,000+ practice questions across VR, NVR & Maths",
+                    "Unlimited practice papers (fresh questions every time)",
+                    "2 full timed diagnostics (40 questions each)",
+                    "17 targeted skill drills covering all exam areas",
+                    "PDF reports & full report archive",
+                    "12 weeks of access",
                   ].map((feature, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <CheckCircle2 className="h-5 w-5 text-brand-green shrink-0 mt-0.5" />
@@ -263,15 +263,16 @@ export default function Pricing() {
                 <p className="text-sm text-slate-600 mb-6 leading-relaxed">
                   A 16-week roadmap with expert guidance, milestone tracking, and weekly plans. Know exactly what to do each week.
                 </p>
+                <p className="text-sm text-slate-500 mb-4 font-medium">Everything in Practice Pack, plus:</p>
                 <ul className="space-y-3">
                   {[
-                    "16-week structured roadmap (4 phases)",
-                    "4 milestone diagnostics with tracking",
-                    "Multi-variable impact simulator",
-                    "Gap velocity analytics",
-                    "Forecast stability metrics",
-                    "Weekly readiness plan (auto-generated)",
+                    "16-week guided preparation roadmap",
+                    "4 milestone diagnostics with auto-tracking",
+                    "Weekly personalised task plans",
+                    "Mock exam simulation (50 questions, timed)",
+                    "Gap velocity & forecast stability analytics",
                     "Programme completion summary",
+                    "16 weeks of access",
                   ].map((feature, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <CheckCircle2 className="h-5 w-5 text-brand-amber shrink-0 mt-0.5" />

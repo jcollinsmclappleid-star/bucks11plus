@@ -151,8 +151,16 @@ export class DatabaseStorage implements IStorage {
       ))
       .orderBy(questions.orderIndex);
 
+    const DIFFICULTY_PROFILES: Record<string, { easy: number; medium: number; hard: number }> = {
+      mini: { easy: 0.25, medium: 0.50, hard: 0.25 },
+      full: { easy: 0.20, medium: 0.45, hard: 0.35 },
+      mock: { easy: 0.15, medium: 0.40, hard: 0.45 },
+      practice_paper: { easy: 0.20, medium: 0.45, hard: 0.35 },
+    };
+    const diffProfile = DIFFICULTY_PROFILES[diag.type] || DIFFICULTY_PROFILES.full;
+
     if (allQuestions.length < diag.questionCount) {
-      const poolQuestions = await this.selectPoolQuestions(diag.questionCount, diag.sections, userId, allQuestions.map(q => q.id));
+      const poolQuestions = await this.selectPoolQuestions(diag.questionCount, diag.sections, userId, allQuestions.map(q => q.id), diffProfile);
       allQuestions = [...allQuestions, ...poolQuestions].slice(0, Math.max(diag.questionCount, allQuestions.length + poolQuestions.length));
     }
 
@@ -316,7 +324,9 @@ export class DatabaseStorage implements IStorage {
     sections: string[],
     userId: string,
     excludeIds: string[] = [],
+    difficultyProfile?: { easy: number; medium: number; hard: number },
   ): Promise<Question[]> {
+    const profile = difficultyProfile || { easy: 0.25, medium: 0.50, hard: 0.25 };
     const perSection = Math.ceil(count / sections.length);
     const results: Question[] = [];
 
@@ -334,8 +344,8 @@ export class DatabaseStorage implements IStorage {
 
       const shuffled = pool.sort(() => Math.random() - 0.5);
 
-      const easyCount = Math.round(perSection * 0.3);
-      const mediumCount = Math.round(perSection * 0.5);
+      const easyCount = Math.round(perSection * profile.easy);
+      const mediumCount = Math.round(perSection * profile.medium);
       const hardCount = perSection - easyCount - mediumCount;
 
       const byDiff = (d: string) => shuffled.filter(q => q.difficulty === d);
@@ -391,8 +401,8 @@ export class DatabaseStorage implements IStorage {
         return { question: q, score: this.scoreDiversity(q, selected) + (usage ? 0 : 5) };
       }).sort((a, b) => b.score - a.score);
 
-      const easyN = Math.round(perSection * 0.3);
-      const medN = Math.round(perSection * 0.5);
+      const easyN = Math.round(perSection * 0.20);
+      const medN = Math.round(perSection * 0.45);
       const hardN = perSection - easyN - medN;
 
       const byDiff = (d: string) => scored.filter(s => s.question.difficulty === d);

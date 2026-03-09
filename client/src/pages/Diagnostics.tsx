@@ -77,6 +77,10 @@ export default function Diagnostics() {
       queryClient.invalidateQueries({ queryKey: ["/api/test-sessions"] });
       setLocation(`/app/test/${data.session.id}?practice=true`);
     },
+    onError: () => {
+      setStartingPaper(null);
+      alert("Failed to generate practice paper. Please try again.");
+    },
     onSettled: () => {
       setStartingPaper(null);
     },

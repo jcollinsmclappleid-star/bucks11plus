@@ -114,6 +114,7 @@ export default function Programme() {
       return res.json();
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["/api/programme/tasks"] }),
+    onError: () => {},
   });
 
   if (!user) {
@@ -288,7 +289,7 @@ export default function Programme() {
           <CardTitle className="font-serif text-lg">16-Week Roadmap</CardTitle>
         </CardHeader>
         <CardContent className="p-6">
-          <div className="flex gap-1 mb-4">
+          <div className="flex gap-1 mb-4 overflow-x-auto">
             {Array.from({ length: 16 }, (_, i) => {
               const weekNum = i + 1;
               const weekMilestones = milestonesByWeek[weekNum] || [];
@@ -298,7 +299,7 @@ export default function Programme() {
               const isPast = weekNum < currentWeek;
 
               return (
-                <div key={i} className="flex-1 relative group">
+                <div key={i} className="flex-1 min-w-[2rem] relative group">
                   <div className={`h-3 rounded-sm ${
                     isPast ? PHASES[phaseIdx].color :
                     isCurrentWeek ? `${PHASES[phaseIdx].color} animate-pulse` :
@@ -326,9 +327,9 @@ export default function Programme() {
               );
             })}
           </div>
-          <div className="flex gap-2 mt-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-6">
             {PHASES.map((phase, i) => (
-              <div key={i} className={`flex-1 text-center p-3 rounded-lg border ${i === currentPhaseIdx ? 'border-primary bg-blue-50/50' : 'border-border/50'}`}>
+              <div key={i} className={`text-center p-3 rounded-lg border ${i === currentPhaseIdx ? 'border-primary bg-blue-50/50' : 'border-border/50'}`}>
                 <div className={`w-3 h-3 rounded-full mx-auto mb-2 ${phase.color}`} />
                 <p className="text-xs font-bold text-primary">{phase.weeks}</p>
                 <p className="text-[11px] text-muted-foreground mt-0.5">{phase.name}</p>

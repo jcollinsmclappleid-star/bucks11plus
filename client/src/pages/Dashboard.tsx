@@ -2,7 +2,7 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { ArrowRight, AlertCircle, BookOpen, Clock, Lock, Target, Loader2 } from "lucide-react";
+import { ArrowRight, AlertCircle, BookOpen, Clock, Lock, Target, Loader2, FileText, TrendingUp } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 import { useAuth } from "../lib/auth";
 import { useQuery } from "@tanstack/react-query";
@@ -269,6 +269,38 @@ export default function Dashboard() {
                 </CardContent>
               </Card>
             )}
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="border-border/60 shadow-sm">
+              <CardContent className="p-6 flex items-center gap-4">
+                <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                  <FileText className="h-6 w-6 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-bold text-primary">Session History</h3>
+                  <p className="text-sm text-muted-foreground">View all past results and download reports.</p>
+                </div>
+                <Button variant="outline" asChild data-testid="link-report-archive">
+                  <Link href="/app/report-archive">View All Results <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="border-border/60 shadow-sm">
+              <CardContent className="p-6 flex items-center gap-4">
+                <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                  <TrendingUp className="h-6 w-6 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-bold text-primary">Progress Tracking</h3>
+                  <p className="text-sm text-muted-foreground">Track your forecast trajectory over time.</p>
+                </div>
+                <Button variant="outline" asChild data-testid="link-progress-tracking">
+                  <Link href="/app/progress">View Progress <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                </Button>
+              </CardContent>
+            </Card>
           </div>
         </>
       )}

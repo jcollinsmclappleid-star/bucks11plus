@@ -1,7 +1,7 @@
 import { Link, useParams } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, Download, BarChart2, Target, SlidersHorizontal, Sparkles, Clock, Loader2, CheckCircle2 } from "lucide-react";
+import { ArrowRight, Download, BarChart2, Target, SlidersHorizontal, Sparkles, Clock, Loader2, CheckCircle2, TrendingUp, FileText } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState } from "react";
@@ -298,6 +298,38 @@ export default function Results() {
             </CardContent>
           </Card>
         </div>
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-6 mt-8">
+        <Card className="border-border/60 shadow-sm">
+          <CardContent className="p-6 flex items-center gap-4">
+            <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+              <TrendingUp className="h-6 w-6 text-primary" />
+            </div>
+            <div className="flex-1">
+              <h3 className="font-bold text-primary">View Your Progress</h3>
+              <p className="text-sm text-muted-foreground">Track how your forecast is changing over time.</p>
+            </div>
+            <Button variant="outline" asChild data-testid="link-view-progress">
+              <Link href="/app/progress">View Progress <ArrowRight className="ml-2 h-4 w-4" /></Link>
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card className="border-border/60 shadow-sm">
+          <CardContent className="p-6 flex items-center gap-4">
+            <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+              <FileText className="h-6 w-6 text-primary" />
+            </div>
+            <div className="flex-1">
+              <h3 className="font-bold text-primary">Report Archive</h3>
+              <p className="text-sm text-muted-foreground">Browse all your past test results.</p>
+            </div>
+            <Button variant="outline" asChild data-testid="link-report-archive">
+              <Link href="/app/report-archive">All Results <ArrowRight className="ml-2 h-4 w-4" /></Link>
+            </Button>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

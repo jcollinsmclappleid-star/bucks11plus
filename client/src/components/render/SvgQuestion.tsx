@@ -65,11 +65,11 @@ function SequenceLayout({ config, selectedAnswer, onSelectAnswer }: { config: Nv
         <div className="flex items-center gap-3 justify-center flex-nowrap min-w-min px-2">
           {config.frames.map((frame, i) =>
             i === config.questionIndex ? (
-              <div key={i} className="w-[120px] h-[120px] shrink-0">
+              <div key={i} className="w-20 h-20 md:w-[120px] md:h-[120px] shrink-0">
                 <QuestionPlaceholder />
               </div>
             ) : (
-              <div key={i} className="w-[120px] h-[120px] shrink-0">
+              <div key={i} className="w-20 h-20 md:w-[120px] md:h-[120px] shrink-0">
                 <FrameCard>
                   <SvgFrameView frame={frame} className="w-full h-full" />
                 </FrameCard>
@@ -92,13 +92,13 @@ function TransformLayout({ config, selectedAnswer, onSelectAnswer }: { config: N
         <div className="flex items-center gap-2 justify-center flex-nowrap min-w-min px-2">
           {frames.length >= 2 && (
             <>
-              <div className="w-[120px] h-[120px] shrink-0">
+              <div className="w-20 h-20 md:w-[120px] md:h-[120px] shrink-0">
                 <FrameCard>
                   <SvgFrameView frame={frames[0]} className="w-full h-full" />
                 </FrameCard>
               </div>
               <Arrow />
-              <div className="w-[120px] h-[120px] shrink-0">
+              <div className="w-20 h-20 md:w-[120px] md:h-[120px] shrink-0">
                 <FrameCard>
                   <SvgFrameView frame={frames[1]} className="w-full h-full" />
                 </FrameCard>
@@ -110,7 +110,7 @@ function TransformLayout({ config, selectedAnswer, onSelectAnswer }: { config: N
           </div>
           {frames.length >= 3 && (
             <>
-              <div className="w-[120px] h-[120px] shrink-0">
+              <div className="w-20 h-20 md:w-[120px] md:h-[120px] shrink-0">
                 <FrameCard>
                   <SvgFrameView frame={frames[2]} className="w-full h-full" />
                 </FrameCard>
@@ -118,7 +118,7 @@ function TransformLayout({ config, selectedAnswer, onSelectAnswer }: { config: N
               <Arrow />
             </>
           )}
-          <div className="w-[120px] h-[120px] shrink-0">
+          <div className="w-20 h-20 md:w-[120px] md:h-[120px] shrink-0">
             <QuestionPlaceholder />
           </div>
         </div>
@@ -135,7 +135,7 @@ function ClassificationLayout({ config, selectedAnswer, onSelectAnswer }: { conf
       <div className="overflow-x-auto">
         <div className="flex items-center gap-3 justify-center flex-nowrap min-w-min px-2">
           {config.group.map((frame, i) => (
-            <div key={i} className="w-[120px] h-[120px] shrink-0">
+            <div key={i} className="w-20 h-20 md:w-[120px] md:h-[120px] shrink-0">
               <FrameCard>
                 <SvgFrameView frame={frame} className="w-full h-full" />
               </FrameCard>

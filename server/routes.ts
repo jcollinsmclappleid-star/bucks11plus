@@ -315,7 +315,7 @@ export async function registerRoutes(
       const paceData = Object.entries(sectionResults).map(([name, data]) => ({
         name,
         avg: Math.round(data.totalTime / data.total),
-        expected: name === 'Mathematics' ? 45 : 35,
+        expected: name === 'Mathematics' ? 40 : name === 'Non-Verbal Reasoning' ? 38 : 35,
       }));
 
       const completed = await storage.completeTestSession(session.id, {
@@ -451,6 +451,9 @@ export async function registerRoutes(
     try {
       const session = await storage.getTestSession(req.params.id);
       if (!session) return res.status(404).json({ message: "Session not found" });
+      if (session.userId !== req.user!.id && !(req.user as any).isAdmin) {
+        return res.status(403).json({ message: "Access denied" });
+      }
       res.json(session);
     } catch (error) {
       next(error);
@@ -464,6 +467,9 @@ export async function registerRoutes(
 
       const session = await storage.getTestSession(req.params.id);
       if (!session) return res.status(404).json({ message: "Session not found" });
+      if (session.userId !== req.user!.id && !(req.user as any).isAdmin) {
+        return res.status(403).json({ message: "Access denied" });
+      }
       if (session.completedAt) return res.status(400).json({ message: "Session already submitted" });
 
       let allQuestions = await storage.getQuestionsByDiagnostic(session.diagnosticId);
@@ -537,7 +543,7 @@ export async function registerRoutes(
       const paceData = Object.entries(sectionResults).map(([name, data]) => ({
         name,
         avg: Math.round(data.totalTime / data.total),
-        expected: name === 'Mathematics' ? 45 : 35,
+        expected: name === 'Mathematics' ? 40 : name === 'Non-Verbal Reasoning' ? 38 : 35,
       }));
 
       const priorSessions = await storage.getUserTestSessions(req.user!.id);

@@ -39,7 +39,8 @@ export function setupAuth(app: Express) {
     saveUninitialized: false,
     cookie: {
       maxAge: 30 * 24 * 60 * 60 * 1000,
-      secure: false,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax" as const,
     },
     store: new PgStore({
       pool,
@@ -140,6 +141,13 @@ export function setupAuth(app: Express) {
 export function requireAuth(req: any, res: any, next: any) {
   if (!req.isAuthenticated()) {
     return res.status(401).json({ message: "Authentication required" });
+  }
+  if (req.user?.subscriptionExpiresAt && req.user.subscriptionTier !== 'free') {
+    const expiresAt = new Date(req.user.subscriptionExpiresAt);
+    if (expiresAt < new Date()) {
+      req.user.subscriptionTier = 'free';
+      storage.updateUserSubscription(req.user.id, 'free', null).catch(() => {});
+    }
   }
   next();
 }

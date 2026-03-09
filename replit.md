@@ -167,3 +167,11 @@ content/
 - Stripe checkout uses `payment` mode with session_id verification
 - Section naming: "Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics" (not "Maths") — consistent across DB, seed, and generators
 - Practice section skillIds mapped to generator skill families (vr.vocab, nvr.sequence, maths.arithmetic, etc.)
+- Difficulty profiles per diagnostic type: mini (25/50/25), full (20/45/35), mock (15/40/45) — GL-realistic
+- GL-aligned timings: mini 8min, full 30min, mock 35min, practice-quick 15min, practice-full 30min, practice-mock 35min
+- Pace expectations: Maths 40s/q, NVR 38s/q, VR 35s/q
+- Session cookie: `secure: true` in production, `sameSite: lax`
+- Subscription expiry: auto-downgrade to free in requireAuth middleware when `subscriptionExpiresAt` is past
+- IDOR protection: test session GET/submit endpoints enforce `session.userId === req.user.id` (admins exempt)
+- Error boundary: React class component wraps entire app, shows friendly retry UI on render errors
+- syncDiagnosticTimings() runs on every startup to ensure DB has latest durations even for existing deployments

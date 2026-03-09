@@ -1,6 +1,6 @@
 import { db } from "./db";
 import { diagnostics, questions, articles, practiceSections } from "@shared/schema";
-import { sql } from "drizzle-orm";
+import { sql, eq } from "drizzle-orm";
 import type { NvrSequenceConfig, NvrTransformConfig, NvrClassificationConfig } from "@shared/contentTypes";
 
 const S = { strokeWidth: 3, stroke: "#111827", fill: "none" as const };
@@ -157,7 +157,7 @@ export async function ensurePracticePaperDiagnostics() {
       title: "Quick Practice Paper",
       subtitle: "A fast 20-question paper with fresh questions each time",
       type: "practice_paper",
-      duration: 25,
+      duration: 15,
       questionCount: 20,
       requiredTier: "pack12",
       sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
@@ -167,7 +167,7 @@ export async function ensurePracticePaperDiagnostics() {
       title: "Full Practice Paper",
       subtitle: "A complete 40-question paper — unique every time",
       type: "practice_paper",
-      duration: 45,
+      duration: 30,
       questionCount: 40,
       requiredTier: "pack12",
       sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
@@ -177,7 +177,7 @@ export async function ensurePracticePaperDiagnostics() {
       title: "Mock Exam Paper",
       subtitle: "50-question exam simulation with fresh questions each attempt",
       type: "practice_paper",
-      duration: 50,
+      duration: 35,
       questionCount: 50,
       requiredTier: "programme16",
       sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
@@ -193,10 +193,28 @@ export async function ensurePracticePaperDiagnostics() {
   }
 }
 
+async function syncDiagnosticTimings() {
+  const timingUpdates: Record<string, { duration: number; subtitle?: string }> = {
+    "mini-1": { duration: 8, subtitle: "Quick 8-minute assessment across core GL-style reasoning" },
+    "full-a": { duration: 30, subtitle: "Complete 30-minute assessment mirroring GL exam pacing" },
+    "full-b": { duration: 30 },
+    "mock-1": { duration: 35, subtitle: "Exam-day simulation under real GL pacing" },
+    "practice-quick": { duration: 15 },
+    "practice-full": { duration: 30 },
+    "practice-mock": { duration: 35 },
+  };
+  for (const [id, upd] of Object.entries(timingUpdates)) {
+    const setData: any = { duration: upd.duration };
+    if (upd.subtitle) setData.subtitle = upd.subtitle;
+    await db.update(diagnostics).set(setData).where(eq(diagnostics.id, id));
+  }
+}
+
 export async function seedDatabase() {
   const [existing] = await db.select({ count: sql<number>`count(*)` }).from(diagnostics);
   if (existing.count > 0) {
     await ensurePracticePaperDiagnostics();
+    await syncDiagnosticTimings();
     return;
   }
 
@@ -206,9 +224,9 @@ export async function seedDatabase() {
     {
       id: "mini-1",
       title: "Mini Diagnostic",
-      subtitle: "Quick 12-minute assessment across core GL-style reasoning",
+      subtitle: "Quick 8-minute assessment across core GL-style reasoning",
       type: "mini",
-      duration: 12,
+      duration: 8,
       questionCount: 12,
       requiredTier: "free",
       sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
@@ -216,9 +234,9 @@ export async function seedDatabase() {
     {
       id: "full-a",
       title: "Full Diagnostic A",
-      subtitle: "Complete 45-minute assessment mirroring Bucks test conditions",
+      subtitle: "Complete 30-minute assessment mirroring GL exam pacing",
       type: "full",
-      duration: 45,
+      duration: 30,
       questionCount: 40,
       requiredTier: "pack12",
       sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
@@ -228,7 +246,7 @@ export async function seedDatabase() {
       title: "Full Diagnostic B",
       subtitle: "Second full-length paper with different question set",
       type: "full",
-      duration: 45,
+      duration: 30,
       questionCount: 40,
       requiredTier: "pack12",
       sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
@@ -236,9 +254,9 @@ export async function seedDatabase() {
     {
       id: "mock-1",
       title: "Mock Exam 1",
-      subtitle: "Exam-day simulation under timed conditions",
+      subtitle: "Exam-day simulation under real GL pacing",
       type: "mock",
-      duration: 50,
+      duration: 35,
       questionCount: 50,
       requiredTier: "programme16",
       sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
@@ -248,7 +266,7 @@ export async function seedDatabase() {
       title: "Quick Practice Paper",
       subtitle: "A fast 20-question paper with fresh questions each time",
       type: "practice_paper",
-      duration: 25,
+      duration: 15,
       questionCount: 20,
       requiredTier: "pack12",
       sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
@@ -258,7 +276,7 @@ export async function seedDatabase() {
       title: "Full Practice Paper",
       subtitle: "A complete 40-question paper — unique every time",
       type: "practice_paper",
-      duration: 45,
+      duration: 30,
       questionCount: 40,
       requiredTier: "pack12",
       sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
@@ -268,7 +286,7 @@ export async function seedDatabase() {
       title: "Mock Exam Paper",
       subtitle: "50-question exam simulation with fresh questions each attempt",
       type: "practice_paper",
-      duration: 50,
+      duration: 35,
       questionCount: 50,
       requiredTier: "programme16",
       sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
