@@ -5,7 +5,7 @@ import { Breadcrumbs, breadcrumbSchema } from "../components/shared/Breadcrumbs"
 import { Disclaimer } from "../components/shared/Disclaimer";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, BookOpen, Target, Clock, BarChart3, CheckCircle2, Download, Zap } from "lucide-react";
-import { DashboardPreviewForecast, DashboardPreviewPace } from "../components/shared/DashboardPreview";
+import { DashboardPreviewForecast, DashboardPreviewPace, DashboardPreviewTrajectory } from "../components/shared/DashboardPreview";
 import { apiRequest } from "../lib/queryClient";
 
 const breadcrumbItems = [
@@ -223,8 +223,9 @@ export default function ParentGuide() {
           </div>
 
           <DashboardPreviewForecast />
+          <p className="text-center text-xs text-muted-foreground mt-3">Readiness forecast after a 12-minute diagnostic assessment</p>
 
-          <div className="mt-12 max-w-3xl mx-auto text-center">
+          <div className="mt-14 max-w-3xl mx-auto text-center">
             <h3 className="text-2xl font-bold text-primary font-serif mb-4">Identifying Specific Skill Gaps</h3>
             <p className="text-muted-foreground leading-relaxed mb-8">
               The platform identifies specific reasoning skill gaps across verbal reasoning rule types, non-verbal reasoning patterns, and mathematical reasoning skills — highlighting the areas that most influence readiness for the qualifying score.
@@ -232,6 +233,7 @@ export default function ParentGuide() {
           </div>
 
           <DashboardPreviewPace />
+          <p className="text-center text-xs text-muted-foreground mt-3">Impact simulator, pace discipline, sub-skill heatmap, and fatigue analysis</p>
 
           <div className="text-center mt-10">
             <Button size="lg" className="h-14 px-10 text-lg bg-brand-amber text-white hover:bg-brand-amber/90 font-bold shadow-lg shadow-brand-amber/15 border-none" asChild data-testid="button-platform-diagnostic">
@@ -276,8 +278,9 @@ export default function ParentGuide() {
                 </Button>
               </div>
             </div>
-            <div className="rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-8">
-              <DashboardPreviewPace />
+            <div>
+              <DashboardPreviewTrajectory />
+              <p className="text-center text-xs text-muted-foreground mt-3">Score trajectory and stability tracking across multiple assessments</p>
             </div>
           </div>
         </div>

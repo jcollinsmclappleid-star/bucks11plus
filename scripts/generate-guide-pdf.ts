@@ -162,27 +162,41 @@ bullet("Consistency — Maintaining stable performance across different question
 
 // PAGE 6
 doc.addPage();
-heading("Example Platform Dashboard");
-body("The 11+ Standard platform provides structured readiness analysis. After completing a diagnostic assessment, parents receive detailed insights including:");
-spacer(0.3);
-bullet("Readiness Forecast — estimated score against the 121 qualifying standard");
-bullet("Performance Band — colour-coded status (red / amber / green)");
-bullet("Accuracy Metrics — percentage correct across each domain");
-bullet("Pace Analysis — timing per question compared to expected benchmarks");
-bullet("Skill Gap Identification — specific reasoning areas requiring focus");
-bullet("Stability Tracking — consistency across multiple assessments");
-spacer(1);
-body("The platform analyses accuracy, timing, and performance stability across reasoning skills. Instead of guessing whether preparation is working, parents can see concrete evidence of progress.");
-spacer(1);
+heading("What the Platform Shows You");
+body("The 11+ Standard platform provides structured readiness analysis. After completing a 12-minute diagnostic assessment, parents receive detailed insights across three areas:");
+spacer(0.5);
+
+subheading("1. Readiness Forecast Dashboard");
+body("A readiness gauge shows an estimated standardised score plotted against the 121 qualifying standard. The dashboard includes:");
+bullet("Estimated Score — circular gauge showing current predicted score (e.g. 118)");
+bullet("Performance Band — colour-coded status: On Track (green), Confident Amber, or Improvement Opportunity (red)");
+bullet("Gap to 121 — visual progress bar showing how many points remain to reach the qualifying standard");
+bullet("Priority Focus Cards — each domain ranked by impact level (High Impact / Medium / On Track)");
+bullet("Section Breakdown — accuracy bars for Verbal Reasoning, Non-Verbal Reasoning, and Mathematics");
+spacer(0.5);
 
 const exY = doc.y;
-doc.rect(60, exY, 475, 120).lineWidth(1).stroke("#e2e8f0");
-doc.font("Helvetica-Bold").fontSize(11).fillColor(NAVY).text("Example: Readiness Summary", 75, exY + 12);
-doc.font("Helvetica").fontSize(10).fillColor(SLATE);
-doc.text("Estimated Score: 118", 75, exY + 35);
-doc.text("Band: Confident Amber (within reach)", 75, exY + 52);
-doc.text("Gap to 121: 3 points", 75, exY + 69);
-doc.text("Verbal Reasoning: 62%  |  Non-Verbal Reasoning: 74%  |  Mathematics: 81%", 75, exY + 90);
+doc.rect(60, exY, 475, 65).lineWidth(1).stroke("#e2e8f0");
+doc.rect(60, exY, 475, 22).fill(LIGHT);
+doc.font("Helvetica-Bold").fontSize(9).fillColor(NAVY).text("Example Readiness Summary", 75, exY + 6);
+doc.font("Helvetica").fontSize(9.5).fillColor(SLATE);
+doc.text("Estimated Score: 118   |   Band: Confident Amber   |   Gap to 121: 3 points", 75, exY + 28);
+doc.text("VR: 62% (High Impact)   |   NVR: 74% (Medium)   |   Maths: 81% (On Track)", 75, exY + 45);
+doc.y = exY + 80;
+
+subheading("2. Skill Gap Analysis");
+body("Beyond summary scores, the platform identifies the specific sub-skills that most influence performance:");
+bullet("Impact Simulator — shows how a +10% improvement in one area would shift the overall forecast range");
+bullet("Pace Discipline Index (PDI) — measures timing control per domain, scored out of 100");
+bullet("Sub-Skill Accuracy Map — colour-coded heatmap across 12 sub-skills (Synonyms, Analogies, Patterns, Ratios, etc.)");
+bullet("Fatigue Analysis — compares accuracy and pace between the first and last thirds of the test to detect concentration drift");
+spacer(0.5);
+
+subheading("3. Progress Tracking (Programme tier)");
+body("Families on the full programme receive trajectory analysis over multiple assessments:");
+bullet("Readiness Trajectory Chart — line graph showing score progression over time against the 121 target");
+bullet("Stability Index — consistency metric scored out of 100, measuring how reliably performance is maintained");
+bullet("Performance Band History — visual timeline of band progression (Red → Amber → Amber) showing improvement trends");
 
 // PAGE 7
 doc.addPage();
