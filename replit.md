@@ -51,6 +51,16 @@ client/src/
 │   ├── admin/
 │   │   ├── QuestionList.tsx  # Filterable question table + stats + QA queue
 │   │   └── QuestionEditor.tsx # Full editor with live preview + validation
+│   ├── BucksGuide.tsx       # Pillar SEO page: /buckinghamshire-11-plus-guide
+│   ├── seo/
+│   │   ├── GrammarSchools.tsx   # /bucks-grammar-schools
+│   │   ├── QualifyingScore.tsx  # /bucks-11-plus-qualifying-score
+│   │   ├── Timeline.tsx         # /bucks-11-plus-timeline
+│   │   ├── SecondaryTransfer.tsx # /buckinghamshire-secondary-transfer-test
+│   │   ├── HowToPass.tsx        # /how-to-pass-bucks-11-plus
+│   │   ├── Registration.tsx     # /bucks-11-plus-registration
+│   │   ├── CommonMistakes.tsx   # /bucks-11-plus-mistakes
+│   │   └── TownGuide.tsx        # /bucks-11-plus-:town (template for 8 towns)
 │   └── ... (HowItWorks, Methodology, GLAlignment, About, Legal)
 
 server/
@@ -186,3 +196,15 @@ content/
 - IDOR protection: test session GET/submit endpoints enforce `session.userId === req.user.id` (admins exempt)
 - Error boundary: React class component wraps entire app, shows friendly retry UI on render errors
 - syncDiagnosticTimings() runs on every startup to ensure DB has latest durations even for existing deployments
+
+## SEO Infrastructure
+- `robots.txt` at `/robots.txt` allowing all crawlers, pointing to sitemap
+- `GET /sitemap.xml` server route with all public pages + 8 town pages
+- `Seo` component supports `canonicalPath` and `schema` (JSON-LD) props
+- Shared components: `ContentCTA.tsx`, `Disclaimer.tsx`, `Breadcrumbs.tsx` (with BreadcrumbList schema)
+- Pillar page: `/buckinghamshire-11-plus-guide` with FAQ JSON-LD
+- Cluster pages: grammar schools, qualifying score, timeline, secondary transfer test
+- High-value pages: how to pass, registration, common mistakes
+- 8 local town pages via TownGuide template + `client/src/data/towns.ts` data
+- Footer: 5 columns (Brand, Platform, Resources, Local Guides, Legal)
+- Target domain: `bucks11plustest.co.uk` (canonical URLs and sitemap)

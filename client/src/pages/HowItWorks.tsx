@@ -80,8 +80,9 @@ export default function HowItWorks() {
   return (
     <div className="min-h-[calc(100vh-4rem)]">
       <Seo
-        title="How It Works | 11+ Standard"
-        description="A structured, assessment-led system for Buckinghamshire 11+ preparation. Diagnostic benchmark, readiness forecast, targeted development and measured progression."
+        title="How Bucks 11 Plus Preparation Works | Diagnostic-Led Approach | 11+ Standard"
+        description="Structured, assessment-led preparation for the Buckinghamshire 11+ Secondary Transfer Test. Diagnostic benchmark, readiness forecast against the 121 qualifying score, and targeted GL-style practice."
+        canonicalPath="/how-it-works"
       />
 
       <div className="bg-gradient-to-b from-slate-50 to-white border-b border-slate-100">

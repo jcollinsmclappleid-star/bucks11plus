@@ -212,8 +212,9 @@ export default function Landing() {
   return (
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
       <Seo
-        title="GL-Style Aligned Bucks 11+ Diagnostics | 11+ Standard"
-        description="Timed diagnostics aligned to GL-style reasoning families used in Bucks for the Buckinghamshire Secondary Transfer Test."
+        title="Bucks 11 Plus Test Preparation | Buckinghamshire Grammar School 11+ | 11+ Standard"
+        description="GL-style timed diagnostics and readiness forecast for the Buckinghamshire 11+ Secondary Transfer Test. Assess verbal reasoning, non-verbal reasoning, and maths against the 121 qualifying score."
+        canonicalPath="/"
       />
 
       <section className="relative overflow-hidden pt-20 pb-24 md:pt-32 md:pb-40 border-b border-border/50" style={{ backgroundColor: '#0d1f30' }}>

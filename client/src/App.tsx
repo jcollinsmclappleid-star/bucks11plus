@@ -38,10 +38,20 @@ import Methodology from "./pages/Methodology";
 import GLAlignment from "./pages/GLAlignment";
 import About from "./pages/About";
 import Legal from "./pages/Legal";
+import BucksGuide from "./pages/BucksGuide";
 
+import HowToPass from "./pages/seo/HowToPass";
+import Registration from "./pages/seo/Registration";
+import CommonMistakes from "./pages/seo/CommonMistakes";
 import Badges from "./pages/Badges";
 import QuestionList from "./pages/admin/QuestionList";
 import QuestionEditor from "./pages/admin/QuestionEditor";
+
+import GrammarSchools from "./pages/seo/GrammarSchools";
+import QualifyingScore from "./pages/seo/QualifyingScore";
+import Timeline from "./pages/seo/Timeline";
+import SecondaryTransfer from "./pages/seo/SecondaryTransfer";
+import TownGuide from "./pages/seo/TownGuide";
 import { useAuth } from "./lib/auth";
 
 function MainLayout({ children }: { children: React.ReactNode }) {
@@ -53,25 +63,41 @@ function MainLayout({ children }: { children: React.ReactNode }) {
       </main>
       
       <footer className="bg-primary text-primary-foreground/70 py-12 mt-auto">
-        <div className="container mx-auto max-w-6xl px-4 grid md:grid-cols-4 gap-8">
+        <div className="container mx-auto max-w-6xl px-4 grid md:grid-cols-5 gap-8">
           <div>
             <div className="font-serif font-bold text-xl text-primary-foreground mb-4">11+ Standard</div>
-            <p className="text-sm">Bucks 11+ Readiness, Forecast & Targeted Practice.</p>
+            <p className="text-sm">Independent Buckinghamshire 11+ readiness assessment and preparation.</p>
           </div>
           <div>
             <h4 className="font-bold text-primary-foreground mb-4">Platform</h4>
             <ul className="space-y-2 text-sm">
               <li><Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
-              <li><Link href="/how-it-works" className="hover:text-white transition-colors">How it works</Link></li>
-              <li><Link href="/parent-hub" className="hover:text-white transition-colors">Parent Hub</Link></li>
+              <li><Link href="/how-it-works" className="hover:text-white transition-colors">How It Works</Link></li>
+              <li><Link href="/how-forecast-works" className="hover:text-white transition-colors">Our Forecast Model</Link></li>
+              <li><Link href="/bucks-gl-alignment" className="hover:text-white transition-colors">GL-Style Alignment</Link></li>
+              <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
             </ul>
           </div>
           <div>
-            <h4 className="font-bold text-primary-foreground mb-4">Transparency</h4>
+            <h4 className="font-bold text-primary-foreground mb-4">Resources</h4>
             <ul className="space-y-2 text-sm">
-              <li><Link href="/how-forecast-works" className="hover:text-white transition-colors">How Our Forecast Works</Link></li>
-              <li><Link href="/bucks-gl-alignment" className="hover:text-white transition-colors">GL-Style Alignment</Link></li>
-              <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
+              <li><Link href="/buckinghamshire-11-plus-guide" className="hover:text-white transition-colors">Bucks 11+ Guide</Link></li>
+              <li><Link href="/bucks-grammar-schools" className="hover:text-white transition-colors">Grammar Schools</Link></li>
+              <li><Link href="/bucks-11-plus-qualifying-score" className="hover:text-white transition-colors">Qualifying Score</Link></li>
+              <li><Link href="/bucks-11-plus-timeline" className="hover:text-white transition-colors">Admissions Timeline</Link></li>
+              <li><Link href="/how-to-pass-bucks-11-plus" className="hover:text-white transition-colors">How to Pass</Link></li>
+              <li><Link href="/bucks-11-plus-registration" className="hover:text-white transition-colors">Registration Guide</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold text-primary-foreground mb-4">Local Guides</h4>
+            <ul className="space-y-2 text-sm">
+              <li><Link href="/bucks-11-plus-high-wycombe" className="hover:text-white transition-colors">High Wycombe</Link></li>
+              <li><Link href="/bucks-11-plus-aylesbury" className="hover:text-white transition-colors">Aylesbury</Link></li>
+              <li><Link href="/bucks-11-plus-beaconsfield" className="hover:text-white transition-colors">Beaconsfield</Link></li>
+              <li><Link href="/bucks-11-plus-amersham" className="hover:text-white transition-colors">Amersham</Link></li>
+              <li><Link href="/bucks-11-plus-chesham" className="hover:text-white transition-colors">Chesham</Link></li>
+              <li><Link href="/bucks-11-plus-marlow" className="hover:text-white transition-colors">Marlow</Link></li>
             </ul>
           </div>
           <div>
@@ -80,12 +106,13 @@ function MainLayout({ children }: { children: React.ReactNode }) {
               <li><Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
               <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
               <li><Link href="/safeguarding" className="hover:text-white transition-colors">Safeguarding</Link></li>
+              <li><Link href="/parent-hub" className="hover:text-white transition-colors">Parent Hub</Link></li>
             </ul>
           </div>
         </div>
         <div className="container mx-auto max-w-6xl px-4 mt-8 pt-6 border-t border-primary-foreground/10">
           <p className="text-xs text-primary-foreground/40 text-center" data-testid="text-footer-disclaimer">
-            Independent readiness assessment. Not affiliated with GL Assessment or Buckinghamshire Council.
+            This website is an independent educational resource. Not affiliated with The Buckinghamshire Grammar Schools, GL Assessment, or any individual grammar school.
           </p>
         </div>
       </footer>
@@ -156,10 +183,19 @@ function Router() {
             <Route path="/how-forecast-works" component={Methodology} />
             <Route path="/bucks-gl-alignment" component={GLAlignment} />
             <Route path="/about" component={About} />
+            <Route path="/buckinghamshire-11-plus-guide" component={BucksGuide} />
             <Route path="/sign-in" component={SignIn} />
             <Route path="/sign-up" component={SignUp} />
             <Route path="/free-diagnostic" component={FreeDiagnosticStart} />
             <Route path="/free-results/:id" component={GuestResults} />
+            <Route path="/bucks-grammar-schools" component={GrammarSchools} />
+            <Route path="/bucks-11-plus-qualifying-score" component={QualifyingScore} />
+            <Route path="/bucks-11-plus-timeline" component={Timeline} />
+            <Route path="/buckinghamshire-secondary-transfer-test" component={SecondaryTransfer} />
+            <Route path="/how-to-pass-bucks-11-plus" component={HowToPass} />
+            <Route path="/bucks-11-plus-registration" component={Registration} />
+            <Route path="/bucks-11-plus-mistakes" component={CommonMistakes} />
+            <Route path="/bucks-11-plus-:town" component={TownGuide} />
             <Route path="/checkout-success" component={CheckoutSuccess} />
             
             <Route path="/terms">

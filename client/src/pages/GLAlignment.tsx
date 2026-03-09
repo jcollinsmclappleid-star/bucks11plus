@@ -4,8 +4,9 @@ export default function GLAlignment() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
       <Seo 
-        title="GL-Style Alignment | 11+ Standard" 
-        description="Learn how our independently developed assessment structure is aligned to GL-style reasoning families used in Bucks." 
+        title="Bucks 11 Plus GL Assessment Style Alignment | 11+ Standard" 
+        description="How our independently developed assessments align to GL-style reasoning families used in the Buckinghamshire Secondary Transfer Test — verbal reasoning, non-verbal reasoning, and mathematical reasoning." 
+        canonicalPath="/bucks-gl-alignment"
       />
       <h1 className="text-4xl md:text-5xl font-bold text-primary font-serif tracking-tight">Aligned to GL-Style Reasoning Families</h1>
       <p className="text-xl text-muted-foreground lead">

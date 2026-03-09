@@ -110,8 +110,9 @@ export default function Pricing() {
   return (
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
       <Seo
-        title="Prepare with Clarity | 11+ Standard"
-        description="Diagnostic-led 11+ preparation for the Buckinghamshire Secondary Transfer Test. See where your child stands, close the gaps that matter, and track real progress."
+        title="Buckinghamshire 11+ Preparation Plans & Pricing | 11+ Standard"
+        description="Choose from Free diagnostic, Practice Pack (£99, 12 weeks) or Young Scholar Programme (£249, 16 weeks). GL-style timed assessments, readiness forecasting, and targeted drill practice for the Bucks 11+."
+        canonicalPath="/pricing"
       />
 
       <section className="relative overflow-hidden pt-20 pb-24 md:pt-28 md:pb-36 border-b border-border/50" style={{ backgroundColor: '#0d1f30' }}>

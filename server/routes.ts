@@ -1203,5 +1203,37 @@ export async function registerRoutes(
     }
   });
 
+  app.get("/sitemap.xml", (_req, res) => {
+    const baseUrl = "https://bucks11plustest.co.uk";
+    const staticPages = [
+      "/", "/pricing", "/how-it-works", "/how-forecast-works", "/bucks-gl-alignment",
+      "/about", "/parent-hub", "/free-diagnostic",
+      "/terms", "/privacy", "/safeguarding",
+      "/buckinghamshire-11-plus-guide",
+      "/bucks-grammar-schools", "/bucks-11-plus-qualifying-score",
+      "/bucks-11-plus-timeline", "/buckinghamshire-secondary-transfer-test",
+      "/how-to-pass-bucks-11-plus", "/bucks-11-plus-registration", "/bucks-11-plus-mistakes",
+    ];
+    const towns = [
+      "high-wycombe", "aylesbury", "beaconsfield", "amersham",
+      "chesham", "gerrards-cross", "marlow", "princes-risborough",
+    ];
+    const townPages = towns.map(t => `/bucks-11-plus-${t}`);
+    const allPages = [...staticPages, ...townPages];
+    const today = new Date().toISOString().split("T")[0];
+
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${allPages.map(p => `  <url>
+    <loc>${baseUrl}${p}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>${p === "/" ? "weekly" : "monthly"}</changefreq>
+    <priority>${p === "/" ? "1.0" : p.includes("guide") ? "0.9" : "0.7"}</priority>
+  </url>`).join("\n")}
+</urlset>`;
+    res.setHeader("Content-Type", "application/xml");
+    res.send(xml);
+  });
+
   return httpServer;
 }

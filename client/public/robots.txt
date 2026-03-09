@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://bucks11plustest.co.uk/sitemap.xml
