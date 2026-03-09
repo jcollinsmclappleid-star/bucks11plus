@@ -452,15 +452,28 @@ export class DatabaseStorage implements IStorage {
 
     const sectionName = section.category;
     const skillFilter = section.skillId;
+    const sectionDifficulty = section.difficulty?.toLowerCase();
 
     let pool: Question[];
     if (skillFilter) {
+      const conditions = [
+        eq(questions.skillId, skillFilter),
+        eq(questions.qaStatus, "approved"),
+      ];
+      if (sectionDifficulty && sectionDifficulty !== 'mixed') {
+        conditions.push(eq(questions.difficulty, sectionDifficulty));
+      }
       pool = await db.select().from(questions)
-        .where(and(
-          eq(questions.skillId, skillFilter),
-          eq(questions.qaStatus, "approved")
-        ));
+        .where(and(...conditions));
       
+      if (pool.length < limit && sectionDifficulty) {
+        pool = await db.select().from(questions)
+          .where(and(
+            eq(questions.skillId, skillFilter),
+            eq(questions.qaStatus, "approved")
+          ));
+      }
+
       if (pool.length === 0) {
         pool = await db.select().from(questions)
           .where(and(
