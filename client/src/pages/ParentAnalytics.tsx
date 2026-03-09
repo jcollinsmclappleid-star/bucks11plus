@@ -562,6 +562,85 @@ export default function ParentAnalytics() {
     );
   }
 
+  if ((analyticsData as any)?.gated) {
+    return (
+      <div className="container mx-auto max-w-5xl px-4 py-12">
+        <div className="text-center mb-10">
+          <h1 className="text-3xl font-bold text-primary font-serif mb-3" data-testid="heading-analytics-gated">Premium Parent Analytics</h1>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            Deep readiness insights exclusively for Structured Programme families.
+          </p>
+        </div>
+
+        <div className="relative rounded-2xl border border-border/60 overflow-hidden mb-8">
+          <div className="absolute inset-0 bg-white/70 backdrop-blur-[3px] z-10 flex flex-col items-center justify-center p-8 text-center">
+            <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+              <Shield className="h-8 w-8 text-primary" />
+            </div>
+            <h2 className="text-2xl font-bold text-primary font-serif mb-2">Included with the Structured Programme</h2>
+            <p className="text-muted-foreground max-w-md mb-6">
+              Upgrade to unlock readiness scoring, pace discipline analysis, fatigue profiling, gap velocity tracking, and personalised improvement priorities.
+            </p>
+            <Link href="/pricing">
+              <Button size="lg" className="bg-primary text-lg h-12 px-8" data-testid="button-upgrade-analytics">
+                View Programme <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
+          </div>
+
+          <div className="p-6 opacity-40 pointer-events-none space-y-4">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <Card><CardContent className="pt-5 pb-4 text-center">
+                <div className="text-xs text-muted-foreground uppercase mb-2">Readiness</div>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500 text-white text-sm font-semibold">Amber</div>
+                <div className="text-3xl font-bold mt-2">78</div>
+                <div className="text-xs text-muted-foreground">out of 100</div>
+              </CardContent></Card>
+              <Card><CardContent className="pt-5 pb-4 text-center">
+                <div className="text-xs text-muted-foreground uppercase mb-2">Confidence</div>
+                <div className="text-sm font-semibold">Moderate</div>
+                <div className="text-3xl font-bold mt-2">68</div>
+                <div className="text-xs text-muted-foreground">stability index</div>
+              </CardContent></Card>
+              <Card><CardContent className="pt-5 pb-4 text-center">
+                <div className="text-xs text-muted-foreground uppercase mb-2">Pace Discipline</div>
+                <div className="text-3xl font-bold">82</div>
+              </CardContent></Card>
+              <Card><CardContent className="pt-5 pb-4 text-center">
+                <div className="text-xs text-muted-foreground uppercase mb-2">Weighted Accuracy</div>
+                <div className="text-3xl font-bold">0.72</div>
+              </CardContent></Card>
+            </div>
+            <Card><CardContent className="p-4">
+              <div className="text-sm font-bold text-primary mb-2">Top 3 Improvement Priorities</div>
+              <div className="space-y-2">
+                {["NVR: Spatial sequences — 42% accuracy", "VR: Letter patterns — 55% accuracy", "Maths: Ratio problems — 60% accuracy"].map((p, i) => (
+                  <div key={i} className="flex items-center gap-2 text-sm text-slate-600">
+                    <Target className="h-4 w-4 text-amber-500 shrink-0" />
+                    {p}
+                  </div>
+                ))}
+              </div>
+            </CardContent></Card>
+            <Card><CardContent className="p-4">
+              <div className="text-sm font-bold text-primary mb-2">Fatigue Analysis</div>
+              <div className="flex gap-4">
+                <div className="flex-1 bg-green-50 rounded-lg p-3 text-center">
+                  <div className="text-lg font-bold text-green-700">82%</div>
+                  <div className="text-xs text-muted-foreground">First third accuracy</div>
+                </div>
+                <div className="flex-1 bg-amber-50 rounded-lg p-3 text-center">
+                  <div className="text-lg font-bold text-amber-700">71%</div>
+                  <div className="text-xs text-muted-foreground">Last third accuracy</div>
+                </div>
+              </div>
+            </CardContent></Card>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (!analyticsData?.available) {
     return (
       <div className="container mx-auto max-w-5xl px-4 py-12 text-center">

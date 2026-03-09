@@ -592,6 +592,9 @@ export async function registerRoutes(
 
   app.get("/api/analytics", requireAuth, async (req, res, next) => {
     try {
+      if (req.user!.subscriptionTier !== "programme16") {
+        return res.json({ available: false, gated: true, message: "Premium Parent Analytics is included with the Structured Readiness Programme." });
+      }
       const userId = req.user!.id;
       const sessions = await storage.getUserTestSessions(userId);
       const completed = sessions.filter(s => s.completedAt).sort(
@@ -672,6 +675,9 @@ export async function registerRoutes(
 
   app.get("/api/analytics/detail", requireAuth, async (req, res, next) => {
     try {
+      if (req.user!.subscriptionTier !== "programme16") {
+        return res.json({ available: false, gated: true });
+      }
       const userId = req.user!.id;
       const sessions = await storage.getUserTestSessions(userId);
       const completed = sessions.filter(s => s.completedAt).sort(
@@ -972,6 +978,16 @@ export async function registerRoutes(
       res.setHeader('Expires', '0');
       
       const sectionId = req.params.id;
+
+      const TIER_RANK: Record<string, number> = { free: 0, pack12: 1, programme16: 2 };
+      const section = await storage.getPracticeSection(sectionId);
+      if (!section) return res.status(404).json({ message: "Practice section not found" });
+      const userRank = TIER_RANK[req.user!.subscriptionTier || "free"] || 0;
+      const requiredRank = TIER_RANK[section.requiredTier] || 0;
+      if (userRank < requiredRank) {
+        return res.status(403).json({ message: "This drill requires a higher subscription tier." });
+      }
+
       console.log(`[Drill] Fetching questions for section: ${sectionId}`);
       
       const { questions: qs, exhaustionWarning } = await storage.getQuestionsForDrill(sectionId, req.user!.id, 10);

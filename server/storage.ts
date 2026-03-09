@@ -50,6 +50,7 @@ export interface IStorage {
   getArticles(): Promise<Article[]>;
   getArticleBySlug(slug: string): Promise<Article | undefined>;
   getPracticeSections(): Promise<PracticeSection[]>;
+  getPracticeSection(id: string): Promise<PracticeSection | undefined>;
   getQuestionsForDrill(sectionId: string, userId: string, limit?: number): Promise<{ questions: Question[]; exhaustionWarning: boolean }>;
 
   createProgrammeEnrolment(userId: string): Promise<ProgrammeEnrolment>;
@@ -684,6 +685,11 @@ export class DatabaseStorage implements IStorage {
 
   async getPracticeSections(): Promise<PracticeSection[]> {
     return db.select().from(practiceSections);
+  }
+
+  async getPracticeSection(id: string): Promise<PracticeSection | undefined> {
+    const [section] = await db.select().from(practiceSections).where(eq(practiceSections.id, id));
+    return section;
   }
 
   async createProgrammeEnrolment(userId: string): Promise<ProgrammeEnrolment> {

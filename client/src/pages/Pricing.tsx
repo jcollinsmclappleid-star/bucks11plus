@@ -1,18 +1,26 @@
 import { Link, useLocation, useSearch } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { CheckCircle2, Loader2, ArrowRight, Target, TrendingUp, BarChart3, Eye, Shield, HelpCircle, ChevronDown, AlertTriangle, BookOpen, Clock, Sparkles } from "lucide-react";
+import { CheckCircle2, XCircle, Loader2, ArrowRight, Target, TrendingUp, BarChart3, Eye, Shield, HelpCircle, ChevronDown, AlertTriangle, BookOpen, Clock, Sparkles, Lock } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 import { useAuth } from "../lib/auth";
 import { useState, useEffect, useRef } from "react";
 import { apiRequest } from "../lib/queryClient";
 
-function DemoCard({ title, description, testId, children }: { title: string; description: string; testId: string; children: React.ReactNode }) {
+function DemoCard({ title, description, testId, children, tierLabel }: { title: string; description: string; testId: string; children: React.ReactNode; tierLabel?: string }) {
   const [open, setOpen] = useState(false);
   return (
     <Card className="border-border/60 shadow-sm overflow-hidden" data-testid={testId}>
       <CardHeader className="pb-3">
-        <CardTitle className="text-lg font-serif">{title}</CardTitle>
+        <div className="flex items-center justify-between gap-2">
+          <CardTitle className="text-lg font-serif">{title}</CardTitle>
+          {tierLabel && (
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-brand-amber/10 text-brand-amber border border-brand-amber/20 shrink-0" data-testid={`badge-${testId}-tier`}>
+              <Lock className="h-3 w-3" />
+              {tierLabel}
+            </span>
+          )}
+        </div>
         <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
       </CardHeader>
       <CardContent>
@@ -218,11 +226,12 @@ export default function Pricing() {
                 </p>
                 <ul className="space-y-3">
                   {[
-                    "1,000+ practice questions across VR, NVR & Maths",
-                    "Unlimited practice papers (fresh questions every time)",
+                    "1,000+ questions across VR, NVR & Maths",
+                    "Easy & Medium difficulty drills (13 targeted sections)",
                     "2 full timed diagnostics (40 questions each)",
-                    "17 targeted skill drills covering all exam areas",
+                    "Practice papers (Quick & Full)",
                     "PDF reports & full report archive",
+                    "Impact simulator & progress tracking",
                     "12 weeks of access",
                   ].map((feature, i) => (
                     <li key={i} className="flex items-start gap-3">
@@ -266,12 +275,14 @@ export default function Pricing() {
                 <p className="text-sm text-slate-500 mb-4 font-medium">Everything in Practice Pack, plus:</p>
                 <ul className="space-y-3">
                   {[
+                    "All 17 Hard-level challenge drills unlocked",
+                    "Mock exam simulation (50 questions, timed)",
                     "16-week guided preparation roadmap",
                     "4 milestone diagnostics with auto-tracking",
                     "Weekly personalised task plans",
-                    "Mock exam simulation (50 questions, timed)",
-                    "Gap velocity & forecast stability analytics",
-                    "Programme completion summary",
+                    "Premium Parent Analytics dashboard",
+                    "Gap velocity & forecast stability metrics",
+                    "Fatigue & pressure profiling",
                     "16 weeks of access",
                   ].map((feature, i) => (
                     <li key={i} className="flex items-start gap-3">
@@ -292,6 +303,63 @@ export default function Pricing() {
                 </Button>
               </CardFooter>
             </Card>
+          </div>
+
+          <div className="mt-16 max-w-4xl mx-auto" data-testid="comparison-table">
+            <h3 className="text-2xl md:text-3xl font-bold text-primary font-serif text-center mb-8">Feature Comparison</h3>
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse text-sm">
+                <thead>
+                  <tr className="border-b-2 border-slate-200">
+                    <th className="text-left py-3 px-4 font-semibold text-slate-600 w-[40%]">Feature</th>
+                    <th className="text-center py-3 px-4 font-semibold text-slate-600">Free</th>
+                    <th className="text-center py-3 px-4 font-semibold text-slate-600">Practice Pack</th>
+                    <th className="text-center py-3 px-4 font-bold text-brand-amber">Programme</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    { feature: "Mini diagnostic (12 questions)", free: true, pack: true, prog: true },
+                    { feature: "Basic readiness forecast", free: true, pack: true, prog: true },
+                    { feature: "Top focus area revealed", free: true, pack: true, prog: true },
+                    { feature: "1 sample practice drill", free: true, pack: true, prog: true },
+                    { feature: "1,000+ practice questions", free: false, pack: true, prog: true },
+                    { feature: "Easy & Medium drills (13 sections)", free: false, pack: true, prog: true },
+                    { feature: "Full timed diagnostics (40 questions)", free: false, pack: true, prog: true },
+                    { feature: "Practice papers (Quick & Full)", free: false, pack: true, prog: true },
+                    { feature: "PDF reports & report archive", free: false, pack: true, prog: true },
+                    { feature: "Impact simulator & progress tracking", free: false, pack: true, prog: true },
+                    { feature: "Hard-level challenge drills (17 sections)", free: false, pack: false, prog: true },
+                    { feature: "Mock exam simulation (50 questions)", free: false, pack: false, prog: true },
+                    { feature: "16-week guided roadmap", free: false, pack: false, prog: true },
+                    { feature: "4 milestone diagnostics with auto-tracking", free: false, pack: false, prog: true },
+                    { feature: "Weekly personalised task plans", free: false, pack: false, prog: true },
+                    { feature: "Premium Parent Analytics dashboard", free: false, pack: false, prog: true },
+                    { feature: "Gap velocity & forecast stability metrics", free: false, pack: false, prog: true },
+                    { feature: "Fatigue & pressure profiling", free: false, pack: false, prog: true },
+                    { feature: "Access duration", free: "1 use", pack: "12 weeks", prog: "16 weeks" },
+                  ].map((row, i) => (
+                    <tr key={i} className={`border-b border-slate-100 ${i >= 10 ? "bg-amber-50/30" : ""}`} data-testid={`comparison-row-${i}`}>
+                      <td className="py-3 px-4 text-slate-700 font-medium">{row.feature}</td>
+                      {["free", "pack", "prog"].map((tier) => {
+                        const val = row[tier as keyof typeof row];
+                        return (
+                          <td key={tier} className="text-center py-3 px-4">
+                            {val === true ? (
+                              <CheckCircle2 className="h-5 w-5 text-brand-green mx-auto" />
+                            ) : val === false ? (
+                              <XCircle className="h-5 w-5 text-slate-300 mx-auto" />
+                            ) : (
+                              <span className="text-sm font-semibold text-slate-700">{val}</span>
+                            )}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </section>
@@ -409,6 +477,7 @@ export default function Pricing() {
               title="Analytics Dashboard"
               description="Readiness metrics, pace discipline, fatigue indicators, and priorities"
               testId="demo-analytics"
+              tierLabel="Programme only"
             >
               <div className="space-y-3">
                 <div className="grid grid-cols-2 gap-2">
@@ -459,6 +528,7 @@ export default function Pricing() {
               title="Progress Tracking"
               description="Score trajectory, gap velocity, and forecast stability over time"
               testId="demo-progress"
+              tierLabel="Programme only"
             >
               <div className="space-y-3">
                 <div className="bg-white border border-slate-200 rounded-lg p-3">
