@@ -117,6 +117,24 @@ export default function Programme() {
     onError: () => {},
   });
 
+  const enrolment = programme?.enrolment;
+  const milestones = programme?.milestones || [];
+  const plans = programme?.plans || [];
+  const currentWeek = programme?.currentWeek || 1;
+  const daysRemaining = programme?.daysRemaining || 0;
+  const currentPlan = plans.find(p => p.week === currentWeek);
+  const planData: WeeklyPlanData | null = currentPlan?.planJson || null;
+
+  const currentWeekTasks = weeklyTasks.filter(t => t.week === currentWeek);
+  const tasksCompleted = currentWeekTasks.filter(t => t.status === 'completed').length;
+  const totalTasks = currentWeekTasks.length;
+
+  useEffect(() => {
+    if (programme?.enrolled && enrolment && currentWeekTasks.length === 0 && !generateTasksMutation.isPending) {
+      generateTasksMutation.mutate(currentWeek);
+    }
+  }, [programme?.enrolled, enrolment, currentWeek, currentWeekTasks.length]);
+
   if (!user) {
     navigate("/sign-in");
     return null;
@@ -164,20 +182,6 @@ export default function Programme() {
       </div>
     );
   }
-
-  const { enrolment, milestones = [], plans = [], currentWeek = 1, daysRemaining = 0 } = programme;
-  const currentPlan = plans.find(p => p.week === currentWeek);
-  const planData: WeeklyPlanData | null = currentPlan?.planJson || null;
-
-  const currentWeekTasks = weeklyTasks.filter(t => t.week === currentWeek);
-  const tasksCompleted = currentWeekTasks.filter(t => t.status === 'completed').length;
-  const totalTasks = currentWeekTasks.length;
-
-  useEffect(() => {
-    if (programme?.enrolled && enrolment && currentWeekTasks.length === 0 && !generateTasksMutation.isPending) {
-      generateTasksMutation.mutate(currentWeek);
-    }
-  }, [programme?.enrolled, enrolment, currentWeek, currentWeekTasks.length]);
 
   const safePlanData = planData ? {
     ...planData,
