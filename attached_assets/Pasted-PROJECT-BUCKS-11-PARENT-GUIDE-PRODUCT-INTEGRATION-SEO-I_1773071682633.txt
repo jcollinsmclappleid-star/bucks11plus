@@ -1,0 +1,378 @@
+PROJECT: BUCKS 11+ PARENT GUIDE + PRODUCT INTEGRATION + SEO IMPLEMENTATION  
+DOMAIN: bucks11plustest.co.uk  
+PRODUCT: 11+ Standard Readiness Platform
+
+OBJECTIVE
+
+Create a short, high-converting downloadable guide called:
+
+“The Buckinghamshire 11+ Parent Guide”
+
+This guide must:
+
+• Explain the Bucks grammar school test clearly  
+• Build trust with parents  
+• Demonstrate the platform dashboards and analytics  
+• Funnel users toward the diagnostic tool  
+
+The guide must integrate visually with the current site design system.
+
+Avoid long text blocks.  
+Use headings, bullet points and visual structure.
+
+------------------------------------------------------------
+
+SECTION 1 — CREATE LANDING PAGE
+
+Create page:
+
+URL  
+/bucks-11-plus-parent-guide
+
+Title  
+The Buckinghamshire 11+ Parent Guide
+
+Meta Description  
+Free guide explaining how the Bucks 11+ grammar school test works, the qualifying score of 121 and how parents can assess readiness.
+
+Primary Keywords
+
+bucks 11 plus guide  
+buckinghamshire 11 plus guide  
+11 plus preparation bucks  
+bucks grammar school guide
+
+------------------------------------------------------------
+
+SECTION 2 — PAGE LAYOUT
+
+The page must follow the existing website design components.
+
+Use existing card layouts, headings, buttons and typography.
+
+Structure the page as follows.
+
+------------------------------------------------------------
+
+HERO SECTION
+
+Heading
+
+Free Buckinghamshire 11+ Parent Guide
+
+Subheading
+
+Understand how the Bucks grammar school test works and how to assess your child's readiness.
+
+Bullet list
+
+• The 13 Buckinghamshire grammar schools  
+• The qualifying score of 121 explained  
+• The admissions timeline for parents  
+• How readiness can be measured before the test
+
+Primary CTA
+
+Download the Free Guide
+
+------------------------------------------------------------
+
+SECTION: WHAT THE GUIDE EXPLAINS
+
+Use a three-column layout.
+
+Column 1
+
+Understanding the Bucks System
+
+Learn how the Buckinghamshire Secondary Transfer Test works and how grammar school admissions are organised.
+
+Column 2
+
+The Qualifying Score
+
+Understand how the score of 121 is calculated and how standardisation works.
+
+Column 3
+
+Preparation Strategy
+
+Learn what successful preparation focuses on: reasoning ability, timing and consistency.
+
+------------------------------------------------------------
+
+SECTION: PREVIEW OF THE GUIDE
+
+Display three preview content blocks.
+
+Preview Block 1
+
+The Buckinghamshire Grammar Schools
+
+Explain that thirteen grammar schools jointly administer the test through The Buckinghamshire Grammar Schools organisation.
+
+Preview Block 2
+
+Understanding the Score of 121
+
+Explain that scoring 121 qualifies a child for grammar school consideration but does not guarantee a place.
+
+Preview Block 3
+
+The Preparation Timeline
+
+Explain how preparation typically develops from Year 4 through Year 6.
+
+------------------------------------------------------------
+
+SECTION: PRODUCT PREVIEW (IMPORTANT)
+
+Introduce the readiness diagnostic tool.
+
+Heading
+
+How the Platform Measures Readiness
+
+Explain that many families complete large numbers of practice questions but struggle to understand whether performance is improving.
+
+Explain that the platform provides structured readiness analysis.
+
+Show example platform dashboard screenshots.
+
+Dashboard example elements:
+
+• readiness forecast  
+• performance band (red / amber / green)  
+• accuracy metrics  
+• pace analysis
+
+Text example
+
+Instead of guessing whether preparation is working, the platform analyses accuracy, timing and performance stability across reasoning skills.
+
+CTA
+
+Start Free Diagnostic
+
+------------------------------------------------------------
+
+SECTION: SKILL GAP ANALYSIS
+
+Show a second screenshot preview.
+
+Explain that the platform identifies specific reasoning skill gaps.
+
+Example:
+
+Verbal reasoning rule types  
+Non-verbal reasoning patterns  
+Mathematical reasoning skills
+
+Explain that the platform highlights the areas that most influence readiness for the qualifying score.
+
+------------------------------------------------------------
+
+SECTION: PREMIUM PROGRAMME PREVIEW
+
+Introduce premium features.
+
+Heading
+
+What the Full Programme Includes
+
+Bullet list
+
+• structured skill drills  
+• full-length mock exams  
+• milestone diagnostics  
+• readiness tracking dashboard
+
+Explain that preparation becomes structured and measurable rather than relying solely on practice questions.
+
+------------------------------------------------------------
+
+SECTION: EMAIL CAPTURE
+
+Create a form.
+
+Fields
+
+Parent First Name  
+Email Address
+
+Button
+
+Send My Free Guide
+
+After submission:
+
+• deliver the downloadable PDF  
+• redirect user to diagnostic introduction page
+
+------------------------------------------------------------
+
+SECTION: TRUST DISCLAIMER
+
+Text
+
+This guide is an independent educational resource designed to help families understand the Buckinghamshire 11+ system.
+
+It is not affiliated with The Buckinghamshire Grammar Schools, GL Assessment, or any individual grammar school.
+
+------------------------------------------------------------
+
+SECTION 3 — CREATE DOWNLOADABLE PDF
+
+File name
+
+bucks-11-plus-parent-guide.pdf
+
+Length
+
+7 pages maximum.
+
+Maintain the website branding.
+
+------------------------------------------------------------
+
+PDF STRUCTURE
+
+PAGE 1
+
+Cover
+
+The Buckinghamshire 11+ Parent Guide
+
+Subtitle
+
+Understanding the grammar school test and how to assess readiness.
+
+------------------------------------------------------------
+
+PAGE 2
+
+How the Bucks Grammar School System Works
+
+Explain:
+
+The Secondary Transfer Test  
+The 13 grammar schools  
+The Year 6 testing process
+
+------------------------------------------------------------
+
+PAGE 3
+
+Understanding the Score of 121
+
+Explain standardisation and cohort comparison.
+
+Include simple visual explanation.
+
+------------------------------------------------------------
+
+PAGE 4
+
+Admissions Timeline
+
+Explain typical timeline:
+
+Year 4 – awareness  
+Year 5 – preparation begins  
+Year 6 – test and school applications
+
+------------------------------------------------------------
+
+PAGE 5
+
+The Biggest Preparation Challenge
+
+Explain that many families complete practice questions without knowing whether readiness is improving.
+
+Introduce readiness measurement.
+
+------------------------------------------------------------
+
+PAGE 6
+
+Example Platform Dashboard
+
+Include screenshots of:
+
+readiness forecast  
+skill breakdown  
+performance metrics
+
+Explain what parents can see.
+
+------------------------------------------------------------
+
+PAGE 7
+
+Next Step
+
+Headline
+
+Measure Your Child's Bucks 11+ Readiness
+
+CTA
+
+Start Free Diagnostic
+
+Include website URL.
+
+------------------------------------------------------------
+
+SECTION 4 — SEO INTEGRATION
+
+Ensure the guide page includes:
+
+Proper heading hierarchy  
+Internal links to:
+
+/buckinghamshire-11-plus-guide  
+/bucks-11-plus-preparation  
+/start-diagnostic
+
+Add FAQ schema including:
+
+What is the Bucks 11 plus test?  
+What score do you need to pass the Bucks 11 plus?  
+When do children take the Bucks 11 plus?  
+How should parents prepare?
+
+------------------------------------------------------------
+
+SECTION 5 — ANALYTICS
+
+Track the following events.
+
+Guide downloads  
+Email capture rate  
+Diagnostic clicks after guide download
+
+------------------------------------------------------------
+
+DESIGN REQUIREMENTS
+
+All new components must match the existing design system.
+
+Use existing:
+
+Typography  
+Button styles  
+Card layouts  
+Spacing  
+Colour palette
+
+Avoid creating a new visual style.
+
+------------------------------------------------------------
+
+EXPECTED RESULT
+
+This guide should:
+
+• capture parent email addresses  
+• demonstrate the product dashboards  
+• drive users toward the readiness diagnostic
