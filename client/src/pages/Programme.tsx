@@ -3,13 +3,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "../lib/auth";
-import { useQuery } from "@tanstack/react-query";
-import { getQueryFn } from "../lib/queryClient";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { getQueryFn, apiRequest, queryClient } from "../lib/queryClient";
 import { Seo } from "../components/shared/Seo";
 import {
   CheckCircle2, Circle, Clock, Target, TrendingUp, Activity,
-  ArrowRight, Calendar, PlayCircle, Loader2, Lock
+  ArrowRight, Calendar, PlayCircle, Loader2, Lock, ChevronDown, ChevronUp, ListChecks
 } from "lucide-react";
+import { useState, useEffect } from "react";
 
 type Milestone = {
   id: string;
@@ -52,6 +53,19 @@ type ProgrammeData = {
   daysRemaining?: number;
 };
 
+type TaskItem = {
+  id: number;
+  week: number;
+  taskType: string;
+  title: string;
+  description: string | null;
+  skillId: string | null;
+  targetCount: number;
+  completedCount: number;
+  status: string;
+  completedAt: string | null;
+};
+
 type ProgressData = {
   latestForecast: number | null;
   latestBand: string | null;
@@ -66,9 +80,15 @@ const PHASES = [
   { name: "Benchmark Consolidation", weeks: "Wk 13-16", color: "bg-green-500" },
 ];
 
+function getPhaseForWeek(week: number) {
+  const idx = Math.min(3, Math.floor((week - 1) / 4));
+  return PHASES[idx];
+}
+
 export default function Programme() {
   const { user, isProgramme, hasPaidAccess } = useAuth();
   const [, navigate] = useLocation();
+  const [expandedWeeks, setExpandedWeeks] = useState<Set<number>>(new Set());
 
   const { data: programme, isLoading } = useQuery<ProgrammeData>({
     queryKey: ["/api/programme"],
@@ -80,6 +100,20 @@ export default function Programme() {
     queryKey: ["/api/progress"],
     queryFn: getQueryFn({ on401: "returnNull" }),
     enabled: !!user,
+  });
+
+  const { data: weeklyTasks = [] } = useQuery<TaskItem[]>({
+    queryKey: ["/api/programme/tasks"],
+    queryFn: getQueryFn({ on401: "returnNull" }),
+    enabled: !!user && isProgramme(),
+  });
+
+  const generateTasksMutation = useMutation({
+    mutationFn: async (week: number) => {
+      const res = await apiRequest("POST", "/api/programme/tasks/generate", { week });
+      return res.json();
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["/api/programme/tasks"] }),
   });
 
   if (!user) {
@@ -134,7 +168,16 @@ export default function Programme() {
   const currentPlan = plans.find(p => p.week === currentWeek);
   const planData: WeeklyPlanData | null = currentPlan?.planJson || null;
 
-  // Defensive check for nested objects in planData
+  const currentWeekTasks = weeklyTasks.filter(t => t.week === currentWeek);
+  const tasksCompleted = currentWeekTasks.filter(t => t.status === 'completed').length;
+  const totalTasks = currentWeekTasks.length;
+
+  useEffect(() => {
+    if (programme?.enrolled && enrolment && currentWeekTasks.length === 0 && !generateTasksMutation.isPending) {
+      generateTasksMutation.mutate(currentWeek);
+    }
+  }, [programme?.enrolled, enrolment, currentWeek, currentWeekTasks.length]);
+
   const safePlanData = planData ? {
     ...planData,
     focusSkills: planData.focusSkills || [],
@@ -149,6 +192,46 @@ export default function Programme() {
   const fs = progress?.forecastStability;
 
   const currentPhaseIdx = Math.min(3, Math.floor((currentWeek - 1) / 4));
+
+  const milestonesByWeek: Record<number, Milestone[]> = {};
+  for (let w = 1; w <= 16; w++) {
+    milestonesByWeek[w] = [];
+  }
+  for (const m of milestones) {
+    if (!milestonesByWeek[m.week]) milestonesByWeek[m.week] = [];
+    milestonesByWeek[m.week].push(m);
+  }
+
+  const toggleWeek = (week: number) => {
+    setExpandedWeeks(prev => {
+      const next = new Set(prev);
+      if (next.has(week)) next.delete(week);
+      else next.add(week);
+      return next;
+    });
+  };
+
+  const isWeekExpanded = (week: number) => {
+    if (expandedWeeks.has(week)) return true;
+    if (week === currentWeek && !expandedWeeks.has(-week)) return true;
+    return false;
+  };
+
+  const toggleCurrentWeek = () => {
+    setExpandedWeeks(prev => {
+      const next = new Set(prev);
+      if (next.has(currentWeek)) {
+        next.delete(currentWeek);
+        next.add(-currentWeek);
+      } else if (next.has(-currentWeek)) {
+        next.delete(-currentWeek);
+        next.add(currentWeek);
+      } else {
+        next.add(-currentWeek);
+      }
+      return next;
+    });
+  };
 
   return (
     <div className="container mx-auto max-w-6xl px-4 py-8 space-y-8">
@@ -208,7 +291,8 @@ export default function Programme() {
           <div className="flex gap-1 mb-4">
             {Array.from({ length: 16 }, (_, i) => {
               const weekNum = i + 1;
-              const milestone = milestones.find(m => m.week === weekNum);
+              const weekMilestones = milestonesByWeek[weekNum] || [];
+              const keyMilestone = weekMilestones.find(m => m.milestoneType === "diagnostic" || m.milestoneType === "mock");
               const phaseIdx = Math.floor(i / 4);
               const isCurrentWeek = weekNum === currentWeek;
               const isPast = weekNum < currentWeek;
@@ -220,15 +304,15 @@ export default function Programme() {
                     isCurrentWeek ? `${PHASES[phaseIdx].color} animate-pulse` :
                     'bg-slate-200'
                   }`} />
-                  {milestone && (
+                  {keyMilestone && (
                     <div className={`absolute -top-1 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                      milestone.completedAt
+                      keyMilestone.completedAt
                         ? 'bg-green-500 border-green-600 text-white'
                         : isCurrentWeek || isPast
                           ? 'bg-white border-primary text-primary'
                           : 'bg-white border-slate-300 text-slate-300'
                     }`}>
-                      {milestone.completedAt ? (
+                      {keyMilestone.completedAt ? (
                         <CheckCircle2 className="h-3 w-3" />
                       ) : (
                         <Circle className="h-3 w-3" />
@@ -236,7 +320,7 @@ export default function Programme() {
                     </div>
                   )}
                   <div className="absolute top-5 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity z-10 bg-primary text-white text-[10px] px-2 py-1 rounded whitespace-nowrap pointer-events-none">
-                    Wk {weekNum}{milestone ? `: ${milestone.title}` : ''}
+                    Wk {weekNum}{keyMilestone ? `: ${keyMilestone.title}` : ''}
                   </div>
                 </div>
               );
@@ -326,7 +410,7 @@ export default function Programme() {
                     {gv.improving ? '-' : '+'}{Math.abs(gv.change)} pts
                   </p>
                   <p className="text-xs text-muted-foreground mt-1">
-                    Gap moved from {gv.oldGap} to {gv.newGap} over {gv.attempts} attempts
+                    Gap moved from {gv.oldGap} to {gv.newGap}
                   </p>
                   <p className={`text-xs font-medium mt-2 ${gv.improving ? 'text-green-600' : 'text-amber-600'}`}>
                     {gv.improving ? "Gap is closing" : "Gap needs attention"}
@@ -368,37 +452,184 @@ export default function Programme() {
         </div>
       </div>
 
-      <Card className="border-border/60 shadow-sm">
-        <CardHeader className="bg-slate-50/50 border-b border-border/50">
-          <CardTitle className="font-serif">Milestones</CardTitle>
-        </CardHeader>
-        <CardContent className="p-6">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {milestones.map((m) => (
-              <div key={m.id} className={`p-4 rounded-lg border ${m.completedAt ? 'border-green-200 bg-green-50/50' : m.week <= currentWeek ? 'border-primary/30 bg-blue-50/30' : 'border-border/50'}`} data-testid={`milestone-${m.week}`}>
-                <div className="flex items-center gap-2 mb-2">
-                  {m.completedAt ? (
+      {totalTasks > 0 && (
+        <Card className="border-border/60 shadow-sm" data-testid="card-weekly-tasks">
+          <CardHeader className="bg-slate-50/50 border-b border-border/50">
+            <div className="flex items-center justify-between">
+              <CardTitle className="font-serif flex items-center gap-2">
+                <ListChecks className="h-5 w-5 text-primary" /> Week {currentWeek} Tasks
+              </CardTitle>
+              <Badge variant={tasksCompleted === totalTasks ? "default" : "secondary"} className={tasksCompleted === totalTasks ? "bg-green-100 text-green-800" : ""}>
+                {tasksCompleted}/{totalTasks} completed
+              </Badge>
+            </div>
+            <CardDescription>Your guided tasks for this week</CardDescription>
+          </CardHeader>
+          <CardContent className="p-6 space-y-3">
+            {currentWeekTasks.map((task) => (
+              <div key={task.id} className={`p-4 rounded-lg border flex items-start gap-3 ${task.status === 'completed' ? 'border-green-200 bg-green-50/50' : 'border-border/60 bg-white'}`} data-testid={`task-item-${task.id}`}>
+                <div className="mt-0.5">
+                  {task.status === 'completed' ? (
                     <CheckCircle2 className="h-5 w-5 text-green-600" />
                   ) : (
-                    <Circle className={`h-5 w-5 ${m.week <= currentWeek ? 'text-primary' : 'text-slate-300'}`} />
+                    <Circle className="h-5 w-5 text-primary/40" />
                   )}
-                  <Badge variant="outline" className="text-xs">Week {m.week}</Badge>
                 </div>
-                <h4 className="font-bold text-sm text-primary">{m.title}</h4>
-                <p className="text-xs text-muted-foreground mt-1">{m.description}</p>
-                {!m.completedAt && m.week <= currentWeek && m.linkedDiagnosticId && (
-                  <Button size="sm" className="mt-3 w-full" asChild>
-                    <Link href={`/app/diagnostic/${m.linkedDiagnosticId}/start`} data-testid={`button-milestone-start-${m.week}`}>
-                      Start <ArrowRight className="h-3 w-3 ml-1" />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h4 className={`font-bold text-sm ${task.status === 'completed' ? 'text-green-800' : 'text-primary'}`}>{task.title}</h4>
+                    <Badge variant="outline" className={`text-[10px] ${
+                      task.taskType === 'diagnostic' ? 'border-blue-300 text-blue-700' : 'border-slate-300 text-slate-600'
+                    }`}>
+                      {task.taskType === 'diagnostic' ? 'Diagnostic' : 'Drill'}
+                    </Badge>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">{task.description}</p>
+                  {task.status !== 'completed' && (
+                    <div className="flex items-center gap-3 mt-2">
+                      <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                        <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${Math.min(100, (task.completedCount / task.targetCount) * 100)}%` }} />
+                      </div>
+                      <span className="text-xs text-muted-foreground font-medium">{task.completedCount}/{task.targetCount}</span>
+                    </div>
+                  )}
+                  {task.status === 'completed' && task.completedAt && (
+                    <p className="text-xs text-green-600 font-medium mt-1">Completed {new Date(task.completedAt).toLocaleDateString()}</p>
+                  )}
+                </div>
+                {task.status !== 'completed' && (
+                  <Button size="sm" variant="outline" className="shrink-0" asChild>
+                    <Link href={task.taskType === 'diagnostic' ? '/app/diagnostic' : '/app/practice'}>
+                      <PlayCircle className="h-3 w-3 mr-1" /> {task.taskType === 'diagnostic' ? 'Start' : 'Practice'}
                     </Link>
                   </Button>
                 )}
-                {m.completedAt && (
-                  <p className="text-xs text-green-600 font-medium mt-2">Completed {new Date(m.completedAt).toLocaleDateString()}</p>
-                )}
               </div>
             ))}
-          </div>
+          </CardContent>
+        </Card>
+      )}
+
+      <Card className="border-border/60 shadow-sm">
+        <CardHeader className="bg-slate-50/50 border-b border-border/50">
+          <CardTitle className="font-serif">All Milestones — 16-Week Timeline</CardTitle>
+          <CardDescription>Track your progress across every week of the programme</CardDescription>
+        </CardHeader>
+        <CardContent className="p-6 space-y-3">
+          {Array.from({ length: 16 }, (_, i) => {
+            const weekNum = i + 1;
+            const weekMilestones = milestonesByWeek[weekNum] || [];
+            const phase = getPhaseForWeek(weekNum);
+            const isPast = weekNum < currentWeek;
+            const isCurrent = weekNum === currentWeek;
+            const isFuture = weekNum > currentWeek;
+            const completedCount = weekMilestones.filter(m => m.completedAt).length;
+            const totalCount = weekMilestones.length;
+            const allComplete = totalCount > 0 && completedCount === totalCount;
+            const expanded = isCurrent
+              ? isWeekExpanded(weekNum)
+              : expandedWeeks.has(weekNum);
+
+            return (
+              <div key={weekNum} className={`rounded-lg border ${
+                isCurrent ? 'border-primary/40 bg-blue-50/30 shadow-sm' :
+                allComplete ? 'border-green-200 bg-green-50/20' :
+                isPast ? 'border-border/50' :
+                'border-border/30'
+              }`} data-testid={`week-section-${weekNum}`}>
+                <button
+                  className="w-full px-4 py-3 flex items-center justify-between text-left"
+                  onClick={() => isCurrent ? toggleCurrentWeek() : toggleWeek(weekNum)}
+                  data-testid={`button-toggle-week-${weekNum}`}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
+                      allComplete ? 'bg-green-500 text-white' :
+                      isCurrent ? `${phase.color} text-white` :
+                      isPast ? 'bg-slate-300 text-white' :
+                      'bg-slate-100 text-slate-400'
+                    }`}>
+                      {allComplete ? <CheckCircle2 className="h-4 w-4" /> : weekNum}
+                    </div>
+                    <div>
+                      <span className={`text-sm font-bold ${isCurrent ? 'text-primary' : isPast ? 'text-slate-600' : 'text-slate-400'}`}>
+                        Week {weekNum}
+                      </span>
+                      <span className="text-xs text-muted-foreground ml-2">{phase.name}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    {isCurrent && (
+                      <Badge variant="outline" className="text-primary border-primary text-[10px]">Current</Badge>
+                    )}
+                    <span className="text-xs text-muted-foreground">
+                      {completedCount}/{totalCount}
+                    </span>
+                    {expanded ? <ChevronUp className="h-4 w-4 text-muted-foreground" /> : <ChevronDown className="h-4 w-4 text-muted-foreground" />}
+                  </div>
+                </button>
+
+                {expanded && weekMilestones.length > 0 && (
+                  <div className="px-4 pb-4 space-y-2">
+                    {weekMilestones.map((m) => (
+                      <div key={m.id} className={`p-3 rounded-lg border flex items-start gap-3 ${
+                        m.completedAt ? 'border-green-200 bg-green-50/50' :
+                        isCurrent ? 'border-primary/20 bg-white' :
+                        'border-border/30 bg-white'
+                      }`} data-testid={`milestone-${m.id}`}>
+                        <div className="mt-0.5">
+                          {m.completedAt ? (
+                            <CheckCircle2 className="h-5 w-5 text-green-600" />
+                          ) : (
+                            <Circle className={`h-5 w-5 ${isCurrent || isPast ? 'text-primary/50' : 'text-slate-300'}`} />
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <h4 className="font-bold text-sm text-primary">{m.title}</h4>
+                            <Badge variant="outline" className={`text-[10px] ${
+                              m.milestoneType === 'diagnostic' ? 'border-blue-300 text-blue-700' :
+                              m.milestoneType === 'mock' ? 'border-orange-300 text-orange-700' :
+                              'border-slate-300 text-slate-600'
+                            }`}>
+                              {m.milestoneType === 'diagnostic' ? 'Diagnostic' :
+                               m.milestoneType === 'mock' ? 'Mock Exam' : 'Practice'}
+                            </Badge>
+                          </div>
+                          <p className="text-xs text-muted-foreground mt-1">{m.description}</p>
+                          {m.completedAt && (
+                            <p className="text-xs text-green-600 font-medium mt-1">
+                              Completed {new Date(m.completedAt).toLocaleDateString()}
+                            </p>
+                          )}
+                        </div>
+                        {!m.completedAt && (isCurrent || isPast) && m.linkedDiagnosticId && (
+                          <Button size="sm" className="shrink-0" asChild>
+                            <Link href={`/app/diagnostic/${m.linkedDiagnosticId}/start`} data-testid={`button-milestone-start-${m.id}`}>
+                              Start <ArrowRight className="h-3 w-3 ml-1" />
+                            </Link>
+                          </Button>
+                        )}
+                        {!m.completedAt && (isCurrent || isPast) && m.milestoneType === 'practice' && (
+                          <Button size="sm" variant="outline" className="shrink-0" asChild>
+                            <Link href="/app/practice" data-testid={`button-practice-${m.id}`}>
+                              <PlayCircle className="h-3 w-3 mr-1" /> Practice
+                            </Link>
+                          </Button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {expanded && weekMilestones.length === 0 && (
+                  <div className="px-4 pb-4">
+                    <p className="text-xs text-muted-foreground">No milestones for this week.</p>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </CardContent>
       </Card>
 

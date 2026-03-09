@@ -1,110 +1,108 @@
 import type { GeneratedQuestion } from '../types';
+import {
+  type SvgFrame, type SvgElement, type FillPattern,
+  allFills,
+  difficulties, seededRandom, pick, shuffleArray,
+  shuffleWithCorrect, makeShape, makeLine, makeDot,
+  safePositions, getDifficultyConfig,
+  hasAnyDuplicateOptions,
+} from './shared';
 
-type SvgStroke = { strokeWidth: number; stroke: string; fill: 'none' | 'solid'; dashed: boolean };
-type SvgElement = { type: 'shape'; shape: string; x: number; y: number; size: number; rotation: number; style: SvgStroke };
-type SvgFrame = { elements: SvgElement[] };
+const asymmetricShapes = [
+  'square', 'triangle', 'pentagon', 'arrow', 'star',
+  'hexagon', 'diamond', 'cross', 'parallelogram', 'trapezoid',
+  'semicircle', 'right_triangle', 'kite',
+] as const;
 
-const shapes = ['square', 'triangle', 'star', 'pentagon', 'arrow'] as const;
+function getSymmetryConfig(diff: string) {
+  const base = getDifficultyConfig(diff);
+  return {
+    ...base,
+    shapePool: asymmetricShapes.filter(s => (base.shapePool as readonly string[]).includes(s)),
+  };
+}
 
 const stemTemplates = [
   'Which option completes the mirror image of the pattern?',
   'Select the option that correctly mirrors the given pattern.',
   'Which image shows the correct reflection of the pattern?',
   'Identify the option that completes the symmetrical pattern.',
-] as const;
-
-const shapePalettes = [
-  ['square', 'triangle', 'star'],
-  ['pentagon', 'arrow', 'square'],
-  ['triangle', 'star', 'arrow'],
-  ['square', 'pentagon', 'triangle'],
-  ['arrow', 'star', 'pentagon'],
-  ['triangle', 'arrow', 'square'],
-] as const;
-const baseStyle: SvgStroke = { strokeWidth: 3, stroke: '#111827', fill: 'none', dashed: false };
-const difficulties = ['easy', 'medium', 'hard'] as const;
-
-function seededRandom(seed: number) {
-  let s = seed;
-  return () => {
-    s = (s * 48271 + 12345) % 2147483647;
-    return (s >>> 0) / 2147483647;
-  };
-}
-
-function pick<T>(arr: readonly T[], rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)];
-}
-
-function makeElement(shape: string, x: number, y: number, size: number, rotation: number, fill: 'none' | 'solid' = 'none'): SvgElement {
-  return { type: 'shape', shape, x, y, size, rotation, style: { ...baseStyle, fill } };
-}
+];
 
 function mirrorX(el: SvgElement): SvgElement {
-  return { ...el, x: 100 - el.x, rotation: (360 - el.rotation) % 360 };
+  if (el.type === 'shape') return { ...el, x: 100 - el.x, rotation: (360 - el.rotation) % 360 };
+  if (el.type === 'line') return { ...el, x1: 100 - el.x1, x2: 100 - el.x2 };
+  if (el.type === 'dot') return { ...el, x: 100 - el.x };
+  return el;
 }
 
-function shuffleWithCorrect<T>(correct: T, distractors: T[], rng: () => number): { options: T[]; correctIndex: number } {
-  const all = [correct, ...distractors];
-  for (let i = all.length - 1; i > 0; i--) {
-    const j = Math.floor(rng() * (i + 1));
-    [all[i], all[j]] = [all[j], all[i]];
-  }
-  return { options: all, correctIndex: all.indexOf(correct) };
+function applyToFrame(frame: SvgFrame, fn: (el: SvgElement) => SvgElement): SvgFrame {
+  return { elements: frame.elements.map(fn) };
 }
 
 export function generateSymmetryQuestions(): GeneratedQuestion[] {
   const questions: GeneratedQuestion[] = [];
 
-  for (let i = 0; i < 40; i++) {
-    const rng = seededRandom(110000 + i * 131);
+  for (let i = 0; i < 60; i++) {
+    const rng = seededRandom(110000 + i * 179);
     rng(); rng(); rng();
+
     const diff = pick(difficulties, rng);
-    const numElements = diff === 'easy' ? 2 : diff === 'medium' ? 3 : 4;
-    const palette = shapePalettes[i % shapePalettes.length];
+    const config = getSymmetryConfig(diff);
     const stemIdx = i % stemTemplates.length;
-    const stem = stemTemplates[stemIdx];
-    const densityLevel: 'low' | 'medium' | 'high' = diff === 'easy' ? 'low' : diff === 'medium' ? 'medium' : 'high';
 
     const leftElements: SvgElement[] = [];
-    for (let e = 0; e < numElements; e++) {
-      const shape = pick(palette, rng);
-      const x = 10 + Math.floor(rng() * 35);
-      const y = 15 + Math.floor(rng() * 70);
+    const positions = shuffleArray([...safePositions], rng);
+
+    for (let e = 0; e < config.numShapes; e++) {
+      const shape = pick(config.shapePool, rng);
+      const pos = positions[e];
+      const x = Math.min(45, pos[0]);
+      const y = pos[1];
       const size = 12 + Math.floor(rng() * 10);
       const rotation = Math.floor(rng() * 8) * 45;
-      const fill = rng() > 0.6 ? 'solid' as const : 'none' as const;
-      leftElements.push(makeElement(shape, x, y, size, rotation, fill));
+      const fill = pick(config.fillPool, rng);
+      leftElements.push(makeShape(shape, x, y, size, rotation, fill));
+    }
+
+    if (config.addDots) {
+      leftElements.push(makeDot(10 + Math.floor(rng() * 30), 15 + Math.floor(rng() * 70), 2 + rng() * 2));
+    }
+
+    if (config.addLine) {
+      leftElements.push(makeLine(
+        10, 20 + Math.floor(rng() * 60),
+        40, 20 + Math.floor(rng() * 60),
+        rng() > 0.5,
+      ));
     }
 
     const leftHalf: SvgFrame = { elements: leftElements };
+    const correctFrame = applyToFrame(leftHalf, mirrorX);
 
-    const correctElements = leftElements.map(mirrorX);
-    const correctFrame: SvgFrame = { elements: correctElements };
+    const distortions = [
+      (el: SvgElement): SvgElement => {
+        const m = mirrorX(el);
+        if (m.type === 'shape') return { ...m, rotation: (m.rotation + 45) % 360 };
+        return m;
+      },
+      (el: SvgElement): SvgElement => {
+        const m = mirrorX(el);
+        if (m.type === 'shape') return { ...m, rotation: (m.rotation + 90) % 360 };
+        return m;
+      },
+      (el: SvgElement): SvgElement => {
+        if (el.type === 'shape') return { ...el, x: 100 - el.x, y: 100 - el.y, rotation: (180 - el.rotation + 360) % 360 };
+        if (el.type === 'dot') return { ...el, x: 100 - el.x, y: 100 - el.y };
+        if (el.type === 'line') return { ...el, x1: 100 - el.x1, y1: 100 - el.y1, x2: 100 - el.x2, y2: 100 - el.y2 };
+        return el;
+      },
+    ];
 
-    const distractor1: SvgFrame = {
-      elements: leftElements.map(el => ({ ...el, x: 100 - el.x, rotation: (el.rotation + 45) % 360 })),
-    };
+    const distractors = distortions.map(fn => applyToFrame(leftHalf, fn));
 
-    const distractor2: SvgFrame = {
-      elements: leftElements.map(el => ({
-        ...mirrorX(el),
-        rotation: (mirrorX(el).rotation + 90) % 360,
-      })),
-    };
-
-    const distractor3: SvgFrame = {
-      elements: leftElements.map(el => ({
-        ...el,
-        y: 100 - el.y,
-        x: 100 - el.x,
-        rotation: (180 - el.rotation + 360) % 360,
-      })),
-    };
-
-    const distractorFrames = [distractor1, distractor2, distractor3];
     const correctStr = JSON.stringify(correctFrame);
-    const validDistractors = distractorFrames.filter(d => JSON.stringify(d) !== correctStr);
+    const validDistractors = distractors.filter(d => JSON.stringify(d) !== correctStr);
     const uniqueDistractors: SvgFrame[] = [];
     const seenFrames = new Set<string>([correctStr]);
     for (const d of validDistractors) {
@@ -114,28 +112,14 @@ export function generateSymmetryQuestions(): GeneratedQuestion[] {
         seenFrames.add(dStr);
       }
     }
+
     while (uniqueDistractors.length < 3) {
-      const offset = uniqueDistractors.length * 30 + 15;
-      const fallbackFrame: SvgFrame = {
-        elements: leftElements.map(el => ({
-          ...mirrorX(el),
-          size: el.size + 4,
-          rotation: (mirrorX(el).rotation + offset) % 360,
-        })),
-      };
-      const fbStr = JSON.stringify(fallbackFrame);
-      if (!seenFrames.has(fbStr)) {
-        uniqueDistractors.push(fallbackFrame);
-        seenFrames.add(fbStr);
-      } else {
-        uniqueDistractors.push({
-          elements: leftElements.map(el => ({
-            ...el, x: 100 - el.x, y: 100 - el.y,
-            rotation: (el.rotation + offset + 45) % 360,
-          })),
-        });
-        break;
-      }
+      const offset = (uniqueDistractors.length + 1) * 30 + 15;
+      uniqueDistractors.push(applyToFrame(leftHalf, (el) => {
+        const m = mirrorX(el);
+        if (m.type === 'shape') return { ...m, size: Math.max(8, m.size + 4), rotation: (m.rotation + offset) % 360 };
+        return m;
+      }));
     }
 
     const { options: answerOptions, correctIndex } = shuffleWithCorrect(correctFrame, uniqueDistractors.slice(0, 3), rng);
@@ -144,7 +128,7 @@ export function generateSymmetryQuestions(): GeneratedQuestion[] {
     questions.push({
       section: 'Non-Verbal Reasoning',
       type: 'symmetry',
-      prompt: stem,
+      prompt: stemTemplates[stemIdx],
       options: labels,
       correctAnswer: labels[correctIndex],
       difficulty: diff,
@@ -157,16 +141,16 @@ export function generateSymmetryQuestions(): GeneratedQuestion[] {
         answerOptions,
       },
       trapTypes: ['wrong_axis', 'partial_rule', 'reversed_direction'],
-      cognitiveLoad: diff === 'easy' ? 2 : diff === 'medium' ? 3 : 5,
-      estTimeSeconds: diff === 'easy' ? 25 : diff === 'medium' ? 35 : 50,
+      cognitiveLoad: diff === 'easy' ? 2 : diff === 'medium' ? 4 : 5,
+      estTimeSeconds: diff === 'easy' ? 25 : diff === 'medium' ? 40 : 55,
       explanation: 'The correct answer mirrors each element across the vertical centre line, reversing both position and rotation.',
       qaStatus: 'approved',
       locale: 'en-GB',
       britishSpelling: true,
-      version: 1,
+      version: 2,
       stemVariantId: `symmetry_stem_${stemIdx}`,
-      shapePaletteId: `palette_${i % shapePalettes.length}`,
-      densityLevel,
+      shapePaletteId: `symmetry_palette_${i % 6}`,
+      densityLevel: diff === 'easy' ? 'low' : diff === 'medium' ? 'medium' : 'high',
     });
   }
 

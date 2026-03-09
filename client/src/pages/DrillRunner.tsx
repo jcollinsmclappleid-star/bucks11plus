@@ -1,14 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useState, useEffect, useCallback, useRef } from "react";
-import { useLocation, useParams } from "wouter";
+import { useLocation, useParams, useSearch } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Question } from "@shared/schema";
 import type { RenderConfig } from "@shared/contentTypes";
 import VisualPrompt from "../components/render/VisualPrompt";
-import { CheckCircle, XCircle } from "lucide-react";
+import { CheckCircle, XCircle, Timer } from "lucide-react";
 
 const LABELS = ["A", "B", "C", "D", "E", "F"];
 
@@ -19,8 +19,19 @@ type FeedbackState = {
   explanation: string | null;
 } | null;
 
+type TimedResult = {
+  questionId: string;
+  selectedAnswer: string;
+  correctAnswer: string;
+  isCorrect: boolean;
+  explanation: string | null;
+};
+
 export default function DrillRunner() {
   const { sectionId } = useParams<{ sectionId: string }>();
+  const search = useSearch();
+  const isTimed = new URLSearchParams(search).get("mode") === "timed";
+
   const [, setLocation] = useLocation();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [feedback, setFeedback] = useState<FeedbackState>(null);
@@ -31,11 +42,65 @@ export default function DrillRunner() {
   const [animKey, setAnimKey] = useState(0);
   const sessionKey = useRef(Date.now());
 
-  const { data: questions, isLoading, error } = useQuery<Question[]>({
+  const [timedAnswers, setTimedAnswers] = useState<Array<{ questionId: string; selectedAnswer: string; timeTaken: number }>>([]);
+  const [timedResults, setTimedResults] = useState<TimedResult[]>([]);
+  const [timedCorrect, setTimedCorrect] = useState(0);
+  const [timedTotal, setTimedTotal] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(0);
+  const [timerInitialized, setTimerInitialized] = useState(false);
+
+  const { data: drillData, isLoading, error } = useQuery<{ questions: Question[]; exhaustion_warning: boolean }>({
     queryKey: [`/api/practice-sections/${sectionId}/questions`],
     staleTime: 0,
     gcTime: 0,
   });
+  const questions = drillData?.questions;
+  const exhaustionWarning = drillData?.exhaustion_warning;
+
+  useEffect(() => {
+    if (isTimed && questions && questions.length > 0 && !timerInitialized) {
+      const totalSeconds = questions.reduce((sum, q) => sum + ((q as any).estTimeSeconds || 30), 0);
+      setTimeLeft(totalSeconds);
+      setTimerInitialized(true);
+    }
+  }, [isTimed, questions, timerInitialized]);
+
+  const submitTimedMutation = useMutation({
+    mutationFn: async (finalAnswers: typeof timedAnswers) => {
+      const res = await apiRequest("POST", `/api/practice-sections/${sectionId}/submit-timed`, { answers: finalAnswers });
+      return res.json();
+    },
+    onSuccess: (data) => {
+      setTimedResults(data.results);
+      setTimedCorrect(data.correct);
+      setTimedTotal(data.total);
+      setFinished(true);
+    },
+  });
+
+  const handleTimedFinish = useCallback(() => {
+    if (submitTimedMutation.isPending) return;
+    const finalAnswers = [...timedAnswers];
+    if (questions) {
+      for (let i = finalAnswers.length; i < questions.length; i++) {
+        finalAnswers.push({ questionId: questions[i].id, selectedAnswer: "", timeTaken: 0 });
+      }
+    }
+    submitTimedMutation.mutate(finalAnswers);
+  }, [timedAnswers, questions, submitTimedMutation.isPending]);
+
+  useEffect(() => {
+    if (!isTimed || !timerInitialized || finished) return;
+    const timer = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev <= 1 && prev > 0) {
+          handleTimedFinish();
+        }
+        return prev > 0 ? prev - 1 : 0;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [isTimed, timerInitialized, finished, handleTimedFinish]);
 
   if (error) {
     return (
@@ -64,8 +129,31 @@ export default function DrillRunner() {
   const handleSelect = useCallback((selectedAnswer: string) => {
     if (!questions || feedback) return;
     const question = questions[currentQuestionIndex];
-    checkMutation.mutate({ questionId: question.id, selectedAnswer });
-  }, [questions, currentQuestionIndex, feedback]);
+
+    if (isTimed) {
+      const timeTaken = Math.round((Date.now() - questionStartTime) / 1000);
+      setTimedAnswers(prev => [...prev, { questionId: question.id, selectedAnswer, timeTaken }]);
+      setSvgSelectedIndex(null);
+
+      if (currentQuestionIndex < questions.length - 1) {
+        setCurrentQuestionIndex(prev => prev + 1);
+        setQuestionStartTime(Date.now());
+        setAnimKey(prev => prev + 1);
+      } else {
+        const finalAnswers = [...timedAnswers, { questionId: question.id, selectedAnswer, timeTaken }];
+        submitTimedMutation.mutate(finalAnswers);
+      }
+    } else {
+      checkMutation.mutate({ questionId: question.id, selectedAnswer });
+    }
+  }, [questions, currentQuestionIndex, feedback, isTimed, questionStartTime, timedAnswers]);
+
+  const completeDrillMutation = useMutation({
+    mutationFn: async () => {
+      const skillId = questions?.[0]?.skillId || undefined;
+      await apiRequest("POST", `/api/practice-sections/${sectionId}/complete-drill`, { skillId });
+    },
+  });
 
   const handleNext = () => {
     if (!questions) return;
@@ -76,17 +164,18 @@ export default function DrillRunner() {
       setQuestionStartTime(Date.now());
       setAnimKey(prev => prev + 1);
     } else {
+      completeDrillMutation.mutate();
       setFinished(true);
     }
   };
 
   useEffect(() => {
-    if (!questions || feedback) return;
+    if (!questions || (!isTimed && feedback)) return;
     const question = questions[currentQuestionIndex];
     const isSvgWithVisualOptions = question.renderType === "svg" && (question.renderConfig as any)?.answerOptions;
 
     const handler = (e: KeyboardEvent) => {
-      if (feedback) return;
+      if (!isTimed && feedback) return;
       const key = e.key.toUpperCase();
       const idx = key.charCodeAt(0) - 65;
       if (idx < 0 || idx >= question.options.length) return;
@@ -101,7 +190,7 @@ export default function DrillRunner() {
 
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [questions, currentQuestionIndex, feedback, handleSelect]);
+  }, [questions, currentQuestionIndex, feedback, handleSelect, isTimed]);
 
   if (isLoading) {
     return (
@@ -117,7 +206,11 @@ export default function DrillRunner() {
       <div className="min-h-screen exam-paper-bg flex flex-col items-center justify-center p-8">
         <div className="drill-complete-card max-w-md w-full text-center space-y-6">
           <h1 className="text-2xl font-bold text-primary font-serif">No Questions Found</h1>
-          <p className="text-muted-foreground">We couldn't find any questions for this section. Please try another one.</p>
+          <p className="text-muted-foreground">
+            {exhaustionWarning
+              ? "You've practised all available questions in this area — great work! Questions will refresh soon."
+              : "We couldn't find any questions for this section. Please try another one."}
+          </p>
           <Button onClick={() => setLocation("/app/practice")}>Back to Practice</Button>
         </div>
       </div>
@@ -125,6 +218,69 @@ export default function DrillRunner() {
   }
 
   if (finished) {
+    if (isTimed) {
+      const pct = timedTotal > 0 ? Math.round((timedCorrect / timedTotal) * 100) : 0;
+      return (
+        <div className="min-h-screen exam-paper-bg flex flex-col items-center justify-center p-4 md:p-8">
+          <div className="drill-complete-card max-w-2xl w-full space-y-6">
+            <div className="text-center space-y-4">
+              <div className="inline-flex items-center gap-2 text-sm font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-3 py-1">
+                <Timer className="h-3.5 w-3.5" /> Timed Drill
+              </div>
+              <h1 className="text-2xl font-bold text-primary font-serif" data-testid="text-drill-complete">Timed Drill Complete!</h1>
+              <div className="text-5xl font-bold text-primary" data-testid="text-drill-score">{pct}%</div>
+              <p className="text-muted-foreground" data-testid="text-drill-summary">{timedCorrect} out of {timedTotal} correct</p>
+              <div className="progress-premium max-w-xs mx-auto">
+                <Progress value={pct} className="h-3" />
+              </div>
+            </div>
+
+            <div className="space-y-3 mt-6">
+              <h2 className="font-semibold text-primary text-sm uppercase tracking-wide">Question Review</h2>
+              {timedResults.map((r, i) => {
+                const q = questions.find(qq => qq.id === r.questionId);
+                return (
+                  <div
+                    key={i}
+                    className={`rounded-lg border p-3 text-sm ${r.isCorrect ? 'border-green-200 bg-green-50/50' : 'border-red-200 bg-red-50/50'}`}
+                    data-testid={`timed-result-${i}`}
+                  >
+                    <div className="flex items-start gap-2">
+                      {r.isCorrect ? (
+                        <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 shrink-0" />
+                      ) : (
+                        <XCircle className="h-4 w-4 text-red-600 mt-0.5 shrink-0" />
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-slate-700 truncate">{q?.prompt || `Question ${i + 1}`}</p>
+                        {!r.isCorrect && r.selectedAnswer && (
+                          <p className="text-red-600 text-xs mt-0.5">Your answer: {r.selectedAnswer}</p>
+                        )}
+                        {!r.isCorrect && !r.selectedAnswer && (
+                          <p className="text-slate-500 text-xs mt-0.5">Not answered</p>
+                        )}
+                        {!r.isCorrect && (
+                          <p className="text-green-700 text-xs mt-0.5">Correct: {r.correctAnswer}</p>
+                        )}
+                        {r.explanation && (
+                          <p className="text-slate-500 text-xs mt-1">{r.explanation}</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="flex gap-3 justify-center pt-4">
+              <Button onClick={() => setLocation("/app/practice")} data-testid="button-back-practice">Back to Practice</Button>
+              <Button variant="outline" onClick={() => setLocation("/app")} data-testid="button-back-dashboard">Dashboard</Button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     const correct = results.filter(r => r.isCorrect).length;
     const total = results.length;
     const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
@@ -156,11 +312,17 @@ export default function DrillRunner() {
   const isSvgWithVisualOptions = renderType === "svg" && renderConfig && "answerOptions" in renderConfig;
 
   const getOptionClass = (opt: string) => {
+    if (isTimed) return "option-button";
     if (!feedback) return "option-button";
     if (opt === feedback.correctAnswer) return "option-button option-correct";
     if (opt === feedback.selectedAnswer && !feedback.isCorrect) return "option-button option-incorrect";
     return "option-button option-dimmed";
   };
+
+  const mins = Math.floor(timeLeft / 60);
+  const secs = timeLeft % 60;
+  const timeString = `${mins}:${secs.toString().padStart(2, '0')}`;
+  const timerClass = timeLeft < 60 ? "timer-pill timer-pill-danger" : timeLeft < 180 ? "timer-pill timer-pill-warning" : "timer-pill timer-pill-normal";
 
   return (
     <div className="min-h-screen exam-paper-bg flex flex-col font-sans">
@@ -168,11 +330,20 @@ export default function DrillRunner() {
         <div className="flex items-center gap-4">
           <div className="font-serif font-bold text-primary text-lg tracking-tight">11+ Standard</div>
           <div className="h-5 w-px bg-border/60"></div>
-          <div className="text-sm font-medium text-muted-foreground">Practice Drill</div>
+          <div className="text-sm font-medium text-muted-foreground">
+            {isTimed ? 'Timed Drill' : 'Practice Drill'}
+          </div>
         </div>
-        <Button variant="ghost" size="sm" onClick={() => setLocation("/app/practice")} data-testid="button-exit-drill">
-          Exit
-        </Button>
+        <div className="flex items-center gap-3">
+          {isTimed && (
+            <div className={timerClass} data-testid="text-drill-timer">
+              {timeString}
+            </div>
+          )}
+          <Button variant="ghost" size="sm" onClick={() => setLocation("/app/practice")} data-testid="button-exit-drill">
+            Exit
+          </Button>
+        </div>
       </header>
 
       <main className="flex-1 max-w-3xl mx-auto w-full p-4 md:p-8 flex flex-col">
@@ -200,7 +371,7 @@ export default function DrillRunner() {
                 renderConfig={renderConfig}
                 selectedAnswer={svgSelectedIndex}
                 onSelectAnswer={(idx) => {
-                  if (feedback) return;
+                  if (!isTimed && feedback) return;
                   setSvgSelectedIndex(idx);
                   handleSelect(LABELS[idx]);
                 }}
@@ -214,7 +385,7 @@ export default function DrillRunner() {
                 <button
                   key={i}
                   onClick={() => handleSelect(opt)}
-                  disabled={!!feedback || checkMutation.isPending}
+                  disabled={(!isTimed && (!!feedback || checkMutation.isPending)) || submitTimedMutation.isPending}
                   data-testid={`button-drill-option-${i}`}
                   aria-label={`Option ${LABELS[i]}`}
                   className={getOptionClass(opt)}
@@ -228,7 +399,7 @@ export default function DrillRunner() {
             </div>
           )}
 
-          {feedback && (
+          {!isTimed && feedback && (
             <div className={`mt-6 flex items-start gap-3 feedback-enter ${feedback.isCorrect ? "feedback-correct" : "feedback-incorrect"}`} data-testid="drill-feedback">
               {feedback.isCorrect ? (
                 <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 shrink-0" />
@@ -249,11 +420,19 @@ export default function DrillRunner() {
             </div>
           )}
 
-          {feedback && (
+          {!isTimed && feedback && (
             <div className="mt-6 flex justify-end">
               <Button onClick={handleNext} data-testid="button-next-question">
                 {currentQuestionIndex < totalQuestions - 1 ? "Next Question" : "See Results"}
               </Button>
+            </div>
+          )}
+
+          {isTimed && (
+            <div className="mt-6 flex justify-center items-center">
+              <p className="text-sm text-muted-foreground/70 italic">
+                Select an option to move to the next question
+              </p>
             </div>
           )}
         </div>

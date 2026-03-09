@@ -3,10 +3,11 @@ import { db } from "./db";
 import {
   users, diagnostics, questions, testSessions, testAnswers, articles, practiceSections,
   programmeEnrolments, programmeMilestones, weeklyPlans, questionUsage, contentCalibration,
+  programmeTasks,
   type User, type InsertUser, type Diagnostic, type Question,
   type TestSession, type TestAnswer, type Article, type PracticeSection,
   type ProgrammeEnrolment, type ProgrammeMilestone, type WeeklyPlan,
-  type OnboardingData,
+  type ProgrammeTask, type OnboardingData,
 } from "@shared/schema";
 
 const PHASE_MAP: Record<number, string> = {
@@ -32,6 +33,7 @@ export interface IStorage {
   getDiagnostic(id: string): Promise<Diagnostic | undefined>;
   getQuestionsByDiagnostic(diagnosticId: string): Promise<Question[]>;
   selectQuestionsForSession(userId: string, diagnosticId: string): Promise<Question[]>;
+  selectQuestionsForPracticePaper(userId: string, questionCount: number, sections?: string[]): Promise<Question[]>;
 
   createTestSession(data: { userId?: string | null; diagnosticId: string; guestToken?: string | null }): Promise<TestSession>;
   getTestSession(id: string): Promise<TestSession | undefined>;
@@ -48,7 +50,7 @@ export interface IStorage {
   getArticles(): Promise<Article[]>;
   getArticleBySlug(slug: string): Promise<Article | undefined>;
   getPracticeSections(): Promise<PracticeSection[]>;
-  getQuestionsForDrill(sectionId: string, userId: string, limit?: number): Promise<Question[]>;
+  getQuestionsForDrill(sectionId: string, userId: string, limit?: number): Promise<{ questions: Question[]; exhaustionWarning: boolean }>;
 
   createProgrammeEnrolment(userId: string): Promise<ProgrammeEnrolment>;
   getProgrammeEnrolment(userId: string): Promise<ProgrammeEnrolment | undefined>;
@@ -56,8 +58,16 @@ export interface IStorage {
   completeEnrolment(enrolmentId: string): Promise<void>;
   getProgrammeMilestones(userId: string): Promise<ProgrammeMilestone[]>;
   completeMilestone(milestoneId: string, sessionId: string): Promise<ProgrammeMilestone>;
+  autoCompleteDiagnosticMilestones(userId: string, diagnosticId: string, sessionId: string): Promise<void>;
+  autoCompletePracticeMilestone(userId: string, currentWeek: number): Promise<void>;
   getWeeklyPlans(userId: string): Promise<WeeklyPlan[]>;
   generateWeeklyPlan(userId: string, enrolmentId: string, week: number, latestSession?: TestSession | null): Promise<WeeklyPlan>;
+
+  getProgrammeTasks(userId: string, week?: number): Promise<ProgrammeTask[]>;
+  generateWeeklyTasks(userId: string, enrolmentId: string, week: number): Promise<ProgrammeTask[]>;
+  incrementTaskProgress(userId: string, taskType: string, skillId?: string): Promise<void>;
+
+  migrateGuestUsage(guestSessionId: string, userId: string): Promise<void>;
 
   getAllQuestions(filters?: { section?: string; skillId?: string; difficulty?: string; qaStatus?: string; renderType?: string }): Promise<Question[]>;
   getQuestion(id: string): Promise<Question | undefined>;
@@ -134,28 +144,57 @@ export class DatabaseStorage implements IStorage {
     const diag = await this.getDiagnostic(diagnosticId);
     if (!diag) return [];
 
-    const allQuestions = await db.select().from(questions)
+    let allQuestions = await db.select().from(questions)
       .where(and(
         eq(questions.diagnosticId, diagnosticId),
         eq(questions.qaStatus, "approved")
       ))
       .orderBy(questions.orderIndex);
 
+    if (allQuestions.length < diag.questionCount) {
+      const poolQuestions = await this.selectPoolQuestions(diag.questionCount, diag.sections, userId, allQuestions.map(q => q.id));
+      allQuestions = [...allQuestions, ...poolQuestions].slice(0, Math.max(diag.questionCount, allQuestions.length + poolQuestions.length));
+    }
+
     if (allQuestions.length === 0) {
       return this.getQuestionsByDiagnostic(diagnosticId);
     }
+
+    const COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000;
+    const cooldownCutoff = Date.now() - COOLDOWN_MS;
 
     const usageRows = await db.select().from(questionUsage)
       .where(eq(questionUsage.userId, userId));
 
     const usageMap = new Map(usageRows.map(u => [u.questionId, u]));
-    const freshnessCutoff = Date.now() - 14 * 24 * 60 * 60 * 1000;
 
-    const scored = allQuestions.map(q => {
+    const freshQuestions: Question[] = [];
+    const recentQuestions: { question: Question; lastServed: number }[] = [];
+
+    for (const q of allQuestions) {
+      const usage = usageMap.get(q.id);
+      if (!usage || !usage.lastServedAt || usage.lastServedAt.getTime() <= cooldownCutoff) {
+        freshQuestions.push(q);
+      } else {
+        recentQuestions.push({ question: q, lastServed: usage.lastServedAt.getTime() });
+      }
+    }
+
+    let workingQuestions: Question[];
+    if (freshQuestions.length >= diag.questionCount) {
+      workingQuestions = freshQuestions;
+    } else {
+      console.warn(`[Session] Pool exhausted for diagnostic ${diagnosticId}: only ${freshQuestions.length} fresh of ${diag.questionCount} needed. Expanding to least-recently-served.`);
+      recentQuestions.sort((a, b) => a.lastServed - b.lastServed);
+      const needed = diag.questionCount - freshQuestions.length;
+      workingQuestions = [...freshQuestions, ...recentQuestions.slice(0, needed).map(r => r.question)];
+    }
+
+    const scored = workingQuestions.map(q => {
       const usage = usageMap.get(q.id);
       const served = usage?.servedCount || 0;
       const lastServed = usage?.lastServedAt?.getTime() || 0;
-      const freshBonus = lastServed < freshnessCutoff ? 5 : 0;
+      const freshBonus = lastServed <= cooldownCutoff ? 5 : 0;
       return { question: q, served, lastServed, freshBonus };
     });
 
@@ -272,9 +311,130 @@ export class DatabaseStorage implements IStorage {
     return score;
   }
 
-  async getQuestionsForDrill(sectionId: string, userId: string, limit: number = 10): Promise<Question[]> {
+  private async selectPoolQuestions(
+    count: number,
+    sections: string[],
+    userId: string,
+    excludeIds: string[] = [],
+  ): Promise<Question[]> {
+    const perSection = Math.ceil(count / sections.length);
+    const results: Question[] = [];
+
+    for (const section of sections) {
+      let pool = await db.select().from(questions)
+        .where(and(
+          eq(questions.section, section),
+          eq(questions.qaStatus, "approved"),
+          sql`${questions.skillId} IS NOT NULL AND ${questions.skillId} != ''`,
+        ));
+
+      if (excludeIds.length > 0) {
+        pool = pool.filter(q => !excludeIds.includes(q.id));
+      }
+
+      const shuffled = pool.sort(() => Math.random() - 0.5);
+
+      const easyCount = Math.round(perSection * 0.3);
+      const mediumCount = Math.round(perSection * 0.5);
+      const hardCount = perSection - easyCount - mediumCount;
+
+      const byDiff = (d: string) => shuffled.filter(q => q.difficulty === d);
+      const easy = byDiff('easy').slice(0, easyCount);
+      const medium = byDiff('medium').slice(0, mediumCount);
+      const hard = byDiff('hard').slice(0, hardCount);
+      let sectionQuestions = [...easy, ...medium, ...hard];
+
+      if (sectionQuestions.length < perSection) {
+        const usedIds = new Set(sectionQuestions.map(q => q.id));
+        const remaining = shuffled.filter(q => !usedIds.has(q.id));
+        sectionQuestions = [...sectionQuestions, ...remaining.slice(0, perSection - sectionQuestions.length)];
+      }
+
+      results.push(...sectionQuestions);
+    }
+
+    return results.sort(() => Math.random() - 0.5).slice(0, count);
+  }
+
+  async selectQuestionsForPracticePaper(
+    userId: string,
+    questionCount: number,
+    sections: string[] = ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
+  ): Promise<Question[]> {
+    const COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000;
+    const cooldownCutoff = Date.now() - COOLDOWN_MS;
+
+    const usageRows = await db.select().from(questionUsage)
+      .where(eq(questionUsage.userId, userId));
+    const usageMap = new Map(usageRows.map(u => [u.questionId, u]));
+
+    const perSection = Math.ceil(questionCount / sections.length);
+    const selected: Question[] = [];
+
+    for (const section of sections) {
+      const pool = await db.select().from(questions)
+        .where(and(
+          eq(questions.section, section),
+          eq(questions.qaStatus, "approved"),
+          sql`${questions.skillId} IS NOT NULL AND ${questions.skillId} != ''`,
+        ));
+
+      const fresh = pool.filter(q => {
+        const usage = usageMap.get(q.id);
+        return !usage || !usage.lastServedAt || usage.lastServedAt.getTime() <= cooldownCutoff;
+      });
+
+      const workingPool = fresh.length >= perSection ? fresh : pool;
+
+      const scored = workingPool.map(q => {
+        const usage = usageMap.get(q.id);
+        return { question: q, score: this.scoreDiversity(q, selected) + (usage ? 0 : 5) };
+      }).sort((a, b) => b.score - a.score);
+
+      const easyN = Math.round(perSection * 0.3);
+      const medN = Math.round(perSection * 0.5);
+      const hardN = perSection - easyN - medN;
+
+      const byDiff = (d: string) => scored.filter(s => s.question.difficulty === d);
+      const pick = [
+        ...byDiff('easy').slice(0, easyN),
+        ...byDiff('medium').slice(0, medN),
+        ...byDiff('hard').slice(0, hardN),
+      ];
+
+      let sectionPick = pick.map(p => p.question);
+      if (sectionPick.length < perSection) {
+        const usedIds = new Set(sectionPick.map(q => q.id));
+        const extra = scored.filter(s => !usedIds.has(s.question.id)).slice(0, perSection - sectionPick.length);
+        sectionPick = [...sectionPick, ...extra.map(e => e.question)];
+      }
+
+      selected.push(...sectionPick);
+    }
+
+    const now = new Date();
+    for (const q of selected) {
+      const existing = usageMap.get(q.id);
+      if (existing) {
+        await db.update(questionUsage)
+          .set({ servedCount: (existing.servedCount || 0) + 1, lastServedAt: now })
+          .where(and(eq(questionUsage.userId, userId), eq(questionUsage.questionId, q.id)));
+      } else {
+        await db.insert(questionUsage).values({
+          userId,
+          questionId: q.id,
+          servedCount: 1,
+          lastServedAt: now,
+        });
+      }
+    }
+
+    return selected.sort(() => Math.random() - 0.5).slice(0, questionCount);
+  }
+
+  async getQuestionsForDrill(sectionId: string, userId: string, limit: number = 10): Promise<{ questions: Question[]; exhaustionWarning: boolean }> {
     const [section] = await db.select().from(practiceSections).where(eq(practiceSections.id, sectionId));
-    if (!section) return [];
+    if (!section) return { questions: [], exhaustionWarning: false };
 
     const sectionName = section.category;
     const skillFilter = section.skillId;
@@ -312,20 +472,53 @@ export class DatabaseStorage implements IStorage {
 
     if (pool.length === 0) {
       console.error(`[Drill] ABSOLUTELY NO questions found for section ${sectionName}`);
-      return [];
+      return { questions: [], exhaustionWarning: false };
     }
+
+    const COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000;
+    const cooldownCutoff = Date.now() - COOLDOWN_MS;
 
     const usageRows = await db.select().from(questionUsage)
       .where(eq(questionUsage.userId, userId));
     const usageMap = new Map(usageRows.map(u => [u.questionId, u]));
 
-    const freshnessCutoff = Date.now() - 14 * 24 * 60 * 60 * 1000;
+    const freshPool: typeof pool = [];
+    const cooledDownPool: { question: Question; lastServed: number }[] = [];
 
-    const scored = pool.map(q => {
+    for (const q of pool) {
+      const usage = usageMap.get(q.id);
+      if (!usage || !usage.lastServedAt) {
+        freshPool.push(q);
+      } else if (usage.lastServedAt.getTime() <= cooldownCutoff) {
+        freshPool.push(q);
+      } else {
+        cooledDownPool.push({ question: q, lastServed: usage.lastServedAt.getTime() });
+      }
+    }
+
+    let exhaustionWarning = false;
+    let workingPool: Question[];
+
+    if (freshPool.length >= limit) {
+      workingPool = freshPool;
+    } else if (freshPool.length > 0) {
+      exhaustionWarning = true;
+      console.warn(`[Drill] Pool nearly exhausted for ${sectionName}: only ${freshPool.length} fresh questions available (need ${limit}). Expanding to least-recently-served.`);
+      cooledDownPool.sort((a, b) => a.lastServed - b.lastServed);
+      const needed = limit - freshPool.length;
+      workingPool = [...freshPool, ...cooledDownPool.slice(0, needed).map(c => c.question)];
+    } else {
+      exhaustionWarning = true;
+      console.warn(`[Drill] Pool fully exhausted for ${sectionName}: all ${pool.length} questions served within 7 days. Using least-recently-served.`);
+      cooledDownPool.sort((a, b) => a.lastServed - b.lastServed);
+      workingPool = cooledDownPool.map(c => c.question);
+    }
+
+    const scored = workingPool.map(q => {
       const usage = usageMap.get(q.id);
       const served = usage?.servedCount || 0;
       const lastServed = usage?.lastServedAt?.getTime() || 0;
-      const freshBonus = lastServed < freshnessCutoff ? 5 : 0;
+      const freshBonus = lastServed <= cooldownCutoff ? 5 : 0;
       return { question: q, served, lastServed, freshBonus };
     });
 
@@ -401,7 +594,7 @@ export class DatabaseStorage implements IStorage {
       }
     }
 
-    return finalSelected;
+    return { questions: finalSelected, exhaustionWarning };
   }
 
   async createTestSession(data: { userId?: string | null; diagnosticId: string; guestToken?: string | null }): Promise<TestSession> {
@@ -478,14 +671,14 @@ export class DatabaseStorage implements IStorage {
       currentWeek: 1,
     }).returning();
 
-    const milestoneData = [
+    const keyMilestones = [
       { week: 1, type: "diagnostic", title: "Baseline Diagnostic", desc: "Establish your starting point with a full diagnostic assessment.", diagId: "full-a" },
-      { week: 6, type: "diagnostic", title: "Progress Diagnostic", desc: "Measure improvement after 5 weeks of targeted practice.", diagId: "full-b" },
-      { week: 12, type: "mock", title: "Full Mock Simulation", desc: "Simulate exam-day conditions with a complete timed paper.", diagId: "mock-1" },
-      { week: 16, type: "diagnostic", title: "Final Readiness Assessment", desc: "Your final forecast before the exam window.", diagId: "full-a" },
+      { week: 6, type: "diagnostic", title: "Progress Check", desc: "Measure improvement after 5 weeks of targeted practice.", diagId: "full-b" },
+      { week: 12, type: "mock", title: "Mock Exam", desc: "Simulate exam-day conditions with a complete timed paper.", diagId: "mock-1" },
+      { week: 16, type: "diagnostic", title: "Final Assessment", desc: "Your final forecast before the exam window.", diagId: "full-a" },
     ];
 
-    for (const m of milestoneData) {
+    for (const m of keyMilestones) {
       const dueAt = new Date(startAt.getTime() + (m.week - 1) * 7 * 24 * 60 * 60 * 1000);
       await db.insert(programmeMilestones).values({
         userId,
@@ -497,6 +690,56 @@ export class DatabaseStorage implements IStorage {
         dueAt,
         linkedDiagnosticId: m.diagId,
       });
+    }
+
+    const weeklyPracticeTemplates: Record<number, { title: string; desc: string; type: string }[]> = {};
+    for (let w = 1; w <= 16; w++) {
+      const phase = getPhase(w);
+      const tasks: { title: string; desc: string; type: string }[] = [];
+
+      if (phase === "Baseline & Foundation") {
+        tasks.push(
+          { title: "Complete 3 VR Drills", desc: "Build verbal reasoning foundations with 3 practice drills.", type: "practice" },
+          { title: "Complete 2 Maths Drills", desc: "Strengthen core maths skills with 2 practice drills.", type: "practice" },
+          { title: "Complete 2 NVR Drills", desc: "Develop non-verbal reasoning with 2 practice drills.", type: "practice" },
+        );
+      } else if (phase === "Targeted Skill Elevation") {
+        tasks.push(
+          { title: "Complete 3 Focused Drills", desc: "Work on your weakest areas with targeted drills.", type: "practice" },
+          { title: "Complete 2 Mixed Drills", desc: "Cross-skill practice to build flexibility.", type: "practice" },
+          { title: "Complete 1 Timed Drill", desc: "Practice under timed conditions.", type: "practice" },
+        );
+      } else if (phase === "Exam Conditioning") {
+        tasks.push(
+          { title: "Complete 2 Timed Drills", desc: "Build exam stamina with timed practice.", type: "practice" },
+          { title: "Complete 3 Skill Drills", desc: "Maintain skill sharpness across all areas.", type: "practice" },
+          { title: "Review Weak Areas", desc: "Focus on areas flagged in your latest diagnostic.", type: "practice" },
+        );
+      } else {
+        tasks.push(
+          { title: "Complete 3 Revision Drills", desc: "Final revision across all skill areas.", type: "practice" },
+          { title: "Complete 2 Timed Drills", desc: "Maintain exam readiness with timed practice.", type: "practice" },
+          { title: "Confidence Check", desc: "Quick practice to build confidence before the exam.", type: "practice" },
+        );
+      }
+
+      weeklyPracticeTemplates[w] = tasks;
+    }
+
+    for (let w = 1; w <= 16; w++) {
+      const tasks = weeklyPracticeTemplates[w];
+      const dueAt = new Date(startAt.getTime() + (w - 1) * 7 * 24 * 60 * 60 * 1000 + 6 * 24 * 60 * 60 * 1000);
+      for (const task of tasks) {
+        await db.insert(programmeMilestones).values({
+          userId,
+          enrolmentId: enrolment.id,
+          week: w,
+          milestoneType: task.type,
+          title: task.title,
+          description: task.desc,
+          dueAt,
+        });
+      }
     }
 
     for (let w = 1; w <= 2; w++) {
@@ -539,6 +782,40 @@ export class DatabaseStorage implements IStorage {
     return milestone;
   }
 
+  async autoCompleteDiagnosticMilestones(userId: string, diagnosticId: string, sessionId: string): Promise<void> {
+    const milestones = await db.select().from(programmeMilestones)
+      .where(and(
+        eq(programmeMilestones.userId, userId),
+        eq(programmeMilestones.linkedDiagnosticId, diagnosticId),
+        isNull(programmeMilestones.completedAt),
+      ))
+      .orderBy(programmeMilestones.week);
+
+    if (milestones.length > 0) {
+      const milestone = milestones[0];
+      await db.update(programmeMilestones)
+        .set({ completedAt: new Date(), linkedSessionId: sessionId })
+        .where(eq(programmeMilestones.id, milestone.id));
+    }
+  }
+
+  async autoCompletePracticeMilestone(userId: string, currentWeek: number): Promise<void> {
+    const milestones = await db.select().from(programmeMilestones)
+      .where(and(
+        eq(programmeMilestones.userId, userId),
+        eq(programmeMilestones.week, currentWeek),
+        eq(programmeMilestones.milestoneType, "practice"),
+        isNull(programmeMilestones.completedAt),
+      ))
+      .orderBy(programmeMilestones.id);
+
+    if (milestones.length > 0) {
+      await db.update(programmeMilestones)
+        .set({ completedAt: new Date() })
+        .where(eq(programmeMilestones.id, milestones[0].id));
+    }
+  }
+
   async getWeeklyPlans(userId: string): Promise<WeeklyPlan[]> {
     return db.select().from(weeklyPlans)
       .where(eq(weeklyPlans.userId, userId))
@@ -570,6 +847,161 @@ export class DatabaseStorage implements IStorage {
     }).returning();
 
     return plan;
+  }
+
+  async migrateGuestUsage(guestSessionId: string, userId: string): Promise<void> {
+    const guestId = `guest-${guestSessionId}`;
+    const guestUsageRows = await db.select().from(questionUsage)
+      .where(eq(questionUsage.userId, guestId));
+
+    if (guestUsageRows.length === 0) return;
+
+    const userUsageRows = await db.select().from(questionUsage)
+      .where(eq(questionUsage.userId, userId));
+    const userUsageMap = new Map(userUsageRows.map(u => [u.questionId, u]));
+
+    for (const guestRow of guestUsageRows) {
+      const existing = userUsageMap.get(guestRow.questionId);
+      if (existing) {
+        const newCount = (existing.servedCount || 0) + (guestRow.servedCount || 0);
+        const latestServed = guestRow.lastServedAt && existing.lastServedAt
+          ? (guestRow.lastServedAt > existing.lastServedAt ? guestRow.lastServedAt : existing.lastServedAt)
+          : guestRow.lastServedAt || existing.lastServedAt;
+        await db.update(questionUsage)
+          .set({ servedCount: newCount, lastServedAt: latestServed })
+          .where(and(eq(questionUsage.userId, userId), eq(questionUsage.questionId, guestRow.questionId)));
+      } else {
+        await db.insert(questionUsage).values({
+          userId,
+          questionId: guestRow.questionId,
+          servedCount: guestRow.servedCount,
+          lastServedAt: guestRow.lastServedAt,
+        });
+      }
+    }
+
+    await db.delete(questionUsage).where(eq(questionUsage.userId, guestId));
+  }
+
+  async getProgrammeTasks(userId: string, week?: number): Promise<ProgrammeTask[]> {
+    if (week !== undefined) {
+      return db.select().from(programmeTasks)
+        .where(and(eq(programmeTasks.userId, userId), eq(programmeTasks.week, week)))
+        .orderBy(programmeTasks.week, programmeTasks.taskType);
+    }
+    return db.select().from(programmeTasks)
+      .where(eq(programmeTasks.userId, userId))
+      .orderBy(programmeTasks.week, programmeTasks.taskType);
+  }
+
+  async generateWeeklyTasks(userId: string, enrolmentId: string, week: number): Promise<ProgrammeTask[]> {
+    const existing = await db.select().from(programmeTasks)
+      .where(and(
+        eq(programmeTasks.userId, userId),
+        eq(programmeTasks.enrolmentId, enrolmentId),
+        eq(programmeTasks.week, week),
+      ));
+    if (existing.length > 0) return existing;
+
+    const phase = getPhase(week);
+    const taskDefs: { taskType: string; title: string; description: string; skillId?: string; targetCount: number }[] = [];
+
+    const vrSkills = ['vr.vocab', 'vr.sequences', 'vr.word_structure', 'vr.codes', 'vr.verbal_logic', 'vr.word_sequences'];
+    const nvrSkills = ['nvr.sequence', 'nvr.transform', 'nvr.classification', 'nvr.symmetry'];
+    const mathsSkills = ['maths.arithmetic', 'maths.fractions', 'maths.word_problems', 'maths.data', 'maths.patterns', 'maths.percentages', 'maths.ratio'];
+
+    const weekVr = vrSkills[(week - 1) % vrSkills.length];
+    const weekNvr = nvrSkills[(week - 1) % nvrSkills.length];
+    const weekMaths = mathsSkills[(week - 1) % mathsSkills.length];
+
+    if (phase === "Baseline & Foundation") {
+      taskDefs.push(
+        { taskType: 'drill', title: 'Complete 3 VR Drills', description: 'Build verbal reasoning foundations.', skillId: weekVr, targetCount: 3 },
+        { taskType: 'drill', title: 'Complete 2 Maths Drills', description: 'Strengthen core maths skills.', skillId: weekMaths, targetCount: 2 },
+        { taskType: 'drill', title: 'Complete 2 NVR Drills', description: 'Develop non-verbal reasoning.', skillId: weekNvr, targetCount: 2 },
+      );
+      if (week === 1) {
+        taskDefs.push({ taskType: 'diagnostic', title: 'Take Baseline Diagnostic', description: 'Complete the baseline assessment to set your starting point.', targetCount: 1 });
+      }
+    } else if (phase === "Targeted Skill Elevation") {
+      taskDefs.push(
+        { taskType: 'drill', title: 'Complete 3 Focused Drills', description: 'Work on your weakest areas.', skillId: weekVr, targetCount: 3 },
+        { taskType: 'drill', title: 'Complete 2 Mixed Drills', description: 'Cross-skill practice.', skillId: weekMaths, targetCount: 2 },
+        { taskType: 'drill', title: 'Complete 1 Timed Drill', description: 'Practice under exam conditions.', skillId: weekNvr, targetCount: 1 },
+      );
+      if (week === 6) {
+        taskDefs.push({ taskType: 'diagnostic', title: 'Take Progress Check', description: 'Measure your improvement with a full diagnostic.', targetCount: 1 });
+      }
+    } else if (phase === "Exam Conditioning") {
+      taskDefs.push(
+        { taskType: 'drill', title: 'Complete 2 Timed Drills', description: 'Build exam stamina.', skillId: weekVr, targetCount: 2 },
+        { taskType: 'drill', title: 'Complete 3 Skill Drills', description: 'Maintain sharpness.', skillId: weekMaths, targetCount: 3 },
+        { taskType: 'drill', title: 'Review Weak Areas', description: 'Focus on flagged areas.', skillId: weekNvr, targetCount: 2 },
+      );
+      if (week === 12) {
+        taskDefs.push({ taskType: 'diagnostic', title: 'Take Mock Exam', description: 'Full exam simulation under timed conditions.', targetCount: 1 });
+      }
+    } else {
+      taskDefs.push(
+        { taskType: 'drill', title: 'Complete 3 Revision Drills', description: 'Final revision across all areas.', skillId: weekVr, targetCount: 3 },
+        { taskType: 'drill', title: 'Complete 2 Timed Drills', description: 'Maintain exam readiness.', skillId: weekMaths, targetCount: 2 },
+        { taskType: 'drill', title: 'Confidence Check', description: 'Build confidence with quick practice.', skillId: weekNvr, targetCount: 1 },
+      );
+      if (week === 16) {
+        taskDefs.push({ taskType: 'diagnostic', title: 'Take Final Assessment', description: 'Final readiness check before the exam.', targetCount: 1 });
+      }
+    }
+
+    const tasks: ProgrammeTask[] = [];
+    for (const def of taskDefs) {
+      const [task] = await db.insert(programmeTasks).values({
+        userId,
+        enrolmentId,
+        week,
+        taskType: def.taskType,
+        title: def.title,
+        description: def.description,
+        skillId: def.skillId || null,
+        targetCount: def.targetCount,
+      }).returning();
+      tasks.push(task);
+    }
+
+    return tasks;
+  }
+
+  async incrementTaskProgress(userId: string, taskType: string, skillId?: string): Promise<void> {
+    const enrolment = await this.getProgrammeEnrolment(userId);
+    if (!enrolment) return;
+
+    const currentWeek = enrolment.currentWeek;
+
+    let conditions = [
+      eq(programmeTasks.userId, userId),
+      eq(programmeTasks.week, currentWeek),
+      eq(programmeTasks.taskType, taskType),
+      eq(programmeTasks.status, 'pending'),
+    ];
+
+    const tasks = await db.select().from(programmeTasks)
+      .where(and(...conditions))
+      .orderBy(programmeTasks.id);
+
+    for (const task of tasks) {
+      if (skillId && task.skillId && task.skillId !== skillId) continue;
+
+      const newCount = (task.completedCount || 0) + 1;
+      const completed = newCount >= task.targetCount;
+
+      await db.update(programmeTasks)
+        .set({
+          completedCount: newCount,
+          status: completed ? 'completed' : 'pending',
+          completedAt: completed ? new Date() : null,
+        })
+        .where(eq(programmeTasks.id, task.id));
+      break;
+    }
   }
 
   async getAllQuestions(filters?: { section?: string; skillId?: string; difficulty?: string; qaStatus?: string; renderType?: string }): Promise<Question[]> {

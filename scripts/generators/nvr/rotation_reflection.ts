@@ -1,13 +1,12 @@
 import type { GeneratedQuestion } from '../types';
-
-type SvgStroke = { strokeWidth: number; stroke: string; fill: 'none' | 'solid'; dashed: boolean };
-type SvgElement = { type: 'shape'; shape: string; x: number; y: number; size: number; rotation: number; style: SvgStroke };
-type SvgFrame = { elements: SvgElement[] };
-
-const allShapes = ['circle', 'square', 'triangle', 'star', 'pentagon', 'arrow'] as const;
-const asymmetricShapes = ['triangle', 'star', 'pentagon', 'arrow'] as const;
-const baseStyle: SvgStroke = { strokeWidth: 3, stroke: '#111827', fill: 'none', dashed: false };
-const difficulties = ['easy', 'medium', 'hard'] as const;
+import {
+  type SvgFrame, type SvgElement, type FillPattern,
+  allShapes, simpleShapes, complexShapes, allFills,
+  difficulties, seededRandom, pick, pickOther, shuffleArray,
+  shuffleWithCorrect, makeShape, makeLine, makeDot,
+  safePositions, getDifficultyConfig, buildCompoundFrame,
+  hasAnyDuplicateOptions,
+} from './shared';
 
 const stemTemplates = [
   'Shape A is to Shape B as Shape C is to…?',
@@ -16,79 +15,27 @@ const stemTemplates = [
   'Which option shows Shape C after the same transformation as A → B?',
 ];
 
-const shapePalettes: (typeof asymmetricShapes[number])[][] = [
-  ['triangle', 'star', 'pentagon'],
-  ['arrow', 'pentagon', 'star'],
-  ['triangle', 'arrow', 'star'],
-  ['pentagon', 'arrow', 'triangle'],
-  ['star', 'triangle', 'arrow'],
-  ['arrow', 'star', 'pentagon'],
-];
-
-function seededRandom(seed: number) {
-  let s = seed;
-  return () => {
-    s = (s * 48271 + 12345) % 2147483647;
-    return (s >>> 0) / 2147483647;
-  };
-}
-
-function pick<T>(arr: readonly T[], rng: () => number): T {
-  return arr[Math.floor(rng() * arr.length)];
-}
-
-function makeElement(shape: string, x: number, y: number, size: number, rotation: number, fill: 'none' | 'solid' = 'none'): SvgElement {
-  return { type: 'shape', shape, x, y, size, rotation, style: { ...baseStyle, fill } };
-}
-
 function applyRotation(el: SvgElement, degrees: number): SvgElement {
-  return { ...el, rotation: (el.rotation + degrees) % 360 };
+  if (el.type === 'shape') return { ...el, rotation: (el.rotation + degrees) % 360 };
+  return el;
 }
 
 function reflectX(el: SvgElement): SvgElement {
-  return { ...el, x: 100 - el.x, rotation: (360 - el.rotation) % 360 };
+  if (el.type === 'shape') return { ...el, x: 100 - el.x, rotation: (360 - el.rotation) % 360 };
+  if (el.type === 'line') return { ...el, x1: 100 - el.x1, x2: 100 - el.x2 };
+  if (el.type === 'dot') return { ...el, x: 100 - el.x };
+  return el;
 }
 
 function reflectY(el: SvgElement): SvgElement {
-  return { ...el, y: 100 - el.y, rotation: (180 - el.rotation + 360) % 360 };
+  if (el.type === 'shape') return { ...el, y: 100 - el.y, rotation: (180 - el.rotation + 360) % 360 };
+  if (el.type === 'line') return { ...el, y1: 100 - el.y1, y2: 100 - el.y2 };
+  if (el.type === 'dot') return { ...el, y: 100 - el.y };
+  return el;
 }
 
-function applyTransformToFrame(frame: SvgFrame, transform: (el: SvgElement) => SvgElement): SvgFrame {
-  return { elements: frame.elements.map(transform) };
-}
-
-function shuffleWithCorrect<T>(correct: T, distractors: T[], rng: () => number): { options: T[]; correctIndex: number } {
-  const all = [correct, ...distractors];
-  for (let i = all.length - 1; i > 0; i--) {
-    const j = Math.floor(rng() * (i + 1));
-    [all[i], all[j]] = [all[j], all[i]];
-  }
-  return { options: all, correctIndex: all.indexOf(correct) };
-}
-
-function ensureAxisSafety(x: number, y: number, subRuleId: string): [number, number] {
-  let safeX = x;
-  let safeY = y;
-  if (subRuleId.includes('reflect_x') && Math.abs(safeX - 50) < 8) {
-    safeX = safeX <= 50 ? 50 - 8 : 50 + 8;
-  }
-  if (subRuleId.includes('reflect_y') && Math.abs(safeY - 50) < 8) {
-    safeY = safeY <= 50 ? 50 - 8 : 50 + 8;
-  }
-  return [safeX, safeY];
-}
-
-function framesAreIdentical(a: SvgFrame, b: SvgFrame): boolean {
-  return JSON.stringify(a) === JSON.stringify(b);
-}
-
-function hasAnyDuplicateOptions(options: SvgFrame[]): boolean {
-  for (let i = 0; i < options.length; i++) {
-    for (let j = i + 1; j < options.length; j++) {
-      if (framesAreIdentical(options[i], options[j])) return true;
-    }
-  }
-  return false;
+function applyToFrame(frame: SvgFrame, fn: (el: SvgElement) => SvgElement): SvgFrame {
+  return { elements: frame.elements.map(fn) };
 }
 
 interface TransformDef {
@@ -109,7 +56,7 @@ const transformDefs: TransformDef[] = [
       (el) => applyRotation(el, 270),
       (el) => applyRotation(el, 45),
     ],
-    explanation: 'The shape is rotated 90° clockwise.',
+    explanation: 'Each element is rotated 90° clockwise.',
     traps: ['wrong_rotation', 'reversed_direction'],
     distractorStyleId: 'wrong_rotation',
   },
@@ -119,9 +66,9 @@ const transformDefs: TransformDef[] = [
     wrongTransforms: [
       (el) => applyRotation(el, 90),
       (el) => applyRotation(el, 270),
-      (el) => applyRotation(el, 45),
+      (el) => reflectX(el),
     ],
-    explanation: 'The shape is rotated 180°.',
+    explanation: 'Each element is rotated 180°.',
     traps: ['wrong_rotation', 'partial_rule'],
     distractorStyleId: 'wrong_rotation',
   },
@@ -131,9 +78,9 @@ const transformDefs: TransformDef[] = [
     wrongTransforms: [
       reflectY,
       (el) => applyRotation(el, 180),
-      (el) => ({ ...el, x: 100 - el.x }),
+      (el) => { const r = reflectX(el); return applyRotation(r, 45); },
     ],
-    explanation: 'The shape is reflected horizontally (across the vertical axis).',
+    explanation: 'Each element is reflected horizontally (across the vertical axis).',
     traps: ['wrong_axis', 'partial_rule'],
     distractorStyleId: 'wrong_axis',
   },
@@ -143,18 +90,25 @@ const transformDefs: TransformDef[] = [
     wrongTransforms: [
       reflectX,
       (el) => applyRotation(el, 180),
-      (el) => ({ ...el, y: 100 - el.y }),
+      (el) => { const r = reflectY(el); return applyRotation(r, 90); },
     ],
-    explanation: 'The shape is reflected vertically (across the horizontal axis).',
+    explanation: 'Each element is reflected vertically (across the horizontal axis).',
     traps: ['wrong_axis', 'partial_rule'],
     distractorStyleId: 'wrong_axis',
   },
 ];
 
-const safePositions: [number, number][] = [
-  [25, 30], [75, 30], [25, 70], [75, 70],
-  [30, 25], [70, 25], [30, 75], [70, 75],
-];
+function ensureAxisSafety(x: number, y: number, subRuleId: string): [number, number] {
+  let safeX = x;
+  let safeY = y;
+  if (subRuleId.includes('reflect_x') && Math.abs(safeX - 50) < 10) {
+    safeX = safeX <= 50 ? 38 : 62;
+  }
+  if (subRuleId.includes('reflect_y') && Math.abs(safeY - 50) < 10) {
+    safeY = safeY <= 50 ? 38 : 62;
+  }
+  return [safeX, safeY];
+}
 
 export function generateRotationReflectionQuestions(): GeneratedQuestion[] {
   const questions: GeneratedQuestion[] = [];
@@ -166,49 +120,43 @@ export function generateRotationReflectionQuestions(): GeneratedQuestion[] {
       let question: GeneratedQuestion | null = null;
 
       while (seedOffset < 10) {
-        const rng = seededRandom(50000 + transformDefs.indexOf(def) * 10000 + i * 131 + seedOffset);
+        const rng = seededRandom(50000 + transformDefs.indexOf(def) * 10000 + i * 173 + seedOffset);
         rng(); rng(); rng();
 
-        const palette = shapePalettes[(transformDefs.indexOf(def) * perSubRule + i) % shapePalettes.length];
-        const shape = pick(palette, rng);
         const diff = pick(difficulties, rng);
-        const numElements = diff === 'easy' ? 1 : diff === 'medium' ? 2 : 3;
-        const stemIdx = (transformDefs.indexOf(def) * perSubRule + i) % stemTemplates.length;
-        const stem = stemTemplates[stemIdx];
-        const paletteId = `palette_${(transformDefs.indexOf(def) * perSubRule + i) % shapePalettes.length}`;
-        const densityLevel = diff === 'easy' ? 'low' as const : diff === 'medium' ? 'medium' as const : 'high' as const;
+        const config = getDifficultyConfig(diff);
+        const stemIdx = i % stemTemplates.length;
 
-        const rotations = [0, 45, 90, 135, 180, 225, 270];
-
-        const frameAElements: SvgElement[] = [];
-        for (let e = 0; e < numElements; e++) {
-          const basePos = safePositions[(e + i * 3) % safePositions.length];
-          const [px, py] = ensureAxisSafety(basePos[0], basePos[1], def.subRuleId);
-          const rot = pick(rotations, rng);
-          const sh = e === 0 ? shape : pick(palette, rng);
-          const fill = rng() > 0.7 ? 'solid' as const : 'none' as const;
-          frameAElements.push(makeElement(sh, px, py, 18, rot, fill));
-        }
-
-        const frameA: SvgFrame = { elements: frameAElements };
-        const frameB = applyTransformToFrame(frameA, def.transform);
-
-        const frameCElements: SvgElement[] = [];
-        for (let e = 0; e < numElements; e++) {
-          const basePos = safePositions[(e + i * 3 + 2) % safePositions.length];
-          const [px, py] = ensureAxisSafety(basePos[0], basePos[1], def.subRuleId);
-          const rot = pick(rotations, rng);
-          const sh = pick(palette, rng);
-          const fill = rng() > 0.7 ? 'solid' as const : 'none' as const;
-          frameCElements.push(makeElement(sh, px, py, 18, rot, fill));
-        }
-
-        const frameC: SvgFrame = { elements: frameCElements };
-        const correctFrame = applyTransformToFrame(frameC, def.transform);
-
-        const distractors: SvgFrame[] = def.wrongTransforms.map(wt =>
-          applyTransformToFrame(frameC, wt)
+        const frameA = buildCompoundFrame(
+          rng, config.numShapes, config.shapePool, config.fillPool,
+          config.addLine, config.addDots,
         );
+
+        frameA.elements = frameA.elements.map(el => {
+          if (el.type === 'shape') {
+            const [sx, sy] = ensureAxisSafety(el.x, el.y, def.subRuleId);
+            return { ...el, x: sx, y: sy };
+          }
+          return el;
+        });
+
+        const frameB = applyToFrame(frameA, def.transform);
+
+        const frameC = buildCompoundFrame(
+          rng, config.numShapes, config.shapePool, config.fillPool,
+          config.addLine, config.addDots,
+        );
+
+        frameC.elements = frameC.elements.map(el => {
+          if (el.type === 'shape') {
+            const [sx, sy] = ensureAxisSafety(el.x, el.y, def.subRuleId);
+            return { ...el, x: sx, y: sy };
+          }
+          return el;
+        });
+
+        const correctFrame = applyToFrame(frameC, def.transform);
+        const distractors = def.wrongTransforms.map(wt => applyToFrame(frameC, wt));
 
         const allOptions = [correctFrame, ...distractors];
         if (hasAnyDuplicateOptions(allOptions)) {
@@ -222,7 +170,7 @@ export function generateRotationReflectionQuestions(): GeneratedQuestion[] {
         question = {
           section: 'Non-Verbal Reasoning',
           type: 'rotation_reflection',
-          prompt: stem,
+          prompt: stemTemplates[stemIdx],
           options: labels,
           correctAnswer: labels[correctIndex],
           difficulty: diff,
@@ -235,25 +183,23 @@ export function generateRotationReflectionQuestions(): GeneratedQuestion[] {
             answerOptions,
           },
           trapTypes: def.traps,
-          cognitiveLoad: diff === 'easy' ? 2 : diff === 'medium' ? 3 : 5,
-          estTimeSeconds: diff === 'easy' ? 25 : diff === 'medium' ? 35 : 50,
+          cognitiveLoad: diff === 'easy' ? 2 : diff === 'medium' ? 4 : 5,
+          estTimeSeconds: diff === 'easy' ? 25 : diff === 'medium' ? 40 : 55,
           explanation: def.explanation,
           qaStatus: 'approved',
           locale: 'en-GB',
           britishSpelling: true,
-          version: 1,
-          stemVariantId: `stem_${stemIdx}`,
-          layoutVariantId: `layout_${numElements}el`,
-          shapePaletteId: paletteId,
+          version: 2,
+          stemVariantId: `stem_rr_${stemIdx}`,
+          layoutVariantId: `compound_${config.numShapes}el`,
+          shapePaletteId: `rr_palette_${i % 6}`,
           distractorStyleId: def.distractorStyleId,
-          densityLevel,
+          densityLevel: diff === 'easy' ? 'low' : diff === 'medium' ? 'medium' : 'high',
         };
         break;
       }
 
-      if (question) {
-        questions.push(question);
-      }
+      if (question) questions.push(question);
     }
   }
 

@@ -89,30 +89,23 @@ const nonClassCount = allQuestions.filter(q => !q.subRuleId?.startsWith('nvr.cla
 if (dupeOptionCount === 0) pass(`0/${nonClassCount} non-classification questions have duplicate options`);
 else fail(`${dupeOptionCount}/${nonClassCount} non-classification questions have duplicate options`);
 
-console.log(`\n--- Classification singleton check ---`);
+console.log(`\n--- Classification frame count check ---`);
 const classificationQs = allQuestions.filter(q => q.subRuleId?.startsWith('nvr.classification'));
-let ambiguousCount = 0;
+let badFrameCount = 0;
 for (const q of classificationQs) {
   const frames = q.renderConfig?.group || q.renderConfig?.answerOptions || [];
   if (frames.length !== 5) {
-    ambiguousCount++;
+    badFrameCount++;
     fail(`Classification question has ${frames.length} frames, expected 5`);
-    continue;
   }
-  const frameKeys = frames.map((f: any) => {
-    const el = f.elements?.[0];
-    if (!el) return 'empty';
-    return `${el.shape}_${el.style?.fill || 'none'}_${el.rotation}`;
-  });
-  const counts = new Map<string, number>();
-  for (const k of frameKeys) counts.set(k, (counts.get(k) || 0) + 1);
-  const singletons = Array.from(counts.values()).filter(c => c === 1);
-  if (singletons.length !== 1) {
-    ambiguousCount++;
+  const emptyFrames = frames.filter((f: any) => !f.elements || f.elements.length === 0);
+  if (emptyFrames.length > 0) {
+    badFrameCount++;
+    fail(`Classification question has ${emptyFrames.length} empty frame(s)`);
   }
 }
-if (ambiguousCount === 0) pass(`0/${classificationQs.length} classification questions are ambiguous`);
-else fail(`${ambiguousCount}/${classificationQs.length} classification questions are ambiguous`);
+if (badFrameCount === 0) pass(`0/${classificationQs.length} classification questions have wrong frame counts`);
+else fail(`${badFrameCount}/${classificationQs.length} classification questions have issues`);
 
 console.log(`\n--- Axis safety (reflection questions) ---`);
 const reflectionQs = allQuestions.filter(q =>

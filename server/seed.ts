@@ -150,9 +150,55 @@ const nvrSvgQuestions: Array<{
   },
 ];
 
+export async function ensurePracticePaperDiagnostics() {
+  const practicePapers = [
+    {
+      id: "practice-quick",
+      title: "Quick Practice Paper",
+      subtitle: "A fast 20-question paper with fresh questions each time",
+      type: "practice_paper",
+      duration: 25,
+      questionCount: 20,
+      requiredTier: "pack12",
+      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
+    },
+    {
+      id: "practice-full",
+      title: "Full Practice Paper",
+      subtitle: "A complete 40-question paper — unique every time",
+      type: "practice_paper",
+      duration: 45,
+      questionCount: 40,
+      requiredTier: "pack12",
+      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
+    },
+    {
+      id: "practice-mock",
+      title: "Mock Exam Paper",
+      subtitle: "50-question exam simulation with fresh questions each attempt",
+      type: "practice_paper",
+      duration: 50,
+      questionCount: 50,
+      requiredTier: "programme16",
+      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
+    },
+  ];
+
+  for (const paper of practicePapers) {
+    const [existing] = await db.select().from(diagnostics).where(sql`${diagnostics.id} = ${paper.id}`);
+    if (!existing) {
+      await db.insert(diagnostics).values(paper);
+      console.log(`Inserted practice paper diagnostic: ${paper.id}`);
+    }
+  }
+}
+
 export async function seedDatabase() {
   const [existing] = await db.select({ count: sql<number>`count(*)` }).from(diagnostics);
-  if (existing.count > 0) return;
+  if (existing.count > 0) {
+    await ensurePracticePaperDiagnostics();
+    return;
+  }
 
   console.log("Seeding database...");
 
@@ -192,6 +238,36 @@ export async function seedDatabase() {
       title: "Mock Exam 1",
       subtitle: "Exam-day simulation under timed conditions",
       type: "mock",
+      duration: 50,
+      questionCount: 50,
+      requiredTier: "programme16",
+      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
+    },
+    {
+      id: "practice-quick",
+      title: "Quick Practice Paper",
+      subtitle: "A fast 20-question paper with fresh questions each time",
+      type: "practice_paper",
+      duration: 25,
+      questionCount: 20,
+      requiredTier: "pack12",
+      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
+    },
+    {
+      id: "practice-full",
+      title: "Full Practice Paper",
+      subtitle: "A complete 40-question paper — unique every time",
+      type: "practice_paper",
+      duration: 45,
+      questionCount: 40,
+      requiredTier: "pack12",
+      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
+    },
+    {
+      id: "practice-mock",
+      title: "Mock Exam Paper",
+      subtitle: "50-question exam simulation with fresh questions each attempt",
+      type: "practice_paper",
       duration: 50,
       questionCount: 50,
       requiredTier: "programme16",
@@ -339,12 +415,20 @@ export async function seedDatabase() {
     { title: "Word Analogies", category: "Verbal Reasoning", icon: "BookOpen", difficulty: "Medium", questionCount: 15, requiredTier: "free", skillId: "vr.vocab" },
     { title: "Letter Sequences", category: "Verbal Reasoning", icon: "Type", difficulty: "Hard", questionCount: 12, requiredTier: "pack12", skillId: "vr.sequences" },
     { title: "Hidden Words", category: "Verbal Reasoning", icon: "Search", difficulty: "Medium", questionCount: 10, requiredTier: "pack12", skillId: "vr.word_structure" },
+    { title: "Code Breaking", category: "Verbal Reasoning", icon: "Lock", difficulty: "Hard", questionCount: 12, requiredTier: "pack12", skillId: "vr.codes" },
+    { title: "Logical Deduction", category: "Verbal Reasoning", icon: "GitBranch", difficulty: "Medium", questionCount: 15, requiredTier: "free", skillId: "vr.verbal_logic" },
+    { title: "Word Classification", category: "Verbal Reasoning", icon: "List", difficulty: "Medium", questionCount: 10, requiredTier: "pack12", skillId: "vr.word_sequences" },
     { title: "Pattern Recognition", category: "Non-Verbal Reasoning", icon: "Grid3x3", difficulty: "Medium", questionCount: 15, requiredTier: "free", skillId: "nvr.sequence" },
-    { title: "Shape Sequences", category: "Non-Verbal Reasoning", icon: "Shapes", difficulty: "Hard", questionCount: 12, requiredTier: "pack12", skillId: "nvr.sequence" },
     { title: "Mirror Images", category: "Non-Verbal Reasoning", icon: "FlipHorizontal", difficulty: "Easy", questionCount: 10, requiredTier: "free", skillId: "nvr.transform" },
+    { title: "Odd One Out", category: "Non-Verbal Reasoning", icon: "CircleDot", difficulty: "Medium", questionCount: 12, requiredTier: "free", skillId: "nvr.classification" },
+    { title: "Symmetry & Spatial", category: "Non-Verbal Reasoning", icon: "Maximize2", difficulty: "Medium", questionCount: 12, requiredTier: "pack12", skillId: "nvr.symmetry" },
     { title: "Arithmetic & Number", category: "Mathematics", icon: "Calculator", difficulty: "Medium", questionCount: 15, requiredTier: "free", skillId: "maths.arithmetic" },
     { title: "Multi-step Word Problems", category: "Mathematics", icon: "Brain", difficulty: "Hard", questionCount: 12, requiredTier: "pack12", skillId: "maths.word_problems" },
-    { title: "Fractions & Percentages", category: "Mathematics", icon: "Percent", difficulty: "Medium", questionCount: 10, requiredTier: "pack12", skillId: "maths.fractions" },
+    { title: "Fractions & Decimals", category: "Mathematics", icon: "Percent", difficulty: "Medium", questionCount: 10, requiredTier: "pack12", skillId: "maths.fractions" },
+    { title: "Data Interpretation", category: "Mathematics", icon: "BarChart3", difficulty: "Medium", questionCount: 10, requiredTier: "pack12", skillId: "maths.data" },
+    { title: "Number Patterns", category: "Mathematics", icon: "TrendingUp", difficulty: "Medium", questionCount: 12, requiredTier: "free", skillId: "maths.patterns" },
+    { title: "Percentages", category: "Mathematics", icon: "BadgePercent", difficulty: "Medium", questionCount: 10, requiredTier: "pack12", skillId: "maths.percentages" },
+    { title: "Ratio & Proportion", category: "Mathematics", icon: "Scale", difficulty: "Medium", questionCount: 10, requiredTier: "pack12", skillId: "maths.ratio" },
   ]);
 
   console.log("Seed data inserted successfully.");

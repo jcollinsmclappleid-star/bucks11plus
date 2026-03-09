@@ -166,6 +166,23 @@ export const weeklyPlans = pgTable("weekly_plans", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
+export const programmeTasks = pgTable("programme_tasks", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull(),
+  enrolmentId: varchar("enrolment_id").notNull(),
+  week: integer("week").notNull(),
+  taskType: text("task_type").notNull(),
+  title: text("title").notNull(),
+  description: text("description"),
+  skillId: text("skill_id"),
+  targetCount: integer("target_count").notNull().default(1),
+  completedCount: integer("completed_count").notNull().default(0),
+  status: text("status").notNull().default("pending"),
+  completedAt: timestamp("completed_at"),
+  linkedSessionId: varchar("linked_session_id"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -199,4 +216,5 @@ export type WeeklyPlan = typeof weeklyPlans.$inferSelect;
 export type QuestionUsage = typeof questionUsage.$inferSelect;
 export type ContentCalibration = typeof contentCalibration.$inferSelect;
 export type QuestionVariant = typeof questionVariants.$inferSelect;
+export type ProgrammeTask = typeof programmeTasks.$inferSelect;
 export type OnboardingData = z.infer<typeof onboardingSchema>;

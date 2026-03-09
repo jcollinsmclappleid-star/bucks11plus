@@ -90,6 +90,7 @@ content/
 - **practice_sections**: id, title, category, icon, difficulty, questionCount, requiredTier, skillId
 - **articles**: id, title, slug, excerpt, content, category, readTime, publishedAt
 - **programme_enrolments / programme_milestones / weekly_plans**: Programme tracking tables
+- **programme_tasks**: id (serial), userId, enrolmentId, week, taskType (drill/diagnostic), title, description, skillId, targetCount, completedCount, status (pending/completed), completedAt — weekly task checklist for programme users
 - **stripe.*** (managed by stripe-replit-sync)
 
 ## Guest Diagnostic Flow
@@ -113,10 +114,16 @@ content/
 - POST /api/test-sessions, GET /api/test-sessions, GET /api/test-sessions/:id, POST /api/test-sessions/:id/submit
 
 ### Practice Drills
-- GET /api/practice-sections, GET /api/practice-sections/:id/questions (anti-repeat), POST /api/practice-sections/:id/check-answer
+- GET /api/practice-sections, GET /api/practice-sections/:id/questions (anti-repeat, returns { questions, exhaustion_warning }), POST /api/practice-sections/:id/check-answer
+- POST /api/practice-sections/:id/submit-timed (timed drill submission)
+- POST /api/practice-sections/:id/complete-drill (tracks programme task progress)
+
+### Practice Papers
+- POST /api/practice-papers/start (body: { paperType: "quick"|"full"|"mock" }) — dynamically selects fresh questions from pool
 
 ### Programme
 - GET /api/programme, POST /api/programme/milestones/:id/complete, GET /api/programme/completion-summary
+- GET /api/programme/tasks, POST /api/programme/tasks/generate — weekly task tracking
 
 ### Admin (requireAdmin)
 - GET /api/admin/questions, GET /api/admin/questions/qa-queue, GET /api/admin/questions/stats
@@ -130,11 +137,13 @@ content/
 - GET /api/articles, GET /api/articles/:slug, GET /api/progress
 
 ## Question Engine
-- 960 questions (300 VR + 360 NVR + 300 Maths) generated via scripts/generators
+- 1000 questions (300 VR + 400 NVR + 300 Maths) generated via scripts/generators
 - NVR questions use SVG render_config (NvrSequenceConfig, NvrTransformConfig, NvrClassificationConfig)
 - Data interpretation uses chart render_config (ChartBarConfig, ChartLineConfig, ChartTableConfig)
 - Anti-repeat: question_usage tracks served_count + last_served_at per user per question
 - Selection prioritizes unseen → least recent → lowest count, max 2 per sub_rule_id per 10-question drill
+- Hard 7-day cooldown: never serves same question within 7 days (falls back to least-recently-served with exhaustion warning when pool exhausted)
+- Guest question_usage migrated to user account on sign-up/claim
 - DrillRunner uses session-unique query key (useRef + staleTime:0) so every drill start fetches fresh questions
 - QA workflow: draft → review → approved/rejected via admin interface
 

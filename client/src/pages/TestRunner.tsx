@@ -15,7 +15,9 @@ export default function TestRunner() {
   const { id } = useParams<{ id: string }>();
   const [, setLocation] = useLocation();
   const search = useSearch();
-  const isGuest = new URLSearchParams(search).get("guest") === "true";
+  const searchParams = new URLSearchParams(search);
+  const isGuest = searchParams.get("guest") === "true";
+  const isPractice = searchParams.get("practice") === "true";
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [timeLeft, setTimeLeft] = useState(0);
@@ -32,27 +34,45 @@ export default function TestRunner() {
     } catch { return null; }
   }, [isGuest]);
 
+  const practiceQuestions = useMemo(() => {
+    if (!isPractice) return null;
+    try {
+      const stored = sessionStorage.getItem("practiceQuestions");
+      return stored ? JSON.parse(stored) as Question[] : null;
+    } catch { return null; }
+  }, [isPractice]);
+
   const guestTitle = isGuest ? (sessionStorage.getItem("guestDiagnosticTitle") || "Free Diagnostic") : "";
   const guestDuration = isGuest ? parseInt(sessionStorage.getItem("guestDiagnosticDuration") || "12", 10) : 0;
 
   const { data: session, isLoading: sessionLoading } = useQuery<TestSession>({
     queryKey: [`/api/test-sessions/${id}`],
-    enabled: !isGuest,
+    enabled: !isGuest && !isPractice,
   });
 
   const { data: diagnostic, isLoading: diagLoading } = useQuery<Diagnostic>({
     queryKey: [`/api/diagnostics/${session?.diagnosticId}`],
-    enabled: !isGuest && !!session?.diagnosticId,
+    enabled: !isGuest && !isPractice && !!session?.diagnosticId,
   });
 
   const { data: fetchedQuestions, isLoading: questionsLoading } = useQuery<Question[]>({
     queryKey: [`/api/diagnostics/${session?.diagnosticId}/questions`],
-    enabled: !isGuest && !!session?.diagnosticId,
+    enabled: !isGuest && !isPractice && !!session?.diagnosticId,
   });
 
-  const questions = isGuest ? guestQuestions : fetchedQuestions;
-  const diagnosticTitle = isGuest ? guestTitle : (diagnostic?.title || "");
-  const diagnosticDuration = isGuest ? guestDuration : (diagnostic?.duration || 0);
+  const { data: practiceSession } = useQuery<TestSession>({
+    queryKey: [`/api/test-sessions/${id}`],
+    enabled: isPractice,
+  });
+
+  const { data: practiceDiagnostic } = useQuery<Diagnostic>({
+    queryKey: [`/api/diagnostics/${practiceSession?.diagnosticId}`],
+    enabled: isPractice && !!practiceSession?.diagnosticId,
+  });
+
+  const questions = isGuest ? guestQuestions : isPractice ? practiceQuestions : fetchedQuestions;
+  const diagnosticTitle = isGuest ? guestTitle : isPractice ? (practiceDiagnostic?.title || "Practice Paper") : (diagnostic?.title || "");
+  const diagnosticDuration = isGuest ? guestDuration : isPractice ? (practiceDiagnostic?.duration || 45) : (diagnostic?.duration || 0);
 
   const submitMutation = useMutation({
     mutationFn: async (finalAnswers: typeof answers) => {
@@ -76,6 +96,9 @@ export default function TestRunner() {
       } else {
         queryClient.invalidateQueries({ queryKey: ["/api/test-sessions"] });
         setLocation(`/app/results/${id}`);
+      }
+      if (isPractice) {
+        sessionStorage.removeItem("practiceQuestions");
       }
     }
   });
@@ -150,6 +173,8 @@ export default function TestRunner() {
 
   const isLoading = isGuest
     ? !questions
+    : isPractice
+    ? !questions
     : (sessionLoading || diagLoading || questionsLoading || !questions || !diagnostic);
 
   if (isLoading) {
@@ -188,7 +213,7 @@ export default function TestRunner() {
           {timeString}
         </div>
 
-        <Button variant="ghost" size="sm" onClick={() => setLocation(isGuest ? "/" : "/app")} data-testid="button-exit">
+        <Button variant="ghost" size="sm" onClick={() => setLocation(isGuest ? "/" : "/app/diagnostic")} data-testid="button-exit">
           Exit
         </Button>
       </header>

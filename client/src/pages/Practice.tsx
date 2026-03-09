@@ -1,18 +1,20 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Lock, PlayCircle, BookOpen } from "lucide-react";
+import { Lock, PlayCircle, BookOpen, Timer, MessageSquare } from "lucide-react";
 import { Link } from "wouter";
 import { Seo } from "../components/shared/Seo";
 import { useQuery } from "@tanstack/react-query";
 import { type PracticeSection } from "@shared/schema";
 import { useAuth } from "../lib/auth";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useState } from "react";
 
 const TIER_RANK: Record<string, number> = { free: 0, pack12: 1, programme16: 2 };
 
 export default function Practice() {
   const { user, hasPaidAccess } = useAuth();
+  const [timedMode, setTimedMode] = useState(false);
   const { data: sections, isLoading } = useQuery<PracticeSection[]>({
     queryKey: ["/api/practice-sections"],
   });
@@ -32,12 +34,41 @@ export default function Practice() {
           <h1 className="text-3xl font-bold text-primary font-serif">Practice Bank</h1>
           <p className="text-muted-foreground mt-2">Targeted drills to close your specific gaps to 121.</p>
         </div>
-        {!hasPaidAccess() && (
-          <Button variant="outline" className="gap-2" asChild data-testid="button-unlock-all">
-            <Link href="/pricing"><Lock className="h-4 w-4" /> Unlock All Drills</Link>
-          </Button>
-        )}
+        <div className="flex items-center gap-3">
+          <div className="flex rounded-lg border border-border overflow-hidden" data-testid="toggle-drill-mode">
+            <button
+              onClick={() => setTimedMode(false)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium transition-colors ${!timedMode ? 'bg-primary text-primary-foreground' : 'bg-background text-muted-foreground hover:bg-muted'}`}
+              data-testid="button-mode-untimed"
+            >
+              <MessageSquare className="h-3.5 w-3.5" />
+              Untimed
+            </button>
+            <button
+              onClick={() => setTimedMode(true)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium transition-colors ${timedMode ? 'bg-primary text-primary-foreground' : 'bg-background text-muted-foreground hover:bg-muted'}`}
+              data-testid="button-mode-timed"
+            >
+              <Timer className="h-3.5 w-3.5" />
+              Timed
+            </button>
+          </div>
+          {!hasPaidAccess() && (
+            <Button variant="outline" className="gap-2" asChild data-testid="button-unlock-all">
+              <Link href="/pricing"><Lock className="h-4 w-4" /> Unlock All Drills</Link>
+            </Button>
+          )}
+        </div>
       </div>
+      {timedMode && (
+        <div className="flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 p-4">
+          <Timer className="h-5 w-5 text-amber-600 mt-0.5 shrink-0" />
+          <div>
+            <p className="font-medium text-amber-900 text-sm">Exam Conditions Mode</p>
+            <p className="text-amber-700 text-xs mt-0.5">Countdown timer • No per-question feedback • All answers scored at the end</p>
+          </div>
+        </div>
+      )}
 
       <div className="space-y-12">
         {isLoading ? (
@@ -98,7 +129,7 @@ export default function Practice() {
                             asChild
                             data-testid={`button-start-drill-${drill.id}`}
                           >
-                            <Link href={`/app/drill/${drill.id}`}><PlayCircle className="mr-2 h-4 w-4" /> Start Drill</Link>
+                            <Link href={`/app/drill/${drill.id}${timedMode ? '?mode=timed' : ''}`}><PlayCircle className="mr-2 h-4 w-4" /> {timedMode ? 'Start Timed Drill' : 'Start Drill'}</Link>
                           </Button>
                         )}
                       </CardContent>

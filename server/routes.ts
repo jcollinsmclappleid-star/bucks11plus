@@ -360,7 +360,54 @@ export async function registerRoutes(
         .where(eq(testSessions.id, req.params.id))
         .returning();
 
+      await storage.migrateGuestUsage(req.params.id, req.user!.id);
+
       res.json(updated);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.post("/api/practice-papers/start", requireAuth, async (req, res, next) => {
+    try {
+      const { paperType } = req.body;
+      const paperMap: Record<string, string> = {
+        quick: "practice-quick",
+        full: "practice-full",
+        mock: "practice-mock",
+      };
+
+      const diagnosticId = paperMap[paperType];
+      if (!diagnosticId) {
+        return res.status(400).json({ message: "Invalid paperType. Must be quick, full, or mock." });
+      }
+
+      const diag = await storage.getDiagnostic(diagnosticId);
+      if (!diag) {
+        return res.status(404).json({ message: "Practice paper diagnostic not found. Database may need reseeding." });
+      }
+
+      const TIER_RANK: Record<string, number> = { free: 0, pack12: 1, programme16: 2 };
+      const userRank = TIER_RANK[req.user!.subscriptionTier] || 0;
+      const requiredRank = TIER_RANK[diag.requiredTier] || 0;
+      if (userRank < requiredRank) {
+        return res.status(403).json({ message: "Upgrade required to access this practice paper" });
+      }
+
+      const selectedQuestions = await storage.selectQuestionsForPracticePaper(
+        req.user!.id,
+        diag.questionCount,
+        diag.sections,
+      );
+
+      const session = await storage.createTestSession({
+        userId: req.user!.id,
+        diagnosticId,
+      });
+
+      const safe = selectedQuestions.map(({ correctAnswer, ...q }) => q);
+
+      res.status(201).json({ session, questions: safe });
     } catch (error) {
       next(error);
     }
@@ -417,8 +464,16 @@ export async function registerRoutes(
 
       const session = await storage.getTestSession(req.params.id);
       if (!session) return res.status(404).json({ message: "Session not found" });
+      if (session.completedAt) return res.status(400).json({ message: "Session already submitted" });
 
-      const allQuestions = await storage.getQuestionsByDiagnostic(session.diagnosticId);
+      let allQuestions = await storage.getQuestionsByDiagnostic(session.diagnosticId);
+      if (allQuestions.length === 0) {
+        const answerIds = answers.map((a: any) => a.questionId).filter(Boolean);
+        if (answerIds.length > 0) {
+          allQuestions = await db.select().from(questions)
+            .where(inArray(questions.id, answerIds));
+        }
+      }
       const questionMap = new Map(allQuestions.map(q => [q.id, q]));
 
       let correct = 0;
@@ -501,6 +556,14 @@ export async function registerRoutes(
         paceData,
         metrics,
       });
+
+      if (req.user!.subscriptionTier === "programme16") {
+        try {
+          await storage.autoCompleteDiagnosticMilestones(req.user!.id, session.diagnosticId, session.id);
+        } catch (err) {
+          console.error("[Programme] Failed to auto-complete diagnostic milestone:", err);
+        }
+      }
 
       res.json(completed);
     } catch (error) {
@@ -780,6 +843,35 @@ export async function registerRoutes(
     }
   });
 
+  app.get("/api/programme/tasks", requireAuth, async (req, res, next) => {
+    try {
+      if (req.user!.subscriptionTier !== "programme16") {
+        return res.status(403).json({ message: "Programme access required" });
+      }
+      const week = req.query.week ? parseInt(req.query.week as string) : undefined;
+      const tasks = await storage.getProgrammeTasks(req.user!.id, week);
+      res.json(tasks);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.post("/api/programme/tasks/generate", requireAuth, async (req, res, next) => {
+    try {
+      if (req.user!.subscriptionTier !== "programme16") {
+        return res.status(403).json({ message: "Programme access required" });
+      }
+      const enrolment = await storage.getProgrammeEnrolment(req.user!.id);
+      if (!enrolment) return res.status(404).json({ message: "No active enrolment" });
+
+      const week = req.body.week || enrolment.currentWeek;
+      const tasks = await storage.generateWeeklyTasks(req.user!.id, enrolment.id, week);
+      res.json(tasks);
+    } catch (error) {
+      next(error);
+    }
+  });
+
   app.get("/api/programme/completion-summary", requireAuth, async (req, res, next) => {
     try {
       if (req.user!.subscriptionTier !== "programme16") {
@@ -863,11 +955,11 @@ export async function registerRoutes(
       const sectionId = req.params.id;
       console.log(`[Drill] Fetching questions for section: ${sectionId}`);
       
-      const qs = await storage.getQuestionsForDrill(sectionId, req.user!.id, 10);
+      const { questions: qs, exhaustionWarning } = await storage.getQuestionsForDrill(sectionId, req.user!.id, 10);
       console.log(`[Drill] Found ${qs.length} questions for section ${sectionId}`);
       
       const safe = qs.map(({ correctAnswer, ...q }) => q);
-      res.json(safe);
+      res.json({ questions: safe, exhaustion_warning: exhaustionWarning });
     } catch (error) {
       console.error(`[Drill] Error fetching questions:`, error);
       res.status(500).json({ message: "Failed to load practice questions" });
@@ -880,11 +972,77 @@ export async function registerRoutes(
       const question = await storage.getQuestion(questionId);
       if (!question) return res.status(404).json({ message: "Question not found" });
       const isCorrect = selectedAnswer === question.correctAnswer;
+
       res.json({ isCorrect, correctAnswer: question.correctAnswer, explanation: question.explanation });
     } catch (error) {
       next(error);
     }
   });
+
+  app.post("/api/practice-sections/:id/submit-timed", requireAuth, async (req, res, next) => {
+    try {
+      const { answers } = req.body;
+      if (!Array.isArray(answers)) return res.status(400).json({ message: "answers array required" });
+
+      const results: Array<{
+        questionId: string;
+        selectedAnswer: string;
+        correctAnswer: string;
+        isCorrect: boolean;
+        explanation: string | null;
+      }> = [];
+
+      let correct = 0;
+      for (const ans of answers) {
+        const question = await storage.getQuestion(ans.questionId);
+        if (!question) continue;
+        const isCorrect = ans.selectedAnswer === question.correctAnswer;
+        if (isCorrect) correct++;
+        results.push({
+          questionId: ans.questionId,
+          selectedAnswer: ans.selectedAnswer,
+          correctAnswer: question.correctAnswer,
+          isCorrect,
+          explanation: question.explanation,
+        });
+      }
+
+      if (req.user!.subscriptionTier === "programme16") {
+        try {
+          const enrolment = await storage.getProgrammeEnrolment(req.user!.id);
+          if (enrolment) {
+            await storage.autoCompletePracticeMilestone(req.user!.id, enrolment.currentWeek);
+            const firstQ = results[0];
+            const q = firstQ ? await storage.getQuestion(firstQ.questionId) : null;
+            await storage.incrementTaskProgress(req.user!.id, 'drill', q?.skillId || undefined);
+          }
+        } catch (err) {
+          console.error("[Programme] Failed to track timed drill:", err);
+        }
+      }
+
+      res.json({ results, correct, total: results.length });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.post("/api/practice-sections/:id/complete-drill", requireAuth, async (req, res, next) => {
+    try {
+      if (req.user!.subscriptionTier === "programme16") {
+        const enrolment = await storage.getProgrammeEnrolment(req.user!.id);
+        if (enrolment) {
+          await storage.autoCompletePracticeMilestone(req.user!.id, enrolment.currentWeek);
+          const { skillId } = req.body;
+          await storage.incrementTaskProgress(req.user!.id, 'drill', skillId || undefined);
+        }
+      }
+      res.json({ ok: true });
+    } catch (error) {
+      next(error);
+    }
+  });
+
 
   const requireAdmin = (req: any, res: any, next: any) => {
     if (!req.isAuthenticated() || !req.user?.isAdmin) {
