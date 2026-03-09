@@ -202,6 +202,20 @@ export const userBadges = pgTable("user_badges", {
   sessionId: varchar("session_id"),
 });
 
+export const guideLeads = pgTable("guide_leads", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  parentName: text("parent_name").notNull(),
+  email: text("email").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  downloadedAt: timestamp("downloaded_at").defaultNow(),
+  clickedDiagnostic: boolean("clicked_diagnostic").notNull().default(false),
+});
+
+export const insertGuideLeadSchema = createInsertSchema(guideLeads).pick({
+  parentName: true,
+  email: true,
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -239,3 +253,5 @@ export type ProgrammeTask = typeof programmeTasks.$inferSelect;
 export type Badge = typeof badges.$inferSelect;
 export type UserBadge = typeof userBadges.$inferSelect;
 export type OnboardingData = z.infer<typeof onboardingSchema>;
+export type GuideLead = typeof guideLeads.$inferSelect;
+export type InsertGuideLead = z.infer<typeof insertGuideLeadSchema>;

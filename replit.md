@@ -208,3 +208,12 @@ content/
 - 8 local town pages via TownGuide template + `client/src/data/towns.ts` data
 - Footer: 5 columns (Brand, Platform, Resources, Local Guides, Legal)
 - Target domain: `bucks11plustest.co.uk` (canonical URLs and sitemap)
+
+## Parent Guide / Lead Capture
+- Landing page: `/bucks-11-plus-parent-guide` with hero, 3-column explainer, guide previews, dashboard previews, email capture form, FAQ with JSON-LD
+- Email capture stores to `guide_leads` table (parentName, email, downloadedAt, clickedDiagnostic)
+- API: `POST /api/guide-leads` (public), `POST /api/guide-leads/:id/diagnostic-click`
+- Downloadable PDF at `/bucks-11-plus-parent-guide.pdf` (7 pages, generated via `scripts/generate-guide-pdf.ts`)
+- Static dashboard preview components: `DashboardPreviewForecast` (gauge + skill bars) and `DashboardPreviewPace` (pace cards + heatmap)
+- Print-optimised page at `client/src/pages/GuidePrint.tsx` (internal, not routed)
+- Cross-linked from BucksGuide pillar page and footer Resources column

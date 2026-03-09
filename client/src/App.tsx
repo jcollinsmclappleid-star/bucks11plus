@@ -47,6 +47,7 @@ import Badges from "./pages/Badges";
 import QuestionList from "./pages/admin/QuestionList";
 import QuestionEditor from "./pages/admin/QuestionEditor";
 
+import ParentGuide from "./pages/ParentGuide";
 import GrammarSchools from "./pages/seo/GrammarSchools";
 import QualifyingScore from "./pages/seo/QualifyingScore";
 import Timeline from "./pages/seo/Timeline";
@@ -88,6 +89,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
               <li><Link href="/bucks-11-plus-timeline" className="hover:text-white transition-colors">Admissions Timeline</Link></li>
               <li><Link href="/how-to-pass-bucks-11-plus" className="hover:text-white transition-colors">How to Pass</Link></li>
               <li><Link href="/bucks-11-plus-registration" className="hover:text-white transition-colors">Registration Guide</Link></li>
+              <li><Link href="/bucks-11-plus-parent-guide" className="hover:text-white transition-colors">Parent Guide (PDF)</Link></li>
             </ul>
           </div>
           <div>
@@ -185,6 +187,7 @@ function Router() {
             <Route path="/bucks-gl-alignment" component={GLAlignment} />
             <Route path="/about" component={About} />
             <Route path="/buckinghamshire-11-plus-guide" component={BucksGuide} />
+            <Route path="/bucks-11-plus-parent-guide" component={ParentGuide} />
             <Route path="/sign-in" component={SignIn} />
             <Route path="/sign-up" component={SignUp} />
             <Route path="/free-diagnostic" component={FreeDiagnosticStart} />

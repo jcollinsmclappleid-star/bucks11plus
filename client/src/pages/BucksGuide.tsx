@@ -195,6 +195,13 @@ export default function BucksGuide() {
         Our platform provides a free 12-minute diagnostic that measures both accuracy and pacing across all three domains, generating a predicted standardised score and identifying the specific question types where your child needs the most improvement.
       </p>
 
+      <div className="not-prose my-8 rounded-xl border border-slate-200 bg-white p-6">
+        <p className="text-sm text-muted-foreground mb-2">Want a summary you can keep?</p>
+        <Link href="/bucks-11-plus-parent-guide" className="text-primary font-semibold hover:underline">
+          Download our free Buckinghamshire 11+ Parent Guide (PDF) &rarr;
+        </Link>
+      </div>
+
       <ContentCTA />
 
       <h2 className="text-primary font-serif" data-testid="heading-faq">Frequently Asked Questions</h2>

@@ -3,11 +3,12 @@ import { db } from "./db";
 import {
   users, diagnostics, questions, testSessions, testAnswers, articles, practiceSections,
   programmeEnrolments, programmeMilestones, weeklyPlans, questionUsage, contentCalibration,
-  programmeTasks, badges, userBadges,
+  programmeTasks, badges, userBadges, guideLeads,
   type User, type InsertUser, type Diagnostic, type Question,
   type TestSession, type TestAnswer, type Article, type PracticeSection,
   type ProgrammeEnrolment, type ProgrammeMilestone, type WeeklyPlan,
   type ProgrammeTask, type OnboardingData, type Badge, type UserBadge,
+  type GuideLead, type InsertGuideLead,
 } from "@shared/schema";
 
 const PHASE_MAP: Record<number, string> = {
@@ -82,6 +83,9 @@ export interface IStorage {
   approveQuestion(id: string): Promise<Question>;
   rejectQuestion(id: string): Promise<Question>;
   getQuestionsByQaStatus(status: string): Promise<Question[]>;
+
+  createGuideLead(data: InsertGuideLead): Promise<GuideLead>;
+  markGuideLeadDiagnosticClick(id: number): Promise<GuideLead | undefined>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1207,6 +1211,19 @@ export class DatabaseStorage implements IStorage {
     return newlyEarned;
   }
 
+  async createGuideLead(data: InsertGuideLead): Promise<GuideLead> {
+    const [lead] = await db.insert(guideLeads).values(data).returning();
+    return lead;
+  }
+
+  async markGuideLeadDiagnosticClick(id: number): Promise<GuideLead | undefined> {
+    const [lead] = await db
+      .update(guideLeads)
+      .set({ clickedDiagnostic: true })
+      .where(eq(guideLeads.id, id))
+      .returning();
+    return lead;
+  }
 }
 
 export const storage = new DatabaseStorage();

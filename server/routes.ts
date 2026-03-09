@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, requireAuth } from "./auth";
-import { onboardingSchema, testSessions, testAnswers, questions } from "@shared/schema";
+import { onboardingSchema, insertGuideLeadSchema, testSessions, testAnswers, questions } from "@shared/schema";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
 import { sql, eq, and, desc, inArray } from "drizzle-orm";
 import { db } from "./db";
@@ -1203,13 +1203,37 @@ export async function registerRoutes(
     }
   });
 
+  app.post("/api/guide-leads", async (req, res, next) => {
+    try {
+      const parsed = insertGuideLeadSchema.safeParse(req.body);
+      if (!parsed.success) {
+        return res.status(400).json({ message: "Please provide your name and email address." });
+      }
+      const lead = await storage.createGuideLead(parsed.data);
+      res.json({ id: lead.id, success: true });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.post("/api/guide-leads/:id/diagnostic-click", async (req, res, next) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
+      const lead = await storage.markGuideLeadDiagnosticClick(id);
+      res.json({ success: !!lead });
+    } catch (error) {
+      next(error);
+    }
+  });
+
   app.get("/sitemap.xml", (_req, res) => {
     const baseUrl = "https://bucks11plustest.co.uk";
     const staticPages = [
       "/", "/pricing", "/how-it-works", "/how-forecast-works", "/bucks-gl-alignment",
       "/about", "/parent-hub", "/free-diagnostic",
       "/terms", "/privacy", "/safeguarding",
-      "/buckinghamshire-11-plus-guide",
+      "/buckinghamshire-11-plus-guide", "/bucks-11-plus-parent-guide",
       "/bucks-grammar-schools", "/bucks-11-plus-qualifying-score",
       "/bucks-11-plus-timeline", "/buckinghamshire-secondary-transfer-test",
       "/how-to-pass-bucks-11-plus", "/bucks-11-plus-registration", "/bucks-11-plus-mistakes",
