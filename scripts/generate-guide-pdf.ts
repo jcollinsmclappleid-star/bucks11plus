@@ -50,6 +50,18 @@ function spacer(n = 1) {
   doc.moveDown(n);
 }
 
+function polarToCartesian(cx: number, cy: number, r: number, angleDeg: number) {
+  const rad = (angleDeg * Math.PI) / 180;
+  return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+}
+
+function describeArc(cx: number, cy: number, r: number, startDeg: number, endDeg: number) {
+  const start = polarToCartesian(cx, cy, r, endDeg);
+  const end = polarToCartesian(cx, cy, r, startDeg);
+  const largeArc = endDeg - startDeg <= 180 ? 0 : 1;
+  return `M ${start.x} ${start.y} A ${r} ${r} 0 ${largeArc} 0 ${end.x} ${end.y}`;
+}
+
 // PAGE 1 — Cover
 spacer(6);
 doc.font("Helvetica-Bold").fontSize(14).fillColor(NAVY).text("11+ Standard", { align: "center" });
@@ -160,43 +172,281 @@ bullet("Reasoning Ability — Building the foundational skills tested in VR, NVR
 bullet("Timing Discipline — Developing the pace needed to complete questions within the time limit");
 bullet("Consistency — Maintaining stable performance across different question types and conditions");
 
-// PAGE 6
+// PAGE 6 — Readiness Forecast Visual
 doc.addPage();
 heading("What the Platform Shows You");
-body("The 11+ Standard platform provides structured readiness analysis. After completing a 12-minute diagnostic assessment, parents receive detailed insights across three areas:");
+body("After completing a 12-minute diagnostic, parents receive a detailed readiness dashboard. Here is what each section looks like:");
+spacer(0.3);
+subheading("1. Readiness Forecast");
+
+// Draw the gauge
+const gaugeX = 130;
+const gaugeY = doc.y + 10;
+const gaugeR = 55;
+
+// Background circle
+doc.circle(gaugeX, gaugeY + gaugeR, gaugeR).lineWidth(14).strokeOpacity(0.1).strokeColor(SLATE).stroke();
+doc.strokeOpacity(1);
+
+// Score arc — 118/141 of the circle
+const scoreAngle = (118 / 141) * 360;
+const startAngle = -90;
+const arcPath = describeArc(gaugeX, gaugeY + gaugeR, gaugeR, startAngle, startAngle + scoreAngle);
+doc.path(arcPath).lineWidth(14).strokeColor(AMBER).stroke();
+
+// Target marker at 121
+const targetAngle = -90 + (121 / 141) * 360;
+const tRad = (targetAngle * Math.PI) / 180;
+const tx = gaugeX + (gaugeR + 2) * Math.cos(tRad);
+const ty = gaugeY + gaugeR + (gaugeR + 2) * Math.sin(tRad);
+const tx2 = gaugeX + (gaugeR - 14) * Math.cos(tRad);
+const ty2 = gaugeY + gaugeR + (gaugeR - 14) * Math.sin(tRad);
+doc.moveTo(tx, ty).lineTo(tx2, ty2).lineWidth(2).strokeColor(NAVY).stroke();
+
+// Score text in centre
+doc.font("Helvetica-Bold").fontSize(28).fillColor(NAVY).text("118", gaugeX - 22, gaugeY + gaugeR - 16, { width: 44, align: "center" });
+doc.font("Helvetica").fontSize(7).fillColor(SLATE).text("EST. SCORE", gaugeX - 30, gaugeY + gaugeR + 14, { width: 60, align: "center" });
+
+// Band label
+doc.font("Helvetica-Bold").fontSize(9).fillColor(AMBER).text("● Confident Amber", gaugeX - 45, gaugeY + gaugeR * 2 + 20, { width: 120, align: "center" });
+
+// Right side — gap bar and priority focus
+const infoX = 240;
+const infoY = gaugeY + 5;
+
+doc.font("Helvetica-Bold").fontSize(11).fillColor(NAVY).text("Gap to 121 Standard", infoX, infoY);
+doc.font("Helvetica").fontSize(9).fillColor(AMBER).text("3 points remaining", infoX + 200, infoY + 1);
+// Progress bar
+doc.rect(infoX, infoY + 18, 280, 10).lineWidth(0.5).fillAndStroke(LIGHT, "#e2e8f0");
+doc.rect(infoX, infoY + 18, 280 * (118 / 121), 10).fill(AMBER);
+
+// Priority focus cards
+const priorities = [
+  { name: "Verbal Reasoning", acc: "62%", impact: "High Impact", color: RED },
+  { name: "Non-Verbal Reasoning", acc: "74%", impact: "Medium", color: AMBER },
+  { name: "Mathematics", acc: "81%", impact: "On Track", color: GREEN },
+];
+
+priorities.forEach((p, i) => {
+  const py = infoY + 42 + i * 28;
+  doc.rect(infoX, py, 280, 24).lineWidth(0.5).fillAndStroke("white", "#e2e8f0");
+  doc.circle(infoX + 10, py + 12, 4).fill(p.color);
+  doc.font("Helvetica-Bold").fontSize(9).fillColor(NAVY).text(p.name, infoX + 20, py + 4, { width: 130 });
+  doc.font("Helvetica").fontSize(8).fillColor(p.color).text(p.impact, infoX + 20, py + 14, { width: 130 });
+  doc.font("Helvetica-Bold").fontSize(12).fillColor(NAVY).text(p.acc, infoX + 230, py + 6, { width: 40, align: "right" });
+});
+
+doc.y = gaugeY + gaugeR * 2 + 40;
 spacer(0.5);
 
-subheading("1. Readiness Forecast Dashboard");
-body("A readiness gauge shows an estimated standardised score plotted against the 121 qualifying standard. The dashboard includes:");
-bullet("Estimated Score — circular gauge showing current predicted score (e.g. 118)");
-bullet("Performance Band — colour-coded status: On Track (green), Confident Amber, or Improvement Opportunity (red)");
-bullet("Gap to 121 — visual progress bar showing how many points remain to reach the qualifying standard");
-bullet("Priority Focus Cards — each domain ranked by impact level (High Impact / Medium / On Track)");
-bullet("Section Breakdown — accuracy bars for Verbal Reasoning, Non-Verbal Reasoning, and Mathematics");
-spacer(0.5);
+// Section breakdown bars
+subheading("Section Breakdown");
+const sections = [
+  { name: "Verbal Reasoning", score: 62, status: "Improvement Opportunity", color: RED, bg: "#fee2e2" },
+  { name: "Non-Verbal Reasoning", score: 74, status: "Within Reach", color: AMBER, bg: "#fef3c7" },
+  { name: "Mathematics", score: 81, status: "On Track", color: GREEN, bg: "#dcfce7" },
+];
 
-const exY = doc.y;
-doc.rect(60, exY, 475, 65).lineWidth(1).stroke("#e2e8f0");
-doc.rect(60, exY, 475, 22).fill(LIGHT);
-doc.font("Helvetica-Bold").fontSize(9).fillColor(NAVY).text("Example Readiness Summary", 75, exY + 6);
-doc.font("Helvetica").fontSize(9.5).fillColor(SLATE);
-doc.text("Estimated Score: 118   |   Band: Confident Amber   |   Gap to 121: 3 points", 75, exY + 28);
-doc.text("VR: 62% (High Impact)   |   NVR: 74% (Medium)   |   Maths: 81% (On Track)", 75, exY + 45);
-doc.y = exY + 80;
+sections.forEach((s) => {
+  const sy = doc.y;
+  doc.font("Helvetica-Bold").fontSize(9.5).fillColor(NAVY).text(s.name, 60, sy);
+  doc.font("Helvetica").fontSize(8).fillColor(s.color).text(s.status, 60, sy + 13);
+  doc.font("Helvetica-Bold").fontSize(12).fillColor(NAVY).text(`${s.score}%`, 480, sy + 3, { width: 55, align: "right" });
+  doc.rect(60, sy + 26, 475, 8).fill(s.bg);
+  doc.rect(60, sy + 26, 475 * (s.score / 100), 8).fill(s.color);
+  doc.y = sy + 42;
+});
 
+// PAGE 7 — Skill Gap Analysis Visual
+doc.addPage();
 subheading("2. Skill Gap Analysis");
-body("Beyond summary scores, the platform identifies the specific sub-skills that most influence performance:");
-bullet("Impact Simulator — shows how a +10% improvement in one area would shift the overall forecast range");
-bullet("Pace Discipline Index (PDI) — measures timing control per domain, scored out of 100");
-bullet("Sub-Skill Accuracy Map — colour-coded heatmap across 12 sub-skills (Synonyms, Analogies, Patterns, Ratios, etc.)");
-bullet("Fatigue Analysis — compares accuracy and pace between the first and last thirds of the test to detect concentration drift");
+body("The platform identifies which specific sub-skills will have the greatest impact on the overall forecast:");
+spacer(0.3);
+
+// Impact Simulator box
+const simY = doc.y;
+doc.rect(60, simY, 475, 75).lineWidth(1).fillAndStroke("white", "#e2e8f0");
+doc.font("Helvetica-Bold").fontSize(10).fillColor(NAVY).text("Impact Simulator", 75, simY + 8);
+doc.font("Helvetica").fontSize(9).fillColor(SLATE).text("If Verbal Reasoning improves by +10%:", 75, simY + 24);
+// Visual: current → projected
+doc.font("Helvetica-Bold").fontSize(14).fillColor(NAVY).text("118", 75, simY + 42);
+doc.font("Helvetica").fontSize(12).fillColor(SLATE).text("→", 110, simY + 44);
+doc.roundedRect(130, simY + 38, 120, 28, 4).fill("#dcfce7");
+doc.font("Helvetica-Bold").fontSize(14).fillColor(GREEN).text("118 – 123", 140, simY + 44);
+doc.font("Helvetica").fontSize(8).fillColor(GREEN).text("Above 121 qualifying standard", 265, simY + 48);
+doc.y = simY + 85;
+
+// PDI pace cards
+subheading("Pace Discipline");
+const paceData = [
+  { name: "Verbal Reasoning", avg: 38, expected: 30, pdi: 64, delta: "+8s", dColor: RED },
+  { name: "Non-Verbal Reasoning", avg: 32, expected: 30, pdi: 78, delta: "+2s", dColor: AMBER },
+  { name: "Mathematics", avg: 28, expected: 30, pdi: 88, delta: "-2s", dColor: GREEN },
+];
+
+doc.font("Helvetica-Bold").fontSize(9).fillColor(NAVY).text("PDI: 72 / 100", 400, doc.y - 16, { width: 135, align: "right" });
+
+paceData.forEach((p) => {
+  const py = doc.y;
+  doc.rect(60, py, 475, 22).lineWidth(0.5).fillAndStroke("white", "#e2e8f0");
+  doc.font("Helvetica-Bold").fontSize(9).fillColor(NAVY).text(p.name, 70, py + 5, { width: 160 });
+  doc.font("Helvetica").fontSize(8).fillColor(SLATE).text(`${p.avg}s / q`, 240, py + 6);
+  doc.font("Helvetica").fontSize(8).fillColor(SLATE).text(`expected ${p.expected}s`, 310, py + 6);
+  // PDI mini bar
+  doc.rect(400, py + 8, 60, 5).fill(LIGHT);
+  doc.rect(400, py + 8, 60 * (p.pdi / 100), 5).fill(p.dColor);
+  doc.font("Helvetica-Bold").fontSize(9).fillColor(p.dColor).text(p.delta, 470, py + 5, { width: 60, align: "right" });
+  doc.y = py + 28;
+});
 spacer(0.5);
 
+// Sub-skill heatmap
+subheading("Sub-Skill Accuracy Map");
+const heatmapSkills = [
+  { label: "Synonyms", value: 85, domain: "VR" },
+  { label: "Antonyms", value: 72, domain: "VR" },
+  { label: "Analogies", value: 58, domain: "VR" },
+  { label: "Comprehension", value: 66, domain: "VR" },
+  { label: "Codes", value: 64, domain: "NVR" },
+  { label: "Sequences", value: 78, domain: "NVR" },
+  { label: "Patterns", value: 82, domain: "NVR" },
+  { label: "Spatial", value: 70, domain: "NVR" },
+  { label: "Fractions", value: 76, domain: "Maths" },
+  { label: "Ratios", value: 68, domain: "Maths" },
+  { label: "Word Probs", value: 55, domain: "Maths" },
+  { label: "Num. Patterns", value: 84, domain: "Maths" },
+];
+
+const cellW = 112;
+const cellH = 38;
+const cols = 4;
+const heatStartY = doc.y;
+
+heatmapSkills.forEach((cell, i) => {
+  const col = i % cols;
+  const row = Math.floor(i / cols);
+  const cx = 60 + col * (cellW + 6);
+  const cy = heatStartY + row * (cellH + 5);
+  const bg = cell.value >= 80 ? "#dcfce7" : cell.value >= 60 ? "#fef3c7" : "#fee2e2";
+  const fg = cell.value >= 80 ? GREEN : cell.value >= 60 ? AMBER : RED;
+
+  doc.roundedRect(cx, cy, cellW, cellH, 4).fill(bg);
+  doc.font("Helvetica").fontSize(7.5).fillColor(fg).text(cell.domain, cx + cellW - 28, cy + 4, { width: 24, align: "right" });
+  doc.font("Helvetica-Bold").fontSize(8).fillColor(fg).text(cell.label, cx + 6, cy + 4);
+  doc.font("Helvetica-Bold").fontSize(13).fillColor(fg).text(`${cell.value}%`, cx + 6, cy + 17);
+});
+
+doc.y = heatStartY + Math.ceil(heatmapSkills.length / cols) * (cellH + 5) + 10;
+
+// Fatigue indicator
+spacer(0.3);
+subheading("Fatigue Analysis");
+const fatY = doc.y;
+doc.roundedRect(60, fatY, 230, 48, 4).fill("#fee2e2");
+doc.font("Helvetica").fontSize(7).fillColor(RED).text("ACCURACY DRIFT", 70, fatY + 6);
+doc.font("Helvetica-Bold").fontSize(18).fillColor(RED).text("−12pp", 70, fatY + 18);
+doc.font("Helvetica").fontSize(7).fillColor(RED).text("First third → Last third", 70, fatY + 38);
+
+doc.roundedRect(305, fatY, 230, 48, 4).fill("#fef3c7");
+doc.font("Helvetica").fontSize(7).fillColor(AMBER).text("PACE DRIFT", 315, fatY + 6);
+doc.font("Helvetica-Bold").fontSize(18).fillColor(AMBER).text("+6s", 315, fatY + 18);
+doc.font("Helvetica").fontSize(7).fillColor(AMBER).text("Slowing under pressure", 315, fatY + 38);
+
+doc.y = fatY + 60;
+
+// PAGE 8 — Progress Tracking Visual
+doc.addPage();
 subheading("3. Progress Tracking (Programme tier)");
-body("Families on the full programme receive trajectory analysis over multiple assessments:");
-bullet("Readiness Trajectory Chart — line graph showing score progression over time against the 121 target");
-bullet("Stability Index — consistency metric scored out of 100, measuring how reliably performance is maintained");
-bullet("Performance Band History — visual timeline of band progression (Red → Amber → Amber) showing improvement trends");
+body("Families on the full programme receive trajectory analysis across multiple assessments:");
+spacer(0.3);
+
+// Trajectory chart
+const chartX = 100;
+const chartY = doc.y + 5;
+const chartW = 380;
+const chartH = 150;
+const minS = 100;
+const maxS = 130;
+const dataPoints = [
+  { label: "Jan", score: 108 },
+  { label: "Mar", score: 112 },
+  { label: "May", score: 115 },
+  { label: "Jul", score: 118 },
+];
+
+// Grid lines
+[105, 110, 115, 120, 125].forEach(tick => {
+  const yy = chartY + chartH - ((tick - minS) / (maxS - minS)) * chartH;
+  doc.moveTo(chartX, yy).lineTo(chartX + chartW, yy).lineWidth(0.5).strokeColor("#e2e8f0").stroke();
+  doc.font("Helvetica").fontSize(7).fillColor("#94a3b8").text(String(tick), chartX - 30, yy - 4, { width: 25, align: "right" });
+});
+
+// 121 target line
+const targetLineY = chartY + chartH - ((121 - minS) / (maxS - minS)) * chartH;
+doc.moveTo(chartX, targetLineY).lineTo(chartX + chartW, targetLineY).lineWidth(1.5).dash(6, { space: 3 }).strokeColor(NAVY).stroke();
+doc.undash();
+doc.font("Helvetica-Bold").fontSize(8).fillColor(NAVY).text("121", chartX + chartW + 5, targetLineY - 5);
+
+// Data line and points
+const points = dataPoints.map((d, i) => ({
+  x: chartX + (i / (dataPoints.length - 1)) * chartW,
+  y: chartY + chartH - ((d.score - minS) / (maxS - minS)) * chartH,
+  ...d,
+}));
+
+// Area fill
+doc.save();
+doc.moveTo(points[0].x, points[0].y);
+points.slice(1).forEach(p => doc.lineTo(p.x, p.y));
+doc.lineTo(points[points.length - 1].x, chartY + chartH);
+doc.lineTo(points[0].x, chartY + chartH);
+doc.closePath();
+doc.fillOpacity(0.1).fill(AMBER);
+doc.restore();
+doc.fillOpacity(1);
+
+// Line
+doc.moveTo(points[0].x, points[0].y);
+points.slice(1).forEach(p => doc.lineTo(p.x, p.y));
+doc.lineWidth(2.5).strokeColor(AMBER).stroke();
+
+// Points and labels
+points.forEach(p => {
+  doc.circle(p.x, p.y, 5).lineWidth(2.5).fillAndStroke("white", AMBER);
+  doc.font("Helvetica-Bold").fontSize(10).fillColor(NAVY).text(String(p.score), p.x - 15, p.y - 18, { width: 30, align: "center" });
+  doc.font("Helvetica").fontSize(8).fillColor("#94a3b8").text(p.label, p.x - 15, chartY + chartH + 8, { width: 30, align: "center" });
+});
+
+doc.y = chartY + chartH + 30;
+spacer(0.5);
+
+// Stability + Band history
+const stY = doc.y;
+doc.roundedRect(60, stY, 220, 65, 4).lineWidth(0.5).fillAndStroke("white", "#e2e8f0");
+doc.font("Helvetica").fontSize(8).fillColor(SLATE).text("Stability Index", 75, stY + 8);
+doc.font("Helvetica-Bold").fontSize(24).fillColor(NAVY).text("74", 75, stY + 22);
+doc.font("Helvetica").fontSize(10).fillColor(SLATE).text("/ 100", 105, stY + 30);
+doc.rect(75, stY + 50, 190, 6).fill(LIGHT);
+doc.rect(75, stY + 50, 190 * 0.74, 6).fill(AMBER);
+
+doc.roundedRect(295, stY, 240, 65, 4).lineWidth(0.5).fillAndStroke("white", "#e2e8f0");
+doc.font("Helvetica").fontSize(8).fillColor(SLATE).text("Performance Band History", 310, stY + 8);
+
+const bands = [
+  { label: "Jan", color: RED, text: "Red" },
+  { label: "Mar", color: AMBER, text: "Amb" },
+  { label: "May", color: AMBER, text: "Amb" },
+  { label: "Jul", color: AMBER, text: "Amb" },
+];
+bands.forEach((b, i) => {
+  const bx = 310 + i * 42;
+  doc.roundedRect(bx, stY + 24, 36, 20, 3).fill(b.color);
+  doc.font("Helvetica-Bold").fontSize(8).fillColor("white").text(b.text, bx + 2, stY + 30, { width: 32, align: "center" });
+  doc.font("Helvetica").fontSize(7).fillColor(SLATE).text(b.label, bx + 2, stY + 48, { width: 32, align: "center" });
+});
+
+doc.y = stY + 80;
+body("Improving trend — moved from Red to Amber band across four assessments.");
 
 // PAGE 7
 doc.addPage();

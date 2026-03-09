@@ -207,7 +207,7 @@ export default function ParentGuide() {
         </div>
       </section>
 
-      <section className="bg-gradient-to-b from-slate-50 to-white py-14 md:py-20 border-b border-slate-100">
+      <section id="platform-preview" className="bg-gradient-to-b from-slate-50 to-white py-14 md:py-20 border-b border-slate-100">
         <div className="container mx-auto max-w-5xl px-4">
           <div className="max-w-3xl mx-auto text-center mb-10">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/10 bg-primary/[0.03] mb-4">

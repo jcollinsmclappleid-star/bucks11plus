@@ -483,6 +483,14 @@ export default function Landing() {
           <p className="text-xs text-slate-400 text-center mt-4 italic">
             Example based on sample student data. Your child's real results will populate after their diagnostic.
           </p>
+
+          <div className="text-center mt-6">
+            <Button variant="outline" className="h-11 px-6 font-semibold" asChild data-testid="button-see-more-platform">
+              <Link href="/bucks-11-plus-parent-guide#platform-preview">
+                See More <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
         </div>
       </section>
 
