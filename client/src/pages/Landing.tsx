@@ -305,7 +305,10 @@ export default function Landing() {
               Concrete content at every level
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              No vague promises — here's exactly what your child gets access to.
+              GL-style practice and diagnostics built specifically for the Buckinghamshire Secondary Transfer Test — the exam that determines entry to all 13 Bucks grammar schools.
+            </p>
+            <p className="text-sm text-muted-foreground/80 max-w-2xl mx-auto mt-2">
+              Every question, drill and diagnostic mirrors the format your child will face on test day, so they walk in prepared and confident.
             </p>
           </div>
 
