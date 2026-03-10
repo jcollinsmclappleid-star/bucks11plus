@@ -249,15 +249,15 @@ export default function Landing() {
             </h1>
 
             <p className="text-lg md:text-xl text-white/65 max-w-3xl mx-auto leading-relaxed">
-              A structured diagnostic system that reveals what is truly limiting performance — accuracy, pace, stability or specific rule types — and shows what to focus on first.
+              GL-style timed diagnostics and targeted practice for the Buckinghamshire Secondary Transfer Test — the single exam that decides entry to all 13 grammar schools. Pinpoint exactly what's holding your child back across verbal reasoning, non-verbal reasoning, maths and comprehension, then close the gap with focused drills.
             </p>
 
             <div className="pt-4 max-w-xl mx-auto space-y-1">
               <p className="text-sm text-white/45 leading-relaxed">
-                Replace uncertainty with structured clarity.
+                Real-time readiness forecast scored against the 121 qualifying benchmark.
               </p>
               <p className="text-sm text-white/45 leading-relaxed">
-                Built for parents who prefer evidence over assumption.
+                Built for parents who want evidence, not guesswork.
               </p>
             </div>
 
