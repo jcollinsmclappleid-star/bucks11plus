@@ -218,11 +218,11 @@ function Router() {
               <Legal type="safeguarding" />
             </Route>
 
+            <Route path="/early-dashboard">
+              <AuthGate><EarlyDashboard /></AuthGate>
+            </Route>
             <Route path="/app">
               <AuthGate><Dashboard /></AuthGate>
-            </Route>
-            <Route path="/app/early-dashboard">
-              <AuthGate><EarlyDashboard /></AuthGate>
             </Route>
             <Route path="/app/test-day-simulator">
               <AuthGate><TestDaySimulator /></AuthGate>
