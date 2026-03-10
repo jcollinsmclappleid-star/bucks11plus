@@ -165,6 +165,7 @@ export default function QuestionList() {
             <SelectItem value="Verbal Reasoning">Verbal Reasoning</SelectItem>
             <SelectItem value="Non-Verbal Reasoning">Non-Verbal Reasoning</SelectItem>
             <SelectItem value="Mathematics">Mathematics</SelectItem>
+            <SelectItem value="English Comprehension">English Comprehension</SelectItem>
           </SelectContent>
         </Select>
 
@@ -190,6 +191,7 @@ export default function QuestionList() {
             <SelectItem value="text">Text</SelectItem>
             <SelectItem value="svg">SVG</SelectItem>
             <SelectItem value="chart">Chart</SelectItem>
+            <SelectItem value="comprehension">Comprehension</SelectItem>
           </SelectContent>
         </Select>
 

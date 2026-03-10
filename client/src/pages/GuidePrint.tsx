@@ -45,7 +45,7 @@ export default function GuidePrint() {
           The Buckinghamshire Secondary Transfer Test (commonly known as the "Bucks 11+") is the selective assessment used to determine eligibility for grammar school places in the county. It is administered by The Buckinghamshire Grammar Schools (TBGS) on behalf of all 13 grammar schools.
         </p>
         <p className="text-sm leading-relaxed mb-4">
-          Children sit the test in September of Year 6. The test is designed to assess reasoning ability across three domains: Verbal Reasoning, Non-Verbal Reasoning, and Mathematics. It is not a test of curriculum knowledge — it measures underlying cognitive and reasoning skills.
+          Children sit the test in September of Year 6. The test is designed to assess reasoning ability across four domains: Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension. It is not a test of curriculum knowledge — it measures underlying cognitive and reasoning skills.
         </p>
         <h3 className="text-lg font-serif font-bold text-[#0d1f30] mt-6 mb-3">The 13 Grammar Schools</h3>
         <p className="text-sm leading-relaxed mb-4">
@@ -92,7 +92,7 @@ export default function GuidePrint() {
           </div>
           <div className="border-l-4 border-amber-400 pl-5">
             <h3 className="text-lg font-serif font-bold text-[#0d1f30]">Year 5 — Preparation Begins</h3>
-            <p className="text-sm leading-relaxed mt-2">Start structured familiarisation with the three test domains: verbal reasoning, non-verbal reasoning, and mathematics. Focus on building foundational reasoning skills and understanding the question formats. Register for the test during the summer term (May–June).</p>
+            <p className="text-sm leading-relaxed mt-2">Start structured familiarisation with the four test domains: verbal reasoning, non-verbal reasoning, mathematics, and English comprehension. Focus on building foundational reasoning skills and understanding the question formats. Register for the test during the summer term (May–June).</p>
           </div>
           <div className="border-l-4 border-green-500 pl-5">
             <h3 className="text-lg font-serif font-bold text-[#0d1f30]">Year 6 — Test & Applications</h3>

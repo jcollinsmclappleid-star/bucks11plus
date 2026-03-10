@@ -162,9 +162,9 @@ export default function GrammarSchools() {
 
       <h2 className="text-primary font-serif">Preparing for the Bucks 11+</h2>
       <p>
-        The test covers Verbal Reasoning, Non-Verbal Reasoning, and Mathematics. Understanding the format and practising
+        The test covers Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension. Understanding the format and practising
         under timed conditions is essential. Our <Link href="/free-diagnostic" className="text-primary hover:underline">free diagnostic assessment</Link> measures
-        your child's current readiness against the 121 qualifying benchmark across all three domains.
+        your child's current readiness against the 121 qualifying benchmark across all four domains.
       </p>
       <p>
         For a comprehensive overview of the test structure, scoring, and preparation strategies, see

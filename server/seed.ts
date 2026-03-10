@@ -160,7 +160,7 @@ export async function ensurePracticePaperDiagnostics() {
       duration: 15,
       questionCount: 20,
       requiredTier: "pack12",
-      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
+      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics", "English Comprehension"],
     },
     {
       id: "practice-full",
@@ -170,7 +170,7 @@ export async function ensurePracticePaperDiagnostics() {
       duration: 30,
       questionCount: 40,
       requiredTier: "pack12",
-      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
+      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics", "English Comprehension"],
     },
     {
       id: "practice-mock",
@@ -180,7 +180,7 @@ export async function ensurePracticePaperDiagnostics() {
       duration: 35,
       questionCount: 50,
       requiredTier: "programme16",
-      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
+      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics", "English Comprehension"],
     },
   ];
 
@@ -210,11 +210,36 @@ async function syncDiagnosticTimings() {
   }
 }
 
+async function ensureComprehensionSection() {
+  const allDiags = await db.select({ id: diagnostics.id, sections: diagnostics.sections }).from(diagnostics);
+  for (const d of allDiags) {
+    const sections = d.sections as string[];
+    if (!sections.includes("English Comprehension")) {
+      await db.update(diagnostics).set({ sections: [...sections, "English Comprehension"] }).where(eq(diagnostics.id, d.id));
+    }
+  }
+
+  const [existingComp] = await db.select({ count: sql<number>`count(*)` }).from(practiceSections)
+    .where(sql`category = 'English Comprehension'`);
+  if (existingComp.count === 0) {
+    await db.insert(practiceSections).values([
+      { title: "Fact Retrieval", category: "English Comprehension", icon: "FileText", difficulty: "Easy", questionCount: 15, requiredTier: "free", skillId: "comp.fact_retrieval" },
+      { title: "Vocabulary in Context", category: "English Comprehension", icon: "BookOpen", difficulty: "Medium", questionCount: 12, requiredTier: "free", skillId: "comp.vocabulary" },
+      { title: "Inference & Deduction", category: "English Comprehension", icon: "Lightbulb", difficulty: "Medium", questionCount: 12, requiredTier: "pack12", skillId: "comp.inference" },
+      { title: "Mood & Tone", category: "English Comprehension", icon: "Palette", difficulty: "Hard", questionCount: 10, requiredTier: "pack12", skillId: "comp.mood" },
+      { title: "Detail Retrieval", category: "English Comprehension", icon: "Search", difficulty: "Medium", questionCount: 12, requiredTier: "pack12", skillId: "comp.detail" },
+      { title: "Advanced Comprehension", category: "English Comprehension", icon: "GraduationCap", difficulty: "Hard", questionCount: 10, requiredTier: "programme16", skillId: "comp.main_idea" },
+    ]);
+    console.log("Inserted comprehension practice sections.");
+  }
+}
+
 export async function seedDatabase() {
   const [existing] = await db.select({ count: sql<number>`count(*)` }).from(diagnostics);
   if (existing.count > 0) {
     await ensurePracticePaperDiagnostics();
     await syncDiagnosticTimings();
+    await ensureComprehensionSection();
     return;
   }
 
@@ -229,7 +254,7 @@ export async function seedDatabase() {
       duration: 8,
       questionCount: 12,
       requiredTier: "free",
-      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
+      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics", "English Comprehension"],
     },
     {
       id: "full-a",
@@ -239,7 +264,7 @@ export async function seedDatabase() {
       duration: 30,
       questionCount: 40,
       requiredTier: "pack12",
-      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
+      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics", "English Comprehension"],
     },
     {
       id: "full-b",
@@ -249,7 +274,7 @@ export async function seedDatabase() {
       duration: 30,
       questionCount: 40,
       requiredTier: "pack12",
-      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
+      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics", "English Comprehension"],
     },
     {
       id: "mock-1",
@@ -259,7 +284,7 @@ export async function seedDatabase() {
       duration: 35,
       questionCount: 50,
       requiredTier: "programme16",
-      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
+      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics", "English Comprehension"],
     },
     {
       id: "practice-quick",
@@ -269,7 +294,7 @@ export async function seedDatabase() {
       duration: 15,
       questionCount: 20,
       requiredTier: "pack12",
-      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
+      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics", "English Comprehension"],
     },
     {
       id: "practice-full",
@@ -279,7 +304,7 @@ export async function seedDatabase() {
       duration: 30,
       questionCount: 40,
       requiredTier: "pack12",
-      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
+      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics", "English Comprehension"],
     },
     {
       id: "practice-mock",
@@ -289,7 +314,7 @@ export async function seedDatabase() {
       duration: 35,
       questionCount: 50,
       requiredTier: "programme16",
-      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
+      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics", "English Comprehension"],
     },
   ]);
 
@@ -372,11 +397,11 @@ export async function seedDatabase() {
       slug: "bucks-11-plus-guide-2025",
       excerpt: "Everything you need to know about the Bucks 11+ — from registration deadlines to the 121 qualifying score — explained in plain language.",
       content: `<h2>What is the Buckinghamshire 11+?</h2>
-<p>The Buckinghamshire 11+ is a selective entrance examination used by grammar schools across the county. It is administered by GL Assessment and tests children in three core areas: Verbal Reasoning, Non-Verbal Reasoning, and Mathematics.</p>
+<p>The Buckinghamshire 11+ is a selective entrance examination used by grammar schools across the county. It is administered by GL Assessment and tests children in four core areas: Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension.</p>
 <h2>The 121 Standard</h2>
 <p>A standardised score of 121 or above is typically required for grammar school entry. This score accounts for the child's age at the time of testing, ensuring fair comparison across the cohort.</p>
 <h2>Test Format</h2>
-<p>The test consists of multiple-choice questions completed under timed conditions. Children have approximately 50 minutes to complete the paper, which covers around 80 questions across all three sections.</p>
+<p>The test consists of multiple-choice questions completed under timed conditions. Children have approximately 50 minutes to complete the paper, which covers around 80 questions across all four sections.</p>
 <h2>Registration Timeline</h2>
 <p>Registration typically opens in May/June for the September test. Parents must register through the Buckinghamshire Council website. Late registrations are rarely accepted.</p>
 <h2>Preparation Strategy</h2>
@@ -461,6 +486,12 @@ export async function seedDatabase() {
     { title: "Advanced Percentages", category: "Mathematics", icon: "BadgePercent", difficulty: "Hard", questionCount: 10, requiredTier: "programme16", skillId: "maths.percentages" },
     { title: "Ratio & Proportion", category: "Mathematics", icon: "Scale", difficulty: "Medium", questionCount: 10, requiredTier: "pack12", skillId: "maths.ratio" },
     { title: "Advanced Ratio & Proportion", category: "Mathematics", icon: "Scale", difficulty: "Hard", questionCount: 10, requiredTier: "programme16", skillId: "maths.ratio" },
+    { title: "Fact Retrieval", category: "English Comprehension", icon: "FileText", difficulty: "Easy", questionCount: 15, requiredTier: "free", skillId: "comp.fact_retrieval" },
+    { title: "Vocabulary in Context", category: "English Comprehension", icon: "BookOpen", difficulty: "Medium", questionCount: 12, requiredTier: "free", skillId: "comp.vocabulary" },
+    { title: "Inference & Deduction", category: "English Comprehension", icon: "Lightbulb", difficulty: "Medium", questionCount: 12, requiredTier: "pack12", skillId: "comp.inference" },
+    { title: "Mood & Tone", category: "English Comprehension", icon: "Palette", difficulty: "Hard", questionCount: 10, requiredTier: "pack12", skillId: "comp.mood" },
+    { title: "Detail Retrieval", category: "English Comprehension", icon: "Search", difficulty: "Medium", questionCount: 12, requiredTier: "pack12", skillId: "comp.detail" },
+    { title: "Advanced Comprehension", category: "English Comprehension", icon: "GraduationCap", difficulty: "Hard", questionCount: 10, requiredTier: "programme16", skillId: "comp.main_idea" },
   ]);
 
   console.log("Seed data inserted successfully.");

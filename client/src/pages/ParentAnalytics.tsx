@@ -202,7 +202,7 @@ function SummaryTab({ data }: { data: AnalyticsData }) {
             <div className="text-2xl font-bold text-center mb-3" data-testid="text-pdi-overall">{Math.round(attempt.pdiOverall)}</div>
             <div className="space-y-1.5">
               {Object.entries(attempt.pdiSections).map(([section, s]) => (
-                <PDIMiniBar key={section} label={section === "Verbal Reasoning" ? "VR" : section === "Non-Verbal Reasoning" ? "NVR" : "MA"} value={s.pdi} />
+                <PDIMiniBar key={section} label={section === "Verbal Reasoning" ? "VR" : section === "Non-Verbal Reasoning" ? "NVR" : section === "English Comprehension" ? "EC" : "MA"} value={s.pdi} />
               ))}
             </div>
           </CardContent>

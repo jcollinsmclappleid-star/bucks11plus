@@ -65,7 +65,7 @@ export default function CommonMistakes() {
         Without understanding <em>where</em> and <em>why</em> marks are being lost, practice becomes unfocused and inefficient.
       </p>
       <p>
-        <strong>What to do instead:</strong> Start with a diagnostic assessment that breaks performance down by domain and measures pacing. Then use the diagnostic data to focus practice on the specific areas where your child is below the required standard. Our <Link href="/free-diagnostic" className="text-primary hover:underline">free diagnostic</Link> does exactly this — measuring both accuracy and speed across Verbal Reasoning, Non-Verbal Reasoning, and Mathematics.
+        <strong>What to do instead:</strong> Start with a diagnostic assessment that breaks performance down by domain and measures pacing. Then use the diagnostic data to focus practice on the specific areas where your child is below the required standard. Our <Link href="/free-diagnostic" className="text-primary hover:underline">free diagnostic</Link> does exactly this — measuring both accuracy and speed across Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension.
       </p>
 
       <h2 className="text-primary font-serif">Mistake 3: Ignoring Timing and Pacing</h2>
@@ -102,7 +102,7 @@ export default function CommonMistakes() {
 
       <h2 className="text-primary font-serif">Mistake 5: Treating All Sections Equally</h2>
       <p>
-        The three sections of the 11+ — Verbal Reasoning, Non-Verbal Reasoning, and Mathematics — contribute to the overall standardised score, but children rarely have equal ability across all three. Spending equal time on each section is inefficient if one area is already strong and another is significantly below standard.
+        The four sections of the 11+ — Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension — contribute to the overall standardised score, but children rarely have equal ability across all four. Spending equal time on each section is inefficient if one area is already strong and another is significantly below standard.
       </p>
       <p>
         <strong>What to do instead:</strong> Use diagnostic data to identify which sections need the most work and allocate preparation time accordingly. A child who consistently scores above the threshold in Mathematics but falls below in Verbal Reasoning should spend the majority of their practice time on vocabulary and verbal logic — not more maths.

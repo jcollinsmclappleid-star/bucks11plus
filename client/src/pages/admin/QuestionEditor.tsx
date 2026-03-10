@@ -143,6 +143,7 @@ export default function QuestionEditor() {
                   <SelectItem value="Verbal Reasoning">Verbal Reasoning</SelectItem>
                   <SelectItem value="Non-Verbal Reasoning">Non-Verbal Reasoning</SelectItem>
                   <SelectItem value="Mathematics">Mathematics</SelectItem>
+                  <SelectItem value="English Comprehension">English Comprehension</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -195,6 +196,7 @@ export default function QuestionEditor() {
                   <SelectItem value="text">Text</SelectItem>
                   <SelectItem value="svg">SVG</SelectItem>
                   <SelectItem value="chart">Chart</SelectItem>
+                  <SelectItem value="comprehension">Comprehension</SelectItem>
                 </SelectContent>
               </Select>
             </div>

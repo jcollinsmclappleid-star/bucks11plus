@@ -270,8 +270,8 @@ export default function Pricing() {
                 </p>
                 <ul className="space-y-3">
                   {[
-                    "1,000+ questions across VR, NVR & Maths",
-                    "Easy & Medium drills (13 sections)",
+                    "1,000+ questions across VR, NVR, Maths & Comprehension",
+                    "Easy & Medium drills (19 sections)",
                     "6 Hard challenge drills included",
                     "2 full timed diagnostics (40 questions each)",
                     "Practice papers (Quick & Full)",
@@ -455,7 +455,7 @@ export default function Pricing() {
                     { feature: "Top focus area revealed", free: true, pack: true, prog: true },
                     { feature: "1 sample practice drill", free: true, pack: true, prog: true },
                     { feature: "1,000+ practice questions", free: false, pack: true, prog: true },
-                    { feature: "Easy & Medium drills (13 sections)", free: false, pack: true, prog: true },
+                    { feature: "Easy & Medium drills (19 sections)", free: false, pack: true, prog: true },
                     { feature: "Hard challenge drills", free: false, pack: "6 sections", prog: "All 17" },
                     { feature: "Badge-based Accomplishments", free: false, pack: true, prog: true },
                     { feature: "Full timed diagnostics (40 questions)", free: false, pack: true, prog: true },

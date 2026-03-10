@@ -49,6 +49,7 @@ function SectionsPanel() {
     { name: "Verbal Reasoning", score: 72, color: "bg-amber-500", items: "18/25" },
     { name: "Non-Verbal Reasoning", score: 58, color: "bg-red-500", items: "14/24" },
     { name: "Mathematics", score: 80, color: "bg-green-500", items: "20/25" },
+    { name: "English Comprehension", score: 66, color: "bg-amber-500", items: "16/24" },
   ];
   return (
     <div className="space-y-5 w-full max-w-md mx-auto" data-testid="showcase-sections">
@@ -213,7 +214,7 @@ export default function Landing() {
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
       <Seo
         title="Bucks 11 Plus Test Preparation | Buckinghamshire Grammar School 11+ | 11+ Standard"
-        description="GL-style timed diagnostics and readiness forecast for the Buckinghamshire 11+ Secondary Transfer Test. Assess verbal reasoning, non-verbal reasoning, and maths against the 121 qualifying score."
+        description="GL-style timed diagnostics and readiness forecast for the Buckinghamshire 11+ Secondary Transfer Test. Assess verbal reasoning, non-verbal reasoning, maths, and English comprehension against the 121 qualifying score."
         canonicalPath="/"
       />
 
@@ -330,7 +331,7 @@ export default function Landing() {
               <h3 className="text-xl font-bold text-primary font-serif mb-4">£99</h3>
               <ul className="space-y-3 flex-1">
                 {[
-                  "1,000+ practice questions across VR, NVR & Maths",
+                  "1,000+ practice questions across VR, NVR, Maths & Comprehension",
                   "Easy & Medium drills + 6 Hard challenge drills",
                   "2 full timed diagnostics (40 questions each)",
                   "Unlimited practice papers (fresh questions every time)",
@@ -525,7 +526,7 @@ export default function Landing() {
                   <BarChart3 className="h-7 w-7" />
                 </div>
                 <h3 className="font-bold text-primary text-xl">Coverage Across the Test</h3>
-                <p className="text-muted-foreground">Verbal Reasoning, Non-Verbal Reasoning and Maths — mapped to the Bucks 11+ format so you are practising the right things.</p>
+                <p className="text-muted-foreground">Verbal Reasoning, Non-Verbal Reasoning, Maths and English Comprehension — mapped to the Bucks 11+ format so you are practising the right things.</p>
               </CardContent>
             </Card>
 
@@ -577,7 +578,7 @@ export default function Landing() {
                 </div>
               </div>
               <p className="text-slate-600 leading-relaxed mb-5">
-                Start with a timed, GL-style diagnostic across Verbal Reasoning, Non-Verbal Reasoning and Maths — including section pacing.
+                Start with a timed, GL-style diagnostic across Verbal Reasoning, Non-Verbal Reasoning, Maths and English Comprehension — including section pacing.
               </p>
               <div className="space-y-2.5 mb-5">
                 <div className="flex items-start gap-2.5 text-sm text-slate-600">

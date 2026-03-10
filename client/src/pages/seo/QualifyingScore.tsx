@@ -82,9 +82,9 @@ export default function QualifyingScore() {
         To achieve the qualifying standard, a child typically needs to demonstrate:
       </p>
       <ul>
-        <li><strong>High accuracy</strong> — answering approximately 80–85% of questions correctly across all three papers</li>
+        <li><strong>High accuracy</strong> — answering approximately 80–85% of questions correctly across all four papers</li>
         <li><strong>Consistent speed</strong> — completing questions within the time limits, as unanswered questions effectively count as incorrect</li>
-        <li><strong>Breadth of ability</strong> — performing strongly across Verbal Reasoning, Non-Verbal Reasoning, and Mathematics, not just in one area</li>
+        <li><strong>Breadth of ability</strong> — performing strongly across Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension, not just in one area</li>
       </ul>
       <p>
         Our <Link href="/free-diagnostic" className="text-primary hover:underline">free diagnostic assessment</Link> measures your child's

@@ -73,7 +73,7 @@ export default function HowToPass() {
 
       <h2 className="text-primary font-serif">Speed vs Accuracy: The Dual Challenge</h2>
       <p>
-        The Buckinghamshire 11+ tests three domains — Verbal Reasoning, Non-Verbal Reasoning, and Mathematics — each under strict time limits. Success requires both <strong>accuracy</strong> (getting answers right) and <strong>speed</strong> (getting answers right quickly enough).
+        The Buckinghamshire 11+ tests four domains — Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension — each under strict time limits. Success requires both <strong>accuracy</strong> (getting answers right) and <strong>speed</strong> (getting answers right quickly enough).
       </p>
       <p>
         Consider the following: a child who answers 90% of questions correctly but only completes 70% of the paper will score significantly lower than a child who answers 80% correctly but completes every question. The time constraint is not incidental — it is a core part of the assessment design.
@@ -128,7 +128,7 @@ export default function HowToPass() {
         The most effective preparation strategy combines <strong>diagnostic assessment</strong> with <strong>targeted practice</strong>. Rather than working through every topic equally, a diagnostic identifies exactly where your child falls below the 121 threshold — and targeted drills close those specific gaps.
       </p>
       <p>
-        This is the approach used by 11+ Standard. Our <Link href="/free-diagnostic" className="text-primary hover:underline">free 12-minute diagnostic</Link> measures both accuracy and pacing across all three domains, providing a realistic readiness forecast against the 121 benchmark. From there, the platform prescribes the exact micro-drills needed to close remaining gaps.
+        This is the approach used by 11+ Standard. Our <Link href="/free-diagnostic" className="text-primary hover:underline">free 12-minute diagnostic</Link> measures both accuracy and pacing across all four domains, providing a realistic readiness forecast against the 121 benchmark. From there, the platform prescribes the exact micro-drills needed to close remaining gaps.
       </p>
 
       <ContentCTA />

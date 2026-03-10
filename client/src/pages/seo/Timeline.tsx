@@ -11,7 +11,7 @@ const breadcrumbItems = [
 
 const timelineEvents = [
   { period: "Year 4 (Summer Term)", event: "Many families begin exploring the 11+ process and starting light preparation" },
-  { period: "Year 5 (Autumn–Spring)", event: "Structured preparation typically begins — practising VR, NVR, and Maths under timed conditions" },
+  { period: "Year 5 (Autumn–Spring)", event: "Structured preparation typically begins — practising VR, NVR, Maths, and Comprehension under timed conditions" },
   { period: "May – June (Year 5)", event: "Online registration opens on the Buckinghamshire Council website" },
   { period: "June (Year 5)", event: "Registration deadline — parents must register their child for the test" },
   { period: "Summer Holidays", event: "Final preparation period — focus on speed, accuracy, and exam technique" },
@@ -90,7 +90,7 @@ export default function Timeline() {
       <p>
         The test is usually held on a weekday in the first two weeks of September, at the start of Year 6.
         Children typically sit the test at a designated grammar school, not at their primary school.
-        The test covers three papers: Verbal Reasoning, Non-Verbal Reasoning, and Mathematics.
+        The test covers four papers: Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension.
       </p>
       <p>
         For details on what the test contains, see

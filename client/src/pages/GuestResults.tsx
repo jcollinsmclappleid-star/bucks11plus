@@ -191,7 +191,7 @@ export default function GuestResults() {
               </div>
               <p className="text-sm text-slate-600 mb-4">12 weeks of targeted practice that moves the needle</p>
               <ul className="space-y-2 mb-6">
-                {["1,000+ questions across VR, NVR & Maths", "Easy & Medium drills (13 sections)", "6 Hard challenge drills included", "2 full timed diagnostics (40 questions each)", "Practice papers (Quick & Full)", "PDF reports & full report archive", "Impact simulator & progress tracking", "Badge-based Accomplishments system"].map((f, i) => (
+                {["1,000+ questions across VR, NVR, Maths & Comprehension", "Easy & Medium drills (13 sections)", "6 Hard challenge drills included", "2 full timed diagnostics (40 questions each)", "Practice papers (Quick & Full)", "PDF reports & full report archive", "Impact simulator & progress tracking", "Badge-based Accomplishments system"].map((f, i) => (
                   <li key={i} className="flex items-center gap-2 text-sm text-slate-700">
                     <BarChart3 className="h-4 w-4 text-primary shrink-0" />
                     {f}

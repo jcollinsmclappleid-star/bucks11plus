@@ -185,6 +185,10 @@ content/
 - **Monetization**: Free → Early Learner £49 (6mo) → Practice Pack £99 (12wk) → Pack Family £149 → Programme £249 (16wk) → Programme Family £349
 
 ## Key Patterns
+- **4 test sections**: Verbal Reasoning, Non-Verbal Reasoning, Mathematics, English Comprehension
+- 200 comprehension questions seeded (40 passages × 5 questions), section="English Comprehension", renderType="comprehension"
+- Comprehension passage rendering in TestRunner: passage text box above question prompt
+- 6 comprehension practice drills: Fact Retrieval, Vocabulary in Context, Inference & Deduction, Mood & Tone, Detail Retrieval, Advanced Comprehension
 - GL-style alignment disclaimer: "Independent readiness assessment. Not affiliated with GL Assessment or Buckinghamshire Council."
 - Tier hierarchy: free (0) = early_learner (0) < pack12 (1) = pack12_family (1) < programme16 (2) = programme16_family (2) — server-side enforcement
 - Family tiers support up to 3 child profiles with child_profiles table + ChildSwitcher component

@@ -84,7 +84,7 @@ export default function TownGuide({ townSlug }: { townSlug: string }) {
 
       <h2 className="text-primary font-serif">Preparing for the Test</h2>
       <p>
-        Preparation for the Bucks 11+ typically focuses on building familiarity with the three assessed domains and developing the pace discipline needed to complete questions within the time limit.
+        Preparation for the Bucks 11+ typically focuses on building familiarity with the four assessed domains and developing the pace discipline needed to complete questions within the time limit.
       </p>
       <ul>
         <li><strong>Verbal reasoning</strong> — vocabulary, word relationships, codes, and logical deduction</li>

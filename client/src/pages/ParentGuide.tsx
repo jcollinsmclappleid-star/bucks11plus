@@ -16,7 +16,7 @@ const breadcrumbItems = [
 const faqItems = [
   {
     question: "What is the Bucks 11 plus test?",
-    answer: "The Buckinghamshire 11+ (formally the Secondary Transfer Test) is a selective assessment sat by children in Year 6 who wish to attend one of the 13 grammar schools in Buckinghamshire. It tests verbal reasoning, non-verbal reasoning, and mathematical reasoning under timed conditions.",
+    answer: "The Buckinghamshire 11+ (formally the Secondary Transfer Test) is a selective assessment sat by children in Year 6 who wish to attend one of the 13 grammar schools in Buckinghamshire. It tests verbal reasoning, non-verbal reasoning, mathematical reasoning, and English comprehension under timed conditions.",
   },
   {
     question: "What score do you need to pass the Bucks 11 plus?",
@@ -28,7 +28,7 @@ const faqItems = [
   },
   {
     question: "How should parents prepare for the Bucks 11 plus?",
-    answer: "Effective preparation focuses on building familiarity with the three assessed domains (verbal reasoning, non-verbal reasoning, and mathematics) and developing pace discipline under timed conditions. A diagnostic approach that identifies specific skill gaps is more effective than generic practice papers alone.",
+    answer: "Effective preparation focuses on building familiarity with the four assessed domains (verbal reasoning, non-verbal reasoning, mathematics, and English comprehension) and developing pace discipline under timed conditions. A diagnostic approach that identifies specific skill gaps is more effective than generic practice papers alone.",
   },
 ];
 
@@ -168,7 +168,7 @@ export default function ParentGuide() {
               </div>
               <h3 className="text-lg font-bold text-primary font-serif mb-2">Preparation Strategy</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Learn what successful preparation focuses on: reasoning ability, timing discipline, and consistency across all three assessed domains.
+                Learn what successful preparation focuses on: reasoning ability, timing discipline, and consistency across all four assessed domains.
               </p>
             </div>
           </div>

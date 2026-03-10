@@ -82,7 +82,7 @@ export default function TestDaySimulator() {
     prompt: `Paper 1 — Question ${i + 1}`,
     options: ["Option A", "Option B", "Option C", "Option D"],
     correctAnswer: "Option A",
-    section: i < 13 ? "verbal_reasoning" : "mathematics",
+    section: i < 8 ? "verbal_reasoning" : i < 14 ? "english_comprehension" : "mathematics",
   }));
 
   const paper2Questions: SimQuestion[] = Array.from({ length: 25 }, (_, i) => ({
@@ -90,7 +90,7 @@ export default function TestDaySimulator() {
     prompt: `Paper 2 — Question ${i + 1}`,
     options: ["Option A", "Option B", "Option C", "Option D"],
     correctAnswer: "Option A",
-    section: i < 13 ? "non_verbal_reasoning" : "mathematics",
+    section: i < 8 ? "non_verbal_reasoning" : i < 14 ? "english_comprehension" : "mathematics",
   }));
 
   const currentPaper = phase === "paper1" ? paper1Questions : paper2Questions;
@@ -169,12 +169,12 @@ export default function TestDaySimulator() {
           <div className="grid md:grid-cols-2 gap-4">
             <div className="p-4 bg-blue-50 rounded-lg">
               <h3 className="font-semibold text-blue-800">Paper 1</h3>
-              <p className="text-sm text-blue-700">25 questions — Verbal Reasoning & Maths</p>
+              <p className="text-sm text-blue-700">25 questions — Verbal Reasoning, Comprehension & Maths</p>
               <p className="text-xs text-blue-600 mt-1">Standard timed conditions</p>
             </div>
             <div className="p-4 bg-purple-50 rounded-lg">
               <h3 className="font-semibold text-purple-800">Paper 2</h3>
-              <p className="text-sm text-purple-700">25 questions — Non-Verbal Reasoning & Maths</p>
+              <p className="text-sm text-purple-700">25 questions — Non-Verbal Reasoning, Comprehension & Maths</p>
               <p className="text-xs text-purple-600 mt-1">Standard timed conditions</p>
             </div>
           </div>

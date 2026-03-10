@@ -135,7 +135,7 @@ export default function Onboarding() {
               <div className="space-y-6 text-center animate-in fade-in slide-in-from-bottom-4 duration-500">
                 <h2 className="text-2xl font-bold text-primary font-serif">Which area feels hardest right now?</h2>
                 <div className="space-y-3">
-                  {["Verbal Reasoning", "Non-Verbal Reasoning", "Maths", "Unsure"].map(opt => (
+                  {["Verbal Reasoning", "Non-Verbal Reasoning", "Maths", "English Comprehension", "Unsure"].map(opt => (
                     <Button
                       key={opt}
                       variant={formData.difficultyAreas.includes(opt) ? "default" : "outline"}

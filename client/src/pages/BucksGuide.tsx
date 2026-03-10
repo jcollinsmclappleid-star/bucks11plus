@@ -7,11 +7,11 @@ import { Disclaimer } from "../components/shared/Disclaimer";
 const faqItems = [
   {
     question: "What is the Buckinghamshire 11 Plus test?",
-    answer: "The Buckinghamshire 11 Plus (also known as the Secondary Transfer Test) is a standardised assessment used to determine eligibility for the 13 grammar schools in Buckinghamshire. It is administered by GL Assessment and covers Verbal Reasoning, Non-Verbal Reasoning, and Mathematics.",
+    answer: "The Buckinghamshire 11 Plus (also known as the Secondary Transfer Test) is a standardised assessment used to determine eligibility for the 13 grammar schools in Buckinghamshire. It is administered by GL Assessment and covers Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension.",
   },
   {
     question: "What score does my child need to pass the Bucks 11 Plus?",
-    answer: "Children need to achieve a standardised score of 121 or above across all three papers to qualify for a grammar school place. The qualifying score is set annually by The Buckinghamshire Grammar Schools (TBGS) and has remained at 121 in recent years.",
+    answer: "Children need to achieve a standardised score of 121 or above across all four papers to qualify for a grammar school place. The qualifying score is set annually by The Buckinghamshire Grammar Schools (TBGS) and has remained at 121 in recent years.",
   },
   {
     question: "When should my child start preparing for the 11 Plus?",
@@ -19,7 +19,7 @@ const faqItems = [
   },
   {
     question: "How is the Buckinghamshire 11 Plus scored?",
-    answer: "Each paper is scored individually and then standardised to account for the child's age. The standardised scores from all three papers are combined, and a child must achieve an overall standardised score of 121 or above to qualify.",
+    answer: "Each paper is scored individually and then standardised to account for the child's age. The standardised scores from all four papers are combined, and a child must achieve an overall standardised score of 121 or above to qualify.",
   },
   {
     question: "Can children from outside Buckinghamshire take the 11 Plus?",
@@ -70,7 +70,7 @@ export default function BucksGuide() {
         The Buckinghamshire 11 Plus — officially called the <strong>Secondary Transfer Test (STT)</strong> — is a selective entrance examination taken by children in Year 6 (typically in September). It determines eligibility for places at the 13 state-funded grammar schools across Buckinghamshire.
       </p>
       <p>
-        The test is administered by <strong>GL Assessment</strong> and covers three core domains: Verbal Reasoning, Non-Verbal Reasoning, and Mathematics. Children must achieve a combined <Link href="/bucks-11-plus-qualifying-score" className="text-primary font-medium">standardised score of 121</Link> or above to qualify for a grammar school place.
+        The test is administered by <strong>GL Assessment</strong> and covers four core domains: Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension. Children must achieve a combined <Link href="/bucks-11-plus-qualifying-score" className="text-primary font-medium">standardised score of 121</Link> or above to qualify for a grammar school place.
       </p>
       <p>
         Each year, approximately 6,000–7,000 children sit the test, with around 30–35% achieving the qualifying score. Competition varies by school, with some grammar schools significantly more oversubscribed than others.
@@ -109,13 +109,13 @@ export default function BucksGuide() {
 
       <h2 className="text-primary font-serif" data-testid="heading-test-contents">What the Test Contains</h2>
       <p>
-        The Bucks 11+ covers three reasoning domains, all assessed in a GL Assessment format:
+        The Bucks 11+ covers four reasoning domains, all assessed in a GL Assessment format:
       </p>
-      <div className="not-prose my-8 grid gap-4 md:grid-cols-3">
+      <div className="not-prose my-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <div className="rounded-xl border border-slate-200 bg-white p-5">
           <h3 className="text-base font-bold text-primary font-serif mb-2">Verbal Reasoning</h3>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Vocabulary, word relationships, codes and ciphers, comprehension-style logic, and letter-pattern sequences. Tests language skills and logical deduction.
+            Vocabulary, word relationships, codes and ciphers, letter-pattern sequences, and logical deduction. Tests language skills and reasoning ability.
           </p>
         </div>
         <div className="rounded-xl border border-slate-200 bg-white p-5">
@@ -128,6 +128,12 @@ export default function BucksGuide() {
           <h3 className="text-base font-bold text-primary font-serif mb-2">Mathematics</h3>
           <p className="text-sm text-muted-foreground leading-relaxed">
             Arithmetic fluency, fractions, decimals, percentages, ratio, data interpretation, and multi-step word problems aligned to Key Stage 2.
+          </p>
+        </div>
+        <div className="rounded-xl border border-slate-200 bg-white p-5">
+          <h3 className="text-base font-bold text-primary font-serif mb-2">English Comprehension</h3>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            Passage-based reading comprehension testing fact retrieval, vocabulary in context, inference, mood and tone, and detail analysis.
           </p>
         </div>
       </div>
@@ -192,7 +198,7 @@ export default function BucksGuide() {
         Common mistakes include starting too late, relying exclusively on paper-based practice without timed conditions, and ignoring weaker domains in favour of subjects the child already enjoys. A structured approach, ideally informed by a <Link href="/free-diagnostic" className="text-primary font-medium">diagnostic assessment</Link>, produces significantly better outcomes than unstructured practice alone.
       </p>
       <p>
-        Our platform provides a free 12-minute diagnostic that measures both accuracy and pacing across all three domains, generating a predicted standardised score and identifying the specific question types where your child needs the most improvement.
+        Our platform provides a free 12-minute diagnostic that measures both accuracy and pacing across all four domains, generating a predicted standardised score and identifying the specific question types where your child needs the most improvement.
       </p>
 
       <div className="not-prose my-8 rounded-xl border border-slate-200 bg-white p-6">

@@ -394,7 +394,7 @@ export class DatabaseStorage implements IStorage {
   async selectQuestionsForPracticePaper(
     userId: string,
     questionCount: number,
-    sections: string[] = ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
+    sections: string[] = ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics", "English Comprehension"],
   ): Promise<Question[]> {
     const COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000;
     const cooldownCutoff = Date.now() - COOLDOWN_MS;

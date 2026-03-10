@@ -5,7 +5,7 @@ export default function GLAlignment() {
     <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
       <Seo 
         title="Bucks 11 Plus GL Assessment Style Alignment | 11+ Standard" 
-        description="How our independently developed assessments align to GL-style reasoning families used in the Buckinghamshire Secondary Transfer Test — verbal reasoning, non-verbal reasoning, and mathematical reasoning." 
+        description="How our independently developed assessments align to GL-style reasoning families used in the Buckinghamshire Secondary Transfer Test — verbal reasoning, non-verbal reasoning, mathematical reasoning, and English comprehension." 
         canonicalPath="/bucks-gl-alignment"
       />
       <h1 className="text-4xl md:text-5xl font-bold text-primary font-serif tracking-tight">Aligned to GL-Style Reasoning Families</h1>
@@ -17,7 +17,7 @@ export default function GLAlignment() {
 
       <h2 className="text-primary font-serif">Aligned to GL-Style Reasoning Families</h2>
       <p>
-        The Buckinghamshire test uses a GL-style format covering three main domains: Verbal Reasoning, Non-Verbal Reasoning (including Spatial), and Mathematics. We independently align our question bank to the historical GL-style reasoning families used in Bucks.
+        The Buckinghamshire test uses a GL-style format covering four main domains: Verbal Reasoning, Non-Verbal Reasoning (including Spatial), Mathematics, and English Comprehension. We independently align our question bank to the historical GL-style reasoning families used in Bucks.
       </p>
       <ul>
         <li><strong>Verbal Reasoning:</strong> Focuses heavily on vocabulary breadth, word structure, and specific code-breaking logic typical of GL-style assessments.</li>

@@ -139,7 +139,7 @@ export default function Registration() {
         This is why we recommend beginning preparation well before the registration window opens. Our <Link href="/how-to-pass-bucks-11-plus" className="text-primary hover:underline">preparation guide</Link> outlines when to start and how to structure your approach.
       </p>
       <p>
-        To understand exactly where your child currently stands, take our <Link href="/free-diagnostic" className="text-primary hover:underline">free 12-minute diagnostic</Link>. It measures accuracy and pacing across all three domains and provides a realistic forecast against the 121 qualifying benchmark.
+        To understand exactly where your child currently stands, take our <Link href="/free-diagnostic" className="text-primary hover:underline">free 12-minute diagnostic</Link>. It measures accuracy and pacing across all four domains and provides a realistic forecast against the 121 qualifying benchmark.
       </p>
 
       <ContentCTA />

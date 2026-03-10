@@ -196,7 +196,7 @@ export default function TestRunner() {
 
   const timerClass = timeLeft < 60 ? "timer-pill timer-pill-danger" : timeLeft < 180 ? "timer-pill timer-pill-warning" : "timer-pill timer-pill-normal";
 
-  const renderType = (question.renderType || "text") as "text" | "svg" | "chart";
+  const renderType = (question.renderType || "text") as "text" | "svg" | "chart" | "comprehension";
   const renderConfig = question.renderConfig as RenderConfig | null;
   const isSvgWithVisualOptions = renderType === "svg" && renderConfig && "answerOptions" in renderConfig;
 
@@ -231,6 +231,17 @@ export default function TestRunner() {
         </div>
 
         <div className="premium-card p-8 flex-1 flex flex-col question-fade-in" key={animKey}>
+          {renderType === "comprehension" && renderConfig && (renderConfig as any).passageText && (
+            <div className="mb-6 p-5 bg-slate-50 border border-slate-200 rounded-lg" data-testid="comprehension-passage">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-xs font-bold uppercase tracking-wider text-primary/70">Passage: {(renderConfig as any).passageTitle}</span>
+              </div>
+              <p className="text-base leading-relaxed text-slate-700 font-serif italic">
+                {(renderConfig as any).passageText}
+              </p>
+            </div>
+          )}
+
           <div className="mb-8">
             <p className="text-xl text-primary font-medium leading-relaxed tracking-[-0.01em]" data-testid="text-question-prompt">
               {question.prompt}

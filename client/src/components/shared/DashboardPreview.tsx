@@ -85,6 +85,7 @@ function PriorityFocusPanel() {
     { name: "Verbal Reasoning", accuracy: "62%", pace: "Slow", impact: "High Impact", impactColor: "bg-red-100 text-red-700 border-red-200", paceColor: "text-red-500" },
     { name: "Non-Verbal Reasoning", accuracy: "74%", pace: "On Track", impact: "Medium", impactColor: "bg-amber-100 text-amber-700 border-amber-200", paceColor: "text-green-600" },
     { name: "Maths", accuracy: "81%", pace: "On Track", impact: "On Track", impactColor: "bg-green-100 text-green-700 border-green-200", paceColor: "text-green-600" },
+    { name: "English Comprehension", accuracy: "69%", pace: "Slow", impact: "Medium", impactColor: "bg-amber-100 text-amber-700 border-amber-200", paceColor: "text-amber-500" },
   ];
 
   return (
@@ -120,6 +121,7 @@ function SectionBreakdown() {
     { name: "Verbal Reasoning", score: 62, status: "Improvement Opportunity", color: "bg-red-500", bgColor: "bg-red-100" },
     { name: "Non-Verbal Reasoning", score: 74, status: "Within Reach", color: "bg-amber-500", bgColor: "bg-amber-100" },
     { name: "Maths", score: 81, status: "On Track", color: "bg-green-500", bgColor: "bg-green-100" },
+    { name: "English Comprehension", score: 69, status: "Within Reach", color: "bg-amber-500", bgColor: "bg-amber-100" },
   ];
 
   return (
@@ -203,6 +205,7 @@ function PaceAnalysis() {
     { name: "Verbal Reasoning", avg: 38, expected: 30, pdi: 64 },
     { name: "Non-Verbal Reasoning", avg: 32, expected: 30, pdi: 78 },
     { name: "Maths", avg: 28, expected: 30, pdi: 88 },
+    { name: "English Comprehension", avg: 35, expected: 30, pdi: 71 },
   ];
 
   return (
@@ -258,6 +261,10 @@ function SubSkillHeatmap() {
     { label: "Ratios", value: 68, time: "32s", domain: "Maths" },
     { label: "Word Problems", value: 55, time: "42s", domain: "Maths" },
     { label: "Number Patterns", value: 84, time: "20s", domain: "Maths" },
+    { label: "Inference", value: 65, time: "38s", domain: "EC" },
+    { label: "Vocabulary in Context", value: 72, time: "30s", domain: "EC" },
+    { label: "Retrieval", value: 80, time: "24s", domain: "EC" },
+    { label: "Summary", value: 60, time: "40s", domain: "EC" },
   ];
 
   return (
@@ -285,7 +292,7 @@ function SubSkillHeatmap() {
           ))}
         </div>
         <p className="text-xs text-muted-foreground mt-3">
-          Accuracy adjusted for difficulty and cognitive load. Colour indicates performance band across all three domains.
+          Accuracy adjusted for difficulty and cognitive load. Colour indicates performance band across all four domains.
         </p>
       </CardContent>
     </Card>

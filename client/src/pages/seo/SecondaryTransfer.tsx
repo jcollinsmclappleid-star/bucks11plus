@@ -14,7 +14,7 @@ export default function SecondaryTransfer() {
     <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
       <Seo
         title="Buckinghamshire Secondary Transfer Test | Official Purpose & Structure"
-        description="Learn about the Buckinghamshire Secondary Transfer Test (11+) — its official purpose, test structure, three papers, and how it determines grammar school eligibility."
+        description="Learn about the Buckinghamshire Secondary Transfer Test (11+) — its official purpose, test structure, four papers, and how it determines grammar school eligibility."
         canonicalPath="/buckinghamshire-secondary-transfer-test"
         schema={[
           breadcrumbSchema(breadcrumbItems),
@@ -46,7 +46,7 @@ export default function SecondaryTransfer() {
 
       <h2 className="text-primary font-serif">Test Structure</h2>
       <p>
-        The Secondary Transfer Test consists of <strong>three separate papers</strong>, each assessing a different
+        The Secondary Transfer Test consists of <strong>four separate papers</strong>, each assessing a different
         domain of reasoning and academic ability:
       </p>
 
@@ -113,7 +113,7 @@ export default function SecondaryTransfer() {
 
       <h2 className="text-primary font-serif">Scoring</h2>
       <p>
-        Raw scores from the three papers are combined and <strong>standardised</strong> to produce a single overall score.
+        Raw scores from the four papers are combined and <strong>standardised</strong> to produce a single overall score.
         The standardisation process adjusts for the child's age and the difficulty of the paper, ensuring fair comparison
         across the cohort.
       </p>
@@ -131,7 +131,7 @@ export default function SecondaryTransfer() {
       </p>
       <p>
         Our <Link href="/free-diagnostic" className="text-primary hover:underline">free diagnostic assessment</Link> measures
-        your child's readiness across all three domains — Verbal Reasoning, Non-Verbal Reasoning, and Mathematics —
+        your child's readiness across all four domains — Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension —
         in just 12 minutes. It provides a forecast score against the 121 benchmark and identifies the specific
         areas where improvement is needed.
       </p>
