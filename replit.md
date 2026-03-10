@@ -186,7 +186,8 @@ content/
 
 ## Key Patterns
 - **4 test sections**: Verbal Reasoning, Non-Verbal Reasoning, Mathematics, English Comprehension
-- 200 comprehension questions seeded (40 passages × 5 questions), section="English Comprehension", renderType="comprehension"
+- 700 comprehension questions total: 200 (comp200, 40 passages) + 500 (comp500, 100 passages), section="English Comprehension", renderType="comprehension"
+- comp500 distribution: 350 Hard (passages 1-70) + 150 Medium (passages 71-100), 39 unique passage titles cycling
 - Comprehension passage rendering in TestRunner: passage text box above question prompt
 - 6 comprehension practice drills: Fact Retrieval, Vocabulary in Context, Inference & Deduction, Mood & Tone, Detail Retrieval, Advanced Comprehension
 - GL-style alignment disclaimer: "Independent readiness assessment. Not affiliated with GL Assessment or Buckinghamshire Council."
