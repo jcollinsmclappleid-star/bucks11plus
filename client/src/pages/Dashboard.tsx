@@ -1,12 +1,14 @@
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { ArrowRight, AlertCircle, BookOpen, Clock, Lock, Target, Loader2, FileText, TrendingUp, Trophy, BarChart3, Map, Zap, Crown } from "lucide-react";
+import { ArrowRight, AlertCircle, BookOpen, Clock, Lock, Target, Loader2, FileText, TrendingUp, Trophy, BarChart3, Map, Zap, Crown, Calendar } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 import { useAuth } from "../lib/auth";
 import { useQuery } from "@tanstack/react-query";
 import { getQueryFn } from "../lib/queryClient";
+import { CountdownWidget } from "./TestDaySimulator";
+import { useEffect } from "react";
 
 type TestSession = {
   id: string;
@@ -29,8 +31,20 @@ type ProgressData = {
 };
 
 export default function Dashboard() {
-  const { user, hasPaidAccess, isProgramme, tierLabel } = useAuth();
+  const { user, hasPaidAccess, isProgramme, isEarlyLearner, tierLabel } = useAuth();
+  const [, navigate] = useLocation();
   const target = 121;
+
+  useEffect(() => {
+    if (user && isEarlyLearner()) {
+      navigate("/app/early-dashboard");
+    }
+  }, [user]);
+
+  const { data: testDayConfig } = useQuery({
+    queryKey: ["/api/test-day-config"],
+    enabled: !!user,
+  });
 
   const { data: sessions, isLoading: sessionsLoading } = useQuery<TestSession[]>({
     queryKey: ["/api/test-sessions"],
@@ -265,6 +279,7 @@ export default function Dashboard() {
                     <Crown className="h-5 w-5 text-primary" />
                     <h3 className="font-bold text-primary font-serif">Programme Exclusive</h3>
                   </div>
+                  {testDayConfig?.examDate && <CountdownWidget examDate={testDayConfig.examDate} />}
                   <div className="space-y-3">
                     <div className="flex items-center gap-3 p-3 rounded-lg bg-white/80 border border-primary/10">
                       <Map className="h-5 w-5 text-primary shrink-0" />
@@ -284,6 +299,16 @@ export default function Dashboard() {
                       </div>
                       <Button size="sm" variant="ghost" asChild data-testid="button-go-analytics">
                         <Link href="/app/analytics"><ArrowRight className="h-4 w-4" /></Link>
+                      </Button>
+                    </div>
+                    <div className="flex items-center gap-3 p-3 rounded-lg bg-white/80 border border-primary/10">
+                      <Calendar className="h-5 w-5 text-primary shrink-0" />
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-primary">Test Day Simulator</p>
+                        <p className="text-xs text-muted-foreground">2-paper exam with timed break</p>
+                      </div>
+                      <Button size="sm" variant="ghost" asChild data-testid="button-go-simulator">
+                        <Link href="/app/test-day-simulator"><ArrowRight className="h-4 w-4" /></Link>
                       </Button>
                     </div>
                   </div>

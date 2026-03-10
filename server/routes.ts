@@ -2,11 +2,12 @@ import type { Express } from "express";
 import { type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, requireAuth } from "./auth";
-import { onboardingSchema, insertGuideLeadSchema, testSessions, testAnswers, questions } from "@shared/schema";
+import { onboardingSchema, insertGuideLeadSchema, testSessions, testAnswers, questions, users } from "@shared/schema";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
 import { sql, eq, and, desc, inArray } from "drizzle-orm";
 import { db } from "./db";
 import { computeAttemptMetrics, computeFullAnalytics, type AnswerRecord, type DrillAnswerRecord, type HistoricalMetrics } from "./metrics";
+import { sendDiagnosticCompleteEmail } from "./email";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -40,7 +41,8 @@ export async function registerRoutes(
   app.post("/api/checkout", requireAuth, async (req, res, next) => {
     try {
       const { tier } = req.body;
-      if (!tier || !["pack12", "programme16"].includes(tier)) {
+      const validTiers = ["early_learner", "pack12", "pack12_family", "programme16", "programme16_family"];
+      if (!tier || !validTiers.includes(tier)) {
         return res.status(400).json({ message: "Invalid tier" });
       }
 
@@ -95,7 +97,8 @@ export async function registerRoutes(
   app.post("/api/guest/checkout", async (req, res, next) => {
     try {
       const { tier } = req.body;
-      if (!tier || !["pack12", "programme16"].includes(tier)) {
+      const validTiers = ["early_learner", "pack12", "pack12_family", "programme16", "programme16_family"];
+      if (!tier || !validTiers.includes(tier)) {
         return res.status(400).json({ message: "Invalid tier" });
       }
 
@@ -136,27 +139,31 @@ export async function registerRoutes(
 
   app.post("/api/checkout/complete", requireAuth, async (req, res, next) => {
     try {
-      const { tier, session_id } = req.body;
-      if (!tier || !["pack12", "programme16"].includes(tier)) {
-        return res.status(400).json({ message: "Invalid tier" });
+      const { session_id } = req.body;
+      if (!session_id) {
+        return res.status(400).json({ message: "session_id is required" });
       }
 
-      if (session_id) {
-        const stripe = await getUncachableStripeClient();
-        const checkoutSession = await stripe.checkout.sessions.retrieve(session_id);
-        if (checkoutSession.payment_status !== "paid") {
-          return res.status(400).json({ message: "Payment not confirmed" });
-        }
-        const sessionUserId = checkoutSession.metadata?.userId;
-        if (sessionUserId && sessionUserId !== req.user!.id) {
-          return res.status(403).json({ message: "Session does not belong to this user" });
-        }
+      const stripe = await getUncachableStripeClient();
+      const checkoutSession = await stripe.checkout.sessions.retrieve(session_id);
+      if (checkoutSession.payment_status !== "paid") {
+        return res.status(400).json({ message: "Payment not confirmed" });
+      }
+      const sessionUserId = checkoutSession.metadata?.userId;
+      if (sessionUserId && sessionUserId !== req.user!.id) {
+        return res.status(403).json({ message: "Session does not belong to this user" });
+      }
+
+      const tier = checkoutSession.metadata?.tier;
+      const validTiers = ["early_learner", "pack12", "pack12_family", "programme16", "programme16_family"];
+      if (!tier || !validTiers.includes(tier)) {
+        return res.status(400).json({ message: "Invalid tier in session metadata" });
       }
 
       const currentUser = await storage.getUser(req.user!.id);
       if (!currentUser) return res.status(404).json({ message: "User not found" });
 
-      const TIER_RANK: Record<string, number> = { free: 0, pack12: 1, programme16: 2 };
+      const TIER_RANK: Record<string, number> = { free: 0, early_learner: 0, pack12: 1, pack12_family: 1, programme16: 2, programme16_family: 2 };
       const currentRank = TIER_RANK[currentUser.subscriptionTier] || 0;
       const newRank = TIER_RANK[tier] || 0;
       if (newRank <= currentRank) {
@@ -164,13 +171,13 @@ export async function registerRoutes(
         return res.json(safeUser);
       }
 
-      const weeksMap: Record<string, number> = { pack12: 12, programme16: 16 };
-      const weeks = weeksMap[tier];
+      const weeksMap: Record<string, number> = { early_learner: 26, pack12: 12, pack12_family: 12, programme16: 16, programme16_family: 16 };
+      const weeks = weeksMap[tier] || 12;
       const expiresAt = new Date(Date.now() + weeks * 7 * 24 * 60 * 60 * 1000);
 
       await storage.updateUserSubscription(req.user!.id, tier, expiresAt);
 
-      if (tier === "programme16") {
+      if (tier === "programme16" || tier === "programme16_family") {
         const existing = await storage.getProgrammeEnrolment(req.user!.id);
         if (!existing) {
           await storage.createProgrammeEnrolment(req.user!.id);
@@ -209,7 +216,7 @@ export async function registerRoutes(
       const diag = await storage.getDiagnostic(req.params.id);
       if (!diag) return res.status(404).json({ message: "Diagnostic not found" });
 
-      const TIER_RANK: Record<string, number> = { free: 0, pack12: 1, programme16: 2 };
+      const TIER_RANK: Record<string, number> = { free: 0, early_learner: 0, pack12: 1, pack12_family: 1, programme16: 2, programme16_family: 2 };
       const userRank = TIER_RANK[req.user!.subscriptionTier] || 0;
       const requiredRank = TIER_RANK[diag.requiredTier] || 0;
       if (userRank < requiredRank) {
@@ -393,7 +400,7 @@ export async function registerRoutes(
         return res.status(404).json({ message: "Practice paper diagnostic not found. Database may need reseeding." });
       }
 
-      const TIER_RANK: Record<string, number> = { free: 0, pack12: 1, programme16: 2 };
+      const TIER_RANK: Record<string, number> = { free: 0, early_learner: 0, pack12: 1, pack12_family: 1, programme16: 2, programme16_family: 2 };
       const userRank = TIER_RANK[req.user!.subscriptionTier] || 0;
       const requiredRank = TIER_RANK[diag.requiredTier] || 0;
       if (userRank < requiredRank) {
@@ -427,7 +434,7 @@ export async function registerRoutes(
       const diag = await storage.getDiagnostic(diagnosticId);
       if (!diag) return res.status(404).json({ message: "Diagnostic not found" });
 
-      const TIER_RANK: Record<string, number> = { free: 0, pack12: 1, programme16: 2 };
+      const TIER_RANK: Record<string, number> = { free: 0, early_learner: 0, pack12: 1, pack12_family: 1, programme16: 2, programme16_family: 2 };
       const userRank = TIER_RANK[req.user!.subscriptionTier] || 0;
       const requiredRank = TIER_RANK[diag.requiredTier] || 0;
       if (userRank < requiredRank) {
@@ -569,7 +576,7 @@ export async function registerRoutes(
         metrics,
       });
 
-      if (req.user!.subscriptionTier === "programme16") {
+      if (req.user!.subscriptionTier === "programme16" || req.user!.subscriptionTier === "programme16_family") {
         try {
           await storage.autoCompleteDiagnosticMilestones(req.user!.id, session.diagnosticId, session.id);
         } catch (err) {
@@ -584,6 +591,14 @@ export async function registerRoutes(
         console.error("[Badges] Failed to evaluate badges:", err);
       }
 
+      try {
+        sendDiagnosticCompleteEmail(req.user!.id, completed).catch(err =>
+          console.error("[Email] Diagnostic complete email failed:", err)
+        );
+      } catch (err) {
+        console.error("[Email] Failed to trigger diagnostic email:", err);
+      }
+
       res.json({ ...completed, newBadges });
     } catch (error) {
       next(error);
@@ -592,7 +607,7 @@ export async function registerRoutes(
 
   app.get("/api/analytics", requireAuth, async (req, res, next) => {
     try {
-      if (req.user!.subscriptionTier !== "programme16") {
+      if (req.user!.subscriptionTier !== "programme16" && req.user!.subscriptionTier !== "programme16_family") {
         return res.json({ available: false, gated: true, message: "Premium Parent Analytics is included with the Young Scholar Programme." });
       }
       const userId = req.user!.id;
@@ -675,7 +690,7 @@ export async function registerRoutes(
 
   app.get("/api/analytics/detail", requireAuth, async (req, res, next) => {
     try {
-      if (req.user!.subscriptionTier !== "programme16") {
+      if (req.user!.subscriptionTier !== "programme16" && req.user!.subscriptionTier !== "programme16_family") {
         return res.json({ available: false, gated: true });
       }
       const userId = req.user!.id;
@@ -813,7 +828,7 @@ export async function registerRoutes(
 
   app.get("/api/programme", requireAuth, async (req, res, next) => {
     try {
-      if (req.user!.subscriptionTier !== "programme16") {
+      if (req.user!.subscriptionTier !== "programme16" && req.user!.subscriptionTier !== "programme16_family") {
         return res.json({ enrolled: false });
       }
       const enrolment = await storage.getProgrammeEnrolment(req.user!.id);
@@ -857,7 +872,7 @@ export async function registerRoutes(
 
   app.post("/api/programme/milestones/:id/complete", requireAuth, async (req, res, next) => {
     try {
-      if (req.user!.subscriptionTier !== "programme16") {
+      if (req.user!.subscriptionTier !== "programme16" && req.user!.subscriptionTier !== "programme16_family") {
         return res.status(403).json({ message: "Programme access required" });
       }
       const { sessionId } = req.body;
@@ -870,7 +885,7 @@ export async function registerRoutes(
 
   app.get("/api/programme/tasks", requireAuth, async (req, res, next) => {
     try {
-      if (req.user!.subscriptionTier !== "programme16") {
+      if (req.user!.subscriptionTier !== "programme16" && req.user!.subscriptionTier !== "programme16_family") {
         return res.status(403).json({ message: "Programme access required" });
       }
       const week = req.query.week ? parseInt(req.query.week as string) : undefined;
@@ -883,7 +898,7 @@ export async function registerRoutes(
 
   app.post("/api/programme/tasks/generate", requireAuth, async (req, res, next) => {
     try {
-      if (req.user!.subscriptionTier !== "programme16") {
+      if (req.user!.subscriptionTier !== "programme16" && req.user!.subscriptionTier !== "programme16_family") {
         return res.status(403).json({ message: "Programme access required" });
       }
       const enrolment = await storage.getProgrammeEnrolment(req.user!.id);
@@ -899,7 +914,7 @@ export async function registerRoutes(
 
   app.get("/api/programme/completion-summary", requireAuth, async (req, res, next) => {
     try {
-      if (req.user!.subscriptionTier !== "programme16") {
+      if (req.user!.subscriptionTier !== "programme16" && req.user!.subscriptionTier !== "programme16_family") {
         return res.status(403).json({ message: "Programme access required" });
       }
       const sessions = await storage.getUserTestSessions(req.user!.id);
@@ -979,7 +994,7 @@ export async function registerRoutes(
       
       const sectionId = req.params.id;
 
-      const TIER_RANK: Record<string, number> = { free: 0, pack12: 1, programme16: 2 };
+      const TIER_RANK: Record<string, number> = { free: 0, early_learner: 0, pack12: 1, pack12_family: 1, programme16: 2, programme16_family: 2 };
       const section = await storage.getPracticeSection(sectionId);
       if (!section) return res.status(404).json({ message: "Practice section not found" });
       const userRank = TIER_RANK[req.user!.subscriptionTier || "free"] || 0;
@@ -1042,7 +1057,7 @@ export async function registerRoutes(
         });
       }
 
-      if (req.user!.subscriptionTier === "programme16") {
+      if (req.user!.subscriptionTier === "programme16" || req.user!.subscriptionTier === "programme16_family") {
         try {
           const enrolment = await storage.getProgrammeEnrolment(req.user!.id);
           if (enrolment) {
@@ -1064,7 +1079,7 @@ export async function registerRoutes(
 
   app.post("/api/practice-sections/:id/complete-drill", requireAuth, async (req, res, next) => {
     try {
-      if (req.user!.subscriptionTier === "programme16") {
+      if (req.user!.subscriptionTier === "programme16" || req.user!.subscriptionTier === "programme16_family") {
         const enrolment = await storage.getProgrammeEnrolment(req.user!.id);
         if (enrolment) {
           await storage.autoCompletePracticeMilestone(req.user!.id, enrolment.currentWeek);
@@ -1225,6 +1240,147 @@ export async function registerRoutes(
     } catch (error) {
       next(error);
     }
+  });
+
+  app.get("/api/child-profiles", requireAuth, async (req, res, next) => {
+    try {
+      const profiles = await storage.getChildProfiles(req.user!.id);
+      res.json(profiles);
+    } catch (error) { next(error); }
+  });
+
+  app.post("/api/child-profiles", requireAuth, async (req, res, next) => {
+    try {
+      const userTier = req.user!.subscriptionTier;
+      if (!userTier?.includes("family")) {
+        return res.status(403).json({ message: "Child profiles require a family plan" });
+      }
+      const existing = await storage.getChildProfiles(req.user!.id);
+      if (existing.length >= 3) {
+        return res.status(400).json({ message: "Maximum 3 child profiles allowed" });
+      }
+      const { childName, childYear, practiceHours, difficultyAreas } = req.body;
+      if (!childName || !childYear) {
+        return res.status(400).json({ message: "Child name and year are required" });
+      }
+      const profile = await storage.createChildProfile({
+        userId: req.user!.id,
+        childName,
+        childYear,
+        practiceHours: practiceHours || null,
+        difficultyAreas: difficultyAreas || null,
+        stage: "exploring",
+      });
+      if (existing.length === 0) {
+        await storage.setActiveChildProfile(req.user!.id, profile.id);
+      }
+      res.json(profile);
+    } catch (error) { next(error); }
+  });
+
+  app.put("/api/child-profiles/:id", requireAuth, async (req, res, next) => {
+    try {
+      const profile = await storage.getChildProfile(req.params.id);
+      if (!profile || profile.userId !== req.user!.id) {
+        return res.status(404).json({ message: "Profile not found" });
+      }
+      const updated = await storage.updateChildProfile(req.params.id, req.body);
+      res.json(updated);
+    } catch (error) { next(error); }
+  });
+
+  app.delete("/api/child-profiles/:id", requireAuth, async (req, res, next) => {
+    try {
+      const profile = await storage.getChildProfile(req.params.id);
+      if (!profile || profile.userId !== req.user!.id) {
+        return res.status(404).json({ message: "Profile not found" });
+      }
+      await storage.deleteChildProfile(req.params.id);
+      const user = await storage.getUser(req.user!.id);
+      if (user?.activeChildProfileId === req.params.id) {
+        const remaining = await storage.getChildProfiles(req.user!.id);
+        await storage.setActiveChildProfile(req.user!.id, remaining.length > 0 ? remaining[0].id : null);
+      }
+      res.json({ success: true });
+    } catch (error) { next(error); }
+  });
+
+  app.put("/api/child-profiles/:id/activate", requireAuth, async (req, res, next) => {
+    try {
+      const profile = await storage.getChildProfile(req.params.id);
+      if (!profile || profile.userId !== req.user!.id) {
+        return res.status(404).json({ message: "Profile not found" });
+      }
+      const user = await storage.setActiveChildProfile(req.user!.id, req.params.id);
+      const { password: _, ...safeUser } = user;
+      res.json(safeUser);
+    } catch (error) { next(error); }
+  });
+
+  app.get("/api/test-day-config", requireAuth, async (req, res, next) => {
+    try {
+      const config = await storage.getTestDayConfig(req.user!.id);
+      res.json(config || null);
+    } catch (error) { next(error); }
+  });
+
+  app.put("/api/test-day-config", requireAuth, async (req, res, next) => {
+    try {
+      const { examDate } = req.body;
+      if (!examDate) {
+        return res.status(400).json({ message: "Exam date is required" });
+      }
+      const config = await storage.setTestDayConfig({
+        userId: req.user!.id,
+        examDate: new Date(examDate),
+      });
+      res.json(config);
+    } catch (error) { next(error); }
+  });
+
+  const handleUnsubscribe = async (token: string, userId: string, res: any) => {
+    const crypto = await import("crypto");
+    const secret = process.env.EMAIL_SECRET || "11plus-email-secret";
+    const expected = crypto.createHmac("sha256", secret).update(userId).digest("hex");
+    if (token !== expected) {
+      return res.status(403).send("<html><body><h2>Invalid unsubscribe link</h2><p>This link may have expired or is invalid.</p></body></html>");
+    }
+    await db.update(users).set({ emailUnsubscribedAt: new Date(), emailConsent: false }).where(eq(users.id, userId));
+    res.send("<html><body style='font-family:sans-serif;max-width:500px;margin:60px auto;text-align:center;'><h2>Unsubscribed</h2><p>You have been successfully unsubscribed from 11+ Standard emails.</p><p><a href='/'>Return to site</a></p></body></html>");
+  };
+
+  app.get("/api/email/unsubscribe", async (req, res, next) => {
+    try {
+      const { token, userId } = req.query;
+      if (!token || !userId) {
+        return res.status(400).send("<html><body><h2>Invalid link</h2></body></html>");
+      }
+      await handleUnsubscribe(token as string, userId as string, res);
+    } catch (error) { next(error); }
+  });
+
+  app.post("/api/email/unsubscribe", async (req, res, next) => {
+    try {
+      const { token, userId } = req.body;
+      if (!token || !userId) {
+        return res.status(400).json({ message: "Missing token or userId" });
+      }
+      await handleUnsubscribe(token, userId, res);
+    } catch (error) { next(error); }
+  });
+
+  app.put("/api/user/email-consent", requireAuth, async (req, res, next) => {
+    try {
+      const { consent } = req.body;
+      const updates: any = { emailConsent: !!consent };
+      if (consent) {
+        updates.emailUnsubscribedAt = null;
+      }
+      await db.update(users).set(updates).where(eq(users.id, req.user!.id));
+      const user = await storage.getUser(req.user!.id);
+      const { password: _, ...safeUser } = user!;
+      res.json(safeUser);
+    } catch (error) { next(error); }
   });
 
   app.get("/sitemap.xml", (_req, res) => {

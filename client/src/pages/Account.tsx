@@ -1,20 +1,108 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Settings, CreditCard, User } from "lucide-react";
+import { Settings, CreditCard, User, Users, Calendar, Mail } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 import { Link } from "wouter";
 import { useAuth } from "../lib/auth";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiRequest } from "../lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Account() {
-  const { user, tierLabel, hasPaidAccess } = useAuth();
+  const { user, tierLabel, hasPaidAccess, isFamilyTier, isProgramme } = useAuth();
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+  const [editingProfile, setEditingProfile] = useState<string | null>(null);
+  const [editName, setEditName] = useState("");
+  const [editYear, setEditYear] = useState("");
+  const [addingChild, setAddingChild] = useState(false);
+  const [newChildName, setNewChildName] = useState("");
+  const [newChildYear, setNewChildYear] = useState("Year 5");
+  const [examDate, setExamDate] = useState("");
+
+  const { data: profiles = [] } = useQuery<any[]>({
+    queryKey: ["/api/child-profiles"],
+    enabled: !!user,
+  });
+
+  const { data: testDayConfig } = useQuery({
+    queryKey: ["/api/test-day-config"],
+    enabled: !!user,
+  });
+
+  const addChildMutation = useMutation({
+    mutationFn: async () => {
+      const res = await apiRequest("POST", "/api/child-profiles", {
+        childName: newChildName,
+        childYear: newChildYear,
+      });
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/child-profiles"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/user"] });
+      setAddingChild(false);
+      setNewChildName("");
+      toast({ title: "Child profile added" });
+    },
+  });
+
+  const updateChildMutation = useMutation({
+    mutationFn: async ({ id, data }: { id: string; data: any }) => {
+      const res = await apiRequest("PUT", `/api/child-profiles/${id}`, data);
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/child-profiles"] });
+      setEditingProfile(null);
+      toast({ title: "Profile updated" });
+    },
+  });
+
+  const deleteChildMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await apiRequest("DELETE", `/api/child-profiles/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/child-profiles"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/user"] });
+      toast({ title: "Profile removed" });
+    },
+  });
+
+  const saveExamDateMutation = useMutation({
+    mutationFn: async () => {
+      const res = await apiRequest("PUT", "/api/test-day-config", { examDate });
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/test-day-config"] });
+      toast({ title: "Exam date saved" });
+    },
+  });
+
+  const emailConsentMutation = useMutation({
+    mutationFn: async (consent: boolean) => {
+      const res = await apiRequest("PUT", "/api/user/email-consent", { consent });
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
+      toast({ title: "Email preferences updated" });
+    },
+  });
 
   if (!user) return null;
 
   const tierDescriptions: Record<string, string> = {
     free: "Limited to Mini Diagnostic and basic drills.",
+    early_learner: "Foundation-level practice for Year 4 & 5. 6 months of access.",
     pack12: "Full access to all diagnostics, drills, PDF reports, and progress tracking for 12 weeks.",
+    pack12_family: "Full access for up to 3 children. 12 weeks of access.",
     programme16: "Full access including 16-week structured roadmap, milestone diagnostics, advanced analytics, and weekly plans.",
+    programme16_family: "Full programme access for up to 3 children. 16 weeks of access.",
   };
 
   return (
@@ -106,6 +194,204 @@ export default function Account() {
                 <Button variant="outline" size="sm" asChild>
                   <Link href="/app/onboarding">Retake Onboarding Questionnaire</Link>
                 </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {(isFamilyTier() || profiles.length > 0) && (
+            <Card className="border-border/60 shadow-sm">
+              <CardHeader>
+                <div className="flex items-center gap-2">
+                  <Users className="h-5 w-5 text-primary" />
+                  <CardTitle>Child Profiles</CardTitle>
+                </div>
+                <CardDescription>Manage up to 3 child profiles for your family account.</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {profiles.map((profile: any) => (
+                  <div key={profile.id} className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-100" data-testid={`child-profile-${profile.id}`}>
+                    {editingProfile === profile.id ? (
+                      <div className="flex-1 space-y-2">
+                        <input
+                          type="text"
+                          value={editName}
+                          onChange={(e) => setEditName(e.target.value)}
+                          className="w-full px-3 py-1.5 rounded-md border text-sm"
+                          data-testid="input-edit-child-name"
+                        />
+                        <select
+                          value={editYear}
+                          onChange={(e) => setEditYear(e.target.value)}
+                          className="w-full px-3 py-1.5 rounded-md border text-sm"
+                          data-testid="select-edit-child-year"
+                        >
+                          <option>Year 4</option>
+                          <option>Year 5</option>
+                          <option>Year 6</option>
+                        </select>
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            onClick={() => updateChildMutation.mutate({ id: profile.id, data: { childName: editName, childYear: editYear } })}
+                            data-testid="button-save-edit-child"
+                          >
+                            Save
+                          </Button>
+                          <Button size="sm" variant="outline" onClick={() => setEditingProfile(null)}>Cancel</Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-primary">{profile.childName}</span>
+                            {profile.id === user.activeChildProfileId && (
+                              <Badge variant="secondary" className="text-xs">Active</Badge>
+                            )}
+                          </div>
+                          <p className="text-sm text-muted-foreground">{profile.childYear} · Stage: {profile.stage || "exploring"}</p>
+                        </div>
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => {
+                              setEditingProfile(profile.id);
+                              setEditName(profile.childName);
+                              setEditYear(profile.childYear);
+                            }}
+                            data-testid={`button-edit-child-${profile.id}`}
+                          >
+                            Edit
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="text-red-600 hover:text-red-700"
+                            onClick={() => {
+                              if (confirm("Remove this child profile? Their progress data will be preserved.")) {
+                                deleteChildMutation.mutate(profile.id);
+                              }
+                            }}
+                            data-testid={`button-remove-child-${profile.id}`}
+                          >
+                            Remove
+                          </Button>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                ))}
+
+                {profiles.length < 3 && isFamilyTier() && (
+                  addingChild ? (
+                    <div className="p-4 bg-slate-50 rounded-lg border border-slate-100 space-y-3">
+                      <input
+                        type="text"
+                        placeholder="Child's name"
+                        value={newChildName}
+                        onChange={(e) => setNewChildName(e.target.value)}
+                        className="w-full px-3 py-2 rounded-md border text-sm"
+                        data-testid="input-account-new-child-name"
+                      />
+                      <select
+                        value={newChildYear}
+                        onChange={(e) => setNewChildYear(e.target.value)}
+                        className="w-full px-3 py-2 rounded-md border text-sm"
+                        data-testid="select-account-new-child-year"
+                      >
+                        <option>Year 4</option>
+                        <option>Year 5</option>
+                        <option>Year 6</option>
+                      </select>
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          onClick={() => addChildMutation.mutate()}
+                          disabled={!newChildName.trim() || addChildMutation.isPending}
+                          data-testid="button-confirm-account-add-child"
+                        >
+                          Add Child
+                        </Button>
+                        <Button size="sm" variant="outline" onClick={() => setAddingChild(false)}>Cancel</Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      onClick={() => setAddingChild(true)}
+                      data-testid="button-account-add-child"
+                    >
+                      + Add Child Profile
+                    </Button>
+                  )
+                )}
+              </CardContent>
+            </Card>
+          )}
+
+          {isProgramme() && (
+            <Card className="border-border/60 shadow-sm">
+              <CardHeader>
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-5 w-5 text-primary" />
+                  <CardTitle>Exam Date</CardTitle>
+                </div>
+                <CardDescription>Set your child's exam date for the countdown timer on your dashboard.</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex gap-3 items-end">
+                  <div className="flex-1">
+                    <label className="text-xs font-medium text-muted-foreground block mb-1">Exam Date</label>
+                    <input
+                      type="date"
+                      value={examDate || (testDayConfig?.examDate ? new Date(testDayConfig.examDate).toISOString().split("T")[0] : "")}
+                      onChange={(e) => setExamDate(e.target.value)}
+                      className="w-full px-3 py-2 rounded-md border text-sm"
+                      data-testid="input-exam-date"
+                    />
+                  </div>
+                  <Button
+                    onClick={() => saveExamDateMutation.mutate()}
+                    disabled={!examDate || saveExamDateMutation.isPending}
+                    data-testid="button-save-exam-date"
+                  >
+                    Save
+                  </Button>
+                </div>
+                {testDayConfig?.examDate && (
+                  <p className="text-sm text-muted-foreground">
+                    Current exam date: {new Date(testDayConfig.examDate).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+          )}
+
+          <Card className="border-border/60 shadow-sm">
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <Mail className="h-5 w-5 text-primary" />
+                <CardTitle>Email Preferences</CardTitle>
+              </div>
+              <CardDescription>Manage your email communication preferences.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-100">
+                <div>
+                  <p className="font-medium text-primary">Progress updates & tips</p>
+                  <p className="text-sm text-muted-foreground">Receive helpful emails about your child's progress, practice reminders, and preparation tips.</p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer" data-testid="toggle-email-consent">
+                  <input
+                    type="checkbox"
+                    checked={user.emailConsent}
+                    onChange={(e) => emailConsentMutation.mutate(e.target.checked)}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:ring-2 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                </label>
               </div>
             </CardContent>
           </Card>

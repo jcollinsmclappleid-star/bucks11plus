@@ -220,6 +220,33 @@ export const guideLeads = pgTable("guide_leads", {
   clickedDiagnostic: boolean("clicked_diagnostic").notNull().default(false),
 });
 
+export const childProfiles = pgTable("child_profiles", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull(),
+  childName: text("child_name").notNull(),
+  childYear: text("child_year").notNull(),
+  practiceHours: text("practice_hours"),
+  difficultyAreas: text("difficulty_areas").array(),
+  stage: text("stage").notNull().default("exploring"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const emailEvents = pgTable("email_events", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull(),
+  eventType: text("event_type").notNull(),
+  emailType: text("email_type").notNull(),
+  sentAt: timestamp("sent_at").notNull().defaultNow(),
+  metadata: jsonb("metadata"),
+});
+
+export const testDayConfig = pgTable("test_day_config", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().unique(),
+  examDate: timestamp("exam_date").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
 export const insertGuideLeadSchema = createInsertSchema(guideLeads).pick({
   parentName: true,
   email: true,
@@ -244,6 +271,10 @@ export const insertTestAnswerSchema = createInsertSchema(testAnswers).omit({ id:
 export const insertArticleSchema = createInsertSchema(articles).omit({ id: true, publishedAt: true });
 export const insertPracticeSectionSchema = createInsertSchema(practiceSections).omit({ id: true });
 
+export const insertChildProfileSchema = createInsertSchema(childProfiles).omit({ id: true, createdAt: true });
+export const insertEmailEventSchema = createInsertSchema(emailEvents).omit({ id: true, sentAt: true });
+export const insertTestDayConfigSchema = createInsertSchema(testDayConfig).omit({ id: true, createdAt: true });
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type Diagnostic = typeof diagnostics.$inferSelect;
@@ -264,3 +295,9 @@ export type UserBadge = typeof userBadges.$inferSelect;
 export type OnboardingData = z.infer<typeof onboardingSchema>;
 export type GuideLead = typeof guideLeads.$inferSelect;
 export type InsertGuideLead = z.infer<typeof insertGuideLeadSchema>;
+export type ChildProfile = typeof childProfiles.$inferSelect;
+export type InsertChildProfile = z.infer<typeof insertChildProfileSchema>;
+export type EmailEvent = typeof emailEvents.$inferSelect;
+export type InsertEmailEvent = z.infer<typeof insertEmailEventSchema>;
+export type TestDayConfig = typeof testDayConfig.$inferSelect;
+export type InsertTestDayConfig = z.infer<typeof insertTestDayConfigSchema>;

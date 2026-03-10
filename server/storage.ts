@@ -3,12 +3,15 @@ import { db } from "./db";
 import {
   users, diagnostics, questions, testSessions, testAnswers, articles, practiceSections,
   programmeEnrolments, programmeMilestones, weeklyPlans, questionUsage, contentCalibration,
-  programmeTasks, badges, userBadges, guideLeads,
+  programmeTasks, badges, userBadges, guideLeads, childProfiles, emailEvents, testDayConfig,
   type User, type InsertUser, type Diagnostic, type Question,
   type TestSession, type TestAnswer, type Article, type PracticeSection,
   type ProgrammeEnrolment, type ProgrammeMilestone, type WeeklyPlan,
   type ProgrammeTask, type OnboardingData, type Badge, type UserBadge,
   type GuideLead, type InsertGuideLead,
+  type ChildProfile, type InsertChildProfile,
+  type EmailEvent, type InsertEmailEvent,
+  type TestDayConfig, type InsertTestDayConfig,
 } from "@shared/schema";
 
 const PHASE_MAP: Record<number, string> = {
@@ -86,6 +89,19 @@ export interface IStorage {
 
   createGuideLead(data: InsertGuideLead): Promise<GuideLead>;
   markGuideLeadDiagnosticClick(id: number): Promise<GuideLead | undefined>;
+
+  createChildProfile(data: InsertChildProfile): Promise<ChildProfile>;
+  getChildProfiles(userId: string): Promise<ChildProfile[]>;
+  getChildProfile(id: string): Promise<ChildProfile | undefined>;
+  updateChildProfile(id: string, data: Partial<ChildProfile>): Promise<ChildProfile>;
+  deleteChildProfile(id: string): Promise<void>;
+  setActiveChildProfile(userId: string, profileId: string | null): Promise<User>;
+
+  createEmailEvent(data: InsertEmailEvent): Promise<EmailEvent>;
+  getEmailEvents(userId: string, emailType?: string): Promise<EmailEvent[]>;
+
+  getTestDayConfig(userId: string): Promise<TestDayConfig | undefined>;
+  setTestDayConfig(data: InsertTestDayConfig): Promise<TestDayConfig>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1223,6 +1239,61 @@ export class DatabaseStorage implements IStorage {
       .where(eq(guideLeads.id, id))
       .returning();
     return lead;
+  }
+
+  async createChildProfile(data: InsertChildProfile): Promise<ChildProfile> {
+    const [profile] = await db.insert(childProfiles).values(data).returning();
+    return profile;
+  }
+
+  async getChildProfiles(userId: string): Promise<ChildProfile[]> {
+    return db.select().from(childProfiles).where(eq(childProfiles.userId, userId)).orderBy(asc(childProfiles.createdAt));
+  }
+
+  async getChildProfile(id: string): Promise<ChildProfile | undefined> {
+    const [profile] = await db.select().from(childProfiles).where(eq(childProfiles.id, id));
+    return profile;
+  }
+
+  async updateChildProfile(id: string, data: Partial<ChildProfile>): Promise<ChildProfile> {
+    const [profile] = await db.update(childProfiles).set(data).where(eq(childProfiles.id, id)).returning();
+    return profile;
+  }
+
+  async deleteChildProfile(id: string): Promise<void> {
+    await db.delete(childProfiles).where(eq(childProfiles.id, id));
+  }
+
+  async setActiveChildProfile(userId: string, profileId: string | null): Promise<User> {
+    const [user] = await db.update(users).set({ activeChildProfileId: profileId }).where(eq(users.id, userId)).returning();
+    return user;
+  }
+
+  async createEmailEvent(data: InsertEmailEvent): Promise<EmailEvent> {
+    const [event] = await db.insert(emailEvents).values(data).returning();
+    return event;
+  }
+
+  async getEmailEvents(userId: string, emailType?: string): Promise<EmailEvent[]> {
+    if (emailType) {
+      return db.select().from(emailEvents).where(and(eq(emailEvents.userId, userId), eq(emailEvents.emailType, emailType))).orderBy(desc(emailEvents.sentAt));
+    }
+    return db.select().from(emailEvents).where(eq(emailEvents.userId, userId)).orderBy(desc(emailEvents.sentAt));
+  }
+
+  async getTestDayConfig(userId: string): Promise<TestDayConfig | undefined> {
+    const [config] = await db.select().from(testDayConfig).where(eq(testDayConfig.userId, userId));
+    return config;
+  }
+
+  async setTestDayConfig(data: InsertTestDayConfig): Promise<TestDayConfig> {
+    const existing = await this.getTestDayConfig(data.userId);
+    if (existing) {
+      const [config] = await db.update(testDayConfig).set({ examDate: data.examDate }).where(eq(testDayConfig.userId, data.userId)).returning();
+      return config;
+    }
+    const [config] = await db.insert(testDayConfig).values(data).returning();
+    return config;
   }
 }
 

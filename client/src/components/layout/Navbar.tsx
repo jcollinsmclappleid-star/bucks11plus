@@ -1,6 +1,7 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "../../lib/auth";
+import ChildSwitcher from "./ChildSwitcher";
 
 export default function Navbar() {
   const [location] = useLocation();
@@ -54,6 +55,7 @@ export default function Navbar() {
               <Link href="/app/badges" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors hidden md:block" data-testid="link-badges">Accomplishments</Link>
               <Link href="/app/progress" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors hidden md:block" data-testid="link-progress">Progress</Link>
               <Link href="/app/report-archive" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors hidden lg:block" data-testid="link-reports">Reports</Link>
+              <ChildSwitcher />
               <Link href="/app/account" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors hidden md:block" data-testid="link-account">
                 {user.childName || user.username}
               </Link>

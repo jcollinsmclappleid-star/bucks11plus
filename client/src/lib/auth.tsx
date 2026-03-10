@@ -16,6 +16,8 @@ type User = {
   stripeCustomerId: string | null;
   onboardingCompleted: boolean;
   isAdmin: boolean;
+  activeChildProfileId: string | null;
+  emailConsent: boolean;
 };
 
 type AuthContextType = {
@@ -24,9 +26,11 @@ type AuthContextType = {
   login: (username: string, password: string) => Promise<void>;
   register: (username: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  isEarlyLearner: () => boolean;
   isPack12: () => boolean;
   isProgramme: () => boolean;
   hasPaidAccess: () => boolean;
+  isFamilyTier: () => boolean;
   tierLabel: () => string;
 };
 
@@ -88,21 +92,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await logoutMutation.mutateAsync();
   };
 
-  const isPack12 = () => user?.subscriptionTier === "pack12";
-  const isProgramme = () => user?.subscriptionTier === "programme16";
-  const hasPaidAccess = () => user?.subscriptionTier === "pack12" || user?.subscriptionTier === "programme16";
+  const isEarlyLearner = () => user?.subscriptionTier === "early_learner";
+  const isPack12 = () => user?.subscriptionTier === "pack12" || user?.subscriptionTier === "pack12_family";
+  const isProgramme = () => user?.subscriptionTier === "programme16" || user?.subscriptionTier === "programme16_family";
+  const hasPaidAccess = () => {
+    const t = user?.subscriptionTier;
+    return t === "pack12" || t === "pack12_family" || t === "programme16" || t === "programme16_family" || t === "early_learner";
+  };
+  const isFamilyTier = () => user?.subscriptionTier?.includes("family") ?? false;
 
   const tierLabel = () => {
     if (!user) return "Free";
     switch (user.subscriptionTier) {
+      case "early_learner": return "Early Learner";
       case "pack12": return "Practice Pack";
+      case "pack12_family": return "Practice Pack (Family)";
       case "programme16": return "Young Scholar Programme";
+      case "programme16_family": return "Young Scholar Programme (Family)";
       default: return "Free";
     }
   };
 
   return (
-    <AuthContext.Provider value={{ user: user ?? null, isLoading, login, register, logout, isPack12, isProgramme, hasPaidAccess, tierLabel }}>
+    <AuthContext.Provider value={{ user: user ?? null, isLoading, login, register, logout, isEarlyLearner, isPack12, isProgramme, hasPaidAccess, isFamilyTier, tierLabel }}>
       {children}
     </AuthContext.Provider>
   );

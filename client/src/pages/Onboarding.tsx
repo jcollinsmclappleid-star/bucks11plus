@@ -28,6 +28,8 @@ export default function Onboarding() {
     difficultyAreas: [] as string[],
   });
 
+  const isEarlyYear = formData.childYear === "Year 4" || formData.childYear === "Year 5";
+
   const handleNext = async () => {
     if (step < totalSteps) {
       setStep(prev => prev + 1);
@@ -47,6 +49,8 @@ export default function Onboarding() {
         await queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
         if (redirectParam === "checkout" && tierParam) {
           setLocation(`/pricing?autoCheckout=${tierParam}`);
+        } else if (isEarlyYear && user?.subscriptionTier === "early_learner") {
+          setLocation("/app/early-dashboard");
         } else {
           setLocation("/app");
         }
@@ -97,6 +101,11 @@ export default function Onboarding() {
                     </Button>
                   ))}
                 </div>
+                {(formData.childYear === "Year 4" || formData.childYear === "Year 5") && (
+                  <div className="mt-4 p-3 bg-amber-50 rounded-lg border border-amber-200 text-sm text-amber-800" data-testid="text-early-learner-hint">
+                    Our <strong>Early Learner</strong> plan (£49, 6 months) is designed specifically for Year 4 &amp; 5 — building foundations at a comfortable pace, with no exam pressure.
+                  </div>
+                )}
               </div>
             )}
 

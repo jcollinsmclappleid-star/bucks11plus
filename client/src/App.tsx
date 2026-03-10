@@ -48,6 +48,8 @@ import QuestionList from "./pages/admin/QuestionList";
 import QuestionEditor from "./pages/admin/QuestionEditor";
 
 import ParentGuide from "./pages/ParentGuide";
+import EarlyDashboard from "./pages/EarlyDashboard";
+import TestDaySimulator from "./pages/TestDaySimulator";
 import GrammarSchools from "./pages/seo/GrammarSchools";
 import QualifyingScore from "./pages/seo/QualifyingScore";
 import Timeline from "./pages/seo/Timeline";
@@ -218,6 +220,12 @@ function Router() {
 
             <Route path="/app">
               <AuthGate><Dashboard /></AuthGate>
+            </Route>
+            <Route path="/app/early-dashboard">
+              <AuthGate><EarlyDashboard /></AuthGate>
+            </Route>
+            <Route path="/app/test-day-simulator">
+              <AuthGate><TestDaySimulator /></AuthGate>
             </Route>
             <Route path="/app/onboarding">
               <AuthGate><Onboarding /></AuthGate>
