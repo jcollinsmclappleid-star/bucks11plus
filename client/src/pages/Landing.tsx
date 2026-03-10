@@ -284,6 +284,10 @@ export default function Landing() {
               <Link href="/pricing" className="text-brand-amber/70 hover:text-brand-amber text-sm font-semibold transition-colors">
                 Young Scholar Programme — £249
               </Link>
+              <span className="hidden sm:inline text-white/15">|</span>
+              <Link href="/pricing" className="text-white/40 hover:text-white/70 text-sm font-medium transition-colors">
+                Early Learner — £49
+              </Link>
             </div>
 
             <p className="text-[11px] text-white/25 mt-2 max-w-md mx-auto">
@@ -360,13 +364,13 @@ export default function Landing() {
               <ul className="space-y-3 flex-1">
                 {[
                   "All 17 Hard challenge drills unlocked",
-                  "16-week guided preparation roadmap",
+                  "Guided preparation roadmap",
                   "4 milestone diagnostics with auto-tracking",
                   "Weekly personalised task plans",
                   "Mock exam simulation (50 questions, timed)",
                   "Premium Parent Analytics dashboard",
                   "Full Accomplishments & gamification rewards",
-                  "16 weeks of access",
+                  "Unlimited access",
                 ].map((f, i) => (
                   <li key={i} className="flex items-start gap-2.5">
                     <CheckCircle2 className="h-4 w-4 text-brand-amber shrink-0 mt-0.5" />
@@ -400,7 +404,7 @@ export default function Landing() {
             <div className="rounded-2xl border-2 border-primary/20 bg-slate-50 p-7 sm:p-8 flex flex-col" data-testid="card-path-programme">
               <h3 className="text-xl font-bold text-primary font-serif mb-3">Begin the Young Scholar Programme</h3>
               <p className="text-slate-600 text-sm leading-relaxed mb-6 flex-1">
-                For families who already want a complete 12–16 week preparation plan aligned to the Bucks 11+. Includes diagnostics, targeted drills and milestone tracking.
+                For families who want a complete preparation plan aligned to the Bucks 11+. Includes diagnostics, targeted drills and milestone tracking.
               </p>
               <Button className="w-full h-12 text-sm font-semibold bg-primary text-primary-foreground" asChild data-testid="button-path-programme">
                 <Link href="/pricing#tiers">View Programme &amp; Enrol</Link>
