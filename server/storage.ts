@@ -351,7 +351,18 @@ export class DatabaseStorage implements IStorage {
     excludeIds: string[] = [],
     difficultyProfile?: { easy: number; medium: number; hard: number },
   ): Promise<Question[]> {
+    const user = await this.getUser(userId);
+    const isEarlyLearner = user?.subscriptionTier === "early_learner";
+
     const profile = difficultyProfile || { easy: 0.25, medium: 0.50, hard: 0.25 };
+    
+    // Adjust profile for early learners to eliminate hard questions
+    const adjustedProfile = isEarlyLearner ? {
+      easy: profile.easy + (profile.hard * 0.4),
+      medium: profile.medium + (profile.hard * 0.6),
+      hard: 0
+    } : profile;
+
     const perSection = Math.ceil(count / sections.length);
     const results: Question[] = [];
 
@@ -361,6 +372,8 @@ export class DatabaseStorage implements IStorage {
           eq(questions.section, section),
           eq(questions.qaStatus, "approved"),
           sql`${questions.skillId} IS NOT NULL AND ${questions.skillId} != ''`,
+          // Filter out hard questions at the database level for early learners
+          isEarlyLearner ? ne(questions.difficulty, 'hard') : sql`TRUE`
         ));
 
       if (excludeIds.length > 0) {
@@ -369,8 +382,8 @@ export class DatabaseStorage implements IStorage {
 
       const shuffled = pool.sort(() => Math.random() - 0.5);
 
-      const easyCount = Math.round(perSection * profile.easy);
-      const mediumCount = Math.round(perSection * profile.medium);
+      const easyCount = Math.round(perSection * adjustedProfile.easy);
+      const mediumCount = Math.round(perSection * adjustedProfile.medium);
       const hardCount = perSection - easyCount - mediumCount;
 
       const byDiff = (d: string) => shuffled.filter(q => q.difficulty === d);
@@ -396,6 +409,9 @@ export class DatabaseStorage implements IStorage {
     questionCount: number,
     sections: string[] = ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics", "English Comprehension"],
   ): Promise<Question[]> {
+    const user = await this.getUser(userId);
+    const isEarlyLearner = user?.subscriptionTier === "early_learner";
+
     const COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000;
     const cooldownCutoff = Date.now() - COOLDOWN_MS;
 
@@ -412,6 +428,7 @@ export class DatabaseStorage implements IStorage {
           eq(questions.section, section),
           eq(questions.qaStatus, "approved"),
           sql`${questions.skillId} IS NOT NULL AND ${questions.skillId} != ''`,
+          isEarlyLearner ? ne(questions.difficulty, 'hard') : sql`TRUE`
         ));
 
       const fresh = pool.filter(q => {
@@ -426,9 +443,9 @@ export class DatabaseStorage implements IStorage {
         return { question: q, score: this.scoreDiversity(q, selected) + (usage ? 0 : 5) };
       }).sort((a, b) => b.score - a.score);
 
-      const easyN = Math.round(perSection * 0.20);
-      const medN = Math.round(perSection * 0.45);
-      const hardN = perSection - easyN - medN;
+      const easyN = Math.round(perSection * (isEarlyLearner ? 0.40 : 0.20));
+      const medN = Math.round(perSection * (isEarlyLearner ? 0.60 : 0.45));
+      const hardN = isEarlyLearner ? 0 : perSection - easyN - medN;
 
       const byDiff = (d: string) => scored.filter(s => s.question.difficulty === d);
       const pick = [
@@ -468,6 +485,9 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getQuestionsForDrill(sectionId: string, userId: string, limit: number = 10): Promise<{ questions: Question[]; exhaustionWarning: boolean }> {
+    const user = await this.getUser(userId);
+    const isEarlyLearner = user?.subscriptionTier === "early_learner";
+
     const [section] = await db.select().from(practiceSections).where(eq(practiceSections.id, sectionId));
     if (!section) return { questions: [], exhaustionWarning: false };
 
@@ -481,8 +501,16 @@ export class DatabaseStorage implements IStorage {
         eq(questions.skillId, skillFilter),
         eq(questions.qaStatus, "approved"),
       ];
+      if (isEarlyLearner) {
+        conditions.push(ne(questions.difficulty, 'hard'));
+      }
       if (sectionDifficulty && sectionDifficulty !== 'mixed') {
-        conditions.push(eq(questions.difficulty, sectionDifficulty));
+        if (!(isEarlyLearner && sectionDifficulty === 'hard')) {
+          conditions.push(eq(questions.difficulty, sectionDifficulty));
+        } else {
+          // If section is hard but user is early learner, fallback to mixed or just exclude hard
+          conditions.push(ne(questions.difficulty, 'hard'));
+        }
       }
       pool = await db.select().from(questions)
         .where(and(...conditions));
@@ -491,7 +519,8 @@ export class DatabaseStorage implements IStorage {
         pool = await db.select().from(questions)
           .where(and(
             eq(questions.skillId, skillFilter),
-            eq(questions.qaStatus, "approved")
+            eq(questions.qaStatus, "approved"),
+            isEarlyLearner ? ne(questions.difficulty, 'hard') : sql`TRUE`
           ));
       }
 
@@ -499,21 +528,26 @@ export class DatabaseStorage implements IStorage {
         pool = await db.select().from(questions)
           .where(and(
             eq(questions.section, sectionName),
-            eq(questions.qaStatus, "approved")
+            eq(questions.qaStatus, "approved"),
+            isEarlyLearner ? ne(questions.difficulty, 'hard') : sql`TRUE`
           ));
       }
     } else {
       pool = await db.select().from(questions)
         .where(and(
           eq(questions.section, sectionName),
-          eq(questions.qaStatus, "approved")
+          eq(questions.qaStatus, "approved"),
+          isEarlyLearner ? ne(questions.difficulty, 'hard') : sql`TRUE`
         ));
     }
 
     if (pool.length === 0) {
       console.log(`[Drill] No questions found for skill ${skillFilter} or section ${sectionName} with approved status. Checking all statuses.`);
       pool = await db.select().from(questions)
-        .where(eq(questions.section, sectionName));
+        .where(and(
+          eq(questions.section, sectionName),
+          isEarlyLearner ? ne(questions.difficulty, 'hard') : sql`TRUE`
+        ));
     }
 
     console.log(`[Drill] Pool size for ${sectionName}: ${pool.length}`);
