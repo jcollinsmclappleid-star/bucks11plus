@@ -23,4 +23,6 @@ export interface GeneratedQuestion {
   distractorStyleId?: string;
   densityLevel?: 'low' | 'medium' | 'high';
   contextId?: string;
+  orderIndex?: number;
+  passageId?: string;
 }

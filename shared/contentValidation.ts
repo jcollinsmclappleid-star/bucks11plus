@@ -8,7 +8,7 @@ const svgStrokeSchema = z.object({
   opacity: z.number().optional(),
 });
 
-const svgShapeSchema = z.enum(["circle", "square", "triangle", "pentagon", "arrow", "star", "hexagon", "diamond", "cross", "parallelogram", "trapezoid", "semicircle", "right_triangle", "kite"]);
+const svgShapeSchema = z.enum(["circle", "square", "triangle", "pentagon", "arrow", "star", "hexagon", "diamond", "cross", "parallelogram", "trapezoid", "semicircle", "right_triangle", "kite", "rectangle"]);
 
 const svgElementSchema = z.discriminatedUnion("type", [
   z.object({
@@ -86,6 +86,38 @@ const chartTableConfigSchema = z.object({
   questionText: z.string(),
 });
 
+const comprehensionPassageConfigSchema = z.object({
+  kind: z.literal("comprehension.passage"),
+  passageId: z.string(),
+  passageTitle: z.string(),
+  passageTheme: z.string(),
+  passageText: z.string(),
+  questionType: z.string(),
+  questionIndex: z.number().int().min(0),
+  totalQuestionsInPassage: z.number().int().min(1),
+  highlightRange: z.object({ start: z.number(), end: z.number() }).optional(),
+  keyWords: z.array(z.object({ word: z.string(), startIndex: z.number() })).optional(),
+});
+
+const spatialNetsConfigSchema = z.object({
+  kind: z.literal("spatial.nets"),
+  promptFrame: svgFrameSchema,
+  answerOptions: z.array(svgFrameSchema).min(4).max(6),
+});
+
+const spatialCubeConfigSchema = z.object({
+  kind: z.literal("spatial.cubes"),
+  cubeViews: z.array(svgFrameSchema).min(1),
+  answerOptions: z.array(z.string()).min(4).max(6),
+});
+
+const spatialFoldConfigSchema = z.object({
+  kind: z.literal("spatial.fold"),
+  promptFrame: svgFrameSchema,
+  foldLine: z.object({ x1: z.number(), y1: z.number(), x2: z.number(), y2: z.number() }),
+  answerOptions: z.array(svgFrameSchema).min(4).max(6),
+});
+
 export const renderConfigSchema = z.discriminatedUnion("kind", [
   nvrSequenceConfigSchema,
   nvrTransformConfigSchema,
@@ -93,6 +125,10 @@ export const renderConfigSchema = z.discriminatedUnion("kind", [
   chartBarConfigSchema,
   chartLineConfigSchema,
   chartTableConfigSchema,
+  comprehensionPassageConfigSchema,
+  spatialNetsConfigSchema,
+  spatialCubeConfigSchema,
+  spatialFoldConfigSchema,
 ]);
 
 export function validateRenderConfig(config: unknown): { valid: boolean; errors?: string[] } {

@@ -17,6 +17,11 @@ export const users = pgTable("users", {
   stripeCustomerId: text("stripe_customer_id"),
   onboardingCompleted: boolean("onboarding_completed").notNull().default(false),
   isAdmin: boolean("is_admin").notNull().default(false),
+  activeChildProfileId: varchar("active_child_profile_id"),
+  emailConsent: boolean("email_consent").notNull().default(false),
+  emailVerified: boolean("email_verified").notNull().default(false),
+  emailUnsubscribedAt: timestamp("email_unsubscribed_at"),
+  lastEmailSentAt: timestamp("last_email_sent_at"),
 });
 
 export const diagnostics = pgTable("diagnostics", {
@@ -97,6 +102,8 @@ export const testSessions = pgTable("test_sessions", {
   paceData: jsonb("pace_data"),
   metrics: jsonb("metrics"),
   guestToken: text("guest_token"),
+  readinessForPrep: integer("readiness_for_prep"),
+  childProfileId: varchar("child_profile_id"),
 });
 
 export const testAnswers = pgTable("test_answers", {
@@ -139,6 +146,7 @@ export const programmeEnrolments = pgTable("programme_enrolments", {
   endAt: timestamp("end_at").notNull(),
   currentWeek: integer("current_week").notNull().default(1),
   createdAt: timestamp("created_at").notNull().defaultNow(),
+  childProfileId: varchar("child_profile_id"),
 });
 
 export const programmeMilestones = pgTable("programme_milestones", {
@@ -200,6 +208,7 @@ export const userBadges = pgTable("user_badges", {
   badgeId: varchar("badge_id").notNull(),
   earnedAt: timestamp("earned_at").notNull().defaultNow(),
   sessionId: varchar("session_id"),
+  childProfileId: varchar("child_profile_id"),
 });
 
 export const guideLeads = pgTable("guide_leads", {

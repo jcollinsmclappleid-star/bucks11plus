@@ -1,4 +1,4 @@
-export type RenderType = "text" | "svg" | "chart";
+export type RenderType = "text" | "svg" | "chart" | "comprehension";
 
 export type FillPattern = "none" | "solid" | "hatched" | "crosshatched" | "dotted" | "striped";
 
@@ -10,7 +10,7 @@ export type SvgStroke = {
   opacity?: number;
 };
 
-export type SvgShape = "circle" | "square" | "triangle" | "pentagon" | "arrow" | "star" | "hexagon" | "diamond" | "cross" | "parallelogram" | "trapezoid" | "semicircle" | "right_triangle" | "kite";
+export type SvgShape = "circle" | "square" | "triangle" | "pentagon" | "arrow" | "star" | "hexagon" | "diamond" | "cross" | "parallelogram" | "trapezoid" | "semicircle" | "right_triangle" | "kite" | "rectangle";
 
 export type SvgElement =
   | { type: "shape"; shape: SvgShape; x: number; y: number; size: number; rotation: number; style: SvgStroke }
@@ -66,10 +66,46 @@ export type ChartTableConfig = {
   questionText: string;
 };
 
+export type ComprehensionPassageConfig = {
+  kind: "comprehension.passage";
+  passageId: string;
+  passageTitle: string;
+  passageTheme: string;
+  passageText: string;
+  questionType: string;
+  questionIndex: number;
+  totalQuestionsInPassage: number;
+  highlightRange?: { start: number; end: number };
+  keyWords?: { word: string; startIndex: number }[];
+};
+
+export type SpatialNetsConfig = {
+  kind: "spatial.nets";
+  promptFrame: SvgFrame;
+  answerOptions: SvgFrame[];
+};
+
+export type SpatialCubeConfig = {
+  kind: "spatial.cubes";
+  cubeViews: SvgFrame[];
+  answerOptions: string[];
+};
+
+export type SpatialFoldConfig = {
+  kind: "spatial.fold";
+  promptFrame: SvgFrame;
+  foldLine: { x1: number; y1: number; x2: number; y2: number };
+  answerOptions: SvgFrame[];
+};
+
 export type RenderConfig =
   | NvrSequenceConfig
   | NvrTransformConfig
   | NvrClassificationConfig
   | ChartBarConfig
   | ChartLineConfig
-  | ChartTableConfig;
+  | ChartTableConfig
+  | ComprehensionPassageConfig
+  | SpatialNetsConfig
+  | SpatialCubeConfig
+  | SpatialFoldConfig;
