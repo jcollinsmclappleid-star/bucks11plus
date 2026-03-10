@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useAuth } from "../lib/auth";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
@@ -43,10 +42,6 @@ function StageTimeline({ stage }: { stage: string }) {
 
 export default function EarlyDashboard() {
   const { user } = useAuth();
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
 
   const { data: sessions } = useQuery({
     queryKey: ["/api/test-sessions"],

@@ -36,7 +36,6 @@ export default function Dashboard() {
   const target = 121;
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     if (user && isEarlyLearner()) {
       navigate("/app/early-dashboard");
     }
