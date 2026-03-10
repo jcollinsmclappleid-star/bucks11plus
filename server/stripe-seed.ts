@@ -9,15 +9,15 @@ const PRODUCTS = [
     priceInPence: 4900,
   },
   {
-    name: 'Practice Pack',
+    name: 'Practice Platform',
     description: 'Self-directed 12-week practice and diagnostics access. Includes full diagnostics, drill bank, PDF reports, progress tracking, likelihood bands, and impact simulator.',
     tier: 'pack12',
     durationWeeks: '12',
     priceInPence: 9900,
   },
   {
-    name: 'Practice Pack — Family',
-    description: 'Full Practice Pack access for up to 3 children. 12 weeks.',
+    name: 'Practice Platform — Family',
+    description: 'Full Practice Platform access for up to 3 children. 12 weeks.',
     tier: 'pack12_family',
     durationWeeks: '12',
     priceInPence: 14900,

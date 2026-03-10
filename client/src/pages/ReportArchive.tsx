@@ -35,7 +35,7 @@ export default function ReportArchive() {
             </div>
             <h3 className="text-2xl font-bold text-primary mb-2 font-serif">Unlock Report Archive</h3>
             <p className="text-slate-600 max-w-md mb-6">
-              Practice Pack and Programme users can download highly detailed PDF reports for every diagnostic, perfect for sharing with tutors or keeping offline records.
+              Practice Platform and Programme users can download highly detailed PDF reports for every diagnostic, perfect for sharing with tutors or keeping offline records.
             </p>
             <Button size="lg" className="bg-primary shadow-lg" asChild data-testid="button-upgrade-reports">
               <Link href="/pricing">View Upgrade Options</Link>

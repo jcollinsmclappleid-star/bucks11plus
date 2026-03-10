@@ -171,7 +171,7 @@ export default function Results() {
                 <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-10 flex flex-col items-center justify-center p-6 text-center">
                   <SlidersHorizontal className="h-8 w-8 text-slate-400 mb-2" />
                   <p className="font-bold text-primary mb-2">Impact Simulator</p>
-                  <p className="text-sm text-muted-foreground mb-3">Unlock with Practice Pack or Programme</p>
+                  <p className="text-sm text-muted-foreground mb-3">Unlock with Practice Platform or Programme</p>
                   <Button size="sm" asChild>
                     <Link href="/pricing">View Plans</Link>
                   </Button>

@@ -111,7 +111,7 @@ export default function Pricing() {
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
       <Seo
         title="Buckinghamshire 11+ Preparation Plans & Pricing | 11+ Standard"
-        description="Choose from Free diagnostic, Practice Pack (£99, 12 weeks) or Young Scholar Programme (£249, 16 weeks). GL-style timed assessments, readiness forecasting, and targeted drill practice for the Bucks 11+."
+        description="Choose from Free diagnostic, Practice Platform (£99, 12 weeks) or Young Scholar Programme (£249). GL-style timed assessments, readiness forecasting, and targeted drill practice for the Bucks 11+."
         canonicalPath="/pricing"
       />
 
@@ -289,7 +289,7 @@ export default function Pricing() {
                       <p className="text-sm text-slate-500 mb-4 font-medium">Included in the programme:</p>
                       <ul className="space-y-3">
                         {[
-                          "Everything in Practice Pack",
+                          "Everything in Practice Platform",
                           "All 17 Hard challenge drills unlocked",
                           "Mock exam simulation (50 questions, timed)",
                           "Guided preparation roadmap",
@@ -318,7 +318,7 @@ export default function Pricing() {
             <div className="grid md:grid-cols-2 gap-6">
               <Card className="border-border/60 shadow-sm flex flex-col" data-testid="card-tier-pack12-family">
                 <CardHeader className="pb-4">
-                  <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-1">Practice Pack — Family</p>
+                  <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-1">Practice Platform — Family</p>
                   <CardTitle className="text-xl font-serif">Up to 3 children</CardTitle>
                 </CardHeader>
                 <CardContent className="flex-1">
@@ -329,7 +329,7 @@ export default function Pricing() {
                   <p className="text-sm text-slate-500 mb-4">12 weeks of access for the whole family</p>
                   <ul className="space-y-2">
                     {[
-                      "Everything in Practice Pack",
+                      "Everything in Practice Platform",
                       "Up to 3 child profiles",
                       "Independent progress tracking per child",
                       "Child switcher in navbar",
@@ -348,7 +348,7 @@ export default function Pricing() {
                     disabled={loading === "pack12_family"}
                     data-testid="button-get-pack12-family"
                   >
-                    {loading === "pack12_family" ? <Loader2 className="h-5 w-5 animate-spin" /> : "Get Family Practice Pack"}
+                    {loading === "pack12_family" ? <Loader2 className="h-5 w-5 animate-spin" /> : "Get Family Practice Platform"}
                   </Button>
                 </CardFooter>
               </Card>
@@ -402,7 +402,7 @@ export default function Pricing() {
                   <tr className="border-b-2 border-slate-200">
                     <th className="text-left py-3 px-4 font-semibold text-slate-600 w-[40%]">Feature</th>
                     <th className="text-center py-3 px-4 font-semibold text-slate-600">Free</th>
-                    <th className="text-center py-3 px-4 font-semibold text-slate-600">Practice Pack</th>
+                    <th className="text-center py-3 px-4 font-semibold text-slate-600">Practice Platform</th>
                     <th className="text-center py-3 px-4 font-bold text-brand-amber">Programme</th>
                   </tr>
                 </thead>
@@ -798,7 +798,7 @@ export default function Pricing() {
               disabled={loading === "pack12"}
               data-testid="button-cta-pack"
             >
-              {loading === "pack12" ? <Loader2 className="h-5 w-5 animate-spin" /> : "Practice Pack — £99"}
+              {loading === "pack12" ? <Loader2 className="h-5 w-5 animate-spin" /> : "Practice Platform — £99"}
             </Button>
           </div>
 

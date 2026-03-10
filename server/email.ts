@@ -144,7 +144,7 @@ export async function sendUpgradeNudge(userId: string) {
       <li><strong>Full timed diagnostics</strong> with detailed PDF reports</li>
       <li><strong>Progress tracking</strong> to see real improvement over time</li>
     </ul>
-    <p>Plans start from <strong>£49</strong> for Early Learners (Year 4/5) and <strong>£99</strong> for the Practice Pack.</p>
+    <p>Plans start from <strong>£49</strong> for Early Learners (Year 4/5) and <strong>£99</strong> for the Practice Platform.</p>
     <div style="text-align:center;margin:24px 0;">
       <a href="${BASE_URL}/pricing" style="display:inline-block;background:#0d1f30;color:white;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold;">View Plans & Pricing</a>
     </div>
@@ -163,7 +163,7 @@ export async function sendProgrammeNudge(userId: string) {
 
   const html = wrapHtml(`
     <h2 style="color:#0d1f30;margin-bottom:8px;">Take It Further</h2>
-    <p>${childName} has been making great progress with the Practice Pack. The Young Scholar Programme takes preparation to the next level:</p>
+    <p>${childName} has been making great progress with the Practice Platform. The Young Scholar Programme takes preparation to the next level:</p>
     <ul style="padding-left:20px;">
       <li><strong>16-week structured roadmap</strong> with weekly plans</li>
       <li><strong>Test Day Simulator</strong> — 2-paper exam with timed break</li>

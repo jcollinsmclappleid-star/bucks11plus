@@ -278,7 +278,7 @@ export default function Landing() {
               </Link>
               <span className="hidden sm:inline text-white/15">|</span>
               <Link href="/pricing" className="text-white/40 hover:text-white/70 text-sm font-medium transition-colors">
-                Practice Pack — £99
+                Practice Platform — £99
               </Link>
               <span className="hidden sm:inline text-white/15">|</span>
               <Link href="/pricing" className="text-brand-amber/70 hover:text-brand-amber text-sm font-semibold transition-colors">
@@ -354,7 +354,7 @@ export default function Landing() {
             </div>
 
             <div className="rounded-2xl border border-slate-200 bg-white p-6 flex flex-col" data-testid="card-included-pack">
-              <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">Practice Pack</p>
+              <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">Practice Platform</p>
               <h3 className="text-xl font-bold text-primary font-serif mb-4">£99</h3>
               <ul className="space-y-3 flex-1">
                 {[
@@ -373,7 +373,7 @@ export default function Landing() {
                 ))}
               </ul>
               <Button className="w-full mt-6 h-11 text-sm font-semibold bg-primary text-primary-foreground" asChild data-testid="button-included-pack">
-                <Link href="/pricing#tiers">Get Practice Pack</Link>
+                <Link href="/pricing#tiers">Get Practice Platform</Link>
               </Button>
             </div>
 
@@ -383,7 +383,7 @@ export default function Landing() {
               </div>
               <p className="text-sm font-semibold text-brand-amber uppercase tracking-wider mb-2">Young Scholar Programme</p>
               <h3 className="text-xl font-bold text-primary font-serif mb-4">£249</h3>
-              <p className="text-xs text-slate-500 mb-3 font-medium">Everything in Practice Pack, plus:</p>
+              <p className="text-xs text-slate-500 mb-3 font-medium">Everything in Practice Platform, plus:</p>
               <ul className="space-y-3 flex-1">
                 {[
                   "All 17 Hard challenge drills unlocked",

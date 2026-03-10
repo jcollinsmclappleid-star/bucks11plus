@@ -186,7 +186,7 @@ export default function GuestResults() {
           <Card className="border-border/60 shadow-md hover:shadow-lg transition-shadow" data-testid="card-upsell-pack12">
             <CardContent className="p-6">
               <div className="flex justify-between items-start mb-4">
-                <h3 className="text-xl font-bold text-primary font-serif">Practice Pack</h3>
+                <h3 className="text-xl font-bold text-primary font-serif">Practice Platform</h3>
                 <span className="text-2xl font-bold text-primary">£99</span>
               </div>
               <p className="text-sm text-slate-600 mb-4">12 weeks of targeted practice that moves the needle</p>
@@ -199,7 +199,7 @@ export default function GuestResults() {
                 ))}
               </ul>
               <Button className="w-full" asChild data-testid="button-upsell-pack12">
-                <Link href={`/sign-up?redirect=checkout&tier=pack12&guestSession=${id}`}>Get Practice Pack</Link>
+                <Link href={`/sign-up?redirect=checkout&tier=pack12&guestSession=${id}`}>Get Practice Platform</Link>
               </Button>
             </CardContent>
           </Card>
@@ -215,7 +215,7 @@ export default function GuestResults() {
               </div>
               <p className="text-sm text-slate-600 mb-4">16-week guided roadmap with milestone tracking</p>
               <ul className="space-y-2 mb-6">
-                {["Everything in Practice Pack, plus:", "All 17 Hard challenge drills unlocked", "Mock exam simulation (50 questions, timed)", "16-week guided preparation roadmap", "4 milestone diagnostics with auto-tracking", "Weekly personalised task plans", "Premium Parent Analytics dashboard", "Gap velocity & forecast stability metrics", "Fatigue & pressure profiling", "Full Accomplishments & gamification rewards"].map((f, i) => (
+                {["Everything in Practice Platform, plus:", "All 17 Hard challenge drills unlocked", "Mock exam simulation (50 questions, timed)", "16-week guided preparation roadmap", "4 milestone diagnostics with auto-tracking", "Weekly personalised task plans", "Premium Parent Analytics dashboard", "Gap velocity & forecast stability metrics", "Fatigue & pressure profiling", "Full Accomplishments & gamification rewards"].map((f, i) => (
                   <li key={i} className="flex items-center gap-2 text-sm text-slate-700">
                     <TrendingUp className="h-4 w-4 text-brand-amber shrink-0" />
                     {f}

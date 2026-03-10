@@ -13,9 +13,9 @@ import { useState } from "react";
 function tierLabel(tier: string): string {
   switch (tier) {
     case "free": return "Free";
-    case "pack12": return "Practice Pack";
+    case "pack12": return "Practice Platform";
     case "programme16": return "Programme";
-    case "pack": return "Practice Pack";
+    case "pack": return "Practice Platform";
     case "monthly": return "Programme";
     default: return tier;
   }
