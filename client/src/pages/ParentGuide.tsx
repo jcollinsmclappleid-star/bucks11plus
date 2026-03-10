@@ -223,7 +223,7 @@ export default function ParentGuide() {
           </div>
 
           <DashboardPreviewForecast />
-          <p className="text-center text-xs text-muted-foreground mt-3">Readiness forecast after a 12-minute diagnostic assessment</p>
+          <p className="text-center text-xs text-muted-foreground mt-3">Readiness forecast after an 8-minute diagnostic assessment</p>
 
           <div className="mt-14 max-w-3xl mx-auto text-center">
             <h3 className="text-2xl font-bold text-primary font-serif mb-4">Identifying Specific Skill Gaps</h3>

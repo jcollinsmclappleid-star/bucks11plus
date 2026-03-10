@@ -110,7 +110,7 @@ export default function Dashboard() {
             <div>
               <h2 className="text-2xl font-bold text-primary font-serif mb-2">Welcome to 11+ Standard</h2>
               <p className="text-muted-foreground max-w-md">
-                Take a free 12-minute Mini Diagnostic to get your child's initial readiness forecast against the 121 benchmark.
+                Take a free 8-minute Mini Diagnostic to get your child's initial readiness forecast against the 121 benchmark.
               </p>
             </div>
             <Button size="lg" className="bg-primary text-lg h-14 px-8" asChild>

@@ -132,7 +132,7 @@ export default function SecondaryTransfer() {
       <p>
         Our <Link href="/free-diagnostic" className="text-primary hover:underline">free diagnostic assessment</Link> measures
         your child's readiness across all four domains — Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension —
-        in just 12 minutes. It provides a forecast score against the 121 benchmark and identifies the specific
+        in just 8 minutes. It provides a forecast score against the 121 benchmark and identifies the specific
         areas where improvement is needed.
       </p>
       <p>

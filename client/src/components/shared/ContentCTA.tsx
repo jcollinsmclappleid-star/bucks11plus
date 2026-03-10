@@ -12,7 +12,7 @@ export function ContentCTA() {
         Assess Your Child's Readiness
       </h3>
       <p className="text-muted-foreground max-w-md mx-auto mb-6 text-sm leading-relaxed">
-        Take a free 12-minute diagnostic to see where your child stands against the 121 Buckinghamshire qualifying score.
+        Take a free 8-minute diagnostic to see where your child stands against the 121 Buckinghamshire qualifying score.
       </p>
       <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
         <Button asChild className="h-11 px-6 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold" data-testid="button-content-cta-diagnostic">

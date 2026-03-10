@@ -62,7 +62,7 @@ export default function FreeDiagnosticStart() {
     <div className="container mx-auto max-w-3xl px-4 py-16">
       <Seo
         title="Free Baseline Diagnostic | 11+ Standard"
-        description="Take a free 12-minute diagnostic to see where your child stands against the Bucks 121 benchmark. No account needed."
+        description="Take a free 8-minute diagnostic to see where your child stands against the Bucks 121 benchmark. No account needed."
       />
 
       <Card className="border-border/60 shadow-lg overflow-hidden" data-testid="card-free-diagnostic-start">

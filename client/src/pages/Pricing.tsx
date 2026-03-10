@@ -149,7 +149,7 @@ export default function Pricing() {
             <div className="rounded-2xl border border-slate-200 bg-white p-7 sm:p-8 flex flex-col" data-testid="card-pricing-path-diagnostic">
               <h3 className="text-xl font-bold text-primary font-serif mb-3">Start With a Diagnostic</h3>
               <p className="text-slate-600 text-sm leading-relaxed mb-6 flex-1">
-                Take a 12-minute timed assessment to understand current readiness, pace and performance profile before committing.
+                Take an 8-minute timed assessment to understand current readiness, pace and performance profile before committing.
               </p>
               <Button variant="outline" className="w-full h-12 text-sm font-semibold" asChild data-testid="button-pricing-path-diagnostic">
                 <Link href="/free-diagnostic">Start Free Diagnostic</Link>

@@ -138,7 +138,7 @@ export default function GuidePrint() {
         <div className="flex flex-col items-center justify-center min-h-[70vh] text-center">
           <h2 className="text-3xl font-serif font-bold text-[#0d1f30] mb-4">Measure Your Child's Bucks 11+ Readiness</h2>
           <p className="text-lg text-slate-500 max-w-md mb-8">
-            Take a free 12-minute diagnostic assessment to see where your child stands against the 121 qualifying score.
+            Take a free 8-minute diagnostic assessment to see where your child stands against the 121 qualifying score.
           </p>
           <div className="rounded-xl border-2 border-[#0d1f30] px-8 py-4">
             <p className="text-lg font-bold text-[#0d1f30]">Start Free Diagnostic</p>

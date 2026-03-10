@@ -473,7 +473,7 @@ export default function Landing() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
             <Button size="lg" className="h-13 px-8 bg-brand-amber text-amber-950 hover:bg-amber-400 font-bold shadow-md border-none" asChild data-testid="button-try-diagnostic-showcase">
               <Link href="/free-diagnostic">
-                Try It Free — 12 Minutes <ArrowRight className="ml-2 h-5 w-5" />
+                Try It Free — 8 Minutes <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
             <span className="text-sm text-muted-foreground flex items-center gap-1">
