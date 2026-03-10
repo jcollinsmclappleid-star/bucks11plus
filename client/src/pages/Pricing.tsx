@@ -211,48 +211,49 @@ export default function Pricing() {
                 </CardFooter>
               </Card>
 
-              <Card className="border-amber-300 border-2 shadow-sm flex flex-col hover:border-amber-400 transition-colors relative overflow-hidden" data-testid="card-tier-early-learner">
-                <div className="absolute top-0 inset-x-0 h-1 bg-amber-400"></div>
-                <CardHeader className="pb-4">
-                  <p className="text-sm font-semibold text-amber-600 uppercase tracking-wider mb-1">Early Learner</p>
-                  <CardTitle className="text-2xl font-serif">Build strong foundations</CardTitle>
-                </CardHeader>
-                <CardContent className="flex-1">
-                  <div className="mb-2">
-                    <span className="text-5xl font-bold text-primary">£49</span>
-                    <span className="text-muted-foreground font-medium"> one-time</span>
-                  </div>
-                  <p className="text-sm text-slate-500 mb-6">Unlimited access · Year 4 &amp; 5</p>
-                  <p className="text-sm text-slate-600 mb-6 leading-relaxed">
-                    Perfect for younger learners building core skills before formal 11+ preparation. No exam pressure — just confident, steady progress.
-                  </p>
-                  <ul className="space-y-3">
-                    {[
-                      "Foundation-level practice questions",
-                      "Readiness percentage tracking",
-                      "Exploring → Developing → Ready pathway",
-                      "Encouraging, age-appropriate interface",
-                      "Progress at your own pace",
-                      "Unlimited access",
-                    ].map((feature, i) => (
-                      <li key={i} className="flex items-start gap-3">
-                        <CheckCircle2 className="h-5 w-5 text-amber-500 shrink-0 mt-0.5" />
-                        <span className="text-slate-700 text-sm font-medium">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-                <CardFooter>
-                  <Button
-                    className="w-full bg-amber-600 text-white hover:bg-amber-700 h-12 text-lg"
-                    onClick={() => handleCheckout("early_learner")}
-                    disabled={loading === "early_learner"}
-                    data-testid="button-get-early-learner"
-                  >
-                    {loading === "early_learner" ? <Loader2 className="h-5 w-5 animate-spin" /> : "Get Early Learner"}
-                  </Button>
-                </CardFooter>
-              </Card>
+            <Card className="border-border/60 shadow-sm flex flex-col hover:border-primary/30 transition-colors" data-testid="card-tier-early-learner">
+              <CardHeader className="pb-4">
+                <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-1">Early Learner</p>
+                <CardTitle className="text-2xl font-serif">Build strong foundations</CardTitle>
+                <p className="text-[10px] font-bold text-amber-600 uppercase tracking-tight mt-1">Target: Year 4 & 5</p>
+              </CardHeader>
+              <CardContent className="flex-1">
+                <div className="mb-2">
+                  <span className="text-5xl font-bold text-primary">£49</span>
+                  <span className="text-muted-foreground font-medium"> one-time</span>
+                </div>
+                <p className="text-sm text-slate-500 mb-6">Unlimited access</p>
+                <p className="text-sm text-slate-600 mb-6 leading-relaxed">
+                  Perfect for younger learners building core skills before formal 11+ preparation. No exam pressure — just confident, steady progress.
+                </p>
+                <ul className="space-y-3">
+                  {[
+                    "Foundation-level practice questions",
+                    "Readiness percentage tracking",
+                    "Exploring → Developing → Ready pathway",
+                    "Encouraging, age-appropriate interface",
+                    "Progress at your own pace",
+                    "Unlimited access",
+                  ].map((feature, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <CheckCircle2 className="h-5 w-5 text-brand-green shrink-0 mt-0.5" />
+                      <span className="text-slate-700 text-sm font-medium">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+              <CardFooter>
+                <Button
+                  variant="outline"
+                  className="w-full h-12 text-lg"
+                  onClick={() => handleCheckout("early_learner")}
+                  disabled={loading === "early_learner"}
+                  data-testid="button-get-early-learner"
+                >
+                  {loading === "early_learner" ? <Loader2 className="h-5 w-5 animate-spin" /> : "Get Early Learner"}
+                </Button>
+              </CardFooter>
+            </Card>
 
               <Card className="border-brand-amber border-2 shadow-xl relative flex flex-col overflow-hidden md:col-span-2" data-testid="card-tier-programme16">
                 <div className="absolute top-0 inset-x-0 h-1.5 bg-brand-amber"></div>

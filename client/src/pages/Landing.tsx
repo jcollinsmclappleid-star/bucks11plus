@@ -330,9 +330,10 @@ export default function Landing() {
               </Button>
             </div>
 
-            <div className="rounded-2xl border-2 border-amber-300 bg-amber-50/30 p-6 flex flex-col" data-testid="card-included-early">
-              <p className="text-sm font-semibold text-amber-600 uppercase tracking-wider mb-2">Early Learner</p>
-              <h3 className="text-xl font-bold text-primary font-serif mb-4">£49</h3>
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 flex flex-col" data-testid="card-included-early">
+              <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">Early Learner</p>
+              <h3 className="text-xl font-bold text-primary font-serif mb-1">£49</h3>
+              <p className="text-[10px] font-bold text-amber-600 uppercase tracking-tight mb-4">Target: Year 4 & 5</p>
               <ul className="space-y-3 flex-1">
                 {[
                   "Foundation-level practice questions",
@@ -342,12 +343,12 @@ export default function Landing() {
                   "Unlimited access",
                 ].map((f, i) => (
                   <li key={i} className="flex items-start gap-2.5">
-                    <CheckCircle2 className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" />
+                    <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0 mt-0.5" />
                     <span className="text-slate-700 text-sm">{f}</span>
                   </li>
                 ))}
               </ul>
-              <Button className="w-full mt-6 h-11 text-sm font-semibold bg-amber-600 text-white hover:bg-amber-700 border-none" asChild data-testid="button-included-early">
+              <Button variant="outline" className="w-full mt-6 h-11 text-sm font-semibold" asChild data-testid="button-included-early">
                 <Link href="/pricing#tiers">Get Early Learner</Link>
               </Button>
             </div>
