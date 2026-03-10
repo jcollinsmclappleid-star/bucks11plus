@@ -309,7 +309,7 @@ export default function Landing() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="rounded-2xl border border-slate-200 bg-white p-6 flex flex-col" data-testid="card-included-free">
               <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">Free</p>
               <h3 className="text-xl font-bold text-primary font-serif mb-4">£0</h3>
@@ -327,6 +327,28 @@ export default function Landing() {
               </ul>
               <Button variant="outline" className="w-full mt-6 h-11 text-sm font-semibold" asChild data-testid="button-included-free">
                 <Link href="/free-diagnostic">Start Free Diagnostic</Link>
+              </Button>
+            </div>
+
+            <div className="rounded-2xl border-2 border-amber-300 bg-amber-50/30 p-6 flex flex-col" data-testid="card-included-early">
+              <p className="text-sm font-semibold text-amber-600 uppercase tracking-wider mb-2">Early Learner</p>
+              <h3 className="text-xl font-bold text-primary font-serif mb-4">£49</h3>
+              <ul className="space-y-3 flex-1">
+                {[
+                  "Foundation-level practice questions",
+                  "Readiness percentage tracking",
+                  "Exploring → Ready pathway",
+                  "Age-appropriate interface",
+                  "Unlimited access",
+                ].map((f, i) => (
+                  <li key={i} className="flex items-start gap-2.5">
+                    <CheckCircle2 className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" />
+                    <span className="text-slate-700 text-sm">{f}</span>
+                  </li>
+                ))}
+              </ul>
+              <Button className="w-full mt-6 h-11 text-sm font-semibold bg-amber-600 text-white hover:bg-amber-700 border-none" asChild data-testid="button-included-early">
+                <Link href="/pricing#tiers">Get Early Learner</Link>
               </Button>
             </div>
 
