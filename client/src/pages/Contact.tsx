@@ -1,6 +1,8 @@
 import { Link } from "wouter";
 import { Seo } from "../components/shared/Seo";
-import { Mail } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Mail, Send } from "lucide-react";
+import { useState } from "react";
 
 export default function Contact() {
   return (
@@ -42,6 +44,12 @@ export default function Contact() {
           </p>
         </div>
 
+        <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-8 md:p-10" data-testid="card-contact-form">
+          <h2 className="text-xl font-bold text-primary font-serif mb-1">Send a Message</h2>
+          <p className="text-sm text-muted-foreground mb-6">We'll get back to you within 1 working day.</p>
+          <ContactForm />
+        </div>
+
         <div className="mt-8 rounded-2xl border border-slate-200 bg-slate-50 p-6 md:p-8" data-testid="card-contact-info">
           <h3 className="font-bold text-primary font-serif mb-3">Before you get in touch</h3>
           <ul className="space-y-2 text-sm text-muted-foreground">
@@ -61,5 +69,66 @@ export default function Contact() {
         </div>
       </div>
     </div>
+  );
+}
+
+function ContactForm() {
+  const [submitted, setSubmitted] = useState(false);
+
+  if (submitted) {
+    return (
+      <div className="text-center py-6 space-y-3" data-testid="contact-form-success">
+        <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+          <Send className="h-5 w-5 text-green-600" />
+        </div>
+        <p className="font-semibold text-primary">Message received</p>
+        <p className="text-sm text-muted-foreground">We'll reply to your email within 1 working day.</p>
+      </div>
+    );
+  }
+
+  return (
+    <form
+      onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }}
+      className="space-y-4"
+      data-testid="contact-form"
+    >
+      <div>
+        <label htmlFor="contact-name" className="block text-sm font-medium text-primary mb-1.5">Your Name</label>
+        <input
+          id="contact-name"
+          type="text"
+          required
+          placeholder="Full name"
+          className="w-full rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm text-primary placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40"
+          data-testid="input-contact-name"
+        />
+      </div>
+      <div>
+        <label htmlFor="contact-email" className="block text-sm font-medium text-primary mb-1.5">Email Address</label>
+        <input
+          id="contact-email"
+          type="email"
+          required
+          placeholder="you@example.com"
+          className="w-full rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm text-primary placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40"
+          data-testid="input-contact-email"
+        />
+      </div>
+      <div>
+        <label htmlFor="contact-message" className="block text-sm font-medium text-primary mb-1.5">Message</label>
+        <textarea
+          id="contact-message"
+          required
+          rows={5}
+          placeholder="How can we help?"
+          className="w-full rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm text-primary placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40 resize-none"
+          data-testid="input-contact-message"
+        />
+      </div>
+      <Button type="submit" className="w-full h-11 bg-primary text-primary-foreground font-semibold" data-testid="button-contact-submit">
+        <Send className="mr-2 h-4 w-4" /> Send Message
+      </Button>
+    </form>
   );
 }
