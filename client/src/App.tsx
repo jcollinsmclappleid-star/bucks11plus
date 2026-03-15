@@ -38,6 +38,7 @@ import Methodology from "./pages/Methodology";
 import GLAlignment from "./pages/GLAlignment";
 import About from "./pages/About";
 import Legal from "./pages/Legal";
+import Contact from "./pages/Contact";
 import BucksGuide from "./pages/BucksGuide";
 
 import HowToPass from "./pages/seo/HowToPass";
@@ -89,6 +90,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
               <li><Link href="/how-forecast-works" className="hover:text-white transition-colors">Our Forecast Model</Link></li>
               <li><Link href="/bucks-gl-alignment" className="hover:text-white transition-colors">GL-Style Alignment</Link></li>
               <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
+              <li><Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
             </ul>
           </div>
           <div>
@@ -120,6 +122,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
               <li><Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
               <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
               <li><Link href="/safeguarding" className="hover:text-white transition-colors">Safeguarding</Link></li>
+              <li><Link href="/refund-policy" className="hover:text-white transition-colors">Refund Policy</Link></li>
               <li><Link href="/parent-hub" className="hover:text-white transition-colors">Parent Hub</Link></li>
             </ul>
           </div>
@@ -226,6 +229,10 @@ function Router() {
             <Route path="/safeguarding">
               <Legal type="safeguarding" />
             </Route>
+            <Route path="/refund-policy">
+              <Legal type="refund" />
+            </Route>
+            <Route path="/contact" component={Contact} />
 
             <Route path="/early-dashboard">
               <AuthGate><EarlyDashboard /></AuthGate>
