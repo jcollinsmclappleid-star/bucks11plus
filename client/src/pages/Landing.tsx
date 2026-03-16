@@ -261,6 +261,35 @@ export default function Landing() {
               </p>
             </div>
 
+            <div className="pt-6 max-w-3xl mx-auto">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 py-4 px-6 rounded-lg border border-white/[0.08] bg-white/[0.03]" data-testid="stat-bar-trust">
+                <div className="flex items-center gap-2 text-white/70">
+                  <span className="text-xl font-serif font-bold text-white/90" data-testid="text-question-count">2,000+</span>
+                  <span className="text-sm font-sans">Curated Questions</span>
+                </div>
+                <span className="hidden sm:inline text-white/15">|</span>
+                <div className="flex items-center gap-2 text-white/70">
+                  <span className="text-xl font-serif font-bold text-white/90">4</span>
+                  <span className="text-sm font-sans">Core Subjects</span>
+                </div>
+                <span className="hidden sm:inline text-white/15">|</span>
+                <div className="flex items-center gap-2 text-white/70">
+                  <span className="text-sm font-sans">GL-Aligned Format</span>
+                </div>
+              </div>
+            </div>
+
+            <p className="text-sm text-white/50 max-w-2xl mx-auto leading-relaxed italic" data-testid="text-trust-statement">
+              2,000+ curated reasoning and practice questions across verbal reasoning, non-verbal reasoning, maths, and comprehension — designed with structured assessment logic and informed by UK school leadership expertise.
+            </p>
+
+            <div className="flex items-center justify-center gap-2" data-testid="badge-expertise">
+              <svg viewBox="0 0 16 16" className="w-4 h-4 text-brand-amber/70" fill="currentColor" aria-hidden="true">
+                <path d="M8 0l2.5 5.3L16 6.2l-4 3.8 1 5.5L8 12.9l-5 2.6 1-5.5-4-3.8 5.5-.9z"/>
+              </svg>
+              <span className="text-xs font-sans font-semibold uppercase tracking-[0.15em] text-white/50">Informed by UK school leadership expertise</span>
+            </div>
+
             <div className="pt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button size="lg" className="h-14 px-10 text-lg bg-brand-amber text-white hover:bg-brand-amber/90 font-bold shadow-lg shadow-brand-amber/15 border-none" asChild>
                 <Link href="/free-diagnostic">
