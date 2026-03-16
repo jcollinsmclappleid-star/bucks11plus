@@ -46,16 +46,24 @@ function ForecastPanel() {
 
 function SectionsPanel() {
   const sections = [
-    { name: "Verbal Reasoning", score: 72, color: "bg-amber-500", items: "18/25" },
-    { name: "Non-Verbal Reasoning", score: 58, color: "bg-red-500", items: "14/24" },
-    { name: "Mathematics", score: 80, color: "bg-green-500", items: "20/25" },
-    { name: "English Comprehension", score: 66, color: "bg-amber-500", items: "16/24" },
+    { name: "Verbal Reasoning", score: 72, color: "bg-amber-500", items: "18/25", subs: [
+      { name: "Letter Patterns", score: 80 }, { name: "Vocab & Synonyms", score: 60 }, { name: "Code Sequences", score: 75 }
+    ]},
+    { name: "Non-Verbal Reasoning", score: 58, color: "bg-red-500", items: "14/24", subs: [
+      { name: "Spatial Sequences", score: 50 }, { name: "Rotation & Reflection", score: 55 }, { name: "Classification", score: 65 }
+    ]},
+    { name: "Mathematics", score: 80, color: "bg-green-500", items: "20/25", subs: [
+      { name: "Arithmetic", score: 85 }, { name: "Fractions & Ratios", score: 70 }, { name: "Data Interpretation", score: 80 }
+    ]},
+    { name: "English Comprehension", score: 66, color: "bg-amber-500", items: "16/24", subs: [
+      { name: "Inference & Deduction", score: 62 }, { name: "Authorial Intent", score: 70 }, { name: "Vocabulary in Context", score: 75 }
+    ]},
   ];
   return (
-    <div className="space-y-5 w-full max-w-md mx-auto" data-testid="showcase-sections">
+    <div className="space-y-4 w-full max-w-md mx-auto" data-testid="showcase-sections">
       <div className="text-center mb-2">
         <h3 className="text-lg font-bold text-primary font-serif">Section-by-Section Accuracy</h3>
-        <p className="text-xs text-muted-foreground mt-1">See exactly where strengths and gaps lie</p>
+        <p className="text-xs text-muted-foreground mt-1">See exactly where strengths and gaps lie — down to sub-skill level</p>
       </div>
       {sections.map((s, i) => (
         <div key={i} className="bg-white rounded-xl border border-slate-200 p-4">
@@ -66,11 +74,24 @@ function SectionsPanel() {
           <div className="h-2.5 bg-slate-100 rounded-full overflow-hidden">
             <div className={`h-full rounded-full ${s.color} transition-all duration-700`} style={{ width: `${s.score}%` }}></div>
           </div>
-          <div className="flex justify-between mt-1.5">
+          <div className="flex justify-between mt-1.5 mb-2">
             <span className="text-xs font-bold text-primary">{s.score}%</span>
             <span className={`text-[10px] font-bold ${s.score >= 75 ? "text-green-600" : s.score >= 65 ? "text-amber-600" : "text-red-600"}`}>
               {s.score >= 75 ? "On Track" : s.score >= 65 ? "Borderline" : "Focus Area"}
             </span>
+          </div>
+          <div className="ml-2 border-l-2 border-slate-100 pl-3 space-y-1">
+            {s.subs.map((sub, j) => (
+              <div key={j} className="flex items-center justify-between text-[11px]">
+                <span className="text-slate-500">{sub.name}</span>
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <div className="w-12 h-1.5 rounded-full bg-slate-100 overflow-hidden">
+                    <div className={`h-full rounded-full ${sub.score >= 75 ? 'bg-green-500' : sub.score >= 60 ? 'bg-amber-500' : 'bg-red-500'}`} style={{ width: `${sub.score}%` }}></div>
+                  </div>
+                  <span className={`font-bold text-[10px] ${sub.score >= 75 ? 'text-green-600' : sub.score >= 60 ? 'text-amber-600' : 'text-red-600'}`}>{sub.score}%</span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       ))}

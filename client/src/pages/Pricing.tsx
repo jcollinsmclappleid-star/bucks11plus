@@ -620,44 +620,66 @@ export default function Pricing() {
           <div className="grid md:grid-cols-3 gap-6">
             <DemoCard
               title="Results Dashboard"
-              description="Forecast gauge, section breakdown, and pace analysis from a real diagnostic"
+              description="Forecast gauge, section breakdown with sub-skills, and pace analysis"
               testId="demo-results"
             >
               <div className="space-y-4">
                 <div className="flex items-center justify-center mb-2">
-                  <div className="relative w-32 h-32">
+                  <div className="relative w-28 h-28">
                     <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
                       <circle cx="50" cy="50" r="40" className="stroke-slate-200" strokeWidth="10" fill="none" />
                       <circle cx="50" cy="50" r="40" className="stroke-amber-400" strokeWidth="10" fill="none" strokeDasharray="251.2" strokeDashoffset={251.2 - (251.2 * (114 / 141))} />
                     </svg>
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
                       <span className="text-2xl font-bold text-primary">114</span>
-                      <span className="text-[10px] text-muted-foreground uppercase font-bold">Forecast</span>
+                      <span className="text-[8px] text-muted-foreground uppercase font-bold">Est. Score</span>
                     </div>
                   </div>
                 </div>
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200 mx-auto">
-                  Borderline (Amber)
+                <div className="flex justify-center">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
+                    Borderline (Amber)
+                  </span>
                 </div>
-                <div className="space-y-2">
+                <div className="text-center text-xs font-bold text-primary mb-1">7 points gap to 121</div>
+                <div className="space-y-2.5">
                   {[
-                    { name: "Verbal Reasoning", score: 72, color: "bg-amber-500" },
-                    { name: "Non-Verbal Reasoning", score: 65, color: "bg-red-500" },
-                    { name: "Mathematics", score: 78, color: "bg-amber-500" },
+                    { name: "Verbal Reasoning", score: 72, color: "bg-amber-500", subs: [
+                      { name: "Letter Patterns", score: 80 }, { name: "Vocab & Synonyms", score: 60 }, { name: "Code Sequences", score: 75 }
+                    ]},
+                    { name: "Non-Verbal Reasoning", score: 65, color: "bg-red-500", subs: [
+                      { name: "Spatial Sequences", score: 50 }, { name: "Rotation & Reflection", score: 70 }, { name: "Classification", score: 65 }
+                    ]},
+                    { name: "Mathematics", score: 78, color: "bg-amber-500", subs: [
+                      { name: "Arithmetic", score: 85 }, { name: "Fractions & Ratios", score: 65 }, { name: "Data Interpretation", score: 80 }
+                    ]},
+                    { name: "English Comprehension", score: 70, color: "bg-amber-500", subs: [
+                      { name: "Inference & Deduction", score: 62 }, { name: "Authorial Intent", score: 75 }, { name: "Vocabulary in Context", score: 80 }
+                    ]},
                   ].map((s, i) => (
                     <div key={i}>
                       <div className="flex justify-between text-xs mb-1">
                         <span className="font-medium text-slate-600">{s.name}</span>
                         <span className="font-bold text-primary">{s.score}%</span>
                       </div>
-                      <div className="h-1.5 bg-slate-100 rounded-full">
+                      <div className="h-1.5 bg-slate-100 rounded-full mb-1">
                         <div className={`h-full rounded-full ${s.color}`} style={{ width: `${s.score}%` }}></div>
+                      </div>
+                      <div className="ml-3 border-l-2 border-slate-100 pl-2 space-y-0.5">
+                        {s.subs.map((sub, j) => (
+                          <div key={j} className="flex items-center justify-between text-[10px]">
+                            <span className="text-slate-500 truncate mr-1">{sub.name}</span>
+                            <div className="flex items-center gap-1 shrink-0">
+                              <div className="w-10 h-1 rounded-full bg-slate-100 overflow-hidden">
+                                <div className={`h-full rounded-full ${sub.score >= 80 ? 'bg-green-500' : sub.score >= 60 ? 'bg-amber-500' : 'bg-red-500'}`} style={{ width: `${sub.score}%` }}></div>
+                              </div>
+                              <span className={`font-bold ${sub.score >= 80 ? 'text-green-600' : sub.score >= 60 ? 'text-amber-600' : 'text-red-600'}`}>{sub.score}%</span>
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   ))}
-                </div>
-                <div className="text-xs text-muted-foreground pt-2 border-t border-slate-100">
-                  7 point gap to 121 standard
                 </div>
               </div>
             </DemoCard>
