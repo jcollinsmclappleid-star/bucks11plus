@@ -239,15 +239,15 @@ export default function Landing() {
         canonicalPath="/"
       />
 
-      <section className="relative overflow-hidden pt-20 pb-24 md:pt-32 md:pb-40 border-b border-border/50" style={{ backgroundColor: '#0d1f30' }}>
+      <section className="relative overflow-hidden pt-12 pb-24 md:pt-16 md:pb-40 border-b border-border/50" style={{ backgroundColor: '#0d1f30' }}>
         <div className="absolute inset-0 z-0 hero-texture"></div>
         <div className="absolute inset-0 z-0 hero-vignette"></div>
         <div className="absolute inset-0 z-0" style={{ background: 'radial-gradient(ellipse 50% 40% at 50% 35%, rgba(255,255,255,0.04) 0%, transparent 100%)' }}></div>
 
         <div className="container mx-auto max-w-5xl px-4 relative z-10">
-          <div className="text-center space-y-6">
+          <div className="flex flex-col gap-8">
 
-            <div className="flex flex-col items-center gap-1 mb-2">
+            <div className="flex flex-col items-start gap-1">
               <svg viewBox="0 0 48 48" className="w-12 h-12 md:w-14 md:h-14" aria-hidden="true">
                 <circle cx="24" cy="24" r="22" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="2" />
                 <circle cx="24" cy="24" r="18" fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth="1.5" />
@@ -263,6 +263,70 @@ export default function Landing() {
               </div>
               <span className="text-white/30 text-[10px] md:text-[11px] font-sans font-medium tracking-wide mt-1.5">Bucks 11+ Readiness &amp; Forecast</span>
             </div>
+
+            <div className="w-full overflow-hidden">
+              <div className="school-ticker">
+                <div className="ticker-content">
+                  <span>Aylesbury Grammar</span>
+                  <span className="separator">•</span>
+                  <span>Aylesbury High</span>
+                  <span className="separator">•</span>
+                  <span>Burnham Grammar</span>
+                  <span className="separator">•</span>
+                  <span>Chesham Grammar</span>
+                  <span className="separator">•</span>
+                  <span>Dr Challoner's Grammar</span>
+                  <span className="separator">•</span>
+                  <span>Dr Challoner's High</span>
+                  <span className="separator">•</span>
+                  <span>John Hampden Grammar</span>
+                  <span className="separator">•</span>
+                  <span>Royal Grammar School</span>
+                  <span className="separator">•</span>
+                  <span>Royal Latin</span>
+                  <span className="separator">•</span>
+                  <span>Sir Henry Floyd Grammar</span>
+                  <span className="separator">•</span>
+                  <span>Sir William Borlase's Grammar</span>
+                  <span className="separator">•</span>
+                  <span>Wycombe High</span>
+                  <span className="separator">•</span>
+                  <span>The Misbourne</span>
+                  <span className="separator">•</span>
+                </div>
+                <div className="ticker-content" aria-hidden="true">
+                  <span>Aylesbury Grammar</span>
+                  <span className="separator">•</span>
+                  <span>Aylesbury High</span>
+                  <span className="separator">•</span>
+                  <span>Burnham Grammar</span>
+                  <span className="separator">•</span>
+                  <span>Chesham Grammar</span>
+                  <span className="separator">•</span>
+                  <span>Dr Challoner's Grammar</span>
+                  <span className="separator">•</span>
+                  <span>Dr Challoner's High</span>
+                  <span className="separator">•</span>
+                  <span>John Hampden Grammar</span>
+                  <span className="separator">•</span>
+                  <span>Royal Grammar School</span>
+                  <span className="separator">•</span>
+                  <span>Royal Latin</span>
+                  <span className="separator">•</span>
+                  <span>Sir Henry Floyd Grammar</span>
+                  <span className="separator">•</span>
+                  <span>Sir William Borlase's Grammar</span>
+                  <span className="separator">•</span>
+                  <span>Wycombe High</span>
+                  <span className="separator">•</span>
+                  <span>The Misbourne</span>
+                  <span className="separator">•</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="text-center space-y-6 mt-12">
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-[1.12] font-serif max-w-4xl mx-auto">
               Know Exactly Where They Stand <br className="hidden md:block" />
