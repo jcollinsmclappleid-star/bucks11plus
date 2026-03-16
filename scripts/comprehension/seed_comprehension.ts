@@ -79,7 +79,7 @@ async function seedComprehension() {
   const forceReseed = process.argv.includes("--force");
 
   const existing = await db.select({ id: questions.id }).from(questions)
-    .where(sql`section = 'comprehension' AND skill_id LIKE 'comp.%'`);
+    .where(sql`section = 'English Comprehension' AND skill_id LIKE 'comp.%'`);
 
   if (existing.length > 0 && !forceReseed) {
     console.log(`Already have ${existing.length} comprehension questions. Use --force to replace them.`);
@@ -88,7 +88,7 @@ async function seedComprehension() {
 
   if (forceReseed && existing.length > 0) {
     console.log(`Force mode: deleting ${existing.length} existing comprehension questions...`);
-    await db.delete(questions).where(sql`section = 'comprehension' AND skill_id LIKE 'comp.%'`);
+    await db.delete(questions).where(sql`section = 'English Comprehension' AND skill_id LIKE 'comp.%'`);
     console.log("Deleted existing comprehension questions.");
   }
 
@@ -116,8 +116,8 @@ async function seedComprehension() {
       };
 
       return {
-        id: `comp-${q.passage_id.toLowerCase()}-q${((q.question_number - 1) % 5) + 1}`,
-        section: "comprehension",
+        id: `comp-${q.passage_id.toLowerCase()}-q${q.question_number}`,
+        section: "English Comprehension",
         type: q.question_type.toLowerCase().replace(/ /g, "_"),
         prompt: q.question_text,
         options: opts,

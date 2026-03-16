@@ -162,7 +162,7 @@ content/
 - GET /api/articles, GET /api/articles/:slug, GET /api/progress
 
 ## Question Engine
-- ~1713 questions (321 VR + 400 NVR + 292 Maths + 700 English Comprehension) — all with answer explanations
+- ~1605 questions (321 VR + 400 NVR + 292 Maths + 592 English Comprehension) — all with answer explanations
 - Difficulty distribution: ~20% easy / 39% medium / 41% hard (GL-realistic harder skew)
 - NVR questions use SVG render_config (NvrSequenceConfig, NvrTransformConfig, NvrClassificationConfig)
 - Data interpretation uses chart render_config (ChartBarConfig, ChartLineConfig, ChartTableConfig)
@@ -188,8 +188,9 @@ content/
 - **4 test sections**: Verbal Reasoning, Non-Verbal Reasoning, Mathematics, English Comprehension
 - **Question Review**: GET /api/test-sessions/:id/review returns answered questions with explanations, correct answers, difficulty, timing
 - **Personalised Upsells**: Results page shows tier-appropriate upgrade suggestions based on weakest section score and overall forecast
-- 700 comprehension questions total: 200 (comp200, 40 passages) + 500 (comp500, 100 passages), section="English Comprehension", renderType="comprehension"
-- comp500 distribution: 350 Hard (passages 1-70) + 150 Medium (passages 71-100), 39 unique passage titles cycling
+- 592 comprehension questions from 40 real passages (parsed from user's docx files), section="English Comprehension", renderType="comprehension"
+- Passage distribution: P1-P20 (File 1, 300q, all 15/passage) + P21-P40 (File 2, 292q, some passages have 14)
+- 5 skill types: comp.inference (428), comp.authorial_intent (98), comp.text_structure (47), comp.vocabulary (13), comp.fact_retrieval (6)
 - Comprehension passage rendering in TestRunner: passage text box above question prompt
 - 6 comprehension practice drills: Fact Retrieval, Vocabulary in Context, Inference & Deduction, Mood & Tone, Detail Retrieval, Advanced Comprehension
 - GL-style alignment disclaimer: "Independent readiness assessment. Not affiliated with GL Assessment or Buckinghamshire Council."
