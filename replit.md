@@ -80,10 +80,11 @@ shared/
 └── style.ts             # Visual constants (strokeWidth, colours, viewBox)
 
 scripts/
-├── generate_seed.ts     # Generates 900 questions → questions.seed.json
+├── generate_seed.ts     # Generates 2,601 questions → questions.seed.json (with full QA validation)
 ├── seed_questions.ts    # Inserts seed JSON into database
 ├── generators/
 │   ├── types.ts         # GeneratedQuestion interface
+│   ├── comprehension.ts # 600 comprehension questions (40 passages × 15 questions, 8 genres, with explanations)
 │   ├── vr/              # 6 VR generators (codes, sequences, vocab, etc)
 │   ├── nvr/             # 5 NVR generators (sequence, rotation, classification, etc)
 │   └── maths/           # 7 Maths generators (arithmetic, fractions, charts, etc)

@@ -22,6 +22,21 @@ type TestSession = {
   paceData: { name: string; avg: number; expected: number }[] | null;
 };
 
+type ReviewItem = {
+  questionId: string;
+  section: string;
+  skillId: string;
+  subRuleId: string;
+  prompt: string;
+  options: string[];
+  correctAnswer: string;
+  selectedAnswer: string | null;
+  isCorrect: boolean;
+  timeTaken: number;
+  explanation: string | null;
+  difficulty: string;
+};
+
 type Milestone = {
   id: string;
   week: number;
@@ -34,19 +49,6 @@ type ProgrammeData = {
   enrolled: boolean;
   milestones?: Milestone[];
   currentWeek?: number;
-};
-
-type ReviewItem = {
-  questionId: string;
-  section: string;
-  prompt: string;
-  options: string[];
-  correctAnswer: string;
-  selectedAnswer: string | null;
-  isCorrect: boolean;
-  timeTaken: number;
-  explanation: string | null;
-  difficulty: string;
 };
 
 const TIER_RANK: Record<string, number> = {
@@ -65,14 +67,14 @@ function getUpsellMessage(tier: string, weakestSection: string, weakestScore: nu
     if (overallScore < 110) {
       return {
         title: "Unlock Targeted Practice",
-        message: `${weakestSection} at ${weakestScore}% needs focused attention. The Early Learner pack gives your child structured practice across all four sections with 2,000+ curated questions.`,
+        message: `${weakestSection} at ${weakestScore}% needs focused attention. The Early Learner pack gives your child structured practice across all four sections with 2,500+ curated questions.`,
         cta: "View Early Learner — £49",
         tier: "early_learner",
       };
     }
     return {
       title: "Start Building Confidence",
-      message: `Great start! The Early Learner pack includes unlimited access to 2,000+ questions across all sections to build consistent practice habits.`,
+      message: `Great start! The Early Learner pack includes unlimited access to 2,500+ questions across all sections to build consistent practice habits.`,
       cta: "View Early Learner — £49",
       tier: "early_learner",
     };
@@ -107,6 +109,26 @@ function getUpsellMessage(tier: string, weakestSection: string, weakestScore: nu
   return null;
 }
 
+function getSubRuleLabel(subRuleId: string): string {
+  const parts = subRuleId.split('.');
+  const last = parts[parts.length - 1] || subRuleId;
+  return last.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+}
+
+function getSectionLabel(section: string): string {
+  const labels: Record<string, string> = {
+    'verbal_reasoning': 'Verbal Reasoning',
+    'Verbal Reasoning': 'Verbal Reasoning',
+    'non_verbal_reasoning': 'Non-Verbal Reasoning',
+    'Non-Verbal Reasoning': 'Non-Verbal Reasoning',
+    'mathematics': 'Mathematics',
+    'Mathematics': 'Mathematics',
+    'comprehension': 'Comprehension',
+    'Comprehension': 'Comprehension',
+  };
+  return labels[section] || section.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+}
+
 export default function Results() {
   const { id } = useParams<{ id: string }>();
   const { user, isProgramme, hasPaidAccess } = useAuth();
@@ -135,6 +157,7 @@ export default function Results() {
   const [showReview, setShowReview] = useState(false);
   const [reviewFilter, setReviewFilter] = useState<"all" | "incorrect" | "correct">("all");
   const [expandedQuestions, setExpandedQuestions] = useState<Set<string>>(new Set());
+  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set());
 
   const currentScore = session?.forecastScore || 0;
   const gap = target - currentScore;
@@ -162,11 +185,33 @@ export default function Results() {
     return true;
   });
 
+  const subSectionData = reviewData ? (() => {
+    const grouped: Record<string, Record<string, { correct: number; total: number }>> = {};
+    for (const a of reviewData) {
+      const section = getSectionLabel(a.section);
+      if (!grouped[section]) grouped[section] = {};
+      const subLabel = getSubRuleLabel(a.subRuleId);
+      if (!grouped[section][subLabel]) grouped[section][subLabel] = { correct: 0, total: 0 };
+      grouped[section][subLabel].total++;
+      if (a.isCorrect) grouped[section][subLabel].correct++;
+    }
+    return grouped;
+  })() : null;
+
   const toggleQuestion = (qId: string) => {
     setExpandedQuestions(prev => {
       const next = new Set(prev);
       if (next.has(qId)) next.delete(qId);
       else next.add(qId);
+      return next;
+    });
+  };
+
+  const toggleSection = (name: string) => {
+    setExpandedSections(prev => {
+      const next = new Set(prev);
+      if (next.has(name)) next.delete(name);
+      else next.add(name);
       return next;
     });
   };
@@ -346,9 +391,20 @@ export default function Results() {
             <CardContent className="p-6 space-y-6">
               {sectionScores.map((section, i) => (
                 <div key={i} className="space-y-3">
-                  <div className="flex justify-between items-end">
+                  <div
+                    className="flex justify-between items-end cursor-pointer"
+                    onClick={() => toggleSection(section.name)}
+                    data-testid={`section-toggle-${i}`}
+                  >
                     <div>
-                      <div className="font-bold text-slate-800">{section.name}</div>
+                      <div className="font-bold text-slate-800 flex items-center gap-2">
+                        {section.name}
+                        {subSectionData && subSectionData[section.name] && (
+                          expandedSections.has(section.name) ?
+                            <ChevronUp className="h-4 w-4 text-slate-400" /> :
+                            <ChevronDown className="h-4 w-4 text-slate-400" />
+                        )}
+                      </div>
                       <div className="text-xs text-muted-foreground mt-0.5">
                         {section.correct}/{section.total} correct — {section.score >= 80 ? "On Track" : section.score >= 60 ? "Within Reach" : "Clear Improvement Opportunity"}
                       </div>
@@ -363,6 +419,29 @@ export default function Results() {
                   {paceData[i] && (
                     <div className="text-xs font-medium text-slate-500 flex items-center gap-1.5">
                       <Clock className="h-3.5 w-3.5" /> Pace: {paceData[i].avg}s/q (expected {paceData[i].expected}s)
+                    </div>
+                  )}
+
+                  {expandedSections.has(section.name) && subSectionData && subSectionData[section.name] && (
+                    <div className="ml-4 space-y-2 pt-2 border-l-2 border-slate-100 pl-4" data-testid={`subsection-breakdown-${i}`}>
+                      {Object.entries(subSectionData[section.name]).map(([subRule, data]) => {
+                        const pct = data.total > 0 ? Math.round((data.correct / data.total) * 100) : 0;
+                        return (
+                          <div key={subRule} className="flex items-center justify-between text-sm">
+                            <span className="text-slate-600 truncate mr-2">{subRule}</span>
+                            <div className="flex items-center gap-2 shrink-0">
+                              <span className="text-xs text-slate-400">{data.correct}/{data.total}</span>
+                              <div className="w-16 h-1.5 rounded-full bg-slate-100 overflow-hidden">
+                                <div
+                                  className={`h-full rounded-full ${pct >= 80 ? 'bg-green-500' : pct >= 60 ? 'bg-amber-500' : 'bg-red-500'}`}
+                                  style={{ width: `${pct}%` }}
+                                ></div>
+                              </div>
+                              <span className={`text-xs font-bold ${pct >= 80 ? 'text-green-600' : pct >= 60 ? 'text-amber-600' : 'text-red-600'}`}>{pct}%</span>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
                   )}
                 </div>
@@ -526,6 +605,25 @@ export default function Results() {
               </div>
             </CardContent>
           )}
+        </Card>
+      )}
+
+      {hasPaidAccess() && !isProgramme() && weakest && weakest.score < 70 && (
+        <Card className="border-blue-200 bg-gradient-to-br from-blue-50 to-white shadow-sm" data-testid="card-upgrade-upsell">
+          <CardContent className="p-6 flex items-center gap-4">
+            <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
+              <TrendingUp className="h-5 w-5 text-blue-600" />
+            </div>
+            <div className="flex-1">
+              <h3 className="font-bold text-primary mb-1">Accelerate with the Young Scholar Programme</h3>
+              <p className="text-sm text-slate-600">
+                {weakest.name} at {weakest.score}% needs structured improvement. The 16-week programme includes personalised task plans, milestone diagnostics, and premium analytics to close the gap faster.
+              </p>
+            </div>
+            <Button size="sm" asChild data-testid="button-upgrade-programme">
+              <Link href="/pricing">Upgrade</Link>
+            </Button>
+          </CardContent>
         </Card>
       )}
 

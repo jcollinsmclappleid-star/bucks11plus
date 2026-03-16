@@ -492,7 +492,7 @@ export default function Pricing() {
                     { feature: "Basic readiness forecast", free: true, pack: true, prog: true },
                     { feature: "Top focus area revealed", free: true, pack: true, prog: true },
                     { feature: "1 sample practice drill", free: true, pack: true, prog: true },
-                    { feature: "1,000+ practice questions", free: false, pack: true, prog: true },
+                    { feature: "2,500+ practice questions", free: false, pack: true, prog: true },
                     { feature: "Easy & Medium drills (19 sections)", free: false, pack: true, prog: true },
                     { feature: "Hard challenge drills", free: false, pack: "6 sections", prog: "All 17" },
                     { feature: "Badge-based Accomplishments", free: false, pack: true, prog: true },

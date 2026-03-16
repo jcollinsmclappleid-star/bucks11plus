@@ -7,7 +7,7 @@ export interface GeneratedQuestion {
   difficulty: string;
   skillId: string;
   subRuleId: string;
-  renderType: 'text' | 'svg' | 'chart';
+  renderType: 'text' | 'svg' | 'chart' | 'comprehension';
   renderConfig: any;
   trapTypes: string[];
   cognitiveLoad: number;

@@ -1,7 +1,7 @@
 import { Link, useParams, useSearch } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, BarChart2, Target, SlidersHorizontal, Sparkles, Clock, Loader2, Lock, TrendingUp, BarChart3, Brain } from "lucide-react";
+import { ArrowRight, BarChart2, Target, SlidersHorizontal, Sparkles, Clock, Loader2, Lock, TrendingUp, BarChart3, Brain, Zap } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 import { useQuery } from "@tanstack/react-query";
 
@@ -37,6 +37,7 @@ export default function GuestResults() {
   const gap = target - currentScore;
   const sectionScores = session?.sectionScores || [];
   const paceData = session?.paceData || [];
+  const weakestSection = sectionScores.length > 0 ? [...sectionScores].sort((a, b) => a.score - b.score)[0] : null;
 
   if (isLoading) {
     return (
@@ -147,7 +148,7 @@ export default function GuestResults() {
                     <div>
                       <div className="font-bold text-slate-800">{section.name}</div>
                       <div className="text-xs text-muted-foreground mt-0.5">
-                        {section.score >= 80 ? "On Track" : section.score >= 60 ? "Within Reach" : "Clear Improvement Opportunity"}
+                        {section.correct}/{section.total} correct · {section.score >= 80 ? "On Track" : section.score >= 60 ? "Within Reach" : "Clear Improvement Opportunity"}
                       </div>
                     </div>
                     <div className="text-right">
@@ -172,6 +173,36 @@ export default function GuestResults() {
         </div>
       </div>
 
+      {weakestSection && (
+        <Card className="border-amber-200 bg-gradient-to-br from-amber-50 to-white shadow-md" data-testid="card-personalised-upsell-guest">
+          <CardContent className="p-8">
+            <div className="flex items-start gap-4">
+              <div className="h-12 w-12 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
+                <Zap className="h-6 w-6 text-amber-600" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-bold text-primary text-xl font-serif mb-2">
+                  {weakestSection.score < 50
+                    ? `${weakestSection.name} needs immediate attention`
+                    : weakestSection.score < 70
+                    ? `Closing the gap in ${weakestSection.name} will have the biggest impact`
+                    : `Fine-tuning ${weakestSection.name} could push the score above 121`
+                  }
+                </h3>
+                <p className="text-slate-600 mb-4 leading-relaxed">
+                  {weakestSection.score < 50
+                    ? `At ${weakestSection.score}%, ${weakestSection.name} is the primary area holding the forecast back. Our 2,500+ question bank includes hundreds of targeted ${weakestSection.name} drills designed to build confidence and close this gap.`
+                    : weakestSection.score < 70
+                    ? `${weakestSection.name} at ${weakestSection.score}% is the biggest lever for improvement. Focused practice with our adaptive question bank could shift this into the "On Track" zone within weeks.`
+                    : `${weakestSection.name} is close at ${weakestSection.score}%. A few targeted sessions could push this past 80%, potentially raising the overall forecast above the 121 standard.`
+                  }
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       <div className="bg-gradient-to-br from-primary/[0.03] to-primary/[0.08] border border-primary/15 rounded-2xl p-8 md:p-12">
         <div className="text-center mb-8">
           <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif mb-3">
@@ -191,7 +222,7 @@ export default function GuestResults() {
               </div>
               <p className="text-sm text-slate-600 mb-4">12 weeks of targeted practice that moves the needle</p>
               <ul className="space-y-2 mb-6">
-                {["1,000+ questions across VR, NVR, Maths & Comprehension", "Easy & Medium drills (13 sections)", "6 Hard challenge drills included", "2 full timed diagnostics (40 questions each)", "Practice papers (Quick & Full)", "PDF reports & full report archive", "Impact simulator & progress tracking", "Badge-based Accomplishments system"].map((f, i) => (
+                {["2,500+ questions across VR, NVR, Maths & Comprehension", "Easy & Medium drills (13 sections)", "6 Hard challenge drills included", "2 full timed diagnostics (40 questions each)", "Practice papers (Quick & Full)", "PDF reports & full report archive", "Impact simulator & progress tracking", "Badge-based Accomplishments system"].map((f, i) => (
                   <li key={i} className="flex items-center gap-2 text-sm text-slate-700">
                     <BarChart3 className="h-4 w-4 text-primary shrink-0" />
                     {f}

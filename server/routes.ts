@@ -496,6 +496,8 @@ export async function registerRoutes(
           return {
             questionId: a.questionId,
             section: q?.section ?? "Unknown",
+            skillId: q?.skillId ?? "",
+            subRuleId: q?.subRuleId ?? "",
             prompt: q?.prompt ?? "",
             options: q?.options ?? [],
             correctAnswer: q?.correctAnswer ?? "",

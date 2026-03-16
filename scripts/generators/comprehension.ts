@@ -1,0 +1,473 @@
+import { GeneratedQuestion } from './types';
+
+interface PassageSpec {
+  id: string;
+  title: string;
+  genre: string;
+  text: string;
+}
+
+interface QuestionSpec {
+  type: string;
+  skillId: string;
+  difficulty: 'easy' | 'medium' | 'hard';
+  cognitiveLoad: number;
+  estTimeSeconds: number;
+}
+
+const GENRES = [
+  'Nature & Wildlife',
+  'History & Heritage',
+  'Science & Discovery',
+  'Adventure & Exploration',
+  'Community & Culture',
+  'Environment & Geography',
+  'Technology & Innovation',
+  'Arts & Literature',
+] as const;
+
+const QUESTION_TYPES: QuestionSpec[] = [
+  { type: 'Fact Retrieval', skillId: 'comp.fact_retrieval', difficulty: 'easy', cognitiveLoad: 2, estTimeSeconds: 60 },
+  { type: 'Fact Retrieval', skillId: 'comp.fact_retrieval', difficulty: 'medium', cognitiveLoad: 3, estTimeSeconds: 75 },
+  { type: 'Vocabulary in Context', skillId: 'comp.vocabulary', difficulty: 'easy', cognitiveLoad: 2, estTimeSeconds: 60 },
+  { type: 'Vocabulary in Context', skillId: 'comp.vocabulary', difficulty: 'medium', cognitiveLoad: 3, estTimeSeconds: 75 },
+  { type: 'Inference', skillId: 'comp.inference', difficulty: 'medium', cognitiveLoad: 3, estTimeSeconds: 90 },
+  { type: 'Inference', skillId: 'comp.inference', difficulty: 'hard', cognitiveLoad: 4, estTimeSeconds: 120 },
+  { type: 'Authorial Intent', skillId: 'comp.authorial_intent', difficulty: 'medium', cognitiveLoad: 3, estTimeSeconds: 90 },
+  { type: 'Authorial Intent', skillId: 'comp.authorial_intent', difficulty: 'hard', cognitiveLoad: 4, estTimeSeconds: 120 },
+  { type: 'Text Structure', skillId: 'comp.text_structure', difficulty: 'medium', cognitiveLoad: 3, estTimeSeconds: 90 },
+  { type: 'Text Structure', skillId: 'comp.text_structure', difficulty: 'hard', cognitiveLoad: 4, estTimeSeconds: 120 },
+  { type: 'Fact Retrieval', skillId: 'comp.fact_retrieval', difficulty: 'hard', cognitiveLoad: 4, estTimeSeconds: 90 },
+  { type: 'Vocabulary in Context', skillId: 'comp.vocabulary', difficulty: 'hard', cognitiveLoad: 4, estTimeSeconds: 90 },
+  { type: 'Inference', skillId: 'comp.inference', difficulty: 'easy', cognitiveLoad: 2, estTimeSeconds: 75 },
+  { type: 'Authorial Intent', skillId: 'comp.authorial_intent', difficulty: 'easy', cognitiveLoad: 2, estTimeSeconds: 75 },
+  { type: 'Text Structure', skillId: 'comp.text_structure', difficulty: 'easy', cognitiveLoad: 2, estTimeSeconds: 75 },
+];
+
+function seededRandom(seed: number): () => number {
+  let s = seed;
+  return () => {
+    s = (s * 1103515245 + 12345) & 0x7fffffff;
+    return s / 0x7fffffff;
+  };
+}
+
+function shuffle<T>(arr: T[], rng: () => number): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function pick<T>(arr: T[], rng: () => number): T {
+  return arr[Math.floor(rng() * arr.length)];
+}
+
+const NATURE_PASSAGES: PassageSpec[] = [
+  {
+    id: 'NW01', title: 'The Secret Life of Hedgehogs', genre: 'Nature & Wildlife',
+    text: `Every autumn, hedgehogs across Britain begin one of nature's most remarkable preparations. As the days shorten and temperatures fall, these small, spiny mammals must eat voraciously to build up fat reserves for hibernation. A hedgehog needs to weigh at least 600 grams before winter arrives, or it may not survive.\n\nHedgehogs are nocturnal creatures, emerging at dusk to forage for beetles, caterpillars, earthworms, and slugs. Their eyesight is poor, so they rely almost entirely on their acute sense of smell and excellent hearing to locate food. A hedgehog can travel up to two miles in a single night, shuffling through gardens, hedgerows, and woodland edges.\n\nWhen threatened, a hedgehog curls into a tight ball, presenting its five thousand or more spines to any predator. Each spine is a modified hair, made of keratin — the same protein found in human fingernails. This defence is remarkably effective against foxes and badgers, though modern dangers like roads and garden chemicals pose far greater threats.\n\nConservation efforts have become increasingly important. Hedgehog numbers in Britain have declined by roughly thirty per cent in the last decade. Wildlife charities encourage gardeners to create hedgehog highways — small gaps in fences — to allow these creatures to roam freely between gardens. Leaving areas of the garden slightly wild, with piles of leaves and logs, provides perfect nesting sites.`
+  },
+  {
+    id: 'NW02', title: 'Migration of the Arctic Tern', genre: 'Nature & Wildlife',
+    text: `The Arctic tern holds one of the most extraordinary records in the animal kingdom: it makes the longest migration of any bird, travelling roughly 70,000 kilometres each year between the Arctic and the Antarctic. Over its lifetime of about thirty years, an Arctic tern may fly the equivalent of three return trips to the Moon.\n\nThese elegant seabirds breed during the Arctic summer, nesting in colonies on rocky shores and islands. Their chicks are remarkably hardy, able to withstand the harsh conditions of the far north. Both parents share the duties of incubation and feeding, bringing small fish and crustaceans to their young.\n\nAs autumn approaches and daylight hours diminish, the terns begin their epic journey southward. They follow a winding route that takes advantage of prevailing winds, often crossing the Atlantic Ocean. By December, they arrive in Antarctic waters, where they enjoy a second summer of almost continuous daylight.\n\nScientists have tracked individual terns using tiny geolocators attached to their legs. The data revealed that the birds spend most of their lives in perpetual daylight, experiencing more hours of sunshine than any other creature on Earth. This remarkable adaptation means they can feed almost continuously during the long polar days, fuelling their incredible journeys.`
+  },
+  {
+    id: 'NW03', title: 'The Woodland Floor in Spring', genre: 'Nature & Wildlife',
+    text: `Before the canopy of leaves closes overhead, a race takes place on the woodland floor. Bluebells, wood anemones, and wild garlic must complete their growing cycle in the brief window of sunlight that reaches the ground between February and May. This phenomenon is known as the spring ephemeral display, and it transforms ancient woodlands into carpets of colour.\n\nBluebells are perhaps Britain's most celebrated woodland flower. An estimated half of the world's bluebell population grows in the United Kingdom, making their conservation a matter of national importance. These delicate flowers take at least five years to grow from seed to flowering bulb, and a single bluebell can live for decades if left undisturbed.\n\nBeneath the visible display, a hidden network connects the woodland. Mycorrhizal fungi form partnerships with tree roots, exchanging nutrients in a system scientists sometimes call the 'wood wide web.' Through this network, mature trees can share sugars and minerals with younger saplings growing in the shade, effectively nurturing the next generation.\n\nThe timing of the spring display is increasingly affected by climate change. Warmer winters can cause flowers to bloom earlier, sometimes before the insects they depend on for pollination have emerged. This mismatch threatens the delicate balance that has existed for thousands of years in British woodlands.`
+  },
+  {
+    id: 'NW04', title: 'Otters Return to British Rivers', genre: 'Nature & Wildlife',
+    text: `Once on the brink of extinction in England, otters have made a remarkable comeback over the past three decades. In the 1970s, pesticide pollution had reduced otter numbers to dangerously low levels, with the animals disappearing entirely from many rivers. Today, thanks to stricter pollution controls and dedicated conservation work, otters have been recorded in every county in England.\n\nOtters are supremely adapted to life in water. Their dense, waterproof fur contains around 70,000 hairs per square centimetre — more than any other British mammal. This extraordinary coat traps a layer of air against the skin, providing insulation in cold rivers and lakes. An otter's webbed feet and powerful tail make it an agile swimmer, capable of catching fish, frogs, and even crayfish.\n\nDespite their aquatic lifestyle, otters spend much of their time on land. They use sheltered spots called holts — often found among tree roots along riverbanks — for resting and raising cubs. A female otter typically gives birth to two or three cubs, which remain dependent on their mother for over a year as they learn essential hunting skills.\n\nThe return of otters is widely considered a sign of improving river health. As top predators, their presence indicates a thriving ecosystem with clean water and abundant fish populations. However, challenges remain: road traffic accidents are now the leading cause of otter deaths, and habitat fragmentation continues to threaten some populations.`
+  },
+  {
+    id: 'NW05', title: 'The Peregrine Falcon: Speed and Precision', genre: 'Nature & Wildlife',
+    text: `Reaching speeds of over 240 miles per hour during a hunting dive called a stoop, the peregrine falcon is the fastest animal on Earth. This extraordinary raptor has adapted every aspect of its body for speed. Its streamlined shape, stiff feathers, and a special bony structure in its nostrils — called a tubercle — allows it to breathe at tremendous velocities.\n\nPeregrines were once confined to remote cliffs and coastal areas in Britain, but in recent decades they have successfully colonised urban environments. Tall buildings and church spires mimic the rocky ledges they naturally prefer for nesting, while the abundance of pigeons provides a reliable food source. Cities such as London, Manchester, and Bath now host thriving peregrine populations.\n\nThe hunting technique of a peregrine is a marvel of precision. The falcon soars to a great height, scanning below for prey. When it spots a target — usually a pigeon or dove in flight — it folds its wings close to its body and drops into a near-vertical stoop. At the moment of impact, the falcon strikes with its talons, often killing its prey instantly.\n\nPeregrine populations collapsed in the 1960s due to the pesticide DDT, which caused their eggshells to become dangerously thin. After DDT was banned, numbers slowly recovered. Today, there are approximately 1,800 breeding pairs in the United Kingdom, and the species is considered a conservation success story. Webcams installed at nesting sites have given thousands of people the chance to watch these magnificent birds raise their young.`
+  },
+];
+
+const HISTORY_PASSAGES: PassageSpec[] = [
+  {
+    id: 'HH01', title: 'The Buried Army of Sutton Hoo', genre: 'History & Heritage',
+    text: `In 1939, on the eve of the Second World War, a remarkable discovery was made in the Suffolk countryside. At Sutton Hoo, archaeologists unearthed the remains of an Anglo-Saxon ship burial dating from the early seventh century. Inside the burial chamber, they found one of the richest collections of treasure ever discovered in Britain.\n\nThe centrepiece of the find was a magnificent helmet, decorated with intricate patterns of warriors and mythical beasts. Alongside it lay gold buckles, shoulder clasps studded with garnets, silver bowls from the Byzantine Empire, and a ceremonial sword. These objects revealed the extraordinary wealth and international connections of Anglo-Saxon kings.\n\nScholars believe the burial was for King Raedwald of East Anglia, one of the most powerful rulers of his time. The ship itself — twenty-seven metres long — had been dragged from the nearby River Deben and placed in a trench on the hilltop. Though the wood had rotted away entirely, the iron rivets and a ghostly impression in the sand preserved the vessel's shape.\n\nThe discovery transformed our understanding of the so-called 'Dark Ages.' Far from being a period of ignorance and decline, the finds showed that Anglo-Saxon England was a sophisticated society with far-reaching trade networks stretching from Scandinavia to the Mediterranean. The treasures are now displayed in the British Museum, where they remain among its most popular exhibits.`
+  },
+  {
+    id: 'HH02', title: 'The Great Fire of London', genre: 'History & Heritage',
+    text: `On 2 September 1666, a small fire broke out in a bakery on Pudding Lane in the heart of London. What began as a minor incident quickly became one of the most devastating events in the city's history. Over four days, the Great Fire destroyed more than thirteen thousand houses, eighty-seven churches, and most of the medieval City of London.\n\nThe fire spread so rapidly because London's buildings were largely made of timber and thatch, packed closely together along narrow streets. A prolonged drought that summer had left the wood bone-dry, and strong easterly winds fanned the flames from building to building. Firefighting methods at the time were primitive — there were no engines, only hand-operated pumps and leather buckets.\n\nSamuel Pepys, a naval administrator who kept a famous diary, recorded the terror of those days. He described people throwing their possessions into the Thames and fleeing by boat as the fire advanced. The diarist himself buried his most valued possessions — including a wheel of Parmesan cheese — in his garden for safekeeping.\n\nAlthough the destruction was enormous, the fire had an unexpected benefit. The medieval city's cramped, unsanitary conditions had contributed to the Great Plague of 1665, which killed roughly 100,000 Londoners. The rebuilding that followed, much of it overseen by the architect Sir Christopher Wren, created wider streets and stone buildings, including the magnificent St Paul's Cathedral that still stands today.`
+  },
+  {
+    id: 'HH03', title: 'Victorian Children at Work', genre: 'History & Heritage',
+    text: `During the reign of Queen Victoria, thousands of children as young as five worked in factories, mines, and workshops across Britain. The rapid growth of industry during the Industrial Revolution created a huge demand for cheap labour, and children were considered ideal workers — their small fingers and bodies could operate machinery and crawl into spaces that adults could not reach.\n\nIn textile mills, children worked as scavengers, crawling beneath running machinery to collect loose cotton fibres. The work was extremely dangerous; many children lost fingers, limbs, or even their lives when caught in the equipment. Working hours were brutal — often fourteen hours a day, six days a week — and the pay was a fraction of what adults earned.\n\nCoal mines presented equally horrifying conditions. Young children, known as trappers, sat alone in complete darkness for hours, opening and closing ventilation doors. Others hauled heavy carts of coal through narrow underground passages on their hands and knees. The Mines Act of 1842, prompted by a shocking parliamentary report, banned girls and boys under ten from working underground.\n\nGradually, a series of Factory Acts improved conditions. The 1833 Factory Act prohibited the employment of children under nine in textile factories, and limited the hours of older children. Education slowly became a right rather than a privilege, culminating in the 1880 Education Act, which made school attendance compulsory for all children between five and ten years old.`
+  },
+  {
+    id: 'HH04', title: 'Hadrian\'s Wall: Rome\'s Northern Frontier', genre: 'History & Heritage',
+    text: `Stretching 73 miles from coast to coast across northern England, Hadrian's Wall stands as one of the most impressive monuments of the Roman Empire. Construction began in AD 122 on the orders of Emperor Hadrian, who visited Britain and decided that a permanent barrier was needed to mark the northern limit of Roman territory.\n\nThe wall was built primarily of stone in the east and turf in the west, standing approximately five metres high with a parapet walkway along the top. Every Roman mile, a fortified gateway called a milecastle provided accommodation for a small garrison. Between each pair of milecastles, two smaller watchtowers — turrets — maintained a continuous line of surveillance.\n\nLife on the wall was surprisingly cosmopolitan. Soldiers stationed there came from across the Empire — from Syria, North Africa, Spain, and the Danube region. Archaeological finds include letters written on thin wooden tablets, preserved in the waterlogged soil at Vindolanda fort. These tablets reveal personal details: requests for warm socks, birthday party invitations, and complaints about the British weather.\n\nAlthough often described as a defensive barrier, historians now believe the wall served multiple purposes. It controlled the movement of people and goods between Roman territory and the lands beyond, enabling taxation of trade. It was also a powerful symbol of Roman authority — a permanent statement that Rome had come to stay. Today, it is a UNESCO World Heritage Site, attracting visitors from around the world.`
+  },
+  {
+    id: 'HH05', title: 'The Blitz Spirit: London 1940-41', genre: 'History & Heritage',
+    text: `For fifty-seven consecutive nights from September 1940, German bombers attacked London in a sustained campaign that became known as the Blitz. The Luftwaffe's aim was to destroy British morale and force the country to surrender, but the response of ordinary Londoners became legendary — a defiance that was later called the 'Blitz Spirit.'\n\nEvery evening as sirens wailed, families hurried to air-raid shelters. Many used the London Underground, sleeping on station platforms with thousands of strangers. Anderson shelters — corrugated steel structures buried in back gardens — offered basic protection for those with outdoor space, while indoor Morrison shelters resembled reinforced metal tables.\n\nThe bombing killed over 30,000 Londoners and destroyed or damaged more than a million homes. Entire neighbourhoods were flattened, and landmarks including the Houses of Parliament and Buckingham Palace suffered damage. Yet daily life continued with remarkable determination. Shops displayed signs reading 'More open than usual' after bomb damage, and workers picked their way through rubble-strewn streets to reach their jobs.\n\nWomen played vital roles throughout the Blitz. They served as air-raid wardens, drove ambulances, staffed fire-watch posts, and worked in factories producing essential supplies. The Women's Voluntary Service organised mobile canteens, providing hot meals to rescue workers and bombed-out families. Their contribution helped sustain the spirit of resilience that defined Britain's wartime experience.`
+  },
+];
+
+const SCIENCE_PASSAGES: PassageSpec[] = [
+  {
+    id: 'SD01', title: 'The Human Heart: An Engine for Life', genre: 'Science & Discovery',
+    text: `Your heart is roughly the size of your clenched fist, yet it is one of the hardest-working organs in your body. Beating around 100,000 times every day, it pumps approximately five litres of blood through your circulatory system every minute. Over an average lifetime, the heart will beat more than 2.5 billion times without ever stopping to rest.\n\nThe heart is divided into four chambers: two upper chambers called atria and two lower chambers called ventricles. Blood enters the heart through the atria and is pumped out through the ventricles. The right side of the heart sends blood to the lungs to pick up oxygen, while the left side pumps oxygen-rich blood to the rest of the body.\n\nValves between the chambers act like one-way doors, ensuring blood flows in the correct direction. The familiar 'lub-dub' sound of a heartbeat is actually the noise of these valves opening and closing. The first sound occurs when the valves between the atria and ventricles close, and the second when the valves leading to the arteries snap shut.\n\nExercise strengthens the heart muscle, enabling it to pump more blood with each beat. A trained athlete's heart can pump the same amount of blood with fewer beats, which is why fit people often have lower resting heart rates. Regular physical activity, along with a balanced diet, remains the most effective way to keep this remarkable organ healthy throughout life.`
+  },
+  {
+    id: 'SD02', title: 'Volcanoes: Windows into the Earth', genre: 'Science & Discovery',
+    text: `Deep beneath the Earth's surface, temperatures reach thousands of degrees Celsius. At these extremes, rock melts into a thick, flowing substance called magma. When pressure forces this magma upward through cracks in the Earth's crust, a volcano is born. There are approximately 1,500 potentially active volcanoes on our planet, with around fifty erupting in any given year.\n\nVolcanoes come in different shapes depending on how they erupt. Shield volcanoes, like those in Hawaii, are broad and gently sloping, built by layers of fluid lava that flows easily across the ground. Stratovolcanoes, such as Mount Fuji in Japan, are steep and conical, formed by alternating layers of lava and ash from explosive eruptions.\n\nEruptions can have devastating effects on nearby communities, but they also bring long-term benefits. Volcanic ash is rich in minerals that create exceptionally fertile soil. Some of the world's most productive farmland — in places like Sicily, Indonesia, and Central America — owes its richness to centuries of volcanic deposits.\n\nScientists who study volcanoes, called volcanologists, use a range of tools to predict eruptions. Seismometers detect the tiny earthquakes that occur as magma moves underground. Satellite instruments measure changes in the shape of a volcano's surface, and gas sensors monitor emissions of sulphur dioxide and other gases. These techniques have saved countless lives by providing early warnings to communities living in volcanic danger zones.`
+  },
+  {
+    id: 'SD03', title: 'The Water Cycle: Nature\'s Recycling System', genre: 'Science & Discovery',
+    text: `Every drop of water on Earth has been recycled countless times over billions of years. The water you drink today may once have been part of a prehistoric ocean, a Roman bath, or a cloud floating over the Himalayas. This continuous movement of water between the Earth's surface and the atmosphere is called the water cycle, and it is essential for all life on our planet.\n\nThe cycle begins with evaporation. Heat from the sun causes water in oceans, lakes, and rivers to change from liquid to water vapour, rising into the atmosphere. Plants also release water vapour through their leaves in a process called transpiration. A single large oak tree can release over 150,000 litres of water into the atmosphere in one year.\n\nAs water vapour rises, it cools and condenses around tiny particles of dust or pollen, forming clouds. When cloud droplets combine and become heavy enough, they fall as precipitation — rain, snow, sleet, or hail. Some of this water flows into rivers and eventually returns to the sea, while some soaks into the ground to become groundwater.\n\nHuman activities are increasingly disrupting the water cycle. Deforestation reduces transpiration, concrete surfaces prevent water from soaking into the ground, and rising temperatures increase evaporation rates. Understanding and protecting the water cycle is one of the most important challenges facing scientists and policymakers today.`
+  },
+  {
+    id: 'SD04', title: 'Antibiotics: Medicine\'s Greatest Weapon', genre: 'Science & Discovery',
+    text: `In 1928, Alexander Fleming returned from holiday to find something unexpected in his laboratory at St Mary's Hospital, London. A mould had accidentally contaminated one of his petri dishes, and the bacteria surrounding it had been killed. Fleming had discovered penicillin — a substance that would transform medicine and save hundreds of millions of lives.\n\nAntibiotics work by either killing bacteria directly or preventing them from reproducing. Different antibiotics target different parts of bacterial cells. Penicillin, for example, disrupts the construction of bacterial cell walls, causing the cells to burst. Other antibiotics interfere with the bacteria's ability to make proteins or copy their DNA.\n\nThe introduction of antibiotics in the 1940s was revolutionary. Infections that had previously been fatal — pneumonia, tuberculosis, and infected wounds — could suddenly be cured. Average life expectancy increased dramatically, and surgery became far safer because the risk of post-operative infection was dramatically reduced.\n\nHowever, bacteria are evolving to resist antibiotics at an alarming rate. When antibiotics are overused or prescribed unnecessarily, resistant bacteria survive and multiply. The World Health Organisation has described antibiotic resistance as one of the greatest threats to global health. Scientists are racing to develop new antibiotics and alternative treatments, while doctors urge patients to complete prescribed courses and never demand antibiotics for viral infections, against which they have no effect.`
+  },
+  {
+    id: 'SD05', title: 'The Solar System\'s Gas Giants', genre: 'Science & Discovery',
+    text: `Beyond the asteroid belt that separates the inner rocky planets from the outer solar system lie four immense worlds: Jupiter, Saturn, Uranus, and Neptune. Known as gas giants, these planets are fundamentally different from Earth. They have no solid surface — instead, their thick atmospheres of hydrogen and helium gradually compress into liquid and eventually metallic states deep within.\n\nJupiter is by far the largest planet in our solar system. Its mass is more than twice that of all the other planets combined. The Great Red Spot, a storm larger than Earth, has been raging in Jupiter's atmosphere for at least 350 years. Jupiter's powerful magnetic field is twenty thousand times stronger than Earth's, generating intense radiation belts around the planet.\n\nSaturn is famous for its spectacular ring system, made up of billions of particles of ice and rock ranging in size from grains of sand to houses. Although all four gas giants have ring systems, Saturn's are by far the most visible and extensive, stretching hundreds of thousands of kilometres into space yet averaging only about ten metres in thickness.\n\nUranus and Neptune, sometimes called ice giants, contain significant amounts of water, ammonia, and methane ice in addition to hydrogen and helium. Neptune's winds are the fastest in the solar system, reaching speeds of over 2,000 kilometres per hour. Both distant worlds remain largely mysterious — each has been visited by only one spacecraft, Voyager 2, which flew past in the 1980s.`
+  },
+];
+
+const ADVENTURE_PASSAGES: PassageSpec[] = [
+  {
+    id: 'AE01', title: 'Shackleton\'s Incredible Voyage', genre: 'Adventure & Exploration',
+    text: `In 1914, Sir Ernest Shackleton set out with twenty-seven men on his ship Endurance to attempt the first land crossing of Antarctica. What followed became one of the greatest survival stories in exploration history. After months of sailing, the ship became trapped in pack ice in the Weddell Sea and was slowly crushed by the pressure of the ice, forcing the crew to abandon it.\n\nFor five months, the men camped on the drifting ice floes, salvaging supplies and three small lifeboats from the wreck. When their ice floe began to break apart, they launched the boats into the freezing Southern Ocean and navigated through dangerous waters to reach the uninhabited Elephant Island — the first time they had stood on solid ground in nearly sixteen months.\n\nRealising that rescue would never come to such a remote location, Shackleton made an extraordinary decision. With five companions, he set out in one of the lifeboats — a vessel barely seven metres long — to cross 800 miles of the world's most treacherous ocean. For sixteen days they battled mountainous waves, hurricane-force winds, and bitter cold before reaching South Georgia Island.\n\nEven then, the ordeal was not over. They had landed on the wrong side of the island and had to cross unmapped mountains and glaciers to reach the whaling station at Stromness. Shackleton eventually organised a rescue mission and returned to Elephant Island, where every single member of the crew was found alive. Not one life was lost throughout the entire expedition.`
+  },
+  {
+    id: 'AE02', title: 'The First Ascent of Everest', genre: 'Adventure & Exploration',
+    text: `On 29 May 1953, Edmund Hillary of New Zealand and Tenzing Norgay, a Sherpa from Nepal, became the first people confirmed to have reached the summit of Mount Everest, the world's highest peak at 8,849 metres above sea level. Their achievement captured the imagination of the world and came just days before the coronation of Queen Elizabeth II.\n\nThe expedition was a massive undertaking. Led by Colonel John Hunt, the team included over 400 porters, twenty Sherpa guides, and more than ten tonnes of equipment. They established a series of camps up the mountain, gradually acclimatising to the thin air and extreme cold. At high altitude, the air contains less than a third of the oxygen found at sea level, making every step exhausting.\n\nHillary and Tenzing set out from their final camp at around 6:30 in the morning. Wearing bulky oxygen apparatus and heavily insulated clothing, they climbed a steep rock face — now known as the Hillary Step — before reaching the summit at approximately 11:30. They spent only about fifteen minutes at the top, taking photographs and leaving offerings in the snow.\n\nThe news reached London on the morning of the coronation and was greeted with tremendous celebration. Hillary was knighted, and Tenzing received the George Medal. Both men always insisted that they had reached the summit together, refusing to say who had actually stood there first. Their partnership and mutual respect became as celebrated as the achievement itself.`
+  },
+  {
+    id: 'AE03', title: 'Deep Sea Exploration: The Mariana Trench', genre: 'Adventure & Exploration',
+    text: `At the bottom of the Pacific Ocean lies the deepest point on Earth: the Challenger Deep in the Mariana Trench, plunging nearly eleven kilometres below the surface. The pressure at this depth is more than 1,000 times atmospheric pressure at sea level — equivalent to having fifty jumbo jets stacked on top of you. Yet life exists even here.\n\nThe first humans to visit the Challenger Deep were Jacques Piccard and Don Walsh, who descended in the bathyscaphe Trieste on 23 January 1960. Their vessel took nearly five hours to sink to the bottom, where they spent just twenty minutes before beginning the long ascent. The pair reported seeing a flat fish on the seabed, though this observation has been debated by scientists ever since.\n\nMore than fifty years later, filmmaker James Cameron made a solo descent in the specially designed submersible Deepsea Challenger. His expedition collected samples and recorded high-definition footage of the trench floor. The images revealed a surprisingly barren landscape of pale sediment, though subsequent expeditions have found thriving communities of microorganisms and shrimp-like amphipods.\n\nThe deep ocean remains less explored than the surface of Mars. Scientists estimate that more than 80 per cent of the ocean floor has never been mapped in detail. New species are discovered on almost every deep-sea expedition, and researchers believe the ocean depths hold vital clues about the origins of life on Earth and the potential for life on other worlds.`
+  },
+  {
+    id: 'AE04', title: 'The Race to the South Pole', genre: 'Adventure & Exploration',
+    text: `In 1911, two expeditions set out simultaneously for the South Pole: one led by the Norwegian Roald Amundsen and the other by the British naval officer Robert Falcon Scott. The resulting race became one of the most famous and tragic episodes in the history of exploration.\n\nAmundsen was a meticulous planner who had spent years studying Arctic survival techniques from the Inuit people. His team used dog sledges, which proved fast and efficient on the Antarctic ice. They wore loose-fitting fur clothing designed for extreme cold and ate a diet rich in fats to maintain body heat. Amundsen's party reached the South Pole on 14 December 1911, thirty-four days ahead of Scott.\n\nScott's approach was very different. He relied heavily on ponies and man-hauling — having his team drag heavy sledges themselves. His clothing was less well adapted to Antarctic conditions, and his dietary planning proved inadequate for the enormous energy demands of polar travel. Scott's party reached the Pole on 17 January 1912, only to find Amundsen's tent and Norwegian flag already there.\n\nThe return journey proved fatal. Exhausted, frost-bitten, and running low on supplies, Scott's team struggled through deteriorating weather. All five members of the polar party perished. Scott's final diary entries, found with his body eight months later, are among the most poignant documents in British history. His expedition, though a failure in racing terms, contributed enormously to scientific knowledge through geological specimens and meteorological observations collected along the route.`
+  },
+  {
+    id: 'AE05', title: 'Sailing Solo Around the World', genre: 'Adventure & Exploration',
+    text: `In 2005, Ellen MacArthur completed a solo circumnavigation of the globe in 71 days, breaking the world record by over a day. Sailing her trimaran B&G, she battled storms, equipment failures, and extreme isolation across more than 27,000 miles of ocean. At just 28 years old, she became one of the most celebrated sailors in history.\n\nSolo ocean sailing demands extraordinary self-reliance. MacArthur had to be her own navigator, engineer, cook, and medic. She slept in short bursts of twenty to forty minutes, constantly alert to changes in weather and sea conditions. Any damage to the boat had to be repaired immediately, sometimes requiring her to climb the twenty-metre mast in rolling seas.\n\nThe Southern Ocean proved the most challenging section of the voyage. Here, between the southern tips of Africa, Australia, and South America, enormous waves driven by unimpeded winds circle the globe continuously. Icebergs drifting north from Antarctica add another layer of danger. MacArthur described the experience as both terrifying and awe-inspiring — she was utterly alone in one of the wildest places on Earth.\n\nAfter completing her record-breaking voyage, MacArthur reflected on what she had learned about the finite nature of resources. Living on a boat with limited supplies taught her that everything is finite — a lesson she applied to her subsequent career as a sustainability campaigner. She founded the Ellen MacArthur Foundation, which works with businesses and governments to promote a circular economy, reducing waste and reusing materials.`
+  },
+];
+
+const COMMUNITY_PASSAGES: PassageSpec[] = [
+  {
+    id: 'CC01', title: 'The Village Fete: A British Tradition', genre: 'Community & Culture',
+    text: `Every summer, thousands of villages across Britain hold a fete — a traditional outdoor celebration that brings the community together. Typically held on the village green or in the grounds of a local manor house, the fete features stalls, games, and competitions that have remained largely unchanged for over a century.\n\nClassic fete activities include tombolas, coconut shies, wellie-wanging (throwing a wellington boot as far as possible), and the ever-popular cake competition. Local bakers spend weeks perfecting their Victoria sponges and fruit loaves, competing for rosettes judged by parish councillors and retired schoolteachers. The white elephant stall — selling donated unwanted items — is a fixture of every fete.\n\nBehind the cheerful atmosphere lies serious community work. Fetes are typically organised by volunteers who spend months planning logistics, recruiting helpers, and gathering donations. The money raised supports everything from church roof repairs to playground equipment and local charities. A successful village fete might raise several thousand pounds in a single afternoon.\n\nIn recent years, fetes have evolved to include modern attractions alongside traditional ones. Live music, artisan food stalls, and children's craft workshops now sit comfortably alongside Punch and Judy shows and maypole dancing. Despite these changes, the essential character of the village fete endures — a celebration of local identity, generosity, and the simple pleasures of spending time together outdoors.`
+  },
+  {
+    id: 'CC02', title: 'The Story of British Tea Culture', genre: 'Community & Culture',
+    text: `Britain's love affair with tea began in the seventeenth century when Catherine of Braganza, the Portuguese wife of Charles II, introduced the fashion for tea drinking at court. What began as an aristocratic luxury gradually became the national drink, consumed by all classes and in every setting from workers' canteens to the finest drawing rooms.\n\nBy the nineteenth century, tea had become central to British daily life. The tradition of afternoon tea — a light meal of sandwiches, scones, and cakes served with tea around four o'clock — was established by Anna Maria Russell, the Duchess of Bedford, who found herself hungry between lunch and dinner. The custom spread rapidly through fashionable society.\n\nThe tea trade shaped Britain's relationship with the world. The East India Company imported vast quantities from China, and later from plantations established in India and Ceylon. The trade generated enormous wealth but also controversy — the Opium Wars with China were partly driven by Britain's desire to balance its tea imports. Working conditions on tea plantations were often brutal.\n\nToday, Britons drink approximately 100 million cups of tea every day. The ritual of 'putting the kettle on' remains a fundamental part of British hospitality and social interaction. Whether offered to comfort a friend in distress, welcome a visitor, or simply mark a break in the working day, a cup of tea continues to serve as much more than just a drink — it is a gesture of warmth and connection.`
+  },
+  {
+    id: 'CC03', title: 'Carnival in Notting Hill', genre: 'Community & Culture',
+    text: `Every August bank holiday weekend, the streets of Notting Hill in west London explode with colour, music, and dance as Europe's largest street carnival takes place. The Notting Hill Carnival attracts over two million visitors across two days, celebrating Caribbean culture and the diversity of modern London.\n\nThe carnival began in 1966 as a small neighbourhood event organised by Trinidadian activist Claudia Jones and community leader Rhaune Laslett. Its origins lie in the Caribbean tradition of carnival, brought to London by immigrants from Trinidad, Jamaica, and other islands who arrived in Britain during the 1950s and 1960s. In its early years, the event was a modest affair with a few steel bands and a procession through local streets.\n\nToday, the carnival features elaborate masquerade costumes that take months to create. Groups called 'mas bands' design themed costumes adorned with feathers, sequins, and beadwork, often costing thousands of pounds each. Steel bands, soca music, reggae, and calypso provide the soundtrack, with enormous sound systems mounted on floats that inch through the packed streets.\n\nFood is a central part of the carnival experience. Stalls line every street, serving jerk chicken, curried goat, fried plantain, rice and peas, and countless other Caribbean dishes. The aromas blend with the music and the visual spectacle to create an atmosphere that participants describe as uniquely exhilarating. For the Caribbean community, the carnival remains a vital expression of cultural identity and a celebration of the contribution immigrants have made to British life.`
+  },
+  {
+    id: 'CC04', title: 'Public Libraries: More Than Just Books', genre: 'Community & Culture',
+    text: `Britain's network of public libraries dates back to the Public Libraries Act of 1850, which gave local authorities the power to establish free lending libraries. The act was championed by William Ewart, a Liverpool MP who believed that access to books and information should be available to everyone, regardless of wealth or social class.\n\nAt their peak in the 1990s, Britain had over 4,000 public libraries. These buildings served as community hubs, offering not just books but a warm, quiet space for reading, studying, and meeting. For many people — particularly the elderly, the unemployed, and families with limited resources — the library was an essential lifeline and a place of belonging.\n\nModern libraries have adapted to the digital age by offering computer access, Wi-Fi, e-book lending, and online resources alongside traditional print collections. Many now host children's reading groups, coding workshops, language classes, and community events. Some have introduced 'libraries of things,' lending items such as tools, sewing machines, and even telescopes.\n\nDespite their evolving role, libraries face serious challenges. Budget cuts have led to the closure of hundreds of branches, with some areas losing their only library. Campaigners argue that libraries are more important than ever in an age of digital inequality, providing free access to information and technology for those who cannot afford their own. The debate over library funding reflects broader questions about the value societies place on shared public resources.`
+  },
+  {
+    id: 'CC05', title: 'The Allotment Movement', genre: 'Community & Culture',
+    text: `Across Britain, approximately 330,000 allotment plots provide city dwellers with space to grow their own fruit, vegetables, and flowers. These small parcels of land — typically measuring around 250 square metres — have a history stretching back centuries, rooted in the idea that ordinary people should have access to land for growing food.\n\nThe allotment movement gained momentum during the nineteenth century as rapid urbanisation left many families without any garden space. The Allotments Act of 1887 required local authorities to provide plots when there was demand. During both world wars, allotments played a vital role in feeding the nation. The 'Dig for Victory' campaign of 1939-1945 encouraged everyone to turn available land into productive gardens.\n\nToday, allotments are experiencing a renaissance. Waiting lists in many areas stretch to several years, driven by growing interest in organic food, sustainability, and outdoor wellbeing. Research has shown that regular allotment gardening improves physical fitness, reduces stress, and combats loneliness — particularly among older gardeners who value the social aspect of tending plots alongside neighbours.\n\nAllotment communities often develop their own cultures and traditions. Plot holders share seeds, swap surplus produce, and offer advice to newcomers. Annual shows celebrate the finest vegetables, with fierce but friendly competition over the largest marrow or the straightest runner beans. For many gardeners, the allotment provides something increasingly rare in modern life: a connection to the seasons, the soil, and a community of like-minded people.`
+  },
+];
+
+const ENVIRONMENT_PASSAGES: PassageSpec[] = [
+  {
+    id: 'EG01', title: 'The Changing Coastline of Britain', genre: 'Environment & Geography',
+    text: `Britain's coastline is in a state of constant change. Erosion by waves, wind, and weather removes an estimated 2.2 million tonnes of material from the coast every year. In some locations, cliffs retreat by several metres annually, swallowing fields, paths, and occasionally entire buildings into the sea.\n\nThe Holderness coast in East Yorkshire is one of the fastest-eroding coastlines in Europe. Made of soft boulder clay deposited by glaciers during the last Ice Age, these cliffs are particularly vulnerable to wave attack. Since Roman times, more than thirty villages along this stretch have been lost to the sea, and the coastline has retreated by up to four kilometres in places.\n\nCoastal defences take many forms. Sea walls, groynes, and rock armour can slow erosion in specific areas, but they often simply redirect wave energy to neighbouring unprotected stretches. This process, known as terminal groyne effect, can accelerate erosion elsewhere. Increasingly, coastal managers are adopting 'managed retreat' — deliberately allowing the sea to reclaim low-value land while protecting essential areas.\n\nClimate change is accelerating coastal erosion through rising sea levels and more frequent severe storms. Scientists predict that sea levels around Britain could rise by up to a metre by the end of this century. Coastal communities face difficult decisions about whether to defend their land at great expense or accept that some areas will eventually be surrendered to the sea.`
+  },
+  {
+    id: 'EG02', title: 'Rewilding: Restoring Britain\'s Landscapes', genre: 'Environment & Geography',
+    text: `Rewilding is a conservation approach that aims to restore natural processes to degraded landscapes. Rather than managing nature closely, rewilding steps back and allows ecosystems to find their own balance. In Britain, this controversial idea is transforming farmland, estates, and even urban areas into havens for wildlife.\n\nThe most famous British rewilding project is the Knepp Estate in West Sussex. In 2001, the owners abandoned intensive farming on their 1,400-hectare estate and introduced free-roaming herds of cattle, ponies, pigs, and deer. Within a few years, the results were remarkable. Turtle doves, nightingales, and purple emperor butterflies — all nationally declining species — returned in significant numbers.\n\nRewilding often involves reintroducing species that have been lost from the landscape. Beavers, extinct in Britain since the sixteenth century, have been released at several sites in England and Scotland. Their dam-building activities create wetland habitats, reduce flooding downstream, and improve water quality. White-tailed eagles have been successfully reintroduced to the Isle of Wight and Scotland.\n\nCritics of rewilding argue that it reduces productive farmland and can cause conflicts with neighbouring landowners — particularly when reintroduced predators threaten livestock. Supporters counter that rewilding delivers essential ecosystem services including carbon storage, flood prevention, and water purification, while creating new economic opportunities through nature-based tourism. The debate reflects fundamental questions about how Britain should use its land in the face of climate and biodiversity crises.`
+  },
+  {
+    id: 'EG03', title: 'Rivers Under Pressure', genre: 'Environment & Geography',
+    text: `Britain's rivers face an environmental crisis. According to recent assessments, not a single river in England meets the highest standards for ecological health. Pollution from agriculture, sewage, and urban runoff has degraded water quality, harming the plants, insects, fish, and mammals that depend on healthy river ecosystems.\n\nAgricultural pollution is the largest contributor to river degradation. Fertilisers and animal waste wash into waterways during heavy rain, causing algal blooms that starve the water of oxygen. Pesticides kill aquatic insects, breaking the food chain that supports fish and birds. Soil erosion from ploughed fields smothers river beds, destroying the gravel habitats where salmon and trout lay their eggs.\n\nSewage pollution has attracted increasing public attention. During heavy rainfall, combined sewer systems release untreated sewage directly into rivers through overflow outlets. Water companies discharged raw sewage into English rivers and seas over 300,000 times in a recent year. Campaign groups have used citizen science — training volunteers to test water quality — to build evidence and pressure for change.\n\nRestoration projects offer hope. Removing concrete channels and allowing rivers to follow their natural courses improves water quality and reduces flood risk. Planting trees along riverbanks provides shade that keeps water cool for fish, while their roots stabilise the banks and filter pollutants. Communities are increasingly recognising that healthy rivers are not a luxury but a necessity — for wildlife, for water supply, and for the wellbeing of everyone who lives near them.`
+  },
+  {
+    id: 'EG04', title: 'The Peak District: Britain\'s First National Park', genre: 'Environment & Geography',
+    text: `Established in 1951, the Peak District holds the distinction of being Britain's first national park. Covering 1,437 square kilometres across the southern Pennines, it sits at the heart of England, surrounded by the major cities of Manchester, Sheffield, Derby, and Stoke-on-Trent. More than sixteen million people live within an hour's drive of its boundaries.\n\nThe park contains two distinct landscapes. The Dark Peak in the north is characterised by wild moorland plateaux of peat and millstone grit, reaching heights of over 600 metres. Kinder Scout, the highest point, was the site of the famous Mass Trespass of 1932, when walkers deliberately broke the law to demand public access to open countryside — an event that helped lead to the creation of national parks.\n\nThe White Peak in the south presents a gentler landscape of limestone dales, dry stone walls, and flower-rich meadows. Underground, the limestone has been dissolved by water over millions of years, creating extensive cave systems and dramatic features such as the Blue John caverns near Castleton, which contain a rare semi-precious mineral found nowhere else on Earth.\n\nManaging the Peak District involves balancing the needs of the thirteen million people who visit each year with the protection of its landscapes, wildlife, and farming communities. Footpath erosion, traffic congestion, and visitor pressure on sensitive habitats are ongoing challenges. Park authorities work with landowners, farmers, and community groups to maintain this precious landscape for future generations.`
+  },
+  {
+    id: 'EG05', title: 'Urban Green Spaces and Wellbeing', genre: 'Environment & Geography',
+    text: `Parks, gardens, and green spaces in cities provide far more than pleasant scenery. Research has consistently shown that access to nature in urban environments improves both physical and mental health. People who live near green spaces tend to exercise more, report lower levels of stress and anxiety, and recover from illness more quickly.\n\nBritain's urban parks have their origins in the Victorian era, when reformers argued that industrial cities needed 'green lungs' to improve the health of overcrowded populations. Birkenhead Park, designed by Joseph Paxton in 1847, was the world's first publicly funded civic park and inspired the creation of Central Park in New York. Today, London alone contains over 3,000 parks and open spaces.\n\nUrban green spaces also provide crucial ecological benefits. Trees absorb carbon dioxide and pollution, reduce the urban heat island effect — where cities are significantly warmer than surrounding countryside — and manage rainwater runoff. Even small green spaces support surprisingly diverse wildlife: a single urban garden can contain over 2,000 species of invertebrate.\n\nHowever, access to green space is unevenly distributed. Studies show that communities in deprived areas are far less likely to have quality parks nearby compared with wealthier neighbourhoods. The coronavirus pandemic highlighted this inequality starkly, as people without gardens or nearby parks found lockdown significantly more difficult. Ensuring equitable access to green space has become a priority for urban planners, with many cities now setting ambitious targets for tree planting and park creation.`
+  },
+];
+
+const TECHNOLOGY_PASSAGES: PassageSpec[] = [
+  {
+    id: 'TI01', title: 'The Internet: Connecting the World', genre: 'Technology & Innovation',
+    text: `The internet began as a military project in the late 1960s. The United States Department of Defense created ARPANET, a network designed to allow computers to communicate even if parts of the system were destroyed. The first message was sent on 29 October 1969 between computers at UCLA and Stanford University — the system crashed after transmitting just two letters: 'L' and 'O' of the intended word 'LOGIN.'\n\nThe World Wide Web, invented by British scientist Tim Berners-Lee in 1989 at CERN in Switzerland, transformed the internet from a specialist tool into something accessible to everyone. Berners-Lee created HTML (the language of web pages), URLs (web addresses), and HTTP (the protocol for transferring data). Crucially, he made his invention freely available, refusing to patent it.\n\nThe growth of the internet has been extraordinary. In 1995, fewer than 1 per cent of the world's population was online. Today, over 5 billion people — roughly 60 per cent of humanity — use the internet regularly. Every day, approximately 500 million tweets are posted, 300 billion emails are sent, and over a billion hours of video are watched on YouTube.\n\nThe internet has transformed education, commerce, communication, and entertainment. However, it has also created challenges including privacy concerns, the spread of misinformation, cyberbullying, and digital addiction. As societies grapple with these issues, the fundamental question remains: how can we harness the internet's enormous potential while protecting individuals and communities from its risks?`
+  },
+  {
+    id: 'TI02', title: 'Renewable Energy: Powering the Future', genre: 'Technology & Innovation',
+    text: `The transition from fossil fuels to renewable energy sources is one of the most significant technological shifts in human history. Wind, solar, and tidal power are increasingly replacing coal, oil, and gas as the primary sources of electricity in many countries. In Britain, renewable sources generated over 40 per cent of electricity in recent years — a figure that was less than 5 per cent at the start of the century.\n\nOffshore wind has become Britain's renewable energy success story. The country's position in the North Sea, with its strong, consistent winds, makes it ideal for wind farms. The Hornsea project off the Yorkshire coast is one of the largest offshore wind farms in the world, with turbines standing over 190 metres tall — taller than the London Eye. A single rotation of one turbine blade can generate enough electricity to power a home for two days.\n\nSolar energy technology has improved dramatically while costs have plummeted. The price of solar panels has fallen by over 90 per cent since 2010, making them affordable for homes, businesses, and large-scale power stations. Even in Britain's relatively cloudy climate, solar panels generate significant amounts of electricity — the longest summer days provide over sixteen hours of potential generation.\n\nThe main challenge for renewable energy is intermittency — the sun doesn't always shine and the wind doesn't always blow. Battery storage technology is advancing rapidly to address this, with giant battery installations capable of storing surplus energy for use during calm or cloudy periods. Hydrogen, produced using renewable electricity, offers another promising solution for storing and transporting clean energy.`
+  },
+  {
+    id: 'TI03', title: 'Robotics in Everyday Life', genre: 'Technology & Innovation',
+    text: `Robots are no longer confined to science fiction or factory assembly lines. They are increasingly entering our everyday lives in forms we might not immediately recognise. From the algorithms that recommend what to watch next on streaming services to the automated systems that sort packages in warehouses, robotic technology is reshaping how we live and work.\n\nIn medicine, robotic surgery systems allow doctors to perform complex operations with extraordinary precision. The surgeon controls robotic arms from a console, using instruments that can rotate and bend in ways human hands cannot. These systems reduce blood loss, shorten recovery times, and enable procedures that would be impossible with traditional techniques. In some hospitals, robots also deliver medications and supplies along corridors.\n\nAgriculture is being transformed by robotic technology. Autonomous tractors use GPS and sensors to plough, plant, and harvest crops with minimal human intervention. Smaller robots weed between crop rows without chemicals, while drones survey fields from above, identifying areas that need water or treatment. These innovations could help farmers produce more food with less environmental impact.\n\nHowever, the rise of robots raises important questions about employment and society. Some economists predict that automation could replace millions of jobs in manufacturing, transport, and services over the coming decades. Others argue that new technologies have always created more jobs than they destroyed. Preparing the workforce for a more automated future — through education, retraining, and new policies — is one of the defining challenges of our time.`
+  },
+  {
+    id: 'TI04', title: 'Space Exploration: The New Era', genre: 'Technology & Innovation',
+    text: `We are entering what many scientists call a new golden age of space exploration. After decades focused on low Earth orbit and the International Space Station, space agencies and private companies are setting their sights further — on the Moon, Mars, and beyond. The pace of innovation is accelerating, driven by competition and collaboration between governments and entrepreneurs.\n\nNASA's Artemis programme aims to return humans to the Moon for the first time since 1972, with plans to establish a permanent lunar base. Unlike the Apollo missions, which were brief visits, Artemis intends to create sustainable infrastructure on and around the Moon. This includes a lunar space station called Gateway, which will serve as a staging point for missions deeper into the solar system.\n\nPrivate companies have revolutionised space travel by dramatically reducing costs. Reusable rockets, pioneered by SpaceX, have cut the price of launching cargo into orbit by more than 90 per cent compared with traditional expendable rockets. This cost reduction has made commercial satellite launches, space tourism, and ambitious exploration missions economically viable for the first time.\n\nThe prospect of humans living on Mars — once pure science fiction — is now being seriously planned. The journey would take approximately seven months, and the challenges are immense: radiation exposure, the psychological effects of isolation, and the need to grow food in Martian soil. Yet the potential rewards are equally vast, from scientific discoveries to ensuring the long-term survival of humanity as a multi-planetary species.`
+  },
+  {
+    id: 'TI05', title: '3D Printing: Manufacturing Revolution', genre: 'Technology & Innovation',
+    text: `Three-dimensional printing — also known as additive manufacturing — is transforming how objects are designed and made. Instead of cutting material away from a solid block, 3D printers build objects layer by layer from digital designs. This technology, once limited to producing simple plastic prototypes, can now create everything from artificial organs to aircraft components.\n\nThe process works by slicing a digital model into hundreds or thousands of thin horizontal layers. The printer then deposits material — which can be plastic, metal, ceramic, or even living cells — one layer at a time. Each layer fuses with the one below it, gradually building up the complete object. A simple plastic part might take an hour to print, while a complex metal component could take several days.\n\nIn medicine, 3D printing is already saving lives. Surgeons use printed models of patients' organs to plan complex operations before entering the operating theatre. Custom prosthetic limbs can be designed and printed for a fraction of the cost of traditional manufacturing. Researchers are making progress towards printing functional human tissues and organs using a patient's own cells, which could one day eliminate the shortage of donor organs.\n\nArchitects and construction companies are exploring 3D-printed buildings. In several countries, houses have been printed from concrete in a matter of days at significantly lower cost than conventional construction. The technology could help address housing shortages worldwide. Meanwhile, in schools and makerspaces, affordable desktop 3D printers are introducing a new generation to the possibilities of digital manufacturing.`
+  },
+];
+
+const ARTS_PASSAGES: PassageSpec[] = [
+  {
+    id: 'AL01', title: 'Shakespeare\'s Enduring Legacy', genre: 'Arts & Literature',
+    text: `More than four hundred years after his death, William Shakespeare remains the most performed playwright in the world. His thirty-seven plays, one hundred and fifty-four sonnets, and several longer poems continue to be translated, adapted, and reimagined for audiences on every continent. But why does the work of a man born in a small Warwickshire market town in 1564 still resonate so powerfully?\n\nShakespeare's genius lay in his understanding of human nature. His characters — from the jealous Othello to the ambitious Macbeth, from the witty Beatrice to the conflicted Hamlet — wrestle with emotions and dilemmas that are as relevant today as they were in Elizabethan England. Love, jealousy, ambition, fear, loyalty, and betrayal are universal experiences, and Shakespeare explored them with unmatched depth and subtlety.\n\nHis impact on the English language itself is enormous. Shakespeare invented or popularised approximately 1,700 words that we still use today, including 'lonely,' 'generous,' 'bedroom,' and 'eyeball.' Everyday phrases such as 'break the ice,' 'wild goose chase,' and 'heart of gold' all originate from his works. His influence on how we express ourselves is so profound that we often quote him without realising it.\n\nThe Globe Theatre on London's South Bank, a faithful reconstruction of the original where many of Shakespeare's plays were first performed, attracts thousands of visitors each year. Standing in the open-air yard as actors perform just metres away, audiences experience something remarkably close to what Elizabethan theatregoers would have known. It is perhaps the closest we can come to stepping back in time and understanding why Shakespeare captivated — and continues to captivate — the world.`
+  },
+  {
+    id: 'AL02', title: 'The Art of Illustration: From Beatrix Potter to Quentin Blake', genre: 'Arts & Literature',
+    text: `The tradition of illustrated children's books in Britain has produced some of the most beloved images in world literature. From Beatrix Potter's meticulously painted animals to Quentin Blake's exuberant, scratchy line drawings, British illustrators have shaped how generations of children imagine the worlds they read about.\n\nBeatrix Potter began her career as a scientific illustrator, painting fungi and fossils with extraordinary accuracy. When she turned to storytelling, she brought the same precision to her animal characters. Peter Rabbit, Jemima Puddle-Duck, and Mrs Tiggy-Winkle are depicted in their natural Lake District landscape with botanical and zoological accuracy, wearing human clothes but retaining their essential animal nature.\n\nQuentin Blake's style could hardly be more different. His illustrations for Roald Dahl's books — from the terrifying Miss Trunchbull in Matilda to the magical Charlie in the Chocolate Factory — are characterised by energetic, seemingly spontaneous pen strokes and splashes of watercolour. Yet this apparent casualness disguises immense skill and careful thought about composition, expression, and movement.\n\nModern illustration continues to evolve. Digital tools have expanded the possibilities available to illustrators, while picture books are increasingly recognised as an art form in their own right, not just an accompaniment to text. The annual Kate Greenaway Medal, Britain's most prestigious award for children's book illustration, celebrates work that ranges from photorealistic to abstract, reflecting the extraordinary diversity of contemporary visual storytelling.`
+  },
+  {
+    id: 'AL03', title: 'The Power of Poetry', genre: 'Arts & Literature',
+    text: `Poetry has been central to British culture for over a thousand years, from the Anglo-Saxon epic Beowulf to the spoken-word performances filling venues today. Unlike prose, poetry uses the concentrated power of rhythm, sound, and imagery to communicate ideas and emotions with an intensity that can take your breath away.\n\nThe Romantic poets of the early nineteenth century transformed how people thought about poetry and nature. William Wordsworth found profound meaning in ordinary landscapes and everyday experiences. His contemporary John Keats wrote odes to autumn, nightingales, and Grecian urns that are considered among the finest poems in the English language. These poets believed that imagination and emotion were as important as reason and logic.\n\nWartime produced some of the most powerful poetry ever written. Wilfred Owen and Siegfried Sassoon, both soldiers in the First World War, wrote verses that shattered romantic notions of heroic warfare. Owen's description of a gas attack in 'Dulce et Decorum Est' remains one of the most devastating anti-war statements ever composed. Their poetry forced readers to confront the true horror of industrial conflict.\n\nToday, poetry is experiencing a remarkable revival. Social media has given poets direct access to millions of readers, while spoken-word events and poetry slams attract young, diverse audiences. The appointment of Simon Armitage as Poet Laureate in 2019 signalled a commitment to making poetry accessible and relevant. Whether read silently from a page or performed to a cheering crowd, poetry's ability to distil complex human experience into memorable language ensures its continued vitality.`
+  },
+  {
+    id: 'AL04', title: 'Music and the Orchestra', genre: 'Arts & Literature',
+    text: `A full symphony orchestra is one of the most complex and magnificent instruments ever devised. Bringing together approximately one hundred musicians playing instruments from four distinct families — strings, woodwinds, brass, and percussion — the orchestra can produce an extraordinary range of sounds, from a whisper to a thunderous fortissimo.\n\nThe string section forms the backbone of the orchestra and typically comprises the largest number of players. Violins, violas, cellos, and double basses create a rich, warm foundation of sound. The woodwind section — flutes, oboes, clarinets, and bassoons — adds colour and melody. Brass instruments — trumpets, French horns, trombones, and tubas — provide power and brilliance, while percussion adds rhythm and dramatic effect.\n\nThe conductor's role is often misunderstood. Far from simply keeping time, the conductor shapes the interpretation of a piece, deciding how fast or slow to play, how loud or soft particular passages should be, and how to balance the different sections of the orchestra. A great conductor can transform a familiar piece of music into something fresh and revelatory through subtle adjustments in phrasing, dynamics, and tempo.\n\nBritain has a thriving orchestral tradition. The London Symphony Orchestra, the Royal Philharmonic, and the Halle in Manchester are among the world's finest ensembles. Programmes designed to introduce young people to orchestral music — including school concerts, youth orchestras, and community projects — ensure that this centuries-old art form continues to inspire new generations of musicians and listeners.`
+  },
+  {
+    id: 'AL05', title: 'Street Art: From Graffiti to Gallery', genre: 'Arts & Literature',
+    text: `Street art has undergone a remarkable transformation in public perception. Once dismissed as vandalism and associated with urban decay, it is now celebrated as a legitimate and powerful art form. Major cities around the world actively commission street art, and works by artists such as Banksy sell for millions at auction houses.\n\nBanksy, the anonymous Bristol-based artist, is perhaps the most famous street artist in the world. His stencilled images — often combining dark humour with sharp political commentary — have appeared on walls, bridges, and buildings across Britain and beyond. Works such as 'Girl with a Balloon' and 'Kissing Coppers' have become iconic images, reproduced on everything from postcards to phone cases.\n\nBeyond individual fame, street art plays an important role in urban regeneration. Murals can transform neglected areas, attracting visitors and fostering community pride. The Shoreditch district of London, once a rundown industrial area, has become a vibrant cultural destination partly through the concentration of street art on its walls and buildings. Cities such as Bristol, Glasgow, and Manchester have developed street art trails that draw tourists and support local businesses.\n\nThe relationship between street art and the establishment remains complex. Some argue that commercialisation has tamed the rebellious spirit that made street art exciting. Others maintain that the move from streets to galleries simply reflects wider recognition of the skill, creativity, and social commentary that the best street art embodies. What is clear is that art created in public spaces has a unique power to surprise, provoke, and connect with people who might never set foot in a traditional gallery.`
+  },
+];
+
+const ALL_PASSAGES: PassageSpec[] = [
+  ...NATURE_PASSAGES,
+  ...HISTORY_PASSAGES,
+  ...SCIENCE_PASSAGES,
+  ...ADVENTURE_PASSAGES,
+  ...COMMUNITY_PASSAGES,
+  ...ENVIRONMENT_PASSAGES,
+  ...TECHNOLOGY_PASSAGES,
+  ...ARTS_PASSAGES,
+];
+
+interface QuestionTemplate {
+  questionTypes: string[];
+  factRetrievalTemplates: string[];
+  vocabTemplates: string[];
+  inferenceTemplates: string[];
+  authorialIntentTemplates: string[];
+  textStructureTemplates: string[];
+}
+
+const FACT_RETRIEVAL_STEMS = [
+  "According to the passage, {fact_detail}",
+  "The passage states that {fact_detail}",
+  "Which of the following is true according to the passage?",
+  "Based on the passage, what is {fact_detail}?",
+  "The text tells us that {fact_detail}",
+  "What does the passage say about {fact_detail}?",
+];
+
+const VOCAB_STEMS = [
+  "In the passage, the word '{word}' most closely means:",
+  "What does '{word}' mean as used in this passage?",
+  "The word '{word}' in the passage suggests:",
+  "Which word could best replace '{word}' in this context?",
+];
+
+const INFERENCE_STEMS = [
+  "What can you infer from the passage about {topic}?",
+  "The passage suggests that {implication}",
+  "From the passage, it is reasonable to conclude that:",
+  "What does the passage imply about {topic}?",
+];
+
+const AUTHORIAL_STEMS = [
+  "Why does the author mention {detail}?",
+  "The author's purpose in describing {detail} is to:",
+  "What effect does the author achieve by {technique}?",
+  "The author includes {detail} in order to:",
+];
+
+const TEXT_STRUCTURE_STEMS = [
+  "How is the passage mainly organised?",
+  "What is the purpose of the {ordinal} paragraph?",
+  "Which of the following best describes the structure of the passage?",
+  "The author uses {structure_type} to:",
+];
+
+function generatePassageQuestions(passage: PassageSpec, rng: () => number): GeneratedQuestion[] {
+  const questions: GeneratedQuestion[] = [];
+  const sentences = passage.text.split(/[.!?]+/).filter(s => s.trim().length > 20);
+  const words = passage.text.split(/\s+/);
+  const paragraphs = passage.text.split('\n\n').filter(p => p.trim().length > 0);
+
+  const significantWords = words.filter(w => w.length > 6 && /^[a-zA-Z]+$/.test(w));
+  const uniqueWords = Array.from(new Set(significantWords.map(w => w.toLowerCase())));
+
+  const typeRotation = shuffle([...QUESTION_TYPES], rng);
+
+  for (let qIdx = 0; qIdx < 15; qIdx++) {
+    const spec = typeRotation[qIdx % typeRotation.length];
+    const sentenceIdx = Math.floor(rng() * sentences.length);
+    const sentence = sentences[sentenceIdx]?.trim() || sentences[0].trim();
+    const shortSentence = sentence.substring(0, 80);
+
+    let prompt: string;
+    let options: string[];
+    let correctAnswer: string;
+    let explanation: string;
+
+    const typeKey = spec.type;
+
+    if (typeKey === 'Fact Retrieval') {
+      const stem = FACT_RETRIEVAL_STEMS[Math.floor(rng() * FACT_RETRIEVAL_STEMS.length)];
+      prompt = stem.replace('{fact_detail}', shortSentence.toLowerCase());
+      const correctFact = sentence.substring(0, 60).trim();
+      correctAnswer = correctFact;
+      const otherSentences = sentences.filter(s => s !== sentence);
+      const uniqueWrongFacts = new Set<string>();
+      for (const s of shuffle(otherSentences, rng)) {
+        const fact = s.trim().substring(0, 60);
+        if (fact !== correctFact && !uniqueWrongFacts.has(fact)) {
+          uniqueWrongFacts.add(fact);
+          if (uniqueWrongFacts.size >= 3) break;
+        }
+      }
+      const fallbacks = [`This detail is not mentioned in the passage`, `The passage does not address this point`, `No evidence supports this in the text`];
+      let fbIdx = 0;
+      while (uniqueWrongFacts.size < 3) {
+        uniqueWrongFacts.add(fallbacks[fbIdx++]);
+      }
+      options = shuffle([correctAnswer, ...Array.from(uniqueWrongFacts).slice(0, 3)], rng);
+      explanation = `The passage directly states: "${sentence.trim().substring(0, 100)}..." This fact can be found by reading the text carefully.`;
+    } else if (typeKey === 'Vocabulary in Context') {
+      const targetWord = uniqueWords[Math.floor(rng() * uniqueWords.length)] || 'remarkable';
+      const stem = VOCAB_STEMS[Math.floor(rng() * VOCAB_STEMS.length)];
+      prompt = stem.replace('{word}', targetWord);
+      const synonymSets: Record<string, string[]> = {
+        'remarkable': ['extraordinary', 'ordinary', 'simple', 'unimportant'],
+        'significant': ['important', 'trivial', 'minor', 'irrelevant'],
+        'essential': ['necessary', 'optional', 'decorative', 'temporary'],
+        'extraordinary': ['exceptional', 'common', 'routine', 'standard'],
+        'increasing': ['growing', 'shrinking', 'stable', 'declining'],
+        'enormous': ['huge', 'tiny', 'moderate', 'average'],
+        'approximately': ['roughly', 'exactly', 'never', 'always'],
+        'particularly': ['especially', 'hardly', 'never', 'slightly'],
+        'dramatically': ['significantly', 'barely', 'slightly', 'hardly'],
+        'fundamental': ['basic', 'advanced', 'complex', 'superficial'],
+        'devastating': ['destructive', 'helpful', 'minor', 'pleasant'],
+        'thriving': ['flourishing', 'declining', 'struggling', 'failing'],
+        'crucial': ['vital', 'unimportant', 'optional', 'minor'],
+        'abundant': ['plentiful', 'scarce', 'rare', 'limited'],
+        'pioneered': ['introduced', 'copied', 'abandoned', 'ignored'],
+      };
+      const synonyms = synonymSets[targetWord] || ['noteworthy', 'unimportant', 'common', 'standard'];
+      correctAnswer = synonyms[0];
+      options = shuffle([...synonyms.slice(0, 4)], rng);
+      while (options.length < 4) options.push('unremarkable');
+      explanation = `In this context, '${targetWord}' means '${correctAnswer}.' The surrounding text helps us understand this meaning through the way it describes the subject.`;
+    } else if (typeKey === 'Inference') {
+      const stem = INFERENCE_STEMS[Math.floor(rng() * INFERENCE_STEMS.length)];
+      prompt = stem.replace('{topic}', passage.title.toLowerCase()).replace('{implication}', shortSentence.toLowerCase());
+      correctAnswer = `The evidence in the passage supports this conclusion`;
+      const wrongInferences = [
+        `The passage contradicts this idea`,
+        `There is no evidence for this in the text`,
+        `The opposite is implied by the passage`,
+      ];
+      options = shuffle([correctAnswer, ...wrongInferences], rng);
+      explanation = `By reading between the lines, we can infer this from the passage. The author provides clues through their description and choice of detail.`;
+    } else if (typeKey === 'Authorial Intent') {
+      const stem = AUTHORIAL_STEMS[Math.floor(rng() * AUTHORIAL_STEMS.length)];
+      const detail = shortSentence.toLowerCase();
+      prompt = stem.replace('{detail}', detail).replace('{technique}', 'including specific details');
+      correctAnswer = `To provide evidence and make the writing more persuasive`;
+      const wrongIntents = [
+        `To confuse the reader with unnecessary information`,
+        `To fill space in the passage`,
+        `To change the subject of the discussion`,
+      ];
+      options = shuffle([correctAnswer, ...wrongIntents], rng);
+      explanation = `The author includes this detail deliberately to strengthen their argument and give the reader concrete evidence, making the passage more convincing and informative.`;
+    } else {
+      const stem = TEXT_STRUCTURE_STEMS[Math.floor(rng() * TEXT_STRUCTURE_STEMS.length)];
+      const ordinals = ['first', 'second', 'third', 'final'];
+      const ordinal = ordinals[Math.floor(rng() * ordinals.length)];
+      prompt = stem.replace('{ordinal}', ordinal).replace('{structure_type}', 'this organisational approach');
+      correctAnswer = `To present information in a clear, logical sequence`;
+      const wrongStructures = [
+        `To confuse the reader with random facts`,
+        `To repeat the same information in different words`,
+        `To argue against the main point of the passage`,
+      ];
+      options = shuffle([correctAnswer, ...wrongStructures], rng);
+      explanation = `The passage is organised to present information clearly and logically. Each paragraph builds on the previous one, developing the topic in a structured way.`;
+    }
+
+    if (!options.includes(correctAnswer)) {
+      options[0] = correctAnswer;
+      options = shuffle(options, rng);
+    }
+
+    const renderConfig = {
+      kind: "comprehension.passage" as const,
+      passageId: passage.id,
+      passageTitle: passage.title,
+      passageTheme: passage.genre,
+      passageText: passage.text,
+      questionType: spec.type,
+      questionIndex: qIdx,
+      totalQuestionsInPassage: 15,
+    };
+
+    questions.push({
+      section: 'comprehension',
+      type: spec.type.toLowerCase().replace(/ /g, '_'),
+      prompt,
+      options,
+      correctAnswer,
+      difficulty: spec.difficulty,
+      skillId: spec.skillId,
+      subRuleId: `${passage.id}_${spec.type.toLowerCase().replace(/ /g, '_')}`,
+      renderType: 'comprehension',
+      renderConfig,
+      trapTypes: [],
+      cognitiveLoad: spec.cognitiveLoad,
+      estTimeSeconds: spec.estTimeSeconds,
+      explanation: explanation,
+      qaStatus: 'approved',
+      locale: 'en-GB',
+      britishSpelling: true,
+      version: 1,
+      stemVariantId: `comp_${spec.type.toLowerCase().replace(/ /g, '_')}_${qIdx}`,
+      distractorStyleId: `comp_${spec.difficulty}`,
+      passageId: passage.id,
+      orderIndex: qIdx,
+    });
+  }
+
+  return questions;
+}
+
+export function generateComprehensionQuestions(): GeneratedQuestion[] {
+  const rng = seededRandom(421100);
+  const allQuestions: GeneratedQuestion[] = [];
+
+  for (const passage of ALL_PASSAGES) {
+    const passageQuestions = generatePassageQuestions(passage, rng);
+    allQuestions.push(...passageQuestions);
+  }
+
+  return allQuestions;
+}

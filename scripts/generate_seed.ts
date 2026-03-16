@@ -16,6 +16,7 @@ import { generatePercentageQuestions } from "./generators/maths/percentages";
 import { generateWordProblemQuestions } from "./generators/maths/word_problems";
 import { generateNumberPatternQuestions } from "./generators/maths/number_patterns";
 import { generateDataInterpretationQuestions } from "./generators/maths/data_interpretation";
+import { generateComprehensionQuestions } from "./generators/comprehension";
 import type { GeneratedQuestion } from "./generators/types";
 import * as fs from "fs";
 import * as path from "path";
@@ -39,6 +40,7 @@ const allQuestions = [
   ...generateWordProblemQuestions(),
   ...generateNumberPatternQuestions(),
   ...generateDataInterpretationQuestions(),
+  ...generateComprehensionQuestions(),
 ];
 
 const bySection: Record<string, number> = {};
