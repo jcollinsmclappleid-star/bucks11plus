@@ -6,8 +6,8 @@ import { Seo } from "../components/shared/Seo";
 import { useState, useRef } from "react";
 
 const showcaseTabs = [
-  { id: "forecast", label: "Readiness Forecast" },
   { id: "sections", label: "Section Breakdown" },
+  { id: "forecast", label: "Readiness Forecast" },
   { id: "analytics", label: "Analytics" },
   { id: "progress", label: "Progress" },
 ] as const;
@@ -222,7 +222,7 @@ function ProgressPanel() {
 }
 
 export default function Landing() {
-  const [activeTab, setActiveTab] = useState<TabId>("forecast");
+  const [activeTab, setActiveTab] = useState<TabId>("sections");
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scrollTabs = (dir: "left" | "right") => {
