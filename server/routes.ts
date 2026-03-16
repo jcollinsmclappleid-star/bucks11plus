@@ -389,7 +389,7 @@ export async function registerRoutes(
 
       const total = answers.length;
       const rawPercent = total > 0 ? (correct / total) * 100 : 0;
-      const forecastScore = Math.round(90 + (rawPercent / 100) * 51);
+      const forecastScore = Math.round((rawPercent / 100) * 141);
       let band = "Clear Improvement Opportunity";
       if (forecastScore >= 121) band = "On Track";
       else if (forecastScore >= 115) band = "Within Reach";
@@ -665,7 +665,7 @@ export async function registerRoutes(
 
       const total = answers.length;
       const rawPercent = total > 0 ? (correct / total) * 100 : 0;
-      const forecastScore = Math.round(90 + (rawPercent / 100) * 51);
+      const forecastScore = Math.round((rawPercent / 100) * 141);
       let band = "Clear Improvement Opportunity";
       if (forecastScore >= 121) band = "On Track";
       else if (forecastScore >= 115) band = "Within Reach";
