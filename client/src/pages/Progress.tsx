@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts";
-import { TrendingUp, AlertCircle, Calendar, CheckCircle2, Lock, ArrowRight, Activity } from "lucide-react";
+import { TrendingUp, AlertCircle, Calendar, CheckCircle2, Lock, ArrowRight, Activity, BarChart3, Target, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "wouter";
@@ -17,6 +17,9 @@ type ProgressData = {
   totalAttempts: number;
   gapVelocity: { oldGap: number; newGap: number; change: number; improving: boolean } | null;
   forecastStability: { stdDev: number; status: string; trend: string } | null;
+  totalQuestionsAnswered: number;
+  overallAccuracy: number;
+  sectionAccuracy: Record<string, { correct: number; total: number; pct: number }>;
 };
 
 export default function Progress() {
@@ -43,6 +46,7 @@ export default function Progress() {
 
   const gv = progress?.gapVelocity;
   const fs = progress?.forecastStability;
+  const sectionAccuracy = progress?.sectionAccuracy || {};
 
   return (
     <div className="container mx-auto max-w-5xl px-4 py-8 space-y-8">
@@ -54,6 +58,35 @@ export default function Progress() {
           <p className="text-muted-foreground mt-2">Historical forecast tracking and your preparation journey.</p>
         </div>
       </div>
+
+      {progress?.totalQuestionsAnswered !== undefined && progress.totalQuestionsAnswered > 0 && (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4" data-testid="progress-stats-grid">
+          <Card className="border-border/60 shadow-sm">
+            <CardContent className="p-4 text-center">
+              <div className="text-3xl font-bold text-primary" data-testid="text-total-questions">{progress.totalQuestionsAnswered}</div>
+              <p className="text-xs text-muted-foreground mt-1">Questions Answered</p>
+            </CardContent>
+          </Card>
+          <Card className="border-border/60 shadow-sm">
+            <CardContent className="p-4 text-center">
+              <div className={`text-3xl font-bold ${progress.overallAccuracy >= 75 ? 'text-green-600' : progress.overallAccuracy >= 55 ? 'text-amber-600' : 'text-red-600'}`} data-testid="text-overall-accuracy">{progress.overallAccuracy}%</div>
+              <p className="text-xs text-muted-foreground mt-1">Overall Accuracy</p>
+            </CardContent>
+          </Card>
+          <Card className="border-border/60 shadow-sm">
+            <CardContent className="p-4 text-center">
+              <div className="text-3xl font-bold text-primary" data-testid="text-total-attempts">{progress.totalAttempts}</div>
+              <p className="text-xs text-muted-foreground mt-1">Assessments Taken</p>
+            </CardContent>
+          </Card>
+          <Card className="border-border/60 shadow-sm">
+            <CardContent className="p-4 text-center">
+              <div className={`text-3xl font-bold ${(progress.latestForecast || 0) >= 121 ? 'text-green-600' : 'text-amber-600'}`} data-testid="text-latest-forecast">{progress.latestForecast || '—'}</div>
+              <p className="text-xs text-muted-foreground mt-1">Latest Forecast</p>
+            </CardContent>
+          </Card>
+        </div>
+      )}
 
       <div className="grid md:grid-cols-3 gap-6">
         <Card className="md:col-span-2 border-border/60 shadow-sm">
@@ -118,7 +151,33 @@ export default function Progress() {
         </div>
       </div>
 
-      {isProgramme() && (
+      {Object.keys(sectionAccuracy).length > 0 && (
+        <Card className="border-border/60 shadow-sm" data-testid="card-section-accuracy">
+          <CardHeader className="bg-slate-50/50 border-b border-border/50">
+            <CardTitle className="flex items-center gap-2 font-serif">
+              <BarChart3 className="h-5 w-5 text-primary" /> Section Accuracy Over All Attempts
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-6">
+            <div className="grid md:grid-cols-2 gap-4">
+              {Object.entries(sectionAccuracy).map(([section, data]) => (
+                <div key={section} className="p-4 rounded-lg border bg-white space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium text-sm text-slate-800">{section}</span>
+                    <span className={`text-sm font-bold ${data.pct >= 75 ? 'text-green-600' : data.pct >= 55 ? 'text-amber-600' : 'text-red-600'}`}>{data.pct}%</span>
+                  </div>
+                  <div className="h-2 w-full rounded-full bg-slate-100 overflow-hidden">
+                    <div className={`h-full rounded-full transition-all ${data.pct >= 75 ? 'bg-green-500' : data.pct >= 55 ? 'bg-amber-500' : 'bg-red-500'}`} style={{ width: `${data.pct}%` }}></div>
+                  </div>
+                  <p className="text-xs text-muted-foreground">{data.correct}/{data.total} correct across all assessments</p>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {hasPaidAccess() && (
         <div className="grid md:grid-cols-2 gap-6">
           <Card className="border-border/60 shadow-sm">
             <CardHeader>
@@ -133,7 +192,7 @@ export default function Progress() {
                     {gv.improving ? '-' : '+'}{Math.abs(gv.change)} pts
                   </p>
                   <p className="text-xs text-muted-foreground mt-1">
-                    Gap moved from {gv.oldGap} to {gv.newGap} over {gv.attempts || 'multiple'} attempts
+                    Gap moved from {gv.oldGap} to {gv.newGap} over {(gv as any).attempts || 'multiple'} attempts
                   </p>
                   <p className={`text-xs font-medium mt-2 ${gv.improving ? 'text-green-600' : 'text-amber-600'}`}>
                     {gv.improving ? "Gap is closing" : "Gap needs attention"}

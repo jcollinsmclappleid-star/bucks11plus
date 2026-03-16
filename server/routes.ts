@@ -254,7 +254,7 @@ export async function registerRoutes(
         return res.json(safeUser);
       }
 
-      const weeksMap: Record<string, number> = { early_learner: 26, pack12: 12, pack12_family: 12, programme16: 16, programme16_family: 16 };
+      const weeksMap: Record<string, number> = { early_learner: 26, pack12: 26, pack12_family: 26, programme16: 52, programme16_family: 52 };
       const weeks = weeksMap[tier] || 12;
       const expiresAt = new Date(Date.now() + weeks * 7 * 24 * 60 * 60 * 1000);
 
@@ -976,6 +976,32 @@ export async function registerRoutes(
         };
       }
 
+      let totalQuestionsAnswered = 0;
+      let totalCorrect = 0;
+      for (const s of completed) {
+        const ans = await storage.getSessionAnswers(s.id);
+        totalQuestionsAnswered += ans.length;
+        totalCorrect += ans.filter(a => a.isCorrect).length;
+      }
+
+      const sectionAccuracy: Record<string, { correct: number; total: number; pct: number }> = {};
+      for (const s of completed) {
+        if (s.sectionScores) {
+          const scores = typeof s.sectionScores === 'string' ? JSON.parse(s.sectionScores) : s.sectionScores;
+          if (Array.isArray(scores)) {
+            for (const sec of scores) {
+              const name = sec.name || "Unknown";
+              if (!sectionAccuracy[name]) sectionAccuracy[name] = { correct: 0, total: 0, pct: 0 };
+              sectionAccuracy[name].correct += sec.correct || 0;
+              sectionAccuracy[name].total += sec.total || 0;
+            }
+          }
+        }
+      }
+      for (const k of Object.keys(sectionAccuracy)) {
+        sectionAccuracy[k].pct = sectionAccuracy[k].total > 0 ? Math.round((sectionAccuracy[k].correct / sectionAccuracy[k].total) * 100) : 0;
+      }
+
       res.json({
         trajectory,
         latestForecast: latest?.forecastScore || null,
@@ -986,6 +1012,9 @@ export async function registerRoutes(
           : 0,
         gapVelocity,
         forecastStability,
+        totalQuestionsAnswered,
+        overallAccuracy: totalQuestionsAnswered > 0 ? Math.round((totalCorrect / totalQuestionsAnswered) * 100) : 0,
+        sectionAccuracy,
       });
     } catch (error) {
       next(error);
@@ -1480,6 +1509,41 @@ export async function registerRoutes(
       const user = await storage.setActiveChildProfile(req.user!.id, req.params.id);
       const { password: _, ...safeUser } = user;
       res.json(safeUser);
+    } catch (error) { next(error); }
+  });
+
+  app.get("/api/simulator-questions", requireAuth, async (req, res, next) => {
+    try {
+      const isProgramme = req.user!.subscriptionTier?.includes("programme16");
+      if (!isProgramme) {
+        return res.status(403).json({ message: "Programme tier required" });
+      }
+
+      const paper1 = await storage.selectQuestionsForPracticePaper(
+        req.user!.id,
+        25,
+        ["Verbal Reasoning", "English Comprehension", "Mathematics"],
+      );
+      const paper2 = await storage.selectQuestionsForPracticePaper(
+        req.user!.id,
+        25,
+        ["Non-Verbal Reasoning", "English Comprehension", "Mathematics"],
+      );
+
+      const mapQ = (q: any) => ({
+        id: q.id,
+        prompt: q.prompt,
+        options: q.options,
+        correctAnswer: q.correctAnswer,
+        section: q.section,
+        explanation: q.explanation,
+        difficulty: q.difficulty,
+      });
+
+      res.json({
+        paper1: paper1.map(mapQ),
+        paper2: paper2.map(mapQ),
+      });
     } catch (error) { next(error); }
   });
 

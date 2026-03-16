@@ -453,6 +453,47 @@ export default function Results() {
             </CardContent>
           </Card>
 
+          {subSectionData && Object.keys(subSectionData).length > 0 && (
+            <Card className="border-red-200/60 bg-gradient-to-br from-red-50/50 to-white shadow-sm" data-testid="card-weakest-areas">
+              <CardHeader className="bg-red-50/30 border-b border-red-100/50">
+                <CardTitle className="flex items-center gap-2 text-lg font-serif">
+                  <Lightbulb className="h-5 w-5 text-red-500" /> Weakest Areas — Focus Here First
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6 space-y-4">
+                {(() => {
+                  const allSubs: { section: string; subRule: string; pct: number; correct: number; total: number }[] = [];
+                  for (const [section, subs] of Object.entries(subSectionData)) {
+                    for (const [subRule, data] of Object.entries(subs)) {
+                      if (data.total >= 1) {
+                        allSubs.push({ section, subRule, pct: Math.round((data.correct / data.total) * 100), correct: data.correct, total: data.total });
+                      }
+                    }
+                  }
+                  const weakest = allSubs.sort((a, b) => a.pct - b.pct).slice(0, 3);
+                  return weakest.map((w, i) => (
+                    <div key={i} className="flex items-center justify-between p-3 rounded-lg border border-red-100 bg-white">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold ${i === 0 ? 'bg-red-100 text-red-700' : 'bg-slate-100 text-slate-600'}`}>{i + 1}</span>
+                          <span className="font-medium text-sm text-slate-800">{w.subRule}</span>
+                        </div>
+                        <span className="text-xs text-muted-foreground ml-8">{w.section} · {w.correct}/{w.total} correct</span>
+                      </div>
+                      <span className={`text-sm font-bold ${w.pct >= 60 ? 'text-amber-600' : 'text-red-600'}`}>{w.pct}%</span>
+                    </div>
+                  ));
+                })()}
+                <p className="text-xs text-muted-foreground pt-2">
+                  Focusing on these areas will have the highest impact on your forecast score.
+                </p>
+                <Button size="sm" className="w-full mt-2" asChild data-testid="button-practice-weakest">
+                  <Link href="/app/practice">Start Targeted Practice <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+
           {upsell && (
             <Card className="border-brand-amber/30 bg-gradient-to-br from-amber-50 to-white shadow-md relative overflow-hidden" data-testid="card-upsell">
               <div className="absolute top-0 right-0 p-6 opacity-5 pointer-events-none">

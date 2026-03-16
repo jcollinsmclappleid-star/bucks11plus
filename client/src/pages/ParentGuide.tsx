@@ -207,6 +207,82 @@ export default function ParentGuide() {
         </div>
       </section>
 
+      <section className="py-14 md:py-20 bg-white border-b border-slate-100">
+        <div className="container mx-auto max-w-5xl px-4">
+          <div className="text-center mb-12">
+            <span className="text-xs font-semibold text-primary/50 uppercase tracking-widest">For Parents</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif tracking-tight mt-2" data-testid="text-tips-heading">
+              Supporting Your Child's Preparation
+            </h2>
+            <p className="text-muted-foreground mt-4 max-w-2xl mx-auto leading-relaxed">
+              Practical strategies that make a real difference — backed by what works for Buckinghamshire families.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center">
+                <Clock className="h-5 w-5 text-green-600" />
+              </div>
+              <h3 className="text-lg font-bold text-primary font-serif">Little and Often Beats Cramming</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                20–30 minutes of focused practice 4–5 times per week is far more effective than long weekend sessions. Consistency builds familiarity with question types and reduces test-day anxiety.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
+                <Target className="h-5 w-5 text-blue-600" />
+              </div>
+              <h3 className="text-lg font-bold text-primary font-serif">Focus on Weaknesses, Not Strengths</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Children naturally gravitate towards what they're good at. Use diagnostic results to identify the specific areas where targeted practice will have the biggest impact on their overall score.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center">
+                <BarChart3 className="h-5 w-5 text-amber-600" />
+              </div>
+              <h3 className="text-lg font-bold text-primary font-serif">Practise Under Timed Conditions</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                The real exam is strictly timed. Start with untimed practice to build accuracy, then introduce time limits gradually. This builds pace discipline without creating pressure too early.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-violet-50 flex items-center justify-center">
+                <BookOpen className="h-5 w-5 text-violet-600" />
+              </div>
+              <h3 className="text-lg font-bold text-primary font-serif">Review Mistakes Together</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                When your child gets a question wrong, work through the explanation together. Understanding why an answer is wrong is often more valuable than getting it right first time.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-rose-50 flex items-center justify-center">
+                <Zap className="h-5 w-5 text-rose-600" />
+              </div>
+              <h3 className="text-lg font-bold text-primary font-serif">Keep the Pressure Proportionate</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Your child should feel supported, not stressed. Frame preparation as building skills rather than "passing or failing." Children who feel confident perform better under exam conditions.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-teal-50 flex items-center justify-center">
+                <CheckCircle2 className="h-5 w-5 text-teal-600" />
+              </div>
+              <h3 className="text-lg font-bold text-primary font-serif">Start Earlier Than You Think</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Year 4 is not too early for gentle familiarisation. Building reasoning skills early means Year 5 and 6 preparation is refining ability rather than learning from scratch.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section id="platform-preview" className="bg-gradient-to-b from-slate-50 to-white py-14 md:py-20 border-b border-slate-100">
         <div className="container mx-auto max-w-5xl px-4">
           <div className="max-w-3xl mx-auto text-center mb-10">

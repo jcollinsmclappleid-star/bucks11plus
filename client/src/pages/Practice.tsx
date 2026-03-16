@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Lock, PlayCircle, BookOpen, Timer, MessageSquare, ArrowRight, Zap } from "lucide-react";
+import { Lock, PlayCircle, BookOpen, Timer, MessageSquare, ArrowRight, Zap, TrendingUp, CheckCircle2 } from "lucide-react";
 import { Link } from "wouter";
 import { Seo } from "../components/shared/Seo";
 import { useQuery } from "@tanstack/react-query";
@@ -12,11 +12,69 @@ import { useState } from "react";
 
 const TIER_RANK: Record<string, number> = { free: 0, pack12: 1, programme16: 2 };
 
+type ProgressData = {
+  sectionAccuracy: Record<string, { correct: number; total: number; pct: number }>;
+  totalQuestionsAnswered: number;
+  overallAccuracy: number;
+};
+
+function DifficultyProgression({ sectionAccuracy }: { sectionAccuracy: Record<string, { correct: number; total: number; pct: number }> }) {
+  const sections = Object.entries(sectionAccuracy);
+  if (sections.length === 0) return null;
+
+  const readyForHard = sections.filter(([, v]) => v.pct >= 75 && v.total >= 5);
+  const needsWork = sections.filter(([, v]) => v.pct < 75 || v.total < 5);
+
+  return (
+    <div className="rounded-xl border border-slate-200 bg-gradient-to-r from-slate-50 to-white p-5 mb-8" data-testid="difficulty-progression">
+      <div className="flex items-center gap-2 mb-4">
+        <TrendingUp className="h-5 w-5 text-primary" />
+        <h3 className="font-bold text-primary font-serif">Difficulty Progression</h3>
+      </div>
+      <p className="text-sm text-muted-foreground mb-4">
+        Score 75%+ on Medium drills in a section to be ready for Hard challenges.
+      </p>
+      <div className="grid md:grid-cols-2 gap-3">
+        {readyForHard.length > 0 && readyForHard.map(([name, data]) => (
+          <div key={name} className="flex items-center gap-3 p-3 rounded-lg bg-green-50 border border-green-200">
+            <CheckCircle2 className="h-5 w-5 text-green-600 shrink-0" />
+            <div className="flex-1 min-w-0">
+              <span className="text-sm font-medium text-green-800 block truncate">{name}</span>
+              <span className="text-xs text-green-600">{data.pct}% accuracy — Ready for Hard</span>
+            </div>
+          </div>
+        ))}
+        {needsWork.map(([name, data]) => (
+          <div key={name} className="flex items-center gap-3 p-3 rounded-lg bg-amber-50 border border-amber-200">
+            <div className="relative h-5 w-5 shrink-0">
+              <svg className="h-5 w-5 -rotate-90" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="7" className="stroke-amber-200" strokeWidth="3" fill="none" />
+                <circle cx="10" cy="10" r="7" className="stroke-amber-500" strokeWidth="3" fill="none"
+                  strokeDasharray={`${2 * Math.PI * 7}`}
+                  strokeDashoffset={`${2 * Math.PI * 7 * (1 - Math.min(data.pct / 75, 1))}`}
+                />
+              </svg>
+            </div>
+            <div className="flex-1 min-w-0">
+              <span className="text-sm font-medium text-amber-800 block truncate">{name}</span>
+              <span className="text-xs text-amber-600">{data.pct}% — need 75% for Hard drills</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function Practice() {
   const { user, hasPaidAccess, isProgramme } = useAuth();
   const [timedMode, setTimedMode] = useState(false);
   const { data: sections, isLoading } = useQuery<PracticeSection[]>({
     queryKey: ["/api/practice-sections"],
+  });
+  const { data: progress } = useQuery<ProgressData>({
+    queryKey: ["/api/progress"],
+    enabled: !!user && hasPaidAccess(),
   });
 
   const categories = sections ? Array.from(new Set(sections.map(s => s.category))) : [];
@@ -68,6 +126,10 @@ export default function Practice() {
             <p className="text-amber-700 text-xs mt-0.5">Countdown timer • No per-question feedback • All answers scored at the end</p>
           </div>
         </div>
+      )}
+
+      {hasPaidAccess() && progress?.sectionAccuracy && Object.keys(progress.sectionAccuracy).length > 0 && (
+        <DifficultyProgression sectionAccuracy={progress.sectionAccuracy} />
       )}
 
       <div className="space-y-12">

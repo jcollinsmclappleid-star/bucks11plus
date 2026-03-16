@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../lib/auth";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation } from "wouter";
-import { apiRequest } from "../lib/queryClient";
+import { Loader2 } from "lucide-react";
 
 type Phase = "intro" | "paper1" | "break" | "paper2" | "results";
 
@@ -12,6 +12,8 @@ interface SimQuestion {
   options: string[];
   correctAnswer: string;
   section: string;
+  explanation?: string;
+  difficulty?: string;
 }
 
 function BubbleOption({ letter, selected, onClick, disabled }: { letter: string; selected: boolean; onClick: () => void; disabled: boolean }) {
@@ -69,6 +71,7 @@ export default function TestDaySimulator() {
   const [paper1Time, setPaper1Time] = useState(0);
   const [paper2Time, setPaper2Time] = useState(0);
   const [timerStart, setTimerStart] = useState(0);
+  const [showReview, setShowReview] = useState(false);
 
   const isProgramme = user?.subscriptionTier?.includes("programme16");
 
@@ -77,21 +80,15 @@ export default function TestDaySimulator() {
     enabled: !!user,
   });
 
-  const paper1Questions: SimQuestion[] = Array.from({ length: 25 }, (_, i) => ({
-    id: `sim-p1-${i + 1}`,
-    prompt: `Paper 1 — Question ${i + 1}`,
-    options: ["Option A", "Option B", "Option C", "Option D"],
-    correctAnswer: "Option A",
-    section: i < 8 ? "verbal_reasoning" : i < 14 ? "english_comprehension" : "mathematics",
-  }));
+  const { data: simQuestions, isLoading: questionsLoading } = useQuery<{ paper1: SimQuestion[]; paper2: SimQuestion[] }>({
+    queryKey: ["/api/simulator-questions"],
+    enabled: !!isProgramme,
+    staleTime: 0,
+    gcTime: 0,
+  });
 
-  const paper2Questions: SimQuestion[] = Array.from({ length: 25 }, (_, i) => ({
-    id: `sim-p2-${i + 1}`,
-    prompt: `Paper 2 — Question ${i + 1}`,
-    options: ["Option A", "Option B", "Option C", "Option D"],
-    correctAnswer: "Option A",
-    section: i < 8 ? "non_verbal_reasoning" : i < 14 ? "english_comprehension" : "mathematics",
-  }));
+  const paper1Questions: SimQuestion[] = simQuestions?.paper1 || [];
+  const paper2Questions: SimQuestion[] = simQuestions?.paper2 || [];
 
   const currentPaper = phase === "paper1" ? paper1Questions : paper2Questions;
   const paperOffset = phase === "paper2" ? paper1Questions.length : 0;
@@ -154,6 +151,17 @@ export default function TestDaySimulator() {
     );
   }
 
+  if (questionsLoading || !simQuestions) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]" data-testid="simulator-loading">
+        <div className="text-center space-y-4">
+          <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto" />
+          <p className="text-muted-foreground">Preparing your exam papers...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (phase === "intro") {
     return (
       <div className="container mx-auto max-w-2xl px-4 py-12 space-y-8" data-testid="simulator-intro">
@@ -170,12 +178,12 @@ export default function TestDaySimulator() {
             <div className="p-4 bg-blue-50 rounded-lg">
               <h3 className="font-semibold text-blue-800">Paper 1</h3>
               <p className="text-sm text-blue-700">25 questions — Verbal Reasoning, Comprehension & Maths</p>
-              <p className="text-xs text-blue-600 mt-1">Standard timed conditions</p>
+              <p className="text-xs text-blue-600 mt-1">Real questions from the question bank</p>
             </div>
             <div className="p-4 bg-purple-50 rounded-lg">
               <h3 className="font-semibold text-purple-800">Paper 2</h3>
               <p className="text-sm text-purple-700">25 questions — Non-Verbal Reasoning, Comprehension & Maths</p>
-              <p className="text-xs text-purple-600 mt-1">Standard timed conditions</p>
+              <p className="text-xs text-purple-600 mt-1">Real questions from the question bank</p>
             </div>
           </div>
           <div className="p-4 bg-amber-50 rounded-lg">
@@ -185,7 +193,8 @@ export default function TestDaySimulator() {
           <ul className="text-sm text-muted-foreground space-y-1">
             <li>• Forward-only navigation — you cannot go back to previous questions</li>
             <li>• Bubble answer sheet — select your answer by filling in the bubble</li>
-            <li>• Paper 1 and Paper 2 scored separately</li>
+            <li>• Paper 1 and Paper 2 scored separately with full review</li>
+            <li>• Questions are unique each time you run the simulator</li>
           </ul>
         </div>
 
@@ -229,39 +238,138 @@ export default function TestDaySimulator() {
   if (phase === "results") {
     let p1Correct = 0;
     let p2Correct = 0;
+    const p1SectionResults: Record<string, { correct: number; total: number }> = {};
+    const p2SectionResults: Record<string, { correct: number; total: number }> = {};
+
     paper1Questions.forEach((q, i) => {
-      if (answers[i] === q.correctAnswer) p1Correct++;
+      const section = q.section;
+      if (!p1SectionResults[section]) p1SectionResults[section] = { correct: 0, total: 0 };
+      p1SectionResults[section].total++;
+      if (answers[i] === q.correctAnswer) {
+        p1Correct++;
+        p1SectionResults[section].correct++;
+      }
     });
     paper2Questions.forEach((q, i) => {
-      if (answers[i + paper1Questions.length] === q.correctAnswer) p2Correct++;
+      const section = q.section;
+      if (!p2SectionResults[section]) p2SectionResults[section] = { correct: 0, total: 0 };
+      p2SectionResults[section].total++;
+      if (answers[i + paper1Questions.length] === q.correctAnswer) {
+        p2Correct++;
+        p2SectionResults[section].correct++;
+      }
     });
 
+    const totalCorrect = p1Correct + p2Correct;
+    const rawPercent = totalQuestions > 0 ? (totalCorrect / totalQuestions) * 100 : 0;
+    const forecastScore = Math.round((rawPercent / 100) * 141);
+    const band = forecastScore >= 121 ? "Green (Secure)" : forecastScore >= 110 ? "Amber (Borderline)" : "Red (Developing)";
+    const bandColor = forecastScore >= 121 ? "text-green-600" : forecastScore >= 110 ? "text-amber-600" : "text-red-600";
+    const bandBg = forecastScore >= 121 ? "bg-green-50 border-green-200" : forecastScore >= 110 ? "bg-amber-50 border-amber-200" : "bg-red-50 border-red-200";
+
+    const allQuestions = [...paper1Questions, ...paper2Questions];
+    const incorrectQuestions = allQuestions.filter((q, i) => answers[i] !== q.correctAnswer);
+
+    const sectionLabel = (s: string) => {
+      const map: Record<string, string> = {
+        "Verbal Reasoning": "Verbal Reasoning",
+        "Non-Verbal Reasoning": "Non-Verbal Reasoning",
+        "Mathematics": "Mathematics",
+        "English Comprehension": "English Comprehension",
+      };
+      return map[s] || s;
+    };
+
     return (
-      <div className="container mx-auto max-w-2xl px-4 py-12 space-y-8" data-testid="simulator-results">
+      <div className="container mx-auto max-w-3xl px-4 py-12 space-y-8" data-testid="simulator-results">
         <h1 className="text-3xl font-serif font-bold text-primary text-center">Simulation Complete</h1>
         <p className="text-center text-muted-foreground">Here's how the test day went.</p>
 
+        <div className={`rounded-xl border-2 p-6 text-center space-y-2 ${bandBg}`}>
+          <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Estimated Forecast</p>
+          <div className={`text-6xl font-bold ${bandColor}`} data-testid="text-forecast-score">{forecastScore}</div>
+          <p className="text-xs text-muted-foreground">out of 141 · Qualifying: 121</p>
+          <p className={`text-sm font-bold ${bandColor}`}>{band}</p>
+          {forecastScore < 121 && (
+            <p className="text-sm text-muted-foreground mt-2">{121 - forecastScore} points from the qualifying standard</p>
+          )}
+        </div>
+
         <div className="grid md:grid-cols-2 gap-6">
-          <div className="rounded-xl border bg-card p-6 text-center space-y-2">
+          <div className="rounded-xl border bg-card p-6 space-y-3">
             <h3 className="font-bold text-blue-800">Paper 1</h3>
             <div className="text-4xl font-bold text-blue-600" data-testid="text-paper1-score">{p1Correct}/{paper1Questions.length}</div>
             <p className="text-sm text-muted-foreground">Time: {Math.floor(paper1Time / 60)}m {paper1Time % 60}s</p>
+            <div className="space-y-2 pt-2 border-t">
+              {Object.entries(p1SectionResults).map(([section, data]) => (
+                <div key={section} className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">{sectionLabel(section)}</span>
+                  <span className="font-medium">{data.correct}/{data.total} ({Math.round((data.correct/data.total)*100)}%)</span>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="rounded-xl border bg-card p-6 text-center space-y-2">
+          <div className="rounded-xl border bg-card p-6 space-y-3">
             <h3 className="font-bold text-purple-800">Paper 2</h3>
             <div className="text-4xl font-bold text-purple-600" data-testid="text-paper2-score">{p2Correct}/{paper2Questions.length}</div>
             <p className="text-sm text-muted-foreground">Time: {Math.floor(paper2Time / 60)}m {paper2Time % 60}s</p>
+            <div className="space-y-2 pt-2 border-t">
+              {Object.entries(p2SectionResults).map(([section, data]) => (
+                <div key={section} className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">{sectionLabel(section)}</span>
+                  <span className="font-medium">{data.correct}/{data.total} ({Math.round((data.correct/data.total)*100)}%)</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
-        <div className="rounded-xl border bg-card p-6 text-center space-y-2">
-          <h3 className="font-bold">Combined Score</h3>
-          <div className="text-5xl font-bold text-primary" data-testid="text-combined-score">{p1Correct + p2Correct}/{totalQuestions}</div>
-        </div>
+        {incorrectQuestions.length > 0 && (
+          <div className="rounded-xl border bg-card overflow-hidden">
+            <button
+              onClick={() => setShowReview(!showReview)}
+              className="w-full flex items-center justify-between px-6 py-4 hover:bg-muted/50 transition-colors"
+              data-testid="button-toggle-review"
+            >
+              <span className="font-bold text-primary">Review Incorrect Answers ({incorrectQuestions.length})</span>
+              <span className="text-muted-foreground text-sm">{showReview ? "Hide" : "Show"}</span>
+            </button>
+            {showReview && (
+              <div className="divide-y max-h-[500px] overflow-y-auto">
+                {incorrectQuestions.map((q, idx) => {
+                  const globalIdx = allQuestions.indexOf(q);
+                  const userAnswer = answers[globalIdx] || "Not answered";
+                  return (
+                    <div key={idx} className="px-6 py-4 space-y-2">
+                      <div className="flex items-start gap-2">
+                        <span className="text-xs font-medium bg-slate-100 px-2 py-0.5 rounded shrink-0">{sectionLabel(q.section)}</span>
+                        {q.difficulty && <span className="text-xs font-medium bg-red-50 text-red-700 px-2 py-0.5 rounded shrink-0">{q.difficulty}</span>}
+                      </div>
+                      <p className="text-sm font-medium">{q.prompt}</p>
+                      <div className="grid grid-cols-2 gap-2 text-xs">
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-red-500">✗</span>
+                          <span className="text-red-700">Your answer: {userAnswer}</span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-green-500">✓</span>
+                          <span className="text-green-700">Correct: {q.correctAnswer}</span>
+                        </div>
+                      </div>
+                      {q.explanation && (
+                        <p className="text-xs text-muted-foreground bg-slate-50 p-2 rounded">{q.explanation}</p>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="flex gap-4 justify-center">
           <button
-            onClick={() => { setPhase("intro"); setAnswers({}); setCurrentQ(0); }}
+            onClick={() => { setPhase("intro"); setAnswers({}); setCurrentQ(0); setShowReview(false); }}
             className="bg-primary text-primary-foreground px-6 py-2.5 rounded-md font-medium hover:bg-primary/90"
             data-testid="button-retry-simulator"
           >
@@ -272,6 +380,17 @@ export default function TestDaySimulator() {
               Back to Dashboard
             </button>
           </Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (!currentPaper.length) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-center space-y-4">
+          <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto" />
+          <p className="text-muted-foreground">Loading questions...</p>
         </div>
       </div>
     );
