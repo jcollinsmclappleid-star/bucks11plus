@@ -300,6 +300,34 @@
   padding: 1rem 1.25rem;
 }
 
+.prose > p {
+  margin-top: 0;
+  margin-bottom: 1.25em;
+}
+
+.prose > h2 {
+  margin-top: 2em;
+  margin-bottom: 0.75em;
+}
+
+.prose > h3 {
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+.prose > ul,
+.prose > ol {
+  margin-top: 0.5em;
+  margin-bottom: 1.25em;
+  padding-left: 1.5em;
+}
+
+.prose > ul > li,
+.prose > ol > li {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+
 .drill-complete-card {
   background: white;
   border: 1px solid rgba(0, 0, 0, 0.06);

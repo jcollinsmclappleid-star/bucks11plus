@@ -905,7 +905,7 @@ export default function Pricing() {
           </div>
           <div className="mt-4 text-center text-xs text-muted-foreground/60">
             <p>Not affiliated with GL Assessment or Buckinghamshire Council</p>
-            <p className="mt-1">Forecasts are indicative — <Link href="/how-forecast-works" className="underline hover:text-primary">how our forecast works</Link></p>
+            <p className="mt-1">Forecasts are indicative — <Link href="/how-it-works" className="underline hover:text-primary">how our forecast works</Link></p>
           </div>
         </div>
       </section>

@@ -4,21 +4,113 @@ export default function Legal({ type }: { type: 'terms' | 'privacy' | 'safeguard
   const content = {
     terms: {
       title: "Terms of Service",
-      date: "Last Updated: October 2023",
+      date: "Last Updated: March 2026",
       sections: [
         {
-          heading: "",
-          body: "By accessing 11+ Standard, you agree to be bound by these terms of service. Our platform provides educational assessment tools for informational purposes. We do not guarantee a passing score on the official 11+ examination."
+          heading: "1. Acceptance of Terms",
+          body: "By accessing or using the 11+ Standard platform (the \"Service\"), you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use the Service. If you are registering on behalf of a child, you confirm that you are the parent or legal guardian of that child and that you accept these terms on their behalf."
+        },
+        {
+          heading: "2. Service Description",
+          body: "11+ Standard is an independent digital education platform providing diagnostic assessments, practice questions, readiness forecasts and progress tracking tools designed to support preparation for the Buckinghamshire 11+ Secondary Transfer Test. The Service is intended for informational and educational purposes only. We do not guarantee any specific score, outcome or grammar school placement. Our readiness forecasts are modelled estimates based on observed performance patterns and are not official standardised scores."
+        },
+        {
+          heading: "3. User Accounts and Responsibilities",
+          body: "You must provide accurate and complete information when creating an account. You are responsible for maintaining the confidentiality of your login credentials and for all activities that occur under your account. Each account is for personal, non-commercial use by a single family. You must not share your account credentials with others or allow multiple families to use a single account. You agree not to use the Service for any unlawful purpose, to reproduce or redistribute any content from the platform, or to attempt to reverse-engineer, scrape or extract data from the Service."
+        },
+        {
+          heading: "4. Children's Accounts",
+          body: "The Service is designed for use by parents and guardians on behalf of children. Children under 13 should not create accounts independently. By creating a child profile, you confirm you are the parent or legal guardian and consent to the collection and processing of your child's assessment data as described in our Privacy Policy."
+        },
+        {
+          heading: "5. Payments and Subscriptions",
+          body: "Certain features of the Service require a paid subscription. All prices are displayed in GBP and include VAT where applicable. Payment is processed securely through Stripe, our third-party payment processor. By purchasing a subscription, you authorise us to charge the payment method you provide. Subscription details, including the features included in each plan, are described on our Pricing page. We reserve the right to change our pricing at any time, though changes will not affect existing active subscriptions."
+        },
+        {
+          heading: "6. Refund Policy",
+          body: "Our refund policy is set out separately on our Refund Policy page. In summary, you have 14 days from the date of purchase to cancel and receive a full refund, provided you have not accessed any digital content. Once you begin using the platform (for example, by starting a diagnostic or accessing practice questions), your right to cancel is waived in accordance with the Consumer Contracts (Information, Cancellation and Additional Charges) Regulations 2013."
+        },
+        {
+          heading: "7. Intellectual Property",
+          body: "All content on the Service — including but not limited to questions, assessments, reports, text, graphics, logos, designs and software — is the property of 11+ Standard or its licensors and is protected by copyright and other intellectual property laws. You may not copy, reproduce, distribute, modify, create derivative works from, publicly display or otherwise exploit any content from the Service without our prior written consent. Your subscription grants you a limited, non-exclusive, non-transferable licence to access and use the Service for personal, non-commercial educational purposes only."
+        },
+        {
+          heading: "8. Disclaimers and Limitations of Liability",
+          body: "The Service is provided on an \"as is\" and \"as available\" basis. We make no warranties or representations, express or implied, regarding the accuracy, reliability or completeness of the Service or its content. We do not guarantee that the Service will be uninterrupted, error-free or secure. To the maximum extent permitted by law, 11+ Standard shall not be liable for any indirect, incidental, special, consequential or punitive damages, or any loss of profits, data or goodwill, arising from or in connection with your use of the Service. Our total liability to you for any claim arising from or related to the Service shall not exceed the amount you paid to us in the 12 months preceding the claim. Nothing in these terms excludes or limits liability for death or personal injury caused by negligence, fraud or fraudulent misrepresentation, or any other liability that cannot be excluded or limited by English law."
+        },
+        {
+          heading: "9. Termination",
+          body: "We may suspend or terminate your access to the Service at any time if you breach these terms, engage in fraudulent or abusive behaviour, or for any other reason at our reasonable discretion. You may close your account at any time by contacting us. Upon termination, your right to access the Service ceases immediately. We may retain certain data as required by law or for legitimate business purposes as described in our Privacy Policy."
+        },
+        {
+          heading: "10. Changes to These Terms",
+          body: "We may update these Terms of Service from time to time. If we make material changes, we will notify you by email or by posting a notice on the Service. Your continued use of the Service after such changes constitutes acceptance of the updated terms."
+        },
+        {
+          heading: "11. Governing Law and Jurisdiction",
+          body: "These terms are governed by and construed in accordance with the laws of England and Wales. Any disputes arising from or in connection with these terms or the Service shall be subject to the exclusive jurisdiction of the courts of England and Wales."
+        },
+        {
+          heading: "12. Contact",
+          body: "If you have any questions about these Terms of Service, please contact us at support@bucks11plustest.co.uk."
         }
       ]
     },
     privacy: {
       title: "Privacy Policy",
-      date: "Last Updated: October 2023",
+      date: "Last Updated: March 2026",
       sections: [
         {
-          heading: "",
-          body: "We take your privacy seriously. 11+ Standard collects minimal personal data required to provide our assessment services. We do not sell user data to third parties. Assessment results are kept confidential."
+          heading: "1. Data Controller",
+          body: "11+ Standard is the data controller for personal data collected through this platform. We are committed to protecting your privacy and handling your data in accordance with the UK General Data Protection Regulation (UK GDPR) and the Data Protection Act 2018."
+        },
+        {
+          heading: "2. Data We Collect",
+          body: "We collect the following categories of personal data: Account information — your name, email address and password when you register. Child profile data — your child's first name, age and year group, which you provide when setting up a child profile. Assessment data — answers, scores, timing data and performance metrics generated when your child completes diagnostics and practice sessions. Payment data — billing details processed securely by Stripe; we do not store full card numbers on our servers. Usage data — pages visited, features used, browser type, device information and IP address, collected automatically when you use the Service."
+        },
+        {
+          heading: "3. Lawful Basis for Processing",
+          body: "We process personal data on the following lawful bases: Contract — to provide the Service you have subscribed to, including delivering assessments, generating reports and tracking progress. Legitimate interests — to improve the Service, analyse usage patterns, prevent fraud and ensure platform security. Consent — where required, for example for marketing communications. You can withdraw consent at any time. Legal obligation — to comply with applicable laws, regulations and legal processes."
+        },
+        {
+          heading: "4. How We Use Your Data",
+          body: "We use personal data to: provide, maintain and improve the Service; generate readiness forecasts, performance reports and progress tracking; process payments and manage subscriptions; communicate with you about your account, including service updates and support responses; analyse aggregate usage patterns to improve our content and platform; and comply with legal obligations."
+        },
+        {
+          heading: "5. Children's Data",
+          body: "Our Service is designed for parents and guardians to use on behalf of their children. We do not knowingly collect personal data directly from children under 13 without parental consent. All child profiles are created by a parent or guardian. We collect only the minimum data necessary to provide the educational service — specifically, a first name, age and assessment performance data. We do not use children's data for marketing or advertising purposes. If you believe a child has provided us with personal data without parental consent, please contact us and we will delete the data promptly."
+        },
+        {
+          heading: "6. Cookies and Analytics",
+          body: "We use essential cookies to keep you signed in and maintain your session. We may use analytics tools to understand how the Service is used, including page views and feature usage. Analytics data is aggregated and does not personally identify individual users. You can control cookie preferences through your browser settings."
+        },
+        {
+          heading: "7. Third-Party Processors",
+          body: "We share personal data with the following third-party processors who act on our behalf: Stripe — for secure payment processing. Stripe's privacy policy governs their handling of your payment data. Hosting and infrastructure providers — to host and deliver the Service. We ensure all third-party processors provide adequate data protection safeguards. We do not sell, rent or trade your personal data to any third party for their own marketing purposes."
+        },
+        {
+          heading: "8. Data Retention",
+          body: "We retain your personal data for as long as your account is active or as needed to provide the Service. If you close your account, we will delete or anonymise your personal data within 90 days, except where we are required to retain it for legal, accounting or regulatory purposes. Assessment data may be retained in anonymised form for the purpose of improving our readiness models."
+        },
+        {
+          heading: "9. Your Rights Under UK GDPR",
+          body: "Under UK data protection law, you have the following rights: Right of access — to request a copy of the personal data we hold about you. Right to rectification — to request correction of inaccurate or incomplete data. Right to erasure — to request deletion of your personal data, subject to legal retention requirements. Right to restrict processing — to request that we limit how we use your data. Right to data portability — to receive your data in a structured, commonly used format. Right to object — to object to processing based on legitimate interests. Right to withdraw consent — where processing is based on consent, you may withdraw it at any time. To exercise any of these rights, please contact us at support@bucks11plustest.co.uk. We will respond to your request within 30 days."
+        },
+        {
+          heading: "10. Data Security",
+          body: "We implement appropriate technical and organisational measures to protect your personal data against unauthorised access, alteration, disclosure or destruction. These include encryption of data in transit, secure authentication mechanisms and regular security reviews. However, no method of transmission over the internet is completely secure, and we cannot guarantee absolute security."
+        },
+        {
+          heading: "11. International Transfers",
+          body: "Your data is primarily stored and processed within the United Kingdom and European Economic Area. Where data is transferred outside these regions, we ensure appropriate safeguards are in place in accordance with UK GDPR requirements."
+        },
+        {
+          heading: "12. Changes to This Policy",
+          body: "We may update this Privacy Policy from time to time. If we make material changes, we will notify you by email or by posting a notice on the Service. We encourage you to review this policy periodically."
+        },
+        {
+          heading: "13. Contact and Complaints",
+          body: "If you have any questions about this Privacy Policy or wish to exercise your data protection rights, please contact us at support@bucks11plustest.co.uk. If you are unsatisfied with our response, you have the right to lodge a complaint with the Information Commissioner's Office (ICO) at ico.org.uk."
         }
       ]
     },
@@ -71,20 +163,20 @@ export default function Legal({ type }: { type: 'terms' | 'privacy' | 'safeguard
   const current = content[type];
 
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg min-h-[60vh]">
+    <div className="container mx-auto max-w-4xl px-4 py-16 min-h-[60vh]">
       <Seo 
         title={`${current.title} | 11+ Standard`} 
         description={`Read our ${current.title.toLowerCase()} to understand our policies and commitments.`} 
       />
       <h1 className="text-4xl md:text-5xl font-bold text-primary font-serif tracking-tight" data-testid="text-legal-title">{current.title}</h1>
-      <p className="text-sm text-muted-foreground">{current.date}</p>
+      <p className="text-sm text-muted-foreground mt-2">{current.date}</p>
       <hr className="my-8" />
       {current.sections.map((section, i) => (
-        <div key={i} className={i > 0 ? "mt-8" : ""}>
+        <div key={i} className="mb-8">
           {section.heading && (
             <h2 className="text-xl font-bold text-primary font-serif mb-3" data-testid={`text-legal-heading-${i}`}>{section.heading}</h2>
           )}
-          <p data-testid={`text-legal-body-${i}`}>{section.body}</p>
+          <p className="text-slate-600 leading-relaxed" data-testid={`text-legal-body-${i}`}>{section.body}</p>
         </div>
       ))}
     </div>

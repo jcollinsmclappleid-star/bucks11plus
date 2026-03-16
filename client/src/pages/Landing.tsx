@@ -404,7 +404,7 @@ export default function Landing() {
                   </li>
                 ))}
               </ul>
-              <Button className="w-full mt-6 h-11 text-sm font-bold bg-brand-amber text-white hover:bg-brand-amber/90 border-none" asChild data-testid="button-included-programme">
+              <Button className="w-full mt-6 h-auto min-h-[2.75rem] py-2 text-sm font-bold bg-brand-amber text-white hover:bg-brand-amber/90 border-none whitespace-normal text-center leading-tight" asChild data-testid="button-included-programme">
                 <Link href="/pricing#tiers">Get Young Scholar Programme</Link>
               </Button>
             </div>

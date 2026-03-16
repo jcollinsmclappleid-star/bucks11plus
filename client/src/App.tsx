@@ -1,4 +1,4 @@
-import { Switch, Route, Link, useLocation } from "wouter";
+import { Switch, Route, Link, useLocation, Redirect } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -34,7 +34,6 @@ import FreeDiagnosticStart from "./pages/FreeDiagnosticStart";
 import GuestResults from "./pages/GuestResults";
 
 import HowItWorks from "./pages/HowItWorks";
-import Methodology from "./pages/Methodology";
 import GLAlignment from "./pages/GLAlignment";
 import About from "./pages/About";
 import Legal from "./pages/Legal";
@@ -60,7 +59,7 @@ import { towns } from "./data/towns";
 import { useAuth } from "./lib/auth";
 
 function ScrollToTop() {
-  const { pathname } = useLocation();
+  const [pathname] = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
@@ -87,7 +86,6 @@ function MainLayout({ children }: { children: React.ReactNode }) {
             <ul className="space-y-2 text-sm">
               <li><Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
               <li><Link href="/how-it-works" className="hover:text-white transition-colors">How It Works</Link></li>
-              <li><Link href="/how-forecast-works" className="hover:text-white transition-colors">Our Forecast Model</Link></li>
               <li><Link href="/bucks-gl-alignment" className="hover:text-white transition-colors">GL-Style Alignment</Link></li>
               <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
               <li><Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
@@ -197,7 +195,9 @@ function Router() {
             <Route path="/parent-hub" component={ParentHub} />
             <Route path="/parent-hub/:slug" component={Article} />
             <Route path="/how-it-works" component={HowItWorks} />
-            <Route path="/how-forecast-works" component={Methodology} />
+            <Route path="/how-forecast-works">
+              <Redirect to="/how-it-works" />
+            </Route>
             <Route path="/bucks-gl-alignment" component={GLAlignment} />
             <Route path="/about" component={About} />
             <Route path="/buckinghamshire-11-plus-guide" component={BucksGuide} />

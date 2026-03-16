@@ -1386,7 +1386,7 @@ export async function registerRoutes(
   app.get("/sitemap.xml", (_req, res) => {
     const baseUrl = "https://bucks11plustest.co.uk";
     const staticPages = [
-      "/", "/pricing", "/how-it-works", "/how-forecast-works", "/bucks-gl-alignment",
+      "/", "/pricing", "/how-it-works", "/bucks-gl-alignment",
       "/about", "/parent-hub", "/free-diagnostic",
       "/terms", "/privacy", "/safeguarding",
       "/buckinghamshire-11-plus-guide", "/bucks-11-plus-parent-guide",

@@ -70,7 +70,7 @@ export default function ParentHub() {
           <div>
             <h3 className="font-bold text-primary mb-4">Categories</h3>
             <ul className="space-y-2">
-              <li><Link href="/how-forecast-works" className="text-muted-foreground hover:text-primary transition-colors">How Our Forecast Works</Link></li>
+              <li><Link href="/how-it-works" className="text-muted-foreground hover:text-primary transition-colors">How It Works</Link></li>
               <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Practice Advice</a></li>
               <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Planning</a></li>
               <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Wellbeing</a></li>
