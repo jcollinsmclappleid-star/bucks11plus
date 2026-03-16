@@ -26,34 +26,31 @@ export default function Navbar() {
           </div>
         </Link>
 
-        <nav className="flex items-center gap-6">
+        <nav className="flex items-center gap-4 lg:gap-6">
+          <Link href="/app" className={`text-sm font-medium transition-colors hidden sm:block ${location === '/app' ? 'text-primary' : 'text-slate-600 hover:text-primary'}`} data-testid="link-dashboard">Dashboard</Link>
+          <Link href="/app/diagnostic" className={`text-sm font-medium transition-colors hidden sm:block ${location.startsWith('/app/diagnostic') ? 'text-primary' : 'text-slate-600 hover:text-primary'}`} data-testid="link-diagnostics">Diagnostics</Link>
+          <Link href="/app/practice" className={`text-sm font-medium transition-colors hidden sm:block ${location.startsWith('/app/practice') ? 'text-primary' : 'text-slate-600 hover:text-primary'}`} data-testid="link-practice">Practice</Link>
+          <Link href="/app/badges" className={`text-sm font-medium transition-colors hidden md:block ${location === '/app/badges' ? 'text-primary' : 'text-slate-600 hover:text-primary'}`} data-testid="link-badges">Accomplishments</Link>
+          <Link href="/app/progress" className={`text-sm font-medium transition-colors hidden md:block ${location === '/app/progress' ? 'text-primary' : 'text-slate-600 hover:text-primary'}`} data-testid="link-progress">Progress</Link>
+          <Link href="/app/report-archive" className={`text-sm font-medium transition-colors hidden lg:block ${location === '/app/report-archive' ? 'text-primary' : 'text-slate-600 hover:text-primary'}`} data-testid="link-reports">Reports</Link>
+
           {!user ? (
-            <>
-              <Link href="/how-it-works" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors hidden sm:block">How It Works</Link>
-              <Link href="/pricing" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors hidden sm:block">Pricing</Link>
-              <div className="flex items-center gap-3 ml-2">
-                <Button variant="ghost" asChild data-testid="link-signin">
-                  <Link href="/sign-in">Sign In</Link>
-                </Button>
-                <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm" data-testid="link-free-diagnostic">
-                  <Link href="/free-diagnostic">Start Free Diagnostic</Link>
-                </Button>
-              </div>
-            </>
+            <div className="flex items-center gap-2 ml-2">
+              <Button variant="ghost" size="sm" asChild data-testid="link-signin">
+                <Link href="/sign-in">Sign In</Link>
+              </Button>
+              <Button size="sm" asChild className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm" data-testid="link-free-diagnostic">
+                <Link href="/free-diagnostic">Free Diagnostic</Link>
+              </Button>
+            </div>
           ) : (
-            <div className="flex items-center gap-6">
-              <Link href="/app" className="text-sm font-medium text-primary transition-colors" data-testid="link-dashboard">Dashboard</Link>
-              <Link href="/app/diagnostic" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors hidden sm:block" data-testid="link-diagnostics">Diagnostics</Link>
-              <Link href="/app/practice" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors" data-testid="link-practice">Practice</Link>
+            <div className="flex items-center gap-4">
               {isProgramme() && (
                 <>
                   <Link href="/app/programme" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors hidden sm:block" data-testid="link-programme">Programme</Link>
                   <Link href="/app/analytics" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors hidden sm:block" data-testid="link-analytics-nav">Analytics</Link>
                 </>
               )}
-              <Link href="/app/badges" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors hidden md:block" data-testid="link-badges">Accomplishments</Link>
-              <Link href="/app/progress" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors hidden md:block" data-testid="link-progress">Progress</Link>
-              <Link href="/app/report-archive" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors hidden lg:block" data-testid="link-reports">Reports</Link>
               <ChildSwitcher />
               <Link href="/app/account" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors hidden md:block" data-testid="link-account">
                 {user.childName || user.username}

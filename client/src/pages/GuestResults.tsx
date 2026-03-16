@@ -1,9 +1,11 @@
 import { Link, useParams, useSearch } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, BarChart2, Target, SlidersHorizontal, Sparkles, Clock, Loader2, Lock, TrendingUp, BarChart3, Brain, Zap } from "lucide-react";
+import { ArrowRight, BarChart2, SlidersHorizontal, Sparkles, Clock, Loader2, Lock, TrendingUp, BarChart3, Zap, CheckCircle2, XCircle, ChevronDown, ChevronUp } from "lucide-react";
+import { Slider } from "@/components/ui/slider";
 import { Seo } from "../components/shared/Seo";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
 type GuestSession = {
   id: string;
@@ -16,12 +18,27 @@ type GuestSession = {
   paceData: { name: string; avg: number; expected: number }[] | null;
 };
 
+type ReviewItem = {
+  questionId: string;
+  section: string;
+  prompt: string;
+  options: string[];
+  correctAnswer: string;
+  selectedAnswer: string | null;
+  isCorrect: boolean;
+  timeTaken: number;
+  explanation: string | null;
+  difficulty: string;
+};
+
 export default function GuestResults() {
   const { id } = useParams<{ id: string }>();
   const search = useSearch();
   const urlToken = new URLSearchParams(search).get("token");
   const guestToken = urlToken || sessionStorage.getItem("guestToken") || "";
   const target = 121;
+  const [simAdjustments, setSimAdjustments] = useState<Record<string, number>>({});
+  const [showReview, setShowReview] = useState(false);
 
   const { data: session, isLoading } = useQuery<GuestSession>({
     queryKey: [`guest-results-${id}`],
@@ -33,11 +50,35 @@ export default function GuestResults() {
     enabled: !!id && !!guestToken,
   });
 
+  const { data: reviewItems } = useQuery<ReviewItem[]>({
+    queryKey: [`guest-review-${id}`],
+    queryFn: async () => {
+      const res = await fetch(`/api/guest/review/${id}?token=${guestToken}`);
+      if (!res.ok) throw new Error("Failed to load review");
+      return res.json();
+    },
+    enabled: !!id && !!guestToken && !!session?.completedAt,
+  });
+
   const currentScore = session?.forecastScore || 0;
-  const gap = target - currentScore;
   const sectionScores = session?.sectionScores || [];
   const paceData = session?.paceData || [];
   const weakestSection = sectionScores.length > 0 ? [...sectionScores].sort((a, b) => a.score - b.score)[0] : null;
+
+  const simScore = (() => {
+    if (sectionScores.length === 0) return currentScore;
+    const totalQuestions = sectionScores.reduce((s, sec) => s + sec.total, 0);
+    let totalCorrect = 0;
+    for (const sec of sectionScores) {
+      const adj = simAdjustments[sec.name] || 0;
+      const newScore = Math.min(100, sec.score + adj);
+      totalCorrect += (newScore / 100) * sec.total;
+    }
+    const newPercent = (totalCorrect / totalQuestions) * 100;
+    return Math.round((newPercent / 100) * 141);
+  })();
+  const simGap = target - simScore;
+  const hasSimChanges = Object.values(simAdjustments).some(v => v !== 0);
 
   if (isLoading) {
     return (
@@ -81,55 +122,80 @@ export default function GuestResults() {
                 <circle cx="50" cy="50" r="40" className="stroke-slate-100" strokeWidth="12" fill="none" />
                 <circle
                   cx="50" cy="50" r="40"
-                  className={`${currentScore >= 121 ? 'stroke-green-500' : currentScore >= 110 ? 'stroke-amber-400' : 'stroke-red-400'}`}
+                  className={`${(hasSimChanges ? simScore : currentScore) >= 121 ? 'stroke-green-500' : (hasSimChanges ? simScore : currentScore) >= 110 ? 'stroke-amber-400' : 'stroke-red-400'}`}
                   strokeWidth="12"
                   fill="none"
                   strokeDasharray="251.2"
-                  strokeDashoffset={251.2 - (251.2 * (currentScore / 141))}
-                  style={{ transition: 'stroke-dashoffset 1.5s ease-out' }}
+                  strokeDashoffset={251.2 - (251.2 * ((hasSimChanges ? simScore : currentScore) / 141))}
+                  style={{ transition: 'stroke-dashoffset 0.5s ease-out' }}
                 />
                 <line x1="50" y1="2" x2="50" y2="15" className="stroke-primary" strokeWidth="2" transform={`rotate(${(121/141)*360} 50 50)`} />
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-6xl font-bold text-primary" data-testid="text-guest-score">{currentScore}</span>
-                <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1">Forecast</span>
+                <span className="text-6xl font-bold text-primary" data-testid="text-guest-score">{hasSimChanges ? simScore : currentScore}</span>
+                <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1">{hasSimChanges ? "Simulated" : "Forecast"}</span>
               </div>
             </div>
 
             <div>
               <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-bold border mb-3 shadow-sm ${
-                currentScore >= 121 ? 'bg-green-100 text-green-800 border-green-200' :
-                currentScore >= 110 ? 'bg-amber-100 text-amber-800 border-amber-200' :
+                (hasSimChanges ? simScore : currentScore) >= 121 ? 'bg-green-100 text-green-800 border-green-200' :
+                (hasSimChanges ? simScore : currentScore) >= 110 ? 'bg-amber-100 text-amber-800 border-amber-200' :
                 'bg-red-100 text-red-800 border-red-200'
               }`} data-testid="text-guest-band">
-                <Sparkles className="h-4 w-4" /> {session.band || "Unknown"}
+                <Sparkles className="h-4 w-4" /> {hasSimChanges ? (simScore >= 121 ? "On Track" : simScore >= 115 ? "Within Reach" : "Clear Improvement Opportunity") : (session.band || "Unknown")}
               </div>
               <p className="text-muted-foreground text-lg">
-                {gap > 0 ? (
-                  <>Your child is currently showing a <strong className="text-primary">{gap} point gap</strong> to the 121 standard.</>
+                {(hasSimChanges ? simGap : target - currentScore) > 0 ? (
+                  <>Your child is currently showing a <strong className="text-primary">{hasSimChanges ? simGap : target - currentScore} point gap</strong> to the 121 standard.</>
                 ) : (
                   <>Your child is <strong className="text-green-700">meeting or exceeding</strong> the 121 standard!</>
                 )}
               </p>
             </div>
 
-            <div className="w-full bg-white p-6 rounded-2xl border border-border shadow-sm text-left mt-4 relative overflow-hidden">
-              <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-10 flex flex-col items-center justify-center p-6 text-center">
-                <SlidersHorizontal className="h-8 w-8 text-slate-400 mb-2" />
-                <p className="font-bold text-primary mb-2">Impact Simulator</p>
-                <p className="text-sm text-muted-foreground mb-3">See how improving specific skills shifts the forecast</p>
-                <Button size="sm" asChild data-testid="button-unlock-simulator">
-                  <Link href="/pricing">Unlock Full Access</Link>
-                </Button>
-              </div>
-              <div className="flex items-center gap-2 mb-4 opacity-40">
+            <div className="w-full bg-white p-6 rounded-2xl border border-border shadow-sm text-left mt-4">
+              <div className="flex items-center gap-2 mb-4">
                 <SlidersHorizontal className="h-5 w-5 text-primary" />
                 <h4 className="font-bold text-primary text-lg font-serif">Impact Simulator</h4>
               </div>
-              <div className="space-y-3 opacity-40">
-                <div className="h-8 bg-slate-100 rounded"></div>
-                <div className="h-24 bg-slate-100 rounded"></div>
+              <p className="text-sm text-muted-foreground mb-4">Drag the sliders to see how improving each section shifts the forecast.</p>
+              <div className="space-y-4">
+                {sectionScores.map((section) => {
+                  const adj = simAdjustments[section.name] || 0;
+                  const newVal = Math.min(100, section.score + adj);
+                  return (
+                    <div key={section.name} className="space-y-1.5">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm font-medium text-slate-700">{section.name}</span>
+                        <span className="text-sm font-bold text-primary">{newVal}%</span>
+                      </div>
+                      <Slider
+                        value={[adj]}
+                        onValueChange={([v]) => setSimAdjustments(prev => ({ ...prev, [section.name]: v }))}
+                        min={0}
+                        max={Math.min(50, 100 - section.score)}
+                        step={5}
+                        className="w-full"
+                        data-testid={`slider-sim-${section.name}`}
+                      />
+                      <div className="flex justify-between text-[10px] text-muted-foreground">
+                        <span>Current: {section.score}%</span>
+                        {adj > 0 && <span className="text-green-600 font-semibold">+{adj}%</span>}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
+              {hasSimChanges && (
+                <button
+                  onClick={() => setSimAdjustments({})}
+                  className="text-xs text-muted-foreground hover:text-primary mt-3 underline"
+                  data-testid="button-reset-sim"
+                >
+                  Reset simulator
+                </button>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -173,6 +239,69 @@ export default function GuestResults() {
         </div>
       </div>
 
+      {reviewItems && reviewItems.length > 0 && (
+        <Card className="border-border/60 shadow-sm">
+          <CardHeader className="bg-slate-50/50 border-b border-border/50 cursor-pointer" onClick={() => setShowReview(!showReview)}>
+            <CardTitle className="flex items-center justify-between text-lg font-serif">
+              <span className="flex items-center gap-2">
+                <CheckCircle2 className="h-5 w-5 text-primary" /> Question Review
+                <span className="text-sm font-normal text-muted-foreground ml-2">
+                  {reviewItems.filter(r => r.isCorrect).length}/{reviewItems.length} correct
+                </span>
+              </span>
+              {showReview ? <ChevronUp className="h-5 w-5 text-muted-foreground" /> : <ChevronDown className="h-5 w-5 text-muted-foreground" />}
+            </CardTitle>
+          </CardHeader>
+          {showReview && (
+            <CardContent className="p-0 divide-y divide-border/50">
+              {reviewItems.map((item, i) => (
+                <div key={i} className={`p-5 ${item.isCorrect ? 'bg-white' : 'bg-red-50/30'}`} data-testid={`review-item-${i}`}>
+                  <div className="flex items-start gap-3">
+                    {item.isCorrect ? (
+                      <CheckCircle2 className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
+                    ) : (
+                      <XCircle className="h-5 w-5 text-red-500 shrink-0 mt-0.5" />
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">{item.section}</span>
+                        <span className="text-xs text-muted-foreground">· {item.timeTaken}s</span>
+                      </div>
+                      <p className="text-sm font-medium text-slate-800 mb-2">{item.prompt}</p>
+                      <div className="flex flex-wrap gap-2 mb-2">
+                        {item.options.map((opt, j) => {
+                          const isCorrect = opt === item.correctAnswer;
+                          const isSelected = opt === item.selectedAnswer;
+                          return (
+                            <span
+                              key={j}
+                              className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${
+                                isCorrect ? 'bg-green-100 text-green-800 border-green-200' :
+                                isSelected && !item.isCorrect ? 'bg-red-100 text-red-800 border-red-200' :
+                                'bg-slate-50 text-slate-600 border-slate-200'
+                              }`}
+                            >
+                              {opt}
+                              {isCorrect && " ✓"}
+                              {isSelected && !item.isCorrect && " ✗"}
+                            </span>
+                          );
+                        })}
+                      </div>
+                      {item.explanation && !item.isCorrect && (
+                        <p className="text-xs text-slate-600 bg-slate-50 rounded-lg p-3 mt-2 border border-slate-100">
+                          <strong>Explanation:</strong> {item.explanation}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </CardContent>
+          )}
+        </Card>
+      )}
+
       {weakestSection && (
         <Card className="border-amber-200 bg-gradient-to-br from-amber-50 to-white shadow-md" data-testid="card-personalised-upsell-guest">
           <CardContent className="p-8">
@@ -206,10 +335,10 @@ export default function GuestResults() {
       <div className="bg-gradient-to-br from-primary/[0.03] to-primary/[0.08] border border-primary/15 rounded-2xl p-8 md:p-12">
         <div className="text-center mb-8">
           <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif mb-3">
-            You've seen where your child stands. Here's how to close the gap.
+            Ready to close the gap? Choose your plan.
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Targeted practice on identified weak areas is the fastest route to improvement. Our paid plans give you the exact roadmap.
+            You've seen exactly where your child stands. Now unlock targeted practice to turn weaknesses into strengths.
           </p>
         </div>
 
@@ -266,7 +395,7 @@ export default function GuestResults() {
               Save These Results (Free Account) <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
-          <p className="text-xs text-muted-foreground mt-3">Create a free account to save your results and access the sample drill.</p>
+          <p className="text-xs text-muted-foreground mt-3">Create a free account to save your results and start practising.</p>
         </div>
       </div>
 

@@ -8,6 +8,7 @@ import React, { useEffect } from "react";
 
 import { AuthProvider } from "./lib/auth";
 import Navbar from "./components/layout/Navbar";
+import LockedOverlay from "./components/shared/LockedOverlay";
 import Landing from "./pages/Landing";
 import Dashboard from "./pages/Dashboard";
 import Pricing from "./pages/Pricing";
@@ -172,6 +173,21 @@ function AuthGate({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+function PreviewGate({ children, section, requiredTier }: { children: React.ReactNode; section: string; requiredTier?: "any" | "pack12" | "programme16" }) {
+  const { user, isLoading } = useAuth();
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+      </div>
+    );
+  }
+  if (!user) {
+    return <LockedOverlay section={section} requiredTier={requiredTier}>{children}</LockedOverlay>;
+  }
+  return <>{children}</>;
+}
+
 function AdminGuard({ children }: { children: React.ReactNode }) {
   const { user, isLoading } = useAuth();
   if (isLoading) return null;
@@ -238,7 +254,7 @@ function Router() {
               <AuthGate><EarlyDashboard /></AuthGate>
             </Route>
             <Route path="/app">
-              <AuthGate><Dashboard /></AuthGate>
+              <PreviewGate section="Dashboard"><Dashboard /></PreviewGate>
             </Route>
             <Route path="/app/test-day-simulator">
               <AuthGate><TestDaySimulator /></AuthGate>
@@ -247,10 +263,10 @@ function Router() {
               <AuthGate><Onboarding /></AuthGate>
             </Route>
             <Route path="/app/practice">
-              <AuthGate><Practice /></AuthGate>
+              <PreviewGate section="Practice" requiredTier="pack12"><Practice /></PreviewGate>
             </Route>
             <Route path="/app/diagnostic">
-              <AuthGate><Diagnostics /></AuthGate>
+              <PreviewGate section="Diagnostics"><Diagnostics /></PreviewGate>
             </Route>
             <Route path="/app/diagnostic/:id/start">
               <AuthGate><DiagnosticStart /></AuthGate>
@@ -259,25 +275,25 @@ function Router() {
               <AuthGate><Results /></AuthGate>
             </Route>
             <Route path="/app/progress">
-              <AuthGate><Progress /></AuthGate>
+              <PreviewGate section="Progress" requiredTier="pack12"><Progress /></PreviewGate>
             </Route>
             <Route path="/app/account">
               <AuthGate><Account /></AuthGate>
             </Route>
             <Route path="/app/report-archive">
-              <AuthGate><ReportArchive /></AuthGate>
+              <PreviewGate section="Reports" requiredTier="pack12"><ReportArchive /></PreviewGate>
             </Route>
             <Route path="/app/programme">
-              <AuthGate><Programme /></AuthGate>
+              <PreviewGate section="Young Scholar Programme" requiredTier="programme16"><Programme /></PreviewGate>
             </Route>
             <Route path="/app/programme/summary">
               <AuthGate><ProgrammeCompletion /></AuthGate>
             </Route>
             <Route path="/app/analytics">
-              <AuthGate><ParentAnalytics /></AuthGate>
+              <PreviewGate section="Parent Analytics" requiredTier="programme16"><ParentAnalytics /></PreviewGate>
             </Route>
             <Route path="/app/badges">
-              <AuthGate><Badges /></AuthGate>
+              <PreviewGate section="Accomplishments"><Badges /></PreviewGate>
             </Route>
             <Route path="/app/checkout-success">
               <AuthGate><CheckoutSuccess /></AuthGate>
