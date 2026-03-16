@@ -1,7 +1,7 @@
 import { Link, useParams } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, Download, BarChart2, Target, SlidersHorizontal, Sparkles, Clock, Loader2, CheckCircle2, TrendingUp, FileText } from "lucide-react";
+import { ArrowRight, Download, BarChart2, Target, SlidersHorizontal, Sparkles, Clock, Loader2, CheckCircle2, TrendingUp, FileText, XCircle, ChevronDown, ChevronUp, Lightbulb, Crown, Zap } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState } from "react";
@@ -36,6 +36,77 @@ type ProgrammeData = {
   currentWeek?: number;
 };
 
+type ReviewItem = {
+  questionId: string;
+  section: string;
+  prompt: string;
+  options: string[];
+  correctAnswer: string;
+  selectedAnswer: string | null;
+  isCorrect: boolean;
+  timeTaken: number;
+  explanation: string | null;
+  difficulty: string;
+};
+
+const TIER_RANK: Record<string, number> = {
+  free: -1,
+  early_learner: 0,
+  pack12: 1,
+  pack12_family: 1,
+  programme16: 2,
+  programme16_family: 2,
+};
+
+function getUpsellMessage(tier: string, weakestSection: string, weakestScore: number, overallScore: number): { title: string; message: string; cta: string; tier: string } | null {
+  const rank = TIER_RANK[tier] ?? -1;
+
+  if (rank < 0) {
+    if (overallScore < 110) {
+      return {
+        title: "Unlock Targeted Practice",
+        message: `${weakestSection} at ${weakestScore}% needs focused attention. The Early Learner pack gives your child structured practice across all four sections with 2,000+ curated questions.`,
+        cta: "View Early Learner — £49",
+        tier: "early_learner",
+      };
+    }
+    return {
+      title: "Start Building Confidence",
+      message: `Great start! The Early Learner pack includes unlimited access to 2,000+ questions across all sections to build consistent practice habits.`,
+      cta: "View Early Learner — £49",
+      tier: "early_learner",
+    };
+  }
+
+  if (rank === 0) {
+    if (weakestScore < 60) {
+      return {
+        title: "Intensify Your Preparation",
+        message: `${weakestSection} at ${weakestScore}% would benefit from the Practice Platform's full diagnostic papers and targeted drill sessions across all difficulty levels.`,
+        cta: "Upgrade to Practice Platform — £99",
+        tier: "pack12",
+      };
+    }
+    return {
+      title: "Ready for More Depth?",
+      message: `Your child is making progress. The Practice Platform unlocks full-length diagnostic papers and harder question sets to push their score higher.`,
+      cta: "Upgrade to Practice Platform — £99",
+      tier: "pack12",
+    };
+  }
+
+  if (rank === 1 && overallScore < 121) {
+    return {
+      title: "Close the Gap with the Young Scholar Programme",
+      message: `At ${overallScore}/141, your child is ${121 - overallScore} points from the 121 standard. The 16-week Programme provides a structured weekly plan, mock exams, and milestone tracking to systematically close this gap.`,
+      cta: "View Young Scholar Programme — £249",
+      tier: "programme16",
+    };
+  }
+
+  return null;
+}
+
 export default function Results() {
   const { id } = useParams<{ id: string }>();
   const { user, isProgramme, hasPaidAccess } = useAuth();
@@ -53,8 +124,17 @@ export default function Results() {
     enabled: isProgramme(),
   });
 
+  const { data: reviewData } = useQuery<ReviewItem[]>({
+    queryKey: [`/api/test-sessions/${id}/review`],
+    queryFn: getQueryFn({ on401: "returnNull" }),
+    enabled: !!id && !!session?.completedAt,
+  });
+
   const [simulatorValue, setSimulatorValue] = useState([10]);
   const [selectedSkill, setSelectedSkill] = useState("");
+  const [showReview, setShowReview] = useState(false);
+  const [reviewFilter, setReviewFilter] = useState<"all" | "incorrect" | "correct">("all");
+  const [expandedQuestions, setExpandedQuestions] = useState<Set<string>>(new Set());
 
   const currentScore = session?.forecastScore || 0;
   const gap = target - currentScore;
@@ -71,6 +151,25 @@ export default function Results() {
   const matchingMilestone = programme?.milestones?.find(
     m => !m.completedAt && m.linkedDiagnosticId === session?.diagnosticId
   );
+
+  const userTier = user?.subscriptionTier || "free";
+  const weakest = sectionScores.length > 0 ? [...sectionScores].sort((a, b) => a.score - b.score)[0] : null;
+  const upsell = weakest ? getUpsellMessage(userTier, weakest.name, weakest.score, currentScore) : null;
+
+  const filteredReview = (reviewData || []).filter(item => {
+    if (reviewFilter === "incorrect") return !item.isCorrect;
+    if (reviewFilter === "correct") return item.isCorrect;
+    return true;
+  });
+
+  const toggleQuestion = (qId: string) => {
+    setExpandedQuestions(prev => {
+      const next = new Set(prev);
+      if (next.has(qId)) next.delete(qId);
+      else next.add(qId);
+      return next;
+    });
+  };
 
   if (isLoading) {
     return (
@@ -251,7 +350,7 @@ export default function Results() {
                     <div>
                       <div className="font-bold text-slate-800">{section.name}</div>
                       <div className="text-xs text-muted-foreground mt-0.5">
-                        {section.score >= 80 ? "On Track" : section.score >= 60 ? "Within Reach" : "Clear Improvement Opportunity"}
+                        {section.correct}/{section.total} correct — {section.score >= 80 ? "On Track" : section.score >= 60 ? "Within Reach" : "Clear Improvement Opportunity"}
                       </div>
                     </div>
                     <div className="text-right">
@@ -274,6 +373,23 @@ export default function Results() {
             </CardContent>
           </Card>
 
+          {upsell && (
+            <Card className="border-brand-amber/30 bg-gradient-to-br from-amber-50 to-white shadow-md relative overflow-hidden" data-testid="card-upsell">
+              <div className="absolute top-0 right-0 p-6 opacity-5 pointer-events-none">
+                <Crown className="w-24 h-24 text-amber-900" />
+              </div>
+              <CardContent className="p-8 relative z-10">
+                <h3 className="font-bold text-amber-800 flex items-center gap-2 mb-3 text-xl font-serif">
+                  <Zap className="h-6 w-6 text-amber-600" /> {upsell.title}
+                </h3>
+                <p className="text-slate-700 mb-6 leading-relaxed">{upsell.message}</p>
+                <Button size="lg" className="w-full bg-brand-amber text-white hover:bg-brand-amber/90 shadow-lg hover:shadow-xl transition-shadow text-base" asChild>
+                  <Link href="/pricing#tiers" data-testid="button-upsell-cta">{upsell.cta} <ArrowRight className="ml-2 h-5 w-5" /></Link>
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+
           <Card className="border-primary/20 bg-gradient-to-br from-blue-50 to-white shadow-md relative overflow-hidden">
             <div className="absolute top-0 right-0 p-6 opacity-5 pointer-events-none">
               <Target className="w-24 h-24 text-blue-900" />
@@ -285,8 +401,8 @@ export default function Results() {
               {sectionScores.length > 0 ? (
                 <p className="text-slate-700 mb-6 leading-relaxed">
                   {(() => {
-                    const weakest = [...sectionScores].sort((a, b) => a.score - b.score)[0];
-                    return `${weakest.name} at ${weakest.score}% is the primary area for improvement. We recommend starting targeted drills immediately.`;
+                    const w = [...sectionScores].sort((a, b) => a.score - b.score)[0];
+                    return `${w.name} at ${w.score}% is the primary area for improvement. We recommend starting targeted drills immediately.`;
                   })()}
                 </p>
               ) : (
@@ -299,6 +415,119 @@ export default function Results() {
           </Card>
         </div>
       </div>
+
+      {reviewData && reviewData.length > 0 && (
+        <Card className="border-border/60 shadow-sm" data-testid="card-question-review">
+          <CardHeader className="bg-slate-50/50 border-b border-border/50 cursor-pointer" onClick={() => setShowReview(!showReview)}>
+            <CardTitle className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-lg font-serif">
+                <FileText className="h-5 w-5 text-primary" /> Question Review
+                <span className="text-sm font-normal text-muted-foreground ml-2">
+                  ({reviewData.filter(r => r.isCorrect).length}/{reviewData.length} correct)
+                </span>
+              </div>
+              <Button variant="ghost" size="sm" data-testid="button-toggle-review">
+                {showReview ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+              </Button>
+            </CardTitle>
+          </CardHeader>
+          {showReview && (
+            <CardContent className="p-6">
+              <div className="flex gap-2 mb-6">
+                {(["all", "incorrect", "correct"] as const).map(f => (
+                  <Button
+                    key={f}
+                    variant={reviewFilter === f ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setReviewFilter(f)}
+                    data-testid={`button-filter-${f}`}
+                  >
+                    {f === "all" ? `All (${reviewData.length})` : f === "incorrect" ? `Incorrect (${reviewData.filter(r => !r.isCorrect).length})` : `Correct (${reviewData.filter(r => r.isCorrect).length})`}
+                  </Button>
+                ))}
+              </div>
+
+              <div className="space-y-3">
+                {filteredReview.map((item, idx) => {
+                  const isExpanded = expandedQuestions.has(item.questionId);
+                  return (
+                    <div
+                      key={item.questionId}
+                      className={`border rounded-xl overflow-hidden transition-colors ${item.isCorrect ? 'border-green-200 bg-green-50/30' : 'border-red-200 bg-red-50/30'}`}
+                      data-testid={`review-item-${idx}`}
+                    >
+                      <div
+                        className="p-4 cursor-pointer flex items-start gap-3"
+                        onClick={() => toggleQuestion(item.questionId)}
+                      >
+                        <div className="shrink-0 mt-0.5">
+                          {item.isCorrect ? (
+                            <CheckCircle2 className="h-5 w-5 text-green-600" />
+                          ) : (
+                            <XCircle className="h-5 w-5 text-red-500" />
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">{item.section}</span>
+                            <span className={`text-xs px-1.5 py-0.5 rounded font-medium ${
+                              item.difficulty === 'easy' ? 'bg-green-100 text-green-700' :
+                              item.difficulty === 'hard' ? 'bg-red-100 text-red-700' :
+                              'bg-amber-100 text-amber-700'
+                            }`}>{item.difficulty}</span>
+                            {item.timeTaken != null && (
+                              <span className="text-xs text-muted-foreground">{item.timeTaken}s</span>
+                            )}
+                          </div>
+                          <p className="text-sm font-medium text-slate-800 line-clamp-2">{item.prompt}</p>
+                        </div>
+                        <div className="shrink-0">
+                          {isExpanded ? <ChevronUp className="h-4 w-4 text-slate-400" /> : <ChevronDown className="h-4 w-4 text-slate-400" />}
+                        </div>
+                      </div>
+
+                      {isExpanded && (
+                        <div className="px-4 pb-4 border-t border-border/40 pt-4 space-y-3">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            {item.options.map((opt, oi) => {
+                              const isCorrectOption = opt === item.correctAnswer;
+                              const isSelected = opt === item.selectedAnswer;
+                              let optClass = "border-slate-200 bg-white text-slate-700";
+                              if (isCorrectOption) optClass = "border-green-300 bg-green-50 text-green-800 font-medium";
+                              if (isSelected && !item.isCorrect) optClass = "border-red-300 bg-red-50 text-red-800 line-through";
+                              if (isSelected && item.isCorrect) optClass = "border-green-300 bg-green-50 text-green-800 font-medium";
+
+                              return (
+                                <div key={oi} className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-sm ${optClass}`}>
+                                  {isCorrectOption && <CheckCircle2 className="h-4 w-4 text-green-600 shrink-0" />}
+                                  {isSelected && !item.isCorrect && <XCircle className="h-4 w-4 text-red-500 shrink-0" />}
+                                  {!isCorrectOption && !isSelected && <span className="h-4 w-4 shrink-0" />}
+                                  <span>{opt}</span>
+                                </div>
+                              );
+                            })}
+                          </div>
+
+                          {item.explanation && (
+                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 flex items-start gap-2" data-testid={`explanation-${idx}`}>
+                              <Lightbulb className="h-4 w-4 text-blue-600 shrink-0 mt-0.5" />
+                              <p className="text-sm text-blue-900">{item.explanation}</p>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+
+                {filteredReview.length === 0 && (
+                  <p className="text-sm text-muted-foreground text-center py-4">No questions match this filter.</p>
+                )}
+              </div>
+            </CardContent>
+          )}
+        </Card>
+      )}
 
       <div className="grid md:grid-cols-2 gap-6 mt-8">
         <Card className="border-border/60 shadow-sm">

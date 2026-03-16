@@ -162,7 +162,7 @@ content/
 - GET /api/articles, GET /api/articles/:slug, GET /api/progress
 
 ## Question Engine
-- ~1013 questions (321 VR + 400 NVR + 292 Maths) generated via scripts/generators
+- ~1713 questions (321 VR + 400 NVR + 292 Maths + 700 English Comprehension) — all with answer explanations
 - Difficulty distribution: ~20% easy / 39% medium / 41% hard (GL-realistic harder skew)
 - NVR questions use SVG render_config (NvrSequenceConfig, NvrTransformConfig, NvrClassificationConfig)
 - Data interpretation uses chart render_config (ChartBarConfig, ChartLineConfig, ChartTableConfig)
@@ -186,6 +186,8 @@ content/
 
 ## Key Patterns
 - **4 test sections**: Verbal Reasoning, Non-Verbal Reasoning, Mathematics, English Comprehension
+- **Question Review**: GET /api/test-sessions/:id/review returns answered questions with explanations, correct answers, difficulty, timing
+- **Personalised Upsells**: Results page shows tier-appropriate upgrade suggestions based on weakest section score and overall forecast
 - 700 comprehension questions total: 200 (comp200, 40 passages) + 500 (comp500, 100 passages), section="English Comprehension", renderType="comprehension"
 - comp500 distribution: 350 Hard (passages 1-70) + 150 Medium (passages 71-100), 39 unique passage titles cycling
 - Comprehension passage rendering in TestRunner: passage text box above question prompt

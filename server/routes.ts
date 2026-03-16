@@ -473,6 +473,46 @@ export async function registerRoutes(
     }
   });
 
+  app.get("/api/test-sessions/:id/review", requireAuth, async (req, res, next) => {
+    try {
+      const session = await storage.getTestSession(req.params.id);
+      if (!session) return res.status(404).json({ message: "Session not found" });
+      if (session.userId !== req.user!.id && !(req.user as any).isAdmin) {
+        return res.status(403).json({ message: "Access denied" });
+      }
+      if (!session.completedAt) return res.status(400).json({ message: "Session not yet completed" });
+
+      const answers = await storage.getSessionAnswers(session.id);
+      const questionIds = answers.map(a => a.questionId);
+      const questionRows = questionIds.length > 0
+        ? await db.select().from(questions).where(inArray(questions.id, questionIds))
+        : [];
+      const qMap = new Map(questionRows.map(q => [q.id, q]));
+
+      const review = answers
+        .sort((a, b) => (a.questionOrder ?? 0) - (b.questionOrder ?? 0))
+        .map(a => {
+          const q = qMap.get(a.questionId);
+          return {
+            questionId: a.questionId,
+            section: q?.section ?? "Unknown",
+            prompt: q?.prompt ?? "",
+            options: q?.options ?? [],
+            correctAnswer: q?.correctAnswer ?? "",
+            selectedAnswer: a.selectedAnswer,
+            isCorrect: a.isCorrect,
+            timeTaken: a.timeTaken,
+            explanation: q?.explanation ?? null,
+            difficulty: q?.difficulty ?? "medium",
+          };
+        });
+
+      res.json(review);
+    } catch (error) {
+      next(error);
+    }
+  });
+
   app.post("/api/test-sessions/:id/submit", requireAuth, async (req, res, next) => {
     try {
       const { answers } = req.body;
