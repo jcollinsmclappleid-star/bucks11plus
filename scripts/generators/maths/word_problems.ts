@@ -27,31 +27,37 @@ function makeOptions(correct: string, distractors: string[]): string[] {
 const multiStepContextIds = [
   'shopping', 'travel', 'school', 'travel', 'school',
   'cooking', 'school', 'sport', 'school', 'cooking',
+  'school', 'gardening', 'entertainment', 'transport', 'school',
 ];
 
 const moneyContextIds = [
   'shopping', 'shopping', 'shopping', 'travel', 'shopping',
   'shopping', 'shopping', 'shopping', 'sport', 'school',
+  'shopping', 'shopping', 'baking', 'entertainment', 'shopping',
 ];
 
 const timeContextIds = [
   'time_schedule', 'travel', 'school', 'travel', 'school',
   'cooking', 'sport', 'travel', 'time_schedule', 'sport',
+  'entertainment', 'travel', 'time_schedule', 'school', 'cooking',
 ];
 
 const multiStepStemVariants = [
   'stem_ms_1', 'stem_ms_2', 'stem_ms_3', 'stem_ms_4', 'stem_ms_5',
   'stem_ms_6', 'stem_ms_1', 'stem_ms_2', 'stem_ms_3', 'stem_ms_4',
+  'stem_ms_5', 'stem_ms_6', 'stem_ms_1', 'stem_ms_2', 'stem_ms_3',
 ];
 
 const moneyStemVariants = [
   'stem_money_1', 'stem_money_2', 'stem_money_3', 'stem_money_4', 'stem_money_5',
   'stem_money_6', 'stem_money_1', 'stem_money_2', 'stem_money_3', 'stem_money_4',
+  'stem_money_5', 'stem_money_6', 'stem_money_1', 'stem_money_2', 'stem_money_3',
 ];
 
 const timeStemVariants = [
   'stem_time_1', 'stem_time_2', 'stem_time_3', 'stem_time_4', 'stem_time_5',
   'stem_time_6', 'stem_time_1', 'stem_time_2', 'stem_time_3', 'stem_time_4',
+  'stem_time_5', 'stem_time_6', 'stem_time_1', 'stem_time_2', 'stem_time_3',
 ];
 
 export function generateWordProblemQuestions(): GeneratedQuestion[] {
@@ -68,6 +74,11 @@ export function generateWordProblemQuestions(): GeneratedQuestion[] {
     { prompt: 'A swimming pool is 50 metres long. Amelia swims 14 lengths. How many metres does she swim in total?', correct: '700', distractors: ['64', '750', '650'], d: 1 },
     { prompt: 'A library has 1,250 books. It receives 380 new books and donates 145 old books. How many books does the library have now?', correct: '1485', distractors: ['1630', '1105', '1395'], d: 3 },
     { prompt: 'A factory produces 175 toys per hour. It operates for 8 hours a day, 5 days a week. How many toys are produced in a week?', correct: '7000', distractors: ['1400', '875', '8750'], d: 3 },
+    { prompt: 'A box contains 36 pens. A school orders 15 boxes. The teacher gives out 4 pens to each of 120 pupils. How many pens are left over?', correct: '60', distractors: ['480', '540', '420'], d: 3 },
+    { prompt: 'A gardener plants 8 rows of flowers with 12 flowers in each row. She removes 15 flowers that did not bloom. How many flowers remain?', correct: '81', distractors: ['96', '75', '66'], d: 2 },
+    { prompt: 'A cinema has 18 rows with 24 seats per row. If 350 tickets are sold, how many empty seats remain?', correct: '82', distractors: ['432', '118', '72'], d: 2 },
+    { prompt: 'A lorry carries 250 kg of goods. It makes 4 deliveries, dropping off 55 kg each time. How much cargo is left?', correct: '30', distractors: ['220', '195', '55'], d: 2 },
+    { prompt: 'An author writes 350 words per hour. She writes for 3 hours in the morning and 2 hours in the afternoon. How many words does she write in total?', correct: '1750', distractors: ['1050', '700', '2100'], d: 2 },
   ];
   for (let i = 0; i < multiStepProblems.length; i++) {
     const p = multiStepProblems[i];
@@ -100,6 +111,11 @@ export function generateWordProblemQuestions(): GeneratedQuestion[] {
     { prompt: 'A pack of 6 apples costs £2.70. How much does each apple cost?', correct: '£0.45', distractors: ['£0.54', '£0.40', '£0.35'], d: 2 },
     { prompt: 'Harry has £50.00. He buys a football for £17.99 and shin pads for £8.50. How much money does he have left?', correct: '£23.51', distractors: ['£24.51', '£26.49', '£23.49'], d: 3 },
     { prompt: 'A school trip costs £135 per pupil. If 24 pupils go, what is the total cost?', correct: '£3240', distractors: ['£3340', '£3140', '£2700'], d: 3 },
+    { prompt: 'A magazine costs £3.75. If Sarah buys one every week for 4 weeks, how much does she spend?', correct: '£15.00', distractors: ['£12.00', '£14.75', '£16.00'], d: 2 },
+    { prompt: 'A toy car costs £6.99 and a toy train costs £8.50. Ben buys both and pays with a £20 note. How much change does he get?', correct: '£4.51', distractors: ['£5.51', '£4.49', '£5.49'], d: 2 },
+    { prompt: 'A baker sells cupcakes for £1.75 each. He sells 12 on Saturday and 8 on Sunday. How much money does he earn over the weekend?', correct: '£35.00', distractors: ['£21.00', '£14.00', '£36.00'], d: 2 },
+    { prompt: 'Tickets for a concert cost £22.50 for adults and £14.00 for children. A family of 2 adults and 4 children attends. What is the total cost?', correct: '£101.00', distractors: ['£100.00', '£96.50', '£108.00'], d: 3 },
+    { prompt: 'A pack of 8 pens costs £4.80. How much does each pen cost?', correct: '£0.60', distractors: ['£0.48', '£0.80', '£0.55'], d: 1 },
   ];
   for (let i = 0; i < moneyProblems.length; i++) {
     const p = moneyProblems[i];
@@ -132,6 +148,11 @@ export function generateWordProblemQuestions(): GeneratedQuestion[] {
     { prompt: 'A flight departs London at 08:30 and lands in Edinburgh at 09:45. How long is the flight?', correct: '1 hour 15 minutes', distractors: ['1 hour 25 minutes', '1 hour 5 minutes', '45 minutes'], d: 1 },
     { prompt: 'If it is 22:40 now, how many minutes until midnight?', correct: '80', distractors: ['120', '60', '100'], d: 3 },
     { prompt: 'A swimming session is from 16:45 to 18:10. How many minutes long is the session?', correct: '85', distractors: ['75', '95', '65'], d: 3 },
+    { prompt: 'A concert starts at 19:30 and lasts 2 hours 15 minutes. What time does it finish?', correct: '21:45', distractors: ['21:35', '22:45', '21:15'], d: 2 },
+    { prompt: 'A ferry departs at 06:50 and arrives at 08:25. How many minutes is the crossing?', correct: '95', distractors: ['85', '135', '75'], d: 2 },
+    { prompt: 'A TV programme starts at 17:40 and ends at 18:15. How many minutes long is it?', correct: '35', distractors: ['25', '45', '75'], d: 1 },
+    { prompt: 'Mia does homework from 16:15 to 17:50. How many minutes does she spend?', correct: '95', distractors: ['85', '105', '65'], d: 2 },
+    { prompt: 'A roast dinner goes in the oven at 12:45 and needs 2 hours 40 minutes. What time should it come out?', correct: '15:25', distractors: ['14:85', '15:15', '15:35'], d: 3 },
   ];
   for (let i = 0; i < timeProblems.length; i++) {
     const p = timeProblems[i];

@@ -57,6 +57,14 @@ function generateAlphabeticalOrderQuestions(): GeneratedQuestion[] {
     { words: ['trouble', 'triumph', 'tribute', 'trivial'], answer: 'tribute', diff: 'hard', cog: 7, time: 45 },
     { words: ['present', 'pretend', 'prevail', 'prevent'], answer: 'present', diff: 'hard', cog: 6, time: 40 },
     { words: ['strength', 'stranger', 'strategy', 'straight'], answer: 'straight', diff: 'hard', cog: 7, time: 45 },
+    { words: ['elephant', 'eagle', 'eel', 'emu'], answer: 'eagle', diff: 'medium', cog: 4, time: 30 },
+    { words: ['garden', 'garage', 'giant', 'ghost'], answer: 'garage', diff: 'medium', cog: 5, time: 35 },
+    { words: ['winter', 'window', 'whistle', 'wonder'], answer: 'whistle', diff: 'medium', cog: 5, time: 35 },
+    { words: ['problem', 'promise', 'prophet', 'project'], answer: 'problem', diff: 'hard', cog: 6, time: 40 },
+    { words: ['measure', 'meadow', 'meaning', 'mention'], answer: 'meadow', diff: 'hard', cog: 6, time: 40 },
+    { words: ['discover', 'disaster', 'diamond', 'distance'], answer: 'diamond', diff: 'hard', cog: 7, time: 45 },
+    { words: ['hospital', 'horizon', 'holiday', 'hundred'], answer: 'holiday', diff: 'hard', cog: 7, time: 45 },
+    { words: ['machine', 'market', 'magic', 'mother'], answer: 'machine', diff: 'medium', cog: 5, time: 35 },
   ];
   const questions: GeneratedQuestion[] = [];
 
@@ -100,6 +108,14 @@ function generateCategoryGroupingQuestions(): GeneratedQuestion[] {
     { category: 'precious stones', members: ['sapphire', 'emerald', 'amethyst'], oddOne: 'alphabet', diff: 'hard', cog: 6, time: 40 },
     { category: 'dances', members: ['waltz', 'polka', 'tango'], oddOne: 'mango', diff: 'hard', cog: 6, time: 40 },
     { category: 'metals', members: ['copper', 'bronze', 'platinum'], oddOne: 'crimson', diff: 'hard', cog: 6, time: 40 },
+    { category: 'planets', members: ['Mars', 'Saturn', 'Neptune'], oddOne: 'Pluto', diff: 'medium', cog: 4, time: 30 },
+    { category: 'rivers', members: ['Thames', 'Severn', 'Trent'], oddOne: 'Snowdon', diff: 'medium', cog: 5, time: 35 },
+    { category: 'shapes', members: ['hexagon', 'pentagon', 'octagon'], oddOne: 'rectangle', diff: 'medium', cog: 4, time: 30 },
+    { category: 'sports', members: ['cricket', 'rugby', 'tennis'], oddOne: 'ballet', diff: 'easy', cog: 2, time: 20 },
+    { category: 'insects', members: ['beetle', 'ladybird', 'grasshopper'], oddOne: 'spider', diff: 'medium', cog: 4, time: 30 },
+    { category: 'continents', members: ['Africa', 'Europe', 'Asia'], oddOne: 'Atlantic', diff: 'easy', cog: 3, time: 25 },
+    { category: 'currencies', members: ['pound', 'dollar', 'euro'], oddOne: 'metre', diff: 'hard', cog: 5, time: 35 },
+    { category: 'spices', members: ['cinnamon', 'turmeric', 'paprika'], oddOne: 'parsley', diff: 'hard', cog: 6, time: 40 },
   ];
   const questions: GeneratedQuestion[] = [];
 

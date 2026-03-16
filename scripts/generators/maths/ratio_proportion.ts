@@ -93,6 +93,30 @@ export function generateRatioQuestions(): GeneratedQuestion[] {
       explanation: 'Total parts = 4. Each part = 16 ÷ 4 = 4. Smaller share = 1 × 4 = 4.',
       subRule: 'maths.ratio.share', traps: ['divide_equally'],
     },
+    {
+      prompt: 'A recipe uses flour and sugar in the ratio 3:1. If 6 cups of flour are used, how many cups of sugar are needed?',
+      correct: '2', distractors: ['3', '1', '6'],
+      explanation: 'Ratio 3:1. Scale factor = 6 ÷ 3 = 2. Sugar = 1 × 2 = 2.',
+      subRule: 'maths.ratio.scale', traps: ['wrong_scale_factor'],
+    },
+    {
+      prompt: 'A ribbon is cut into two pieces in the ratio 2:5. The total length is 35 cm. How long is the shorter piece?',
+      correct: '10', distractors: ['25', '7', '14'],
+      explanation: 'Total parts = 7. Each part = 35 ÷ 7 = 5. Shorter = 2 × 5 = 10 cm.',
+      subRule: 'maths.ratio.share', traps: ['divide_equally'],
+    },
+    {
+      prompt: 'On a map, 1 cm represents 5 km. Two towns are 8 cm apart on the map. What is the real distance?',
+      correct: '40', distractors: ['8', '13', '80'],
+      explanation: '8 × 5 = 40 km.',
+      subRule: 'maths.ratio.map_scale', traps: ['unit_conversion_error'],
+    },
+    {
+      prompt: 'There are boys and girls in a club in the ratio 3:2. If there are 15 boys, how many girls are there?',
+      correct: '10', distractors: ['6', '12', '25'],
+      explanation: 'Scale factor = 15 ÷ 3 = 5. Girls = 2 × 5 = 10.',
+      subRule: 'maths.ratio.scale', traps: ['wrong_scale_factor'],
+    },
   ];
 
   for (const q of easyQuestions) {
@@ -224,6 +248,36 @@ export function generateRatioQuestions(): GeneratedQuestion[] {
       explanation: 'Total parts = 10. Each part = 60 ÷ 10 = 6. Blue = 3 × 6 = 18.',
       subRule: 'maths.ratio.three_way_share', traps: ['divide_equally'],
     },
+    {
+      prompt: 'A painter mixes blue and white paint in the ratio 3:7 to make 5 litres of pale blue paint. How many ml of blue paint does he use?',
+      correct: '1500', distractors: ['3500', '2100', '1000'],
+      explanation: '5 litres = 5000 ml. Total parts = 10. Each part = 500 ml. Blue = 3 × 500 = 1500 ml.',
+      subRule: 'maths.ratio.share', traps: ['unit_conversion_error'],
+    },
+    {
+      prompt: 'The ratio of fiction to non-fiction books in a library is 5:3. If there are 120 fiction books, how many non-fiction books are there?',
+      correct: '72', distractors: ['200', '45', '80'],
+      explanation: 'Scale factor = 120 ÷ 5 = 24. Non-fiction = 3 × 24 = 72.',
+      subRule: 'maths.ratio.scale', traps: ['wrong_scale_factor'],
+    },
+    {
+      prompt: 'A car uses petrol and oil in the ratio 20:1. If it uses 60 litres of petrol, how much oil does it use?',
+      correct: '3', distractors: ['20', '1', '6'],
+      explanation: 'Scale factor = 60 ÷ 20 = 3. Oil = 1 × 3 = 3 litres.',
+      subRule: 'maths.ratio.scale', traps: ['wrong_scale_factor'],
+    },
+    {
+      prompt: 'Three friends share a bill in the ratio 1:2:3. The total bill is £180. How much does the person paying the most contribute?',
+      correct: '£90', distractors: ['£60', '£30', '£120'],
+      explanation: 'Total parts = 6. Each part = £30. Largest share = 3 × £30 = £90.',
+      subRule: 'maths.ratio.three_way_share', traps: ['divide_equally'],
+    },
+    {
+      prompt: 'A scale model of a building is 1:200. The model is 15 cm tall. How tall is the real building in metres?',
+      correct: '30', distractors: ['200', '3000', '15'],
+      explanation: 'Real height = 15 × 200 = 3000 cm = 30 m.',
+      subRule: 'maths.ratio.map_scale', traps: ['unit_conversion_error'],
+    },
   ];
 
   for (const q of mediumQuestions) {
@@ -318,6 +372,36 @@ export function generateRatioQuestions(): GeneratedQuestion[] {
       correct: '36', distractors: ['24', '42', '12'],
       explanation: 'Scale factor = 84 ÷ 7 = 12. Car = 3 × 12 = 36.',
       subRule: 'maths.ratio.three_way_share', traps: ['wrong_scale_factor'],
+    },
+    {
+      prompt: 'A recipe for 6 people uses 900 g of potatoes. How many grams are needed for 10 people?',
+      correct: '1500', distractors: ['900', '1200', '5400'],
+      explanation: 'Per person = 900 ÷ 6 = 150 g. For 10 = 150 × 10 = 1500 g.',
+      subRule: 'maths.ratio.scale', traps: ['wrong_scale_factor'],
+    },
+    {
+      prompt: 'A map has a scale of 1:50000. Two villages are 6 cm apart on the map. What is the real distance in km?',
+      correct: '3', distractors: ['30', '300', '0.3'],
+      explanation: '6 × 50000 = 300000 cm = 3000 m = 3 km.',
+      subRule: 'maths.ratio.map_scale', traps: ['unit_conversion_error'],
+    },
+    {
+      prompt: 'An alloy is made of copper and zinc in the ratio 7:3. If 210 g of copper is used, what is the total weight of the alloy?',
+      correct: '300', distractors: ['90', '280', '240'],
+      explanation: 'Scale factor = 210 ÷ 7 = 30. Zinc = 3 × 30 = 90. Total = 210 + 90 = 300 g.',
+      subRule: 'maths.ratio.total_from_part', traps: ['partial_calculation'],
+    },
+    {
+      prompt: 'In a fruit bowl, the ratio of apples to oranges to bananas is 4:3:2. There are 36 pieces of fruit. How many oranges are there?',
+      correct: '12', distractors: ['16', '8', '9'],
+      explanation: 'Total parts = 9. Each part = 36 ÷ 9 = 4. Oranges = 3 × 4 = 12.',
+      subRule: 'maths.ratio.three_way_share', traps: ['divide_equally'],
+    },
+    {
+      prompt: 'A school trip costs £240 for 8 pupils. How much would it cost for 12 pupils at the same rate?',
+      correct: '£360', distractors: ['£288', '£320', '£400'],
+      explanation: 'Per pupil = £240 ÷ 8 = £30. For 12 = £30 × 12 = £360.',
+      subRule: 'maths.ratio.scale', traps: ['wrong_scale_factor'],
     },
   ];
 

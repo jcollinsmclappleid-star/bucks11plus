@@ -43,7 +43,7 @@ function applyToFrame(frame: SvgFrame, fn: (el: SvgElement) => SvgElement): SvgF
 export function generateSymmetryQuestions(): GeneratedQuestion[] {
   const questions: GeneratedQuestion[] = [];
 
-  for (let i = 0; i < 60; i++) {
+  for (let i = 0; i < 140; i++) {
     const rng = seededRandom(110000 + i * 179);
     rng(); rng(); rng();
 

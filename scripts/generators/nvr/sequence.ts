@@ -246,8 +246,8 @@ export function generateSequenceQuestions(): GeneratedQuestion[] {
     ...generateCompoundSequence(35000, 80),
     ...generateCompoundSequence(40000, 80),
   ];
-  const easy = all.filter(q => q.difficulty === 'easy').slice(0, 10);
-  const medium = all.filter(q => q.difficulty === 'medium').slice(0, 15);
-  const hard = all.filter(q => q.difficulty === 'hard').slice(0, 25);
+  const easy = all.filter(q => q.difficulty === 'easy').slice(0, 20);
+  const medium = all.filter(q => q.difficulty === 'medium').slice(0, 30);
+  const hard = all.filter(q => q.difficulty === 'hard').slice(0, 50);
   return [...easy, ...medium, ...hard];
 }

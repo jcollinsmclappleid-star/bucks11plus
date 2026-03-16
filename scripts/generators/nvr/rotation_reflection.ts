@@ -112,7 +112,7 @@ function ensureAxisSafety(x: number, y: number, subRuleId: string): [number, num
 
 export function generateRotationReflectionQuestions(): GeneratedQuestion[] {
   const questions: GeneratedQuestion[] = [];
-  const perSubRule = 20;
+  const perSubRule = 35;
 
   for (const def of transformDefs) {
     for (let i = 0; i < perSubRule; i++) {

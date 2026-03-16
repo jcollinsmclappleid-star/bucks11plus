@@ -45,6 +45,20 @@ function generateAlphabeticSkipQuestions(): GeneratedQuestion[] {
     { start: 8, skip: 3, diff: 'hard', cog: 5, time: 35 },
     { start: 3, skip: 5, diff: 'hard', cog: 6, time: 40 },
     { start: 5, skip: 4, diff: 'hard', cog: 6, time: 40 },
+    { start: 6, skip: 2, diff: 'easy', cog: 2, time: 20 },
+    { start: 4, skip: 2, diff: 'easy', cog: 2, time: 20 },
+    { start: 9, skip: 2, diff: 'medium', cog: 3, time: 25 },
+    { start: 10, skip: 3, diff: 'medium', cog: 4, time: 30 },
+    { start: 2, skip: 4, diff: 'medium', cog: 5, time: 35 },
+    { start: 6, skip: 4, diff: 'hard', cog: 5, time: 35 },
+    { start: 7, skip: 4, diff: 'hard', cog: 6, time: 40 },
+    { start: 1, skip: 6, diff: 'hard', cog: 7, time: 45 },
+    { start: 8, skip: 2, diff: 'easy', cog: 2, time: 20 },
+    { start: 13, skip: 3, diff: 'medium', cog: 3, time: 25 },
+    { start: 12, skip: 2, diff: 'medium', cog: 3, time: 25 },
+    { start: 3, skip: 6, diff: 'hard', cog: 7, time: 45 },
+    { start: 11, skip: 3, diff: 'medium', cog: 4, time: 30 },
+    { start: 14, skip: 2, diff: 'medium', cog: 3, time: 25 },
   ];
   const questions: GeneratedQuestion[] = [];
 
@@ -100,6 +114,14 @@ function generateAlternatingQuestions(): GeneratedQuestion[] {
     { s1: 6, s2: 20, inc1: 3, inc2: -2, diff: 'hard', cog: 7, time: 45 },
     { s1: 1, s2: 2, inc1: 4, inc2: 4, diff: 'hard', cog: 7, time: 45 },
     { s1: 13, s2: 14, inc1: 2, inc2: 2, diff: 'hard', cog: 5, time: 35 },
+    { s1: 5, s2: 6, inc1: 3, inc2: 3, diff: 'medium', cog: 4, time: 30 },
+    { s1: 15, s2: 16, inc1: 2, inc2: 2, diff: 'hard', cog: 5, time: 35 },
+    { s1: 3, s2: 22, inc1: 2, inc2: -2, diff: 'hard', cog: 6, time: 40 },
+    { s1: 1, s2: 3, inc1: 4, inc2: 4, diff: 'hard', cog: 7, time: 45 },
+    { s1: 7, s2: 8, inc1: 3, inc2: 3, diff: 'medium', cog: 5, time: 35 },
+    { s1: 2, s2: 4, inc1: 2, inc2: 2, diff: 'easy', cog: 3, time: 25 },
+    { s1: 5, s2: 24, inc1: 1, inc2: -1, diff: 'medium', cog: 4, time: 30 },
+    { s1: 8, s2: 9, inc1: 3, inc2: 3, diff: 'hard', cog: 6, time: 40 },
   ];
   const questions: GeneratedQuestion[] = [];
 
@@ -176,6 +198,14 @@ function generateReversePatternQuestions(): GeneratedQuestion[] {
     { start: 21, step: 3, diff: 'hard', cog: 6, time: 40 },
     { start: 20, step: 4, diff: 'hard', cog: 7, time: 45 },
     { start: 19, step: 3, diff: 'hard', cog: 6, time: 40 },
+    { start: 24, step: 1, diff: 'easy', cog: 2, time: 20 },
+    { start: 22, step: 2, diff: 'medium', cog: 3, time: 25 },
+    { start: 18, step: 2, diff: 'medium', cog: 4, time: 30 },
+    { start: 17, step: 3, diff: 'hard', cog: 6, time: 40 },
+    { start: 16, step: 4, diff: 'hard', cog: 7, time: 45 },
+    { start: 23, step: 3, diff: 'hard', cog: 5, time: 35 },
+    { start: 15, step: 2, diff: 'medium', cog: 4, time: 30 },
+    { start: 14, step: 3, diff: 'hard', cog: 6, time: 40 },
   ];
   const questions: GeneratedQuestion[] = [];
 

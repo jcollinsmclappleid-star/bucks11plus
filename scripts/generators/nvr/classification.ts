@@ -173,7 +173,7 @@ function getRuleForDifficulty(diff: string, rng: () => number): SharedRule {
 export function generateClassificationQuestions(): GeneratedQuestion[] {
   const questions: GeneratedQuestion[] = [];
 
-  for (let i = 0; i < 90; i++) {
+  for (let i = 0; i < 200; i++) {
     const rng = seededRandom(60000 + i * 313);
     rng(); rng(); rng();
 

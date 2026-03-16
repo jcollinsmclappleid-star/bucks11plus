@@ -51,6 +51,11 @@ export function generateDataInterpretationQuestions(): GeneratedQuestion[] {
     { title: 'Sandwiches Sold at Tuck Shop', xLabels: ['Cheese', 'Ham', 'Tuna', 'Egg'], values: [22, 18, 14, 10], yMax: 25, questionText: 'How many cheese sandwiches were sold?', correct: '22', distractors: ['18', '14', '10'], d: 1 },
     { title: 'Library Visits in Leeds', xLabels: ['Jan', 'Feb', 'Mar', 'Apr'], values: [120, 95, 110, 130], yMax: 150, questionText: 'In which month were there the most library visits?', correct: 'Apr', distractors: ['Jan', 'Mar', 'Feb'], d: 1 },
     { title: 'Pets Owned by Class 5B', xLabels: ['Dog', 'Cat', 'Fish', 'Rabbit', 'Hamster'], values: [9, 7, 4, 3, 5], yMax: 12, questionText: 'How many pupils own a cat?', correct: '7', distractors: ['9', '5', '4'], d: 1 },
+    { title: 'House Points This Term', xLabels: ['Red', 'Blue', 'Green', 'Yellow'], values: [85, 72, 90, 68], yMax: 100, questionText: 'Which house has the most points?', correct: 'Green', distractors: ['Red', 'Blue', 'Yellow'], d: 1 },
+    { title: 'Fruit Sold at Tuck Shop', xLabels: ['Apple', 'Banana', 'Orange', 'Pear', 'Grape'], values: [18, 25, 12, 8, 15], yMax: 30, questionText: 'How many bananas were sold?', correct: '25', distractors: ['18', '15', '12'], d: 1 },
+    { title: 'Number of Pupils Absent', xLabels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'], values: [5, 3, 8, 2, 6], yMax: 10, questionText: 'On which day were the most pupils absent?', correct: 'Wed', distractors: ['Fri', 'Mon', 'Tue'], d: 1 },
+    { title: 'Books Borrowed from Library', xLabels: ['Fiction', 'Non-Fiction', 'Poetry', 'Comics'], values: [32, 18, 7, 14], yMax: 40, questionText: 'How many fiction books were borrowed?', correct: '32', distractors: ['18', '14', '7'], d: 1 },
+    { title: 'Temperature in Bristol (°C)', xLabels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'], values: [14, 16, 13, 18, 15], yMax: 22, questionText: 'What was the temperature on Thursday?', correct: '18', distractors: ['16', '15', '13'], d: 1 },
   ];
   for (let idx = 0; idx < barSingleStep.length; idx++) {
     const c = barSingleStep[idx];
@@ -87,6 +92,11 @@ export function generateDataInterpretationQuestions(): GeneratedQuestion[] {
     { title: 'Minutes of Exercise', xLabels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'], values: [30, 45, 20, 50, 35], yMax: 55, questionText: 'What is the mean number of minutes of exercise per day?', correct: '36', distractors: ['35', '38', '30'], d: 3 },
     { title: 'Visitors to Edinburgh Castle', xLabels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'], values: [120, 95, 150, 110, 135], yMax: 160, questionText: 'How many more visitors came on Wednesday than Tuesday?', correct: '55', distractors: ['50', '60', '45'], d: 2 },
     { title: 'Pupils in After-School Clubs', xLabels: ['Football', 'Netball', 'Chess', 'Drama', 'Art'], values: [18, 14, 8, 12, 10], yMax: 20, questionText: 'How many pupils are in Football and Netball combined?', correct: '32', distractors: ['30', '28', '34'], d: 2 },
+    { title: 'Spelling Test Marks', xLabels: ['Anna', 'Ben', 'Clara', 'Dan', 'Eva'], values: [18, 14, 20, 12, 16], yMax: 25, questionText: 'What is the difference between the highest and lowest marks?', correct: '8', distractors: ['6', '10', '4'], d: 2 },
+    { title: 'Distance Cycled (km)', xLabels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'], values: [5, 8, 3, 10, 6], yMax: 12, questionText: 'What is the total distance cycled from Monday to Friday?', correct: '32', distractors: ['30', '34', '28'], d: 2 },
+    { title: 'Pupils Late This Week', xLabels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'], values: [4, 2, 7, 3, 5], yMax: 10, questionText: 'How many more pupils were late on Wednesday than Tuesday?', correct: '5', distractors: ['4', '3', '7'], d: 2 },
+    { title: 'Tickets Sold for School Play', xLabels: ['Year 3', 'Year 4', 'Year 5', 'Year 6'], values: [24, 30, 28, 35], yMax: 40, questionText: 'How many tickets were sold by Year 5 and Year 6 combined?', correct: '63', distractors: ['58', '65', '54'], d: 2 },
+    { title: 'Water Consumed (litres)', xLabels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'], values: [12, 15, 10, 18, 14], yMax: 20, questionText: 'What is the mean daily water consumption?', correct: '13.8', distractors: ['14', '13', '15'], d: 3 },
   ];
   for (const c of barTwoStep) {
     questions.push({
@@ -122,6 +132,11 @@ export function generateDataInterpretationQuestions(): GeneratedQuestion[] {
     { title: 'Temperature in Glasgow (°C)', xLabels: ['6am', '9am', '12pm', '3pm', '6pm', '9pm'], values: [3, 7, 12, 14, 10, 6], yMax: 18, questionText: 'What was the highest temperature recorded?', correct: '14', distractors: ['12', '10', '15'], d: 1 },
     { title: 'Weight of Puppy (kg)', xLabels: ['Month 1', 'Month 2', 'Month 3', 'Month 4', 'Month 5', 'Month 6'], values: [2, 3, 5, 7, 9, 11], yMax: 14, questionText: 'How much did the puppy weigh in Month 4?', correct: '7', distractors: ['5', '9', '6'], d: 1 },
     { title: 'Electricity Usage in Norwich (kWh)', xLabels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'], values: [350, 320, 280, 220, 180, 150], yMax: 400, questionText: 'In which month was the usage 280 kWh?', correct: 'Mar', distractors: ['Feb', 'Apr', 'Jan'], d: 1 },
+    { title: 'Height of Bean Plant (cm)', xLabels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'], values: [3, 7, 12, 18, 25, 33], yMax: 40, questionText: 'How tall was the bean plant in Week 4?', correct: '18', distractors: ['12', '25', '15'], d: 1 },
+    { title: 'Daily Step Count', xLabels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], values: [5000, 6200, 4800, 7100, 5500, 8900, 7400], yMax: 10000, questionText: 'On which day was the step count highest?', correct: 'Sat', distractors: ['Sun', 'Thu', 'Fri'], d: 1 },
+    { title: 'Rainfall in Liverpool (mm)', xLabels: ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], values: [55, 65, 72, 85, 90, 78], yMax: 100, questionText: 'How much rainfall was there in October?', correct: '85', distractors: ['72', '90', '78'], d: 1 },
+    { title: 'Class Test Scores', xLabels: ['Test 1', 'Test 2', 'Test 3', 'Test 4', 'Test 5'], values: [65, 72, 68, 80, 75], yMax: 100, questionText: 'In which test was the highest score achieved?', correct: 'Test 4', distractors: ['Test 5', 'Test 2', 'Test 3'], d: 1 },
+    { title: 'Minutes of Reading per Day', xLabels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'], values: [20, 35, 15, 40, 30], yMax: 50, questionText: 'How many minutes were spent reading on Wednesday?', correct: '15', distractors: ['20', '30', '35'], d: 1 },
   ];
   for (let idx = 0; idx < lineSingleStep.length; idx++) {
     const c = lineSingleStep[idx];
@@ -158,6 +173,11 @@ export function generateDataInterpretationQuestions(): GeneratedQuestion[] {
     { title: 'School Dinner Choices', headers: ['Meal', 'Monday', 'Tuesday', 'Wednesday'], rows: [['Pasta', 25, 30, 28], ['Curry', 18, 22, 20], ['Jacket Potato', 12, 8, 15]], questionText: 'How many pupils chose Curry across all three days?', correct: '60', distractors: ['58', '62', '55'], d: 2 },
     { title: 'Savings Account Balance (£)', headers: ['Month', 'Deposit', 'Balance'], rows: [['January', 50, 50], ['February', 30, 80], ['March', 45, 125], ['April', 25, 150]], questionText: 'How much was deposited in total over the four months?', correct: '£150', distractors: ['£125', '£155', '£100'], d: 2 },
     { title: 'Sports Day Results (points)', headers: ['House', 'Running', 'Throwing', 'Jumping'], rows: [['Oak', 45, 38, 42], ['Elm', 40, 44, 36], ['Ash', 48, 35, 40], ['Birch', 37, 42, 45]], questionText: 'Which house scored the most points in total?', correct: 'Ash', distractors: ['Birch', 'Oak', 'Elm'], d: 3 },
+    { title: 'School Attendance (%)', headers: ['Day', 'Year 5', 'Year 6'], rows: [['Monday', 96, 94], ['Tuesday', 98, 97], ['Wednesday', 92, 95], ['Thursday', 97, 96], ['Friday', 94, 93]], questionText: 'On which day was Year 5 attendance the highest?', correct: 'Tuesday', distractors: ['Thursday', 'Monday', 'Friday'], d: 2 },
+    { title: 'Pocket Money Spent (£)', headers: ['Item', 'Week 1', 'Week 2', 'Week 3'], rows: [['Sweets', 1.50, 2.00, 1.75], ['Comics', 3.00, 2.50, 3.50], ['Toys', 5.00, 4.00, 6.00]], questionText: 'How much was spent on Comics across all three weeks?', correct: '£9.00', distractors: ['£8.50', '£9.50', '£7.50'], d: 2 },
+    { title: 'PE Lesson Activities (minutes)', headers: ['Activity', 'Class A', 'Class B'], rows: [['Warm-up', 10, 12], ['Main Game', 25, 20], ['Cool-down', 5, 8]], questionText: 'How many minutes does Class A spend on activities in total?', correct: '40', distractors: ['35', '45', '42'], d: 2 },
+    { title: 'Heights of Pupils (cm)', headers: ['Name', 'Start of Year', 'End of Year'], rows: [['Amy', 132, 138], ['Ben', 140, 145], ['Cara', 128, 135], ['Dan', 135, 141]], questionText: 'Who grew the most during the year?', correct: 'Cara', distractors: ['Amy', 'Dan', 'Ben'], d: 2 },
+    { title: 'Garden Produce (kg)', headers: ['Vegetable', 'June', 'July', 'August'], rows: [['Tomatoes', 3, 8, 12], ['Courgettes', 2, 5, 7], ['Beans', 1, 4, 9]], questionText: 'What was the total produce in August?', correct: '28', distractors: ['23', '30', '25'], d: 2 },
   ];
   for (const c of tableTwoStep) {
     questions.push({

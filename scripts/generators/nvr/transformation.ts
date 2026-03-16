@@ -150,7 +150,7 @@ function ensureAxisSafety(x: number, y: number): [number, number] {
 export function generateTransformationQuestions(): GeneratedQuestion[] {
   const questions: GeneratedQuestion[] = [];
 
-  for (let i = 0; i < 120; i++) {
+  for (let i = 0; i < 260; i++) {
     let seedOffset = 0;
     let question: GeneratedQuestion | null = null;
 

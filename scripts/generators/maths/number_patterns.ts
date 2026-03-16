@@ -39,6 +39,14 @@ export function generateNumberPatternQuestions(): GeneratedQuestion[] {
     { start: 4, step: 8, count: 5, d: 2 },
     { start: 25, step: 12, count: 5, d: 2 },
     { start: 60, step: -7, count: 5, d: 2 },
+    { start: 6, step: 5, count: 5, d: 1 },
+    { start: 11, step: 9, count: 5, d: 2 },
+    { start: 150, step: -12, count: 5, d: 2 },
+    { start: 3, step: 7, count: 5, d: 2 },
+    { start: 90, step: -11, count: 5, d: 3 },
+    { start: 17, step: 14, count: 5, d: 3 },
+    { start: 2, step: 6, count: 5, d: 1 },
+    { start: 45, step: -5, count: 5, d: 1 },
   ];
   for (const c of linearConfigs) {
     const seq: number[] = [];
@@ -75,6 +83,11 @@ export function generateNumberPatternQuestions(): GeneratedQuestion[] {
     { seq: [2, 8, 18, 32, 50], next: 72, prompt: '2, 8, 18, 32, 50, ...', d: 3 },
     { seq: [3, 12, 27, 48, 75], next: 108, prompt: '3, 12, 27, 48, 75, ...', d: 3 },
     { seq: [1, 8, 27, 64, 125], next: 216, prompt: '1, 8, 27, 64, 125, ...', d: 3 },
+    { seq: [4, 16, 36, 64, 100], next: 144, prompt: '4, 16, 36, 64, 100, ...', d: 2 },
+    { seq: [81, 100, 121, 144], next: 169, prompt: '81, 100, 121, 144, ...', d: 2 },
+    { seq: [1, 4, 9, 16, 25, 36], next: 49, prompt: '1, 4, 9, 16, 25, 36, ...', d: 1 },
+    { seq: [144, 169, 196, 225], next: 256, prompt: '144, 169, 196, 225, ...', d: 3 },
+    { seq: [5, 20, 45, 80, 125], next: 180, prompt: '5, 20, 45, 80, 125, ...', d: 3 },
   ];
   for (const c of squareConfigs) {
     questions.push({
@@ -107,6 +120,12 @@ export function generateNumberPatternQuestions(): GeneratedQuestion[] {
     { seq: [3, 7, 10, 17, 27], next: 44, d: 3 },
     { seq: [4, 6, 10, 16, 26], next: 42, d: 3 },
     { seq: [1, 5, 6, 11, 17], next: 28, d: 2 },
+    { seq: [3, 3, 6, 9, 15], next: 24, d: 2 },
+    { seq: [4, 7, 11, 18, 29], next: 47, d: 2 },
+    { seq: [2, 6, 8, 14, 22], next: 36, d: 2 },
+    { seq: [1, 2, 3, 5, 8, 13, 21], next: 34, d: 1 },
+    { seq: [5, 8, 13, 21, 34], next: 55, d: 3 },
+    { seq: [6, 10, 16, 26, 42], next: 68, d: 3 },
   ];
   for (const c of fibConfigs) {
     const display = c.seq.join(', ');
