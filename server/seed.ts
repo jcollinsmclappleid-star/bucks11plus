@@ -1,7 +1,17 @@
 import { db } from "./db";
-import { diagnostics, questions, articles, practiceSections } from "@shared/schema";
+import { diagnostics, questions, articles, practiceSections, users } from "@shared/schema";
 import { sql, eq } from "drizzle-orm";
+import { scrypt, randomBytes } from "crypto";
+import { promisify } from "util";
 import type { NvrSequenceConfig, NvrTransformConfig, NvrClassificationConfig } from "@shared/contentTypes";
+
+const scryptAsync = promisify(scrypt);
+
+async function hashPassword(password: string) {
+  const salt = randomBytes(16).toString("hex");
+  const buf = (await scryptAsync(password, salt, 64)) as Buffer;
+  return `${buf.toString("hex")}.${salt}`;
+}
 
 const S = { strokeWidth: 3, stroke: "#111827", fill: "none" as const };
 const SF = { strokeWidth: 3, stroke: "#111827", fill: "solid" as const };
@@ -235,6 +245,21 @@ async function ensureComprehensionSection() {
 }
 
 export async function seedDatabase() {
+  // Always ensure admin user exists
+  const existingAdmin = await db.query.users.findFirst({
+    where: (users, { eq }) => eq(users.username, "admin@bucks11plus.co.uk"),
+  });
+
+  if (!existingAdmin) {
+    const adminPassword = await hashPassword("Admin11plus!");
+    await db.insert(users).values({
+      username: "admin@bucks11plus.co.uk",
+      password: adminPassword,
+      isAdmin: true,
+    });
+    console.log("✓ Admin user created: admin@bucks11plus.co.uk / Admin11plus!");
+  }
+
   const [existing] = await db.select({ count: sql<number>`count(*)` }).from(diagnostics);
   if (existing.count > 0) {
     await ensurePracticePaperDiagnostics();
@@ -493,33 +518,6 @@ export async function seedDatabase() {
     { title: "Detail Retrieval", category: "English Comprehension", icon: "Search", difficulty: "Medium", questionCount: 12, requiredTier: "pack12", skillId: "comp.detail" },
     { title: "Advanced Comprehension", category: "English Comprehension", icon: "GraduationCap", difficulty: "Hard", questionCount: 10, requiredTier: "programme16", skillId: "comp.main_idea" },
   ]);
-
-  // Create admin user
-  const { scrypt, randomBytes } = await import("crypto");
-  const { promisify } = await import("util");
-  const scryptAsync = promisify(scrypt);
-  
-  async function hashPassword(password: string) {
-    const salt = randomBytes(16).toString("hex");
-    const buf = (await scryptAsync(password, salt, 64)) as Buffer;
-    return `${buf.toString("hex")}.${salt}`;
-  }
-
-  const adminPassword = await hashPassword("Admin11plus!");
-  
-  // Check if admin already exists
-  const existingAdmin = await db.query.users.findFirst({
-    where: (users, { eq }) => eq(users.username, "admin@bucks11plus.co.uk"),
-  });
-
-  if (!existingAdmin) {
-    await db.insert(users).values({
-      username: "admin@bucks11plus.co.uk",
-      password: adminPassword,
-      isAdmin: true,
-    });
-    console.log("Admin user created: admin@bucks11plus.co.uk / Admin11plus!");
-  }
 
   console.log("Seed data inserted successfully.");
 }
