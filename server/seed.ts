@@ -494,5 +494,32 @@ export async function seedDatabase() {
     { title: "Advanced Comprehension", category: "English Comprehension", icon: "GraduationCap", difficulty: "Hard", questionCount: 10, requiredTier: "programme16", skillId: "comp.main_idea" },
   ]);
 
+  // Create admin user
+  const { scrypt, randomBytes } = await import("crypto");
+  const { promisify } = await import("util");
+  const scryptAsync = promisify(scrypt);
+  
+  async function hashPassword(password: string) {
+    const salt = randomBytes(16).toString("hex");
+    const buf = (await scryptAsync(password, salt, 64)) as Buffer;
+    return `${buf.toString("hex")}.${salt}`;
+  }
+
+  const adminPassword = await hashPassword("Admin11plus!");
+  
+  // Check if admin already exists
+  const existingAdmin = await db.query.users.findFirst({
+    where: (users, { eq }) => eq(users.username, "admin@bucks11plus.co.uk"),
+  });
+
+  if (!existingAdmin) {
+    await db.insert(users).values({
+      username: "admin@bucks11plus.co.uk",
+      password: adminPassword,
+      isAdmin: true,
+    });
+    console.log("Admin user created: admin@bucks11plus.co.uk / Admin11plus!");
+  }
+
   console.log("Seed data inserted successfully.");
 }
