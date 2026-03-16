@@ -13,6 +13,7 @@ export default function ReportArchive() {
   const { user } = useAuth();
   const { data: sessions, isLoading } = useQuery<TestSession[]>({
     queryKey: ["/api/test-sessions"],
+    enabled: !!user,
   });
 
   const hasPaidAccess = user?.subscriptionTier === 'pack12' || user?.subscriptionTier === 'programme16';

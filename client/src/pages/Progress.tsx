@@ -23,6 +23,7 @@ export default function Progress() {
   const { user, hasPaidAccess, isProgramme } = useAuth();
   const { data: progress, isLoading } = useQuery<ProgressData>({
     queryKey: ["/api/progress"],
+    enabled: !!user,
   });
 
   if (isLoading) {

@@ -64,6 +64,7 @@ export default function Diagnostics() {
 
   const { data: sessions, isLoading: loadingSessions } = useQuery<TestSession[]>({
     queryKey: ["/api/test-sessions"],
+    enabled: !!user,
   });
 
   const startPaperMutation = useMutation({
