@@ -22,7 +22,7 @@ export default function LockedOverlay({ children, section, requiredTier = "any" 
   return (
     <div className="relative">
       {!dismissed && (
-        <div className="sticky top-0 z-30 bg-primary/95 text-primary-foreground backdrop-blur-sm shadow-md" data-testid={`banner-locked-${section}`}>
+        <div className="sticky top-16 z-30 bg-primary/95 text-primary-foreground backdrop-blur-sm shadow-md" data-testid={`banner-locked-${section}`}>
           <div className="container mx-auto max-w-5xl px-4 py-3 flex items-center justify-between gap-4">
             <div className="flex items-center gap-3 min-w-0">
               <Lock className="h-4 w-4 shrink-0 opacity-80" />
