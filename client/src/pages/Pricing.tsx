@@ -83,6 +83,24 @@ export default function Pricing() {
     }
   };
 
+  const handleUpgrade = async (targetTier: string) => {
+    setLoading("upgrade");
+    try {
+      const res = await apiRequest("POST", "/api/checkout/upgrade", { targetTier });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch (err) {
+      console.error("Upgrade error:", err);
+    } finally {
+      setLoading(null);
+    }
+  };
+
+  const isUpgradeEligible = user && (user.subscriptionTier === "pack12" || user.subscriptionTier === "pack12_family");
+  const upgradeTier = user?.subscriptionTier === "pack12_family" ? "programme16_family" : "programme16";
+
   const faqs = [
     {
       q: "Is this affiliated with GL Assessment?",
@@ -111,7 +129,7 @@ export default function Pricing() {
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
       <Seo
         title="Buckinghamshire 11+ Preparation Plans & Pricing | 11+ Standard"
-        description="Choose from Free diagnostic, Practice Platform (£99, 12 weeks) or Young Scholar Programme (£249). GL-style timed assessments, readiness forecasting, and targeted drill practice for the Bucks 11+."
+        description="Choose from Free diagnostic, Practice Platform (£119, 12 weeks) or Young Scholar Programme (£249). GL-style timed assessments, readiness forecasting, and targeted drill practice for the Bucks 11+."
         canonicalPath="/pricing"
       />
 
@@ -247,6 +265,62 @@ export default function Pricing() {
           </div>
         </div>
       </section>
+
+      {isUpgradeEligible && (
+        <section className="py-10 bg-gradient-to-r from-brand-amber/5 to-brand-amber/10 border-b border-brand-amber/20" id="upgrade">
+          <div className="container mx-auto max-w-4xl px-4">
+            <Card className="border-brand-amber border-2 shadow-lg overflow-hidden" data-testid="card-upgrade-banner">
+              <CardContent className="p-8 md:p-10">
+                <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-3">
+                      <TrendingUp className="h-5 w-5 text-brand-amber" />
+                      <span className="text-xs font-bold uppercase tracking-wider text-brand-amber">Upgrade Available</span>
+                    </div>
+                    <h3 className="text-2xl font-bold text-primary font-serif mb-2">
+                      Ready for the full Programme?
+                    </h3>
+                    <p className="text-slate-600 leading-relaxed mb-4">
+                      You're already on the Practice Platform. Upgrade to the Young Scholar Programme and only pay the difference — {user?.subscriptionTier === "pack12_family" ? "£200" : "£130"}. Get the structured 16-week roadmap, mock exams, milestone tracking, weekly plans, and premium analytics.
+                    </p>
+                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6">
+                      {[
+                        "16-week guided preparation roadmap",
+                        "Mock exam simulation (50 questions)",
+                        "4 milestone diagnostics",
+                        "Weekly personalised task plans",
+                        "All 17 Hard challenge drills",
+                        "Premium Parent Analytics",
+                      ].map((f, i) => (
+                        <li key={i} className="flex items-center gap-2 text-sm text-slate-700">
+                          <CheckCircle2 className="h-4 w-4 text-brand-amber shrink-0" />
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="shrink-0 text-center md:text-right">
+                    <div className="mb-2">
+                      <span className="text-sm text-slate-500 line-through mr-2">£249</span>
+                      <span className="text-3xl font-bold text-primary">{user?.subscriptionTier === "pack12_family" ? "£200" : "£130"}</span>
+                    </div>
+                    <p className="text-xs text-slate-500 mb-4">Pay only the difference</p>
+                    <Button
+                      size="lg"
+                      className="bg-brand-amber text-white hover:bg-brand-amber/90 font-bold shadow-md w-full md:w-auto px-8"
+                      onClick={() => handleUpgrade(upgradeTier)}
+                      disabled={loading === "upgrade"}
+                      data-testid="button-upgrade-programme"
+                    >
+                      {loading === "upgrade" ? <Loader2 className="h-5 w-5 animate-spin" /> : <>Upgrade Now <ArrowRight className="ml-2 h-4 w-4" /></>}
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+      )}
 
       <section className="py-20 md:py-28 bg-slate-50 border-b border-border/30" id="tiers">
         <div className="container mx-auto max-w-6xl px-4">
@@ -492,7 +566,7 @@ export default function Pricing() {
                     { feature: "Basic readiness forecast", free: true, pack: true, prog: true },
                     { feature: "Top focus area revealed", free: true, pack: true, prog: true },
                     { feature: "1 sample practice drill", free: true, pack: true, prog: true },
-                    { feature: "2,500+ practice questions", free: false, pack: true, prog: true },
+                    { feature: "1,600+ practice questions", free: false, pack: true, prog: true },
                     { feature: "Easy & Medium drills (19 sections)", free: false, pack: true, prog: true },
                     { feature: "Hard challenge drills", free: false, pack: "6 sections", prog: "All 17" },
                     { feature: "Badge-based Accomplishments", free: false, pack: true, prog: true },
@@ -878,7 +952,7 @@ export default function Pricing() {
               disabled={loading === "pack12"}
               data-testid="button-cta-pack"
             >
-              {loading === "pack12" ? <Loader2 className="h-5 w-5 animate-spin" /> : "Practice Platform — £99"}
+              {loading === "pack12" ? <Loader2 className="h-5 w-5 animate-spin" /> : "Practice Platform — £119"}
             </Button>
           </div>
 

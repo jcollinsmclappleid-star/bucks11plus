@@ -140,11 +140,11 @@ export async function sendUpgradeNudge(userId: string) {
     <h2 style="color:#0d1f30;margin-bottom:8px;">Ready for More?</h2>
     <p>You've had a chance to explore 11+ Standard with the free diagnostic. Here's what unlocking full access gives ${childName}:</p>
     <ul style="padding-left:20px;">
-      <li><strong>2,500+ targeted practice questions</strong> across VR, NVR, Maths & Comprehension</li>
+      <li><strong>1,600+ targeted practice questions</strong> across VR, NVR, Maths & Comprehension</li>
       <li><strong>Full timed diagnostics</strong> with detailed PDF reports</li>
       <li><strong>Progress tracking</strong> to see real improvement over time</li>
     </ul>
-    <p>Plans start from <strong>£49</strong> for Early Learners (Year 4/5) and <strong>£99</strong> for the Practice Platform.</p>
+    <p>Plans start from <strong>£49</strong> for Early Learners (Year 4/5) and <strong>£119</strong> for the Practice Platform.</p>
     <div style="text-align:center;margin:24px 0;">
       <a href="${BASE_URL}/pricing" style="display:inline-block;background:#0d1f30;color:white;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold;">View Plans & Pricing</a>
     </div>

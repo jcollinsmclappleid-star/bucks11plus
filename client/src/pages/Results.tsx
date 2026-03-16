@@ -60,21 +60,21 @@ const TIER_RANK: Record<string, number> = {
   programme16_family: 2,
 };
 
-function getUpsellMessage(tier: string, weakestSection: string, weakestScore: number, overallScore: number): { title: string; message: string; cta: string; tier: string } | null {
+function getUpsellMessage(tier: string, weakestSection: string, weakestScore: number, overallScore: number): { title: string; message: string; cta: string; tier: string; isUpgrade?: boolean } | null {
   const rank = TIER_RANK[tier] ?? -1;
 
   if (rank < 0) {
     if (overallScore < 110) {
       return {
         title: "Unlock Targeted Practice",
-        message: `${weakestSection} at ${weakestScore}% needs focused attention. The Early Learner pack gives your child structured practice across all four sections with 2,500+ curated questions.`,
+        message: `${weakestSection} at ${weakestScore}% needs focused attention. The Early Learner pack gives your child structured practice across all four sections with 1,600+ curated questions.`,
         cta: "View Early Learner — £49",
         tier: "early_learner",
       };
     }
     return {
       title: "Start Building Confidence",
-      message: `Great start! The Early Learner pack includes unlimited access to 2,500+ questions across all sections to build consistent practice habits.`,
+      message: `Great start! The Early Learner pack includes unlimited access to 1,600+ questions across all sections to build consistent practice habits.`,
       cta: "View Early Learner — £49",
       tier: "early_learner",
     };
@@ -85,14 +85,14 @@ function getUpsellMessage(tier: string, weakestSection: string, weakestScore: nu
       return {
         title: "Intensify Your Preparation",
         message: `${weakestSection} at ${weakestScore}% would benefit from the Practice Platform's full diagnostic papers and targeted drill sessions across all difficulty levels.`,
-        cta: "Upgrade to Practice Platform — £99",
+        cta: "Upgrade to Practice Platform — £119",
         tier: "pack12",
       };
     }
     return {
       title: "Ready for More Depth?",
       message: `Your child is making progress. The Practice Platform unlocks full-length diagnostic papers and harder question sets to push their score higher.`,
-      cta: "Upgrade to Practice Platform — £99",
+      cta: "Upgrade to Practice Platform — £119",
       tier: "pack12",
     };
   }
@@ -100,9 +100,10 @@ function getUpsellMessage(tier: string, weakestSection: string, weakestScore: nu
   if (rank === 1 && overallScore < 121) {
     return {
       title: "Close the Gap with the Young Scholar Programme",
-      message: `At ${overallScore}/141, your child is ${121 - overallScore} points from the 121 standard. The 16-week Programme provides a structured weekly plan, mock exams, and milestone tracking to systematically close this gap.`,
-      cta: "View Young Scholar Programme — £249",
+      message: `At ${overallScore}/141, your child is ${121 - overallScore} points from the 121 standard. The 16-week Programme provides a structured weekly plan, mock exams, and milestone tracking to systematically close this gap. As a Practice Platform member, you only pay the difference to upgrade.`,
+      cta: "Upgrade to Programme — Pay the Difference",
       tier: "programme16",
+      isUpgrade: true,
     };
   }
 
@@ -463,7 +464,7 @@ export default function Results() {
                 </h3>
                 <p className="text-slate-700 mb-6 leading-relaxed">{upsell.message}</p>
                 <Button size="lg" className="w-full bg-brand-amber text-white hover:bg-brand-amber/90 shadow-lg hover:shadow-xl transition-shadow text-base" asChild>
-                  <Link href="/pricing#tiers" data-testid="button-upsell-cta">{upsell.cta} <ArrowRight className="ml-2 h-5 w-5" /></Link>
+                  <Link href={upsell.isUpgrade ? "/pricing#upgrade" : "/pricing#tiers"} data-testid="button-upsell-cta">{upsell.cta} <ArrowRight className="ml-2 h-5 w-5" /></Link>
                 </Button>
               </CardContent>
             </Card>

@@ -94,6 +94,89 @@ export async function registerRoutes(
     }
   });
 
+  app.post("/api/checkout/upgrade", requireAuth, async (req, res, next) => {
+    try {
+      const { targetTier } = req.body;
+      const validUpgrades: Record<string, string[]> = {
+        pack12: ["programme16"],
+        pack12_family: ["programme16_family"],
+      };
+
+      const user = req.user!;
+      const currentTier = user.subscriptionTier;
+      const allowed = validUpgrades[currentTier];
+      if (!allowed || !allowed.includes(targetTier)) {
+        return res.status(400).json({ message: "Invalid upgrade path" });
+      }
+
+      const stripe = await getUncachableStripeClient();
+
+      let customerId = user.stripeCustomerId;
+      if (!customerId) {
+        const customer = await stripe.customers.create({
+          metadata: { userId: user.id },
+        });
+        await storage.updateUserStripeInfo(user.id, customer.id);
+        customerId = customer.id;
+      }
+
+      const pricesResult = await db.execute(
+        sql`SELECT pr.id as price_id, pr.unit_amount, p.metadata FROM stripe.prices pr JOIN stripe.products p ON pr.product = p.id WHERE p.active = true AND pr.active = true`
+      );
+
+      const findPrice = (tier: string) => pricesResult.rows.find((r: any) => {
+        const meta = typeof r.metadata === 'string' ? JSON.parse(r.metadata) : r.metadata;
+        return meta?.tier === tier;
+      });
+
+      const currentPrice = findPrice(currentTier);
+      const targetPrice = findPrice(targetTier);
+
+      if (!currentPrice || !targetPrice) {
+        return res.status(404).json({ message: "Price not found for upgrade calculation" });
+      }
+
+      const currentAmount = Number((currentPrice as any).unit_amount);
+      const targetAmount = Number((targetPrice as any).unit_amount);
+      const difference = targetAmount - currentAmount;
+
+      if (difference <= 0) {
+        return res.status(400).json({ message: "No upgrade difference to pay" });
+      }
+
+      const host = req.get('host');
+      const protocol = req.protocol;
+
+      const session = await stripe.checkout.sessions.create({
+        customer: customerId,
+        payment_method_types: ['card'],
+        line_items: [{
+          price_data: {
+            currency: 'gbp',
+            product_data: {
+              name: `Upgrade to Young Scholar Programme`,
+              description: `Upgrade difference from ${currentTier === 'pack12_family' ? 'Practice Platform Family' : 'Practice Platform'}`,
+            },
+            unit_amount: difference,
+          },
+          quantity: 1,
+        }],
+        mode: 'payment',
+        success_url: `${protocol}://${host}/app/checkout-success?tier=${targetTier}&session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${protocol}://${host}/pricing`,
+        metadata: {
+          userId: user.id,
+          tier: targetTier,
+          upgradeFrom: currentTier,
+        },
+      });
+
+      res.json({ url: session.url, difference: difference / 100 });
+    } catch (error) {
+      next(error);
+    }
+  });
+
   app.post("/api/guest/checkout", async (req, res, next) => {
     try {
       const { tier } = req.body;

@@ -329,7 +329,7 @@ export default function Dashboard() {
                     <li className="flex items-center gap-2"><Target className="h-4 w-4 shrink-0" /> All Hard-level challenge drills</li>
                   </ul>
                   <Button className="w-full bg-violet-600 hover:bg-violet-700 text-white" asChild data-testid="button-upgrade-programme">
-                    <Link href="/pricing">View Young Scholar Programme <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                    <Link href="/pricing#upgrade">Upgrade — Pay the Difference <ArrowRight className="ml-2 h-4 w-4" /></Link>
                   </Button>
                 </CardContent>
               </Card>

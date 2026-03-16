@@ -13,7 +13,7 @@ const PRODUCTS = [
     description: 'Self-directed 12-week practice and diagnostics access. Includes full diagnostics, drill bank, PDF reports, progress tracking, likelihood bands, and impact simulator.',
     tier: 'pack12',
     durationWeeks: '12',
-    priceInPence: 9900,
+    priceInPence: 11900,
   },
   {
     name: 'Practice Platform — Family',

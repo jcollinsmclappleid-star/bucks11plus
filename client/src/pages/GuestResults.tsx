@@ -191,7 +191,7 @@ export default function GuestResults() {
                 </h3>
                 <p className="text-slate-600 mb-4 leading-relaxed">
                   {weakestSection.score < 50
-                    ? `At ${weakestSection.score}%, ${weakestSection.name} is the primary area holding the forecast back. Our 2,500+ question bank includes hundreds of targeted ${weakestSection.name} drills designed to build confidence and close this gap.`
+                    ? `At ${weakestSection.score}%, ${weakestSection.name} is the primary area holding the forecast back. Our 1,600+ question bank includes hundreds of targeted ${weakestSection.name} drills designed to build confidence and close this gap.`
                     : weakestSection.score < 70
                     ? `${weakestSection.name} at ${weakestSection.score}% is the biggest lever for improvement. Focused practice with our adaptive question bank could shift this into the "On Track" zone within weeks.`
                     : `${weakestSection.name} is close at ${weakestSection.score}%. A few targeted sessions could push this past 80%, potentially raising the overall forecast above the 121 standard.`
@@ -218,11 +218,11 @@ export default function GuestResults() {
             <CardContent className="p-6">
               <div className="flex justify-between items-start mb-4">
                 <h3 className="text-xl font-bold text-primary font-serif">Practice Platform</h3>
-                <span className="text-2xl font-bold text-primary">£99</span>
+                <span className="text-2xl font-bold text-primary">£119</span>
               </div>
               <p className="text-sm text-slate-600 mb-4">12 weeks of targeted practice that moves the needle</p>
               <ul className="space-y-2 mb-6">
-                {["2,500+ questions across VR, NVR, Maths & Comprehension", "Easy & Medium drills (13 sections)", "6 Hard challenge drills included", "2 full timed diagnostics (40 questions each)", "Practice papers (Quick & Full)", "PDF reports & full report archive", "Impact simulator & progress tracking", "Badge-based Accomplishments system"].map((f, i) => (
+                {["1,600+ questions across VR, NVR, Maths & Comprehension", "Easy & Medium drills (13 sections)", "6 Hard challenge drills included", "2 full timed diagnostics (40 questions each)", "Practice papers (Quick & Full)", "PDF reports & full report archive", "Impact simulator & progress tracking", "Badge-based Accomplishments system"].map((f, i) => (
                   <li key={i} className="flex items-center gap-2 text-sm text-slate-700">
                     <BarChart3 className="h-4 w-4 text-primary shrink-0" />
                     {f}

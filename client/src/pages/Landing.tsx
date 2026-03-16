@@ -264,7 +264,7 @@ export default function Landing() {
             <div className="pt-6 max-w-3xl mx-auto">
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 py-4 px-6 rounded-lg border border-white/[0.08] bg-white/[0.03]" data-testid="stat-bar-trust">
                 <div className="flex items-center gap-2 text-white/70">
-                  <span className="text-xl font-serif font-bold text-white/90" data-testid="text-question-count">2,500+</span>
+                  <span className="text-xl font-serif font-bold text-white/90" data-testid="text-question-count">1,600+</span>
                   <span className="text-sm font-sans">Curated Questions</span>
                 </div>
                 <span className="hidden sm:inline text-white/15">|</span>
@@ -280,7 +280,7 @@ export default function Landing() {
             </div>
 
             <p className="text-sm text-white/50 max-w-2xl mx-auto leading-relaxed italic" data-testid="text-trust-statement">
-              2,500+ curated reasoning and practice questions across verbal reasoning, non-verbal reasoning, maths, and comprehension — designed with structured assessment logic and informed by UK school leadership expertise.
+              1,600+ curated reasoning and practice questions across verbal reasoning, non-verbal reasoning, maths, and comprehension — designed with structured assessment logic and informed by UK school leadership expertise.
             </p>
 
             <div className="flex items-center justify-center gap-2" data-testid="badge-expertise">
@@ -307,7 +307,7 @@ export default function Landing() {
               </Link>
               <span className="hidden sm:inline text-white/15">|</span>
               <Link href="/pricing" className="text-white/40 hover:text-white/70 text-sm font-medium transition-colors">
-                Practice Platform — £99
+                Practice Platform — £119
               </Link>
               <span className="hidden sm:inline text-white/15">|</span>
               <Link href="/pricing" className="text-brand-amber/70 hover:text-brand-amber text-sm font-semibold transition-colors">
@@ -387,10 +387,10 @@ export default function Landing() {
 
             <div className="rounded-2xl border border-slate-200 bg-white p-6 flex flex-col" data-testid="card-included-pack">
               <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">Practice Platform</p>
-              <h3 className="text-xl font-bold text-primary font-serif mb-4">£99</h3>
+              <h3 className="text-xl font-bold text-primary font-serif mb-4">£119</h3>
               <ul className="space-y-3 flex-1">
                 {[
-                  "2,500+ practice questions across VR, NVR, Maths & Comprehension",
+                  "1,600+ practice questions across VR, NVR, Maths & Comprehension",
                   "Easy & Medium drills + 6 Hard challenge drills",
                   "2 full timed diagnostics (40 questions each)",
                   "Unlimited practice papers (fresh questions every time)",
