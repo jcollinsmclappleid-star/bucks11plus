@@ -53,4 +53,8 @@ STRIPE_PUBLISHABLE_KEY = "pk_live_51TA4HSDv8IzJrrwIcE28QKqVl2zYobQYqD4x889L6TUP8
 BASE_URL = "https://11plus-standard.replit.app"
 
 [[ports]]
+localPort = 5000
+externalPort = 80
+
+[[ports]]
 localPort = 5001

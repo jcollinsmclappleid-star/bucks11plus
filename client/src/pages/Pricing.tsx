@@ -589,7 +589,7 @@ export default function Pricing() {
                     disabled={loading === "programme16"}
                     data-testid="button-get-programme16"
                   >
-                    {loading === "programme16" ? <Loader2 className="h-5 w-5 animate-spin" /> : "Get Young Scholar Programme"}
+                    {loading === "programme16" ? <Loader2 className="h-5 w-5 animate-spin" /> : "Young Scholar Programme"}
                   </Button>
                 </CardContent>
               </Card>
@@ -696,7 +696,7 @@ export default function Pricing() {
                       disabled={loading === "programme16" || loading === "upgrade"}
                       data-testid="button-get-programme16"
                     >
-                      {(loading === "programme16" || loading === "upgrade") ? <Loader2 className="h-5 w-5 animate-spin" /> : (isUpgradeEligible ? "Upgrade Now" : "Get Young Scholar Programme")}
+                      {(loading === "programme16" || loading === "upgrade") ? <Loader2 className="h-5 w-5 animate-spin" /> : (isUpgradeEligible ? "Upgrade Now" : "Young Scholar Programme")}
                     </Button>
                   </CardContent>
                 </Card>
@@ -778,7 +778,7 @@ export default function Pricing() {
                           disabled={loading === "programme16_family"}
                           data-testid="button-get-programme16-family"
                         >
-                          {loading === "programme16_family" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Get Family Young Scholar Programme"}
+                          {loading === "programme16_family" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Family Young Scholar"}
                         </Button>
                       </CardFooter>
                     </Card>
@@ -866,7 +866,7 @@ export default function Pricing() {
                       disabled={loading === "programme16_family"}
                       data-testid="button-get-programme16-family"
                     >
-                      {loading === "programme16_family" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Get Family Young Scholar Programme"}
+                      {loading === "programme16_family" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Family Young Scholar"}
                     </Button>
                   </CardFooter>
                 </Card>

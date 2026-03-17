@@ -9,6 +9,36 @@ import { db } from "./db";
 import { computeAttemptMetrics, computeFullAnalytics, type AnswerRecord, type DrillAnswerRecord, type HistoricalMetrics } from "./metrics";
 import { sendDiagnosticCompleteEmail } from "./email";
 
+async function findStripePriceForTier(tier: string): Promise<string | null> {
+  try {
+    const pricesResult = await db.execute(
+      sql`SELECT pr.id as price_id, p.metadata FROM stripe.prices pr JOIN stripe.products p ON pr.product = p.id WHERE p.active = true AND pr.active = true`
+    );
+    const priceRow = pricesResult.rows.find((r: any) => {
+      const meta = typeof r.metadata === 'string' ? JSON.parse(r.metadata) : r.metadata;
+      return meta?.tier === tier;
+    });
+    if (priceRow) return (priceRow as any).price_id;
+  } catch (e) {
+    console.log("Stripe DB lookup failed, falling back to API:", e);
+  }
+
+  try {
+    const stripe = await getUncachableStripeClient();
+    const prices = await stripe.prices.list({ active: true, limit: 100, expand: ['data.product'] });
+    for (const price of prices.data) {
+      const product = price.product as any;
+      if (product?.metadata?.tier === tier) {
+        return price.id;
+      }
+    }
+  } catch (e) {
+    console.log("Stripe API price lookup failed:", e);
+  }
+
+  return null;
+}
+
 export async function registerRoutes(
   httpServer: Server,
   app: Express
@@ -58,17 +88,8 @@ export async function registerRoutes(
         customerId = customer.id;
       }
 
-      const pricesResult = await db.execute(
-        sql`SELECT pr.id as price_id, p.metadata FROM stripe.prices pr JOIN stripe.products p ON pr.product = p.id WHERE p.active = true AND pr.active = true`
-      );
-
-      const targetTier = tier;
-      const priceRow = pricesResult.rows.find((r: any) => {
-        const meta = typeof r.metadata === 'string' ? JSON.parse(r.metadata) : r.metadata;
-        return meta?.tier === targetTier;
-      });
-
-      if (!priceRow) {
+      const priceId = await findStripePriceForTier(tier);
+      if (!priceId) {
         return res.status(404).json({ message: "Price not found. Products may not be seeded yet." });
       }
 
@@ -78,7 +99,7 @@ export async function registerRoutes(
       const session = await stripe.checkout.sessions.create({
         customer: customerId,
         payment_method_types: ['card'],
-        line_items: [{ price: (priceRow as any).price_id, quantity: 1 }],
+        line_items: [{ price: priceId, quantity: 1 }],
         mode: 'payment',
         success_url: `${protocol}://${host}/app/checkout-success?tier=${tier}&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${protocol}://${host}/pricing`,
@@ -120,24 +141,21 @@ export async function registerRoutes(
         customerId = customer.id;
       }
 
-      const pricesResult = await db.execute(
-        sql`SELECT pr.id as price_id, pr.unit_amount, p.metadata FROM stripe.prices pr JOIN stripe.products p ON pr.product = p.id WHERE p.active = true AND pr.active = true`
-      );
+      const tierPriceMap: Record<string, number> = {
+        early_learner: 4900,
+        pack12: 11900,
+        pack12_family: 14900,
+        programme16: 24900,
+        programme16_family: 34900,
+      };
 
-      const findPrice = (tier: string) => pricesResult.rows.find((r: any) => {
-        const meta = typeof r.metadata === 'string' ? JSON.parse(r.metadata) : r.metadata;
-        return meta?.tier === tier;
-      });
-
-      const currentPrice = findPrice(currentTier);
-      const targetPrice = findPrice(targetTier);
-
-      if (!currentPrice || !targetPrice) {
+      const targetPriceId = await findStripePriceForTier(targetTier);
+      if (!targetPriceId) {
         return res.status(404).json({ message: "Price not found for upgrade calculation" });
       }
 
-      const currentAmount = Number((currentPrice as any).unit_amount);
-      const targetAmount = Number((targetPrice as any).unit_amount);
+      const currentAmount = tierPriceMap[currentTier] || 0;
+      const targetAmount = tierPriceMap[targetTier] || 0;
       const difference = targetAmount - currentAmount;
 
       if (difference <= 0) {
@@ -187,16 +205,8 @@ export async function registerRoutes(
 
       const stripe = await getUncachableStripeClient();
 
-      const pricesResult = await db.execute(
-        sql`SELECT pr.id as price_id, p.metadata FROM stripe.prices pr JOIN stripe.products p ON pr.product = p.id WHERE p.active = true AND pr.active = true`
-      );
-
-      const priceRow = pricesResult.rows.find((r: any) => {
-        const meta = typeof r.metadata === 'string' ? JSON.parse(r.metadata) : r.metadata;
-        return meta?.tier === tier;
-      });
-
-      if (!priceRow) {
+      const priceId = await findStripePriceForTier(tier);
+      if (!priceId) {
         return res.status(404).json({ message: "Price not found. Products may not be seeded yet." });
       }
 
@@ -205,7 +215,7 @@ export async function registerRoutes(
 
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
-        line_items: [{ price: (priceRow as any).price_id, quantity: 1 }],
+        line_items: [{ price: priceId, quantity: 1 }],
         mode: 'payment',
         success_url: `${protocol}://${host}/checkout-success?tier=${tier}&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${protocol}://${host}/pricing`,

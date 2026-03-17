@@ -519,7 +519,7 @@ export default function Landing() {
                 ))}
               </ul>
               <Button className="w-full mt-6 h-auto min-h-[2.75rem] py-2 text-sm font-bold bg-brand-amber text-white hover:bg-brand-amber/90 border-none whitespace-normal text-center leading-tight" asChild data-testid="button-included-programme">
-                <Link href="/pricing?autoCheckout=programme16">Get Young Scholar Programme</Link>
+                <Link href="/pricing?autoCheckout=programme16">Young Scholar Programme</Link>
               </Button>
             </div>
           </div>
