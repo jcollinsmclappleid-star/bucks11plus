@@ -52,6 +52,7 @@ import QuestionList from "./pages/admin/QuestionList";
 import QuestionEditor from "./pages/admin/QuestionEditor";
 
 import ParentGuide from "./pages/ParentGuide";
+import SiteLinks from "./pages/SiteLinks";
 import EarlyDashboard from "./pages/EarlyDashboard";
 import TestDaySimulator from "./pages/TestDaySimulator";
 import GrammarSchools from "./pages/seo/GrammarSchools";
@@ -94,6 +95,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
               <li><Link href="/bucks-gl-alignment" className="hover:text-white transition-colors">GL-Style Alignment</Link></li>
               <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
               <li><Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
+              <li><Link href="/site-links" className="hover:text-white transition-colors">Site Links</Link></li>
             </ul>
           </div>
           <div>
@@ -235,6 +237,7 @@ function Router() {
             <Route path="/how-to-pass-bucks-11-plus" component={HowToPass} />
             <Route path="/bucks-11-plus-registration" component={Registration} />
             <Route path="/bucks-11-plus-mistakes" component={CommonMistakes} />
+            <Route path="/site-links" component={SiteLinks} />
             {towns.map(t => (
               <Route key={t.slug} path={`/bucks-11-plus-${t.slug}`}>
                 <TownGuide townSlug={t.slug} />

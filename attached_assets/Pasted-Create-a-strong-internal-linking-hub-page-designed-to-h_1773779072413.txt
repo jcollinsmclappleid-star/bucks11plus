@@ -1,0 +1,72 @@
+Create a strong internal linking hub page designed to help Google understand the most important pages on my website and improve the chance of sitelinks appearing in Google Search.
+
+Important context:
+This is not for an XML sitemap submission.
+This page should support Google sitelinks indirectly by improving crawlability, hierarchy, and internal linking.
+Google chooses sitelinks automatically based on site structure, crawlable links, and clear navigation.
+
+Build requirements:
+
+1. Create a public page at:
+/site-links
+
+2. Purpose:
+This page should act as a clean HTML sitemap / internal linking hub for users and search engines.
+It should clearly surface the most important pages on the site.
+
+3. SEO requirements:
+- Fully crawlable HTML links only
+- No JavaScript-only links
+- Proper semantic HTML
+- Canonical tag set to the page URL
+- Indexable
+- Included in footer navigation
+- Linked from homepage or another important indexed page
+- Included in XML sitemap if the site has one
+- Fast-loading and mobile-friendly
+
+4. Page structure:
+- Title tag: Site Links | [Site Name]
+- Meta description: Explore the main pages, tools, guides, and resources on [Site Name].
+- H1: Site Links
+- Short intro paragraph explaining this page helps visitors find the most important sections of the site
+
+5. Link hierarchy:
+Create clearly labelled sections with H2 headings, such as:
+- Main Pages
+- Key Tools / Services / Products
+- Guides / Resources
+- Support / Help
+- Company / Trust Pages
+
+6. Link format:
+For each page shown, include:
+- page title
+- one-sentence description
+- standard HTML anchor link
+
+7. Prioritisation:
+Show the most important commercial and informational pages first.
+Use clear, descriptive anchor text that matches the actual page topic.
+
+8. UX:
+- Clean professional layout
+- Simple cards or grouped lists
+- Easy to scan
+- Consistent with site branding
+- Responsive on mobile
+
+9. CTA block:
+At the bottom, add a prominent call-to-action linking to the site’s primary conversion page.
+
+10. Code quality:
+- Modular and easy to expand
+- Reusable data structure for adding future links
+- Render links in page source so search engines can crawl them easily
+
+Also review the rest of the site and improve sitelink signals by:
+- making top navigation clearer
+- linking important pages from the homepage
+- reducing weak or duplicate navigation items
+- using descriptive anchor text consistently
+- ensuring all priority pages are reachable within a few clicks

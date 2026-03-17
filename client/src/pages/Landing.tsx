@@ -861,6 +861,44 @@ export default function Landing() {
         </div>
       </section>
 
+      <section className="py-16 bg-slate-50/50">
+        <div className="container mx-auto max-w-5xl px-4">
+          <h2 className="text-2xl font-bold text-primary font-serif text-center mb-2">Buckinghamshire 11+ Resources</h2>
+          <p className="text-muted-foreground text-center mb-10 max-w-xl mx-auto">Free guides and information to help you navigate the grammar school admissions process.</p>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <Link href="/buckinghamshire-11-plus-guide" className="group p-5 bg-white rounded-xl border border-border/40 hover:border-primary/30 hover:shadow-md transition-all">
+              <h3 className="font-semibold text-primary mb-1 group-hover:text-primary/80">Complete Bucks 11+ Guide</h3>
+              <p className="text-sm text-muted-foreground">Everything you need to know about the exam, scoring and admissions.</p>
+            </Link>
+            <Link href="/bucks-grammar-schools" className="group p-5 bg-white rounded-xl border border-border/40 hover:border-primary/30 hover:shadow-md transition-all">
+              <h3 className="font-semibold text-primary mb-1 group-hover:text-primary/80">All 13 Grammar Schools</h3>
+              <p className="text-sm text-muted-foreground">Directory of every Buckinghamshire grammar school and their admissions.</p>
+            </Link>
+            <Link href="/bucks-11-plus-qualifying-score" className="group p-5 bg-white rounded-xl border border-border/40 hover:border-primary/30 hover:shadow-md transition-all">
+              <h3 className="font-semibold text-primary mb-1 group-hover:text-primary/80">Qualifying Score Explained</h3>
+              <p className="text-sm text-muted-foreground">What the standardised 121 benchmark means and how it works.</p>
+            </Link>
+            <Link href="/how-to-pass-bucks-11-plus" className="group p-5 bg-white rounded-xl border border-border/40 hover:border-primary/30 hover:shadow-md transition-all">
+              <h3 className="font-semibold text-primary mb-1 group-hover:text-primary/80">How to Pass the 11+</h3>
+              <p className="text-sm text-muted-foreground">Strategies and tips to help your child reach the qualifying score.</p>
+            </Link>
+            <Link href="/bucks-11-plus-timeline" className="group p-5 bg-white rounded-xl border border-border/40 hover:border-primary/30 hover:shadow-md transition-all">
+              <h3 className="font-semibold text-primary mb-1 group-hover:text-primary/80">Admissions Timeline</h3>
+              <p className="text-sm text-muted-foreground">Key dates from registration through to results and allocation.</p>
+            </Link>
+            <Link href="/bucks-11-plus-registration" className="group p-5 bg-white rounded-xl border border-border/40 hover:border-primary/30 hover:shadow-md transition-all">
+              <h3 className="font-semibold text-primary mb-1 group-hover:text-primary/80">Registration Guide</h3>
+              <p className="text-sm text-muted-foreground">Step-by-step instructions for registering for the test.</p>
+            </Link>
+          </div>
+          <div className="text-center mt-8">
+            <Link href="/site-links" className="text-sm text-primary font-medium hover:underline">
+              View all pages and resources →
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <div className="py-6 text-center bg-white">
         <p className="text-xs text-slate-400" data-testid="text-disclaimer">
           Independent readiness assessment. Not affiliated with GL Assessment or Buckinghamshire Council.
