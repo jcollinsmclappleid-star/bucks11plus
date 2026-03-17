@@ -108,6 +108,19 @@ export default function Pricing() {
   const isUpgradeEligible = user && (user.subscriptionTier === "pack12" || user.subscriptionTier === "pack12_family");
   const upgradeTier = user?.subscriptionTier === "pack12_family" ? "programme16_family" : "programme16";
 
+  const tierRank: Record<string, number> = {
+    free: 0,
+    early_learner: 1,
+    pack12: 2,
+    pack12_family: 3,
+    programme16: 4,
+    programme16_family: 5,
+  };
+  const currentTier = user?.subscriptionTier || "free";
+  const currentRank = tierRank[currentTier] ?? 0;
+  const hasPaidPlan = user && currentRank > 0;
+  const isTopTier = currentTier === "programme16" || currentTier === "programme16_family";
+
   const faqs = [
     {
       q: "Is this affiliated with GL Assessment?",
@@ -225,53 +238,80 @@ export default function Pricing() {
         <div className="absolute inset-0 z-0 hero-vignette"></div>
         <div className="absolute inset-0 z-0" style={{ background: 'radial-gradient(ellipse 50% 40% at 50% 35%, rgba(255,255,255,0.04) 0%, transparent 100%)' }}></div>
         <div className="container mx-auto max-w-4xl px-4 relative z-10 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-white tracking-tight leading-[1.12] font-serif mb-6" data-testid="text-pricing-hero-title">
-            Give your child the clarity they deserve ahead of the Bucks 11+
-          </h1>
-          <p className="text-xl md:text-2xl text-white/60 max-w-3xl mx-auto leading-relaxed mb-10">
-            Know exactly where they stand. See precisely what to work on. Track real progress — not just effort.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
-            <Button size="lg" className="h-14 px-8 text-lg bg-brand-amber text-white hover:bg-brand-amber/90 w-full sm:w-auto font-bold shadow-lg shadow-brand-amber/15 border-none" asChild data-testid="button-hero-programme">
-              <a href="#tiers">View Plans &amp; Pricing <ArrowRight className="ml-2 h-5 w-5" /></a>
-            </Button>
-            <Button size="lg" variant="outline" className="h-14 px-8 text-lg w-full sm:w-auto bg-white/[0.03] border-white/15 text-white/80 hover:bg-white/[0.06] hover:text-white" asChild data-testid="button-hero-diagnostic">
-              <Link href="/free-diagnostic">Try Free Diagnostic First</Link>
-            </Button>
-          </div>
+          {hasPaidPlan ? (
+            <>
+              <h1 className="text-4xl md:text-6xl font-bold text-white tracking-tight leading-[1.12] font-serif mb-6" data-testid="text-pricing-hero-title">
+                {isTopTier ? "You're on the complete programme" : "Your current plan & upgrade options"}
+              </h1>
+              <p className="text-xl md:text-2xl text-white/60 max-w-3xl mx-auto leading-relaxed mb-10">
+                {isTopTier
+                  ? "You have full access to everything 11+ Standard offers. Head to your dashboard to continue your child's preparation."
+                  : "See what's included in your plan and explore options to unlock more features for your child's preparation."}
+              </p>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
+                <Button size="lg" className="h-14 px-8 text-lg bg-brand-amber text-white hover:bg-brand-amber/90 w-full sm:w-auto font-bold shadow-lg shadow-brand-amber/15 border-none" asChild data-testid="button-hero-dashboard">
+                  <Link href="/app">Go to Dashboard <ArrowRight className="ml-2 h-5 w-5" /></Link>
+                </Button>
+                {!isTopTier && (
+                  <Button size="lg" variant="outline" className="h-14 px-8 text-lg w-full sm:w-auto bg-white/[0.03] border-white/15 text-white/80 hover:bg-white/[0.06] hover:text-white" asChild data-testid="button-hero-upgrade">
+                    <a href="#tiers">View Upgrade Options</a>
+                  </Button>
+                )}
+              </div>
+            </>
+          ) : (
+            <>
+              <h1 className="text-4xl md:text-6xl font-bold text-white tracking-tight leading-[1.12] font-serif mb-6" data-testid="text-pricing-hero-title">
+                Give your child the clarity they deserve ahead of the Bucks 11+
+              </h1>
+              <p className="text-xl md:text-2xl text-white/60 max-w-3xl mx-auto leading-relaxed mb-10">
+                Know exactly where they stand. See precisely what to work on. Track real progress — not just effort.
+              </p>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
+                <Button size="lg" className="h-14 px-8 text-lg bg-brand-amber text-white hover:bg-brand-amber/90 w-full sm:w-auto font-bold shadow-lg shadow-brand-amber/15 border-none" asChild data-testid="button-hero-programme">
+                  <a href="#tiers">View Plans &amp; Pricing <ArrowRight className="ml-2 h-5 w-5" /></a>
+                </Button>
+                <Button size="lg" variant="outline" className="h-14 px-8 text-lg w-full sm:w-auto bg-white/[0.03] border-white/15 text-white/80 hover:bg-white/[0.06] hover:text-white" asChild data-testid="button-hero-diagnostic">
+                  <Link href="/free-diagnostic">Try Free Diagnostic First</Link>
+                </Button>
+              </div>
+            </>
+          )}
           <p className="text-[11px] text-white/25">
             Independent readiness assessment · Not affiliated with GL Assessment or Buckinghamshire Council
           </p>
         </div>
       </section>
 
-      <section className="py-14 md:py-20 bg-white border-b border-border/30">
-        <div className="container mx-auto max-w-4xl px-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif text-center mb-10" data-testid="text-pricing-dual-path">
-            How Would You Like to Begin?
-          </h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="rounded-2xl border border-slate-200 bg-white p-7 sm:p-8 flex flex-col" data-testid="card-pricing-path-diagnostic">
-              <h3 className="text-xl font-bold text-primary font-serif mb-3">Start With a Diagnostic</h3>
-              <p className="text-slate-600 text-sm leading-relaxed mb-6 flex-1">
-                Take an 8-minute timed assessment to understand current readiness, pace and performance profile before committing.
-              </p>
-              <Button variant="outline" className="w-full h-12 text-sm font-semibold" asChild data-testid="button-pricing-path-diagnostic">
-                <Link href="/free-diagnostic">Start Free Diagnostic</Link>
-              </Button>
-            </div>
-            <div className="rounded-2xl border-2 border-primary/20 bg-slate-50 p-7 sm:p-8 flex flex-col" data-testid="card-pricing-path-programme">
-              <h3 className="text-xl font-bold text-primary font-serif mb-3">Begin the Young Scholar Programme</h3>
-              <p className="text-slate-600 text-sm leading-relaxed mb-6 flex-1">
-                For families who want a complete preparation plan aligned to the Bucks 11+. Includes diagnostics, targeted drills and milestone tracking.
-              </p>
-              <Button className="w-full h-12 text-sm font-semibold bg-primary text-primary-foreground" asChild data-testid="button-pricing-path-programme">
-                <a href="#tiers">View Programme &amp; Enrol</a>
-              </Button>
+      {!hasPaidPlan && (
+        <section className="py-14 md:py-20 bg-white border-b border-border/30">
+          <div className="container mx-auto max-w-4xl px-4">
+            <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif text-center mb-10" data-testid="text-pricing-dual-path">
+              How Would You Like to Begin?
+            </h2>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="rounded-2xl border border-slate-200 bg-white p-7 sm:p-8 flex flex-col" data-testid="card-pricing-path-diagnostic">
+                <h3 className="text-xl font-bold text-primary font-serif mb-3">Start With a Diagnostic</h3>
+                <p className="text-slate-600 text-sm leading-relaxed mb-6 flex-1">
+                  Take an 8-minute timed assessment to understand current readiness, pace and performance profile before committing.
+                </p>
+                <Button variant="outline" className="w-full h-12 text-sm font-semibold" asChild data-testid="button-pricing-path-diagnostic">
+                  <Link href="/free-diagnostic">Start Free Diagnostic</Link>
+                </Button>
+              </div>
+              <div className="rounded-2xl border-2 border-primary/20 bg-slate-50 p-7 sm:p-8 flex flex-col" data-testid="card-pricing-path-programme">
+                <h3 className="text-xl font-bold text-primary font-serif mb-3">Begin the Young Scholar Programme</h3>
+                <p className="text-slate-600 text-sm leading-relaxed mb-6 flex-1">
+                  For families who want a complete preparation plan aligned to the Bucks 11+. Includes diagnostics, targeted drills and milestone tracking.
+                </p>
+                <Button className="w-full h-12 text-sm font-semibold bg-primary text-primary-foreground" asChild data-testid="button-pricing-path-programme">
+                  <a href="#tiers">View Programme &amp; Enrol</a>
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {isUpgradeEligible && (
         <section className="py-10 bg-gradient-to-r from-brand-amber/5 to-brand-amber/10 border-b border-brand-amber/20" id="upgrade">
@@ -341,12 +381,51 @@ export default function Pricing() {
       <section className="py-20 md:py-28 bg-slate-50 border-b border-border/30" id="tiers">
         <div className="container mx-auto max-w-6xl px-4">
           <div className="text-center mb-14">
-            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4" data-testid="text-tiers-title">What your child gets</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4" data-testid="text-tiers-title">
+              {hasPaidPlan ? (isTopTier ? "Your plan" : "Your plan & upgrade options") : "What your child gets"}
+            </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Choose the level of support that's right for your family.
+              {hasPaidPlan
+                ? (isTopTier ? "You have full access to the most comprehensive preparation package." : "You're making great progress. Here's what you have and what's available next.")
+                : "Choose the level of support that's right for your family."}
             </p>
           </div>
 
+          {hasPaidPlan && (
+            <div className="max-w-3xl mx-auto mb-12">
+              <Card className="border-brand-green/30 bg-green-50/50 shadow-sm" data-testid="card-current-plan">
+                <CardContent className="p-6 md:p-8">
+                  <div className="flex items-start gap-4">
+                    <div className="h-12 w-12 rounded-xl bg-brand-green/10 flex items-center justify-center shrink-0">
+                      <CheckCircle2 className="h-6 w-6 text-brand-green" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-1">
+                        <h3 className="text-xl font-bold text-primary font-serif">
+                          {currentTier === "early_learner" && "Early Learner"}
+                          {currentTier === "pack12" && "Practice Platform"}
+                          {currentTier === "pack12_family" && "Practice Platform — Family"}
+                          {currentTier === "programme16" && "Young Scholar Programme"}
+                          {currentTier === "programme16_family" && "Young Scholar Programme — Family"}
+                        </h3>
+                        <Badge className="bg-brand-green/10 text-brand-green border-brand-green/20 hover:bg-brand-green/10">Active</Badge>
+                      </div>
+                      <p className="text-sm text-slate-600 mb-4">
+                        {currentTier === "early_learner" && "Foundation-level practice with readiness tracking and age-appropriate learning."}
+                        {(currentTier === "pack12" || currentTier === "pack12_family") && "1,600+ questions, full diagnostics, timed drills, PDF reports and progress tracking."}
+                        {(currentTier === "programme16" || currentTier === "programme16_family") && "Complete preparation: diagnostics, all drills, mock exams, roadmap, milestone tracking, weekly plans and premium analytics."}
+                      </p>
+                      <Button size="sm" asChild>
+                        <Link href="/app">Go to Dashboard <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {!hasPaidPlan && (
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
               <Card className="border-border/60 shadow-sm flex flex-col hover:border-primary/30 transition-colors" data-testid="card-tier-free">
                 <CardHeader className="pb-4">
@@ -381,49 +460,49 @@ export default function Pricing() {
                 </CardFooter>
               </Card>
 
-            <Card className="border-border/60 shadow-sm flex flex-col hover:border-primary/30 transition-colors" data-testid="card-tier-early-learner">
-              <CardHeader className="pb-4">
-                <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-1">Early Learner</p>
-                <CardTitle className="text-2xl font-serif">Build strong foundations</CardTitle>
-                <p className="text-[10px] font-bold text-amber-600 uppercase tracking-tight mt-1">Target: Year 4 & 5</p>
-              </CardHeader>
-              <CardContent className="flex-1">
-                <div className="mb-2">
-                  <span className="text-5xl font-bold text-primary">£49</span>
-                  <span className="text-muted-foreground font-medium"> one-time</span>
-                </div>
-                <p className="text-sm text-slate-500 mb-6">Unlimited access</p>
-                <p className="text-sm text-slate-600 mb-6 leading-relaxed">
-                  Perfect for younger learners building core skills before formal 11+ preparation. No exam pressure — just confident, steady progress.
-                </p>
-                <ul className="space-y-3">
-                  {[
-                    "Foundation-level practice questions",
-                    "Readiness percentage tracking",
-                    "Exploring → Developing → Ready pathway",
-                    "Encouraging, age-appropriate interface",
-                    "Progress at your own pace",
-                    "Unlimited access",
-                  ].map((feature, i) => (
-                    <li key={i} className="flex items-start gap-3">
-                      <CheckCircle2 className="h-5 w-5 text-brand-green shrink-0 mt-0.5" />
-                      <span className="text-slate-700 text-sm font-medium">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-              <CardFooter>
-                <Button
-                  variant="outline"
-                  className="w-full h-12 text-lg"
-                  onClick={() => handleCheckout("early_learner")}
-                  disabled={loading === "early_learner"}
-                  data-testid="button-get-early-learner"
-                >
-                  {loading === "early_learner" ? <Loader2 className="h-5 w-5 animate-spin" /> : "Get Early Learner"}
-                </Button>
-              </CardFooter>
-            </Card>
+              <Card className="border-border/60 shadow-sm flex flex-col hover:border-primary/30 transition-colors" data-testid="card-tier-early-learner">
+                <CardHeader className="pb-4">
+                  <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-1">Early Learner</p>
+                  <CardTitle className="text-2xl font-serif">Build strong foundations</CardTitle>
+                  <p className="text-[10px] font-bold text-amber-600 uppercase tracking-tight mt-1">Target: Year 4 & 5</p>
+                </CardHeader>
+                <CardContent className="flex-1">
+                  <div className="mb-2">
+                    <span className="text-5xl font-bold text-primary">£49</span>
+                    <span className="text-muted-foreground font-medium"> one-time</span>
+                  </div>
+                  <p className="text-sm text-slate-500 mb-6">Unlimited access</p>
+                  <p className="text-sm text-slate-600 mb-6 leading-relaxed">
+                    Perfect for younger learners building core skills before formal 11+ preparation. No exam pressure — just confident, steady progress.
+                  </p>
+                  <ul className="space-y-3">
+                    {[
+                      "Foundation-level practice questions",
+                      "Readiness percentage tracking",
+                      "Exploring → Developing → Ready pathway",
+                      "Encouraging, age-appropriate interface",
+                      "Progress at your own pace",
+                      "Unlimited access",
+                    ].map((feature, i) => (
+                      <li key={i} className="flex items-start gap-3">
+                        <CheckCircle2 className="h-5 w-5 text-brand-green shrink-0 mt-0.5" />
+                        <span className="text-slate-700 text-sm font-medium">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+                <CardFooter>
+                  <Button
+                    variant="outline"
+                    className="w-full h-12 text-lg"
+                    onClick={() => handleCheckout("early_learner")}
+                    disabled={loading === "early_learner"}
+                    data-testid="button-get-early-learner"
+                  >
+                    {loading === "early_learner" ? <Loader2 className="h-5 w-5 animate-spin" /> : "Get Early Learner"}
+                  </Button>
+                </CardFooter>
+              </Card>
 
               <Card className="border-primary/30 shadow-md flex flex-col hover:border-primary/50 transition-colors relative overflow-hidden" data-testid="card-tier-pack12">
                 <CardHeader className="pb-4">
@@ -515,91 +594,287 @@ export default function Pricing() {
                 </CardContent>
               </Card>
             </div>
+          )}
 
-          <div className="mt-12 max-w-4xl mx-auto">
-            <h3 className="text-2xl md:text-3xl font-bold text-primary font-serif text-center mb-4" data-testid="text-family-pricing-title">Family Plans</h3>
-            <p className="text-center text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Preparing multiple children? Family plans include up to 3 child profiles, each with their own independent progress, diagnostics, and practice data.
-            </p>
-            <div className="grid md:grid-cols-2 gap-6">
-              <Card className="border-border/60 shadow-sm flex flex-col" data-testid="card-tier-pack12-family">
-                <CardHeader className="pb-4">
-                  <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-1">Practice Platform — Family</p>
-                  <CardTitle className="text-xl font-serif">Up to 3 children</CardTitle>
-                </CardHeader>
-                <CardContent className="flex-1">
-                  <div className="mb-2">
-                    <span className="text-4xl font-bold text-primary">£149</span>
-                    <span className="text-muted-foreground font-medium"> one-time</span>
-                  </div>
-                  <p className="text-sm text-slate-500 mb-4">6 months of access for the whole family</p>
-                  <ul className="space-y-2">
-                    {[
-                      "Everything in Practice Platform",
-                      "Up to 3 child profiles",
-                      "Independent progress tracking per child",
-                      "Child switcher in navbar",
-                    ].map((f, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm">
-                        <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0 mt-0.5" />
-                        <span className="text-slate-700">{f}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-                <CardFooter>
-                  <Button
-                    className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-11"
-                    onClick={() => handleCheckout("pack12_family")}
-                    disabled={loading === "pack12_family"}
-                    data-testid="button-get-pack12-family"
-                  >
-                    {loading === "pack12_family" ? <Loader2 className="h-5 w-5 animate-spin" /> : "Get Family Practice Platform"}
-                  </Button>
-                </CardFooter>
-              </Card>
+          {hasPaidPlan && !isTopTier && (
+            <div className="max-w-4xl mx-auto">
+              <h3 className="text-2xl font-bold text-primary font-serif text-center mb-8" data-testid="text-upgrade-options-title">Upgrade Options</h3>
+              <div className={`grid gap-6 ${currentRank < 2 ? "md:grid-cols-2" : "md:grid-cols-1 max-w-xl mx-auto"}`}>
+                {currentRank < 2 && (
+                  <Card className="border-primary/30 shadow-md flex flex-col hover:border-primary/50 transition-colors relative overflow-hidden" data-testid="card-tier-pack12">
+                    <CardHeader className="pb-4">
+                      <p className="text-sm font-semibold text-primary uppercase tracking-wider mb-1">Practice Platform</p>
+                      <CardTitle className="text-2xl font-serif">Targeted exam practice</CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex-1">
+                      <div className="mb-2">
+                        <span className="text-5xl font-bold text-primary">£119</span>
+                        <span className="text-muted-foreground font-medium"> one-time</span>
+                      </div>
+                      <p className="text-sm text-slate-500 mb-6">6 months access</p>
+                      <p className="text-sm text-slate-600 mb-6 leading-relaxed">
+                        1,600+ questions across Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension. Full diagnostics, timed drills, and progress tracking.
+                      </p>
+                      <ul className="space-y-3">
+                        {[
+                          "1,600+ Verbal Reasoning, Non-Verbal Reasoning, Maths & Comprehension questions",
+                          "Easy & Medium drills (19 sections) + 6 Hard drills",
+                          "Full timed diagnostics (40 questions)",
+                          "Practice papers (Quick & Full)",
+                          "PDF reports & report archive",
+                          "Impact simulator & progress tracking",
+                          "6 months of full access",
+                        ].map((feature, i) => (
+                          <li key={i} className="flex items-start gap-3">
+                            <CheckCircle2 className="h-5 w-5 text-brand-green shrink-0 mt-0.5" />
+                            <span className="text-slate-700 text-sm font-medium">{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                    <CardFooter>
+                      <Button
+                        className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-12 text-lg"
+                        onClick={() => handleCheckout("pack12")}
+                        disabled={loading === "pack12"}
+                        data-testid="button-get-pack12"
+                      >
+                        {loading === "pack12" ? <Loader2 className="h-5 w-5 animate-spin" /> : "Upgrade to Practice Platform"}
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                )}
 
-              <Card className="border-brand-amber border-2 shadow-md flex flex-col relative overflow-hidden" data-testid="card-tier-programme16-family">
-                <div className="absolute top-0 inset-x-0 h-1 bg-brand-amber"></div>
-                <CardHeader className="pb-4">
-                  <p className="text-sm font-semibold text-brand-amber uppercase tracking-wider mb-1">Young Scholar Programme — Family</p>
-                  <CardTitle className="text-xl font-serif">The complete family pathway</CardTitle>
-                </CardHeader>
-                <CardContent className="flex-1">
-                  <div className="mb-2">
-                    <span className="text-4xl font-bold text-primary">£349</span>
-                    <span className="text-muted-foreground font-medium"> one-time</span>
+                <Card className="border-brand-amber border-2 shadow-xl relative flex flex-col overflow-hidden" data-testid="card-tier-programme16">
+                  <div className="absolute top-0 inset-x-0 h-1.5 bg-brand-amber"></div>
+                  <div className="absolute top-0 right-0 bg-brand-amber text-amber-950 px-4 py-1.5 rounded-bl-lg font-bold text-sm shadow-sm">
+                    RECOMMENDED
                   </div>
-                  <p className="text-sm text-slate-500 mb-4">12 months of access for the whole family</p>
-                  <ul className="space-y-2">
-                    {[
-                      "Everything in Young Scholar Programme",
-                      "Up to 3 child profiles",
-                      "Independent roadmaps per child",
-                      "Test Day Simulator for each child",
-                      "Family analytics dashboard",
-                    ].map((f, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm">
-                        <CheckCircle2 className="h-4 w-4 text-brand-amber shrink-0 mt-0.5" />
-                        <span className="text-primary font-medium">{f}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-                <CardFooter>
-                  <Button
-                    className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-11 font-bold"
-                    onClick={() => handleCheckout("programme16_family")}
-                    disabled={loading === "programme16_family"}
-                    data-testid="button-get-programme16-family"
-                  >
-                    {loading === "programme16_family" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Get Family Young Scholar Programme"}
-                  </Button>
-                </CardFooter>
-              </Card>
+
+                  <CardHeader className="pt-8 pb-4">
+                    <p className="text-sm font-semibold text-brand-amber uppercase tracking-wider mb-1">Young Scholar Programme</p>
+                    <CardTitle className="text-2xl font-serif">Complete preparation pathway</CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex-1">
+                    <div className="mb-2">
+                      {isUpgradeEligible ? (
+                        <>
+                          <span className="text-sm text-slate-500 line-through mr-2">£249</span>
+                          <span className="text-5xl font-bold text-primary">{currentTier === "pack12_family" ? "£200" : "£130"}</span>
+                        </>
+                      ) : (
+                        <>
+                          <span className="text-5xl font-bold text-primary">£249</span>
+                          <span className="text-muted-foreground font-medium"> one-time</span>
+                        </>
+                      )}
+                    </div>
+                    {isUpgradeEligible && <p className="text-sm text-brand-green font-medium mb-4">Pay only the difference — upgrade pricing applied</p>}
+                    <p className="text-sm text-slate-600 mb-6 leading-relaxed">
+                      Everything in Practice Platform plus a structured roadmap, mock exams, milestone tracking, and weekly plans. 12 months of full access.
+                    </p>
+                    <ul className="space-y-3">
+                      {[
+                        "Everything in Practice Platform",
+                        "All 17 Hard challenge drills unlocked",
+                        "3 mock exam simulations (50 questions each)",
+                        "Guided preparation roadmap",
+                        "4 milestone diagnostics with auto-tracking",
+                        "Weekly personalised task plans",
+                        "Premium Parent Analytics dashboard",
+                        "12 months of full access",
+                      ].map((feature, i) => (
+                        <li key={i} className="flex items-start gap-3">
+                          <CheckCircle2 className="h-5 w-5 text-brand-amber shrink-0 mt-0.5" />
+                          <span className="text-primary text-sm font-semibold">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <Button
+                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-14 text-lg font-bold shadow-md mt-6"
+                      onClick={() => isUpgradeEligible ? handleUpgrade(upgradeTier) : handleCheckout("programme16")}
+                      disabled={loading === "programme16" || loading === "upgrade"}
+                      data-testid="button-get-programme16"
+                    >
+                      {(loading === "programme16" || loading === "upgrade") ? <Loader2 className="h-5 w-5 animate-spin" /> : (isUpgradeEligible ? "Upgrade Now" : "Get Young Scholar Programme")}
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {!currentTier.includes("family") && (
+                <div className="mt-10">
+                  <h4 className="text-lg font-bold text-primary font-serif text-center mb-6">Need multiple child profiles?</h4>
+                  <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+                    {currentRank < 3 && (
+                      <Card className="border-border/60 shadow-sm flex flex-col" data-testid="card-tier-pack12-family">
+                        <CardHeader className="pb-4">
+                          <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-1">Practice Platform — Family</p>
+                          <CardTitle className="text-xl font-serif">Up to 3 children</CardTitle>
+                        </CardHeader>
+                        <CardContent className="flex-1">
+                          <div className="mb-2">
+                            <span className="text-4xl font-bold text-primary">£149</span>
+                            <span className="text-muted-foreground font-medium"> one-time</span>
+                          </div>
+                          <p className="text-sm text-slate-500 mb-4">6 months of access for the whole family</p>
+                          <ul className="space-y-2">
+                            {[
+                              "Everything in Practice Platform",
+                              "Up to 3 child profiles",
+                              "Independent progress tracking per child",
+                            ].map((f, i) => (
+                              <li key={i} className="flex items-start gap-2 text-sm">
+                                <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0 mt-0.5" />
+                                <span className="text-slate-700">{f}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </CardContent>
+                        <CardFooter>
+                          <Button
+                            className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-11"
+                            onClick={() => handleCheckout("pack12_family")}
+                            disabled={loading === "pack12_family"}
+                            data-testid="button-get-pack12-family"
+                          >
+                            {loading === "pack12_family" ? <Loader2 className="h-5 w-5 animate-spin" /> : "Get Family Practice Platform"}
+                          </Button>
+                        </CardFooter>
+                      </Card>
+                    )}
+
+                    <Card className="border-brand-amber border-2 shadow-md flex flex-col relative overflow-hidden" data-testid="card-tier-programme16-family">
+                      <div className="absolute top-0 inset-x-0 h-1 bg-brand-amber"></div>
+                      <CardHeader className="pb-4">
+                        <p className="text-sm font-semibold text-brand-amber uppercase tracking-wider mb-1">Young Scholar Programme — Family</p>
+                        <CardTitle className="text-xl font-serif">The complete family pathway</CardTitle>
+                      </CardHeader>
+                      <CardContent className="flex-1">
+                        <div className="mb-2">
+                          <span className="text-4xl font-bold text-primary">£349</span>
+                          <span className="text-muted-foreground font-medium"> one-time</span>
+                        </div>
+                        <p className="text-sm text-slate-500 mb-4">12 months of access for the whole family</p>
+                        <ul className="space-y-2">
+                          {[
+                            "Everything in Young Scholar Programme",
+                            "Up to 3 child profiles",
+                            "Independent roadmaps per child",
+                            "Test Day Simulator for each child",
+                            "Family analytics dashboard",
+                          ].map((f, i) => (
+                            <li key={i} className="flex items-start gap-2 text-sm">
+                              <CheckCircle2 className="h-4 w-4 text-brand-amber shrink-0 mt-0.5" />
+                              <span className="text-primary font-medium">{f}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </CardContent>
+                      <CardFooter>
+                        <Button
+                          className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-11 font-bold"
+                          onClick={() => handleCheckout("programme16_family")}
+                          disabled={loading === "programme16_family"}
+                          data-testid="button-get-programme16-family"
+                        >
+                          {loading === "programme16_family" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Get Family Young Scholar Programme"}
+                        </Button>
+                      </CardFooter>
+                    </Card>
+                  </div>
+                </div>
+              )}
             </div>
-          </div>
+          )}
 
+          {!hasPaidPlan && (
+            <div className="mt-12 max-w-4xl mx-auto">
+              <h3 className="text-2xl md:text-3xl font-bold text-primary font-serif text-center mb-4" data-testid="text-family-pricing-title">Family Plans</h3>
+              <p className="text-center text-muted-foreground mb-8 max-w-2xl mx-auto">
+                Preparing multiple children? Family plans include up to 3 child profiles, each with their own independent progress, diagnostics, and practice data.
+              </p>
+              <div className="grid md:grid-cols-2 gap-6">
+                <Card className="border-border/60 shadow-sm flex flex-col" data-testid="card-tier-pack12-family">
+                  <CardHeader className="pb-4">
+                    <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-1">Practice Platform — Family</p>
+                    <CardTitle className="text-xl font-serif">Up to 3 children</CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex-1">
+                    <div className="mb-2">
+                      <span className="text-4xl font-bold text-primary">£149</span>
+                      <span className="text-muted-foreground font-medium"> one-time</span>
+                    </div>
+                    <p className="text-sm text-slate-500 mb-4">6 months of access for the whole family</p>
+                    <ul className="space-y-2">
+                      {[
+                        "Everything in Practice Platform",
+                        "Up to 3 child profiles",
+                        "Independent progress tracking per child",
+                        "Child switcher in navbar",
+                      ].map((f, i) => (
+                        <li key={i} className="flex items-start gap-2 text-sm">
+                          <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0 mt-0.5" />
+                          <span className="text-slate-700">{f}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                  <CardFooter>
+                    <Button
+                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-11"
+                      onClick={() => handleCheckout("pack12_family")}
+                      disabled={loading === "pack12_family"}
+                      data-testid="button-get-pack12-family"
+                    >
+                      {loading === "pack12_family" ? <Loader2 className="h-5 w-5 animate-spin" /> : "Get Family Practice Platform"}
+                    </Button>
+                  </CardFooter>
+                </Card>
+
+                <Card className="border-brand-amber border-2 shadow-md flex flex-col relative overflow-hidden" data-testid="card-tier-programme16-family">
+                  <div className="absolute top-0 inset-x-0 h-1 bg-brand-amber"></div>
+                  <CardHeader className="pb-4">
+                    <p className="text-sm font-semibold text-brand-amber uppercase tracking-wider mb-1">Young Scholar Programme — Family</p>
+                    <CardTitle className="text-xl font-serif">The complete family pathway</CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex-1">
+                    <div className="mb-2">
+                      <span className="text-4xl font-bold text-primary">£349</span>
+                      <span className="text-muted-foreground font-medium"> one-time</span>
+                    </div>
+                    <p className="text-sm text-slate-500 mb-4">12 months of access for the whole family</p>
+                    <ul className="space-y-2">
+                      {[
+                        "Everything in Young Scholar Programme",
+                        "Up to 3 child profiles",
+                        "Independent roadmaps per child",
+                        "Test Day Simulator for each child",
+                        "Family analytics dashboard",
+                      ].map((f, i) => (
+                        <li key={i} className="flex items-start gap-2 text-sm">
+                          <CheckCircle2 className="h-4 w-4 text-brand-amber shrink-0 mt-0.5" />
+                          <span className="text-primary font-medium">{f}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                  <CardFooter>
+                    <Button
+                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-11 font-bold"
+                      onClick={() => handleCheckout("programme16_family")}
+                      disabled={loading === "programme16_family"}
+                      data-testid="button-get-programme16-family"
+                    >
+                      {loading === "programme16_family" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Get Family Young Scholar Programme"}
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </div>
+            </div>
+          )}
+
+          {!hasPaidPlan && (
           <div className="mt-16 max-w-4xl mx-auto" data-testid="comparison-table">
             <h3 className="text-2xl md:text-3xl font-bold text-primary font-serif text-center mb-8">Feature Comparison</h3>
             <div className="overflow-x-auto">
@@ -657,6 +932,7 @@ export default function Pricing() {
               </table>
             </div>
           </div>
+          )}
         </div>
       </section>
 
