@@ -8,6 +8,7 @@ import React, { useEffect } from "react";
 
 import { AuthProvider } from "./lib/auth";
 import Navbar from "./components/layout/Navbar";
+import AdminTierSwitcher from "./components/layout/AdminTierSwitcher";
 import LockedOverlay from "./components/shared/LockedOverlay";
 import Landing from "./pages/Landing";
 import Dashboard from "./pages/Dashboard";
@@ -77,6 +78,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
       <main className="flex-1">
         {children}
       </main>
+      <AdminTierSwitcher />
       
       <footer className="bg-primary text-primary-foreground/70 py-12 mt-auto">
         <div className="container mx-auto max-w-6xl px-4 grid md:grid-cols-5 gap-8">

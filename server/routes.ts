@@ -1413,6 +1413,21 @@ export async function registerRoutes(
     }
   });
 
+  app.post("/api/admin/switch-tier", requireAdmin, async (req, res, next) => {
+    try {
+      const { tier } = req.body;
+      const validTiers = ["free", "early_learner", "pack12", "pack12_family", "programme16", "programme16_family"];
+      if (!tier || !validTiers.includes(tier)) {
+        return res.status(400).json({ message: "Invalid tier" });
+      }
+      const user = await storage.updateUserSubscription(req.user!.id, tier);
+      const { password: _, ...safeUser } = user;
+      res.json(safeUser);
+    } catch (error) {
+      next(error);
+    }
+  });
+
   app.post("/api/guide-leads", async (req, res, next) => {
     try {
       const parsed = insertGuideLeadSchema.safeParse(req.body);
