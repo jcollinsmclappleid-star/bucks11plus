@@ -82,6 +82,30 @@ async function logEmailEvent(userId: string, emailType: string, eventType: strin
   }
 }
 
+export async function sendPasswordResetEmail(email: string, resetToken: string): Promise<boolean> {
+  const resetUrl = `${BASE_URL}/reset-password?token=${resetToken}`;
+
+  const html = `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.6;color:#1a1a2e;max-width:600px;margin:0 auto;padding:20px;">
+  <div style="text-align:center;margin-bottom:24px;">
+    <strong style="font-size:18px;color:#0d1f30;">11+ Standard</strong>
+  </div>
+  <h2 style="color:#0d1f30;margin-bottom:8px;">Reset Your Password</h2>
+  <p>We received a request to reset your password. Click the button below to choose a new one:</p>
+  <div style="text-align:center;margin:24px 0;">
+    <a href="${resetUrl}" style="display:inline-block;background:#0d1f30;color:white;padding:14px 28px;border-radius:6px;text-decoration:none;font-weight:bold;">Reset Password</a>
+  </div>
+  <p style="font-size:13px;color:#64748b;">This link expires in 1 hour. If you didn't request this, you can safely ignore this email — your password won't change.</p>
+  <hr style="border:none;border-top:1px solid #e5e7eb;margin:32px 0 16px;">
+  <p style="font-size:11px;color:#9ca3af;text-align:center;">11+ Standard · Buckinghamshire 11+ Preparation</p>
+</body>
+</html>`;
+
+  return sendEmail(email, "Reset your 11+ Standard password", html);
+}
+
 export async function sendDiagnosticCompleteEmail(userId: string, sessionData: any) {
   const user = await storage.getUser(userId);
   if (!user || !user.email || !user.emailConsent || user.emailUnsubscribedAt) return;

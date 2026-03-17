@@ -19,6 +19,8 @@ import Onboarding from "./pages/Onboarding";
 import Practice from "./pages/Practice";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 import Diagnostics from "./pages/Diagnostics";
 import DiagnosticStart from "./pages/DiagnosticStart";
@@ -220,6 +222,8 @@ function Router() {
             <Route path="/bucks-11-plus-parent-guide" component={ParentGuide} />
             <Route path="/sign-in" component={SignIn} />
             <Route path="/sign-up" component={SignUp} />
+            <Route path="/forgot-password" component={ForgotPassword} />
+            <Route path="/reset-password" component={ResetPassword} />
             <Route path="/free-diagnostic" component={FreeDiagnosticStart} />
             <Route path="/free-results/:id" component={GuestResults} />
             <Route path="/bucks-grammar-schools" component={GrammarSchools} />

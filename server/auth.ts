@@ -7,7 +7,11 @@ import { scrypt, randomBytes, timingSafeEqual } from "crypto";
 import { promisify } from "util";
 import { storage } from "./storage";
 import { pool } from "./db";
+import { db } from "./db";
+import { users } from "@shared/schema";
+import { eq, and, gt } from "drizzle-orm";
 import type { User } from "@shared/schema";
+import { sendPasswordResetEmail } from "./email";
 
 const scryptAsync = promisify(scrypt);
 
@@ -135,6 +139,70 @@ export function setupAuth(app: Express) {
     }
     const { password: _, ...safeUser } = req.user!;
     res.json(safeUser);
+  });
+
+  app.post("/api/auth/forgot-password", async (req, res) => {
+    try {
+      const { email } = req.body;
+      if (!email) {
+        return res.status(400).json({ message: "Email is required" });
+      }
+
+      const [user] = await db.select().from(users).where(eq(users.email, email.toLowerCase().trim()));
+
+      if (user) {
+        const token = randomBytes(32).toString("hex");
+        const expires = new Date(Date.now() + 60 * 60 * 1000);
+
+        await db.update(users)
+          .set({ passwordResetToken: token, passwordResetExpires: expires })
+          .where(eq(users.id, user.id));
+
+        await sendPasswordResetEmail(email.toLowerCase().trim(), token);
+      }
+
+      res.json({ message: "If an account with that email exists, we've sent a password reset link." });
+    } catch (err) {
+      console.error("[Auth] Forgot password error:", err);
+      res.status(500).json({ message: "Something went wrong. Please try again." });
+    }
+  });
+
+  app.post("/api/auth/reset-password", async (req, res) => {
+    try {
+      const { token, password } = req.body;
+      if (!token || !password) {
+        return res.status(400).json({ message: "Token and new password are required" });
+      }
+      if (password.length < 6) {
+        return res.status(400).json({ message: "Password must be at least 6 characters" });
+      }
+
+      const [user] = await db.select().from(users).where(
+        and(
+          eq(users.passwordResetToken, token),
+          gt(users.passwordResetExpires, new Date())
+        )
+      );
+
+      if (!user) {
+        return res.status(400).json({ message: "Invalid or expired reset link. Please request a new one." });
+      }
+
+      const hashedPassword = await hashPassword(password);
+      await db.update(users)
+        .set({
+          password: hashedPassword,
+          passwordResetToken: null,
+          passwordResetExpires: null,
+        })
+        .where(eq(users.id, user.id));
+
+      res.json({ message: "Password updated successfully. You can now sign in." });
+    } catch (err) {
+      console.error("[Auth] Reset password error:", err);
+      res.status(500).json({ message: "Something went wrong. Please try again." });
+    }
   });
 }
 

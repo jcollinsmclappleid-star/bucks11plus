@@ -22,6 +22,8 @@ export const users = pgTable("users", {
   emailVerified: boolean("email_verified").notNull().default(false),
   emailUnsubscribedAt: timestamp("email_unsubscribed_at"),
   lastEmailSentAt: timestamp("last_email_sent_at"),
+  passwordResetToken: text("password_reset_token"),
+  passwordResetExpires: timestamp("password_reset_expires"),
 });
 
 export const diagnostics = pgTable("diagnostics", {

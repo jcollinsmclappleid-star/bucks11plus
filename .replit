@@ -56,3 +56,7 @@ timeoutMs = 120000
 [userenv.shared]
 STRIPE_PUBLISHABLE_KEY = "pk_test_51TBYP1DEurErtLgikXmL6NxRybjzeiM61OxZgIKCnKon96tUBtNRPyjel9PPvoTUEtgr9D7USe1qWeFfh3kXMeXH005bDV2bwM"
 STRIPE_SECRET_KEY = "sk_test_51TBYP1DEurErtLgiFiAJcmCNRbcCwOqbeKfzPpmFDilekTMTtldUrmco6p1URFurv5wjcKfL0as4Cr2uHkaTHnVW00aCzGRmMX"
+RESEND_FROM_EMAIL = "11+ Standard <onboarding@resend.dev>"
+
+[userenv.production]
+BASE_URL = "https://11plus-standard.replit.app"

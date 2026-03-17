@@ -61,7 +61,7 @@ export default function SignIn() {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label htmlFor="password">Password</Label>
-                <a href="#" className="text-sm font-medium text-brand-primary hover:underline">Forgot password?</a>
+                <Link href="/forgot-password" className="text-sm font-medium text-brand-primary hover:underline" data-testid="link-forgot-password">Forgot password?</Link>
               </div>
               <Input
                 id="password"
