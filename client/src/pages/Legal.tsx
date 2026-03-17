@@ -66,7 +66,7 @@ export default function Legal({ type }: { type: 'terms' | 'privacy' | 'safeguard
         },
         {
           heading: "2. Data We Collect",
-          body: "We collect the following categories of personal data: Account information — your name, email address and password when you register. Child profile data — your child's first name, age and year group, which you provide when setting up a child profile. Assessment data — answers, scores, timing data and performance metrics generated when your child completes diagnostics and practice sessions. Payment data — billing details processed securely by Stripe; we do not store full card numbers on our servers. Usage data — pages visited, features used, browser type, device information and IP address, collected automatically when you use the Service."
+          body: "We collect the following categories of personal data: Account information — your name, email address and password when you register. Your password is stored using industry-standard one-way hashing and cannot be viewed by anyone, including our team. Child profile data — your child's first name, age and year group, which you provide when setting up a child profile. Assessment data — answers, scores, timing data and performance metrics generated when your child completes diagnostics and practice sessions. Payment data — billing details processed securely by Stripe; we do not store full card numbers on our servers. Email communication data — records of transactional and service emails sent to you, including email type, delivery status and timestamps, to manage communication frequency and preferences. Usage data — pages visited, features used, browser type, device information and IP address, collected automatically when you use the Service."
         },
         {
           heading: "3. Lawful Basis for Processing",
@@ -74,7 +74,11 @@ export default function Legal({ type }: { type: 'terms' | 'privacy' | 'safeguard
         },
         {
           heading: "4. How We Use Your Data",
-          body: "We use personal data to: provide, maintain and improve the Service; generate readiness forecasts, performance reports and progress tracking; process payments and manage subscriptions; communicate with you about your account, including service updates and support responses; analyse aggregate usage patterns to improve our content and platform; and comply with legal obligations."
+          body: "We use personal data to: provide, maintain and improve the Service; generate readiness forecasts, performance reports and progress tracking; process payments and manage subscriptions; send transactional emails including password reset links, diagnostic results notifications and account-related communications; send optional service emails such as practice reminders and upgrade suggestions (only where you have opted in to email communications); analyse aggregate usage patterns to improve our content and platform; and comply with legal obligations."
+        },
+        {
+          heading: "4a. Email Communications",
+          body: "We send two categories of email: Transactional emails — these are essential to the operation of your account and include password reset links, payment confirmations and critical account notifications. These are sent regardless of your marketing preferences as they are necessary for the performance of our contract with you. Service emails — these include diagnostic results summaries, practice reminders and upgrade suggestions. These are only sent if you have opted in to email communications during account setup or via your Account Settings page. You can withdraw your consent and stop receiving service emails at any time by: clicking the 'Unsubscribe' link at the bottom of any service email, or toggling off email communications in your Account Settings. Withdrawal of consent does not affect emails already sent. We log email delivery events (type, status, timestamp) to manage sending frequency and prevent duplicate communications. We do not share your email address with any third party for their own marketing purposes."
         },
         {
           heading: "5. Children's Data",
@@ -86,11 +90,11 @@ export default function Legal({ type }: { type: 'terms' | 'privacy' | 'safeguard
         },
         {
           heading: "7. Third-Party Processors",
-          body: "We share personal data with the following third-party processors who act on our behalf: Stripe — for secure payment processing. Stripe's privacy policy governs their handling of your payment data. Hosting and infrastructure providers — to host and deliver the Service. We ensure all third-party processors provide adequate data protection safeguards. We do not sell, rent or trade your personal data to any third party for their own marketing purposes."
+          body: "We share personal data with the following third-party processors who act on our behalf: Stripe — for secure payment processing. Stripe's privacy policy governs their handling of your payment data. Resend — for transactional and service email delivery. When we send you an email, your email address and the email content are processed by Resend (resend.com) on our behalf. Resend acts as a data processor under our instruction and does not use your data for their own purposes. Their privacy policy is available at resend.com/legal/privacy-policy. Hosting and infrastructure providers — to host and deliver the Service. We ensure all third-party processors provide adequate data protection safeguards and have appropriate data processing agreements in place. We do not sell, rent or trade your personal data to any third party for their own marketing purposes."
         },
         {
           heading: "8. Data Retention",
-          body: "We retain your personal data for as long as your account is active or as needed to provide the Service. If you close your account, we will delete or anonymise your personal data within 90 days, except where we are required to retain it for legal, accounting or regulatory purposes. Assessment data may be retained in anonymised form for the purpose of improving our readiness models."
+          body: "We retain your personal data for as long as your account is active or as needed to provide the Service. Password reset tokens are temporary and expire automatically after 1 hour; they are deleted from our systems once used or expired. Email delivery logs are retained for up to 12 months to manage communication frequency and troubleshoot delivery issues. If you close your account, we will delete or anonymise your personal data within 90 days, except where we are required to retain it for legal, accounting or regulatory purposes. Assessment data may be retained in anonymised form for the purpose of improving our readiness models."
         },
         {
           heading: "9. Your Rights Under UK GDPR",
