@@ -1,6 +1,7 @@
 import { Link, useLocation, useSearch } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle, Loader2, ArrowRight, Target, TrendingUp, BarChart3, Eye, Shield, HelpCircle, ChevronDown, AlertTriangle, BookOpen, Clock, Sparkles, Lock, Zap, SlidersHorizontal } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 import { useAuth } from "../lib/auth";
