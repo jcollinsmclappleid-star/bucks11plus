@@ -562,7 +562,6 @@ export default function Pricing() {
                     <span className="text-5xl font-bold text-primary">£249</span>
                     <span className="text-muted-foreground font-medium"> one-time</span>
                   </div>
-                  <p className="text-sm text-brand-primary/70 mb-4 font-medium bg-blue-50 px-3 py-1.5 rounded inline-block">Launch price (future price £349)</p>
                   <p className="text-sm text-slate-600 mb-6 leading-relaxed">
                     Everything in Practice Platform plus a structured roadmap, mock exams, milestone tracking, and weekly plans. 12 months of full access.
                   </p>
