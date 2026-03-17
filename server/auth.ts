@@ -148,7 +148,15 @@ export function setupAuth(app: Express) {
         return res.status(400).json({ message: "Email is required" });
       }
 
-      const [user] = await db.select().from(users).where(eq(users.email, email.toLowerCase().trim()));
+      const normalizedEmail = email.toLowerCase().trim();
+      const results = await db.select().from(users).where(
+        eq(users.username, normalizedEmail)
+      );
+      let user = results[0];
+      if (!user) {
+        const byEmail = await db.select().from(users).where(eq(users.email, normalizedEmail));
+        user = byEmail[0];
+      }
 
       if (user) {
         const token = randomBytes(32).toString("hex");
