@@ -3,9 +3,8 @@ import Stripe from 'stripe';
 let connectionSettings: any;
 
 async function getCredentials() {
-  // First, try to use environment variables
   const publishableKey = process.env.STRIPE_PUBLISHABLE_KEY;
-  const secretKey = process.env.STRIPE_SECRET_KEY;
+  const secretKey = process.env.STRIPE_SECRET_KEY || process.env.SLACK_LIVE_API_KEY2;
 
   if (publishableKey && secretKey) {
     return { publishableKey, secretKey };
