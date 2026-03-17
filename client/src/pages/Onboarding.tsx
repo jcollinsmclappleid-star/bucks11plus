@@ -47,7 +47,10 @@ export default function Onboarding() {
       try {
         await apiRequest("PUT", "/api/user/onboarding", formData);
         await queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
-        if (redirectParam === "checkout" && tierParam) {
+        const sessionIdParam = searchParams.get("session_id");
+        if (redirectParam === "checkout" && tierParam && sessionIdParam) {
+          setLocation(`/app/checkout-success?tier=${tierParam}&session_id=${sessionIdParam}`);
+        } else if (redirectParam === "checkout" && tierParam) {
           setLocation(`/pricing?autoCheckout=${tierParam}`);
         } else if (isEarlyYear && user?.subscriptionTier === "early_learner") {
           setLocation("/app/early-dashboard");

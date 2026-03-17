@@ -38,7 +38,10 @@ export default function SignUp() {
         }
       }
 
-      if (redirectParam === "checkout" && tierParam) {
+      const sessionIdParam = params.get("session_id");
+      if (redirectParam === "checkout" && tierParam && sessionIdParam) {
+        setLocation(`/app/onboarding?redirect=checkout&tier=${tierParam}&session_id=${sessionIdParam}`);
+      } else if (redirectParam === "checkout" && tierParam) {
         setLocation(`/app/onboarding?redirect=checkout&tier=${tierParam}`);
       } else {
         setLocation("/app/onboarding");
