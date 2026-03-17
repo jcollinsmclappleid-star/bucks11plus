@@ -1,11 +1,34 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "../../lib/auth";
 import ChildSwitcher from "./ChildSwitcher";
+import { Menu, X } from "lucide-react";
+import { useState } from "react";
 
 export default function Navbar() {
   const [location] = useLocation();
   const { user, logout, isProgramme } = useAuth();
+  const [open, setOpen] = useState(false);
+
+  const navLinks = [
+    { href: "/app", label: "Dashboard", show: true },
+    { href: "/app/diagnostic", label: "Diagnostics", show: true, matchPrefix: true },
+    { href: "/app/practice", label: "Practice", show: true, matchPrefix: true },
+    { href: "/app/badges", label: "Accomplishments", show: true },
+    { href: "/app/progress", label: "Progress", show: true },
+    { href: "/app/report-archive", label: "Reports", show: true },
+    { href: "/app/programme", label: "Programme", show: !!user && isProgramme() },
+    { href: "/app/analytics", label: "Analytics", show: !!user && isProgramme() },
+    { href: "/app/account", label: "Account", show: !!user },
+    { href: "/pricing", label: "Pricing", show: true },
+    { href: "/parent-guide", label: "Parent Guide", show: true },
+  ];
+
+  const isActive = (href: string, matchPrefix?: boolean) => {
+    if (matchPrefix) return location.startsWith(href);
+    return location === href;
+  };
 
   return (
     <header className="border-b border-border/40 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 sticky top-0 z-50">
@@ -26,13 +49,12 @@ export default function Navbar() {
           </div>
         </Link>
 
-        <nav className="flex items-center gap-4 lg:gap-6">
-          <Link href="/app" className={`text-sm font-medium transition-colors hidden sm:block ${location === '/app' ? 'text-primary' : 'text-slate-600 hover:text-primary'}`} data-testid="link-dashboard">Dashboard</Link>
-          <Link href="/app/diagnostic" className={`text-sm font-medium transition-colors hidden sm:block ${location.startsWith('/app/diagnostic') ? 'text-primary' : 'text-slate-600 hover:text-primary'}`} data-testid="link-diagnostics">Diagnostics</Link>
-          <Link href="/app/practice" className={`text-sm font-medium transition-colors hidden sm:block ${location.startsWith('/app/practice') ? 'text-primary' : 'text-slate-600 hover:text-primary'}`} data-testid="link-practice">Practice</Link>
-          <Link href="/app/badges" className={`text-sm font-medium transition-colors hidden md:block ${location === '/app/badges' ? 'text-primary' : 'text-slate-600 hover:text-primary'}`} data-testid="link-badges">Accomplishments</Link>
-          <Link href="/app/progress" className={`text-sm font-medium transition-colors hidden md:block ${location === '/app/progress' ? 'text-primary' : 'text-slate-600 hover:text-primary'}`} data-testid="link-progress">Progress</Link>
-          <Link href="/app/report-archive" className={`text-sm font-medium transition-colors hidden lg:block ${location === '/app/report-archive' ? 'text-primary' : 'text-slate-600 hover:text-primary'}`} data-testid="link-reports">Reports</Link>
+        <nav className="hidden md:flex items-center gap-4 lg:gap-6">
+          <Link href="/app" className={`text-sm font-medium transition-colors ${isActive('/app') ? 'text-primary' : 'text-slate-600 hover:text-primary'}`} data-testid="link-dashboard">Dashboard</Link>
+          <Link href="/app/diagnostic" className={`text-sm font-medium transition-colors ${isActive('/app/diagnostic', true) ? 'text-primary' : 'text-slate-600 hover:text-primary'}`} data-testid="link-diagnostics">Diagnostics</Link>
+          <Link href="/app/practice" className={`text-sm font-medium transition-colors ${isActive('/app/practice', true) ? 'text-primary' : 'text-slate-600 hover:text-primary'}`} data-testid="link-practice">Practice</Link>
+          <Link href="/app/progress" className={`text-sm font-medium transition-colors ${isActive('/app/progress') ? 'text-primary' : 'text-slate-600 hover:text-primary'}`} data-testid="link-progress">Progress</Link>
+          <Link href="/app/report-archive" className={`text-sm font-medium transition-colors hidden lg:block ${isActive('/app/report-archive') ? 'text-primary' : 'text-slate-600 hover:text-primary'}`} data-testid="link-reports">Reports</Link>
 
           {!user ? (
             <div className="flex items-center gap-2 ml-2">
@@ -47,12 +69,12 @@ export default function Navbar() {
             <div className="flex items-center gap-4">
               {isProgramme() && (
                 <>
-                  <Link href="/app/programme" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors hidden sm:block" data-testid="link-programme">Programme</Link>
-                  <Link href="/app/analytics" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors hidden sm:block" data-testid="link-analytics-nav">Analytics</Link>
+                  <Link href="/app/programme" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors" data-testid="link-programme">Programme</Link>
+                  <Link href="/app/analytics" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors" data-testid="link-analytics-nav">Analytics</Link>
                 </>
               )}
               <ChildSwitcher />
-              <Link href="/app/account" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors hidden md:block" data-testid="link-account">
+              <Link href="/app/account" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors" data-testid="link-account">
                 {user.childName || user.username}
               </Link>
               {user.isAdmin && (
@@ -69,6 +91,88 @@ export default function Navbar() {
             </div>
           )}
         </nav>
+
+        <div className="flex items-center gap-2 md:hidden">
+          {!user && (
+            <Button size="sm" asChild className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm text-xs" data-testid="link-free-diagnostic-mobile">
+              <Link href="/free-diagnostic">Free Diagnostic</Link>
+            </Button>
+          )}
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-9 w-9" data-testid="button-mobile-menu">
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-72 p-0">
+              <div className="flex flex-col h-full">
+                <div className="p-4 border-b border-border/40">
+                  <div className="flex items-center gap-3">
+                    <div className="flex flex-col leading-none">
+                      <span className="font-serif font-bold text-lg text-primary tracking-tight">11+ Standard</span>
+                      {user && (
+                        <span className="text-xs text-muted-foreground mt-1">{user.childName || user.username}</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <nav className="flex-1 overflow-y-auto p-4 space-y-1">
+                  {navLinks.filter(l => l.show).map(link => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className={`block px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                        isActive(link.href, link.matchPrefix)
+                          ? 'bg-primary/10 text-primary'
+                          : 'text-slate-700 hover:bg-slate-100'
+                      }`}
+                      onClick={() => setOpen(false)}
+                      data-testid={`link-mobile-${link.label.toLowerCase().replace(/\s/g, '-')}`}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                  {user?.isAdmin && (
+                    <Link
+                      href="/admin/questions"
+                      className="block px-3 py-2.5 rounded-lg text-sm font-medium text-amber-600 hover:bg-amber-50 transition-colors"
+                      onClick={() => setOpen(false)}
+                      data-testid="link-mobile-admin"
+                    >
+                      Admin
+                    </Link>
+                  )}
+                </nav>
+
+                <div className="p-4 border-t border-border/40 space-y-2">
+                  {user ? (
+                    <>
+                      <ChildSwitcher />
+                      <Button
+                        variant="outline"
+                        className="w-full"
+                        onClick={() => { logout(); setOpen(false); }}
+                        data-testid="button-mobile-signout"
+                      >
+                        Sign Out
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button className="w-full" asChild>
+                        <Link href="/sign-in" onClick={() => setOpen(false)}>Sign In</Link>
+                      </Button>
+                      <Button variant="outline" className="w-full" asChild>
+                        <Link href="/sign-up" onClick={() => setOpen(false)}>Create Account</Link>
+                      </Button>
+                    </>
+                  )}
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
     </header>
   );
