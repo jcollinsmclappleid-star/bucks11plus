@@ -35,6 +35,10 @@ async function initStripe() {
     if (domain) {
       const webhookUrl = `https://${domain}/api/stripe/webhook`;
       try {
+        const { Pool } = await import('pg');
+        const pool = new Pool({ connectionString: databaseUrl });
+        await pool.query(`DELETE FROM stripe._managed_webhooks WHERE url != $1`, [webhookUrl]);
+        await pool.end();
         const result = await stripeSync.findOrCreateManagedWebhook(webhookUrl);
         console.log(`Webhook configured: ${result?.webhook?.url || webhookUrl}`);
       } catch (webhookErr: any) {
@@ -44,9 +48,12 @@ async function initStripe() {
       console.warn('No domain found, skipping webhook registration');
     }
 
-    stripeSync.syncBackfill()
-      .then(() => console.log('Stripe data synced'))
-      .catch((err: any) => console.error('Error syncing Stripe data:', err));
+    try {
+      await stripeSync.syncBackfill();
+      console.log('Stripe data synced');
+    } catch (syncErr: any) {
+      console.error('Error syncing Stripe data:', syncErr.message);
+    }
   } catch (error) {
     console.error('Failed to initialize Stripe:', error);
   }
