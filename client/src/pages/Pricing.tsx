@@ -68,17 +68,23 @@ export default function Pricing() {
     }
   }, [user, search]);
 
+  const [error, setError] = useState<string | null>(null);
+
   const handleCheckout = async (tier: string) => {
     setLoading(tier);
+    setError(null);
     try {
       const endpoint = user ? "/api/checkout" : "/api/guest/checkout";
       const res = await apiRequest("POST", endpoint, { tier });
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
+      } else {
+        setError(data.message || "Could not start checkout. Please try again.");
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Checkout error:", err);
+      setError(err?.message || "An error occurred. Please try again.");
     } finally {
       setLoading(null);
     }
@@ -321,6 +327,15 @@ export default function Pricing() {
             </Card>
           </div>
         </section>
+      )}
+
+      {error && (
+        <div className="container mx-auto max-w-4xl px-4 mt-4">
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center gap-2" data-testid="text-checkout-error">
+            <AlertTriangle className="h-5 w-5 shrink-0" />
+            <span>{error}</span>
+          </div>
+        </div>
       )}
 
       <section className="py-20 md:py-28 bg-slate-50 border-b border-border/30" id="tiers">
