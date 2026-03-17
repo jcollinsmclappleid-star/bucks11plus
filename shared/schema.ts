@@ -24,6 +24,7 @@ export const users = pgTable("users", {
   lastEmailSentAt: timestamp("last_email_sent_at"),
   passwordResetToken: text("password_reset_token"),
   passwordResetExpires: timestamp("password_reset_expires"),
+  targetSchool: text("target_school"),
 });
 
 export const diagnostics = pgTable("diagnostics", {
@@ -229,6 +230,7 @@ export const childProfiles = pgTable("child_profiles", {
   childYear: text("child_year").notNull(),
   practiceHours: text("practice_hours"),
   difficultyAreas: text("difficulty_areas").array(),
+  targetSchool: text("target_school"),
   stage: text("stage").notNull().default("exploring"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
@@ -264,6 +266,7 @@ export const onboardingSchema = z.object({
   childYear: z.string().min(1),
   practiceHours: z.string().min(1),
   difficultyAreas: z.array(z.string()),
+  targetSchool: z.string().optional(),
 });
 
 export const insertDiagnosticSchema = createInsertSchema(diagnostics);

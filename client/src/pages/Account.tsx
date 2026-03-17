@@ -20,6 +20,7 @@ export default function Account() {
   const [addingChild, setAddingChild] = useState(false);
   const [newChildName, setNewChildName] = useState("");
   const [newChildYear, setNewChildYear] = useState("Year 5");
+  const [newChildSchool, setNewChildSchool] = useState("");
   const [examDate, setExamDate] = useState("");
 
   const { data: profiles = [] } = useQuery<any[]>({
@@ -37,6 +38,7 @@ export default function Account() {
       const res = await apiRequest("POST", "/api/child-profiles", {
         childName: newChildName,
         childYear: newChildYear,
+        targetSchool: newChildSchool || undefined,
       });
       return res.json();
     },
@@ -45,6 +47,7 @@ export default function Account() {
       queryClient.invalidateQueries({ queryKey: ["/api/user"] });
       setAddingChild(false);
       setNewChildName("");
+      setNewChildSchool("");
       toast({ title: "Child profile added" });
     },
   });
@@ -303,6 +306,17 @@ export default function Account() {
                         <option>Year 4</option>
                         <option>Year 5</option>
                         <option>Year 6</option>
+                      </select>
+                      <select
+                        value={newChildSchool}
+                        onChange={(e) => setNewChildSchool(e.target.value)}
+                        className="w-full px-3 py-2 rounded-md border text-sm"
+                        data-testid="select-account-new-child-school"
+                      >
+                        <option value="">Target school (optional)</option>
+                        {["Aylesbury Grammar School","Aylesbury High School","Beaconsfield High School","Burnham Grammar School","Chesham Grammar School","Dr Challoner's Grammar School","Dr Challoner's High School","John Hampden Grammar School","Royal Grammar School (High Wycombe)","Royal Latin School","Sir Henry Floyd Grammar School","Sir William Borlase's Grammar School","Wycombe High School","Not sure yet","Other"].map(s => (
+                          <option key={s} value={s}>{s}</option>
+                        ))}
                       </select>
                       <div className="flex gap-2">
                         <Button

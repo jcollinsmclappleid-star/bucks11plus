@@ -127,6 +127,7 @@ export class DatabaseStorage implements IStorage {
         childYear: data.childYear,
         practiceHours: data.practiceHours,
         difficultyAreas: data.difficultyAreas,
+        targetSchool: data.targetSchool || null,
         onboardingCompleted: true,
       })
       .where(eq(users.id, userId))
