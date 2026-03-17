@@ -52,7 +52,7 @@ function DemoCard({ title, description, testId, children, tierLabel }: { title: 
 }
 
 export default function Pricing() {
-  const { user } = useAuth();
+  const { user, isLoading } = useAuth();
   const [, navigate] = useLocation();
   const search = useSearch();
   const [loading, setLoading] = useState<string | null>(null);
@@ -62,11 +62,11 @@ export default function Pricing() {
   useEffect(() => {
     const params = new URLSearchParams(search);
     const autoTier = params.get("autoCheckout");
-    if (autoTier && user && !autoCheckoutTriggered.current) {
+    if (autoTier && !autoCheckoutTriggered.current && !isLoading) {
       autoCheckoutTriggered.current = true;
       handleCheckout(autoTier);
     }
-  }, [user, search]);
+  }, [user, search, isLoading]);
 
   const [error, setError] = useState<string | null>(null);
 

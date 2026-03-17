@@ -466,7 +466,7 @@ export default function Landing() {
                 ))}
               </ul>
               <Button variant="outline" className="w-full mt-6 h-11 text-sm font-semibold" asChild data-testid="button-included-early">
-                <Link href="/pricing#tiers">Get Early Learner</Link>
+                <Link href="/pricing?autoCheckout=early_learner">Get Early Learner</Link>
               </Button>
             </div>
 
@@ -490,7 +490,7 @@ export default function Landing() {
                 ))}
               </ul>
               <Button className="w-full mt-6 h-11 text-sm font-semibold bg-primary text-primary-foreground" asChild data-testid="button-included-pack">
-                <Link href="/pricing#tiers">Get Practice Platform</Link>
+                <Link href="/pricing?autoCheckout=pack12">Get Practice Platform</Link>
               </Button>
             </div>
 
@@ -519,7 +519,7 @@ export default function Landing() {
                 ))}
               </ul>
               <Button className="w-full mt-6 h-auto min-h-[2.75rem] py-2 text-sm font-bold bg-brand-amber text-white hover:bg-brand-amber/90 border-none whitespace-normal text-center leading-tight" asChild data-testid="button-included-programme">
-                <Link href="/pricing#tiers">Get Young Scholar Programme</Link>
+                <Link href="/pricing?autoCheckout=programme16">Get Young Scholar Programme</Link>
               </Button>
             </div>
           </div>
@@ -547,7 +547,7 @@ export default function Landing() {
                 For families who want a complete preparation plan aligned to the Bucks 11+. Includes diagnostics, targeted drills and milestone tracking.
               </p>
               <Button className="w-full h-12 text-sm font-semibold bg-primary text-primary-foreground" asChild data-testid="button-path-programme">
-                <Link href="/pricing#tiers">View Programme &amp; Enrol</Link>
+                <Link href="/pricing?autoCheckout=programme16">View Programme &amp; Enrol</Link>
               </Button>
             </div>
           </div>
