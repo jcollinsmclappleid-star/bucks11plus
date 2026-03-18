@@ -1,7 +1,7 @@
 import { Link, useParams, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { AlertCircle, Clock, CheckCircle2, Loader2 } from "lucide-react";
+import { AlertCircle, Clock, CheckCircle2, Info, Loader2 } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Diagnostic, TestSession } from "@shared/schema";
@@ -104,6 +104,14 @@ export default function DiagnosticStart() {
                 Do not help them with the answers. The forecast engine needs an honest baseline.
               </li>
             </ul>
+          </div>
+
+          <div className="flex items-start gap-3 rounded-lg bg-blue-50 border border-blue-200 px-4 py-3" data-testid="text-comp-timing-note">
+            <Info className="h-4 w-4 text-blue-600 mt-0.5 shrink-0" />
+            <p className="text-sm text-blue-800 leading-relaxed">
+              <span className="font-semibold">Comprehension sections have their own separate timer.</span>{" "}
+              When a reading passage appears, the main clock pauses and a dedicated reading countdown begins. Your child will see a "Begin Answering" button to move on when they're ready.
+            </p>
           </div>
 
           <div className="pt-6 border-t border-border/50 text-center">

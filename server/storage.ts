@@ -1004,7 +1004,35 @@ export class DatabaseStorage implements IStorage {
       [selected[i], selected[j]] = [selected[j], selected[i]];
     }
 
-    const finalSelected = selected.slice(0, limit);
+    let finalSelected = selected.slice(0, limit);
+
+    // For comprehension drills: regroup by passage and sort within each passage by questionIndex
+    // so the frontend receives contiguous passage blocks (passage 1 all, then passage 2 all, etc.)
+    if (skillFilter?.startsWith('comp.')) {
+      const passageMap = new Map<string, Question[]>();
+      for (const q of finalSelected) {
+        const pid = (q.renderConfig as any)?.passageId || q.subRuleId || '__none__';
+        if (!passageMap.has(pid)) passageMap.set(pid, []);
+        passageMap.get(pid)!.push(q);
+      }
+      for (const qs of passageMap.values()) {
+        qs.sort((a, b) => {
+          const idxA = (a.renderConfig as any)?.questionIndex ?? a.orderIndex;
+          const idxB = (b.renderConfig as any)?.questionIndex ?? b.orderIndex;
+          return idxA - idxB;
+        });
+      }
+      const seen = new Set<string>();
+      const reordered: Question[] = [];
+      for (const q of finalSelected) {
+        const pid = (q.renderConfig as any)?.passageId || q.subRuleId || '__none__';
+        if (!seen.has(pid)) {
+          seen.add(pid);
+          reordered.push(...(passageMap.get(pid) ?? []));
+        }
+      }
+      finalSelected = reordered.slice(0, limit);
+    }
 
     const now = new Date();
     for (const q of finalSelected) {

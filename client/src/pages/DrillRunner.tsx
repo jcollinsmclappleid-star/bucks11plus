@@ -8,7 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import type { Question } from "@shared/schema";
 import type { RenderConfig } from "@shared/contentTypes";
 import VisualPrompt from "../components/render/VisualPrompt";
-import { CheckCircle, XCircle, Timer } from "lucide-react";
+import { CheckCircle, XCircle, Timer, BookOpen } from "lucide-react";
 
 const LABELS = ["A", "B", "C", "D", "E", "F"];
 
@@ -307,9 +307,30 @@ export default function DrillRunner() {
   const totalQuestions = questions.length;
   const currentQuestionNumber = currentQuestionIndex + 1;
 
-  const renderType = (question.renderType || "text") as "text" | "svg" | "chart";
+  const renderType = (question.renderType || "text") as "text" | "svg" | "chart" | "comprehension";
   const renderConfig = question.renderConfig as RenderConfig | null;
   const isSvgWithVisualOptions = renderType === "svg" && renderConfig && "answerOptions" in renderConfig;
+
+  // Comprehension passage data
+  const rc = (question.renderConfig as any) || {};
+  const isCompQuestion = renderType === "comprehension";
+  const passageId = rc.passageId || "__none__";
+  const passageTitle = rc.passageTitle || "Reading Passage";
+  const passageText = rc.passageText || "";
+  const passageTheme = rc.passageTheme || "";
+
+  // Build ordered list of unique passage IDs for "Passage X of Y" label
+  const passageOrder: string[] = [];
+  const passageSeen = new Set<string>();
+  for (const q of questions) {
+    if (q.renderType === "comprehension") {
+      const pid = (q.renderConfig as any)?.passageId || "__none__";
+      if (!passageSeen.has(pid)) { passageSeen.add(pid); passageOrder.push(pid); }
+    }
+  }
+  const passageNumber = passageOrder.indexOf(passageId) + 1;
+  const totalPassages = passageOrder.length;
+  const showPassageLabel = isCompQuestion && totalPassages > 1;
 
   const getOptionClass = (opt: string) => {
     if (isTimed) return "option-button";
@@ -358,6 +379,30 @@ export default function DrillRunner() {
         </div>
 
         <div className="premium-card p-8 flex-1 flex flex-col question-fade-in" key={animKey}>
+          {isCompQuestion && passageText && (
+            <div className="mb-6 border border-slate-200 rounded-lg overflow-hidden" data-testid="comprehension-passage-drill">
+              <div className="flex items-center gap-2 px-4 py-2.5 bg-slate-100 border-b border-slate-200">
+                <BookOpen className="h-3.5 w-3.5 text-primary/60 shrink-0" />
+                <span className="text-xs font-bold uppercase tracking-wider text-primary/70 flex-1 truncate" data-testid="text-drill-passage-title">
+                  {passageTitle}
+                  {passageTheme && (
+                    <span className="ml-2 font-normal normal-case text-muted-foreground">· {passageTheme}</span>
+                  )}
+                </span>
+                {showPassageLabel && (
+                  <span className="text-xs font-medium text-muted-foreground shrink-0" data-testid="text-drill-passage-label">
+                    Passage {passageNumber} of {totalPassages}
+                  </span>
+                )}
+              </div>
+              <div className="max-h-64 overflow-y-auto p-5 bg-slate-50" data-testid="comprehension-passage-text-drill">
+                <p className="text-base leading-relaxed text-slate-700 font-serif italic whitespace-pre-line">
+                  {passageText}
+                </p>
+              </div>
+            </div>
+          )}
+
           <div className="mb-8">
             <p className="text-xl text-primary font-medium leading-relaxed tracking-[-0.01em]" data-testid="text-drill-prompt">
               {question.prompt}
