@@ -143,6 +143,10 @@ export default function Results() {
     queryKey: [`/api/test-sessions/${id}`],
     queryFn: getQueryFn({ on401: "throw" }),
     enabled: !!id,
+    refetchInterval: (query) => {
+      const s = (query.state.data) as TestSession | undefined;
+      return (s && !s.completedAt) ? 1500 : false;
+    },
   });
 
   const { data: programme } = useQuery<ProgrammeData>({
@@ -236,6 +240,15 @@ export default function Results() {
         <Button className="mt-4" asChild>
           <Link href="/app">Go to Dashboard</Link>
         </Button>
+      </div>
+    );
+  }
+
+  if (!session.completedAt) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <p className="text-muted-foreground">Saving your results…</p>
       </div>
     );
   }

@@ -28,6 +28,8 @@ export default function TestRunner() {
   const [svgSelectedIndex, setSvgSelectedIndex] = useState<number | null>(null);
   const [animKey, setAnimKey] = useState(0);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  // Guard against double-submit (last-question click + timer race, or timer firing twice)
+  const submitCalledRef = useRef(false);
 
   // Two-phase comprehension timer state
   const [compReadingActive, setCompReadingActive] = useState(false);
@@ -116,6 +118,7 @@ export default function TestRunner() {
         setLocation(`/free-results/${id}`);
       } else {
         queryClient.invalidateQueries({ queryKey: ["/api/test-sessions"] });
+        queryClient.invalidateQueries({ queryKey: [`/api/test-sessions/${id}`] });
         setLocation(`/app/results/${id}`);
       }
       if (isPractice) {
@@ -123,6 +126,7 @@ export default function TestRunner() {
       }
     },
     onError: (err: Error) => {
+      submitCalledRef.current = false;
       setSubmitError(err.message || "Submission failed. Please try again.");
     },
   });
@@ -141,6 +145,8 @@ export default function TestRunner() {
   submitMutationRef.current = submitMutation;
 
   const handleFinish = useCallback(() => {
+    if (submitCalledRef.current) return;
+    submitCalledRef.current = true;
     submitMutationRef.current.mutate(answersRef.current);
   }, []);
 
@@ -245,7 +251,10 @@ export default function TestRunner() {
       setQuestionStartTime(Date.now());
       setAnimKey(prev => prev + 1);
     } else {
-      submitMutation.mutate(newAnswers);
+      if (!submitCalledRef.current) {
+        submitCalledRef.current = true;
+        submitMutation.mutate(newAnswers);
+      }
     }
   }, [questions, currentQuestionIndex, questionStartTime, answers, submitMutation]);
 
@@ -288,7 +297,21 @@ export default function TestRunner() {
     );
   }
 
-  const question = questions![currentQuestionIndex];
+  if (!questions || questions.length === 0) {
+    return (
+      <div className="min-h-screen exam-paper-bg flex items-center justify-center">
+        <div className="text-center space-y-4 p-8 max-w-md">
+          <h2 className="text-xl font-semibold text-primary">Unable to load questions</h2>
+          <p className="text-muted-foreground">There was a problem preparing your test. Please go back and try again.</p>
+          <Button onClick={() => setLocation("/app/diagnostics")} data-testid="button-back-diagnostics">
+            Back to Diagnostics
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  const question = questions[currentQuestionIndex];
   const totalQuestions = questions!.length;
   const currentQuestionNumber = currentQuestionIndex + 1;
 
