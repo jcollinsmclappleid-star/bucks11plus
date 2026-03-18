@@ -1,0 +1,334 @@
+# Pricing Model Update
+
+Replace any existing pricing logic with the following exact structure.
+This covers tiers, prices, access durations, feature gating, Stripe checkout,
+auth helpers, and the pricing page UI.
+
+---
+
+## PART 1 — Tier Structure
+
+There are three ranks. Every user has a `subscriptionTier` string on their record.
+
+  RANK 0 (Free / no paid access):
+    "free"          — default for all new accounts
+    "early_learner" — special cohort (younger children), same access as free
+                      but hard questions are suppressed in pool selection
+
+  RANK 1 (Flexible paid access — Practice Platform):
+    "pack_monthly"  — £24.99/month recurring Stripe subscription
+    "pack12"        — legacy one-time (keep in valid tiers list, do not show on page)
+    "pack12_family" — legacy family one-time (keep in valid tiers list only)
+
+  RANK 2 (Structured paid access — Young Scholar Programmes):
+    "programme8"         — £59  one-time, 8 weeks
+    "programme12"        — £89  one-time, 12 weeks
+    "programme24_plus"   — £149 one-time, 24 weeks  ← shown on pricing page
+    "programme16"        — £249 one-time, 52 weeks  ← legacy/school year, keep valid
+    "programme16_family" — £349 one-time, 52 weeks  ← legacy family, keep valid
+
+---
+
+## PART 2 — Access Duration (weeks from purchase)
+
+  early_learner:       26 weeks
+  pack12:              26 weeks
+  pack12_family:       26 weeks
+  pack_monthly:         5 weeks  (rolling — extended on each successful renewal)
+  programme8:           8 weeks
+  programme12:         12 weeks
+  programme16:         52 weeks
+  programme16_family:  52 weeks
+  programme24_plus:    24 weeks
+
+On checkout success, set expiresAt = now + (weeks × 7 × 24 × 60 × 60 × 1000).
+
+---
+
+## PART 3 — Stripe Checkout
+
+pack_monthly is a recurring SUBSCRIPTION. All other tiers are one-time PAYMENTS.
+
+  const isSubscription = tier === "pack_monthly";
+
+  stripe.checkout.sessions.create({
+    mode: isSubscription ? "subscription" : "payment",
+    payment_method_types: ["card"],
+    line_items: [{ price: priceId, quantity: 1 }],
+    success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url:  `${origin}/pricing`,
+    metadata: { userId, tier },
+  });
+
+Look up priceId from Stripe by matching tier to the product metadata field
+(store tier name in the Stripe product's metadata so it can be found dynamically).
+
+Prices in pence (GBP) for fallback inline price_data if no Stripe product found:
+
+  pack_monthly:      2499   (£24.99)
+  programme8:        5900   (£59)
+  programme12:       8900   (£89)
+  programme16:      24900   (£249)
+  programme16_family: 34900 (£349)
+  programme24_plus: 14900   (£149)
+
+---
+
+## PART 4 — Checkout Success Handler
+
+On /api/checkout/success (or webhook equivalent):
+
+  1. Verify payment_status === "paid" (or subscription status === "active")
+  2. Retrieve tier from checkoutSession.metadata.tier
+  3. Validate tier is in the allowed list
+  4. Compute expiresAt using weeksMap above
+  5. Call storage.updateUserSubscription(userId, tier, expiresAt)
+  6. If tier is a programme tier (programme8/12/16/24_plus), call
+     storage.createProgrammeEnrolment(userId) if one doesn't already exist
+  7. Return updated user record
+
+Valid tiers list for server-side validation:
+  ["pack_monthly", "programme8", "programme12", "programme24_plus",
+   "early_learner", "pack12", "pack12_family", "programme16", "programme16_family"]
+
+---
+
+## PART 5 — Upgrade Route
+
+Allow users to upgrade from a lower tier to a higher one.
+Block downgrades (newRank <= currentRank) unless the checkout session has
+upgradeFrom metadata set (indicating a deliberate upgrade flow).
+
+Allowed upgrade paths:
+
+  pack12        → programme16, programme12, programme24_plus
+  pack12_family → programme16_family
+  pack_monthly  → programme8, programme12, programme24_plus
+  programme8    → programme12, programme24_plus
+  programme12   → programme24_plus
+
+For upgrades, create a new checkout session with:
+  metadata: { userId, tier: targetTier, upgradeFrom: currentTier }
+
+---
+
+## PART 6 — Tier Rank Map (use everywhere consistently)
+
+  const TIER_RANK: Record<string, number> = {
+    free: 0, early_learner: 0,
+    pack12: 1, pack12_family: 1, pack_monthly: 1,
+    programme8: 2, programme12: 2, programme16: 2,
+    programme16_family: 2, programme24_plus: 2,
+  };
+
+---
+
+## PART 7 — Auth Helper Functions
+
+Export these from the auth context so components can gate features without
+repeating tier string comparisons:
+
+  const isEarlyLearner = () =>
+    user?.subscriptionTier === "early_learner";
+
+  const isPack12 = () => {
+    const t = user?.subscriptionTier;
+    return t === "pack12" || t === "pack12_family" || t === "pack_monthly";
+  };
+
+  const isProgramme = () => {
+    const t = user?.subscriptionTier;
+    return t === "programme8"  || t === "programme12"      ||
+           t === "programme16" || t === "programme16_family" ||
+           t === "programme24_plus";
+  };
+
+  const hasPaidAccess = () => {
+    const t = user?.subscriptionTier;
+    return t === "pack12"      || t === "pack12_family"    ||
+           t === "pack_monthly" || t === "early_learner"   ||
+           t === "programme8"  || t === "programme12"      ||
+           t === "programme16" || t === "programme16_family" ||
+           t === "programme24_plus";
+  };
+
+  const isFamilyTier = () =>
+    user?.subscriptionTier?.includes("family") ?? false;
+
+  const tierLabel = () => {
+    switch (user?.subscriptionTier) {
+      case "early_learner":      return "Early Learner";
+      case "pack12":             return "Practice Platform";
+      case "pack12_family":      return "Practice Platform (Family)";
+      case "pack_monthly":       return "Practice Platform";
+      case "programme8":         return "Young Scholar Programme (8 Weeks)";
+      case "programme12":        return "Young Scholar Programme (12 Weeks)";
+      case "programme16":        return "Young Scholar Programme";
+      case "programme16_family": return "Young Scholar Programme (Family)";
+      case "programme24_plus":   return "Young Scholar Programme+";
+      default:                   return "Free";
+    }
+  };
+
+---
+
+## PART 8 — Content Gating (requiredTier on practice sections)
+
+Use these string values in the requiredTier column/field on practice sections
+and diagnostics to control access:
+
+  "free"        → visible to everyone including guests
+  "pack12"      → requires hasPaidAccess() — Rank 1 or above
+  "programme12" → requires isProgramme() — Rank 2 only
+  "programme16" → requires isProgramme() — Rank 2 only (premium content)
+
+Hard-difficulty drills:
+  pack_monthly / pack12 users get SELECT hard drills only
+  programme users get ALL hard drills unlocked
+
+In the server route that serves practice section questions, check:
+
+  const TIER_RANK = { free: 0, early_learner: 0, pack12: 1, pack12_family: 1,
+    pack_monthly: 1, programme8: 2, programme12: 2, programme16: 2,
+    programme16_family: 2, programme24_plus: 2 };
+
+  const userRank = TIER_RANK[user.subscriptionTier] || 0;
+  const requiredRank = TIER_RANK[section.requiredTier] || 0;
+  if (userRank < requiredRank) {
+    return res.status(403).json({ message: "Upgrade required" });
+  }
+
+---
+
+## PART 9 — Pricing Page UI
+
+Show four cards to unauthenticated or free users. A toggle above lets the user
+filter between "All Plans", "Flexible Access", and "Structured Programmes".
+
+### Toggle
+
+  const [viewMode, setViewMode] = useState<"all" | "flexible" | "structured">("all");
+
+  Show the toggle only when the user has no paid access. Hidden for paid users.
+
+### Card 1 — Free Diagnostic  (shown in Flexible Access group)
+  Price:    £0
+  Tier:     none (no checkout)
+  CTA:      "Start Free Test" → /free-diagnostic
+  Features: 1 full timed diagnostic, instant score, basic subject breakdown,
+            sample practice drill
+
+### Card 2 — Practice Platform  (shown in Flexible Access group, MOST POPULAR badge)
+  Price:    £24.99/month
+  Tier:     pack_monthly
+  CTA:      "Start Monthly Plan" → handleCheckout("pack_monthly")
+  Note:     "Cancel anytime" / "Most families use this for 3–6 months"
+  Features: Unlimited Easy & Medium tests, select Hard challenge drills,
+            full subject breakdown, progress tracking, cancel anytime
+
+### Card 3 — Young Scholar 8 Weeks  (shown in Structured Programmes group)
+  Price:    £59
+  Tier:     programme8
+  CTA:      "Join 8 Week Programme" → handleCheckout("programme8")
+  Features: All Hard drills & tests unlocked, guided weekly roadmap,
+            2 milestone diagnostics, weekly task plans,
+            progress tracking, parent dashboard
+
+### Card 4 — Young Scholar 12 Weeks  (shown in Structured Programmes group)
+  Price:    £89
+  Tier:     programme12
+  CTA:      "Join 12 Week Programme" → handleCheckout("programme12")
+  Features: All Hard drills & tests unlocked, guided weekly roadmap,
+            4 milestone diagnostics, weekly task plans,
+            mock exam simulation, parent performance dashboard,
+            accomplishments & gamification
+
+### Card 5 — Young Scholar Programme+  (shown in Structured Programmes group, PREMIUM badge)
+  Price:    £149
+  Tier:     programme24_plus
+  CTA:      "Join Programme+" → handleCheckout("programme24_plus")
+  Badge:    Amber "PREMIUM" banner with Crown icon, amber top border stripe
+  Features: All Hard drills & tests unlocked, guided weekly roadmap,
+            6 milestone diagnostics, additional mock exams,
+            advanced performance analytics, weakness targeting engine,
+            exam readiness score, priority access to new tests,
+            premium parent insights dashboard
+
+### Auto-checkout via URL param
+
+  useEffect(() => {
+    const autoTier = new URLSearchParams(search).get("autoCheckout");
+    if (autoTier && !triggered.current && !isLoading) {
+      triggered.current = true;
+      handleCheckout(autoTier);
+    }
+  }, [user, search, isLoading]);
+
+  This allows deep-linking to /pricing?autoCheckout=pack_monthly from the results
+  page or any CTA, automatically triggering Stripe checkout without an extra click.
+
+### Logged-in paid users
+
+  If hasPaidAccess() is true, hide the toggle and show the user's current plan
+  highlighted, with available upgrade options shown below.
+
+  If the user is on the top tier (programme24_plus, programme16, programme16_family),
+  show a "You're on the complete programme" banner instead of upgrade cards.
+
+---
+
+## PART 10 — FAQ Section
+
+Include these five questions on the pricing page:
+
+  Q: What's the difference between the monthly subscription and a programme?
+  A: The monthly subscription gives you full platform access — unlimited practice
+     tests, diagnostics, progress tracking and subject breakdowns. Programmes add
+     a structured layer on top: a guided weekly roadmap, milestone diagnostics,
+     task plans, and parent analytics. Think of it as flexible practice vs guided
+     preparation.
+
+  Q: Do programme plans include full platform access?
+  A: Yes. Every programme plan includes everything in the Practice Platform —
+     unlimited tests, full subject breakdowns, and progress tracking — plus the
+     structured roadmap and advanced features.
+
+  Q: Can I switch from the monthly plan to a programme later?
+  A: Absolutely. You can upgrade from the monthly subscription to any programme at
+     any time, and you'll only pay the difference. Many families start with the
+     monthly plan to try the platform, then move to a programme when they're ready
+     for structured preparation.
+
+  Q: How long do most families stay on the platform?
+  A: Most families use the platform for 3–6 months leading up to the 11+ exam. The
+     12-week programme is our most popular structured option, while the 24-week
+     Programme+ gives maximum runway for thorough preparation.
+
+  Q: Is this affiliated with GL Assessment?
+  A: No. This is an independent readiness assessment platform. Our content is
+     aligned to GL Assessment-style reasoning formats used in the 11+ exam, but we
+     are not affiliated with GL Assessment or any grammar school.
+
+---
+
+## PART 11 — Navigation Gating
+
+In the navbar, show programme-specific links only for programme users:
+
+  { href: "/app/programme", label: "Programme", show: !!user && isProgramme() },
+  { href: "/app/analytics", label: "Analytics", show: !!user && isProgramme() },
+
+---
+
+## Summary Reference Table
+
+  Tier               | Display Name                      | Price     | Duration | Rank
+  -------------------|-----------------------------------|-----------|----------|------
+  free               | Free                              | £0        | —        | 0
+  early_learner      | Early Learner                     | special   | 26 wks   | 0
+  pack_monthly       | Practice Platform                 | £24.99/mo | rolling  | 1
+  pack12 (legacy)    | Practice Platform                 | legacy    | 26 wks   | 1
+  programme8         | Young Scholar Programme (8 Weeks) | £59       | 8 wks    | 2
+  programme12        | Young Scholar Programme (12 Weeks)| £89       | 12 wks   | 2
+  programme24_plus   | Young Scholar Programme+          | £149      | 24 wks   | 2
+  programme16 (leg.) | Young Scholar Programme           | £249      | 52 wks   | 2

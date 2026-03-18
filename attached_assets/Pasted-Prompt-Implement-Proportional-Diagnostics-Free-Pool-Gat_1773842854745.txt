@@ -1,0 +1,304 @@
+Prompt: Implement Proportional Diagnostics + Free Pool Gating (GL-only / Buckinghamshire App)
+Context
+This app serves only GL Assessment questions, targeting Buckinghamshire 11+ selective schools. The benchmark is the 121 standardised score pass threshold. The question bank contains questions across four sections: Verbal Reasoning, Mathematics, Non-Verbal Reasoning, and English Comprehension (GL passages only, typically 7–15 questions per passage). There is no CEM board — all comprehension questions share a single GL exam board tag.
+
+The goal is to implement two things from the reference implementation:
+
+Proportional section weighting — diagnostic and practice sessions assemble questions in proportions matching the real GL exam, not randomly.
+Free pool gating — unauthenticated/guest users are restricted to a small curated subset of the question bank, creating a conversion incentive to sign up.
+Part 1 — Schema: Add free_pool Column
+In shared/schema.ts, add a boolean column to the questions table:
+
+freePool: boolean("free_pool").notNull().default(false),
+After adding it, run npm run db:push to apply the change to the database.
+
+Part 2 — Core Selection Logic: selectPoolQuestions
+Replace or implement the selectPoolQuestions private method in server/storage.ts with the following logic exactly. Read each comment carefully — there are subtle ordering and ceiling dependencies.
+
+2a. Section weights (GL exam proportions)
+const SECTION_WEIGHTS: Record<string, number> = {
+  "Verbal Reasoning":      0.35,  // GL weights VR heaviest (~35% of exam time)
+  "Mathematics":           0.25,
+  "Non-Verbal Reasoning":  0.25,
+  "English Comprehension": 0.15,  // target proportion only — actual count is ceiling-controlled
+};
+2b. Guest detection
+const isGuest = userId.startsWith('guest-');
+Guest userIds are injected by the guest diagnostic route as guest-${sessionId}. All authenticated users have standard UUID-format IDs and will never match this prefix.
+
+2c. Non-comp weight normalization
+The comprehension section is controlled by a separate ceiling formula (see 2e), so the per-section quota for non-comp sections must be normalized against their combined weight only — not the full 1.0. This prevents under-filling when comprehension consumes fewer slots than 15%:
+
+const nonCompSections = sections.filter(s => s !== 'English Comprehension');
+const nonCompTotalWeight = nonCompSections.reduce(
+  (sum, s) => sum + (SECTION_WEIGHTS[s] ?? 0.25), 0
+);
+// e.g. VR(0.35) + Math(0.25) + NVR(0.25) = 0.85
+// perSection('Verbal Reasoning') = ceil(count * 0.35/0.85) ≈ ceil(count * 0.412)
+const perSection = (section: string) =>
+  Math.ceil(count * ((SECTION_WEIGHTS[section] ?? 0.25) / nonCompTotalWeight));
+2d. Per-section DB query
+For each section, query the approved pool with these filters applied to the database (not in memory) for performance and correctness:
+
+let pool = await db.select().from(questions)
+  .where(and(
+    eq(questions.section, section),
+    eq(questions.qaStatus, "approved"),
+    sql`${questions.skillId} IS NOT NULL AND ${questions.skillId} != ''`,
+    // Guest users only see the curated free pool
+    isGuest ? eq(questions.freePool, true) : sql`TRUE`,
+    // Exclude IDs already committed to this session (from diagnostic-linked questions)
+    // (handled post-query via pool.filter())
+  ));
+if (excludeIds.length > 0) {
+  pool = pool.filter(q => !excludeIds.includes(q.id));
+}
+Since this is GL-only, you do not need a multi-board examBoard filter. If you have questions with an examBoard column, you can add WHERE exam_board = '{}' OR exam_board @> ARRAY['GL']::text[] but since every question is GL, this is optional.
+
+2e. Comprehension: passage-atomic selection with ceiling
+Comprehension questions must always be served as complete passages — never a partial set. A user should never see question 4 of a passage without questions 1–3.
+
+if (section === "English Comprehension") {
+  // Group all candidates by passageId
+  const passageGroupsMap = new Map<string, Question[]>();
+  for (const q of pool) {
+    const rc = q.renderConfig as any;
+    const pid = rc?.passageId || q.subRuleId || '__none__';
+    if (!passageGroupsMap.has(pid)) passageGroupsMap.set(pid, []);
+    passageGroupsMap.get(pid)!.push(q);
+  }
+  // Sort each passage group by questionIndex
+  for (const qs of passageGroupsMap.values()) {
+    qs.sort((a, b) => {
+      const idxA = (a.renderConfig as any)?.questionIndex ?? a.orderIndex;
+      const idxB = (b.renderConfig as any)?.questionIndex ?? b.orderIndex;
+      return idxA - idxB;
+    });
+  }
+  // Shuffle passages for variety, then stable-sort ascending by size
+  // (prefers shorter passages so small diagnostics can fit at least one)
+  const sortedPassages = [...passageGroupsMap.values()]
+    .sort(() => Math.random() - 0.5)   // shuffle first
+    .sort((a, b) => a.length - b.length);  // then sort by size ascending
+  // Comprehension ceiling formula:
+  // Target 25% of the diagnostic total. But guarantee at least one complete
+  // passage fits, even in small diagnostics (e.g. 12-question free mini where
+  // 25% = 3 but the smallest passage is 7 questions).
+  const proportionalCeiling = Math.ceil(count * 0.25);
+  const smallestPassageSize = sortedPassages.length > 0 ? sortedPassages[0].length : Infinity;
+  const compCeiling = Math.max(proportionalCeiling, smallestPassageSize);
+  // Greedily accumulate complete passages from smallest to largest
+  const compResult: Question[] = [];
+  for (const qs of sortedPassages) {
+    if (compResult.length + qs.length <= compCeiling) {
+      compResult.push(...qs);
+    }
+    if (compResult.length >= compCeiling) break;
+  }
+  results.push(...compResult);
+  continue;
+}
+2f. Non-comp: difficulty-proportional selection + backfill
+For each non-comp section, draw from the pool using the session's difficulty profile (e.g. mini = 25/50/25, full = 20/45/35) and then do a proportional assembly pass rather than flat concatenation:
+
+const sectionTarget = perSection(section);
+const shuffled = pool.sort(() => Math.random() - 0.5);
+const easyCount  = Math.round(sectionTarget * adjustedProfile.easy);
+const mediumCount = Math.round(sectionTarget * adjustedProfile.medium);
+const hardCount  = sectionTarget - easyCount - mediumCount;
+const byDiff = (d: string) => shuffled.filter(q => q.difficulty === d);
+const easy   = byDiff('easy').slice(0, easyCount);
+const medium = byDiff('medium').slice(0, mediumCount);
+const hard   = byDiff('hard').slice(0, hardCount);
+let sectionQuestions = [...easy, ...medium, ...hard];
+// Backfill if one difficulty tier is short
+if (sectionQuestions.length < sectionTarget) {
+  const usedIds = new Set(sectionQuestions.map(q => q.id));
+  const remaining = shuffled.filter(q => !usedIds.has(q.id));
+  sectionQuestions = [
+    ...sectionQuestions,
+    ...remaining.slice(0, sectionTarget - sectionQuestions.length)
+  ];
+}
+results.push(...sectionQuestions);
+2g. Proportional final assembly
+After the section loop, assemble the final question list proportionally rather than flat-slicing — this preserves the 35/25/25 section balance even when any individual section's pool is small:
+
+const compResults    = results.filter(q => q.renderType === 'comprehension');
+const nonCompResults = results.filter(q => q.renderType !== 'comprehension');
+const nonCompTarget  = Math.max(0, count - compResults.length);
+// Group non-comp by section and shuffle each section independently
+const nonCompBySection = new Map<string, Question[]>();
+for (const q of nonCompResults) {
+  if (!nonCompBySection.has(q.section)) nonCompBySection.set(q.section, []);
+  nonCompBySection.get(q.section)!.push(q);
+}
+for (const qs of nonCompBySection.values()) qs.sort(() => Math.random() - 0.5);
+// Proportional allocation
+const takenBySection = new Map<string, number>();
+const selectedNonComp: Question[] = [];
+let allocated = 0;
+nonCompSections.forEach((section, i) => {
+  const weight  = SECTION_WEIGHTS[section] ?? 0.25;
+  const isLast  = i === nonCompSections.length - 1;
+  const target  = isLast
+    ? nonCompTarget - allocated
+    : Math.round(nonCompTarget * (weight / nonCompTotalWeight));
+  allocated += target;
+  const qs  = nonCompBySection.get(section) ?? [];
+  const take = Math.min(Math.max(0, target), qs.length);
+  selectedNonComp.push(...qs.slice(0, take));
+  takenBySection.set(section, take);
+});
+// Backfill: redistribute if any section came up short
+const stillNeeded = nonCompTarget - selectedNonComp.length;
+if (stillNeeded > 0) {
+  const surplus = nonCompSections
+    .flatMap(s => {
+      const qs    = nonCompBySection.get(s) ?? [];
+      const taken = takenBySection.get(s) ?? 0;
+      return qs.slice(taken);
+    })
+    .sort(() => Math.random() - 0.5);
+  selectedNonComp.push(...surplus.slice(0, stillNeeded));
+}
+return [...compResults, ...selectedNonComp];
+Part 3 — Guest Gating in selectQuestionsForSession
+In selectQuestionsForSession, apply the guest filter in three places:
+
+3a. Detect the guest at the top of the method
+const isGuestSession = userId.startsWith('guest-');
+3b. Apply to the diagnostic-linked query
+let allQuestions = await db.select().from(questions)
+  .where(and(
+    eq(questions.diagnosticId, diagnosticId),
+    eq(questions.qaStatus, "approved"),
+    // Block guests from receiving non-free-pool questions even if they are
+    // directly linked to this diagnosticId in the DB
+    isGuestSession ? eq(questions.freePool, true) : sql`TRUE`
+  ))
+  .orderBy(questions.orderIndex);
+3c. Guard the unfiltered emergency fallback
+If after both the diagnostic-linked query and the pool query allQuestions is still empty, the code likely falls back to an unfiltered getQuestionsByDiagnostic() call. For guests, skip this entirely:
+
+if (allQuestions.length === 0) {
+  if (isGuestSession) return []; // never leak unrestricted questions to guests
+  return this.getQuestionsByDiagnostic(diagnosticId);
+}
+Part 4 — Guest Route
+In server/routes.ts, the guest diagnostic start route must inject the guest- prefix into the userId passed to storage:
+
+app.post('/api/guest/start-diagnostic', async (req, res) => {
+  const { diagnosticId, targetExamBoard } = req.body;
+  // Use session ID to give the same guest consistent identity within one browser session
+  const guestUserId = `guest-${req.session.id}`;
+  const questions = await storage.selectQuestionsForSession(
+    guestUserId, diagnosticId, targetExamBoard
+  );
+  // ... return session
+});
+Part 5 — Seed Script: scripts/seed_free_pool.ts
+Create this script to deterministically mark the free pool. It should be idempotent (safe to re-run). Since this app is GL-only, there is no CEM comprehension — seed only GL passages.
+
+Seed targets:
+
+Non-comprehension per section: 6 easy + 13 medium + 6 hard = 25 questions (or fewer if the pool is smaller), selected by ORDER BY order_index for determinism
+Comprehension: 3 smallest GL passages (fewest questions per passage), so the minimum viable passage always fits in a 12-question free diagnostic
+// scripts/seed_free_pool.ts
+import { db } from "../server/db";
+import { questions } from "../shared/schema";
+import { sql, and, eq, inArray } from "drizzle-orm";
+const NON_COMP_SECTIONS = ["Verbal Reasoning", "Mathematics", "Non-Verbal Reasoning"];
+const DIFFICULTY_CAPS   = { easy: 6, medium: 13, hard: 6 };
+async function clearFreePool() {
+  await db.update(questions).set({ freePool: false });
+}
+async function selectNonCompIds(section: string): Promise<string[]> {
+  const rows = await db
+    .select({ id: questions.id, difficulty: questions.difficulty })
+    .from(questions)
+    .where(and(
+      eq(questions.section, section),
+      eq(questions.qaStatus, "approved"),
+      sql`${questions.skillId} IS NOT NULL AND ${questions.skillId} != ''`,
+      sql`${questions.renderType} != 'comprehension'`,
+      sql`${questions.diagnosticId} IS NULL`
+    ))
+    .orderBy(questions.orderIndex);
+  const byDiff: Record<string, string[]> = { easy: [], medium: [], hard: [] };
+  for (const row of rows) {
+    const tier = row.difficulty ?? "medium";
+    if (byDiff[tier]) byDiff[tier].push(row.id);
+  }
+  const selected: string[] = [];
+  for (const [tier, cap] of Object.entries(DIFFICULTY_CAPS)) {
+    selected.push(...byDiff[tier].slice(0, cap));
+  }
+  return selected;
+}
+async function selectGLCompIds(): Promise<string[]> {
+  const rows = await db
+    .select({
+      id: questions.id,
+      passageId: sql<string>`${questions.renderConfig}->>'passageId'`,
+    })
+    .from(questions)
+    .where(and(
+      eq(questions.renderType, "comprehension"),
+      eq(questions.qaStatus, "approved"),
+      sql`${questions.diagnosticId} IS NULL`
+      // No board filter needed — all comprehension is GL in this app
+    ));
+  const passageSizes = new Map<string, string[]>();
+  for (const row of rows) {
+    const pid = row.passageId ?? "__unknown__";
+    if (!passageSizes.has(pid)) passageSizes.set(pid, []);
+    passageSizes.get(pid)!.push(row.id);
+  }
+  // Select the 3 smallest passages (fewest questions)
+  const top3 = [...passageSizes.entries()]
+    .sort(([, a], [, b]) => a.length - b.length)
+    .slice(0, 3);
+  const ids: string[] = [];
+  for (const [pid, qids] of top3) {
+    console.log(`  GL passage ${pid}: ${qids.length}q`);
+    ids.push(...qids);
+  }
+  return ids;
+}
+async function main() {
+  console.log("Clearing free pool…");
+  await clearFreePool();
+  const allIds: string[] = [];
+  console.log("Selecting non-comprehension questions…");
+  for (const section of NON_COMP_SECTIONS) {
+    const ids = await selectNonCompIds(section);
+    allIds.push(...ids);
+    console.log(`  ${section}: ${ids.length}q`);
+  }
+  console.log("Selecting GL comprehension passages…");
+  const compIds = await selectGLCompIds();
+  allIds.push(...compIds);
+  await db.update(questions).set({ freePool: true }).where(inArray(questions.id, allIds));
+  const check = await db.execute(sql`
+    SELECT section, COUNT(*)::int AS cnt FROM questions
+    WHERE free_pool = true GROUP BY section ORDER BY section
+  `);
+  console.table(check.rows);
+  console.log(`Done. ${new Set(allIds).size} questions in free pool.`);
+}
+main().catch(e => { console.error(e); process.exit(1); });
+Run with: npx tsx scripts/seed_free_pool.ts
+
+Part 6 — Verification Checklist
+After implementing, verify each of the following:
+
+Schema: SELECT column_name FROM information_schema.columns WHERE table_name = 'questions' AND column_name = 'free_pool' returns a row.
+Seed counts: Run the seed script and confirm output shows ~25q per non-comp section (fewer if pool is small) and at least 1–3 GL comp passages.
+Free diagnostic GL (12 questions): Call the guest endpoint with targetExamBoard: "GL" and confirm:
+Total = 12 questions
+Section breakdown roughly: VR ~3–4, Math ~2–3, NVR ~2–3, Comp = smallest fitting passage
+Every question ID returned has free_pool = true in the database
+Variation: Call the guest endpoint 3 times and confirm non-comp question IDs vary between calls (pool has enough candidates to shuffle).
+Authenticated user unaffected: An authenticated user's diagnostic call returns questions from the full bank (not just free_pool = true rows).
+Comprehension is always complete: No guest session returns a partial passage. Every passageId group in the response contains all questions for that passage in order.

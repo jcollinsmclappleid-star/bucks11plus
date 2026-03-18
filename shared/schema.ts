@@ -61,6 +61,7 @@ export const questions = pgTable("questions", {
   qualityScore: smallint("quality_score").notNull().default(0),
   qaStatus: text("qa_status").notNull().default("draft"),
   estTimeSeconds: integer("est_time_seconds").notNull().default(30),
+  freePool: boolean("free_pool").notNull().default(false),
   explanation: text("explanation"),
   notes: text("notes"),
 });

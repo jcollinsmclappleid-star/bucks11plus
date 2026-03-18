@@ -1,0 +1,914 @@
+# Build Prompt: GL-Only 11+ Diagnostic Platform (Buckinghamshire / 121 Pass Mark)
+
+## Context
+
+This app serves GL Assessment questions only, targeting Buckinghamshire 11+ selective
+schools. The benchmark is the 121 standardised score pass threshold. The question bank
+covers four sections: Verbal Reasoning, Mathematics, Non-Verbal Reasoning, and English
+Comprehension (GL passages only, typically 7–15 questions per passage). There is no CEM
+board.
+
+Implement the following features exactly as specified. All code is TypeScript/React with
+Drizzle ORM on PostgreSQL.
+
+---
+
+## PART 1 — Schema: Add `free_pool` Column
+
+In `shared/schema.ts`, add a boolean column to the questions table:
+
+  freePool: boolean("free_pool").notNull().default(false),
+
+After adding it, run `npm run db:push` to apply the change.
+
+---
+
+## PART 2 — Core Selection Logic: `selectPoolQuestions`
+
+Implement this as a private method in `server/storage.ts`. Read every comment — there
+are subtle ordering and ceiling dependencies.
+
+### 2a. Section weights (GL exam proportions)
+
+  const SECTION_WEIGHTS: Record<string, number> = {
+    "Verbal Reasoning":      0.35,
+    "Mathematics":           0.25,
+    "Non-Verbal Reasoning":  0.25,
+    "English Comprehension": 0.15, // target only — actual controlled by ceiling formula
+  };
+
+### 2b. Guest detection
+
+  const isGuest = userId.startsWith('guest-');
+
+All authenticated users have standard UUID-format IDs and will never match this prefix.
+
+### 2c. Difficulty profiles per diagnostic type
+
+  const DIFFICULTY_PROFILES: Record<string, { easy: number; medium: number; hard: number }> = {
+    mini:           { easy: 0.25, medium: 0.50, hard: 0.25 },
+    full:           { easy: 0.20, medium: 0.45, hard: 0.35 },
+    mock:           { easy: 0.15, medium: 0.40, hard: 0.45 },
+    practice_paper: { easy: 0.20, medium: 0.45, hard: 0.35 },
+  };
+  const diffProfile = DIFFICULTY_PROFILES[diag.type] || DIFFICULTY_PROFILES.full;
+
+### 2d. Non-comp weight normalisation
+
+Comprehension is controlled by a separate ceiling, so normalize the per-section quota
+for non-comp sections against their combined weight only (not the full 1.0):
+
+  const nonCompSections = sections.filter(s => s !== 'English Comprehension');
+  const nonCompTotalWeight = nonCompSections.reduce(
+    (sum, s) => sum + (SECTION_WEIGHTS[s] ?? 0.25), 0
+  );
+  // e.g. VR(0.35) + Math(0.25) + NVR(0.25) = 0.85
+
+  const perSection = (section: string) =>
+    Math.ceil(count * ((SECTION_WEIGHTS[section] ?? 0.25) / nonCompTotalWeight));
+
+### 2e. Per-section DB query
+
+  let pool = await db.select().from(questions)
+    .where(and(
+      eq(questions.section, section),
+      eq(questions.qaStatus, "approved"),
+      sql`${questions.skillId} IS NOT NULL AND ${questions.skillId} != ''`,
+      isGuest ? eq(questions.freePool, true) : sql`TRUE`,
+    ));
+
+  if (excludeIds.length > 0) {
+    pool = pool.filter(q => !excludeIds.includes(q.id));
+  }
+
+Since every question is GL, no exam board filter is needed. If you have an examBoard
+column, add: WHERE exam_board = '{}' OR exam_board @> ARRAY['GL']::text[]
+
+### 2f. Comprehension: passage-atomic selection with ceiling
+
+Comprehension questions must always be served as complete passages — never partial.
+
+  if (section === "English Comprehension") {
+    const passageGroupsMap = new Map<string, Question[]>();
+    for (const q of pool) {
+      const rc = q.renderConfig as any;
+      const pid = rc?.passageId || q.subRuleId || '__none__';
+      if (!passageGroupsMap.has(pid)) passageGroupsMap.set(pid, []);
+      passageGroupsMap.get(pid)!.push(q);
+    }
+
+    for (const qs of passageGroupsMap.values()) {
+      qs.sort((a, b) => {
+        const idxA = (a.renderConfig as any)?.questionIndex ?? a.orderIndex;
+        const idxB = (b.renderConfig as any)?.questionIndex ?? b.orderIndex;
+        return idxA - idxB;
+      });
+    }
+
+    // Shuffle for variety, then stable-sort by size ascending (prefer shorter passages)
+    const sortedPassages = [...passageGroupsMap.values()]
+      .sort(() => Math.random() - 0.5)
+      .sort((a, b) => a.length - b.length);
+
+    // Ceiling formula: target 25% of diagnostic total, but always fit at least one
+    // complete passage even in small diagnostics (e.g. 12-question free mini where
+    // 25% = 3 but the smallest passage is 7 questions).
+    const proportionalCeiling = Math.ceil(count * 0.25);
+    const smallestPassageSize = sortedPassages.length > 0 ? sortedPassages[0].length : Infinity;
+    const compCeiling = Math.max(proportionalCeiling, smallestPassageSize);
+
+    const compResult: Question[] = [];
+    for (const qs of sortedPassages) {
+      if (compResult.length + qs.length <= compCeiling) {
+        compResult.push(...qs);
+      }
+      if (compResult.length >= compCeiling) break;
+    }
+
+    results.push(...compResult);
+    continue;
+  }
+
+### 2g. Non-comp: difficulty-proportional selection
+
+  const sectionTarget = perSection(section);
+  const shuffled = pool.sort(() => Math.random() - 0.5);
+
+  const easyCount   = Math.round(sectionTarget * diffProfile.easy);
+  const mediumCount = Math.round(sectionTarget * diffProfile.medium);
+  const hardCount   = sectionTarget - easyCount - mediumCount;
+
+  const byDiff = (d: string) => shuffled.filter(q => q.difficulty === d);
+  let sectionQuestions = [
+    ...byDiff('easy').slice(0, easyCount),
+    ...byDiff('medium').slice(0, mediumCount),
+    ...byDiff('hard').slice(0, hardCount),
+  ];
+
+  // Backfill if one difficulty tier is short
+  if (sectionQuestions.length < sectionTarget) {
+    const usedIds = new Set(sectionQuestions.map(q => q.id));
+    const remaining = shuffled.filter(q => !usedIds.has(q.id));
+    sectionQuestions = [
+      ...sectionQuestions,
+      ...remaining.slice(0, sectionTarget - sectionQuestions.length),
+    ];
+  }
+
+  results.push(...sectionQuestions);
+
+### 2h. Proportional final assembly
+
+After the section loop, assemble the final list proportionally — never flat-slice:
+
+  const compResults    = results.filter(q => q.renderType === 'comprehension');
+  const nonCompResults = results.filter(q => q.renderType !== 'comprehension');
+  const nonCompTarget  = Math.max(0, count - compResults.length);
+
+  const nonCompBySection = new Map<string, Question[]>();
+  for (const q of nonCompResults) {
+    if (!nonCompBySection.has(q.section)) nonCompBySection.set(q.section, []);
+    nonCompBySection.get(q.section)!.push(q);
+  }
+  for (const qs of nonCompBySection.values()) qs.sort(() => Math.random() - 0.5);
+
+  const takenBySection = new Map<string, number>();
+  const selectedNonComp: Question[] = [];
+  let allocated = 0;
+  nonCompSections.forEach((section, i) => {
+    const weight = SECTION_WEIGHTS[section] ?? 0.25;
+    const isLast = i === nonCompSections.length - 1;
+    const target = isLast
+      ? nonCompTarget - allocated
+      : Math.round(nonCompTarget * (weight / nonCompTotalWeight));
+    allocated += target;
+    const qs   = nonCompBySection.get(section) ?? [];
+    const take = Math.min(Math.max(0, target), qs.length);
+    selectedNonComp.push(...qs.slice(0, take));
+    takenBySection.set(section, take);
+  });
+
+  // Backfill: redistribute from sections that had surplus
+  const stillNeeded = nonCompTarget - selectedNonComp.length;
+  if (stillNeeded > 0) {
+    const surplus = nonCompSections
+      .flatMap(s => {
+        const qs    = nonCompBySection.get(s) ?? [];
+        const taken = takenBySection.get(s) ?? 0;
+        return qs.slice(taken);
+      })
+      .sort(() => Math.random() - 0.5);
+    selectedNonComp.push(...surplus.slice(0, stillNeeded));
+  }
+
+  // Comprehension always comes first — required for two-phase timer to work correctly.
+  return [...compResults, ...selectedNonComp];
+
+---
+
+## PART 3 — Guest Gating in `selectQuestionsForSession`
+
+Apply the guest filter in THREE places — all three must be present.
+
+### 3a. Detect guest at the top of the method
+
+  const isGuestSession = userId.startsWith('guest-');
+
+### 3b. Apply to the diagnostic-linked query
+
+  let allQuestions = await db.select().from(questions)
+    .where(and(
+      eq(questions.diagnosticId, diagnosticId),
+      eq(questions.qaStatus, "approved"),
+      isGuestSession ? eq(questions.freePool, true) : sql`TRUE`
+    ))
+    .orderBy(questions.orderIndex);
+
+### 3c. Guard the unfiltered emergency fallback
+
+If after both queries allQuestions is still empty, code typically falls back to an
+unfiltered getQuestionsByDiagnostic() call. Block this for guests:
+
+  if (allQuestions.length === 0) {
+    if (isGuestSession) return []; // never leak unrestricted questions to guests
+    return this.getQuestionsByDiagnostic(diagnosticId);
+  }
+
+---
+
+## PART 4 — Guest Route
+
+In `server/routes.ts`, inject the guest- prefix into the userId:
+
+  app.post('/api/guest/start-diagnostic', async (req, res) => {
+    const { diagnosticId, targetExamBoard } = req.body;
+    const guestToken = randomBytes(16).toString('hex');
+    const guestUserId = `guest-${req.session.id}`;
+    const questions = await storage.selectQuestionsForSession(
+      guestUserId, diagnosticId, 'GL'
+    );
+    // Create session, attach guestToken, return { session, questions, guestToken }
+  });
+
+  app.get('/api/guest/results/:id', async (req, res) => {
+    const session = await storage.getTestSession(req.params.id);
+    if (session.guestToken !== req.query.token) return res.status(403).json({ message: "Invalid token" });
+    res.json(session);
+  });
+
+  app.get('/api/guest/review/:id', async (req, res) => {
+    const session = await storage.getTestSession(req.params.id);
+    if (session.guestToken !== req.query.token) return res.status(403).json({ message: "Invalid token" });
+    // Return per-question review: prompt, options, correctAnswer, selectedAnswer, explanation
+  });
+
+---
+
+## PART 5 — Seed Script: `scripts/seed_free_pool.ts`
+
+Create this script. It is idempotent (safe to re-run). GL-only so no CEM passages.
+
+Seed targets:
+  - Non-comprehension per section: 6 easy + 13 medium + 6 hard = 25q (or fewer if
+    pool is smaller), ordered by order_index for determinism
+  - Comprehension: 3 smallest GL passages (fewest questions per passage)
+
+  import { db } from "../server/db";
+  import { questions } from "../shared/schema";
+  import { sql, and, eq, inArray } from "drizzle-orm";
+
+  const NON_COMP_SECTIONS = ["Verbal Reasoning", "Mathematics", "Non-Verbal Reasoning"];
+  const DIFFICULTY_CAPS   = { easy: 6, medium: 13, hard: 6 };
+
+  async function clearFreePool() {
+    await db.update(questions).set({ freePool: false });
+  }
+
+  async function selectNonCompIds(section: string): Promise<string[]> {
+    const rows = await db
+      .select({ id: questions.id, difficulty: questions.difficulty })
+      .from(questions)
+      .where(and(
+        eq(questions.section, section),
+        eq(questions.qaStatus, "approved"),
+        sql`${questions.skillId} IS NOT NULL AND ${questions.skillId} != ''`,
+        sql`${questions.renderType} != 'comprehension'`,
+        sql`${questions.diagnosticId} IS NULL`
+      ))
+      .orderBy(questions.orderIndex);
+
+    const byDiff: Record<string, string[]> = { easy: [], medium: [], hard: [] };
+    for (const row of rows) {
+      const tier = row.difficulty ?? "medium";
+      if (byDiff[tier]) byDiff[tier].push(row.id);
+    }
+
+    const selected: string[] = [];
+    for (const [tier, cap] of Object.entries(DIFFICULTY_CAPS)) {
+      selected.push(...byDiff[tier].slice(0, cap));
+    }
+    return selected;
+  }
+
+  async function selectGLCompIds(): Promise<string[]> {
+    const rows = await db
+      .select({
+        id: questions.id,
+        passageId: sql<string>`${questions.renderConfig}->>'passageId'`,
+      })
+      .from(questions)
+      .where(and(
+        eq(questions.renderType, "comprehension"),
+        eq(questions.qaStatus, "approved"),
+        sql`${questions.diagnosticId} IS NULL`
+      ));
+
+    const passageSizes = new Map<string, string[]>();
+    for (const row of rows) {
+      const pid = row.passageId ?? "__unknown__";
+      if (!passageSizes.has(pid)) passageSizes.set(pid, []);
+      passageSizes.get(pid)!.push(row.id);
+    }
+
+    const top3 = [...passageSizes.entries()]
+      .sort(([, a], [, b]) => a.length - b.length)
+      .slice(0, 3);
+
+    const ids: string[] = [];
+    for (const [pid, qids] of top3) {
+      console.log(`  GL passage ${pid}: ${qids.length}q`);
+      ids.push(...qids);
+    }
+    return ids;
+  }
+
+  async function main() {
+    console.log("Clearing free pool…");
+    await clearFreePool();
+
+    const allIds: string[] = [];
+    for (const section of NON_COMP_SECTIONS) {
+      const ids = await selectNonCompIds(section);
+      allIds.push(...ids);
+      console.log(`  ${section}: ${ids.length}q`);
+    }
+
+    console.log("Selecting GL comprehension passages…");
+    allIds.push(...await selectGLCompIds());
+
+    await db.update(questions).set({ freePool: true }).where(inArray(questions.id, allIds));
+
+    const check = await db.execute(sql`
+      SELECT section, COUNT(*)::int AS cnt
+      FROM questions WHERE free_pool = true
+      GROUP BY section ORDER BY section
+    `);
+    console.table(check.rows);
+    console.log(`Done. ${new Set(allIds).size} questions in free pool.`);
+  }
+
+  main().catch(e => { console.error(e); process.exit(1); });
+
+Run with: npx tsx scripts/seed_free_pool.ts
+
+---
+
+## PART 6 — Comprehension Question Ordering
+
+Comprehension questions must form a contiguous block — never interleaved with other
+types. The two-phase timer (Part 8) depends on detecting "same passage as previous
+question" by comparing passage IDs. If a VR question appeared mid-passage the reading
+phase would wrongly restart.
+
+The final return in selectPoolQuestions already guarantees this:
+  return [...compResults, ...selectedNonComp];
+
+A 12-question GL diagnostic therefore looks like:
+  Questions 1–7: English Comprehension (all questions of the passage, in order)
+  Questions 8–12: VR, Math, NVR (proportionally distributed)
+
+Within each passage group, sort by questionIndex before any other processing:
+
+  for (const qs of passageGroupsMap.values()) {
+    qs.sort((a, b) => {
+      const idxA = (a.renderConfig as any)?.questionIndex ?? a.orderIndex;
+      const idxB = (b.renderConfig as any)?.questionIndex ?? b.orderIndex;
+      return idxA - idxB;
+    });
+  }
+
+Apply the same sort in selectQuestionsForSession when building the passage map from
+diagnostic-linked questions.
+
+### Defensive passage expansion
+
+If a diagnostic's linked set contains only a subset of a passage (e.g. questions 1–5
+of a 7-question passage), fetch the missing questions from the pool to complete it:
+
+  for (const [key, qs] of compPassageMap.entries()) {
+    const firstQ = qs[0];
+    const rc     = firstQ.renderConfig as any;
+    const total: number | undefined = rc?.totalQuestionsInPassage;
+
+    if (total && qs.length < total) {
+      const pid        = rc?.passageId || firstQ.subRuleId || '__none__';
+      const existingIds = qs.map(q => q.id);
+
+      const missing = await db.select().from(questions).where(and(
+        eq(questions.qaStatus, 'approved'),
+        sql`render_config->>'passageId' = ${pid}`,
+        sql`id NOT IN (${sql.raw(existingIds.map(id => `'${id}'`).join(','))})`
+      ));
+
+      qs.push(...missing);
+      qs.sort((a, b) => {
+        const idxA = (a.renderConfig as any)?.questionIndex ?? a.orderIndex;
+        const idxB = (b.renderConfig as any)?.questionIndex ?? b.orderIndex;
+        return idxA - idxB;
+      });
+    }
+  }
+
+---
+
+## PART 7 — Two-Phase Comprehension Timer
+
+The main test timer pauses entirely when a comprehension question is active. A separate
+comprehension clock runs in its place with two phases:
+
+  Reading phase:   Child reads the passage. Timer counts down from estTimeSeconds
+                   (default 150s). No answer options shown. Manual "done reading"
+                   button lets them advance early.
+
+  Answering phase: 45 seconds per question. Options appear. Timer auto-advances.
+
+The first question of a new passage always starts in reading phase. Subsequent questions
+of the SAME passage skip straight to answering phase (child already read it).
+
+### 7a. Constants and state
+
+  const COMP_ANSWERING_SECS = 45;
+
+  const [compTimeLeft, setCompTimeLeft] = useState(0);
+  const [compPhase, setCompPhase]       = useState<'reading' | 'answering' | null>(null);
+  const compPhaseRef         = useRef<'reading' | 'answering' | null>(null);
+  const mainTimerPausedRef   = useRef(false);
+  const currentPassageIdRef  = useRef<string | number | null>(null);
+
+Use useRef for compPhase and mainTimerPausedRef IN ADDITION to useState because the
+setInterval callback captures ref values at creation time — stale state from useState
+inside setInterval breaks the timer transitions.
+
+### 7b. Phase initialisation on question change
+
+  useEffect(() => {
+    if (!questions || questions.length === 0) return;
+    const q      = questions[currentQuestionIndex];
+    const isComp = q?.renderType === 'comprehension';
+
+    if (!isComp) {
+      mainTimerPausedRef.current = false;
+      compPhaseRef.current       = null;
+      setCompPhase(null);
+      currentPassageIdRef.current = null;
+      setCompTimeLeft(0);
+      return;
+    }
+
+    const cfg      = q.renderConfig as Record<string, unknown> | null;
+    const passageId = (cfg?.passageId ?? -currentQuestionIndex) as string | number;
+    const isNewPassage = passageId !== currentPassageIdRef.current;
+    currentPassageIdRef.current  = passageId;
+    mainTimerPausedRef.current   = true;
+
+    if (isNewPassage) {
+      compPhaseRef.current = 'reading';
+      setCompPhase('reading');
+      setCompTimeLeft((q.estTimeSeconds as number) || 150);
+    } else {
+      compPhaseRef.current = 'answering';
+      setCompPhase('answering');
+      setCompTimeLeft(COMP_ANSWERING_SECS);
+    }
+  }, [currentQuestionIndex, questions]);
+
+### 7c. Single shared interval driving both clocks
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (mainTimerPausedRef.current) {
+        setCompTimeLeft(prev => {
+          if (prev <= 1 && compPhaseRef.current === 'reading') {
+            compPhaseRef.current = 'answering';
+            setCompPhase('answering');
+            return COMP_ANSWERING_SECS;
+          }
+          return prev > 0 ? prev - 1 : 0;
+        });
+      } else {
+        setTimeLeft(prev => {
+          if (prev <= 1 && prev > 0) handleFinish();
+          return prev > 0 ? prev - 1 : 0;
+        });
+      }
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [handleFinish]);
+
+### 7d. Manual "finished reading" button
+
+  const advanceToAnswering = useCallback(() => {
+    compPhaseRef.current = 'answering';
+    setCompPhase('answering');
+    setCompTimeLeft(COMP_ANSWERING_SECS);
+  }, []);
+
+  {isComprehension && compPhase === 'reading' && (
+    <div className="mt-auto space-y-4">
+      <div className="flex items-center gap-2 rounded-lg bg-blue-50 border border-blue-200 px-4 py-3 text-sm text-blue-800">
+        <BookOpen className="h-4 w-4 text-blue-600 shrink-0" />
+        <span>Read the passage carefully. Answering begins automatically when the
+        timer ends, or click below when ready.</span>
+      </div>
+      <Button onClick={advanceToAnswering} variant="outline" className="w-full"
+              data-testid="button-begin-answering">
+        <Pencil className="h-4 w-4 mr-2" />
+        I've finished reading — Begin Answering
+      </Button>
+    </div>
+  )}
+
+### 7e. Hide answer options during reading phase
+
+  {compPhase !== 'reading' && (
+    <div className="space-y-3 mt-auto">
+      {question.options.map((opt, i) => (
+        <button key={i} onClick={() => handleNext(opt)} className="option-button"
+                data-testid={`button-option-${i}`}>
+          <div className="option-badge">{LABELS[i]}</div>
+          <span>{opt}</span>
+        </button>
+      ))}
+    </div>
+  )}
+
+### 7f. Header timer pills
+
+  {compPhase === 'reading' ? (
+    <div className="flex items-center gap-2">
+      <div className={compTimerClass} data-testid="text-reading-timer">
+        <BookOpen className="h-3.5 w-3.5" /> Reading {compTimeString}
+      </div>
+      <span className="text-xs text-muted-foreground hidden md:inline-block">main paused</span>
+    </div>
+  ) : compPhase === 'answering' ? (
+    <div className="flex items-center gap-2">
+      <div className={compTimerClass} data-testid="text-comp-timer">
+        <Pencil className="h-3.5 w-3.5" /> Answering {compTimeString}
+      </div>
+      <span className="text-xs text-muted-foreground hidden md:inline-block">main paused</span>
+    </div>
+  ) : (
+    <div className={timerClass} data-testid="text-timer">{timeString}</div>
+  )}
+
+  // Colour the timer pill based on time remaining
+  const compTimerClass = compTimeLeft < 20
+    ? "timer-pill timer-pill-danger"
+    : compTimeLeft < 60
+    ? "timer-pill timer-pill-warning"
+    : "timer-pill timer-pill-normal";
+
+### 7g. Phase badges inline with section label
+
+  {isComprehension && compPhase === 'reading' && (
+    <span className="flex items-center gap-1 text-xs font-semibold text-blue-700
+                     bg-blue-50 border border-blue-200 rounded-full px-2.5 py-0.5"
+          data-testid="badge-reading-phase">
+      <BookOpen className="h-3 w-3" /> Reading Phase
+    </span>
+  )}
+  {isComprehension && compPhase === 'answering' && (
+    <span className="flex items-center gap-1 text-xs font-semibold text-emerald-700
+                     bg-emerald-50 border border-emerald-200 rounded-full px-2.5 py-0.5"
+          data-testid="badge-answering-phase">
+      <Pencil className="h-3 w-3" /> Answering Phase
+    </span>
+  )}
+
+### 7h. Block keyboard shortcuts during reading phase
+
+  const handler = (e: KeyboardEvent) => {
+    if (compPhaseRef.current === 'reading') return; // block all key presses
+    const key = e.key.toUpperCase();
+    const idx = key.charCodeAt(0) - 65;
+    if (idx < 0 || idx >= question.options.length) return;
+    handleNext(question.options[idx]);
+  };
+  window.addEventListener("keydown", handler);
+  return () => window.removeEventListener("keydown", handler);
+
+---
+
+## PART 8 — Passage Always Visible
+
+Every comprehension question always renders the full passage text above the question
+prompt — in reading phase AND answering phase. Never conditionally hide it.
+
+  {renderType === "comprehension" && (() => {
+    const passageText  = (renderConfig as any)?.passageText
+      || (renderConfig as any)?.passage
+      || (renderConfig as any)?.text;
+    const passageTitle = (renderConfig as any)?.passageTitle
+      || (renderConfig as any)?.title;
+
+    if (passageText) {
+      return (
+        <div className="mb-6 p-5 bg-slate-50 border border-slate-200 rounded-lg"
+             data-testid="comprehension-passage">
+          {passageTitle && (
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-xs font-bold uppercase tracking-wider text-primary/70">
+                Passage: {passageTitle}
+              </span>
+            </div>
+          )}
+          <p className="text-base leading-relaxed text-slate-700 font-serif">
+            {passageText}
+          </p>
+        </div>
+      );
+    }
+
+    // Never show a blank — always surface missing-passage as a visible warning
+    return (
+      <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg"
+           data-testid="comprehension-passage-missing">
+        <p className="text-sm text-amber-700 font-medium">
+          Reading passage not available for this question. Please contact support.
+        </p>
+      </div>
+    );
+  })()}
+
+### renderConfig shape required for every comprehension question
+
+  {
+    passageId:               string,  // e.g. "comp-passage-4" — groups the passage
+    passageText:             string,  // full passage body — REQUIRED
+    passageTitle?:           string,  // optional heading
+    questionIndex:           number,  // 0-based order within the passage
+    totalQuestionsInPassage: number,  // used for defensive expansion
+  }
+
+Validate during seeding/import that every comprehension row has a non-empty passageText.
+
+---
+
+## PART 9 — Diagnostic Start Screen: Timing Explanation
+
+Show this note prominently above the Begin button:
+
+  <div className="flex items-start gap-2 rounded-lg bg-blue-50 border border-blue-200
+                  px-4 py-3 text-sm text-blue-800"
+       data-testid="text-comp-timing-note">
+    <CheckCircle2 className="h-4 w-4 text-blue-600 mt-0.5 shrink-0" />
+    <span>
+      <strong>Comprehension sections have their own separate timer</strong> — when your
+      child reaches a reading passage, the main countdown pauses and a dedicated
+      comprehension clock starts. The {diagnosticDuration}-minute timer covers all
+      other question types only.
+    </span>
+  </div>
+
+---
+
+## PART 10 — Score Formula and the 121 Pass Mark
+
+Map raw percentage correct to the GL standardised score scale (69–141):
+
+  const rawPercent   = total > 0 ? (correct / total) * 100 : 0;
+  const forecastScore = Math.round((rawPercent / 100) * 141);
+
+Buckinghamshire pass mark: 121. This maps to approximately 86% correct.
+
+Readiness bands:
+
+  let band = "Clear Improvement Opportunity"; // below 82%
+  if (rawPercent >= 86) band = "On Track";        // forecast ≥ 121
+  else if (rawPercent >= 82) band = "Within Reach"; // forecast 115–120
+
+Store both forecastScore and band on the completed session record.
+
+On the results page, convert back to percentage for the circular gauge display:
+
+  const readinessPct = Math.round((forecastScore / 141) * 100);
+
+Also display the raw forecast score (e.g. "121") as a secondary label — Bucks parents
+specifically recognise 121 as the threshold, so naming it is more meaningful than a
+percentage alone.
+
+---
+
+## PART 11 — Pace Data: Per-Section Timing Analysis
+
+Track per-section timing as you process submitted answers on the server:
+
+  const sectionResults: Record<string, {
+    correct: number; total: number; totalTime: number; totalExpected: number;
+  }> = {};
+  const compPace = { total: 0, totalTime: 0, totalExpected: 0 };
+
+  for (const ans of answers) {
+    const question = /* fetch by id */;
+    const sr = sectionResults[question.section] ??= { correct: 0, total: 0, totalTime: 0, totalExpected: 0 };
+    sr.total++;
+    sr.totalTime     += ans.timeTaken || 0;
+    sr.totalExpected += (question.estTimeSeconds as number) || 35;
+    if (isCorrect) sr.correct++;
+
+    if (ans.isComp) {
+      compPace.total++;
+      compPace.totalTime     += ans.timeTaken || 0;
+      compPace.totalExpected += (question.estTimeSeconds as number) || 45;
+    }
+  }
+
+  const paceData = Object.entries(sectionResults).map(([name, data]) => ({
+    name,
+    avg:      Math.round(data.totalTime / data.total),
+    expected: data.totalExpected > 0
+      ? Math.round(data.totalExpected / data.total)
+      : (name === 'Mathematics' ? 40 : name === 'Non-Verbal Reasoning' ? 38 : 35),
+    isComp: false,
+  }));
+
+  if (compPace.total > 0) {
+    paceData.push({
+      name:     'Comprehension',
+      avg:      Math.round(compPace.totalTime / compPace.total),
+      expected: Math.round(compPace.totalExpected / compPace.total),
+      isComp:   true,
+    });
+  }
+
+Default expected times (fallback when estTimeSeconds is missing):
+  Mathematics:         40 seconds
+  Non-Verbal Reasoning: 38 seconds
+  Verbal Reasoning:    35 seconds
+  Comprehension:       derived from estTimeSeconds on the passage question
+
+---
+
+## PART 12 — `estTimeSeconds` Field on Questions
+
+This field is used in three places and must be present on questions:
+
+  TestRunner (reading phase): setCompTimeLeft((q.estTimeSeconds) || 150)
+  DrillRunner (timed mode):   questions.reduce((sum, q) => sum + (q.estTimeSeconds || 30), 0)
+  Server (pace analysis):     question.estTimeSeconds populates totalExpected in paceData
+
+What value to assign:
+  - First question of a passage: set to expected reading time for the whole passage.
+    A 200-word passage ≈ 90s. A 350-word passage ≈ 150s.
+  - Subsequent questions of the same passage: set to 45 (the answering budget).
+  - Non-comprehension easy: 30s. Medium: 38s. Hard: 45s.
+
+If estTimeSeconds is missing the fallbacks are 150 (reading phase) and 30 (drills).
+These fallbacks are safe but produce inaccurate pace analysis in results.
+
+---
+
+## PART 13 — Impact Simulator on the Guest Results Page
+
+Show an interactive panel with a slider per section. As the parent adjusts a slider,
+the forecast score updates in real time. This is the primary conversion element.
+
+  const [simAdjustments, setSimAdjustments] = useState<Record<string, number>>({});
+
+  const simForecast = (() => {
+    const totalQuestions = sectionScores.reduce((s, sec) => s + sec.total, 0);
+    let totalCorrect = 0;
+    for (const sec of sectionScores) {
+      const adj      = simAdjustments[sec.name] || 0;
+      const newScore = Math.min(100, sec.score + adj);
+      totalCorrect  += (newScore / 100) * sec.total;
+    }
+    const newPercent = (totalCorrect / totalQuestions) * 100;
+    return Math.round((newPercent / 100) * 141);
+  })();
+
+  const hasSimChanges = Object.values(simAdjustments).some(v => v !== 0);
+  const displayScore  = hasSimChanges ? simForecast : session.forecastScore;
+
+Each slider ranges from 0 to +30 (percentage points of improvement). Default 0.
+When any slider is non-zero, label the displayed score "Simulated" not "Readiness".
+The 121 pass mark line on the gauge is the natural conversion anchor.
+
+---
+
+## PART 14 — Practice Drill Modes (Timed vs. Practice)
+
+Drills are topic-focused sessions separate from diagnostics, controlled by URL param:
+
+  Practice mode (?mode=practice): Immediate feedback after each answer — correct/
+    incorrect badge, the right answer, and the explanation. No time pressure.
+
+  Timed mode (?mode=timed): No per-question feedback. Single countdown timer for
+    the entire drill. Final batch results at the end. Mirrors real exam conditions.
+
+Calculate total time budget from question data:
+
+  const totalSeconds = questions.reduce(
+    (sum, q) => sum + ((q.estTimeSeconds as number) || 30), 0
+  );
+
+In practice mode the button reads "Check Answer" and reveals an explanation card
+before advancing. In timed mode, selecting any option immediately advances.
+
+Question exhaustion warning — return this flag when the pool is running low:
+
+  const exhaustion_warning = availableQuestions.length < section.questionCount;
+  res.json({ questions: selected, exhaustion_warning });
+
+Display a visible notice to the parent when true: "Your child has answered most
+questions in this section. Scores may not be fully representative."
+
+---
+
+## PART 15 — `qaStatus` Gating and `skillId` Non-null Requirement
+
+Two question-level flags control pool eligibility. Never remove these filters:
+
+  qaStatus = 'approved'
+    Questions start as 'draft'. Only approved questions appear in any pool —
+    diagnostics, drills, or free pool. This allows admin review before going live.
+
+  skillId IS NOT NULL AND skillId != ''
+    Non-comprehension questions without a skillId are excluded because:
+    1. They cannot be used in skill-specific diagnostics
+    2. They cannot generate meaningful skill-level insights in results
+    3. They are likely incomplete drafts
+    Comprehension questions use passageId in renderConfig instead of skillId.
+
+  diagnosticId IS NULL (in seed script only)
+    Questions directly linked to a specific diagnostic via diagnosticId are
+    pre-curated and not part of the general pool. Exclude them from the free pool
+    seed so the free pool only draws from the general bank.
+
+---
+
+## Verification Checklist
+
+After implementing, confirm all of the following:
+
+1. SCHEMA: The free_pool column exists on questions (default false, not null).
+
+2. SEED: npx tsx scripts/seed_free_pool.ts runs without error and reports ~25q per
+   non-comp section and at least 1–3 GL passages in the free pool.
+
+3. FREE DIAGNOSTIC (GL, 12 questions):
+   - Total = 12
+   - Section distribution: Comp questions come first, then VR/Math/NVR
+   - Every returned question ID has free_pool = true in the database
+   - No error field in the response
+
+4. VARIATION: Three consecutive guest calls return different non-comp question IDs.
+
+5. AUTHENTICATED USER: A signed-in user's diagnostic returns questions from the full
+   bank (not just free_pool = true rows).
+
+6. COMPREHENSION ALWAYS COMPLETE: No guest session returns a partial passage. Every
+   passageId group in the response contains all questions in order.
+
+7. PASSAGE VISIBLE: data-testid="comprehension-passage" is present in the DOM during
+   BOTH reading phase and answering phase of the same passage.
+
+8. OPTIONS HIDDEN: data-testid="button-option-0" does NOT exist in the DOM during
+   the reading phase.
+
+9. MAIN TIMER PAUSES: While any comprehension question is active, the main countdown
+   does not decrement. Header shows "Reading X:XX" or "Answering X:XX main paused".
+
+10. READING PHASE ONCE PER PASSAGE: Navigate through a multi-question passage — the
+    reading timer starts only on question 1. Questions 2, 3 etc. go to answering.
+
+11. KEYBOARD BLOCKED: Pressing A/B/C/D during reading phase does not advance the
+    question.
+
+12. AMBER FALLBACK: A question with missing passageText shows the amber warning card,
+    not a blank space.
+
+13. SCORE FORMULA: A child scoring 86% correct gets forecastScore = 121 (exactly at
+    the Bucks pass mark). Band = "On Track".
+
+14. PACE DATA: Submitted sessions include paceData array with avg and expected fields
+    per section. Comprehension pace is tracked separately with isComp: true.
+
+15. GUEST TOKEN: Attempting to fetch results with a wrong token returns HTTP 403.
+
+16. DRILL TIMED MODE: The timer counts down from the sum of estTimeSeconds values.
+    No per-question feedback is shown until the final results screen.
+
+17. START SCREEN NOTE: data-testid="text-comp-timing-note" is visible on the
+    diagnostic start page before the child begins.

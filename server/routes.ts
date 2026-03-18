@@ -256,7 +256,7 @@ export async function registerRoutes(
       const currentUser = await storage.getUser(req.user!.id);
       if (!currentUser) return res.status(404).json({ message: "User not found" });
 
-      const TIER_RANK: Record<string, number> = { free: 0, early_learner: 0, pack12: 1, pack12_family: 1, programme16: 2, programme16_family: 2 };
+      const TIER_RANK: Record<string, number> = { free: 0, early_learner: 0, pack12: 1, pack12_family: 1, pack_monthly: 1, programme8: 2, programme12: 2, programme16: 2, programme16_family: 2, programme24_plus: 2 };
       const currentRank = TIER_RANK[currentUser.subscriptionTier] || 0;
       const newRank = TIER_RANK[tier] || 0;
       if (newRank <= currentRank) {
@@ -309,7 +309,7 @@ export async function registerRoutes(
       const diag = await storage.getDiagnostic(req.params.id);
       if (!diag) return res.status(404).json({ message: "Diagnostic not found" });
 
-      const TIER_RANK: Record<string, number> = { free: 0, early_learner: 0, pack12: 1, pack12_family: 1, programme16: 2, programme16_family: 2 };
+      const TIER_RANK: Record<string, number> = { free: 0, early_learner: 0, pack12: 1, pack12_family: 1, pack_monthly: 1, programme8: 2, programme12: 2, programme16: 2, programme16_family: 2, programme24_plus: 2 };
       const userRank = TIER_RANK[req.user!.subscriptionTier] || 0;
       const requiredRank = TIER_RANK[diag.requiredTier] || 0;
       if (userRank < requiredRank) {
@@ -366,11 +366,16 @@ export async function registerRoutes(
       if (session.guestToken !== guestToken) return res.status(403).json({ message: "Invalid guest token" });
       if (session.completedAt) return res.status(400).json({ message: "Session already completed" });
 
-      const allQuestions = await storage.getQuestionsByDiagnostic(session.diagnosticId);
-      const questionMap = new Map(allQuestions.map(q => [q.id, q]));
+      // Look up questions by the IDs in the answers (handles free-pool questions with no diagnosticId)
+      const answerQuestionIds = answers.map((a: any) => a.questionId).filter(Boolean);
+      const questionRows = answerQuestionIds.length > 0
+        ? await db.select().from(questions).where(inArray(questions.id, answerQuestionIds))
+        : [];
+      const questionMap = new Map(questionRows.map(q => [q.id, q]));
 
       let correct = 0;
-      const sectionResults: Record<string, { correct: number; total: number; totalTime: number }> = {};
+      const sectionResults: Record<string, { correct: number; total: number; totalTime: number; totalExpected: number }> = {};
+      const compPace = { total: 0, totalTime: 0, totalExpected: 0 };
 
       for (let idx = 0; idx < answers.length; idx++) {
         const ans = answers[idx];
@@ -381,11 +386,18 @@ export async function registerRoutes(
         if (isCorrect) correct++;
 
         if (!sectionResults[question.section]) {
-          sectionResults[question.section] = { correct: 0, total: 0, totalTime: 0 };
+          sectionResults[question.section] = { correct: 0, total: 0, totalTime: 0, totalExpected: 0 };
         }
         sectionResults[question.section].total++;
         sectionResults[question.section].totalTime += ans.timeTaken || 0;
+        sectionResults[question.section].totalExpected += (question.estTimeSeconds as number) || 35;
         if (isCorrect) sectionResults[question.section].correct++;
+
+        if (question.renderType === 'comprehension') {
+          compPace.total++;
+          compPace.totalTime += ans.timeTaken || 0;
+          compPace.totalExpected += (question.estTimeSeconds as number) || 45;
+        }
 
         await storage.createTestAnswer({
           sessionId: session.id,
@@ -401,8 +413,8 @@ export async function registerRoutes(
       const rawPercent = total > 0 ? (correct / total) * 100 : 0;
       const forecastScore = Math.round((rawPercent / 100) * 141);
       let band = "Clear Improvement Opportunity";
-      if (forecastScore >= 121) band = "On Track";
-      else if (forecastScore >= 115) band = "Within Reach";
+      if (rawPercent >= 86) band = "On Track";
+      else if (rawPercent >= 82) band = "Within Reach";
 
       const sectionScores = Object.entries(sectionResults).map(([name, data]) => ({
         name,
@@ -412,11 +424,24 @@ export async function registerRoutes(
         correct: data.correct,
       }));
 
-      const paceData = Object.entries(sectionResults).map(([name, data]) => ({
-        name,
-        avg: Math.round(data.totalTime / data.total),
-        expected: name === 'Mathematics' ? 40 : name === 'Non-Verbal Reasoning' ? 38 : 35,
-      }));
+      const paceData: { name: string; avg: number; expected: number; isComp: boolean }[] = 
+        Object.entries(sectionResults).map(([name, data]) => ({
+          name,
+          avg: Math.round(data.totalTime / data.total),
+          expected: data.totalExpected > 0
+            ? Math.round(data.totalExpected / data.total)
+            : (name === 'Mathematics' ? 40 : name === 'Non-Verbal Reasoning' ? 38 : 35),
+          isComp: false,
+        }));
+
+      if (compPace.total > 0) {
+        paceData.push({
+          name: 'Comprehension',
+          avg: Math.round(compPace.totalTime / compPace.total),
+          expected: Math.round(compPace.totalExpected / compPace.total),
+          isComp: true,
+        });
+      }
 
       const completed = await storage.completeTestSession(session.id, {
         totalScore: correct,
@@ -534,7 +559,7 @@ export async function registerRoutes(
         return res.status(404).json({ message: "Practice paper diagnostic not found. Database may need reseeding." });
       }
 
-      const TIER_RANK: Record<string, number> = { free: 0, early_learner: 0, pack12: 1, pack12_family: 1, programme16: 2, programme16_family: 2 };
+      const TIER_RANK: Record<string, number> = { free: 0, early_learner: 0, pack12: 1, pack12_family: 1, pack_monthly: 1, programme8: 2, programme12: 2, programme16: 2, programme16_family: 2, programme24_plus: 2 };
       const userRank = TIER_RANK[req.user!.subscriptionTier] || 0;
       const requiredRank = TIER_RANK[diag.requiredTier] || 0;
       if (userRank < requiredRank) {
@@ -568,7 +593,7 @@ export async function registerRoutes(
       const diag = await storage.getDiagnostic(diagnosticId);
       if (!diag) return res.status(404).json({ message: "Diagnostic not found" });
 
-      const TIER_RANK: Record<string, number> = { free: 0, early_learner: 0, pack12: 1, pack12_family: 1, programme16: 2, programme16_family: 2 };
+      const TIER_RANK: Record<string, number> = { free: 0, early_learner: 0, pack12: 1, pack12_family: 1, pack_monthly: 1, programme8: 2, programme12: 2, programme16: 2, programme16_family: 2, programme24_plus: 2 };
       const userRank = TIER_RANK[req.user!.subscriptionTier] || 0;
       const requiredRank = TIER_RANK[diag.requiredTier] || 0;
       if (userRank < requiredRank) {
@@ -661,18 +686,18 @@ export async function registerRoutes(
       }
       if (session.completedAt) return res.status(400).json({ message: "Session already submitted" });
 
-      let allQuestions = await storage.getQuestionsByDiagnostic(session.diagnosticId);
+      const answerIds = answers.map((a: any) => a.questionId).filter(Boolean);
+      let allQuestions = answerIds.length > 0
+        ? await db.select().from(questions).where(inArray(questions.id, answerIds))
+        : await storage.getQuestionsByDiagnostic(session.diagnosticId);
       if (allQuestions.length === 0) {
-        const answerIds = answers.map((a: any) => a.questionId).filter(Boolean);
-        if (answerIds.length > 0) {
-          allQuestions = await db.select().from(questions)
-            .where(inArray(questions.id, answerIds));
-        }
+        allQuestions = await storage.getQuestionsByDiagnostic(session.diagnosticId);
       }
       const questionMap = new Map(allQuestions.map(q => [q.id, q]));
 
       let correct = 0;
-      const sectionResults: Record<string, { correct: number; total: number; totalTime: number }> = {};
+      const sectionResults: Record<string, { correct: number; total: number; totalTime: number; totalExpected: number }> = {};
+      const compPace = { total: 0, totalTime: 0, totalExpected: 0 };
       const answerRecords: AnswerRecord[] = [];
 
       const diffMap: Record<string, number> = { easy: 2, medium: 3, hard: 4 };
@@ -686,11 +711,18 @@ export async function registerRoutes(
         if (isCorrect) correct++;
 
         if (!sectionResults[question.section]) {
-          sectionResults[question.section] = { correct: 0, total: 0, totalTime: 0 };
+          sectionResults[question.section] = { correct: 0, total: 0, totalTime: 0, totalExpected: 0 };
         }
         sectionResults[question.section].total++;
         sectionResults[question.section].totalTime += ans.timeTaken || 0;
+        sectionResults[question.section].totalExpected += (question.estTimeSeconds as number) || 35;
         if (isCorrect) sectionResults[question.section].correct++;
+
+        if (question.renderType === 'comprehension') {
+          compPace.total++;
+          compPace.totalTime += ans.timeTaken || 0;
+          compPace.totalExpected += (question.estTimeSeconds as number) || 45;
+        }
 
         await storage.createTestAnswer({
           sessionId: session.id,
@@ -718,8 +750,8 @@ export async function registerRoutes(
       const rawPercent = total > 0 ? (correct / total) * 100 : 0;
       const forecastScore = Math.round((rawPercent / 100) * 141);
       let band = "Clear Improvement Opportunity";
-      if (forecastScore >= 121) band = "On Track";
-      else if (forecastScore >= 115) band = "Within Reach";
+      if (rawPercent >= 86) band = "On Track";
+      else if (rawPercent >= 82) band = "Within Reach";
 
       const sectionScores = Object.entries(sectionResults).map(([name, data]) => ({
         name,
@@ -729,11 +761,24 @@ export async function registerRoutes(
         correct: data.correct,
       }));
 
-      const paceData = Object.entries(sectionResults).map(([name, data]) => ({
-        name,
-        avg: Math.round(data.totalTime / data.total),
-        expected: name === 'Mathematics' ? 40 : name === 'Non-Verbal Reasoning' ? 38 : 35,
-      }));
+      const paceData: { name: string; avg: number; expected: number; isComp: boolean }[] =
+        Object.entries(sectionResults).map(([name, data]) => ({
+          name,
+          avg: Math.round(data.totalTime / data.total),
+          expected: data.totalExpected > 0
+            ? Math.round(data.totalExpected / data.total)
+            : (name === 'Mathematics' ? 40 : name === 'Non-Verbal Reasoning' ? 38 : 35),
+          isComp: false,
+        }));
+
+      if (compPace.total > 0) {
+        paceData.push({
+          name: 'Comprehension',
+          avg: Math.round(compPace.totalTime / compPace.total),
+          expected: Math.round(compPace.totalExpected / compPace.total),
+          isComp: true,
+        });
+      }
 
       const priorSessions = await storage.getUserTestSessions(req.user!.id);
       const historicalRS = priorSessions
@@ -1199,7 +1244,7 @@ export async function registerRoutes(
       
       const sectionId = req.params.id;
 
-      const TIER_RANK: Record<string, number> = { free: 0, early_learner: 0, pack12: 1, pack12_family: 1, programme16: 2, programme16_family: 2 };
+      const TIER_RANK: Record<string, number> = { free: 0, early_learner: 0, pack12: 1, pack12_family: 1, pack_monthly: 1, programme8: 2, programme12: 2, programme16: 2, programme16_family: 2, programme24_plus: 2 };
       const section = await storage.getPracticeSection(sectionId);
       if (!section) return res.status(404).json({ message: "Practice section not found" });
       const userRank = TIER_RANK[req.user!.subscriptionTier || "free"] || 0;

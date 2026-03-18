@@ -143,7 +143,7 @@ export default function GuestResults() {
                 (hasSimChanges ? simScore : currentScore) >= 110 ? 'bg-amber-100 text-amber-800 border-amber-200' :
                 'bg-red-100 text-red-800 border-red-200'
               }`} data-testid="text-guest-band">
-                <Sparkles className="h-4 w-4" /> {hasSimChanges ? (simScore >= 121 ? "On Track" : simScore >= 115 ? "Within Reach" : "Clear Improvement Opportunity") : (session.band || "Unknown")}
+                <Sparkles className="h-4 w-4" /> {hasSimChanges ? (simScore >= 121 ? "On Track" : simScore >= 116 ? "Within Reach" : "Clear Improvement Opportunity") : (session.band || "Unknown")}
               </div>
               <p className="text-muted-foreground text-lg">
                 {(hasSimChanges ? simGap : target - currentScore) > 0 ? (

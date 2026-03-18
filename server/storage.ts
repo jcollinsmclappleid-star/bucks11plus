@@ -170,10 +170,13 @@ export class DatabaseStorage implements IStorage {
     const diag = await this.getDiagnostic(diagnosticId);
     if (!diag) return [];
 
+    const isGuestSession = userId.startsWith('guest-');
+
     let allQuestions = await db.select().from(questions)
       .where(and(
         eq(questions.diagnosticId, diagnosticId),
-        eq(questions.qaStatus, "approved")
+        eq(questions.qaStatus, "approved"),
+        isGuestSession ? eq(questions.freePool, true) : sql`TRUE`
       ))
       .orderBy(questions.orderIndex);
 
@@ -186,12 +189,71 @@ export class DatabaseStorage implements IStorage {
     const diffProfile = DIFFICULTY_PROFILES[diag.type] || DIFFICULTY_PROFILES.full;
 
     if (allQuestions.length < diag.questionCount) {
-      const poolQuestions = await this.selectPoolQuestions(diag.questionCount, diag.sections, userId, allQuestions.map(q => q.id), diffProfile);
-      allQuestions = [...allQuestions, ...poolQuestions].slice(0, Math.max(diag.questionCount, allQuestions.length + poolQuestions.length));
+      const poolQuestions = await this.selectPoolQuestions(
+        diag.questionCount, diag.sections, userId, allQuestions.map(q => q.id), diffProfile, diag.type
+      );
+      allQuestions = [...allQuestions, ...poolQuestions];
     }
 
     if (allQuestions.length === 0) {
+      if (isGuestSession) return [];
       return this.getQuestionsByDiagnostic(diagnosticId);
+    }
+
+    // Comprehension ordering: ensure passage-atomic groups and sort within each passage
+    const compPassageMap = new Map<string, Question[]>();
+    const nonCompQuestions: Question[] = [];
+    for (const q of allQuestions) {
+      if (q.renderType === 'comprehension') {
+        const rc = q.renderConfig as any;
+        const pid = rc?.passageId || q.subRuleId || '__none__';
+        if (!compPassageMap.has(pid)) compPassageMap.set(pid, []);
+        compPassageMap.get(pid)!.push(q);
+      } else {
+        nonCompQuestions.push(q);
+      }
+    }
+
+    // Sort each passage group by questionIndex
+    for (const [, qs] of compPassageMap.entries()) {
+      qs.sort((a, b) => {
+        const idxA = (a.renderConfig as any)?.questionIndex ?? a.orderIndex;
+        const idxB = (b.renderConfig as any)?.questionIndex ?? b.orderIndex;
+        return idxA - idxB;
+      });
+    }
+
+    // Defensive passage expansion: if passage subset is incomplete, fetch missing questions
+    if (!isGuestSession) {
+      for (const [, qs] of compPassageMap.entries()) {
+        const firstQ = qs[0];
+        const rc = firstQ.renderConfig as any;
+        const total: number | undefined = rc?.totalQuestionsInPassage;
+        if (total && qs.length < total) {
+          const pid = rc?.passageId || firstQ.subRuleId || '__none__';
+          const existingIds = qs.map(q => q.id);
+          const missing = await db.select().from(questions).where(and(
+            eq(questions.qaStatus, 'approved'),
+            sql`render_config->>'passageId' = ${pid}`,
+            sql`id NOT IN (${sql.raw(existingIds.map(id => `'${id}'`).join(','))})`
+          ));
+          qs.push(...missing);
+          qs.sort((a, b) => {
+            const idxA = (a.renderConfig as any)?.questionIndex ?? a.orderIndex;
+            const idxB = (b.renderConfig as any)?.questionIndex ?? b.orderIndex;
+            return idxA - idxB;
+          });
+        }
+      }
+    }
+
+    // Comp questions come first (required for two-phase timer)
+    const orderedComp = [...compPassageMap.values()].flat();
+    allQuestions = [...orderedComp, ...nonCompQuestions];
+
+    // For guests, skip usage tracking
+    if (isGuestSession) {
+      return allQuestions.slice(0, diag.questionCount);
     }
 
     const COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000;
@@ -351,20 +413,36 @@ export class DatabaseStorage implements IStorage {
     userId: string,
     excludeIds: string[] = [],
     difficultyProfile?: { easy: number; medium: number; hard: number },
+    diagType?: string,
   ): Promise<Question[]> {
-    const user = await this.getUser(userId);
+    const isGuest = userId.startsWith('guest-');
+    const user = isGuest ? null : await this.getUser(userId);
     const isEarlyLearner = user?.subscriptionTier === "early_learner";
 
-    const profile = difficultyProfile || { easy: 0.25, medium: 0.50, hard: 0.25 };
-    
-    // Adjust profile for early learners to eliminate hard questions
-    const adjustedProfile = isEarlyLearner ? {
-      easy: profile.easy + (profile.hard * 0.4),
-      medium: profile.medium + (profile.hard * 0.6),
-      hard: 0
-    } : profile;
+    const SECTION_WEIGHTS: Record<string, number> = {
+      "Verbal Reasoning": 0.35,
+      "Mathematics": 0.25,
+      "Non-Verbal Reasoning": 0.25,
+      "English Comprehension": 0.15,
+    };
 
-    const perSection = Math.ceil(count / sections.length);
+    const DIFFICULTY_PROFILES: Record<string, { easy: number; medium: number; hard: number }> = {
+      mini: { easy: 0.25, medium: 0.50, hard: 0.25 },
+      full: { easy: 0.20, medium: 0.45, hard: 0.35 },
+      mock: { easy: 0.15, medium: 0.40, hard: 0.45 },
+      practice_paper: { easy: 0.20, medium: 0.45, hard: 0.35 },
+    };
+
+    const profile = difficultyProfile || DIFFICULTY_PROFILES[diagType || 'full'] || DIFFICULTY_PROFILES.full;
+    const diffProfile = isEarlyLearner
+      ? { easy: profile.easy + profile.hard * 0.4, medium: profile.medium + profile.hard * 0.6, hard: 0 }
+      : profile;
+
+    const nonCompSections = sections.filter(s => s !== 'English Comprehension');
+    const nonCompTotalWeight = nonCompSections.reduce((sum, s) => sum + (SECTION_WEIGHTS[s] ?? 0.25), 0);
+    const perSection = (section: string) =>
+      Math.ceil(count * ((SECTION_WEIGHTS[section] ?? 0.25) / nonCompTotalWeight));
+
     const results: Question[] = [];
 
     for (const section of sections) {
@@ -373,36 +451,120 @@ export class DatabaseStorage implements IStorage {
           eq(questions.section, section),
           eq(questions.qaStatus, "approved"),
           sql`${questions.skillId} IS NOT NULL AND ${questions.skillId} != ''`,
-          // Filter out hard questions at the database level for early learners
-          isEarlyLearner ? ne(questions.difficulty, 'hard') : sql`TRUE`
+          isGuest ? eq(questions.freePool, true) : sql`TRUE`,
         ));
 
       if (excludeIds.length > 0) {
         pool = pool.filter(q => !excludeIds.includes(q.id));
       }
 
+      if (isEarlyLearner) {
+        pool = pool.filter(q => q.difficulty !== 'hard');
+      }
+
+      // Comprehension: passage-atomic selection with ceiling
+      if (section === "English Comprehension") {
+        const passageGroupsMap = new Map<string, Question[]>();
+        for (const q of pool) {
+          const rc = q.renderConfig as any;
+          const pid = rc?.passageId || q.subRuleId || '__none__';
+          if (!passageGroupsMap.has(pid)) passageGroupsMap.set(pid, []);
+          passageGroupsMap.get(pid)!.push(q);
+        }
+
+        for (const qs of passageGroupsMap.values()) {
+          qs.sort((a, b) => {
+            const idxA = (a.renderConfig as any)?.questionIndex ?? a.orderIndex;
+            const idxB = (b.renderConfig as any)?.questionIndex ?? b.orderIndex;
+            return idxA - idxB;
+          });
+        }
+
+        const sortedPassages = [...passageGroupsMap.values()]
+          .sort(() => Math.random() - 0.5)
+          .sort((a, b) => a.length - b.length);
+
+        const proportionalCeiling = Math.ceil(count * 0.25);
+        const smallestPassageSize = sortedPassages.length > 0 ? sortedPassages[0].length : Infinity;
+        const compCeiling = Math.max(proportionalCeiling, smallestPassageSize);
+
+        const compResult: Question[] = [];
+        for (const qs of sortedPassages) {
+          if (compResult.length + qs.length <= compCeiling) {
+            compResult.push(...qs);
+          }
+          if (compResult.length >= compCeiling) break;
+        }
+
+        results.push(...compResult);
+        continue;
+      }
+
+      // Non-comp: difficulty-proportional selection with backfill
+      const sectionTarget = perSection(section);
       const shuffled = pool.sort(() => Math.random() - 0.5);
 
-      const easyCount = Math.round(perSection * adjustedProfile.easy);
-      const mediumCount = Math.round(perSection * adjustedProfile.medium);
-      const hardCount = perSection - easyCount - mediumCount;
+      const easyCount = Math.round(sectionTarget * diffProfile.easy);
+      const mediumCount = Math.round(sectionTarget * diffProfile.medium);
+      const hardCount = sectionTarget - easyCount - mediumCount;
 
       const byDiff = (d: string) => shuffled.filter(q => q.difficulty === d);
-      const easy = byDiff('easy').slice(0, easyCount);
-      const medium = byDiff('medium').slice(0, mediumCount);
-      const hard = byDiff('hard').slice(0, hardCount);
-      let sectionQuestions = [...easy, ...medium, ...hard];
+      let sectionQuestions = [
+        ...byDiff('easy').slice(0, easyCount),
+        ...byDiff('medium').slice(0, mediumCount),
+        ...byDiff('hard').slice(0, Math.max(0, hardCount)),
+      ];
 
-      if (sectionQuestions.length < perSection) {
+      if (sectionQuestions.length < sectionTarget) {
         const usedIds = new Set(sectionQuestions.map(q => q.id));
         const remaining = shuffled.filter(q => !usedIds.has(q.id));
-        sectionQuestions = [...sectionQuestions, ...remaining.slice(0, perSection - sectionQuestions.length)];
+        sectionQuestions = [...sectionQuestions, ...remaining.slice(0, sectionTarget - sectionQuestions.length)];
       }
 
       results.push(...sectionQuestions);
     }
 
-    return results.sort(() => Math.random() - 0.5).slice(0, count);
+    // Proportional final assembly — comp first
+    const compResults = results.filter(q => q.renderType === 'comprehension');
+    const nonCompResults = results.filter(q => q.renderType !== 'comprehension');
+    const nonCompTarget = Math.max(0, count - compResults.length);
+
+    const nonCompBySection = new Map<string, Question[]>();
+    for (const q of nonCompResults) {
+      if (!nonCompBySection.has(q.section)) nonCompBySection.set(q.section, []);
+      nonCompBySection.get(q.section)!.push(q);
+    }
+    for (const qs of nonCompBySection.values()) qs.sort(() => Math.random() - 0.5);
+
+    const takenBySection = new Map<string, number>();
+    const selectedNonComp: Question[] = [];
+    let allocated = 0;
+    nonCompSections.forEach((section, i) => {
+      const weight = SECTION_WEIGHTS[section] ?? 0.25;
+      const isLast = i === nonCompSections.length - 1;
+      const target = isLast
+        ? nonCompTarget - allocated
+        : Math.round(nonCompTarget * (weight / nonCompTotalWeight));
+      allocated += target;
+      const qs = nonCompBySection.get(section) ?? [];
+      const take = Math.min(Math.max(0, target), qs.length);
+      selectedNonComp.push(...qs.slice(0, take));
+      takenBySection.set(section, take);
+    });
+
+    const stillNeeded = nonCompTarget - selectedNonComp.length;
+    if (stillNeeded > 0) {
+      const surplus = nonCompSections
+        .flatMap(s => {
+          const qs = nonCompBySection.get(s) ?? [];
+          const taken = takenBySection.get(s) ?? 0;
+          return qs.slice(taken);
+        })
+        .sort(() => Math.random() - 0.5);
+      selectedNonComp.push(...surplus.slice(0, stillNeeded));
+    }
+
+    return [...compResults, ...selectedNonComp];
   }
 
   async selectQuestionsForPracticePaper(

@@ -105,21 +105,28 @@ export default function Pricing() {
     }
   };
 
-  const isUpgradeEligible = user && (user.subscriptionTier === "pack12" || user.subscriptionTier === "pack12_family");
+  const PACK_TIERS = new Set(["pack12", "pack12_family", "pack_monthly"]);
+  const PROGRAMME_TIERS = new Set(["programme8", "programme12", "programme16", "programme16_family", "programme24_plus"]);
+
+  const isUpgradeEligible = user && PACK_TIERS.has(user.subscriptionTier);
   const upgradeTier = user?.subscriptionTier === "pack12_family" ? "programme16_family" : "programme16";
 
   const tierRank: Record<string, number> = {
     free: 0,
     early_learner: 1,
     pack12: 2,
-    pack12_family: 3,
-    programme16: 4,
-    programme16_family: 5,
+    pack12_family: 2,
+    pack_monthly: 2,
+    programme8: 3,
+    programme12: 3,
+    programme16: 3,
+    programme16_family: 3,
+    programme24_plus: 3,
   };
   const currentTier = user?.subscriptionTier || "free";
   const currentRank = tierRank[currentTier] ?? 0;
   const hasPaidPlan = user && currentRank > 0;
-  const isTopTier = currentTier === "programme16" || currentTier === "programme16_family";
+  const isTopTier = PROGRAMME_TIERS.has(currentTier);
 
   const faqs = [
     {
@@ -403,17 +410,17 @@ export default function Pricing() {
                       <div className="flex items-center gap-3 mb-1">
                         <h3 className="text-xl font-bold text-primary font-serif">
                           {currentTier === "early_learner" && "Early Learner"}
-                          {currentTier === "pack12" && "Practice Platform"}
+                          {(currentTier === "pack12" || currentTier === "pack_monthly") && "Practice Platform"}
                           {currentTier === "pack12_family" && "Practice Platform — Family"}
-                          {currentTier === "programme16" && "Young Scholar Programme"}
+                          {(currentTier === "programme8" || currentTier === "programme12" || currentTier === "programme16" || currentTier === "programme24_plus") && "Young Scholar Programme"}
                           {currentTier === "programme16_family" && "Young Scholar Programme — Family"}
                         </h3>
                         <Badge className="bg-brand-green/10 text-brand-green border-brand-green/20 hover:bg-brand-green/10">Active</Badge>
                       </div>
                       <p className="text-sm text-slate-600 mb-4">
                         {currentTier === "early_learner" && "Foundation-level practice with readiness tracking and age-appropriate learning."}
-                        {(currentTier === "pack12" || currentTier === "pack12_family") && "1,600+ questions, full diagnostics, timed drills, PDF reports and progress tracking."}
-                        {(currentTier === "programme16" || currentTier === "programme16_family") && "Complete preparation: diagnostics, all drills, mock exams, roadmap, milestone tracking, weekly plans and premium analytics."}
+                        {(currentTier === "pack12" || currentTier === "pack12_family" || currentTier === "pack_monthly") && "1,600+ questions, full diagnostics, timed drills, PDF reports and progress tracking."}
+                        {(currentTier === "programme8" || currentTier === "programme12" || currentTier === "programme16" || currentTier === "programme16_family" || currentTier === "programme24_plus") && "Complete preparation: diagnostics, all drills, mock exams, roadmap, milestone tracking, weekly plans and premium analytics."}
                       </p>
                       <Button size="sm" asChild>
                         <Link href="/app">Go to Dashboard <ArrowRight className="ml-2 h-4 w-4" /></Link>

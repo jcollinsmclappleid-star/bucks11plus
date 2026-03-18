@@ -92,12 +92,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await logoutMutation.mutateAsync();
   };
 
+  const PACK_TIERS = new Set(["pack12", "pack12_family", "pack_monthly"]);
+  const PROGRAMME_TIERS = new Set(["programme16", "programme16_family", "programme8", "programme12", "programme24_plus"]);
+
   const isEarlyLearner = () => user?.subscriptionTier === "early_learner";
-  const isPack12 = () => user?.subscriptionTier === "pack12" || user?.subscriptionTier === "pack12_family";
-  const isProgramme = () => user?.subscriptionTier === "programme16" || user?.subscriptionTier === "programme16_family";
+  const isPack12 = () => PACK_TIERS.has(user?.subscriptionTier ?? "");
+  const isProgramme = () => PROGRAMME_TIERS.has(user?.subscriptionTier ?? "");
   const hasPaidAccess = () => {
-    const t = user?.subscriptionTier;
-    return t === "pack12" || t === "pack12_family" || t === "programme16" || t === "programme16_family" || t === "early_learner";
+    const t = user?.subscriptionTier ?? "";
+    return t === "early_learner" || PACK_TIERS.has(t) || PROGRAMME_TIERS.has(t);
   };
   const isFamilyTier = () => user?.subscriptionTier?.includes("family") ?? false;
 
@@ -107,8 +110,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       case "early_learner": return "Early Learner";
       case "pack12": return "Practice Platform";
       case "pack12_family": return "Practice Platform (Family)";
+      case "pack_monthly": return "Practice Platform (Monthly)";
+      case "programme8": return "Young Scholar Programme (8-week)";
+      case "programme12": return "Young Scholar Programme (12-week)";
       case "programme16": return "Young Scholar Programme";
       case "programme16_family": return "Young Scholar Programme (Family)";
+      case "programme24_plus": return "Young Scholar Programme (24-week)";
       default: return "Free";
     }
   };

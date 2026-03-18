@@ -39,7 +39,8 @@ export default function CheckoutSuccess() {
     }
   }, [user, isLoading, tier]);
 
-  const tierLabel = tier === "programme16" ? "Young Scholar Programme" : "Practice Platform";
+  const PROGRAMME_TIERS = new Set(["programme8", "programme12", "programme16", "programme16_family", "programme24_plus"]);
+  const tierLabel = PROGRAMME_TIERS.has(tier) ? "Young Scholar Programme" : tier === "early_learner" ? "Early Learner" : "Practice Platform";
 
   if (processing) {
     return (
