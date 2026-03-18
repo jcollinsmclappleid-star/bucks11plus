@@ -201,7 +201,9 @@ export class DatabaseStorage implements IStorage {
     }
 
     if (allQuestions.length === 0) {
-      if (isGuestSession) return [];
+      // For guest sessions or pool-restricted diagnostics (full/mock), never fall back to
+      // unrestricted questions — returning empty signals a seeding problem cleanly.
+      if (isGuestSession || diagPoolFilter !== null) return [];
       return this.getQuestionsByDiagnostic(diagnosticId);
     }
 
@@ -884,6 +886,7 @@ export class DatabaseStorage implements IStorage {
       pool = await db.select().from(questions)
         .where(and(
           eq(questions.section, sectionName),
+          inArray(questions.questionPool, DRILL_POOL_FILTER),
           isEarlyLearner ? ne(questions.difficulty, 'hard') : sql`TRUE`
         ));
     }

@@ -28,7 +28,9 @@ const SECTION_QUOTAS = {
 } as const;
 
 const NON_COMP_SECTIONS = ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"] as const;
-const COMP_PASSAGE_COUNT = 6;
+// Target at least 96 comprehension questions (sufficient for 5 full-a/b + 3 mock runs without overlap).
+// We accumulate whole passages until we reach or exceed this quota.
+const COMP_QUESTION_QUOTA = 96;
 
 const isDryRun = process.argv.includes("--dry-run");
 
@@ -137,16 +139,28 @@ async function main() {
     }
   }
 
-  const stillNeeded = Math.max(0, COMP_PASSAGE_COUNT - alreadyDiagPassages.size);
+  // How many comp questions are already in the diagnostic pool?
+  const alreadyDiagCompCount = [...passageMap.values()]
+    .flatMap(qs => qs)
+    .filter(q => q.questionPool === "diagnostic").length;
+  const stillNeededCount = Math.max(0, COMP_QUESTION_QUOTA - alreadyDiagCompCount);
 
-  // Prefer non-freePool passages; sort by freePool status then size
-  const sortedCandidates = candidatePassages
+  // Prefer non-freePool passages; sort by freePool status then size (larger passages first to hit quota faster)
+  const sortedCandidatesAll = candidatePassages
     .sort((a, b) => {
       const aFree = a[1].some(q => q.freePool) ? 1 : 0;
       const bFree = b[1].some(q => q.freePool) ? 1 : 0;
-      return aFree - bFree || a[1].length - b[1].length;
-    })
-    .slice(0, stillNeeded);
+      return aFree - bFree || b[1].length - a[1].length;
+    });
+
+  // Accumulate passages until we reach stillNeededCount questions
+  const sortedCandidates: typeof sortedCandidatesAll = [];
+  let accumulated = 0;
+  for (const entry of sortedCandidatesAll) {
+    if (accumulated >= stillNeededCount) break;
+    sortedCandidates.push(entry);
+    accumulated += entry[1].length;
+  }
 
   let compTotal = 0;
   // Count already-diagnostic comp questions
@@ -185,7 +199,8 @@ async function main() {
     const t = String(row.total).padStart(5);
     console.log(`│ ${s} │${e} │${m} │${h} │${t} │`);
   }
-  const compLabel = `English Comprehension (×${alreadyDiagPassages.size + sortedCandidates.length} passages)`.padEnd(27);
+  const totalPassages = alreadyDiagPassages.size + sortedCandidates.length;
+  const compLabel = `English Comprehension (×${totalPassages} passages)`.padEnd(27);
   const compTotalStr = String(compTotal).padStart(5);
   console.log(`│ ${compLabel} │   — │      — │   — │${compTotalStr} │`);
   console.log("├─────────────────────────────┼──────┼────────┼──────┼───────┤");
