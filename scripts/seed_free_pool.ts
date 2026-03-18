@@ -13,18 +13,18 @@ import { eq, and, isNotNull, ne, sql } from "drizzle-orm";
  *   npx tsx scripts/seed_free_pool.ts --reset      (clear all freePool flags first)
  */
 
+// Mini-1 diagnostic uses only these three sections (no comprehension —
+// passage atomicity makes comp unworkable in a 12-question mini budget).
 const SECTIONS = [
   "Verbal Reasoning",
   "Non-Verbal Reasoning",
   "Mathematics",
-  "English Comprehension",
 ];
 
 const PER_SECTION_TARGETS = {
   "Verbal Reasoning": 8,
   "Non-Verbal Reasoning": 6,
   "Mathematics": 6,
-  "English Comprehension": 4,
 };
 
 const isDryRun = process.argv.includes("--dry-run");

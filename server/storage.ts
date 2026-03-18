@@ -484,13 +484,14 @@ export class DatabaseStorage implements IStorage {
           .sort(() => Math.random() - 0.5)
           .sort((a, b) => a.length - b.length);
 
-        const proportionalCeiling = Math.ceil(count * 0.25);
-        const smallestPassageSize = sortedPassages.length > 0 ? sortedPassages[0].length : Infinity;
-        const compCeiling = Math.max(proportionalCeiling, smallestPassageSize);
+        // Hard cap: comprehension may not exceed 25% of total budget.
+        // Passages larger than this ceiling are skipped entirely to prevent
+        // comprehension from flooding the question set.
+        const compCeiling = Math.floor(count * 0.25);
 
         const compResult: Question[] = [];
         for (const qs of sortedPassages) {
-          if (compResult.length + qs.length <= compCeiling) {
+          if (qs.length <= compCeiling && compResult.length + qs.length <= compCeiling) {
             compResult.push(...qs);
           }
           if (compResult.length >= compCeiling) break;
