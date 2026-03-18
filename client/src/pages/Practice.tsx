@@ -10,7 +10,11 @@ import { useAuth } from "../lib/auth";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState } from "react";
 
-const TIER_RANK: Record<string, number> = { free: 0, pack12: 1, programme16: 2 };
+const TIER_RANK: Record<string, number> = {
+  free: 0,
+  pack12: 1, pack12_family: 1, pack_monthly: 1,
+  programme8: 2, programme12: 2, programme16: 2, programme16_family: 2, programme24_plus: 2,
+};
 
 type ProgressData = {
   sectionAccuracy: Record<string, { correct: number; total: number; pct: number }>;

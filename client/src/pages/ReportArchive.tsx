@@ -10,13 +10,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
 
 export default function ReportArchive() {
-  const { user } = useAuth();
+  const { user, hasPaidAccess } = useAuth();
   const { data: sessions, isLoading } = useQuery<TestSession[]>({
     queryKey: ["/api/test-sessions"],
     enabled: !!user,
   });
-
-  const hasPaidAccess = user?.subscriptionTier === 'pack12' || user?.subscriptionTier === 'programme16';
   const completedSessions = sessions?.filter(s => s.completedAt) || [];
 
   return (
@@ -29,7 +27,7 @@ export default function ReportArchive() {
       </div>
 
       <div className="relative">
-        {!hasPaidAccess && (
+        {!hasPaidAccess() && (
           <div className="absolute inset-0 bg-white/60 backdrop-blur-sm z-20 flex flex-col items-center justify-center p-8 text-center border border-slate-200 rounded-xl shadow-sm">
             <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg mb-6 border border-slate-100">
               <Lock className="h-8 w-8 text-brand-amber" />
@@ -44,7 +42,7 @@ export default function ReportArchive() {
           </div>
         )}
 
-        <div className={`space-y-4 ${!hasPaidAccess ? 'opacity-40 pointer-events-none select-none' : ''}`}>
+        <div className={`space-y-4 ${!hasPaidAccess() ? 'opacity-40 pointer-events-none select-none' : ''}`}>
           {isLoading ? (
             Array(3).fill(0).map((_, i) => (
               <Skeleton key={i} className="h-24 w-full" />

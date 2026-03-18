@@ -13,15 +13,23 @@ import { useState } from "react";
 function tierLabel(tier: string): string {
   switch (tier) {
     case "free": return "Free";
-    case "pack12": return "Practice Platform";
-    case "programme16": return "Programme";
-    case "pack": return "Practice Platform";
-    case "monthly": return "Programme";
-    default: return tier;
+    case "pack12":
+    case "pack12_family":
+    case "pack_monthly": return "Practice Platform";
+    case "programme8":
+    case "programme12":
+    case "programme16":
+    case "programme16_family":
+    case "programme24_plus": return "Young Scholar Programme";
+    default: return "Practice Platform";
   }
 }
 
-const TIER_RANK: Record<string, number> = { free: 0, pack12: 1, programme16: 2 };
+const TIER_RANK: Record<string, number> = {
+  free: 0,
+  pack12: 1, pack12_family: 1, pack_monthly: 1,
+  programme8: 2, programme12: 2, programme16: 2, programme16_family: 2, programme24_plus: 2,
+};
 
 const PRACTICE_PAPERS = [
   {

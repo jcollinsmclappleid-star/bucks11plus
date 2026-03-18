@@ -1530,7 +1530,7 @@ export async function registerRoutes(
   app.post("/api/admin/switch-tier", requireAdmin, async (req, res, next) => {
     try {
       const { tier } = req.body;
-      const validTiers = ["free", "early_learner", "pack12", "pack12_family", "programme16", "programme16_family"];
+      const validTiers = ["free", "early_learner", "pack12", "pack12_family", "pack_monthly", "programme8", "programme12", "programme16", "programme16_family", "programme24_plus"];
       if (!tier || !validTiers.includes(tier)) {
         return res.status(400).json({ message: "Invalid tier" });
       }

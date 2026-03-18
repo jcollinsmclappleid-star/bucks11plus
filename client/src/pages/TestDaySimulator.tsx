@@ -62,7 +62,7 @@ function CountdownWidget({ examDate }: { examDate: string }) {
 export { CountdownWidget };
 
 export default function TestDaySimulator() {
-  const { user } = useAuth();
+  const { user, isProgramme } = useAuth();
   const [, navigate] = useLocation();
   const [phase, setPhase] = useState<Phase>("intro");
   const [currentQ, setCurrentQ] = useState(0);
@@ -73,7 +73,7 @@ export default function TestDaySimulator() {
   const [timerStart, setTimerStart] = useState(0);
   const [showReview, setShowReview] = useState(false);
 
-  const isProgramme = user?.subscriptionTier?.includes("programme16");
+  const isProgrammeUser = isProgramme();
 
   const { data: testDayConfig } = useQuery({
     queryKey: ["/api/test-day-config"],
@@ -82,7 +82,7 @@ export default function TestDaySimulator() {
 
   const { data: simQuestions, isLoading: questionsLoading } = useQuery<{ paper1: SimQuestion[]; paper2: SimQuestion[] }>({
     queryKey: ["/api/simulator-questions"],
-    enabled: !!isProgramme,
+    enabled: !!isProgrammeUser,
     staleTime: 0,
     gcTime: 0,
   });
@@ -134,7 +134,7 @@ export default function TestDaySimulator() {
     }
   }, [currentQ, currentPaper.length, phase, timerStart]);
 
-  if (!isProgramme) {
+  if (!isProgrammeUser) {
     return (
       <div className="container mx-auto max-w-2xl px-4 py-16 text-center space-y-6" data-testid="simulator-locked">
         <div className="text-5xl">🔒</div>
