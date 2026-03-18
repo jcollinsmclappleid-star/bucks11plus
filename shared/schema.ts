@@ -62,6 +62,7 @@ export const questions = pgTable("questions", {
   qaStatus: text("qa_status").notNull().default("draft"),
   estTimeSeconds: integer("est_time_seconds").notNull().default(30),
   freePool: boolean("free_pool").notNull().default(false),
+  questionPool: varchar("question_pool").notNull().default("practice"),
   explanation: text("explanation"),
   notes: text("notes"),
 });

@@ -172,11 +172,16 @@ export class DatabaseStorage implements IStorage {
 
     const isGuestSession = userId.startsWith('guest-');
 
+    // Pool segregation: full/mock use the 'diagnostic' pool; mini/guest are unrestricted.
+    const diagPoolFilter: string[] | null =
+      (diag.type === 'full' || diag.type === 'mock') ? ['diagnostic', 'any'] : null;
+
     let allQuestions = await db.select().from(questions)
       .where(and(
         eq(questions.diagnosticId, diagnosticId),
         eq(questions.qaStatus, "approved"),
-        isGuestSession ? eq(questions.freePool, true) : sql`TRUE`
+        isGuestSession ? eq(questions.freePool, true) : sql`TRUE`,
+        diagPoolFilter ? inArray(questions.questionPool, diagPoolFilter) : sql`TRUE`,
       ))
       .orderBy(questions.orderIndex);
 
@@ -190,7 +195,7 @@ export class DatabaseStorage implements IStorage {
 
     if (allQuestions.length < diag.questionCount) {
       const poolQuestions = await this.selectPoolQuestions(
-        diag.questionCount, diag.sections, userId, allQuestions.map(q => q.id), diffProfile, diag.type
+        diag.questionCount, diag.sections, userId, allQuestions.map(q => q.id), diffProfile, diag.type, diagPoolFilter
       );
       allQuestions = [...allQuestions, ...poolQuestions];
     }
@@ -471,6 +476,7 @@ export class DatabaseStorage implements IStorage {
     excludeIds: string[] = [],
     difficultyProfile?: { easy: number; medium: number; hard: number },
     diagType?: string,
+    poolFilter?: string[] | null,
   ): Promise<Question[]> {
     const isGuest = userId.startsWith('guest-');
     const user = isGuest ? null : await this.getUser(userId);
@@ -509,6 +515,7 @@ export class DatabaseStorage implements IStorage {
           eq(questions.qaStatus, "approved"),
           sql`${questions.skillId} IS NOT NULL AND ${questions.skillId} != ''`,
           isGuest ? eq(questions.freePool, true) : sql`TRUE`,
+          poolFilter && poolFilter.length > 0 ? inArray(questions.questionPool, poolFilter) : sql`TRUE`,
         ));
 
       if (excludeIds.length > 0) {
@@ -691,13 +698,16 @@ export class DatabaseStorage implements IStorage {
     // === Comprehension: passage-grouped selection ===
     // Pick 1-2 complete passages and take questions in questionIndex order.
     // This ensures students read one passage through, not snippets from many.
+    const PRACTICE_POOL_FILTER = ['practice', 'any'];
+
     if (hasComp && compQuota > 0) {
       const compPool = await db.select().from(questions)
         .where(and(
           eq(questions.section, 'English Comprehension'),
           eq(questions.qaStatus, "approved"),
           sql`${questions.skillId} IS NOT NULL AND ${questions.skillId} != ''`,
-          isEarlyLearner ? ne(questions.difficulty, 'hard') : sql`TRUE`
+          isEarlyLearner ? ne(questions.difficulty, 'hard') : sql`TRUE`,
+          inArray(questions.questionPool, PRACTICE_POOL_FILTER),
         ));
 
       // Group by passage
@@ -738,7 +748,8 @@ export class DatabaseStorage implements IStorage {
           eq(questions.section, section),
           eq(questions.qaStatus, "approved"),
           sql`${questions.skillId} IS NOT NULL AND ${questions.skillId} != ''`,
-          isEarlyLearner ? ne(questions.difficulty, 'hard') : sql`TRUE`
+          isEarlyLearner ? ne(questions.difficulty, 'hard') : sql`TRUE`,
+          inArray(questions.questionPool, PRACTICE_POOL_FILTER),
         ));
 
       const fresh = pool.filter(q => {
@@ -816,11 +827,14 @@ export class DatabaseStorage implements IStorage {
     const skillFilter = section.skillId;
     const sectionDifficulty = section.difficulty?.toLowerCase();
 
+    const DRILL_POOL_FILTER = ['practice', 'any'];
+
     let pool: Question[];
     if (skillFilter) {
       const conditions = [
         eq(questions.skillId, skillFilter),
         eq(questions.qaStatus, "approved"),
+        inArray(questions.questionPool, DRILL_POOL_FILTER),
       ];
       if (isEarlyLearner) {
         conditions.push(ne(questions.difficulty, 'hard'));
@@ -841,6 +855,7 @@ export class DatabaseStorage implements IStorage {
           .where(and(
             eq(questions.skillId, skillFilter),
             eq(questions.qaStatus, "approved"),
+            inArray(questions.questionPool, DRILL_POOL_FILTER),
             isEarlyLearner ? ne(questions.difficulty, 'hard') : sql`TRUE`
           ));
       }
@@ -850,6 +865,7 @@ export class DatabaseStorage implements IStorage {
           .where(and(
             eq(questions.section, sectionName),
             eq(questions.qaStatus, "approved"),
+            inArray(questions.questionPool, DRILL_POOL_FILTER),
             isEarlyLearner ? ne(questions.difficulty, 'hard') : sql`TRUE`
           ));
       }
@@ -858,6 +874,7 @@ export class DatabaseStorage implements IStorage {
         .where(and(
           eq(questions.section, sectionName),
           eq(questions.qaStatus, "approved"),
+          inArray(questions.questionPool, DRILL_POOL_FILTER),
           isEarlyLearner ? ne(questions.difficulty, 'hard') : sql`TRUE`
         ));
     }
