@@ -1,8 +1,10 @@
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, CheckCircle2, Target, Clock, BarChart3, Zap, Search, Wrench, TrendingUp, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowRight, CheckCircle2, Target, Clock, BarChart3, Zap, Search, Wrench, TrendingUp, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
+import { useAuth } from "../lib/auth";
+import { apiRequest } from "../lib/queryClient";
 import { useState, useRef } from "react";
 
 const showcaseTabs = [
@@ -221,9 +223,38 @@ function ProgressPanel() {
   );
 }
 
+type ProgrammeTier = "programme8" | "programme12" | "programme24_plus";
+
+const PROGRAMME_OPTIONS: { tier: ProgrammeTier; label: string; weeks: string; programmePrice: string; best?: boolean }[] = [
+  { tier: "programme8",       label: "8 Week Programme",    weeks: "8 weeks",  programmePrice: "£59" },
+  { tier: "programme12",      label: "12 Week Programme",   weeks: "12 weeks", programmePrice: "£89" },
+  { tier: "programme24_plus", label: "Programme+ · 24 wks", weeks: "24 weeks", programmePrice: "£149", best: true },
+];
+
 export default function Landing() {
   const [activeTab, setActiveTab] = useState<TabId>("sections");
+  const [selectedProgramme, setSelectedProgramme] = useState<ProgrammeTier>("programme24_plus");
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const { user } = useAuth();
+  const [, navigate] = useLocation();
+
+  async function handleProgrammeCheckout() {
+    if (!user) {
+      navigate(`/pricing?autoCheckout=${selectedProgramme}`);
+      return;
+    }
+    setCheckoutLoading(true);
+    try {
+      const res = await apiRequest("POST", "/api/checkout/session", { tier: selectedProgramme });
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+    } catch {
+      navigate(`/pricing?autoCheckout=${selectedProgramme}`);
+    } finally {
+      setCheckoutLoading(false);
+    }
+  }
 
   const scrollTabs = (dir: "left" | "right") => {
     if (scrollRef.current) {
@@ -395,12 +426,8 @@ export default function Landing() {
                 Practice Platform — £24.99/mo
               </Link>
               <span className="hidden sm:inline text-white/15">|</span>
-              <Link href="/pricing" className="text-brand-amber/70 hover:text-brand-amber text-sm font-semibold transition-colors">
-                Programme+ — £149
-              </Link>
-              <span className="hidden sm:inline text-white/15">|</span>
-              <Link href="/pricing" className="text-white/40 hover:text-white/70 text-sm font-medium transition-colors">
-                8 Week — £59
+              <Link href="/pricing#tiers" className="text-brand-amber/70 hover:text-brand-amber text-sm font-semibold transition-colors">
+                Structured Programmes — from £59
               </Link>
             </div>
 
@@ -475,32 +502,50 @@ export default function Landing() {
                 RECOMMENDED
               </div>
               <p className="text-sm font-semibold text-brand-amber uppercase tracking-wider mb-2">Structured Programmes</p>
-              <h3 className="text-xl font-bold text-primary font-serif mb-1">from £59<span className="text-sm font-medium text-slate-500"> one-time</span></h3>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight mb-4">8 / 12 / 24 week options</p>
+              <div className="mb-1">
+                <span className="text-xl font-bold text-primary font-serif">
+                  {PROGRAMME_OPTIONS.find(o => o.tier === selectedProgramme)?.programmePrice}
+                </span>
+                <span className="text-sm font-medium text-slate-500"> one-time</span>
+              </div>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight mb-3">
+                + £24.99/mo subscription · includes platform access
+              </p>
               <div className="space-y-2 mb-4 flex-1">
-                {[
-                  { label: "8 Week Programme", price: "£59", weeks: "8 wks", tier: "programme8" },
-                  { label: "12 Week Programme", price: "£89", weeks: "12 wks", tier: "programme12" },
-                  { label: "Programme+ (24 wks)", price: "£149", weeks: "Best value", tier: "programme24_plus", highlight: true },
-                ].map((opt) => (
-                  <div
+                {PROGRAMME_OPTIONS.map((opt) => (
+                  <button
                     key={opt.tier}
-                    className={`flex items-center justify-between px-3 py-2.5 rounded-xl border text-sm ${opt.highlight ? "border-brand-amber/60 bg-amber-50" : "border-slate-200 bg-white"}`}
-                    data-testid={`row-programme-${opt.tier}`}
+                    onClick={() => setSelectedProgramme(opt.tier)}
+                    data-testid={`button-select-landing-${opt.tier}`}
+                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl border text-sm transition-all ${
+                      selectedProgramme === opt.tier
+                        ? "border-brand-amber bg-amber-50 shadow-sm"
+                        : "border-slate-200 bg-white hover:border-brand-amber/40"
+                    }`}
                   >
                     <div className="flex items-center gap-2">
-                      <CheckCircle2 className={`h-4 w-4 shrink-0 ${opt.highlight ? "text-brand-amber" : "text-brand-green"}`} />
-                      <span className={`font-medium ${opt.highlight ? "text-amber-900" : "text-slate-700"}`}>{opt.label}</span>
+                      <div className={`h-4 w-4 rounded-full border-2 flex items-center justify-center shrink-0 ${selectedProgramme === opt.tier ? "border-brand-amber" : "border-slate-300"}`}>
+                        {selectedProgramme === opt.tier && <div className="h-2 w-2 rounded-full bg-brand-amber" />}
+                      </div>
+                      <span className={`font-medium ${selectedProgramme === opt.tier ? "text-amber-900" : "text-slate-700"}`}>{opt.label}</span>
                     </div>
-                    <div className="text-right">
-                      <span className={`font-bold text-sm ${opt.highlight ? "text-brand-amber" : "text-primary"}`}>{opt.price}</span>
-                      {opt.highlight && <span className="ml-1.5 text-[10px] font-bold text-brand-amber uppercase tracking-tight">Best value</span>}
+                    <div className="flex items-center gap-1.5">
+                      {opt.best && <span className="text-[9px] font-bold text-brand-amber uppercase tracking-tight bg-amber-100 px-1.5 py-0.5 rounded-full">Best value</span>}
+                      <span className={`font-bold ${selectedProgramme === opt.tier ? "text-brand-amber" : "text-primary"}`}>{opt.programmePrice}</span>
                     </div>
-                  </div>
+                  </button>
                 ))}
               </div>
-              <Button className="w-full mt-2 h-auto min-h-[2.75rem] py-2 text-sm font-bold bg-brand-amber text-white hover:bg-brand-amber/90 border-none" asChild data-testid="button-included-programme">
-                <Link href="/pricing#tiers">Choose Your Programme</Link>
+              <Button
+                className="w-full mt-2 h-auto min-h-[2.75rem] py-2 text-sm font-bold bg-brand-amber text-white hover:bg-brand-amber/90 border-none"
+                onClick={handleProgrammeCheckout}
+                disabled={checkoutLoading}
+                data-testid="button-included-programme"
+              >
+                {checkoutLoading
+                  ? <Loader2 className="h-4 w-4 animate-spin" />
+                  : `Get ${selectedProgramme === "programme8" ? "8 Week" : selectedProgramme === "programme12" ? "12 Week" : "Programme+"} — ${PROGRAMME_OPTIONS.find(o => o.tier === selectedProgramme)?.programmePrice}`
+                }
               </Button>
             </div>
           </div>

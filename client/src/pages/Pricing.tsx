@@ -571,7 +571,8 @@ export default function Pricing() {
                       </span>
                       <span className="text-muted-foreground font-medium"> one-time</span>
                     </div>
-                    <p className="text-xs text-slate-500 mb-4">Everything in Practice Platform, plus structured coaching</p>
+                    <p className="text-xs text-brand-amber font-semibold mb-1">+ £24.99/mo subscription</p>
+                    <p className="text-xs text-slate-500 mb-4">Includes full platform access · cancel subscription any time</p>
                     <div className="space-y-2 mb-4">
                       {([
                         { tier: "programme8", label: "8 Week Programme", price: "£59" },
