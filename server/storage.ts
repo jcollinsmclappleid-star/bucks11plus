@@ -251,7 +251,29 @@ export class DatabaseStorage implements IStorage {
 
     // Comp questions come first (required for two-phase timer)
     const orderedComp = [...compPassageMap.values()].flat();
-    allQuestions = [...orderedComp, ...nonCompQuestions];
+
+    // Round-robin interleave non-comp by canonical section order
+    const CANONICAL_ORDER = ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"];
+    const guestNonCompBySection = new Map<string, Question[]>();
+    for (const q of nonCompQuestions) {
+      if (!guestNonCompBySection.has(q.section)) guestNonCompBySection.set(q.section, []);
+      guestNonCompBySection.get(q.section)!.push(q);
+    }
+    const guestNonCompBuckets = CANONICAL_ORDER
+      .map(s => guestNonCompBySection.get(s) ?? [])
+      .concat([...guestNonCompBySection.entries()]
+        .filter(([s]) => !CANONICAL_ORDER.includes(s))
+        .map(([, qs]) => qs))
+      .filter(b => b.length > 0);
+    const guestInterleaved: Question[] = [];
+    const guestMaxLen = Math.max(0, ...guestNonCompBuckets.map(b => b.length));
+    for (let i = 0; i < guestMaxLen; i++) {
+      for (const bucket of guestNonCompBuckets) {
+        if (i < bucket.length) guestInterleaved.push(bucket[i]);
+      }
+    }
+
+    allQuestions = [...orderedComp, ...guestInterleaved];
 
     // For guests, skip usage tracking
     if (isGuestSession) {
@@ -351,13 +373,19 @@ export class DatabaseStorage implements IStorage {
       return idxA - idxB;
     });
 
-    // Round-robin interleave non-comp by section (VR → NVR → Math → VR → …)
+    // Round-robin interleave non-comp by canonical section order (VR → NVR → Math → …)
+    const CANONICAL_SECTION_ORDER = ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"];
     const nonCompSectionMap = new Map<string, Question[]>();
     for (const q of nonCompSelected) {
       if (!nonCompSectionMap.has(q.section)) nonCompSectionMap.set(q.section, []);
       nonCompSectionMap.get(q.section)!.push(q);
     }
-    const nonCompBuckets = [...nonCompSectionMap.values()];
+    const nonCompBuckets = CANONICAL_SECTION_ORDER
+      .map(s => nonCompSectionMap.get(s) ?? [])
+      .concat([...nonCompSectionMap.entries()]
+        .filter(([s]) => !CANONICAL_SECTION_ORDER.includes(s))
+        .map(([, qs]) => qs))
+      .filter(b => b.length > 0);
     const interleavedNonComp: Question[] = [];
     const ncMaxLen = Math.max(0, ...nonCompBuckets.map(b => b.length));
     for (let i = 0; i < ncMaxLen; i++) {
