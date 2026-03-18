@@ -223,34 +223,26 @@ function ProgressPanel() {
   );
 }
 
-type ProgrammeTier = "programme8" | "programme12" | "programme24_plus";
-
-const PROGRAMME_OPTIONS: { tier: ProgrammeTier; label: string; weeks: string; programmePrice: string; best?: boolean }[] = [
-  { tier: "programme8",       label: "8 Week Programme",    weeks: "8 weeks",  programmePrice: "£59" },
-  { tier: "programme12",      label: "12 Week Programme",   weeks: "12 weeks", programmePrice: "£89" },
-  { tier: "programme24_plus", label: "Programme+ · 24 wks", weeks: "24 weeks", programmePrice: "£149", best: true },
-];
-
 export default function Landing() {
   const [activeTab, setActiveTab] = useState<TabId>("sections");
-  const [selectedProgramme, setSelectedProgramme] = useState<ProgrammeTier>("programme24_plus");
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
   const [, navigate] = useLocation();
 
   async function handleProgrammeCheckout() {
+    const tier = "programme24_plus";
     if (!user) {
-      navigate(`/pricing?autoCheckout=${selectedProgramme}`);
+      navigate(`/pricing?autoCheckout=${tier}`);
       return;
     }
     setCheckoutLoading(true);
     try {
-      const res = await apiRequest("POST", "/api/checkout/session", { tier: selectedProgramme });
+      const res = await apiRequest("POST", "/api/checkout/session", { tier });
       const data = await res.json();
       if (data.url) window.location.href = data.url;
     } catch {
-      navigate(`/pricing?autoCheckout=${selectedProgramme}`);
+      navigate(`/pricing?autoCheckout=${tier}`);
     } finally {
       setCheckoutLoading(false);
     }
@@ -427,7 +419,7 @@ export default function Landing() {
               </Link>
               <span className="hidden sm:inline text-white/15">|</span>
               <Link href="/pricing#tiers" className="text-brand-amber/70 hover:text-brand-amber text-sm font-semibold transition-colors">
-                Structured Programmes — from £59
+                Programme+ — £149 · or £89 add-on for subscribers
               </Link>
             </div>
 
@@ -501,50 +493,44 @@ export default function Landing() {
               <div className="absolute top-0 right-0 bg-brand-amber text-amber-950 px-3 py-1 rounded-bl-lg font-bold text-xs">
                 RECOMMENDED
               </div>
-              <p className="text-sm font-semibold text-brand-amber uppercase tracking-wider mb-2">Structured Programmes</p>
+              <p className="text-sm font-semibold text-brand-amber uppercase tracking-wider mb-2">Programme+</p>
               <div className="mb-1">
-                <span className="text-xl font-bold text-primary font-serif">
-                  {PROGRAMME_OPTIONS.find(o => o.tier === selectedProgramme)?.programmePrice}
-                </span>
+                <span className="text-xl font-bold text-primary font-serif">£149</span>
                 <span className="text-sm font-medium text-slate-500"> one-time</span>
               </div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight mb-3">
-                + £24.99/mo subscription · includes platform access
-              </p>
-              <div className="space-y-2 mb-4 flex-1">
-                {PROGRAMME_OPTIONS.map((opt) => (
-                  <button
-                    key={opt.tier}
-                    onClick={() => setSelectedProgramme(opt.tier)}
-                    data-testid={`button-select-landing-${opt.tier}`}
-                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl border text-sm transition-all ${
-                      selectedProgramme === opt.tier
-                        ? "border-brand-amber bg-amber-50 shadow-sm"
-                        : "border-slate-200 bg-white hover:border-brand-amber/40"
-                    }`}
-                  >
-                    <div className="flex items-center gap-2">
-                      <div className={`h-4 w-4 rounded-full border-2 flex items-center justify-center shrink-0 ${selectedProgramme === opt.tier ? "border-brand-amber" : "border-slate-300"}`}>
-                        {selectedProgramme === opt.tier && <div className="h-2 w-2 rounded-full bg-brand-amber" />}
-                      </div>
-                      <span className={`font-medium ${selectedProgramme === opt.tier ? "text-amber-900" : "text-slate-700"}`}>{opt.label}</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      {opt.best && <span className="text-[9px] font-bold text-brand-amber uppercase tracking-tight bg-amber-100 px-1.5 py-0.5 rounded-full">Best value</span>}
-                      <span className={`font-bold ${selectedProgramme === opt.tier ? "text-brand-amber" : "text-primary"}`}>{opt.programmePrice}</span>
-                    </div>
-                  </button>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight mb-1">26 weeks · all-inclusive · no subscription needed</p>
+              <span className="inline-block text-[10px] font-bold text-brand-green uppercase tracking-tight bg-green-50 border border-green-200 px-2 py-0.5 rounded-full mb-4 w-fit">
+                Platform access included
+              </span>
+              <ul className="space-y-2.5 flex-1 mb-4">
+                {[
+                  "1,600+ practice questions across all 4 sections",
+                  "Full timed diagnostics (40 questions)",
+                  "All 17 Hard challenge drills unlocked",
+                  "26-week structured preparation roadmap",
+                  "3 mock exam simulations",
+                  "Weekly personalised task plans",
+                ].map((f, i) => (
+                  <li key={i} className="flex items-start gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-brand-amber shrink-0 mt-0.5" />
+                    <span className="text-primary text-sm font-medium">{f}</span>
+                  </li>
                 ))}
+              </ul>
+              <div className="rounded-lg bg-white/70 border border-brand-amber/20 px-3 py-2 mb-3">
+                <p className="text-xs text-amber-800">
+                  <span className="font-bold">Already subscribed?</span> Sign in and add a 12-week structured programme for just <span className="font-bold">£89</span>.
+                </p>
               </div>
               <Button
-                className="w-full mt-2 h-auto min-h-[2.75rem] py-2 text-sm font-bold bg-brand-amber text-white hover:bg-brand-amber/90 border-none"
+                className="w-full h-auto min-h-[2.75rem] py-2 text-sm font-bold bg-brand-amber text-white hover:bg-brand-amber/90 border-none"
                 onClick={handleProgrammeCheckout}
                 disabled={checkoutLoading}
                 data-testid="button-included-programme"
               >
                 {checkoutLoading
                   ? <Loader2 className="h-4 w-4 animate-spin" />
-                  : `Get ${selectedProgramme === "programme8" ? "8 Week" : selectedProgramme === "programme12" ? "12 Week" : "Programme+"} — ${PROGRAMME_OPTIONS.find(o => o.tier === selectedProgramme)?.programmePrice}`
+                  : "Get Programme+ — £149"
                 }
               </Button>
             </div>

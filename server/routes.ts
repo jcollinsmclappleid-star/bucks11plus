@@ -52,7 +52,7 @@ const TIER_DISPLAY_NAME: Record<string, string> = {
   pack12_family: "Practice Platform — Family",
   pack_monthly: "Practice Platform Monthly",
   programme8: "8 Week Programme",
-  programme12: "12 Week Programme",
+  programme12: "12 Week Structured Programme (Subscriber Add-on)",
   programme16: "Young Scholar Programme",
   programme16_family: "Young Scholar Programme — Family",
   programme24_plus: "Programme+",
