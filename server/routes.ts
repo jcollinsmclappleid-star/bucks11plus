@@ -471,7 +471,8 @@ export async function registerRoutes(
         });
       }
 
-      const total = answers.length;
+      // Use matched answer count so score isn't deflated by any unresolved question IDs
+      const total = answerRecords.length;
       const rawPercent = total > 0 ? (correct / total) * 100 : 0;
       const forecastScore = Math.round((rawPercent / 100) * 141);
       let band = "Clear Improvement Opportunity";
@@ -806,7 +807,8 @@ export async function registerRoutes(
         });
       }
 
-      const total = answers.length;
+      // Use matched answer count so score isn't deflated by any unresolved question IDs
+      const total = answerRecords.length;
       const rawPercent = total > 0 ? (correct / total) * 100 : 0;
       const forecastScore = Math.round((rawPercent / 100) * 141);
       let band = "Clear Improvement Opportunity";

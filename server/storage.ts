@@ -14,6 +14,17 @@ import {
   type TestDayConfig, type InsertTestDayConfig,
 } from "@shared/schema";
 
+// Each fixed diagnostic/mock has its own exclusive comprehension passage set.
+// These passage IDs map directly to renderConfig.passageId on comp questions.
+// No two diagnostics share a passage — prevents repeat passages across tests.
+const DIAGNOSTIC_PASSAGES: Record<string, string[]> = {
+  'full-a':  ['P3', 'P5'],
+  'full-b':  ['P7', 'P10'],
+  'mock-1':  ['P11'],
+  'mock-2':  ['P14'],
+  'mock-3':  ['P16'],
+};
+
 const PHASE_MAP: Record<number, string> = {
   1: "Baseline & Foundation", 2: "Baseline & Foundation", 3: "Baseline & Foundation", 4: "Baseline & Foundation",
   5: "Targeted Skill Elevation", 6: "Targeted Skill Elevation", 7: "Targeted Skill Elevation", 8: "Targeted Skill Elevation",
@@ -196,7 +207,7 @@ export class DatabaseStorage implements IStorage {
 
     if (allQuestions.length < diag.questionCount) {
       const poolQuestions = await this.selectPoolQuestions(
-        diag.questionCount, diag.sections, userId, allQuestions.map(q => q.id), diffProfile, diag.type, diagPoolFilter
+        diag.questionCount, diag.sections, userId, allQuestions.map(q => q.id), diffProfile, diag.type, diagPoolFilter, diagnosticId
       );
       allQuestions = [...allQuestions, ...poolQuestions];
     }
@@ -480,6 +491,7 @@ export class DatabaseStorage implements IStorage {
     difficultyProfile?: { easy: number; medium: number; hard: number },
     diagType?: string,
     poolFilter?: string[] | null,
+    currentDiagnosticId?: string,
   ): Promise<Question[]> {
     const isGuest = userId.startsWith('guest-');
     const user = isGuest ? null : await this.getUser(userId);
@@ -531,6 +543,16 @@ export class DatabaseStorage implements IStorage {
 
       // Comprehension: passage-atomic selection with ceiling
       if (section === "English Comprehension") {
+        // Restrict passages to those assigned to this specific diagnostic,
+        // preventing the same passage appearing in multiple tests for the same user.
+        const allowedPassages = currentDiagnosticId ? DIAGNOSTIC_PASSAGES[currentDiagnosticId] : undefined;
+        if (allowedPassages) {
+          pool = pool.filter(q => {
+            const pid = (q.renderConfig as any)?.passageId;
+            return pid && allowedPassages.includes(pid);
+          });
+        }
+
         const passageGroupsMap = new Map<string, Question[]>();
         for (const q of pool) {
           const rc = q.renderConfig as any;

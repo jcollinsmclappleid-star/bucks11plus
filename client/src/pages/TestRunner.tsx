@@ -27,6 +27,7 @@ export default function TestRunner() {
   const [questionStartTime, setQuestionStartTime] = useState<number>(Date.now());
   const [svgSelectedIndex, setSvgSelectedIndex] = useState<number | null>(null);
   const [animKey, setAnimKey] = useState(0);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   // Two-phase comprehension timer state
   const [compReadingActive, setCompReadingActive] = useState(false);
@@ -68,7 +69,14 @@ export default function TestRunner() {
   });
 
   const { data: fetchedQuestions, isLoading: questionsLoading } = useQuery<Question[]>({
-    queryKey: [`/api/diagnostics/${session?.diagnosticId}/questions`],
+    // Include session ID so each session fetches its own fresh question set
+    // (prevents stale cache being reused across retakes of the same diagnostic)
+    queryKey: [`/api/diagnostics/${session?.diagnosticId}/questions`, id],
+    queryFn: async () => {
+      const res = await fetch(`/api/diagnostics/${session?.diagnosticId}/questions`, { credentials: "include" });
+      if (!res.ok) throw new Error(`${res.status}: ${await res.text()}`);
+      return res.json();
+    },
     enabled: !isGuest && !isPractice && !!session?.diagnosticId,
   });
 
@@ -103,6 +111,7 @@ export default function TestRunner() {
       }
     },
     onSuccess: () => {
+      setSubmitError(null);
       if (isGuest) {
         setLocation(`/free-results/${id}`);
       } else {
@@ -112,6 +121,9 @@ export default function TestRunner() {
       if (isPractice) {
         sessionStorage.removeItem("practiceQuestions");
       }
+    },
+    onError: (err: Error) => {
+      setSubmitError(err.message || "Submission failed. Please try again.");
     },
   });
 
@@ -442,6 +454,12 @@ export default function TestRunner() {
                 ))}
               </div>
             )}
+          </div>
+        )}
+
+        {submitError && (
+          <div className="mt-4 mx-auto max-w-md bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3 text-center" data-testid="text-submit-error">
+            {submitError} — <button className="underline" onClick={() => submitMutation.mutate(answers)}>Retry</button>
           </div>
         )}
 
