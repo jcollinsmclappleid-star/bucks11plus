@@ -87,9 +87,17 @@ export default function Dashboard() {
             {user?.childName ? `${user.childName}'s Readiness Forecast` : "Readiness Forecast"}
           </h1>
           {hasData ? (
-            <p className="text-muted-foreground mt-1">
-              Based on {latest.diagnosticId.includes("mini") ? "Mini" : "Full"} Diagnostic completed {new Date(latest.completedAt!).toLocaleDateString()}.
-            </p>
+            <div className="mt-1">
+              <p className="text-muted-foreground">
+                Based on {latest.diagnosticId.includes("mini") ? "Mini" : "Full"} Diagnostic completed {new Date(latest.completedAt!).toLocaleDateString()}.
+              </p>
+              <p className="text-xs text-muted-foreground/60 mt-0.5">
+                Forecast calibrated against the 121+ Buckinghamshire qualifying benchmark.{" "}
+                <Link href="/how-forecast-works" className="underline underline-offset-2 hover:text-muted-foreground transition-colors">
+                  How scoring works
+                </Link>
+              </p>
+            </div>
           ) : (
             <p className="text-muted-foreground mt-1">Take your first diagnostic to see your forecast.</p>
           )}

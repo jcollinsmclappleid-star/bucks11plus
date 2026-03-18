@@ -1,4 +1,4 @@
-import { Switch, Route, Link, useLocation, Redirect } from "wouter";
+import { Switch, Route, Link, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -44,6 +44,7 @@ import Legal from "./pages/Legal";
 import Contact from "./pages/Contact";
 import BucksGuide from "./pages/BucksGuide";
 
+import ScoringMethodology from "./pages/ScoringMethodology";
 import HowToPass from "./pages/seo/HowToPass";
 import Registration from "./pages/seo/Registration";
 import CommonMistakes from "./pages/seo/CommonMistakes";
@@ -93,6 +94,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
               <li><Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
               <li><Link href="/how-it-works" className="hover:text-white transition-colors">How It Works</Link></li>
               <li><Link href="/bucks-gl-alignment" className="hover:text-white transition-colors">GL-Style Alignment</Link></li>
+              <li><Link href="/how-forecast-works" className="hover:text-white transition-colors">How Scoring Works</Link></li>
               <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
               <li><Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
               <li><Link href="/site-links" className="hover:text-white transition-colors">Site Links</Link></li>
@@ -217,9 +219,7 @@ function Router() {
             <Route path="/parent-hub" component={ParentHub} />
             <Route path="/parent-hub/:slug" component={Article} />
             <Route path="/how-it-works" component={HowItWorks} />
-            <Route path="/how-forecast-works">
-              <Redirect to="/how-it-works" />
-            </Route>
+            <Route path="/how-forecast-works" component={ScoringMethodology} />
             <Route path="/bucks-gl-alignment" component={GLAlignment} />
             <Route path="/about" component={About} />
             <Route path="/buckinghamshire-11-plus-guide" component={BucksGuide} />

@@ -9,6 +9,14 @@ import { db } from "./db";
 import { computeAttemptMetrics, computeFullAnalytics, type AnswerRecord, type DrillAnswerRecord, type HistoricalMetrics } from "./metrics";
 import { sendDiagnosticCompleteEmail } from "./email";
 
+const PROGRAMME_TIERS = new Set([
+  "programme8",
+  "programme12",
+  "programme16",
+  "programme16_family",
+  "programme24_plus",
+]);
+
 const TIER_RANK: Record<string, number> = {
   free: 0,
   early_learner: 0,
@@ -859,7 +867,7 @@ export async function registerRoutes(
         metrics,
       });
 
-      if (req.user!.subscriptionTier === "programme16" || req.user!.subscriptionTier === "programme16_family") {
+      if (PROGRAMME_TIERS.has(req.user!.subscriptionTier ?? "")) {
         try {
           await storage.autoCompleteDiagnosticMilestones(req.user!.id, session.diagnosticId, session.id);
         } catch (err) {
@@ -890,7 +898,7 @@ export async function registerRoutes(
 
   app.get("/api/analytics", requireAuth, async (req, res, next) => {
     try {
-      if (req.user!.subscriptionTier !== "programme16" && req.user!.subscriptionTier !== "programme16_family") {
+      if (!PROGRAMME_TIERS.has(req.user!.subscriptionTier ?? "")) {
         return res.json({ available: false, gated: true, message: "Premium Parent Analytics is included with the Young Scholar Programme." });
       }
       const userId = req.user!.id;
@@ -973,7 +981,7 @@ export async function registerRoutes(
 
   app.get("/api/analytics/detail", requireAuth, async (req, res, next) => {
     try {
-      if (req.user!.subscriptionTier !== "programme16" && req.user!.subscriptionTier !== "programme16_family") {
+      if (!PROGRAMME_TIERS.has(req.user!.subscriptionTier ?? "")) {
         return res.json({ available: false, gated: true });
       }
       const userId = req.user!.id;
@@ -1140,7 +1148,7 @@ export async function registerRoutes(
 
   app.get("/api/programme", requireAuth, async (req, res, next) => {
     try {
-      if (req.user!.subscriptionTier !== "programme16" && req.user!.subscriptionTier !== "programme16_family") {
+      if (!PROGRAMME_TIERS.has(req.user!.subscriptionTier ?? "")) {
         return res.json({ enrolled: false });
       }
       const enrolment = await storage.getProgrammeEnrolment(req.user!.id);
@@ -1184,7 +1192,7 @@ export async function registerRoutes(
 
   app.post("/api/programme/milestones/:id/complete", requireAuth, async (req, res, next) => {
     try {
-      if (req.user!.subscriptionTier !== "programme16" && req.user!.subscriptionTier !== "programme16_family") {
+      if (!PROGRAMME_TIERS.has(req.user!.subscriptionTier ?? "")) {
         return res.status(403).json({ message: "Programme access required" });
       }
       const { sessionId } = req.body;
@@ -1197,7 +1205,7 @@ export async function registerRoutes(
 
   app.get("/api/programme/tasks", requireAuth, async (req, res, next) => {
     try {
-      if (req.user!.subscriptionTier !== "programme16" && req.user!.subscriptionTier !== "programme16_family") {
+      if (!PROGRAMME_TIERS.has(req.user!.subscriptionTier ?? "")) {
         return res.status(403).json({ message: "Programme access required" });
       }
       const week = req.query.week ? parseInt(req.query.week as string) : undefined;
@@ -1210,7 +1218,7 @@ export async function registerRoutes(
 
   app.post("/api/programme/tasks/generate", requireAuth, async (req, res, next) => {
     try {
-      if (req.user!.subscriptionTier !== "programme16" && req.user!.subscriptionTier !== "programme16_family") {
+      if (!PROGRAMME_TIERS.has(req.user!.subscriptionTier ?? "")) {
         return res.status(403).json({ message: "Programme access required" });
       }
       const enrolment = await storage.getProgrammeEnrolment(req.user!.id);
@@ -1226,7 +1234,7 @@ export async function registerRoutes(
 
   app.get("/api/programme/completion-summary", requireAuth, async (req, res, next) => {
     try {
-      if (req.user!.subscriptionTier !== "programme16" && req.user!.subscriptionTier !== "programme16_family") {
+      if (!PROGRAMME_TIERS.has(req.user!.subscriptionTier ?? "")) {
         return res.status(403).json({ message: "Programme access required" });
       }
       const sessions = await storage.getUserTestSessions(req.user!.id);
@@ -1368,7 +1376,7 @@ export async function registerRoutes(
         });
       }
 
-      if (req.user!.subscriptionTier === "programme16" || req.user!.subscriptionTier === "programme16_family") {
+      if (PROGRAMME_TIERS.has(req.user!.subscriptionTier ?? "")) {
         try {
           const enrolment = await storage.getProgrammeEnrolment(req.user!.id);
           if (enrolment) {
@@ -1390,7 +1398,7 @@ export async function registerRoutes(
 
   app.post("/api/practice-sections/:id/complete-drill", requireAuth, async (req, res, next) => {
     try {
-      if (req.user!.subscriptionTier === "programme16" || req.user!.subscriptionTier === "programme16_family") {
+      if (PROGRAMME_TIERS.has(req.user!.subscriptionTier ?? "")) {
         const enrolment = await storage.getProgrammeEnrolment(req.user!.id);
         if (enrolment) {
           await storage.autoCompletePracticeMilestone(req.user!.id, enrolment.currentWeek);
@@ -1645,7 +1653,7 @@ export async function registerRoutes(
 
   app.get("/api/simulator-questions", requireAuth, async (req, res, next) => {
     try {
-      const isProgramme = req.user!.subscriptionTier?.includes("programme16");
+      const isProgramme = PROGRAMME_TIERS.has(req.user!.subscriptionTier ?? "");
       if (!isProgramme) {
         return res.status(403).json({ message: "Programme tier required" });
       }
