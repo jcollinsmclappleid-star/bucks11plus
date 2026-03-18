@@ -1,4 +1,3 @@
-import "dotenv/config";
 import { db } from "../server/db";
 import { questions } from "../shared/schema";
 import { eq, and, isNotNull, ne, sql } from "drizzle-orm";
