@@ -223,8 +223,9 @@ export class DatabaseStorage implements IStorage {
       });
     }
 
-    // Defensive passage expansion: if passage subset is incomplete, fetch missing questions
-    if (!isGuestSession) {
+    // Defensive passage expansion: if passage subset is incomplete, fetch missing questions.
+    // Skipped for guest sessions and mini diagnostics (partial passage is intentional there).
+    if (!isGuestSession && diag.type !== 'mini') {
       for (const [, qs] of compPassageMap.entries()) {
         const firstQ = qs[0];
         const rc = firstQ.renderConfig as any;
@@ -339,8 +340,18 @@ export class DatabaseStorage implements IStorage {
       selected.push(chosen.question);
     }
 
+    // Re-sort: comprehension questions must come first so the two-phase timer fires correctly.
+    const compSelected = selected.filter(q => q.renderType === 'comprehension');
+    const nonCompSelected = selected.filter(q => q.renderType !== 'comprehension');
+    compSelected.sort((a, b) => {
+      const idxA = (a.renderConfig as any)?.questionIndex ?? a.orderIndex;
+      const idxB = (b.renderConfig as any)?.questionIndex ?? b.orderIndex;
+      return idxA - idxB;
+    });
+    const orderedSelected = [...compSelected, ...nonCompSelected];
+
     const now = new Date();
-    for (const q of selected) {
+    for (const q of orderedSelected) {
       const existing = usageMap.get(q.id);
       if (existing) {
         await db.update(questionUsage)
@@ -356,7 +367,7 @@ export class DatabaseStorage implements IStorage {
       }
     }
 
-    return selected;
+    return orderedSelected;
   }
 
   private extractVariety(q: Question): {
@@ -484,9 +495,20 @@ export class DatabaseStorage implements IStorage {
           .sort(() => Math.random() - 0.5)
           .sort((a, b) => a.length - b.length);
 
-        // Hard cap: comprehension may not exceed 25% of total budget.
-        // Passages larger than this ceiling are skipped entirely to prevent
-        // comprehension from flooding the question set.
+        // Mini diagnostics and guest sessions: partial passage mode.
+        // Pick the first 3 questions from a randomly selected passage.
+        // This allows comprehension to appear without atomic passages
+        // flooding a small question budget.
+        if (diagType === 'mini' || isGuest) {
+          if (sortedPassages.length > 0) {
+            const randomPassage = sortedPassages[Math.floor(Math.random() * sortedPassages.length)];
+            results.push(...randomPassage.slice(0, 3));
+          }
+          continue;
+        }
+
+        // Full / mock diagnostics: hard cap at 25% of total budget.
+        // Skip any passage larger than the ceiling to prevent flooding.
         const compCeiling = Math.floor(count * 0.25);
 
         const compResult: Question[] = [];

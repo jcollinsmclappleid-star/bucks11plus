@@ -279,7 +279,7 @@ export async function seedDatabase() {
       duration: 8,
       questionCount: 12,
       requiredTier: "free",
-      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"],
+      sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics", "English Comprehension"],
     },
     {
       id: "full-a",
