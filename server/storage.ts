@@ -172,9 +172,10 @@ export class DatabaseStorage implements IStorage {
 
     const isGuestSession = userId.startsWith('guest-');
 
-    // Pool segregation: full/mock use the 'diagnostic' pool; mini/guest are unrestricted.
+    // Pool segregation: full/mock use the 'diagnostic' pool; mini and all guest sessions are unrestricted
+    // (guests rely on freePool flag instead — freePool questions are always in the practice pool).
     const diagPoolFilter: string[] | null =
-      (diag.type === 'full' || diag.type === 'mock') ? ['diagnostic', 'any'] : null;
+      (!isGuestSession && (diag.type === 'full' || diag.type === 'mock')) ? ['diagnostic', 'any'] : null;
 
     let allQuestions = await db.select().from(questions)
       .where(and(

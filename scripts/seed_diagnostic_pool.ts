@@ -58,12 +58,14 @@ async function main() {
     const targetMedium = Math.max(0, SECTION_QUOTAS.medium - alreadyDiag.filter(q => q.difficulty === "medium").length);
     const targetHard = Math.max(0, SECTION_QUOTAS.hard - alreadyDiag.filter(q => q.difficulty === "hard").length);
 
-    // Pool: approved, not already diagnostic, ordered by orderIndex
+    // Pool: approved, currently 'practice' only (skip 'any' and already-diagnostic),
+    // ordered by orderIndex for deterministic selection
     const baseWhere = and(
       eq(questions.section, section),
       eq(questions.qaStatus, "approved"),
       isNotNull(questions.skillId),
       ne(questions.skillId, ""),
+      eq(questions.questionPool, "practice"),
       alreadyDiagIds.length > 0 ? notInArray(questions.id, alreadyDiagIds) : sql`TRUE`,
     );
 
@@ -127,12 +129,26 @@ async function main() {
     passageMap.get(pid)!.push(q);
   }
 
-  // Separate already-diagnostic passages from candidates
+  // Separate fully-diagnostic passages from candidates; normalize partial passages
   const alreadyDiagPassages = new Set<string>();
   const candidatePassages: Array<[string, typeof compPool]> = [];
 
   for (const [pid, qs] of passageMap.entries()) {
-    if (qs.some(q => q.questionPool === "diagnostic")) {
+    const diagCount = qs.filter(q => q.questionPool === "diagnostic").length;
+    if (diagCount === qs.length) {
+      // Fully assigned — count as already done
+      alreadyDiagPassages.add(pid);
+    } else if (diagCount > 0) {
+      // Partially assigned — normalize by promoting remaining practice questions in passage
+      const remainingPractice = qs.filter(q => q.questionPool === "practice");
+      if (!isDryRun && remainingPractice.length > 0) {
+        await db.update(questions)
+          .set({ questionPool: "diagnostic" })
+          .where(inArray(questions.id, remainingPractice.map(q => q.id)));
+      }
+      console.log(
+        `[English Comprehension] Passage ${pid}: normalized ${remainingPractice.length} partial questions → diagnostic`,
+      );
       alreadyDiagPassages.add(pid);
     } else {
       candidatePassages.push([pid, qs]);
