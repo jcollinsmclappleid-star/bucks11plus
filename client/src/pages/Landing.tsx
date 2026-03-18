@@ -426,7 +426,7 @@ export default function Landing() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="rounded-2xl border border-slate-200 bg-white p-6 flex flex-col" data-testid="card-included-free">
               <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">Free</p>
               <h3 className="text-xl font-bold text-primary font-serif mb-4">£0</h3>
@@ -444,29 +444,6 @@ export default function Landing() {
               </ul>
               <Button variant="outline" className="w-full mt-6 h-11 text-sm font-semibold" asChild data-testid="button-included-free">
                 <Link href="/free-diagnostic">Start Free Diagnostic</Link>
-              </Button>
-            </div>
-
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 flex flex-col" data-testid="card-included-early">
-              <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">Early Learner</p>
-              <h3 className="text-xl font-bold text-primary font-serif mb-1">£49</h3>
-              <p className="text-[10px] font-bold text-amber-600 uppercase tracking-tight mb-4">Target: Year 4 & 5</p>
-              <ul className="space-y-3 flex-1">
-                {[
-                  "Foundation-level practice questions",
-                  "Readiness percentage tracking",
-                  "Exploring → Ready pathway",
-                  "Age-appropriate interface",
-                  "Unlimited access",
-                ].map((f, i) => (
-                  <li key={i} className="flex items-start gap-2.5">
-                    <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0 mt-0.5" />
-                    <span className="text-slate-700 text-sm">{f}</span>
-                  </li>
-                ))}
-              </ul>
-              <Button variant="outline" className="w-full mt-6 h-11 text-sm font-semibold" asChild data-testid="button-included-early">
-                <Link href="/pricing?autoCheckout=early_learner">Get Early Learner</Link>
               </Button>
             </div>
 
@@ -497,27 +474,33 @@ export default function Landing() {
               <div className="absolute top-0 right-0 bg-brand-amber text-amber-950 px-3 py-1 rounded-bl-lg font-bold text-xs">
                 RECOMMENDED
               </div>
-              <p className="text-sm font-semibold text-brand-amber uppercase tracking-wider mb-2">Programme+</p>
-              <h3 className="text-xl font-bold text-primary font-serif mb-1">£149</h3>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight mb-3">24 weeks · one-time</p>
-              <p className="text-xs text-slate-500 mb-3 font-medium">Everything in Practice Platform, plus:</p>
-              <ul className="space-y-3 flex-1">
+              <p className="text-sm font-semibold text-brand-amber uppercase tracking-wider mb-2">Structured Programmes</p>
+              <h3 className="text-xl font-bold text-primary font-serif mb-1">from £59<span className="text-sm font-medium text-slate-500"> one-time</span></h3>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight mb-4">8 / 12 / 24 week options</p>
+              <div className="space-y-2 mb-4 flex-1">
                 {[
-                  "All 17 Hard challenge drills unlocked",
-                  "24-week preparation roadmap",
-                  "3 full mock exam simulations",
-                  "Milestone diagnostics with auto-tracking",
-                  "Weekly personalised task plans",
-                  "Premium Parent Analytics dashboard",
-                ].map((f, i) => (
-                  <li key={i} className="flex items-start gap-2.5">
-                    <CheckCircle2 className="h-4 w-4 text-brand-amber shrink-0 mt-0.5" />
-                    <span className="text-primary text-sm font-medium">{f}</span>
-                  </li>
+                  { label: "8 Week Programme", price: "£59", weeks: "8 wks", tier: "programme8" },
+                  { label: "12 Week Programme", price: "£89", weeks: "12 wks", tier: "programme12" },
+                  { label: "Programme+ (24 wks)", price: "£149", weeks: "Best value", tier: "programme24_plus", highlight: true },
+                ].map((opt) => (
+                  <div
+                    key={opt.tier}
+                    className={`flex items-center justify-between px-3 py-2.5 rounded-xl border text-sm ${opt.highlight ? "border-brand-amber/60 bg-amber-50" : "border-slate-200 bg-white"}`}
+                    data-testid={`row-programme-${opt.tier}`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className={`h-4 w-4 shrink-0 ${opt.highlight ? "text-brand-amber" : "text-brand-green"}`} />
+                      <span className={`font-medium ${opt.highlight ? "text-amber-900" : "text-slate-700"}`}>{opt.label}</span>
+                    </div>
+                    <div className="text-right">
+                      <span className={`font-bold text-sm ${opt.highlight ? "text-brand-amber" : "text-primary"}`}>{opt.price}</span>
+                      {opt.highlight && <span className="ml-1.5 text-[10px] font-bold text-brand-amber uppercase tracking-tight">Best value</span>}
+                    </div>
+                  </div>
                 ))}
-              </ul>
-              <Button className="w-full mt-6 h-auto min-h-[2.75rem] py-2 text-sm font-bold bg-brand-amber text-white hover:bg-brand-amber/90 border-none whitespace-normal text-center leading-tight" asChild data-testid="button-included-programme">
-                <Link href="/pricing?autoCheckout=programme24_plus">Get Programme+</Link>
+              </div>
+              <Button className="w-full mt-2 h-auto min-h-[2.75rem] py-2 text-sm font-bold bg-brand-amber text-white hover:bg-brand-amber/90 border-none" asChild data-testid="button-included-programme">
+                <Link href="/pricing#tiers">Choose Your Programme</Link>
               </Button>
             </div>
           </div>
