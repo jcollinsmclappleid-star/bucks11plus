@@ -854,6 +854,105 @@ export class DatabaseStorage implements IStorage {
 
     const DRILL_POOL_FILTER = ['practice', 'any'];
 
+    // ── Comprehension drills: passage-atomic selection ─────────────────────
+    // Diversity selection breaks comp drills (it picks 1 question per passage).
+    // Instead: group all comp pool questions by passage, rank passages by how
+    // recently they were served, pick 1 or 2 whole passages, return all their
+    // questions sorted by questionIndex within each passage.
+    if (sectionName === 'English Comprehension') {
+      const allCompPool = await db.select().from(questions)
+        .where(and(
+          eq(questions.section, 'English Comprehension'),
+          eq(questions.qaStatus, 'approved'),
+          inArray(questions.questionPool, DRILL_POOL_FILTER),
+          isEarlyLearner ? ne(questions.difficulty, 'hard') : sql`TRUE`,
+        ));
+
+      // Group questions by passageId
+      const passageMap = new Map<string, Question[]>();
+      for (const q of allCompPool) {
+        const pid = (q.renderConfig as any)?.passageId || q.subRuleId || '__none__';
+        if (!passageMap.has(pid)) passageMap.set(pid, []);
+        passageMap.get(pid)!.push(q);
+      }
+
+      // Sort each passage's questions by questionIndex
+      for (const qs of passageMap.values()) {
+        qs.sort((a, b) => {
+          const idxA = (a.renderConfig as any)?.questionIndex ?? a.orderIndex;
+          const idxB = (b.renderConfig as any)?.questionIndex ?? b.orderIndex;
+          return idxA - idxB;
+        });
+      }
+
+      // Load usage for this user to rank passages by freshness
+      const usageRows = await db.select().from(questionUsage).where(eq(questionUsage.userId, userId));
+      const usageMap = new Map(usageRows.map(u => [u.questionId, u]));
+      const COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000;
+      const cooldownCutoff = Date.now() - COOLDOWN_MS;
+
+      // Score each passage: use the most-recently-served question as the proxy.
+      // Lower lastServed = more "fresh" = pick this passage first.
+      const passageScores: { pid: string; lastServed: number; allFresh: boolean }[] = [];
+      for (const [pid, qs] of passageMap.entries()) {
+        let maxLastServed = 0;
+        let allFresh = true;
+        for (const q of qs) {
+          const usage = usageMap.get(q.id);
+          if (usage?.lastServedAt) {
+            const t = usage.lastServedAt.getTime();
+            if (t > maxLastServed) maxLastServed = t;
+            if (t > cooldownCutoff) allFresh = false;
+          }
+        }
+        passageScores.push({ pid, lastServed: maxLastServed, allFresh });
+      }
+
+      // Sort: unserved passages first, then by least-recently-served
+      passageScores.sort((a, b) => {
+        if (a.allFresh !== b.allFresh) return a.allFresh ? -1 : 1;
+        return a.lastServed - b.lastServed;
+      });
+
+      // Shuffle passages within the same freshness tier for variety
+      const freshPassages = passageScores.filter(p => p.allFresh);
+      const usedPassages  = passageScores.filter(p => !p.allFresh);
+      for (let i = freshPassages.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [freshPassages[i], freshPassages[j]] = [freshPassages[j], freshPassages[i]];
+      }
+      const ranked = [...freshPassages, ...usedPassages];
+
+      const exhaustionWarning = freshPassages.length === 0;
+
+      // Pick 1 passage (or 2 if limit is large enough to fit two passages)
+      const questionsPerPassage = passageMap.get(ranked[0]?.pid)?.length ?? 15;
+      const maxPassages = limit >= questionsPerPassage * 2 ? 2 : 1;
+
+      const finalSelected: Question[] = [];
+      for (let i = 0; i < Math.min(maxPassages, ranked.length); i++) {
+        const qs = passageMap.get(ranked[i].pid) ?? [];
+        finalSelected.push(...qs);
+        if (finalSelected.length >= limit) break;
+      }
+
+      // Mark usage
+      const now = new Date();
+      for (const q of finalSelected) {
+        const existing = usageMap.get(q.id);
+        if (existing) {
+          await db.update(questionUsage)
+            .set({ servedCount: (existing.servedCount || 0) + 1, lastServedAt: now })
+            .where(and(eq(questionUsage.userId, userId), eq(questionUsage.questionId, q.id)));
+        } else {
+          await db.insert(questionUsage).values({ userId, questionId: q.id, servedCount: 1, lastServedAt: now });
+        }
+      }
+
+      return { questions: finalSelected, exhaustionWarning };
+    }
+    // ──────────────────────────────────────────────────────────────────────
+
     let pool: Question[];
     if (skillFilter) {
       const conditions = [
