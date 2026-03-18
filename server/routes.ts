@@ -9,6 +9,55 @@ import { db } from "./db";
 import { computeAttemptMetrics, computeFullAnalytics, type AnswerRecord, type DrillAnswerRecord, type HistoricalMetrics } from "./metrics";
 import { sendDiagnosticCompleteEmail } from "./email";
 
+const TIER_RANK: Record<string, number> = {
+  free: 0,
+  early_learner: 0,
+  pack12: 1,
+  pack12_family: 1,
+  pack_monthly: 1,
+  programme8: 2,
+  programme12: 2,
+  programme16: 2,
+  programme16_family: 2,
+  programme24_plus: 2,
+};
+
+const ALL_VALID_TIERS = [
+  "early_learner",
+  "pack12",
+  "pack12_family",
+  "pack_monthly",
+  "programme8",
+  "programme12",
+  "programme16",
+  "programme16_family",
+  "programme24_plus",
+];
+
+const TIER_PRICE_GBP_PENCE: Record<string, number> = {
+  early_learner: 4900,
+  pack12: 11900,
+  pack12_family: 14900,
+  pack_monthly: 2499,
+  programme8: 5900,
+  programme12: 8900,
+  programme16: 24900,
+  programme16_family: 34900,
+  programme24_plus: 14900,
+};
+
+const TIER_DISPLAY_NAME: Record<string, string> = {
+  early_learner: "Early Learner",
+  pack12: "Practice Platform",
+  pack12_family: "Practice Platform — Family",
+  pack_monthly: "Practice Platform Monthly",
+  programme8: "8 Week Programme",
+  programme12: "12 Week Programme",
+  programme16: "Young Scholar Programme",
+  programme16_family: "Young Scholar Programme — Family",
+  programme24_plus: "Programme+",
+};
+
 async function findStripePriceForTier(tier: string): Promise<string | null> {
   try {
     const pricesResult = await db.execute(
@@ -71,8 +120,7 @@ export async function registerRoutes(
   app.post("/api/checkout", requireAuth, async (req, res, next) => {
     try {
       const { tier } = req.body;
-      const validTiers = ["early_learner", "pack12", "pack12_family", "programme16", "programme16_family"];
-      if (!tier || !validTiers.includes(tier)) {
+      if (!tier || !ALL_VALID_TIERS.includes(tier)) {
         return res.status(400).json({ message: "Invalid tier" });
       }
 
@@ -88,19 +136,31 @@ export async function registerRoutes(
         customerId = customer.id;
       }
 
-      const priceId = await findStripePriceForTier(tier);
-      if (!priceId) {
-        return res.status(404).json({ message: "Price not found. Products may not be seeded yet." });
-      }
-
       const host = req.get('host');
       const protocol = req.protocol;
+      const isSubscription = tier === "pack_monthly";
+      const mode = isSubscription ? "subscription" : "payment";
+
+      const priceId = await findStripePriceForTier(tier);
+      let lineItems: any[];
+      if (priceId) {
+        lineItems = [{ price: priceId, quantity: 1 }];
+      } else {
+        const unitAmount = TIER_PRICE_GBP_PENCE[tier] || 0;
+        const priceData: any = {
+          currency: 'gbp',
+          product_data: { name: TIER_DISPLAY_NAME[tier] || tier },
+          unit_amount: unitAmount,
+        };
+        if (isSubscription) priceData.recurring = { interval: 'month' };
+        lineItems = [{ price_data: priceData, quantity: 1 }];
+      }
 
       const session = await stripe.checkout.sessions.create({
         customer: customerId,
         payment_method_types: ['card'],
-        line_items: [{ price: priceId, quantity: 1 }],
-        mode: 'payment',
+        line_items: lineItems,
+        mode,
         success_url: `${protocol}://${host}/app/checkout-success?tier=${tier}&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${protocol}://${host}/pricing`,
         metadata: {
@@ -119,8 +179,11 @@ export async function registerRoutes(
     try {
       const { targetTier } = req.body;
       const validUpgrades: Record<string, string[]> = {
-        pack12: ["programme16"],
+        pack_monthly: ["programme8", "programme12", "programme24_plus"],
+        pack12: ["programme8", "programme12", "programme24_plus", "programme16"],
         pack12_family: ["programme16_family"],
+        programme8: ["programme12", "programme24_plus"],
+        programme12: ["programme24_plus"],
       };
 
       const user = req.user!;
@@ -141,26 +204,9 @@ export async function registerRoutes(
         customerId = customer.id;
       }
 
-      const tierPriceMap: Record<string, number> = {
-        early_learner: 4900,
-        pack12: 11900,
-        pack12_family: 14900,
-        programme16: 24900,
-        programme16_family: 34900,
-      };
-
-      const targetPriceId = await findStripePriceForTier(targetTier);
-      if (!targetPriceId) {
-        return res.status(404).json({ message: "Price not found for upgrade calculation" });
-      }
-
-      const currentAmount = tierPriceMap[currentTier] || 0;
-      const targetAmount = tierPriceMap[targetTier] || 0;
-      const difference = targetAmount - currentAmount;
-
-      if (difference <= 0) {
-        return res.status(400).json({ message: "No upgrade difference to pay" });
-      }
+      const currentAmount = TIER_PRICE_GBP_PENCE[currentTier] || 0;
+      const targetAmount = TIER_PRICE_GBP_PENCE[targetTier] || 0;
+      const difference = Math.max(0, targetAmount - currentAmount);
 
       const host = req.get('host');
       const protocol = req.protocol;
@@ -172,10 +218,10 @@ export async function registerRoutes(
           price_data: {
             currency: 'gbp',
             product_data: {
-              name: `Upgrade to Young Scholar Programme`,
-              description: `Upgrade difference from ${currentTier === 'pack12_family' ? 'Practice Platform Family' : 'Practice Platform'}`,
+              name: `Upgrade to ${TIER_DISPLAY_NAME[targetTier] || targetTier}`,
+              description: `Upgrade difference from ${TIER_DISPLAY_NAME[currentTier] || currentTier}`,
             },
-            unit_amount: difference,
+            unit_amount: difference > 0 ? difference : targetAmount,
           },
           quantity: 1,
         }],
@@ -189,7 +235,7 @@ export async function registerRoutes(
         },
       });
 
-      res.json({ url: session.url, difference: difference / 100 });
+      res.json({ url: session.url, difference: (difference || targetAmount) / 100 });
     } catch (error) {
       next(error);
     }
@@ -198,30 +244,38 @@ export async function registerRoutes(
   app.post("/api/guest/checkout", async (req, res, next) => {
     try {
       const { tier } = req.body;
-      const validTiers = ["early_learner", "pack12", "pack12_family", "programme16", "programme16_family"];
-      if (!tier || !validTiers.includes(tier)) {
+      if (!tier || !ALL_VALID_TIERS.includes(tier)) {
         return res.status(400).json({ message: "Invalid tier" });
       }
 
       const stripe = await getUncachableStripeClient();
-
-      const priceId = await findStripePriceForTier(tier);
-      if (!priceId) {
-        return res.status(404).json({ message: "Price not found. Products may not be seeded yet." });
-      }
-
       const host = req.get('host');
       const protocol = req.protocol;
+      const isSubscription = tier === "pack_monthly";
+      const mode = isSubscription ? "subscription" : "payment";
+
+      const priceId = await findStripePriceForTier(tier);
+      let lineItems: any[];
+      if (priceId) {
+        lineItems = [{ price: priceId, quantity: 1 }];
+      } else {
+        const unitAmount = TIER_PRICE_GBP_PENCE[tier] || 0;
+        const priceData: any = {
+          currency: 'gbp',
+          product_data: { name: TIER_DISPLAY_NAME[tier] || tier },
+          unit_amount: unitAmount,
+        };
+        if (isSubscription) priceData.recurring = { interval: 'month' };
+        lineItems = [{ price_data: priceData, quantity: 1 }];
+      }
 
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
-        line_items: [{ price: priceId, quantity: 1 }],
-        mode: 'payment',
+        line_items: lineItems,
+        mode,
         success_url: `${protocol}://${host}/checkout-success?tier=${tier}&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${protocol}://${host}/pricing`,
-        metadata: {
-          tier: tier,
-        },
+        metadata: { tier },
       });
 
       res.json({ url: session.url });
@@ -248,15 +302,13 @@ export async function registerRoutes(
       }
 
       const tier = checkoutSession.metadata?.tier;
-      const validTiers = ["early_learner", "pack12", "pack12_family", "programme16", "programme16_family"];
-      if (!tier || !validTiers.includes(tier)) {
+      if (!tier || !ALL_VALID_TIERS.includes(tier)) {
         return res.status(400).json({ message: "Invalid tier in session metadata" });
       }
 
       const currentUser = await storage.getUser(req.user!.id);
       if (!currentUser) return res.status(404).json({ message: "User not found" });
 
-      const TIER_RANK: Record<string, number> = { free: 0, early_learner: 0, pack12: 1, pack12_family: 1, pack_monthly: 1, programme8: 2, programme12: 2, programme16: 2, programme16_family: 2, programme24_plus: 2 };
       const currentRank = TIER_RANK[currentUser.subscriptionTier] || 0;
       const newRank = TIER_RANK[tier] || 0;
       if (newRank <= currentRank) {
@@ -264,13 +316,24 @@ export async function registerRoutes(
         return res.json(safeUser);
       }
 
-      const weeksMap: Record<string, number> = { early_learner: 26, pack12: 26, pack12_family: 26, programme16: 52, programme16_family: 52 };
+      const weeksMap: Record<string, number> = {
+        early_learner: 26,
+        pack12: 26,
+        pack12_family: 26,
+        pack_monthly: 5,
+        programme8: 8,
+        programme12: 12,
+        programme16: 52,
+        programme16_family: 52,
+        programme24_plus: 24,
+      };
       const weeks = weeksMap[tier] || 12;
       const expiresAt = new Date(Date.now() + weeks * 7 * 24 * 60 * 60 * 1000);
 
       await storage.updateUserSubscription(req.user!.id, tier, expiresAt);
 
-      if (tier === "programme16" || tier === "programme16_family") {
+      const programmeTiers = new Set(["programme8", "programme12", "programme16", "programme16_family", "programme24_plus"]);
+      if (programmeTiers.has(tier)) {
         const existing = await storage.getProgrammeEnrolment(req.user!.id);
         if (!existing) {
           await storage.createProgrammeEnrolment(req.user!.id);
@@ -309,7 +372,6 @@ export async function registerRoutes(
       const diag = await storage.getDiagnostic(req.params.id);
       if (!diag) return res.status(404).json({ message: "Diagnostic not found" });
 
-      const TIER_RANK: Record<string, number> = { free: 0, early_learner: 0, pack12: 1, pack12_family: 1, pack_monthly: 1, programme8: 2, programme12: 2, programme16: 2, programme16_family: 2, programme24_plus: 2 };
       const userRank = TIER_RANK[req.user!.subscriptionTier] || 0;
       const requiredRank = TIER_RANK[diag.requiredTier] || 0;
       if (userRank < requiredRank) {
@@ -559,7 +621,6 @@ export async function registerRoutes(
         return res.status(404).json({ message: "Practice paper diagnostic not found. Database may need reseeding." });
       }
 
-      const TIER_RANK: Record<string, number> = { free: 0, early_learner: 0, pack12: 1, pack12_family: 1, pack_monthly: 1, programme8: 2, programme12: 2, programme16: 2, programme16_family: 2, programme24_plus: 2 };
       const userRank = TIER_RANK[req.user!.subscriptionTier] || 0;
       const requiredRank = TIER_RANK[diag.requiredTier] || 0;
       if (userRank < requiredRank) {
@@ -593,7 +654,6 @@ export async function registerRoutes(
       const diag = await storage.getDiagnostic(diagnosticId);
       if (!diag) return res.status(404).json({ message: "Diagnostic not found" });
 
-      const TIER_RANK: Record<string, number> = { free: 0, early_learner: 0, pack12: 1, pack12_family: 1, pack_monthly: 1, programme8: 2, programme12: 2, programme16: 2, programme16_family: 2, programme24_plus: 2 };
       const userRank = TIER_RANK[req.user!.subscriptionTier] || 0;
       const requiredRank = TIER_RANK[diag.requiredTier] || 0;
       if (userRank < requiredRank) {
@@ -1244,7 +1304,6 @@ export async function registerRoutes(
       
       const sectionId = req.params.id;
 
-      const TIER_RANK: Record<string, number> = { free: 0, early_learner: 0, pack12: 1, pack12_family: 1, pack_monthly: 1, programme8: 2, programme12: 2, programme16: 2, programme16_family: 2, programme24_plus: 2 };
       const section = await storage.getPracticeSection(sectionId);
       if (!section) return res.status(404).json({ message: "Practice section not found" });
       const userRank = TIER_RANK[req.user!.subscriptionTier || "free"] || 0;
