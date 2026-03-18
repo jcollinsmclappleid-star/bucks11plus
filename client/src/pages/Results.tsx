@@ -56,8 +56,12 @@ const TIER_RANK: Record<string, number> = {
   early_learner: 0,
   pack12: 1,
   pack12_family: 1,
+  pack_monthly: 1,
+  programme8: 2,
+  programme12: 2,
   programme16: 2,
   programme16_family: 2,
+  programme24_plus: 2,
 };
 
 function getUpsellMessage(tier: string, weakestSection: string, weakestScore: number, overallScore: number): { title: string; message: string; cta: string; tier: string; isUpgrade?: boolean } | null {
@@ -85,24 +89,24 @@ function getUpsellMessage(tier: string, weakestSection: string, weakestScore: nu
       return {
         title: "Intensify Your Preparation",
         message: `${weakestSection} at ${weakestScore}% would benefit from the Practice Platform's full diagnostic papers and targeted drill sessions across all difficulty levels.`,
-        cta: "Upgrade to Practice Platform — £119",
-        tier: "pack12",
+        cta: "Upgrade to Practice Platform — £24.99/mo",
+        tier: "pack_monthly",
       };
     }
     return {
       title: "Ready for More Depth?",
       message: `Your child is making progress. The Practice Platform unlocks full-length diagnostic papers and harder question sets to push their score higher.`,
-      cta: "Upgrade to Practice Platform — £119",
-      tier: "pack12",
+      cta: "Upgrade to Practice Platform — £24.99/mo",
+      tier: "pack_monthly",
     };
   }
 
   if (rank === 1 && overallScore < 121) {
     return {
-      title: "Close the Gap with the Young Scholar Programme",
-      message: `At ${overallScore}/141, your child is ${121 - overallScore} points from the 121 standard. The 16-week Programme provides a structured weekly plan, mock exams, and milestone tracking to systematically close this gap. As a Practice Platform member, you only pay the difference to upgrade.`,
-      cta: "Upgrade to Programme — Pay the Difference",
-      tier: "programme16",
+      title: "Close the Gap with Programme+",
+      message: `At ${overallScore}/141, your child is ${121 - overallScore} points from the 121 standard. The 24-week Programme+ provides a structured weekly plan, mock exams, and milestone tracking to systematically close this gap.`,
+      cta: "Upgrade to Programme+ — £149",
+      tier: "programme24_plus",
       isUpgrade: true,
     };
   }

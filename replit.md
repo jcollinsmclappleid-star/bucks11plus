@@ -1,7 +1,7 @@
 # 11+ Standard — Buckinghamshire 11+ Exam Preparation Platform
 
 ## Overview
-A full-stack web platform for Buckinghamshire 11+ exam preparation, aligned to GL-style reasoning families used in Bucks. Features timed diagnostics, a proprietary readiness forecast against the 121 benchmark, targeted practice drills with anti-repeat question selection, an admin QA system, SVG-rendered NVR questions, chart-based data interpretation, a Parent Hub content engine for SEO, and a 3-tier monetization model: Free (mini diagnostic), £119 Practice Platform (12 weeks), £249 Young Scholar Programme (16 weeks).
+A full-stack web platform for Buckinghamshire 11+ exam preparation, aligned to GL-style reasoning families used in Bucks. Features timed diagnostics, a proprietary readiness forecast against the 121 benchmark, targeted practice drills with anti-repeat question selection, an admin QA system, SVG-rendered NVR questions, chart-based data interpretation, a Parent Hub content engine for SEO, and a 5-tier monetization model: Free diagnostic, Practice Platform £24.99/mo (subscription), 8 Week Programme £59, 12 Week Programme £89, Programme+ £149 (24 weeks).
 
 ## Architecture
 - **Frontend**: React 19 + Vite + TailwindCSS v4 + Shadcn/UI + wouter routing + TanStack Query
@@ -183,7 +183,7 @@ content/
 - **NVR Frames**: 120px × 120px cards with subtle shadows, numbered labels, clean borders
 - **Test UI**: Premium exam-paper background (gradient), premium-card with layered shadows, pill-shaped timer (3 states: normal/warning/danger), option buttons with branded letter badges and hover lift, question fade-in animations, section badge pills
 - **CSS Classes**: exam-paper-bg, premium-card, premium-header, timer-pill[-normal/-warning/-danger], option-button, option-badge, option-correct/incorrect/dimmed, section-badge, progress-premium, question-fade-in, feedback-enter, feedback-correct/incorrect, drill-complete-card
-- **Monetization**: Free → Early Learner £49 (6mo) → Practice Platform £119 (12wk) → Platform Family £149 → Programme £249 (16wk) → Programme Family £349
+- **Monetization**: Free → Early Learner £49 → Practice Platform £24.99/mo (pack_monthly, subscription) → 8 Week £59 (programme8) → 12 Week £89 (programme12) → Programme+ £149/24wk (programme24_plus). Legacy: pack12 £119, programme16 £249, programme16_family £349 — still valid, not shown on pricing page.
 - **Upgrade path**: Practice Platform users can upgrade to Programme by paying only the difference (£130 individual, £200 family) via POST /api/checkout/upgrade
 
 ## Key Patterns

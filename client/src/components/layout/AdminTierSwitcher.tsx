@@ -7,10 +7,13 @@ import { Shield, ChevronUp, ChevronDown } from "lucide-react";
 const TIERS = [
   { value: "free", label: "Free", color: "bg-slate-100 text-slate-700" },
   { value: "early_learner", label: "Early Learner · £49", color: "bg-amber-100 text-amber-800" },
-  { value: "pack12", label: "Practice Platform · £119", color: "bg-blue-100 text-blue-800" },
-  { value: "pack12_family", label: "Practice Family · £149", color: "bg-blue-100 text-blue-800" },
-  { value: "programme16", label: "Young Scholar · £249", color: "bg-emerald-100 text-emerald-800" },
-  { value: "programme16_family", label: "Scholar Family · £349", color: "bg-emerald-100 text-emerald-800" },
+  { value: "pack_monthly", label: "Practice Platform · £24.99/mo", color: "bg-blue-100 text-blue-800" },
+  { value: "pack12", label: "Practice Platform (legacy · £119)", color: "bg-blue-50 text-blue-600" },
+  { value: "programme8", label: "8 Week Programme · £59", color: "bg-emerald-100 text-emerald-800" },
+  { value: "programme12", label: "12 Week Programme · £89", color: "bg-emerald-100 text-emerald-800" },
+  { value: "programme24_plus", label: "Programme+ · £149", color: "bg-emerald-200 text-emerald-900" },
+  { value: "programme16", label: "Young Scholar (legacy · £249)", color: "bg-emerald-50 text-emerald-600" },
+  { value: "programme16_family", label: "Scholar Family (legacy · £349)", color: "bg-emerald-50 text-emerald-600" },
 ];
 
 export default function AdminTierSwitcher() {

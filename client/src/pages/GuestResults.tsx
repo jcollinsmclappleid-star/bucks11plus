@@ -343,47 +343,49 @@ export default function GuestResults() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-8">
-          <Card className="border-border/60 shadow-md hover:shadow-lg transition-shadow" data-testid="card-upsell-pack12">
+          <Card className="border-border/60 shadow-md hover:shadow-lg transition-shadow" data-testid="card-upsell-pack-monthly">
             <CardContent className="p-6">
-              <div className="flex justify-between items-start mb-4">
+              <div className="flex justify-between items-start mb-1">
                 <h3 className="text-xl font-bold text-primary font-serif">Practice Platform</h3>
-                <span className="text-2xl font-bold text-primary">£119</span>
+                <span className="text-2xl font-bold text-primary">£24.99<span className="text-sm font-medium text-slate-500">/mo</span></span>
               </div>
-              <p className="text-sm text-slate-600 mb-4">12 weeks of targeted practice that moves the needle</p>
+              <p className="text-xs text-slate-400 mb-3">Cancel any time</p>
+              <p className="text-sm text-slate-600 mb-4">Targeted practice that moves the needle — cancel any time</p>
               <ul className="space-y-2 mb-6">
-                {["1,600+ questions across VR, NVR, Maths & Comprehension", "Easy & Medium drills (13 sections)", "6 Hard challenge drills included", "2 full timed diagnostics (40 questions each)", "Practice papers (Quick & Full)", "PDF reports & full report archive", "Impact simulator & progress tracking", "Badge-based Accomplishments system"].map((f, i) => (
+                {["1,600+ questions across VR, NVR, Maths & Comprehension", "Easy & Medium drills (19 sections)", "Full timed diagnostics (40 questions)", "PDF reports & impact simulator", "Progress tracking dashboard"].map((f, i) => (
                   <li key={i} className="flex items-center gap-2 text-sm text-slate-700">
                     <BarChart3 className="h-4 w-4 text-primary shrink-0" />
                     {f}
                   </li>
                 ))}
               </ul>
-              <Button className="w-full" asChild data-testid="button-upsell-pack12">
-                <Link href={`/sign-up?redirect=checkout&tier=pack12&guestSession=${id}`}>Get Practice Platform</Link>
+              <Button className="w-full" asChild data-testid="button-upsell-pack-monthly">
+                <Link href={`/sign-up?redirect=checkout&tier=pack_monthly&guestSession=${id}`}>Start Monthly — £24.99/mo</Link>
               </Button>
             </CardContent>
           </Card>
 
-          <Card className="border-brand-amber border-2 shadow-xl relative" data-testid="card-upsell-programme16">
+          <Card className="border-brand-amber border-2 shadow-xl relative" data-testid="card-upsell-programme24">
             <div className="absolute top-0 right-0 bg-brand-amber text-amber-950 px-3 py-1 rounded-bl-lg font-bold text-xs">
               RECOMMENDED
             </div>
             <CardContent className="p-6">
-              <div className="flex justify-between items-start mb-4">
-                <h3 className="text-xl font-bold text-primary font-serif">Young Scholar Programme</h3>
-                <span className="text-2xl font-bold text-primary">£249</span>
+              <div className="flex justify-between items-start mb-1">
+                <h3 className="text-xl font-bold text-primary font-serif">Programme+</h3>
+                <span className="text-2xl font-bold text-primary">£149</span>
               </div>
-              <p className="text-sm text-slate-600 mb-4">16-week guided roadmap with milestone tracking</p>
+              <p className="text-xs text-slate-400 mb-3">24 weeks · one-time payment</p>
+              <p className="text-sm text-slate-600 mb-4">Complete 24-week roadmap with milestone tracking and mock exams</p>
               <ul className="space-y-2 mb-6">
-                {["Everything in Practice Platform, plus:", "All 17 Hard challenge drills unlocked", "Mock exam simulation (50 questions, timed)", "16-week guided preparation roadmap", "4 milestone diagnostics with auto-tracking", "Weekly personalised task plans", "Premium Parent Analytics dashboard", "Gap velocity & forecast stability metrics", "Fatigue & pressure profiling", "Full Accomplishments & gamification rewards"].map((f, i) => (
+                {["Everything in Practice Platform, plus:", "All 17 Hard challenge drills unlocked", "3 full mock exam simulations", "24-week guided preparation roadmap", "Milestone diagnostics with auto-tracking", "Weekly personalised task plans", "Premium Parent Analytics dashboard"].map((f, i) => (
                   <li key={i} className="flex items-center gap-2 text-sm text-slate-700">
                     <TrendingUp className="h-4 w-4 text-brand-amber shrink-0" />
                     {f}
                   </li>
                 ))}
               </ul>
-              <Button className="w-full bg-primary" asChild data-testid="button-upsell-programme16">
-                <Link href={`/sign-up?redirect=checkout&tier=programme16&guestSession=${id}`}>Get Young Scholar Programme</Link>
+              <Button className="w-full bg-primary" asChild data-testid="button-upsell-programme24">
+                <Link href={`/sign-up?redirect=checkout&tier=programme24_plus&guestSession=${id}`}>Get Programme+ — £149</Link>
               </Button>
             </CardContent>
           </Card>

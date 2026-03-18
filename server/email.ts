@@ -168,7 +168,7 @@ export async function sendUpgradeNudge(userId: string) {
       <li><strong>Full timed diagnostics</strong> with detailed PDF reports</li>
       <li><strong>Progress tracking</strong> to see real improvement over time</li>
     </ul>
-    <p>Plans start from <strong>£49</strong> for Early Learners (Year 4/5) and <strong>£119</strong> for the Practice Platform.</p>
+    <p>Plans start from <strong>£24.99/month</strong> for the Practice Platform (cancel any time) or <strong>£59</strong> one-time for the 8-week structured programme.</p>
     <div style="text-align:center;margin:24px 0;">
       <a href="${BASE_URL}/pricing" style="display:inline-block;background:#0d1f30;color:white;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold;">View Plans & Pricing</a>
     </div>

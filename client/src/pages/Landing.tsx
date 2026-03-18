@@ -392,15 +392,15 @@ export default function Landing() {
               </Link>
               <span className="hidden sm:inline text-white/15">|</span>
               <Link href="/pricing" className="text-white/40 hover:text-white/70 text-sm font-medium transition-colors">
-                Practice Platform — £119
+                Practice Platform — £24.99/mo
               </Link>
               <span className="hidden sm:inline text-white/15">|</span>
               <Link href="/pricing" className="text-brand-amber/70 hover:text-brand-amber text-sm font-semibold transition-colors">
-                Young Scholar Programme — £249
+                Programme+ — £149
               </Link>
               <span className="hidden sm:inline text-white/15">|</span>
               <Link href="/pricing" className="text-white/40 hover:text-white/70 text-sm font-medium transition-colors">
-                Early Learner — £49
+                8 Week — £59
               </Link>
             </div>
 
@@ -472,16 +472,15 @@ export default function Landing() {
 
             <div className="rounded-2xl border border-slate-200 bg-white p-6 flex flex-col" data-testid="card-included-pack">
               <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">Practice Platform</p>
-              <h3 className="text-xl font-bold text-primary font-serif mb-4">£119</h3>
+              <h3 className="text-xl font-bold text-primary font-serif mb-1">£24.99<span className="text-sm font-medium text-slate-500">/mo</span></h3>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight mb-4">Cancel any time</p>
               <ul className="space-y-3 flex-1">
                 {[
                   "1,600+ practice questions across VR, NVR, Maths & Comprehension",
-                  "Easy & Medium drills + 6 Hard challenge drills",
-                  "2 full timed diagnostics (40 questions each)",
-                  "Unlimited practice papers (fresh questions every time)",
-                  "Badge-based Accomplishments system",
-                  "PDF reports & full report archive",
-                  "12 weeks of access",
+                  "Easy & Medium drills (19 sections)",
+                  "Full timed diagnostics (40 questions)",
+                  "PDF reports & impact simulator",
+                  "Cancel any time",
                 ].map((f, i) => (
                   <li key={i} className="flex items-start gap-2.5">
                     <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0 mt-0.5" />
@@ -490,7 +489,7 @@ export default function Landing() {
                 ))}
               </ul>
               <Button className="w-full mt-6 h-11 text-sm font-semibold bg-primary text-primary-foreground" asChild data-testid="button-included-pack">
-                <Link href="/pricing?autoCheckout=pack12">Get Practice Platform</Link>
+                <Link href="/pricing?autoCheckout=pack_monthly">Start Monthly</Link>
               </Button>
             </div>
 
@@ -498,19 +497,18 @@ export default function Landing() {
               <div className="absolute top-0 right-0 bg-brand-amber text-amber-950 px-3 py-1 rounded-bl-lg font-bold text-xs">
                 RECOMMENDED
               </div>
-              <p className="text-sm font-semibold text-brand-amber uppercase tracking-wider mb-2">Young Scholar Programme</p>
-              <h3 className="text-xl font-bold text-primary font-serif mb-4">£249</h3>
+              <p className="text-sm font-semibold text-brand-amber uppercase tracking-wider mb-2">Programme+</p>
+              <h3 className="text-xl font-bold text-primary font-serif mb-1">£149</h3>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight mb-3">24 weeks · one-time</p>
               <p className="text-xs text-slate-500 mb-3 font-medium">Everything in Practice Platform, plus:</p>
               <ul className="space-y-3 flex-1">
                 {[
                   "All 17 Hard challenge drills unlocked",
-                  "Guided preparation roadmap",
-                  "4 milestone diagnostics with auto-tracking",
+                  "24-week preparation roadmap",
+                  "3 full mock exam simulations",
+                  "Milestone diagnostics with auto-tracking",
                   "Weekly personalised task plans",
-                  "Mock exam simulation (50 questions, timed)",
                   "Premium Parent Analytics dashboard",
-                  "Full Accomplishments & gamification rewards",
-                  "Unlimited access",
                 ].map((f, i) => (
                   <li key={i} className="flex items-start gap-2.5">
                     <CheckCircle2 className="h-4 w-4 text-brand-amber shrink-0 mt-0.5" />
@@ -519,7 +517,7 @@ export default function Landing() {
                 ))}
               </ul>
               <Button className="w-full mt-6 h-auto min-h-[2.75rem] py-2 text-sm font-bold bg-brand-amber text-white hover:bg-brand-amber/90 border-none whitespace-normal text-center leading-tight" asChild data-testid="button-included-programme">
-                <Link href="/pricing?autoCheckout=programme16">Young Scholar Programme</Link>
+                <Link href="/pricing?autoCheckout=programme24_plus">Get Programme+</Link>
               </Button>
             </div>
           </div>
@@ -542,12 +540,12 @@ export default function Landing() {
               </Button>
             </div>
             <div className="rounded-2xl border-2 border-primary/20 bg-slate-50 p-7 sm:p-8 flex flex-col" data-testid="card-path-programme">
-              <h3 className="text-xl font-bold text-primary font-serif mb-3">Begin the Young Scholar Programme</h3>
+              <h3 className="text-xl font-bold text-primary font-serif mb-3">Begin the Programme+</h3>
               <p className="text-slate-600 text-sm leading-relaxed mb-6 flex-1">
-                For families who want a complete preparation plan aligned to the Bucks 11+. Includes diagnostics, targeted drills and milestone tracking.
+                For families who want a complete 24-week preparation plan aligned to the Bucks 11+. Includes diagnostics, targeted drills, mock exams, and milestone tracking.
               </p>
               <Button className="w-full h-12 text-sm font-semibold bg-primary text-primary-foreground" asChild data-testid="button-path-programme">
-                <Link href="/pricing?autoCheckout=programme16">View Programme &amp; Enrol</Link>
+                <Link href="/pricing?autoCheckout=programme24_plus">View Programme+ &amp; Enrol</Link>
               </Button>
             </div>
           </div>
