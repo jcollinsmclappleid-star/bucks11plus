@@ -390,7 +390,7 @@ export default function TestRunner() {
           /* ===== QUESTION / ANSWERING PHASE ===== */
           <div className="premium-card p-8 flex-1 flex flex-col question-fade-in" key={animKey}>
             {isCompQuestion && passageText && (
-              <div className="mb-6 p-5 bg-slate-50 border border-slate-200 rounded-lg" data-testid="comprehension-passage">
+              <div className="mb-6 p-5 bg-slate-50 border border-slate-200 rounded-lg max-h-72 overflow-y-auto" data-testid="comprehension-passage">
                 <div className="flex items-center justify-between gap-2 mb-3">
                   <span className="text-xs font-bold uppercase tracking-wider text-primary/70">{passageTitle}</span>
                   {compAnswerTimeLeft > 0 && (
@@ -399,7 +399,7 @@ export default function TestRunner() {
                     </span>
                   )}
                 </div>
-                <p className="text-base leading-relaxed text-slate-700 font-serif italic line-clamp-6">
+                <p className="text-base leading-relaxed text-slate-700 font-serif italic whitespace-pre-line">
                   {passageText}
                 </p>
               </div>
