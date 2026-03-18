@@ -1,46 +1,51 @@
 import { db } from "../server/db";
 import { questions } from "../shared/schema";
-import { eq, and, isNotNull, ne, sql } from "drizzle-orm";
+import { eq, and, isNotNull, ne, asc, inArray, sql } from "drizzle-orm";
 
 /**
  * Marks a representative sample of approved questions as freePool = true.
  *
- * For VR / NVR / Mathematics: picks questions spread across difficulty levels.
- * For English Comprehension: picks the first 3 questions (by questionIndex)
- * from a randomly selected passage. Mini diagnostics use partial-passage mode
- * so these 3 questions are shown alongside the full passage text.
+ * For VR / NVR / Mathematics: selects 6 easy + 13 medium + 6 hard per section,
+ * ordered by orderIndex (deterministic, not random).
+ *
+ * For English Comprehension: marks the 3 smallest passages (fewest questions)
+ * as free — all questions in those passages get freePool = true.
+ *
+ * Always clears all freePool flags first (idempotent full reset on every run).
  *
  * Usage:
  *   npx tsx scripts/seed_free_pool.ts
  *   npx tsx scripts/seed_free_pool.ts --dry-run   (preview only)
- *   npx tsx scripts/seed_free_pool.ts --reset      (clear all freePool flags first)
  */
 
-const NON_COMP_SECTIONS: Record<string, number> = {
-  "Verbal Reasoning": 8,
-  "Non-Verbal Reasoning": 6,
-  "Mathematics": 6,
+const NON_COMP_TARGETS = {
+  easy: 6,
+  medium: 13,
+  hard: 6,
 };
 
-const COMP_QUESTIONS_PER_PASSAGE = 3;
+const NON_COMP_SECTIONS = ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"] as const;
+const COMP_PASSAGES = 3;
 
 const isDryRun = process.argv.includes("--dry-run");
-const shouldReset = process.argv.includes("--reset");
 
 async function main() {
   console.log(`\n=== Seed Free Pool ===`);
-  if (isDryRun) console.log("[DRY RUN] No changes will be written.");
+  if (isDryRun) console.log("[DRY RUN] No changes will be written.\n");
 
-  if (shouldReset && !isDryRun) {
-    console.log("Resetting all freePool flags to false...");
+  // Always reset first — makes the script fully idempotent
+  if (!isDryRun) {
     await db.update(questions).set({ freePool: false });
-    console.log("Reset complete.");
+    console.log("Reset all freePool flags to false.\n");
+  } else {
+    console.log("[DRY RUN] Would reset all freePool flags.\n");
   }
 
-  let totalMarked = 0;
+  const summaryRows: { section: string; easy: number; medium: number; hard: number; total: number }[] = [];
+  let grandTotal = 0;
 
   // ── Non-comprehension sections ────────────────────────────────────────────
-  for (const [section, target] of Object.entries(NON_COMP_SECTIONS)) {
+  for (const section of NON_COMP_SECTIONS) {
     const pool = await db
       .select()
       .from(questions)
@@ -51,54 +56,50 @@ async function main() {
           isNotNull(questions.skillId),
           ne(questions.skillId, ""),
         ),
-      );
+      )
+      .orderBy(asc(questions.orderIndex));
 
     if (pool.length === 0) {
       console.log(`[${section}] No approved questions found — skipping.`);
       continue;
     }
 
-    const byDiff: Record<string, typeof pool> = { easy: [], medium: [], hard: [] };
+    const byDiff: Record<"easy" | "medium" | "hard", typeof pool> = { easy: [], medium: [], hard: [] };
     for (const q of pool) {
-      byDiff[q.difficulty]?.push(q);
+      const d = q.difficulty as "easy" | "medium" | "hard";
+      if (d in byDiff) byDiff[d].push(q);
     }
-    for (const diff of Object.keys(byDiff)) {
-      byDiff[diff].sort(() => Math.random() - 0.5);
-    }
-
-    const easyCount = Math.ceil(target * 0.25);
-    const mediumCount = Math.ceil(target * 0.50);
-    const hardCount = Math.max(0, target - easyCount - mediumCount);
 
     const selected = [
-      ...byDiff.easy.slice(0, easyCount),
-      ...byDiff.medium.slice(0, mediumCount),
-      ...byDiff.hard.slice(0, hardCount),
+      ...byDiff.easy.slice(0, NON_COMP_TARGETS.easy),
+      ...byDiff.medium.slice(0, NON_COMP_TARGETS.medium),
+      ...byDiff.hard.slice(0, NON_COMP_TARGETS.hard),
     ];
 
-    if (selected.length < target) {
-      const usedIds = new Set(selected.map((q) => q.id));
-      const remaining = pool.filter((q) => !usedIds.has(q.id));
-      selected.push(...remaining.slice(0, target - selected.length));
-    }
-
-    console.log(
-      `[${section}] Selecting ${selected.length}/${pool.length} questions ` +
-      `(easy: ${byDiff.easy.slice(0, easyCount).length}, ` +
-      `medium: ${byDiff.medium.slice(0, mediumCount).length}, ` +
-      `hard: ${byDiff.hard.slice(0, hardCount).length})`,
-    );
+    const counts = {
+      easy: byDiff.easy.slice(0, NON_COMP_TARGETS.easy).length,
+      medium: byDiff.medium.slice(0, NON_COMP_TARGETS.medium).length,
+      hard: byDiff.hard.slice(0, NON_COMP_TARGETS.hard).length,
+    };
 
     if (!isDryRun && selected.length > 0) {
-      for (const q of selected) {
-        await db.update(questions).set({ freePool: true }).where(eq(questions.id, q.id));
-      }
+      const ids = selected.map((q) => q.id);
+      await db.update(questions)
+        .set({ freePool: true })
+        .where(inArray(questions.id, ids));
     }
 
-    totalMarked += selected.length;
+    summaryRows.push({
+      section,
+      easy: counts.easy,
+      medium: counts.medium,
+      hard: counts.hard,
+      total: selected.length,
+    });
+    grandTotal += selected.length;
   }
 
-  // ── English Comprehension: first 3 questions from a random passage ────────
+  // ── English Comprehension: 3 smallest passages ────────────────────────────
   const compPool = await db
     .select()
     .from(questions)
@@ -110,54 +111,60 @@ async function main() {
       ),
     );
 
-  if (compPool.length === 0) {
-    console.log(`[English Comprehension] No approved questions found — skipping.`);
-  } else {
-    // Group by passageId
-    const passageMap = new Map<string, typeof compPool>();
-    for (const q of compPool) {
-      const pid = (q.renderConfig as any)?.passageId as string;
-      if (!pid) continue;
-      if (!passageMap.has(pid)) passageMap.set(pid, []);
-      passageMap.get(pid)!.push(q);
-    }
-
-    // Sort each passage by questionIndex
-    for (const qs of passageMap.values()) {
-      qs.sort(
-        (a, b) =>
-          ((a.renderConfig as any)?.questionIndex ?? 9999) -
-          ((b.renderConfig as any)?.questionIndex ?? 9999),
-      );
-    }
-
-    // Pick a random passage
-    const passages = [...passageMap.values()];
-    const randomPassage = passages[Math.floor(Math.random() * passages.length)];
-    const selected = randomPassage.slice(0, COMP_QUESTIONS_PER_PASSAGE);
-
-    const pid = (selected[0].renderConfig as any)?.passageId;
-    console.log(
-      `[English Comprehension] Selecting ${selected.length} questions from passage ${pid} ` +
-      `(questions at index ${selected.map((q) => (q.renderConfig as any)?.questionIndex).join(", ")})`,
-    );
-
-    if (!isDryRun && selected.length > 0) {
-      for (const q of selected) {
-        await db.update(questions).set({ freePool: true }).where(eq(questions.id, q.id));
-      }
-    }
-
-    totalMarked += selected.length;
+  const passageMap = new Map<string, typeof compPool>();
+  for (const q of compPool) {
+    const pid = (q.renderConfig as any)?.passageId as string;
+    if (!pid) continue;
+    if (!passageMap.has(pid)) passageMap.set(pid, []);
+    passageMap.get(pid)!.push(q);
   }
 
-  console.log(`\n✓ ${isDryRun ? "Would mark" : "Marked"} ${totalMarked} questions as freePool = true.`);
+  // Sort passages by ascending question count (smallest first)
+  const sortedPassages = [...passageMap.entries()]
+    .sort((a, b) => a[1].length - b[1].length)
+    .slice(0, COMP_PASSAGES);
 
-  const totals = await db
+  let compTotal = 0;
+  for (const [pid, qs] of sortedPassages) {
+    if (!isDryRun && qs.length > 0) {
+      const ids = qs.map((q) => q.id);
+      await db.update(questions)
+        .set({ freePool: true })
+        .where(inArray(questions.id, ids));
+    }
+    console.log(
+      `[English Comprehension] Passage ${pid}: ${qs.length} questions marked freePool`,
+    );
+    compTotal += qs.length;
+  }
+  grandTotal += compTotal;
+
+  // ── Summary table ─────────────────────────────────────────────────────────
+  console.log("\n┌─────────────────────────────┬──────┬────────┬──────┬───────┐");
+  console.log("│ Section                     │ Easy │ Medium │ Hard │ Total │");
+  console.log("├─────────────────────────────┼──────┼────────┼──────┼───────┤");
+  for (const row of summaryRows) {
+    const s = row.section.padEnd(27);
+    const e = String(row.easy).padStart(4);
+    const m = String(row.medium).padStart(6);
+    const h = String(row.hard).padStart(4);
+    const t = String(row.total).padStart(5);
+    console.log(`│ ${s} │${e} │${m} │${h} │${t} │`);
+  }
+  const compLabel = `English Comprehension (×${COMP_PASSAGES} passages)`.padEnd(27);
+  const compTotalStr = String(compTotal).padStart(5);
+  console.log(`│ ${compLabel} │   — │      — │   — │${compTotalStr} │`);
+  console.log("├─────────────────────────────┼──────┼────────┼──────┼───────┤");
+  const gLabel = "TOTAL".padEnd(27);
+  const gStr = String(grandTotal).padStart(5);
+  console.log(`│ ${gLabel} │      │        │      │${gStr} │`);
+  console.log("└─────────────────────────────┴──────┴────────┴──────┴───────┘");
+
+  const dbCount = await db
     .select({ count: sql<number>`count(*)` })
     .from(questions)
     .where(eq(questions.freePool, true));
-  console.log(`Total freePool questions in DB: ${totals[0]?.count ?? 0}`);
+  console.log(`\n${isDryRun ? "Would mark" : "Marked"} ${grandTotal} questions. DB freePool count: ${dbCount[0]?.count ?? 0}\n`);
 
   process.exit(0);
 }

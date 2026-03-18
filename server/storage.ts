@@ -1,4 +1,4 @@
-import { eq, desc, and, sql, asc, ne, inArray, isNull } from "drizzle-orm";
+import { eq, desc, and, sql, asc, ne, inArray, notInArray, isNull } from "drizzle-orm";
 import { db } from "./db";
 import {
   users, diagnostics, questions, testSessions, testAnswers, articles, practiceSections,
@@ -237,7 +237,7 @@ export class DatabaseStorage implements IStorage {
           const missing = await db.select().from(questions).where(and(
             eq(questions.qaStatus, 'approved'),
             sql`render_config->>'passageId' = ${pid}`,
-            sql`id NOT IN (${sql.raw(existingIds.map(id => `'${id}'`).join(','))})`
+            existingIds.length > 0 ? notInArray(questions.id, existingIds) : sql`TRUE`
           ));
           qs.push(...missing);
           qs.sort((a, b) => {
