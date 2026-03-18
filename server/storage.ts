@@ -224,8 +224,9 @@ export class DatabaseStorage implements IStorage {
     }
 
     // Defensive passage expansion: if passage subset is incomplete, fetch missing questions.
-    // Skipped for guest sessions and mini diagnostics (partial passage is intentional there).
-    if (!isGuestSession && diag.type !== 'mini') {
+    // Skipped for: guest sessions (always partial), mini diagnostics (intentional 3-question slice),
+    // and full/mock diagnostics (now use partial-passage mode capped at compCeiling).
+    if (!isGuestSession && diag.type !== 'mini' && diag.type !== 'full' && diag.type !== 'mock') {
       for (const [, qs] of compPassageMap.entries()) {
         const firstQ = qs[0];
         const rc = firstQ.renderConfig as any;
@@ -340,7 +341,8 @@ export class DatabaseStorage implements IStorage {
       selected.push(chosen.question);
     }
 
-    // Re-sort: comprehension questions must come first so the two-phase timer fires correctly.
+    // Re-sort: comprehension questions come first (two-phase timer requirement),
+    // then non-comp questions are interleaved round-robin by section.
     const compSelected = selected.filter(q => q.renderType === 'comprehension');
     const nonCompSelected = selected.filter(q => q.renderType !== 'comprehension');
     compSelected.sort((a, b) => {
@@ -348,7 +350,23 @@ export class DatabaseStorage implements IStorage {
       const idxB = (b.renderConfig as any)?.questionIndex ?? b.orderIndex;
       return idxA - idxB;
     });
-    const orderedSelected = [...compSelected, ...nonCompSelected];
+
+    // Round-robin interleave non-comp by section (VR → NVR → Math → VR → …)
+    const nonCompSectionMap = new Map<string, Question[]>();
+    for (const q of nonCompSelected) {
+      if (!nonCompSectionMap.has(q.section)) nonCompSectionMap.set(q.section, []);
+      nonCompSectionMap.get(q.section)!.push(q);
+    }
+    const nonCompBuckets = [...nonCompSectionMap.values()];
+    const interleavedNonComp: Question[] = [];
+    const ncMaxLen = Math.max(0, ...nonCompBuckets.map(b => b.length));
+    for (let i = 0; i < ncMaxLen; i++) {
+      for (const bucket of nonCompBuckets) {
+        if (i < bucket.length) interleavedNonComp.push(bucket[i]);
+      }
+    }
+
+    const orderedSelected = [...compSelected, ...interleavedNonComp];
 
     const now = new Date();
     for (const q of orderedSelected) {
@@ -507,16 +525,20 @@ export class DatabaseStorage implements IStorage {
           continue;
         }
 
-        // Full / mock diagnostics: hard cap at 25% of total budget.
-        // Skip any passage larger than the ceiling to prevent flooding.
+        // Full / mock: partial-passage mode — slice to compCeiling questions.
+        // 1 passage for 'full' (ceil ~10 of 40q), up to 2 passages for 'mock' (~12 of 50q).
+        // This fixes the previous all-or-nothing logic which required qs.length <= ceiling
+        // (impossible since all passages have 14-15 questions).
         const compCeiling = Math.floor(count * 0.25);
-
+        const maxPassages = diagType === 'mock' ? 2 : 1;
         const compResult: Question[] = [];
+        let passagesUsed = 0;
+
         for (const qs of sortedPassages) {
-          if (qs.length <= compCeiling && compResult.length + qs.length <= compCeiling) {
-            compResult.push(...qs);
-          }
-          if (compResult.length >= compCeiling) break;
+          if (passagesUsed >= maxPassages || compResult.length >= compCeiling) break;
+          const take = Math.min(qs.length, compCeiling - compResult.length);
+          compResult.push(...qs.slice(0, take));
+          passagesUsed++;
         }
 
         results.push(...compResult);
@@ -547,7 +569,7 @@ export class DatabaseStorage implements IStorage {
       results.push(...sectionQuestions);
     }
 
-    // Proportional final assembly — comp first
+    // Proportional final assembly — comp first, then non-comp round-robin interleaved
     const compResults = results.filter(q => q.renderType === 'comprehension');
     const nonCompResults = results.filter(q => q.renderType !== 'comprehension');
     const nonCompTarget = Math.max(0, count - compResults.length);
@@ -559,8 +581,9 @@ export class DatabaseStorage implements IStorage {
     }
     for (const qs of nonCompBySection.values()) qs.sort(() => Math.random() - 0.5);
 
+    // Proportional allocation per section into buckets
+    const sectionBuckets = new Map<string, Question[]>();
     const takenBySection = new Map<string, number>();
-    const selectedNonComp: Question[] = [];
     let allocated = 0;
     nonCompSections.forEach((section, i) => {
       const weight = SECTION_WEIGHTS[section] ?? 0.25;
@@ -571,11 +594,13 @@ export class DatabaseStorage implements IStorage {
       allocated += target;
       const qs = nonCompBySection.get(section) ?? [];
       const take = Math.min(Math.max(0, target), qs.length);
-      selectedNonComp.push(...qs.slice(0, take));
+      sectionBuckets.set(section, qs.slice(0, take));
       takenBySection.set(section, take);
     });
 
-    const stillNeeded = nonCompTarget - selectedNonComp.length;
+    // Backfill shortfall across surplus
+    const totalAllocated = [...sectionBuckets.values()].reduce((sum, b) => sum + b.length, 0);
+    const stillNeeded = nonCompTarget - totalAllocated;
     if (stillNeeded > 0) {
       const surplus = nonCompSections
         .flatMap(s => {
@@ -583,11 +608,28 @@ export class DatabaseStorage implements IStorage {
           const taken = takenBySection.get(s) ?? 0;
           return qs.slice(taken);
         })
-        .sort(() => Math.random() - 0.5);
-      selectedNonComp.push(...surplus.slice(0, stillNeeded));
+        .sort(() => Math.random() - 0.5)
+        .slice(0, stillNeeded);
+      for (const q of surplus) {
+        const bucket = sectionBuckets.get(q.section);
+        if (bucket) bucket.push(q);
+        else sectionBuckets.set(q.section, [q]);
+      }
     }
 
-    return [...compResults, ...selectedNonComp];
+    // Round-robin interleave buckets (VR → NVR → Math → VR → NVR → Math …)
+    const orderedBuckets = nonCompSections
+      .map(s => sectionBuckets.get(s) ?? [])
+      .filter(b => b.length > 0);
+    const interleaved: Question[] = [];
+    const maxLen = Math.max(0, ...orderedBuckets.map(b => b.length));
+    for (let i = 0; i < maxLen; i++) {
+      for (const bucket of orderedBuckets) {
+        if (i < bucket.length) interleaved.push(bucket[i]);
+      }
+    }
+
+    return [...compResults, ...interleaved];
   }
 
   async selectQuestionsForPracticePaper(
@@ -605,10 +647,64 @@ export class DatabaseStorage implements IStorage {
       .where(eq(questionUsage.userId, userId));
     const usageMap = new Map(usageRows.map(u => [u.questionId, u]));
 
-    const perSection = Math.ceil(questionCount / sections.length);
-    const selected: Question[] = [];
+    const nonCompSections = sections.filter(s => s !== 'English Comprehension');
+    const hasComp = sections.includes('English Comprehension');
 
-    for (const section of sections) {
+    // Comprehension takes up to 25% of total budget; the rest is split across non-comp sections
+    const compQuota = hasComp ? Math.floor(questionCount * 0.25) : 0;
+    const nonCompCount = questionCount - compQuota;
+    const perNonCompSection = nonCompSections.length > 0
+      ? Math.ceil(nonCompCount / nonCompSections.length)
+      : 0;
+
+    const compQuestions: Question[] = [];
+    const nonCompBuckets = new Map<string, Question[]>();
+
+    // === Comprehension: passage-grouped selection ===
+    // Pick 1-2 complete passages and take questions in questionIndex order.
+    // This ensures students read one passage through, not snippets from many.
+    if (hasComp && compQuota > 0) {
+      const compPool = await db.select().from(questions)
+        .where(and(
+          eq(questions.section, 'English Comprehension'),
+          eq(questions.qaStatus, "approved"),
+          sql`${questions.skillId} IS NOT NULL AND ${questions.skillId} != ''`,
+          isEarlyLearner ? ne(questions.difficulty, 'hard') : sql`TRUE`
+        ));
+
+      // Group by passage
+      const passageMap = new Map<string, Question[]>();
+      for (const q of compPool) {
+        const rc = q.renderConfig as any;
+        const pid = rc?.passageId || q.subRuleId || '__none__';
+        if (!passageMap.has(pid)) passageMap.set(pid, []);
+        passageMap.get(pid)!.push(q);
+      }
+      // Sort each passage by questionIndex
+      for (const qs of passageMap.values()) {
+        qs.sort((a, b) => {
+          const idxA = (a.renderConfig as any)?.questionIndex ?? a.orderIndex;
+          const idxB = (b.renderConfig as any)?.questionIndex ?? b.orderIndex;
+          return idxA - idxB;
+        });
+      }
+
+      // Prefer passages with fresh questions; shuffle then pick 1-2
+      const passageList = [...passageMap.values()].sort(() => Math.random() - 0.5);
+      // For a 20q quick paper use 1 passage; for 40q/50q allow up to 2
+      const maxPassages = questionCount >= 40 ? 2 : 1;
+      let passagesUsed = 0;
+
+      for (const qs of passageList) {
+        if (passagesUsed >= maxPassages || compQuestions.length >= compQuota) break;
+        const take = Math.min(qs.length, compQuota - compQuestions.length);
+        compQuestions.push(...qs.slice(0, take));
+        passagesUsed++;
+      }
+    }
+
+    // === Non-comp sections: difficulty-proportional with freshness preference ===
+    for (const section of nonCompSections) {
       const pool = await db.select().from(questions)
         .where(and(
           eq(questions.section, section),
@@ -622,34 +718,45 @@ export class DatabaseStorage implements IStorage {
         return !usage || !usage.lastServedAt || usage.lastServedAt.getTime() <= cooldownCutoff;
       });
 
-      const workingPool = fresh.length >= perSection ? fresh : pool;
+      const workingPool = fresh.length >= perNonCompSection ? fresh : pool;
+      const shuffled = workingPool.sort(() => Math.random() - 0.5);
 
-      const scored = workingPool.map(q => {
-        const usage = usageMap.get(q.id);
-        return { question: q, score: this.scoreDiversity(q, selected) + (usage ? 0 : 5) };
-      }).sort((a, b) => b.score - a.score);
+      const easyN = Math.round(perNonCompSection * (isEarlyLearner ? 0.40 : 0.20));
+      const medN = Math.round(perNonCompSection * (isEarlyLearner ? 0.60 : 0.45));
+      const hardN = isEarlyLearner ? 0 : perNonCompSection - easyN - medN;
 
-      const easyN = Math.round(perSection * (isEarlyLearner ? 0.40 : 0.20));
-      const medN = Math.round(perSection * (isEarlyLearner ? 0.60 : 0.45));
-      const hardN = isEarlyLearner ? 0 : perSection - easyN - medN;
-
-      const byDiff = (d: string) => scored.filter(s => s.question.difficulty === d);
-      const pick = [
+      const byDiff = (d: string) => shuffled.filter(q => q.difficulty === d);
+      let pick = [
         ...byDiff('easy').slice(0, easyN),
         ...byDiff('medium').slice(0, medN),
-        ...byDiff('hard').slice(0, hardN),
+        ...byDiff('hard').slice(0, Math.max(0, hardN)),
       ];
 
-      let sectionPick = pick.map(p => p.question);
-      if (sectionPick.length < perSection) {
-        const usedIds = new Set(sectionPick.map(q => q.id));
-        const extra = scored.filter(s => !usedIds.has(s.question.id)).slice(0, perSection - sectionPick.length);
-        sectionPick = [...sectionPick, ...extra.map(e => e.question)];
+      if (pick.length < perNonCompSection) {
+        const usedIds = new Set(pick.map(q => q.id));
+        const extra = shuffled.filter(q => !usedIds.has(q.id)).slice(0, perNonCompSection - pick.length);
+        pick = [...pick, ...extra];
       }
 
-      selected.push(...sectionPick);
+      nonCompBuckets.set(section, pick.slice(0, perNonCompSection));
     }
 
+    // === Round-robin interleave non-comp buckets (VR → NVR → Math → VR → …) ===
+    const orderedNonCompBuckets = nonCompSections
+      .map(s => nonCompBuckets.get(s) ?? [])
+      .filter(b => b.length > 0);
+    const interleavedNonComp: Question[] = [];
+    const maxLen = Math.max(0, ...orderedNonCompBuckets.map(b => b.length));
+    for (let i = 0; i < maxLen; i++) {
+      for (const bucket of orderedNonCompBuckets) {
+        if (i < bucket.length) interleavedNonComp.push(bucket[i]);
+      }
+    }
+
+    // Comp block first (for two-phase timer compatibility), then interleaved non-comp
+    const selected = [...compQuestions, ...interleavedNonComp].slice(0, questionCount);
+
+    // Track usage
     const now = new Date();
     for (const q of selected) {
       const existing = usageMap.get(q.id);
@@ -667,7 +774,7 @@ export class DatabaseStorage implements IStorage {
       }
     }
 
-    return selected.sort(() => Math.random() - 0.5).slice(0, questionCount);
+    return selected;
   }
 
   async getQuestionsForDrill(sectionId: string, userId: string, limit: number = 10): Promise<{ questions: Question[]; exhaustionWarning: boolean }> {
