@@ -1,4 +1,31 @@
 User-agent: *
 Allow: /
+Disallow: /app/
+Disallow: /admin/
+Disallow: /free-results/
+Disallow: /checkout-success
+Disallow: /app/checkout-success
+Disallow: /early-dashboard
 
 Sitemap: https://bucks11plustest.co.uk/sitemap.xml
+
+# llms.txt: https://bucks11plustest.co.uk/llms.txt
+
+# AI/LLM crawlers — welcome to index our public content
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: CCBot
+Allow: /

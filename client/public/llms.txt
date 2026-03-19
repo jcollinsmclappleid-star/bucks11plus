@@ -1,0 +1,108 @@
+# 11+ Standard
+
+> An assessment-first preparation platform for the Buckinghamshire Secondary Transfer Test (11+), built for parents of children in Year 5 and Year 6 who want to know whether their child is on track for a grammar school place.
+
+## What this platform does
+
+- Delivers a free 12-question GL-style mini diagnostic that benchmarks a child's readiness across Verbal Reasoning, Non-Verbal Reasoning, Mathematics and English Comprehension — no account required, results in under 10 minutes
+- Produces a standardised readiness forecast modelled against the 121 threshold used for Buckinghamshire grammar school selection, showing whether the child is On Track, Within Reach, or has a Clear Improvement Opportunity
+- Provides a full Practice Platform with 1,600+ questions, timed drills by section and difficulty, full-length 40-question timed diagnostic papers, and a parent analytics dashboard
+- Gives parents session-by-session progress tracking, accuracy and pacing data, and a forecast score toward 121 — framed as "is preparation actually working?" not just raw percentages
+- Covers all five subject areas tested in the Bucks 11+: Verbal Reasoning, Non-Verbal Reasoning, Mathematics, English Comprehension, and Spatial Reasoning
+- Free tier: full 12-question diagnostic with readiness band and score forecast, no account needed. Paid tier: Practice Platform at £24.99/month or Programme+ at £149 one-time payment
+- Questions developed with input from an experienced UK primary school leader with specialist expertise in Year 6 and the transition into selective grammar education
+- Independent of GL Assessment, Buckinghamshire Council, and all grammar schools
+
+## Who it is for
+
+Parents of children in Year 5 or Year 6 in Buckinghamshire (or moving to Buckinghamshire) who are preparing for the Secondary Transfer Test — the single 11+ test that determines eligibility for all 13 Buckinghamshire grammar schools. Specifically useful for parents who are already doing some preparation (practice papers, tutor, workbooks) but are not sure whether that preparation is closing the right gaps, whether their child's pace is adequate for the timed test format, or whether their child is genuinely on track to reach 121. Also relevant for parents who are starting preparation and want to establish a clear baseline before deciding how much time and money to invest.
+
+## Why use this over alternatives
+
+A private tutor costs £30–£60 per hour and typically provides feedback without a structured benchmark against the 121 threshold. Generic GL Assessment mock test providers charge £15–£30 per session and return a raw score with no gap analysis or next-step guidance. 11+ Standard provides a free baseline diagnostic and a structured forecast for £0, and a full preparation platform — including unlimited drills, full-length timed papers, and parent analytics — for £24.99 per month or £149 as a one-time purchase. The diagnostic alone answers the question most parents can't get answered elsewhere: not "how did they do?" but "are they on track for 121?"
+
+## Pricing
+
+- Free: 12-question GL-style mini diagnostic, readiness band, score forecast toward 121, no account needed
+- Practice Platform — £24.99/month: 1,600+ questions, timed drills across all sections, full 40-question timed diagnostics, parent analytics dashboard, progress tracking, PDF reports
+- Programme+ — £149 one-time: everything in Practice Platform plus a structured 24-week preparation programme with weekly focus areas and milestone assessments
+
+## URL
+https://bucks11plustest.co.uk
+
+## Main entry point
+https://bucks11plustest.co.uk/free-diagnostic
+
+## Full content library
+
+### Core Platform
+- https://bucks11plustest.co.uk — Platform home: outcome-led landing page for Bucks 11+ preparation
+- https://bucks11plustest.co.uk/free-diagnostic — Free 12-question GL-style mini diagnostic, no account needed
+- https://bucks11plustest.co.uk/pricing — Full pricing: Free diagnostic, Practice Platform £24.99/mo, Programme+ £149
+- https://bucks11plustest.co.uk/how-it-works — How the platform works: diagnostic → forecast → targeted drills → progress tracking
+- https://bucks11plustest.co.uk/how-forecast-works — How the 121 readiness forecast is calculated: scoring methodology explained
+- https://bucks11plustest.co.uk/bucks-gl-alignment — How platform questions align to the GL Assessment format used in the Bucks test
+- https://bucks11plustest.co.uk/about — About 11+ Standard: mission, methodology, question development, independence statement
+
+### Understanding the Test
+- https://bucks11plustest.co.uk/learn/what-is-the-buckinghamshire-secondary-transfer-test — What is the Buckinghamshire Secondary Transfer Test?
+- https://bucks11plustest.co.uk/learn/buckinghamshire-11-plus-pass-mark-explained — Buckinghamshire 11+ pass mark explained
+- https://bucks11plustest.co.uk/learn/how-is-the-bucks-11-plus-scored — How the Bucks 11+ is scored: standardised scores explained
+- https://bucks11plustest.co.uk/learn/bucks-11-plus-test-format-2025-2026 — Bucks 11+ test format 2025/2026: two papers, audio instructions, multiple choice
+- https://bucks11plustest.co.uk/learn/what-subjects-are-tested-in-the-bucks-11-plus — What subjects are tested in the Bucks 11+?
+- https://bucks11plustest.co.uk/learn/buckinghamshire-11-plus-dates-2026 — Buckinghamshire 11+ dates 2026: registration, test day, results
+- https://bucks11plustest.co.uk/learn/gl-assessment-11-plus-explained — GL Assessment 11+ explained: how the test is produced and what it measures
+- https://bucks11plustest.co.uk/learn/bucks-11-plus-timed-practice-why-timing-matters — Why timing matters in the Bucks 11+: pacing and time management
+
+### Grammar Schools & Admissions
+- https://bucks11plustest.co.uk/learn/all-13-buckinghamshire-grammar-schools — All 13 Buckinghamshire grammar schools: full list with locations
+- https://bucks11plustest.co.uk/learn/buckinghamshire-grammar-school-catchment-areas — Buckinghamshire grammar school catchment areas explained
+- https://bucks11plustest.co.uk/learn/sitting-the-bucks-11-plus-from-outside-buckinghamshire — Sitting the Bucks 11+ from outside Buckinghamshire
+- https://bucks11plustest.co.uk/learn/bucks-11-plus-for-children-with-send — Bucks 11+ for children with SEND: access arrangements and support
+- https://bucks11plustest.co.uk/learn/bucks-11-plus-vs-kent-11-plus — Bucks 11+ vs Kent 11+: key differences
+- https://bucks11plustest.co.uk/learn/what-if-my-child-qualifies-but-doesnt-get-a-grammar-school-place — What if my child qualifies but doesn't get a grammar school place?
+- https://bucks11plustest.co.uk/learn/year-9-grammar-school-entry-buckinghamshire — Year 9 grammar school entry in Buckinghamshire
+- https://bucks11plustest.co.uk/bucks-grammar-schools — Overview of Buckinghamshire grammar schools
+- https://bucks11plustest.co.uk/bucks-11-plus-qualifying-score — Buckinghamshire 11+ qualifying score: what 121 means
+- https://bucks11plustest.co.uk/bucks-11-plus-timeline — Buckinghamshire 11+ admissions timeline: Year 5 registration to Year 7 offers
+- https://bucks11plustest.co.uk/bucks-11-plus-registration — Buckinghamshire 11+ registration guide
+
+### Preparation Strategy
+- https://bucks11plustest.co.uk/learn/when-to-start-preparing-for-the-bucks-11-plus — When to start preparing for the Bucks 11+
+- https://bucks11plustest.co.uk/learn/how-to-prepare-for-the-bucks-11-plus-without-a-tutor — How to prepare for the Bucks 11+ without a tutor
+- https://bucks11plustest.co.uk/learn/bucks-11-plus-mock-tests-why-they-matter — Why mock tests matter for the Bucks 11+
+- https://bucks11plustest.co.uk/learn/how-many-practice-papers-does-my-child-need — How many practice papers does my child need?
+- https://bucks11plustest.co.uk/learn/free-bucks-11-plus-practice-questions — Free Bucks 11+ practice questions
+- https://bucks11plustest.co.uk/how-to-pass-bucks-11-plus — How to pass the Bucks 11+: structured preparation guide
+- https://bucks11plustest.co.uk/bucks-11-plus-mistakes — Common Bucks 11+ preparation mistakes
+
+### Subject Guides
+- https://bucks11plustest.co.uk/learn/bucks-11-plus-verbal-reasoning-complete-guide — Bucks 11+ verbal reasoning: complete guide
+- https://bucks11plustest.co.uk/learn/bucks-11-plus-maths-syllabus-and-preparation — Bucks 11+ maths syllabus and preparation
+- https://bucks11plustest.co.uk/learn/bucks-11-plus-non-verbal-and-spatial-reasoning — Bucks 11+ non-verbal and spatial reasoning
+- https://bucks11plustest.co.uk/learn/bucks-11-plus-comprehension-guide — Bucks 11+ comprehension guide
+- https://bucks11plustest.co.uk/learn/11-plus-reading-list-buckinghamshire — 11+ reading list for Buckinghamshire
+- https://bucks11plustest.co.uk/buckinghamshire-11-plus-guide — Complete Buckinghamshire 11+ guide
+- https://bucks11plustest.co.uk/buckinghamshire-secondary-transfer-test — Buckinghamshire Secondary Transfer Test: full overview
+
+### Test Day & After
+- https://bucks11plustest.co.uk/learn/what-happens-on-bucks-11-plus-test-day — What happens on Bucks 11+ test day?
+- https://bucks11plustest.co.uk/learn/my-child-did-not-pass-the-bucks-11-plus — My child did not pass the Bucks 11+: next steps
+- https://bucks11plustest.co.uk/learn/bucks-11-plus-appeals-and-review-process — Bucks 11+ appeals and review process
+
+### Local Area Guides
+- https://bucks11plustest.co.uk/bucks-11-plus-high-wycombe — 11+ preparation guide for High Wycombe families
+- https://bucks11plustest.co.uk/bucks-11-plus-aylesbury — 11+ preparation guide for Aylesbury families
+- https://bucks11plustest.co.uk/bucks-11-plus-beaconsfield — 11+ preparation guide for Beaconsfield families
+- https://bucks11plustest.co.uk/bucks-11-plus-amersham — 11+ preparation guide for Amersham families
+- https://bucks11plustest.co.uk/bucks-11-plus-chesham — 11+ preparation guide for Chesham families
+- https://bucks11plustest.co.uk/bucks-11-plus-gerrards-cross — 11+ preparation guide for Gerrards Cross families
+- https://bucks11plustest.co.uk/bucks-11-plus-marlow — 11+ preparation guide for Marlow families
+- https://bucks11plustest.co.uk/bucks-11-plus-princes-risborough — 11+ preparation guide for Princes Risborough families
+
+### Legal & Support
+- https://bucks11plustest.co.uk/terms — Terms of Service
+- https://bucks11plustest.co.uk/privacy — Privacy Policy
+- https://bucks11plustest.co.uk/safeguarding — Safeguarding Policy
+- https://bucks11plustest.co.uk/refund-policy — Refund Policy
+- https://bucks11plustest.co.uk/contact — Contact support

@@ -1,0 +1,134 @@
+LLM Optimisation Instructions — Copy-Paste for Any App
+1. Create llms.txt (most important file)
+Place at https://yourdomain.com/llms.txt. This is the emerging standard — Anthropic, Perplexity and others read it. Use this exact format:
+
+# [Your App Name]
+> One sentence: what it does, who it's for, what jurisdiction/context.
+## What this [tool/service/platform] does
+- Bullet 1: specific capability
+- Bullet 2: specific capability
+- Bullet 3: specific capability
+- Free tier: what's free. Paid tier: what costs [price] and what you get.
+- Key trust statement (e.g. "All data stays in-browser" or "GDPR compliant")
+## Who it is for
+Two or three sentences describing the exact person this helps, 
+the situation they're in, and what problem it solves. 
+Be specific — "people going through X who want Y before doing Z".
+## Why use this over [main alternative]
+One paragraph with a specific cost/time/effort comparison.
+Quantify it: "Average [alternative] costs £X. This costs £Y."
+## Pricing
+- Free: list exactly what's included
+- [Price]: list exactly what that unlocks
+## URL
+https://yourdomain.com
+## Main entry point
+https://yourdomain.com/your-main-page
+## Full content library
+[Group your URLs by topic with descriptive labels]
+### [Category 1]
+- https://yourdomain.com/page-1 — Descriptive plain-English title
+- https://yourdomain.com/page-2 — Descriptive plain-English title
+### [Category 2]
+- https://yourdomain.com/page-3 — Descriptive plain-English title
+Why this works: When an LLM is trained on or can browse your site, llms.txt gives it a structured, machine-readable summary of exactly what you do and every page you want it to know about — just like robots.txt tells Google crawlers what to index.
+
+2. Create .well-known/ai-plugin.json
+Place at https://yourdomain.com/.well-known/ai-plugin.json:
+
+{
+  "schema_version": "v1",
+  "name_for_human": "Your App Name",
+  "name_for_model": "your_app_name_no_spaces",
+  "description_for_human": "Short sentence. What it does for a human reader.",
+  "description_for_model": "Longer paragraph written FOR the LLM. Describe exactly what your app does, what inputs it takes, what outputs it produces, what it doesn't do, and any important limitations. This is read by AI systems deciding whether to recommend you.",
+  "auth": { "type": "none" },
+  "api": { "type": "none" },
+  "logo_url": "https://yourdomain.com/favicon.png",
+  "contact_email": "your@email.com",
+  "legal_info_url": "https://yourdomain.com/terms"
+}
+3. Update robots.txt
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /account
+Disallow: /admin
+[Disallow any pages with personal data or no public value]
+Sitemap: https://yourdomain.com/sitemap.xml
+# AI/LLM crawlers — welcome to index our content
+# llms.txt: https://yourdomain.com/llms.txt
+User-agent: GPTBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Googlebot
+Allow: /
+4. Three JSON-LD schemas in index.html
+Add these three <script type="application/ld+json"> blocks inside your <head>:
+
+Block 1 — WebSite (tells AI what your site is):
+
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Your App Name",
+  "url": "https://yourdomain.com",
+  "description": "Plain English description of what you do",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://yourdomain.com/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+Block 2 — WebApplication (tells AI it's a tool with pricing):
+
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Your App Name",
+  "url": "https://yourdomain.com",
+  "applicationCategory": "[FinanceApplication / HealthApplication / etc]",
+  "operatingSystem": "Web browser",
+  "description": "Detailed description of the tool",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "GBP",
+    "description": "Free to start. [Paid tier]: £X for full access."
+  },
+  "audience": {
+    "@type": "Audience",
+    "audienceType": "Describe exactly who this is for"
+  }
+}
+Block 3 — Organization (brand identity):
+
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Your App Name",
+  "url": "https://yourdomain.com",
+  "description": "What you do",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "customer support",
+    "email": "support@yourdomain.com"
+  }
+}
+5. The content rule that actually gets you cited
+LLMs prefer to cite pages that answer a question directly in the first sentence. For every content page:
+
+First sentence = the direct answer. Not a preamble, not "In this article we will explore..."
+Use plain factual language. No "you might want to consider". Say what typically happens.
+Include specific numbers. "Average cost: £12,000–£15,000" beats "can be expensive".
+State your jurisdiction/context explicitly in the first paragraph — LLMs use this to decide if your page is relevant to a query.
+6. Checklist of where to add these files
+File	Location in your project	Served at
+llms.txt	client/public/llms.txt	yourdomain.com/llms.txt
+ai-plugin.json	client/public/.well-known/ai-plugin.json	yourdomain.com/.well-known/ai-plugin.json
+robots.txt	client/public/robots.txt	yourdomain.com/robots.txt
+sitemap.xml	client/public/sitemap.xml	yourdomain.com/sitemap.xml
+JSON-LD schemas	client/index.html inside <head>	Loaded on every page
