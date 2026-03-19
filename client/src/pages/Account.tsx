@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CreditCard, User, Users, Calendar, Mail, ExternalLink } from "lucide-react";
+import { CreditCard, User, Users, Calendar, Mail, ExternalLink, ArrowRight, TrendingUp } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 import { Link } from "wouter";
 import { useAuth } from "../lib/auth";
@@ -10,10 +10,31 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "../lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 
+type Tab = "profile" | "subscription";
+
+const UPGRADE_OPTIONS: Record<string, { tier: string; label: string; price: string; description: string }[]> = {
+  pack_monthly: [
+    { tier: "programme12", label: "12-Week Structured Programme", price: "£89", description: "Add a step-by-step roadmap, milestone diagnostics & weekly plans. Keeps your subscription." },
+    { tier: "programme24_plus", label: "Programme+ (26 weeks)", price: "£149", description: "All-inclusive 26-week plan with full access — replaces your subscription." },
+  ],
+  pack12: [
+    { tier: "programme12", label: "12-Week Structured Programme", price: "£89", description: "Add structured coaching on top of your current access." },
+    { tier: "programme24_plus", label: "Programme+ (26 weeks)", price: "£149", description: "Full all-inclusive 26-week plan." },
+  ],
+  programme8: [
+    { tier: "programme12", label: "12-Week Structured Programme", price: "£89", description: "Extend with a longer structured roadmap." },
+    { tier: "programme24_plus", label: "Programme+ (26 weeks)", price: "£149", description: "Full 26-week all-inclusive plan." },
+  ],
+  programme12: [
+    { tier: "programme24_plus", label: "Programme+ (26 weeks)", price: "£149", description: "Upgrade to the full 26-week all-inclusive plan." },
+  ],
+};
+
 export default function Account() {
   const { user, tierLabel, hasPaidAccess, isFamilyTier, isProgramme } = useAuth();
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const [activeTab, setActiveTab] = useState<Tab>("profile");
   const [editingProfile, setEditingProfile] = useState<string | null>(null);
   const [editName, setEditName] = useState("");
   const [editYear, setEditYear] = useState("");
@@ -22,6 +43,7 @@ export default function Account() {
   const [newChildYear, setNewChildYear] = useState("Year 5");
   const [newChildSchool, setNewChildSchool] = useState("");
   const [examDate, setExamDate] = useState("");
+  const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
 
   const { data: profiles = [] } = useQuery<any[]>({
     queryKey: ["/api/child-profiles"],
@@ -110,7 +132,25 @@ export default function Account() {
     },
   });
 
+  const handleUpgrade = async (targetTier: string) => {
+    setCheckoutLoading(targetTier);
+    try {
+      const res = await apiRequest("POST", "/api/checkout/upgrade", { targetTier });
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+    } catch {
+      toast({ title: "Could not start upgrade", description: "Please try again.", variant: "destructive" });
+    } finally {
+      setCheckoutLoading(null);
+    }
+  };
+
   if (!user) return null;
+
+  const currentTier = user.subscriptionTier || "free";
+  const upgradeOptions = UPGRADE_OPTIONS[currentTier] || [];
+  const isTopTier = currentTier === "programme24_plus" || currentTier === "programme16_family" || currentTier === "programme16";
+  const hasStripeAccount = !!user.stripeCustomerId;
 
   const tierDescriptions: Record<string, string> = {
     free: "Limited to Mini Diagnostic and basic drills.",
@@ -125,321 +165,404 @@ export default function Account() {
     programme16_family: "Full programme access for up to 3 children. 16 weeks of access.",
   };
 
+  const navItems: { id: Tab; label: string; icon: React.ReactNode }[] = [
+    { id: "profile", label: "Profile Details", icon: <User className="h-4 w-4" /> },
+    { id: "subscription", label: "Subscription", icon: <CreditCard className="h-4 w-4" /> },
+  ];
+
   return (
     <div className="container mx-auto max-w-4xl px-4 py-8 space-y-8">
       <Seo title="Account | 11+ Standard" description="Manage your account settings and subscription." />
-      
+
       <div className="border-b border-border/60 pb-6">
         <h1 className="text-3xl font-bold text-primary font-serif">Account Settings</h1>
       </div>
 
       <div className="grid md:grid-cols-3 gap-8">
-        
+
         <div className="flex md:flex-col gap-2 overflow-x-auto pb-2 md:pb-0">
-          <Button variant="secondary" className="justify-start gap-2 text-primary font-medium w-full">
-            <User className="h-4 w-4" /> Profile Details
-          </Button>
-          <Button variant="ghost" className="justify-start gap-2 text-muted-foreground w-full">
-            <CreditCard className="h-4 w-4" /> Subscription
-          </Button>
+          {navItems.map((item) => (
+            <Button
+              key={item.id}
+              variant={activeTab === item.id ? "secondary" : "ghost"}
+              className={`justify-start gap-2 w-full shrink-0 ${activeTab === item.id ? "text-primary font-medium" : "text-muted-foreground"}`}
+              onClick={() => setActiveTab(item.id)}
+              data-testid={`tab-${item.id}`}
+            >
+              {item.icon} {item.label}
+            </Button>
+          ))}
         </div>
 
         <div className="md:col-span-2 space-y-6">
-          <Card className="border-border/60 shadow-sm">
-            <CardHeader>
-              <CardTitle>Current Plan</CardTitle>
-              <CardDescription>Manage your access to 11+ Standard</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-100">
-                <div>
-                  <div className="flex items-center gap-3 mb-1">
-                    <span className="font-bold text-primary text-lg" data-testid="text-tier-name">{tierLabel()}</span>
-                    <Badge variant="secondary" className="bg-slate-200">Active</Badge>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    {tierDescriptions[user.subscriptionTier] || "Limited access."}
-                  </p>
-                  {user.subscriptionExpiresAt && (
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Access expires: {new Date(user.subscriptionExpiresAt).toLocaleDateString()}
-                    </p>
-                  )}
-                </div>
-                <div className="flex flex-col gap-2 items-end">
-                  {!hasPaidAccess() && (
-                    <Button variant="outline" asChild data-testid="button-upgrade-account">
-                      <Link href="/pricing">Upgrade</Link>
-                    </Button>
-                  )}
-                  {user.subscriptionTier === "pack_monthly" && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => manageBillingMutation.mutate()}
-                      disabled={manageBillingMutation.isPending}
-                      data-testid="button-manage-billing"
-                      className="gap-1.5"
-                    >
-                      <ExternalLink className="h-3.5 w-3.5" />
-                      {manageBillingMutation.isPending ? "Opening…" : "Manage Billing"}
-                    </Button>
-                  )}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
 
-          <Card className="border-border/60 shadow-sm">
-            <CardHeader>
-              <CardTitle>Child Profile</CardTitle>
-              <CardDescription>These details inform the forecast engine.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label className="text-xs font-medium text-muted-foreground">Child Name</label>
-                  <div className="font-medium text-primary">{user.childName || 'Not set'}</div>
-                </div>
-                <div className="space-y-1">
-                  <label className="text-xs font-medium text-muted-foreground">Year Group</label>
-                  <div className="font-medium text-primary">{user.childYear || 'Not set'}</div>
-                </div>
-                <div className="space-y-1">
-                  <label className="text-xs font-medium text-muted-foreground">Targeting</label>
-                  <div className="font-medium text-primary">Bucks Grammar (121)</div>
-                </div>
-                <div className="space-y-1">
-                  <label className="text-xs font-medium text-muted-foreground">Test Window</label>
-                  <div className="font-medium text-primary">September</div>
-                </div>
-                <div className="space-y-1">
-                  <label className="text-xs font-medium text-muted-foreground">Practice Hours</label>
-                  <div className="font-medium text-primary">{user.practiceHours || 'Not set'}</div>
-                </div>
-                <div className="space-y-1">
-                  <label className="text-xs font-medium text-muted-foreground">Hardest Areas</label>
-                  <div className="font-medium text-primary">{(user.difficultyAreas || []).join(', ') || 'None selected'}</div>
-                </div>
-              </div>
-              <div className="pt-4 mt-2 border-t border-border/50">
-                <Button variant="outline" size="sm" asChild>
-                  <Link href="/app/onboarding">Retake Onboarding Questionnaire</Link>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          {(isFamilyTier() || profiles.length > 0) && (
-            <Card className="border-border/60 shadow-sm">
-              <CardHeader>
-                <div className="flex items-center gap-2">
-                  <Users className="h-5 w-5 text-primary" />
-                  <CardTitle>Child Profiles</CardTitle>
-                </div>
-                <CardDescription>Manage up to 3 child profiles for your family account.</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {profiles.map((profile: any) => (
-                  <div key={profile.id} className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-100" data-testid={`child-profile-${profile.id}`}>
-                    {editingProfile === profile.id ? (
-                      <div className="flex-1 space-y-2">
-                        <input
-                          type="text"
-                          value={editName}
-                          onChange={(e) => setEditName(e.target.value)}
-                          className="w-full px-3 py-1.5 rounded-md border text-sm"
-                          data-testid="input-edit-child-name"
-                        />
-                        <select
-                          value={editYear}
-                          onChange={(e) => setEditYear(e.target.value)}
-                          className="w-full px-3 py-1.5 rounded-md border text-sm"
-                          data-testid="select-edit-child-year"
-                        >
-                          <option>Year 4</option>
-                          <option>Year 5</option>
-                          <option>Year 6</option>
-                        </select>
-                        <div className="flex gap-2">
-                          <Button
-                            size="sm"
-                            onClick={() => updateChildMutation.mutate({ id: profile.id, data: { childName: editName, childYear: editYear } })}
-                            data-testid="button-save-edit-child"
-                          >
-                            Save
-                          </Button>
-                          <Button size="sm" variant="outline" onClick={() => setEditingProfile(null)}>Cancel</Button>
+          {activeTab === "subscription" && (
+            <>
+              <Card className="border-border/60 shadow-sm">
+                <CardHeader>
+                  <CardTitle>Current Plan</CardTitle>
+                  <CardDescription>Manage your access to 11+ Standard</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="p-4 bg-slate-50 rounded-lg border border-slate-100">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-3 mb-1 flex-wrap">
+                          <span className="font-bold text-primary text-lg" data-testid="text-tier-name">{tierLabel()}</span>
+                          <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200">Active</Badge>
                         </div>
-                      </div>
-                    ) : (
-                      <>
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <span className="font-bold text-primary">{profile.childName}</span>
-                            {profile.id === user.activeChildProfileId && (
-                              <Badge variant="secondary" className="text-xs">Active</Badge>
-                            )}
-                          </div>
-                          <p className="text-sm text-muted-foreground">{profile.childYear} · Stage: {profile.stage || "exploring"}</p>
-                        </div>
-                        <div className="flex gap-2">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => {
-                              setEditingProfile(profile.id);
-                              setEditName(profile.childName);
-                              setEditYear(profile.childYear);
-                            }}
-                            data-testid={`button-edit-child-${profile.id}`}
-                          >
-                            Edit
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="text-red-600 hover:text-red-700"
-                            onClick={() => {
-                              if (confirm("Remove this child profile? Their progress data will be preserved.")) {
-                                deleteChildMutation.mutate(profile.id);
-                              }
-                            }}
-                            data-testid={`button-remove-child-${profile.id}`}
-                          >
-                            Remove
-                          </Button>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                ))}
-
-                {profiles.length < 3 && isFamilyTier() && (
-                  addingChild ? (
-                    <div className="p-4 bg-slate-50 rounded-lg border border-slate-100 space-y-3">
-                      <input
-                        type="text"
-                        placeholder="Child's name"
-                        value={newChildName}
-                        onChange={(e) => setNewChildName(e.target.value)}
-                        className="w-full px-3 py-2 rounded-md border text-sm"
-                        data-testid="input-account-new-child-name"
-                      />
-                      <select
-                        value={newChildYear}
-                        onChange={(e) => setNewChildYear(e.target.value)}
-                        className="w-full px-3 py-2 rounded-md border text-sm"
-                        data-testid="select-account-new-child-year"
-                      >
-                        <option>Year 4</option>
-                        <option>Year 5</option>
-                        <option>Year 6</option>
-                      </select>
-                      <select
-                        value={newChildSchool}
-                        onChange={(e) => setNewChildSchool(e.target.value)}
-                        className="w-full px-3 py-2 rounded-md border text-sm"
-                        data-testid="select-account-new-child-school"
-                      >
-                        <option value="">Target school (optional)</option>
-                        {["Aylesbury Grammar School","Aylesbury High School","Beaconsfield High School","Burnham Grammar School","Chesham Grammar School","Dr Challoner's Grammar School","Dr Challoner's High School","John Hampden Grammar School","Royal Grammar School (High Wycombe)","Royal Latin School","Sir Henry Floyd Grammar School","Sir William Borlase's Grammar School","Wycombe High School","Not sure yet","Other"].map(s => (
-                          <option key={s} value={s}>{s}</option>
-                        ))}
-                      </select>
-                      <div className="flex gap-2">
-                        <Button
-                          size="sm"
-                          onClick={() => addChildMutation.mutate()}
-                          disabled={!newChildName.trim() || addChildMutation.isPending}
-                          data-testid="button-confirm-account-add-child"
-                        >
-                          Add Child
-                        </Button>
-                        <Button size="sm" variant="outline" onClick={() => setAddingChild(false)}>Cancel</Button>
+                        <p className="text-sm text-muted-foreground">
+                          {tierDescriptions[currentTier] || "Limited access."}
+                        </p>
+                        {user.subscriptionExpiresAt && (
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Access expires: {new Date(user.subscriptionExpiresAt).toLocaleDateString()}
+                          </p>
+                        )}
+                        {currentTier === "pack_monthly" && (
+                          <p className="text-xs text-muted-foreground mt-1">Renews monthly. Cancel any time before your next billing date.</p>
+                        )}
                       </div>
                     </div>
-                  ) : (
-                    <Button
-                      variant="outline"
-                      className="w-full"
-                      onClick={() => setAddingChild(true)}
-                      data-testid="button-account-add-child"
-                    >
-                      + Add Child Profile
-                    </Button>
-                  )
-                )}
-              </CardContent>
-            </Card>
-          )}
-
-          {isProgramme() && (
-            <Card className="border-border/60 shadow-sm">
-              <CardHeader>
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-5 w-5 text-primary" />
-                  <CardTitle>Exam Date</CardTitle>
-                </div>
-                <CardDescription>Set your child's exam date for the countdown timer on your dashboard.</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex gap-3 items-end">
-                  <div className="flex-1">
-                    <label className="text-xs font-medium text-muted-foreground block mb-1">Exam Date</label>
-                    <input
-                      type="date"
-                      value={examDate || (testDayConfig?.examDate ? new Date(testDayConfig.examDate).toISOString().split("T")[0] : "")}
-                      onChange={(e) => setExamDate(e.target.value)}
-                      className="w-full px-3 py-2 rounded-md border text-sm"
-                      data-testid="input-exam-date"
-                    />
                   </div>
-                  <Button
-                    onClick={() => saveExamDateMutation.mutate()}
-                    disabled={!examDate || saveExamDateMutation.isPending}
-                    data-testid="button-save-exam-date"
-                  >
-                    Save
-                  </Button>
-                </div>
-                {testDayConfig?.examDate && (
-                  <p className="text-sm text-muted-foreground">
-                    Current exam date: {new Date(testDayConfig.examDate).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
-                  </p>
-                )}
-              </CardContent>
-            </Card>
+
+                  {hasStripeAccount && (
+                    <div className="space-y-3 pt-1">
+                      <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Billing</p>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-between h-12"
+                        onClick={() => manageBillingMutation.mutate()}
+                        disabled={manageBillingMutation.isPending}
+                        data-testid="button-manage-billing"
+                      >
+                        <span className="flex items-center gap-2">
+                          <ExternalLink className="h-4 w-4 text-muted-foreground" />
+                          <span>
+                            {currentTier === "pack_monthly"
+                              ? "Manage billing & cancel subscription"
+                              : "Manage billing"}
+                          </span>
+                        </span>
+                        {manageBillingMutation.isPending && (
+                          <span className="text-xs text-muted-foreground">Opening…</span>
+                        )}
+                      </Button>
+                      {currentTier === "pack_monthly" && (
+                        <p className="text-xs text-muted-foreground px-1">
+                          Cancellation takes effect at the end of your current billing period. You keep full access until then.
+                        </p>
+                      )}
+                    </div>
+                  )}
+
+                  {!hasPaidAccess() && (
+                    <div className="pt-2">
+                      <Button className="w-full" asChild data-testid="button-upgrade-account">
+                        <Link href="/pricing">View Plans <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                      </Button>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {hasPaidAccess() && !isTopTier && upgradeOptions.length > 0 && (
+                <Card className="border-border/60 shadow-sm">
+                  <CardHeader>
+                    <div className="flex items-center gap-2">
+                      <TrendingUp className="h-5 w-5 text-primary" />
+                      <CardTitle>Upgrade Options</CardTitle>
+                    </div>
+                    <CardDescription>Add structured coaching or move to a full programme.</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    {upgradeOptions.map((opt) => (
+                      <div
+                        key={opt.tier}
+                        className="flex items-center justify-between p-4 rounded-lg border border-border/60 gap-3"
+                        data-testid={`upgrade-option-${opt.tier}`}
+                      >
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap mb-0.5">
+                            <span className="font-semibold text-primary text-sm">{opt.label}</span>
+                            <span className="font-bold text-primary">{opt.price}</span>
+                          </div>
+                          <p className="text-xs text-muted-foreground">{opt.description}</p>
+                        </div>
+                        <Button
+                          size="sm"
+                          className="shrink-0"
+                          onClick={() => handleUpgrade(opt.tier)}
+                          disabled={checkoutLoading === opt.tier}
+                          data-testid={`button-upgrade-to-${opt.tier}`}
+                        >
+                          {checkoutLoading === opt.tier ? "Loading…" : "Upgrade"}
+                        </Button>
+                      </div>
+                    ))}
+                    <p className="text-xs text-muted-foreground pt-1">
+                      Upgrades are one-time payments. Your current access is preserved.
+                    </p>
+                  </CardContent>
+                </Card>
+              )}
+            </>
           )}
 
-          <Card className="border-border/60 shadow-sm">
-            <CardHeader>
-              <div className="flex items-center gap-2">
-                <Mail className="h-5 w-5 text-primary" />
-                <CardTitle>Email Preferences</CardTitle>
-              </div>
-              <CardDescription>Manage your email communication preferences.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-100">
-                <div>
-                  <p className="font-medium text-primary">Progress updates & tips</p>
-                  <p className="text-sm text-muted-foreground">Receive helpful emails about your child's progress, practice reminders, and preparation tips.</p>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer" data-testid="toggle-email-consent">
-                  <input
-                    type="checkbox"
-                    checked={user.emailConsent}
-                    onChange={(e) => emailConsentMutation.mutate(e.target.checked)}
-                    className="sr-only peer"
-                  />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:ring-2 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                </label>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+          {activeTab === "profile" && (
+            <>
+              <Card className="border-border/60 shadow-sm">
+                <CardHeader>
+                  <CardTitle>Child Profile</CardTitle>
+                  <CardDescription>These details inform the forecast engine.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                      <label className="text-xs font-medium text-muted-foreground">Child Name</label>
+                      <div className="font-medium text-primary">{user.childName || 'Not set'}</div>
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs font-medium text-muted-foreground">Year Group</label>
+                      <div className="font-medium text-primary">{user.childYear || 'Not set'}</div>
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs font-medium text-muted-foreground">Targeting</label>
+                      <div className="font-medium text-primary">Bucks Grammar (121)</div>
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs font-medium text-muted-foreground">Test Window</label>
+                      <div className="font-medium text-primary">September</div>
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs font-medium text-muted-foreground">Practice Hours</label>
+                      <div className="font-medium text-primary">{user.practiceHours || 'Not set'}</div>
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs font-medium text-muted-foreground">Hardest Areas</label>
+                      <div className="font-medium text-primary">{(user.difficultyAreas || []).join(', ') || 'None selected'}</div>
+                    </div>
+                  </div>
+                  <div className="pt-4 mt-2 border-t border-border/50">
+                    <Button variant="outline" size="sm" asChild>
+                      <Link href="/app/onboarding">Retake Onboarding Questionnaire</Link>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
 
+              {(isFamilyTier() || profiles.length > 0) && (
+                <Card className="border-border/60 shadow-sm">
+                  <CardHeader>
+                    <div className="flex items-center gap-2">
+                      <Users className="h-5 w-5 text-primary" />
+                      <CardTitle>Child Profiles</CardTitle>
+                    </div>
+                    <CardDescription>Manage up to 3 child profiles for your family account.</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {profiles.map((profile: any) => (
+                      <div key={profile.id} className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-100" data-testid={`child-profile-${profile.id}`}>
+                        {editingProfile === profile.id ? (
+                          <div className="flex-1 space-y-2">
+                            <input
+                              type="text"
+                              value={editName}
+                              onChange={(e) => setEditName(e.target.value)}
+                              className="w-full px-3 py-1.5 rounded-md border text-sm"
+                              data-testid="input-edit-child-name"
+                            />
+                            <select
+                              value={editYear}
+                              onChange={(e) => setEditYear(e.target.value)}
+                              className="w-full px-3 py-1.5 rounded-md border text-sm"
+                              data-testid="select-edit-child-year"
+                            >
+                              <option>Year 4</option>
+                              <option>Year 5</option>
+                              <option>Year 6</option>
+                            </select>
+                            <div className="flex gap-2">
+                              <Button
+                                size="sm"
+                                onClick={() => updateChildMutation.mutate({ id: profile.id, data: { childName: editName, childYear: editYear } })}
+                                data-testid="button-save-edit-child"
+                              >
+                                Save
+                              </Button>
+                              <Button size="sm" variant="outline" onClick={() => setEditingProfile(null)}>Cancel</Button>
+                            </div>
+                          </div>
+                        ) : (
+                          <>
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <span className="font-bold text-primary">{profile.childName}</span>
+                                {profile.id === user.activeChildProfileId && (
+                                  <Badge variant="secondary" className="text-xs">Active</Badge>
+                                )}
+                              </div>
+                              <p className="text-sm text-muted-foreground">{profile.childYear} · Stage: {profile.stage || "exploring"}</p>
+                            </div>
+                            <div className="flex gap-2">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => {
+                                  setEditingProfile(profile.id);
+                                  setEditName(profile.childName);
+                                  setEditYear(profile.childYear);
+                                }}
+                                data-testid={`button-edit-child-${profile.id}`}
+                              >
+                                Edit
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="text-red-600 hover:text-red-700"
+                                onClick={() => {
+                                  if (confirm("Remove this child profile? Their progress data will be preserved.")) {
+                                    deleteChildMutation.mutate(profile.id);
+                                  }
+                                }}
+                                data-testid={`button-remove-child-${profile.id}`}
+                              >
+                                Remove
+                              </Button>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    ))}
+
+                    {profiles.length < 3 && isFamilyTier() && (
+                      addingChild ? (
+                        <div className="p-4 bg-slate-50 rounded-lg border border-slate-100 space-y-3">
+                          <input
+                            type="text"
+                            placeholder="Child's name"
+                            value={newChildName}
+                            onChange={(e) => setNewChildName(e.target.value)}
+                            className="w-full px-3 py-2 rounded-md border text-sm"
+                            data-testid="input-account-new-child-name"
+                          />
+                          <select
+                            value={newChildYear}
+                            onChange={(e) => setNewChildYear(e.target.value)}
+                            className="w-full px-3 py-2 rounded-md border text-sm"
+                            data-testid="select-account-new-child-year"
+                          >
+                            <option>Year 4</option>
+                            <option>Year 5</option>
+                            <option>Year 6</option>
+                          </select>
+                          <select
+                            value={newChildSchool}
+                            onChange={(e) => setNewChildSchool(e.target.value)}
+                            className="w-full px-3 py-2 rounded-md border text-sm"
+                            data-testid="select-account-new-child-school"
+                          >
+                            <option value="">Target school (optional)</option>
+                            {["Aylesbury Grammar School","Aylesbury High School","Beaconsfield High School","Burnham Grammar School","Chesham Grammar School","Dr Challoner's Grammar School","Dr Challoner's High School","John Hampden Grammar School","Royal Grammar School (High Wycombe)","Royal Latin School","Sir Henry Floyd Grammar School","Sir William Borlase's Grammar School","Wycombe High School","Not sure yet","Other"].map(s => (
+                              <option key={s} value={s}>{s}</option>
+                            ))}
+                          </select>
+                          <div className="flex gap-2">
+                            <Button
+                              size="sm"
+                              onClick={() => addChildMutation.mutate()}
+                              disabled={!newChildName.trim() || addChildMutation.isPending}
+                              data-testid="button-confirm-account-add-child"
+                            >
+                              Add Child
+                            </Button>
+                            <Button size="sm" variant="outline" onClick={() => setAddingChild(false)}>Cancel</Button>
+                          </div>
+                        </div>
+                      ) : (
+                        <Button
+                          variant="outline"
+                          className="w-full"
+                          onClick={() => setAddingChild(true)}
+                          data-testid="button-account-add-child"
+                        >
+                          + Add Child Profile
+                        </Button>
+                      )
+                    )}
+                  </CardContent>
+                </Card>
+              )}
+
+              {isProgramme() && (
+                <Card className="border-border/60 shadow-sm">
+                  <CardHeader>
+                    <div className="flex items-center gap-2">
+                      <Calendar className="h-5 w-5 text-primary" />
+                      <CardTitle>Exam Date</CardTitle>
+                    </div>
+                    <CardDescription>Set your child's exam date for the countdown timer on your dashboard.</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex gap-3 items-end">
+                      <div className="flex-1">
+                        <label className="text-xs font-medium text-muted-foreground block mb-1">Exam Date</label>
+                        <input
+                          type="date"
+                          value={examDate || (testDayConfig?.examDate ? new Date(testDayConfig.examDate).toISOString().split("T")[0] : "")}
+                          onChange={(e) => setExamDate(e.target.value)}
+                          className="w-full px-3 py-2 rounded-md border text-sm"
+                          data-testid="input-exam-date"
+                        />
+                      </div>
+                      <Button
+                        onClick={() => saveExamDateMutation.mutate()}
+                        disabled={!examDate || saveExamDateMutation.isPending}
+                        data-testid="button-save-exam-date"
+                      >
+                        Save
+                      </Button>
+                    </div>
+                    {testDayConfig?.examDate && (
+                      <p className="text-sm text-muted-foreground">
+                        Current exam date: {new Date(testDayConfig.examDate).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
+                      </p>
+                    )}
+                  </CardContent>
+                </Card>
+              )}
+
+              <Card className="border-border/60 shadow-sm">
+                <CardHeader>
+                  <div className="flex items-center gap-2">
+                    <Mail className="h-5 w-5 text-primary" />
+                    <CardTitle>Email Preferences</CardTitle>
+                  </div>
+                  <CardDescription>Manage your email communication preferences.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-100">
+                    <div>
+                      <p className="font-medium text-primary">Progress updates & tips</p>
+                      <p className="text-sm text-muted-foreground">Receive helpful emails about your child's progress, practice reminders, and preparation tips.</p>
+                    </div>
+                    <label className="relative inline-flex items-center cursor-pointer" data-testid="toggle-email-consent">
+                      <input
+                        type="checkbox"
+                        checked={user.emailConsent}
+                        onChange={(e) => emailConsentMutation.mutate(e.target.checked)}
+                        className="sr-only peer"
+                      />
+                      <div className="w-11 h-6 bg-gray-200 peer-focus:ring-2 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                    </label>
+                  </div>
+                </CardContent>
+              </Card>
+            </>
+          )}
+
+        </div>
       </div>
     </div>
   );
