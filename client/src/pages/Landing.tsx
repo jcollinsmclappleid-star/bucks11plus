@@ -773,6 +773,9 @@ export default function Landing() {
                   <span>Initial readiness band with 121 context</span>
                 </div>
               </div>
+              <p className="text-xs text-slate-400 italic border-t border-slate-100 pt-3">
+                The starting point — so preparation is directed, not scattered.
+              </p>
             </div>
 
             <div className="group relative bg-white rounded-2xl border border-slate-200 p-7 sm:p-8 hover:border-primary/20 hover:shadow-lg transition-all duration-300" data-testid="step-readiness-forecast">
@@ -894,7 +897,7 @@ export default function Landing() {
                 </div>
                 <div className="bg-white/70 rounded-xl border border-amber-200/40 px-4 py-3">
                   <p className="font-bold text-amber-900">October, Year 6</p>
-                  <p className="text-amber-700 text-xs mt-0.5">Results and school offers</p>
+                  <p className="text-amber-700 text-xs mt-0.5">Test results published</p>
                 </div>
               </div>
               <p className="text-amber-800 text-sm leading-relaxed">
