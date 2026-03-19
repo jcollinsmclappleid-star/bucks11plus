@@ -69,7 +69,7 @@ export default function GLAlignment() {
           <li>✓ GL-style question families replicated independently — not official GL Assessment materials</li>
           <li>✓ Timed conditions modelled at question level — accuracy and pace both assessed</li>
           <li>✓ Difficulty-weighted questions across Easy, Medium, and Hard bands</li>
-          <li>✓ 1,600+ questions in the bank covering all section types</li>
+          <li>✓ 1,500+ questions in the bank covering all section types</li>
         </ul>
       </div>
 

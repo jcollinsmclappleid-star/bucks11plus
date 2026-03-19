@@ -207,7 +207,7 @@ export async function sendUpgradeNudge(userId: string) {
     <h2 style="color:#0d1f30;margin-bottom:8px;">Ready for More?</h2>
     <p>You've had a chance to explore 11+ Standard with the free diagnostic. Here's what unlocking full access gives ${childName}:</p>
     <ul style="padding-left:20px;">
-      <li><strong>1,600+ targeted practice questions</strong> across VR, NVR, Maths & Comprehension</li>
+      <li><strong>1,500+ targeted practice questions</strong> across VR, NVR, Maths & Comprehension</li>
       <li><strong>Full timed diagnostics</strong> with detailed PDF reports</li>
       <li><strong>Progress tracking</strong> to see real improvement over time</li>
     </ul>

@@ -477,7 +477,7 @@ export default function Pricing() {
                       </div>
                       <p className="text-sm text-slate-600 mb-4">
                         {currentTier === "early_learner" && "Foundation-level practice with readiness tracking and age-appropriate learning."}
-                        {(currentTier === "pack12" || currentTier === "pack12_family" || currentTier === "pack_monthly") && "1,600+ questions, full diagnostics, timed drills, PDF reports and progress tracking."}
+                        {(currentTier === "pack12" || currentTier === "pack12_family" || currentTier === "pack_monthly") && "1,500+ questions, full diagnostics, timed drills, PDF reports and progress tracking."}
                         {currentTier === "programme24_plus" && "26-week all-inclusive programme: diagnostics, all drills, 3 mock exams, roadmap, milestone tracking, weekly plans and premium analytics."}
                         {(currentTier === "programme8" || currentTier === "programme12" || currentTier === "programme16" || currentTier === "programme16_family") && "Complete preparation: diagnostics, all drills, mock exams, roadmap, milestone tracking, weekly plans and premium analytics."}
                       </p>
@@ -548,7 +548,7 @@ export default function Pricing() {
                     </p>
                     <ul className="space-y-2">
                       {[
-                        "1,600+ VR, NVR, Maths & Comprehension questions",
+                        "1,500+ VR, NVR, Maths & Comprehension questions",
                         "Full timed diagnostics (40 questions)",
                         "Easy & Medium drills (19 sections)",
                         "PDF reports & impact simulator",
@@ -595,7 +595,7 @@ export default function Pricing() {
                     </div>
                     <ul className="space-y-2">
                       {[
-                        "1,600+ VR, NVR, Maths & Comprehension questions",
+                        "1,500+ VR, NVR, Maths & Comprehension questions",
                         "Full timed diagnostics (40 questions)",
                         "All 17 Hard challenge drills unlocked",
                         "26-week structured preparation roadmap",
@@ -655,11 +655,11 @@ export default function Pricing() {
                       </div>
                       <p className="text-sm text-slate-500 mb-6">6 months access</p>
                       <p className="text-sm text-slate-600 mb-6 leading-relaxed">
-                        1,600+ questions across Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension. Full diagnostics, timed drills, and progress tracking.
+                        1,500+ questions across Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension. Full diagnostics, timed drills, and progress tracking.
                       </p>
                       <ul className="space-y-3">
                         {[
-                          "1,600+ Verbal Reasoning, Non-Verbal Reasoning, Maths & Comprehension questions",
+                          "1,500+ Verbal Reasoning, Non-Verbal Reasoning, Maths & Comprehension questions",
                           "Easy & Medium drills (19 sections) + 6 Hard drills",
                           "Full timed diagnostics (40 questions)",
                           "Practice papers (Quick & Full)",
@@ -935,7 +935,7 @@ export default function Pricing() {
                     { feature: "Basic readiness forecast", free: true, pack: true, prog: true },
                     { feature: "Top focus area revealed", free: true, pack: true, prog: true },
                     { feature: "1 sample practice drill", free: true, pack: true, prog: true },
-                    { feature: "1,600+ Verbal Reasoning, Non-Verbal Reasoning, Maths & Comprehension questions", free: false, pack: true, prog: true },
+                    { feature: "1,500+ Verbal Reasoning, Non-Verbal Reasoning, Maths & Comprehension questions", free: false, pack: true, prog: true },
                     { feature: "Easy & Medium drills (19 sections)", free: false, pack: true, prog: true },
                     { feature: "Hard challenge drills", free: false, pack: "6 sections", prog: "All 17" },
                     { feature: "Badge-based Accomplishments", free: false, pack: true, prog: true },

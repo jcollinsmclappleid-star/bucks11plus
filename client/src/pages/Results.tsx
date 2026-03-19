@@ -71,14 +71,14 @@ function getUpsellMessage(tier: string, weakestSection: string, weakestScore: nu
     if (overallScore < 110) {
       return {
         title: "Unlock Targeted Practice",
-        message: `${weakestSection} at ${weakestScore}% needs focused attention. The Early Learner pack gives your child structured practice across all four sections with 1,600+ curated questions.`,
+        message: `${weakestSection} at ${weakestScore}% needs focused attention. The Early Learner pack gives your child structured practice across all four sections with 1,500+ curated questions.`,
         cta: "View Early Learner — £49",
         tier: "early_learner",
       };
     }
     return {
       title: "Start Building Confidence",
-      message: `Great start! The Early Learner pack includes unlimited access to 1,600+ questions across all sections to build consistent practice habits.`,
+      message: `Great start! The Early Learner pack includes unlimited access to 1,500+ questions across all sections to build consistent practice habits.`,
       cta: "View Early Learner — £49",
       tier: "early_learner",
     };
