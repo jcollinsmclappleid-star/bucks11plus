@@ -125,6 +125,25 @@ export async function registerRoutes(
     }
   });
 
+  app.post("/api/stripe/customer-portal", requireAuth, async (req, res, next) => {
+    try {
+      const user = req.user!;
+      if (!user.stripeCustomerId) {
+        return res.status(400).json({ message: "No billing account found. Please contact support." });
+      }
+      const stripe = await getUncachableStripeClient();
+      const host = req.get("host");
+      const protocol = req.protocol;
+      const session = await stripe.billingPortal.sessions.create({
+        customer: user.stripeCustomerId,
+        return_url: `${protocol}://${host}/app/account`,
+      });
+      res.json({ url: session.url });
+    } catch (error) {
+      next(error);
+    }
+  });
+
   app.post("/api/checkout", requireAuth, async (req, res, next) => {
     try {
       const { tier } = req.body;

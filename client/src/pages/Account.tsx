@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Settings, CreditCard, User, Users, Calendar, Mail } from "lucide-react";
+import { CreditCard, User, Users, Calendar, Mail, ExternalLink } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 import { Link } from "wouter";
 import { useAuth } from "../lib/auth";
@@ -97,6 +97,19 @@ export default function Account() {
     },
   });
 
+  const manageBillingMutation = useMutation({
+    mutationFn: async () => {
+      const res = await apiRequest("POST", "/api/stripe/customer-portal", {});
+      return res.json();
+    },
+    onSuccess: (data) => {
+      if (data.url) window.location.href = data.url;
+    },
+    onError: () => {
+      toast({ title: "Could not open billing portal", description: "Please try again or contact support.", variant: "destructive" });
+    },
+  });
+
   if (!user) return null;
 
   const tierDescriptions: Record<string, string> = {
@@ -104,6 +117,10 @@ export default function Account() {
     early_learner: "Foundation-level practice for Year 4 & 5. 6 months of access.",
     pack12: "Full access to all diagnostics, drills, PDF reports, and progress tracking for 12 weeks.",
     pack12_family: "Full access for up to 3 children. 12 weeks of access.",
+    pack_monthly: "Full access to all diagnostics, drills, PDF reports, and progress tracking. Renews monthly — cancel anytime.",
+    programme8: "8-week structured programme with milestone diagnostics, advanced analytics, and a personalised weekly plan.",
+    programme12: "12-week structured programme — subscriber add-on with milestone diagnostics and a personalised weekly plan.",
+    programme24_plus: "24-week Programme+ with full structured roadmap, milestone diagnostics, advanced analytics, and priority support.",
     programme16: "Full access including 16-week structured roadmap, milestone diagnostics, advanced analytics, and weekly plans.",
     programme16_family: "Full programme access for up to 3 children. 16 weeks of access.",
   };
@@ -124,9 +141,6 @@ export default function Account() {
           </Button>
           <Button variant="ghost" className="justify-start gap-2 text-muted-foreground w-full">
             <CreditCard className="h-4 w-4" /> Subscription
-          </Button>
-          <Button variant="ghost" className="justify-start gap-2 text-muted-foreground w-full">
-            <Settings className="h-4 w-4" /> Preferences
           </Button>
         </div>
 
@@ -152,11 +166,26 @@ export default function Account() {
                     </p>
                   )}
                 </div>
-                {!hasPaidAccess() && (
-                  <Button variant="outline" asChild data-testid="button-upgrade-account">
-                    <Link href="/pricing">Upgrade</Link>
-                  </Button>
-                )}
+                <div className="flex flex-col gap-2 items-end">
+                  {!hasPaidAccess() && (
+                    <Button variant="outline" asChild data-testid="button-upgrade-account">
+                      <Link href="/pricing">Upgrade</Link>
+                    </Button>
+                  )}
+                  {user.subscriptionTier === "pack_monthly" && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => manageBillingMutation.mutate()}
+                      disabled={manageBillingMutation.isPending}
+                      data-testid="button-manage-billing"
+                      className="gap-1.5"
+                    >
+                      <ExternalLink className="h-3.5 w-3.5" />
+                      {manageBillingMutation.isPending ? "Opening…" : "Manage Billing"}
+                    </Button>
+                  )}
+                </div>
               </div>
             </CardContent>
           </Card>
