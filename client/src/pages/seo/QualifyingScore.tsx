@@ -9,6 +9,29 @@ const breadcrumbItems = [
   { label: "Qualifying Score" },
 ];
 
+const faqItems = [
+  {
+    question: "What is the qualifying score for the Buckinghamshire 11+?",
+    answer: "The qualifying score is 121 on the standardised scale used for the Buckinghamshire Secondary Transfer Test. Children who achieve a standardised score of 121 or above are deemed to have qualified for grammar school and are eligible to be considered for a place at any of the 13 Buckinghamshire grammar schools.",
+  },
+  {
+    question: "Is 121 a raw score or a percentage?",
+    answer: "Neither. 121 is a standardised score — a statistically adjusted figure that accounts for the child's age on the day of the test and the difficulty of that year's paper. Two children who answer the same number of questions correctly may receive different standardised scores if they are different ages, because the standardisation process adjusts for developmental age differences within the cohort.",
+  },
+  {
+    question: "What happens if my child scores 120?",
+    answer: "A score of 120 does not meet the qualifying threshold. There is no borderline review process — the 121 qualifying standard is a hard cutoff. A child who scores 120 has not qualified, regardless of how close the score appears to the threshold.",
+  },
+  {
+    question: "Does qualifying at 121 guarantee a grammar school place?",
+    answer: "No. Qualifying at 121 makes a child eligible to be considered for a grammar school place, but it does not guarantee one. Where a school receives more qualifying applicants than it has places, it allocates places using oversubscription criteria — typically starting with looked-after children, then siblings, then distance from the school.",
+  },
+  {
+    question: "What raw accuracy does a child typically need to reach 121?",
+    answer: "To achieve the 121 qualifying standard, a child typically needs to answer approximately 80–85% of questions correctly across all four test domains. This requires both accuracy and pace — unanswered questions score zero, so a child who runs out of time in any section effectively loses marks for every question they did not reach.",
+  },
+];
+
 export default function QualifyingScore() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
@@ -18,6 +41,15 @@ export default function QualifyingScore() {
         canonicalPath="/bucks-11-plus-qualifying-score"
         schema={[
           breadcrumbSchema(breadcrumbItems),
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: faqItems.map(item => ({
+              "@type": "Question",
+              name: item.question,
+              acceptedAnswer: { "@type": "Answer", text: item.answer },
+            })),
+          },
         ]}
       />
 

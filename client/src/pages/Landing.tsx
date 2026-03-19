@@ -260,6 +260,20 @@ export default function Landing() {
         title="Bucks 11+ Preparation Platform — Get Your Child Ready for 121 | 11+ Standard"
         description="The preparation platform built for the Buckinghamshire Secondary Transfer Test. Diagnose exactly where your child stands, target the right skills, and track whether preparation is closing the gap to 121."
         canonicalPath="/"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: [
+            { "@type": "Question", name: "What is the Buckinghamshire 11+ Secondary Transfer Test?", acceptedAnswer: { "@type": "Answer", text: "The Buckinghamshire Secondary Transfer Test (STT) is a selective entrance exam taken by children in Year 6, typically in September. It determines eligibility for all 13 state-funded grammar schools in Buckinghamshire. The test is produced by GL Assessment and covers four domains: Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension." } },
+            { "@type": "Question", name: "What does 121 mean in the Bucks 11+?", acceptedAnswer: { "@type": "Answer", text: "121 is the standardised score threshold used in Buckinghamshire to determine whether a child qualifies for grammar school. It is not a raw score or percentage — it is a standardised figure that accounts for the child's age on test day and the difficulty of that year's paper. Children who score 121 or above are considered to have qualified and are eligible to be considered for any of the 13 Buckinghamshire grammar schools." } },
+            { "@type": "Question", name: "What subjects does the Bucks 11+ test cover?", acceptedAnswer: { "@type": "Answer", text: "The test covers four domains: Verbal Reasoning (vocabulary, word relationships, code problems), Non-Verbal Reasoning and Spatial Reasoning (patterns, sequences, transformations), Mathematics (arithmetic, fractions, word problems), and English Comprehension (reading passages with multiple-choice questions)." } },
+            { "@type": "Question", name: "How does the free diagnostic work?", acceptedAnswer: { "@type": "Answer", text: "The free diagnostic is a 12-question, 8-minute timed assessment in GL-style format. No account is needed. On completion, parents receive a readiness band (On Track, Within Reach, or Clear Improvement Opportunity), a forecast standardised score toward 121, and a breakdown of performance across the four test sections." } },
+            { "@type": "Question", name: "When should my child start preparing for the Bucks 11+?", acceptedAnswer: { "@type": "Answer", text: "Most families begin structured preparation in Year 4 or early Year 5, giving children 12 to 18 months before the September test date. Starting with a diagnostic assessment helps identify specific gaps and ensures preparation time is spent where it will have the most impact." } },
+            { "@type": "Question", name: "Is 11+ Standard affiliated with GL Assessment or Buckinghamshire Council?", acceptedAnswer: { "@type": "Answer", text: "No. 11+ Standard is fully independent. We are not affiliated with GL Assessment, Buckinghamshire Council, The Buckinghamshire Grammar Schools (TBGS), or any individual grammar school. The GL-style label refers to the question format we use to replicate the test structure — it does not imply any formal relationship." } },
+            { "@type": "Question", name: "What is included in the Practice Platform?", acceptedAnswer: { "@type": "Answer", text: "The Practice Platform (£24.99/month) includes 1,600+ questions across all four test domains, timed drills by section and difficulty level, full 40-question timed diagnostic papers, a parent analytics dashboard with 10 performance metrics, session-by-session progress tracking, and PDF reports. All can be cancelled at any time." } },
+            { "@type": "Question", name: "What is the difference between the Practice Platform and Programme+?", acceptedAnswer: { "@type": "Answer", text: "The Practice Platform (£24.99/month) is flexible access to the full question bank, drills, and analytics. Programme+ (£149 one-time) includes everything in the Practice Platform plus a structured 24-week preparation programme with week-by-week focus areas and milestone assessments — designed for families who want a complete guided programme rather than self-directed practice." } },
+          ]
+        }}
       />
 
       <section className="relative overflow-hidden pt-12 pb-24 md:pt-16 md:pb-40 border-b border-border/50" style={{ backgroundColor: '#0d1f30' }}>
@@ -965,6 +979,94 @@ export default function Landing() {
               View all pages and resources →
             </Link>
           </div>
+        </div>
+      </section>
+
+      <section className="py-14 bg-white border-t border-slate-100" aria-label="Platform overview">
+        <div className="container mx-auto max-w-4xl px-4">
+
+          <div className="mb-10">
+            <h2 className="text-2xl font-bold text-primary font-serif mb-4">At a Glance</h2>
+            <ul className="space-y-2 text-sm text-slate-600 list-none pl-0">
+              <li>✓ Free 12-question GL-style mini diagnostic — no account required, results in under 10 minutes</li>
+              <li>✓ Covers all four Bucks 11+ domains: Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension</li>
+              <li>✓ Readiness forecast benchmarked against the 121 standardised score qualifying threshold</li>
+              <li>✓ Practice Platform with 1,600+ questions, timed drills, and parent analytics — from £24.99/month</li>
+              <li>✓ Fully independent — not affiliated with GL Assessment, Buckinghamshire Council, or any grammar school</li>
+            </ul>
+          </div>
+
+          <div className="mb-10">
+            <h2 className="text-2xl font-bold text-primary font-serif mb-4">What the Diagnostic Covers</h2>
+            <p className="text-slate-600 leading-relaxed mb-4">
+              The Buckinghamshire Secondary Transfer Test (also called the Secondary Transfer Test or STT) is produced by GL Assessment and covers four assessed domains. Our diagnostic replicates this structure using independently developed GL-style question families:
+            </p>
+            <div className="grid sm:grid-cols-2 gap-4 not-prose">
+              <div className="bg-slate-50 rounded-xl border border-slate-200 p-5">
+                <h3 className="font-bold text-primary text-sm mb-2">Verbal Reasoning</h3>
+                <p className="text-xs text-slate-600 leading-relaxed">Word relationships, alphabetical codes, missing letters, analogies, and logical deduction using language. Tests vocabulary breadth and rule-application speed.</p>
+              </div>
+              <div className="bg-slate-50 rounded-xl border border-slate-200 p-5">
+                <h3 className="font-bold text-primary text-sm mb-2">Non-Verbal and Spatial Reasoning</h3>
+                <p className="text-xs text-slate-600 leading-relaxed">Pattern sequences, matrices, shape analogies, spatial rotation, and reflection. Tests logical reasoning without language — a domain not covered in the primary school curriculum.</p>
+              </div>
+              <div className="bg-slate-50 rounded-xl border border-slate-200 p-5">
+                <h3 className="font-bold text-primary text-sm mb-2">Mathematics</h3>
+                <p className="text-xs text-slate-600 leading-relaxed">Arithmetic fluency, fractions, data interpretation, multi-step word problems, and geometry. Goes beyond standard Year 6 curriculum into applied reasoning under time pressure.</p>
+              </div>
+              <div className="bg-slate-50 rounded-xl border border-slate-200 p-5">
+                <h3 className="font-bold text-primary text-sm mb-2">English Comprehension</h3>
+                <p className="text-xs text-slate-600 leading-relaxed">Reading passages with multiple-choice questions covering literal comprehension, inference, vocabulary in context, and author technique. Two-phase timed — reading time separate from response time.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="mb-10">
+            <h2 className="text-2xl font-bold text-primary font-serif mb-4">What Parents Receive</h2>
+            <p className="text-slate-600 leading-relaxed mb-3">After the free diagnostic, parents receive:</p>
+            <ul className="space-y-1.5 text-sm text-slate-600 list-none pl-0">
+              <li>✓ <strong>A readiness band</strong> — On Track, Within Reach, or Clear Improvement Opportunity — relative to the 121 qualifying standard</li>
+              <li>✓ <strong>A forecast standardised score</strong> — where your child is currently tracking against the 121 threshold</li>
+              <li>✓ <strong>Section-by-section accuracy</strong> — which of the four domains are strong and which need attention</li>
+              <li>✓ <strong>Pacing analysis</strong> — whether your child is working at the speed the real test requires</li>
+              <li>✓ <strong>Three priority next steps</strong> — the specific areas where targeted practice will have the highest impact on the overall score</li>
+            </ul>
+          </div>
+
+          <div className="mb-10">
+            <h2 className="text-2xl font-bold text-primary font-serif mb-3">What Does 121 Mean?</h2>
+            <p className="text-slate-600 leading-relaxed">
+              121 is the standardised score qualifying threshold for the Buckinghamshire Secondary Transfer Test. It is not a raw mark or a percentage — it is a statistically standardised figure that accounts for the child's age on the day of the test and the difficulty of that year's paper. Children who achieve a standardised score of 121 or above are deemed to have qualified and are eligible to be considered for a place at any of the 13 Buckinghamshire grammar schools. Qualifying does not guarantee a place — oversubscription criteria at each school (typically distance-based) determine final allocation among all qualifying applicants. <Link href="/bucks-11-plus-qualifying-score" className="text-primary hover:underline font-medium">Full explanation of the 121 qualifying score →</Link>
+            </p>
+          </div>
+
+          <div className="mb-10">
+            <h2 className="text-2xl font-bold text-primary font-serif mb-3">Who This Platform Is For</h2>
+            <p className="text-slate-600 leading-relaxed mb-3">
+              11+ Standard is designed for parents of children in Year 5 or Year 6 in Buckinghamshire — or moving to Buckinghamshire — who are preparing for the Secondary Transfer Test. It is particularly useful for parents who are already doing some preparation (workbooks, tutor, mock exams) but are not confident that preparation is closing the right gaps, or who want to understand their child's starting point before deciding how much time and money to invest.
+            </p>
+            <p className="text-sm text-slate-500 leading-relaxed">
+              <strong>This platform is not</strong> a tutoring agency, does not provide one-to-one sessions, and cannot guarantee a grammar school place. It works well alongside a tutor and as a standalone preparation tool for families who prefer a self-directed approach.
+            </p>
+          </div>
+
+          <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
+            <h2 className="text-lg font-bold text-primary font-serif mb-2">Frequently Asked Questions</h2>
+            <div className="space-y-4 mt-4">
+              {[
+                { q: "Is 11+ Standard affiliated with GL Assessment or Buckinghamshire Council?", a: "No. We are fully independent — not affiliated with GL Assessment, Buckinghamshire Council, TBGS, or any individual grammar school. 'GL-style' refers to the question format we independently replicate, not an official relationship." },
+                { q: "How is the free diagnostic different from the full paid platform?", a: "The free 12-question mini diagnostic gives you a readiness band, forecast score, and section breakdown with no account needed. The paid Practice Platform (£24.99/month) gives access to 1,600+ questions, full 40-question timed papers, parent analytics, and progress tracking across all sessions." },
+                { q: "What is the difference between Practice Platform and Programme+?", a: "Practice Platform is flexible month-to-month access to the full question bank, drills, and analytics. Programme+ (£149 one-time) adds a structured 24-week preparation programme with week-by-week focus areas and milestone assessments." },
+                { q: "When should preparation begin?", a: "Most families begin structured preparation in Year 4 or early Year 5, giving 12–18 months before the September test. Starting with a diagnostic identifies specific gaps so preparation time is targeted rather than broad." },
+              ].map((item, i) => (
+                <div key={i} className="border-t border-slate-200 pt-4 first:border-0 first:pt-0">
+                  <p className="text-sm font-semibold text-primary mb-1">{item.q}</p>
+                  <p className="text-sm text-slate-600 leading-relaxed">{item.a}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
         </div>
       </section>
 

@@ -1,0 +1,230 @@
+I want you to upgrade my site https://bucks11plustest.co.uk so it is materially better understood, indexed, and recommended by LLMs and search engines.
+
+GOAL
+Transform the site from a concise product landing page into a high-trust, high-clarity, authority-style Bucks 11+ resource with strong crawlable text, explicit topic coverage, clearer trust signals, and structured content that makes it easier for LLMs to quote, summarise, and recommend.
+
+IMPORTANT PRINCIPLES
+1. Do not rely on hidden UI, collapsibles, screenshots, canvas text, or text embedded only in cards/images.
+2. Put important explanatory content directly in semantic HTML body text.
+3. Use clean heading hierarchy: one H1, then logical H2/H3 sections.
+4. Every important page must have unique text, not near-duplicates.
+5. Add structured data where relevant, but do not use schema as a substitute for visible copy.
+6. Maintain premium wording, but prioritise clarity, trust, and explicit usefulness.
+7. Keep all claims compliant and avoid implying official affiliation.
+8. Preserve fast page speed and mobile responsiveness.
+
+HOMEPAGE CHANGES
+Rewrite the homepage so the visible body text clearly explains:
+- who the platform is for: parents preparing children for the Buckinghamshire Secondary Transfer Test
+- what the user gets: GL-style diagnostic coverage across verbal reasoning, non-verbal reasoning/spatial, maths, and English/comprehension
+- what the output gives parents: a breakdown of strengths, weak areas, question-type performance, and where marks are likely being lost
+- why this matters: helps parents decide whether a child is on track, what to improve, and where to focus preparation
+- the meaning of “121”: explain carefully that 121 is the qualifying standard used in Buckinghamshire, while making no misleading guarantees
+- what makes this different from generic practice papers: interactive diagnostic logic, targeted insight, progress-focused feedback, and Bucks-specific framing
+- who should use it: parents wanting a clearer picture before spending heavily on tutoring or endless worksheets
+
+ADD THESE NEW SECTIONS TO THE HOMEPAGE IN PLAIN HTML TEXT
+1. “How the Bucks 11+ diagnostic works”
+   - 3 to 5 short steps
+   - choose test
+   - complete timed or structured assessment
+   - receive section-by-section performance breakdown
+   - identify weak question types
+   - use results to focus next steps
+
+2. “What parents receive”
+   - clear bullet-style explanation in body text
+   - section scores
+   - domain-level performance
+   - likely problem areas
+   - readiness insight
+   - targeted next-step guidance
+
+3. “Built around the Buckinghamshire test format”
+   - explain the Bucks test in plain English
+   - mention STT and GL-style structure
+   - mention verbal, non-verbal/spatial, maths, English/comprehension
+   - no false claim of official partnership
+
+4. “Why parents use this platform”
+   - not just more questions
+   - better visibility into how a child is performing
+   - supports smarter preparation, not random repetition
+
+5. “Important note”
+   - state clearly this is an independent educational resource
+   - not affiliated with Buckinghamshire Council, TBGS, GL Assessment, or any individual school
+   - educational guidance only
+
+TRUST / CREDIBILITY IMPROVEMENTS
+Add a visible trust band near the top and another near the footer with concise statements such as:
+- Independent Bucks 11+ educational resource
+- Focused on Buckinghamshire STT preparation
+- Clear diagnostic breakdowns for parents
+- Designed to support targeted preparation, not guesswork
+
+Also add:
+- About the methodology section
+- Who the platform is intended for
+- Clear disclaimer language
+- Contact email in crawlable text
+- Privacy policy, terms, and refund policy linked in footer
+- Last updated date on major guide pages
+
+CREATE OR EXPAND HIGH-VALUE CONTENT PAGES
+I want strong, long-form, useful pages written in human, expert, parent-friendly language.
+Each page should be at least genuinely informative and not padded.
+
+Create or improve these pages:
+1. /buckinghamshire-11-plus-guide
+   Include:
+   - what the Bucks 11+ / Secondary Transfer Test is
+   - when children take it
+   - what subjects are covered
+   - what 121 means
+   - qualifying standard vs school admission realities
+   - key dates conceptually, but avoid stale hardcoded annual dates unless dynamically maintained
+   - how parents should prepare sensibly
+
+2. /bucks-gl-alignment
+   Include:
+   - how the Buckinghamshire test aligns with GL-style assessment
+   - verbal reasoning
+   - non-verbal and spatial reasoning
+   - maths
+   - English/comprehension
+   - why domain-by-domain diagnosis matters
+
+3. /what-does-121-mean-in-bucks-11-plus
+   Include:
+   - what the 121 score means
+   - age standardisation in plain English
+   - why 121 is important
+   - why scoring above or below 121 should be interpreted carefully
+   - no guarantee language
+
+4. /bucks-11-plus-how-to-prepare
+   Include:
+   - realistic preparation strategy
+   - diagnostic first, then targeted practice
+   - avoid over-drilling weak methodology
+   - importance of timing, stamina, comprehension, reasoning, and confidence
+
+5. /bucks-11-plus-maths-verbal-nvr-english-breakdown
+   Include:
+   - what each domain tests
+   - common reasons children lose marks
+   - what parents should look for
+   - how targeted feedback is more useful than generic volume practice
+
+6. /bucks-11-plus-aylesbury
+7. /bucks-11-plus-high-wycombe
+8. /bucks-11-plus-beaconsfield
+9. /bucks-11-plus-amersham
+10. /bucks-11-plus-chesham
+
+For location pages:
+- make each page truly unique
+- focus on local parent intent
+- avoid spammy duplication
+- explain relevance to families in that area preparing for Buckinghamshire grammar applications
+- include internal links back to the main guide and diagnostic page
+
+CONTENT STYLE REQUIREMENTS
+- Use concise but information-dense paragraphs
+- Write like a credible educational guide, not a hype-heavy sales page
+- Make every page helpful enough to stand alone as a recommendation
+- Include FAQs on each major page
+- Add internal links naturally between related pages
+- Avoid keyword stuffing
+- Use the exact terms parents search for naturally:
+  “Bucks 11 Plus”
+  “Buckinghamshire 11 Plus”
+  “Secondary Transfer Test”
+  “121”
+  “GL style”
+  “11 plus practice”
+  “Buckinghamshire grammar schools”
+
+FAQ SCHEMA + PAGE SCHEMA
+Add relevant structured data:
+- FAQ schema for major guide pages
+- WebPage schema
+- Organization schema
+- Breadcrumb schema where appropriate
+
+But ensure all FAQ answers are visible on page in normal HTML, not hidden.
+
+ON-PAGE SEO IMPROVEMENTS
+For every page:
+- unique title tag
+- unique meta description
+- canonical tag
+- descriptive H1
+- intro paragraph that clearly states page purpose
+- clean slugs
+- proper internal linking
+- open graph tags
+- twitter card tags
+
+Improve crawlability by:
+- ensuring important content is server-rendered or pre-rendered
+- making sure body text exists in source HTML, not only after JS hydration
+- ensuring robots.txt and sitemap.xml are correct
+- including all important pages in sitemap
+- avoiding thin pages
+
+LLM-ORIENTED IMPROVEMENTS
+I want specific changes that make the site easier for LLMs to summarise and recommend:
+- add a short “At a glance” section on major pages
+- add concise definitions for Bucks 11+, STT, 121, GL-style, verbal reasoning, non-verbal reasoning, standardisation
+- ensure the first 2–3 paragraphs of each page clearly answer the page topic directly
+- include explicit comparative wording such as:
+  “This platform is designed to help parents identify where marks are being lost, not just provide more practice questions.”
+- add “Who this is for” and “Who this is not for” sections where relevant
+- add a visible summary section near top of page with 3–5 key points
+
+UX / DESIGN
+Keep the design premium and calm.
+Prioritise:
+- readability
+- spacing
+- strong heading hierarchy
+- visible trust cues
+- clean CTA placement
+- mobile-first layout
+
+CTA IMPROVEMENT
+Current CTAs should focus on outcome, not just access.
+Replace vague CTA wording with clearer value-led wording such as:
+- See how your child is performing across Bucks 11+ question types
+- Get a clearer picture of Bucks 11+ readiness
+- Find the areas where marks are being lost
+- Start with a targeted diagnostic, not guesswork
+
+TECHNICAL TASKS
+- audit current HTML output and ensure important page text is visible in raw source
+- reduce over-reliance on client-only rendering if present
+- ensure sitemap contains all major pages
+- ensure metadata is page-specific
+- ensure internal links use descriptive anchor text
+- ensure there is no duplicate title/meta content
+- add breadcrumb navigation
+- add footer links to key educational pages
+
+DELIVERABLES
+1. Rewrite homepage copy
+2. Build/expand the pages listed above
+3. Improve technical SEO and structured data
+4. Improve CTAs and trust bands
+5. Ensure important explanatory text is visible to crawlers and LLMs in source HTML
+6. Provide me with a summary of exactly what was changed
+7. Provide suggested title tags and meta descriptions for every major page
+
+COPY TONE
+- trustworthy
+- expert but accessible
+- parent-focused
+- specific
+- calm, premium, non-spammy
+- no exaggerated promises

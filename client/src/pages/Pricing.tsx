@@ -469,7 +469,8 @@ export default function Pricing() {
                           {currentTier === "early_learner" && "Early Learner"}
                           {(currentTier === "pack12" || currentTier === "pack_monthly") && "Practice Platform"}
                           {currentTier === "pack12_family" && "Practice Platform — Family"}
-                          {(currentTier === "programme8" || currentTier === "programme12" || currentTier === "programme16" || currentTier === "programme24_plus") && "Young Scholar Programme"}
+                          {currentTier === "programme24_plus" && "Programme+"}
+                          {(currentTier === "programme8" || currentTier === "programme12" || currentTier === "programme16") && "Young Scholar Programme"}
                           {currentTier === "programme16_family" && "Young Scholar Programme — Family"}
                         </h3>
                         <Badge className="bg-brand-green/10 text-brand-green border-brand-green/20 hover:bg-brand-green/10">Active</Badge>
@@ -477,7 +478,8 @@ export default function Pricing() {
                       <p className="text-sm text-slate-600 mb-4">
                         {currentTier === "early_learner" && "Foundation-level practice with readiness tracking and age-appropriate learning."}
                         {(currentTier === "pack12" || currentTier === "pack12_family" || currentTier === "pack_monthly") && "1,600+ questions, full diagnostics, timed drills, PDF reports and progress tracking."}
-                        {(currentTier === "programme8" || currentTier === "programme12" || currentTier === "programme16" || currentTier === "programme16_family" || currentTier === "programme24_plus") && "Complete preparation: diagnostics, all drills, mock exams, roadmap, milestone tracking, weekly plans and premium analytics."}
+                        {currentTier === "programme24_plus" && "26-week all-inclusive programme: diagnostics, all drills, 3 mock exams, roadmap, milestone tracking, weekly plans and premium analytics."}
+                        {(currentTier === "programme8" || currentTier === "programme12" || currentTier === "programme16" || currentTier === "programme16_family") && "Complete preparation: diagnostics, all drills, mock exams, roadmap, milestone tracking, weekly plans and premium analytics."}
                       </p>
                       <Button size="sm" asChild>
                         <Link href="/app">Go to Dashboard <ArrowRight className="ml-2 h-4 w-4" /></Link>

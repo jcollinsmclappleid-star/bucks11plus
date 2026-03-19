@@ -115,7 +115,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       case "programme12": return "Young Scholar Programme (12-week)";
       case "programme16": return "Young Scholar Programme";
       case "programme16_family": return "Young Scholar Programme (Family)";
-      case "programme24_plus": return "Young Scholar Programme (24-week)";
+      case "programme24_plus": return "Programme+";
       default: return "Free";
     }
   };

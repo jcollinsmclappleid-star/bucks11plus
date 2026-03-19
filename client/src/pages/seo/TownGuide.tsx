@@ -17,8 +17,19 @@ export default function TownGuide({ townSlug }: { townSlug: string }) {
     { label: town.name },
   ];
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: town.faq.map(item => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: { "@type": "Answer", text: item.answer },
+    })),
+  };
+
   const schema = [
     breadcrumbSchema(breadcrumbs),
+    faqSchema,
     {
       "@context": "https://schema.org",
       "@type": "Article",
@@ -31,7 +42,7 @@ export default function TownGuide({ townSlug }: { townSlug: string }) {
     <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
       <Seo
         title={`Bucks 11 Plus Guide for Parents in ${town.name} | 11+ Standard`}
-        description={`Guide for families in ${town.name} preparing for the Buckinghamshire 11+ grammar school test. Learn how the Secondary Transfer Test works and assess readiness.`}
+        description={`Guide for families in ${town.name} preparing for the Buckinghamshire 11+ grammar school test. Learn how the Secondary Transfer Test works, which grammar schools are closest, and how to assess your child's readiness.`}
         canonicalPath={`/bucks-11-plus-${town.slug}`}
         schema={schema}
       />
@@ -71,10 +82,10 @@ export default function TownGuide({ townSlug }: { townSlug: string }) {
         The Buckinghamshire Secondary Transfer Test is administered by The Buckinghamshire Grammar Schools (TBGS). Children sit the test in September of Year 6, and results are released in October.
       </p>
       <p>
-        The test assesses <strong>verbal reasoning</strong>, <strong>non-verbal reasoning</strong>, and <strong>mathematical reasoning</strong> under timed conditions. Scores are standardised to account for age differences within the cohort, and the qualifying score is <strong>121</strong>.
+        The test assesses <strong>verbal reasoning</strong>, <strong>non-verbal reasoning and spatial reasoning</strong>, <strong>mathematical reasoning</strong>, and <strong>English comprehension</strong> under timed conditions. Scores are standardised to account for age differences within the cohort, and the qualifying score is <strong>121</strong>.
       </p>
       <p>
-        Achieving the qualifying score does not automatically guarantee a grammar school place — admission also depends on oversubscription criteria set by each individual school.
+        Achieving the qualifying score does not automatically guarantee a grammar school place — admission also depends on oversubscription criteria set by each individual school, which typically prioritise looked-after children, siblings, and then distance from the school.
       </p>
       <p>
         <Link href="/buckinghamshire-11-plus-guide" className="text-primary font-semibold hover:underline">
@@ -82,27 +93,32 @@ export default function TownGuide({ townSlug }: { townSlug: string }) {
         </Link>
       </p>
 
-      <h2 className="text-primary font-serif">Preparing for the Test</h2>
-      <p>
-        Preparation for the Bucks 11+ typically focuses on building familiarity with the four assessed domains and developing the pace discipline needed to complete questions within the time limit.
-      </p>
+      <h2 className="text-primary font-serif">Preparing for the Test from {town.name}</h2>
+      <p>{town.preparation}</p>
+      <p>{town.localContext}</p>
       <ul>
         <li><strong>Verbal reasoning</strong> — vocabulary, word relationships, codes, and logical deduction</li>
-        <li><strong>Non-verbal reasoning</strong> — pattern recognition, sequences, spatial awareness, and transformations</li>
+        <li><strong>Non-verbal and spatial reasoning</strong> — pattern recognition, sequences, spatial awareness, and transformations</li>
         <li><strong>Mathematical reasoning</strong> — arithmetic fluency, fractions, data interpretation, and multi-step problems</li>
+        <li><strong>English comprehension</strong> — reading passages with multiple-choice questions on meaning, inference, and vocabulary</li>
       </ul>
-      <p>
-        Many families use structured diagnostic assessments to identify specific gaps rather than relying on generic practice papers. A diagnostic approach helps focus preparation on the areas that will have the most impact on the overall score.
-      </p>
       <p>
         <Link href="/how-to-pass-bucks-11-plus" className="text-primary font-semibold hover:underline">
           How to prepare effectively for the Bucks 11+ &rarr;
         </Link>
       </p>
 
-      <h2 className="text-primary font-serif">Why {town.name} Families Research the Test Early</h2>
+      <h2 className="text-primary font-serif">The Specific Challenge for {town.name} Families</h2>
+      <p>{town.uniqueChallenge}</p>
       <p>{town.whyEarly}</p>
-      <p>{town.localContext}</p>
+
+      <h2 className="text-primary font-serif">Frequently Asked Questions</h2>
+      {town.faq.map((item, i) => (
+        <div key={i}>
+          <h3 className="text-primary font-serif">{item.question}</h3>
+          <p>{item.answer}</p>
+        </div>
+      ))}
 
       <ContentCTA />
       <Disclaimer />

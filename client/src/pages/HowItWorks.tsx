@@ -127,6 +127,61 @@ function ForecastSection({ title, index, children }: { title: string; index: num
   );
 }
 
+const howItWorksFaqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How does the 11+ Standard diagnostic work?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The diagnostic is a timed GL-style assessment covering Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension. It benchmarks your child's accuracy, pacing and readiness against the 121 qualifying standard for Buckinghamshire grammar schools."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the 121 qualifying score?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "In Buckinghamshire, a standardised score of 121 is required to qualify for a grammar school place via the Secondary Transfer Test. The exact raw score required varies each year based on cohort-wide performance and age standardisation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How is the readiness forecast calculated?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The readiness forecast combines accuracy modelling, pace adjustment, sub-skill stability analysis and consistency tracking into a composite index. It evaluates performance under timed conditions across all four reasoning domains and maps it against historical qualifying benchmarks."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What are the readiness bands?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "There are three readiness bands: Secure (Green) — performance consistently meets projected qualifying thresholds; Borderline (Amber) — close to qualifying thresholds but with identifiable risk factors; Development Required (Red) — a measurable gap exists relative to qualifying thresholds."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How often should my child take a diagnostic?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We recommend a diagnostic every 4–6 weeks of targeted practice to track progression across readiness bands. The forecast model improves in accuracy as more diagnostic data is collected over time."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this preparation suitable for all Buckinghamshire grammar schools?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. All 13 Buckinghamshire grammar schools use the same GL Assessment Secondary Transfer Test. Our diagnostic and practice content is aligned to the GL-style reasoning formats used across all schools in the county."
+      }
+    }
+  ]
+};
+
 export default function HowItWorks() {
   return (
     <div className="min-h-[calc(100vh-4rem)]">
@@ -134,6 +189,7 @@ export default function HowItWorks() {
         title="How Bucks 11 Plus Preparation Works | Diagnostic-Led Approach | 11+ Standard"
         description="Structured, assessment-led preparation for the Buckinghamshire 11+ Secondary Transfer Test. Diagnostic benchmark, readiness forecast against the 121 qualifying score, and targeted GL-style practice."
         canonicalPath="/how-it-works"
+        schema={howItWorksFaqSchema}
       />
 
       <div className="bg-gradient-to-b from-slate-50 to-white border-b border-slate-100">
