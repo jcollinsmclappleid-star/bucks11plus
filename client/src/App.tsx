@@ -54,6 +54,8 @@ import QuestionEditor from "./pages/admin/QuestionEditor";
 
 import ParentGuide from "./pages/ParentGuide";
 import SiteLinks from "./pages/SiteLinks";
+import LearnHub from "./pages/learn/LearnHub";
+import LearnArticle from "./pages/learn/LearnArticle";
 import EarlyDashboard from "./pages/EarlyDashboard";
 import TestDaySimulator from "./pages/TestDaySimulator";
 import GrammarSchools from "./pages/seo/GrammarSchools";
@@ -110,6 +112,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
               <li><Link href="/how-to-pass-bucks-11-plus" className="hover:text-white transition-colors">How to Pass</Link></li>
               <li><Link href="/bucks-11-plus-registration" className="hover:text-white transition-colors">Registration Guide</Link></li>
               <li><Link href="/bucks-11-plus-parent-guide" className="hover:text-white transition-colors">Parent Guide (PDF)</Link></li>
+              <li><Link href="/learn" className="hover:text-white transition-colors">Learning Hub (30 Guides)</Link></li>
             </ul>
           </div>
           <div>
@@ -237,6 +240,8 @@ function Router() {
             <Route path="/how-to-pass-bucks-11-plus" component={HowToPass} />
             <Route path="/bucks-11-plus-registration" component={Registration} />
             <Route path="/bucks-11-plus-mistakes" component={CommonMistakes} />
+            <Route path="/learn" component={LearnHub} />
+            <Route path="/learn/:slug" component={LearnArticle} />
             <Route path="/site-links" component={SiteLinks} />
             {towns.map(t => (
               <Route key={t.slug} path={`/bucks-11-plus-${t.slug}`}>
