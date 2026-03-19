@@ -180,12 +180,12 @@ export default function Account() {
 
       <div className="grid md:grid-cols-3 gap-8">
 
-        <div className="flex md:flex-col gap-2 overflow-x-auto pb-2 md:pb-0">
+        <div className="grid grid-cols-2 md:grid-cols-1 gap-2">
           {navItems.map((item) => (
             <Button
               key={item.id}
               variant={activeTab === item.id ? "secondary" : "ghost"}
-              className={`justify-start gap-2 w-full shrink-0 ${activeTab === item.id ? "text-primary font-medium" : "text-muted-foreground"}`}
+              className={`justify-start gap-2 w-full ${activeTab === item.id ? "text-primary font-medium" : "text-muted-foreground"}`}
               onClick={() => setActiveTab(item.id)}
               data-testid={`tab-${item.id}`}
             >
