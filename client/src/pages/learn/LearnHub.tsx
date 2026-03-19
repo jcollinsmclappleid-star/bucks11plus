@@ -82,7 +82,7 @@ export default function LearnHub() {
             Ready to assess where your child stands?
           </h2>
           <p className="text-muted-foreground mb-6 max-w-lg mx-auto">
-            Take our free 40-question GL-style diagnostic. No account needed — get a full report in under 45 minutes.
+            Take our free 12-question GL-style mini diagnostic. No account needed — get a full readiness report in under 10 minutes.
           </p>
           <Link href="/free-diagnostic">
             <button

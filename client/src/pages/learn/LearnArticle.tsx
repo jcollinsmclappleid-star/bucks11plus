@@ -107,7 +107,7 @@ export default function LearnArticle() {
         <div className="mt-10 bg-primary/5 border border-primary/20 rounded-xl p-6 flex flex-col sm:flex-row items-center gap-4 justify-between">
           <div>
             <p className="font-semibold text-foreground text-sm">Ready to test your child's current level?</p>
-            <p className="text-muted-foreground text-xs mt-1">Free 40-question GL-style diagnostic. No account needed.</p>
+            <p className="text-muted-foreground text-xs mt-1">Free 12-question mini diagnostic. No account needed.</p>
           </div>
           <div className="flex gap-3 shrink-0">
             <Link href="/learn">
