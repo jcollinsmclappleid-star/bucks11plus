@@ -244,7 +244,7 @@ async function ensureComprehensionSection() {
   }
 }
 
-async function ensureFreePool() {
+export async function ensureFreePool() {
   const [{ count }] = await db
     .select({ count: sql<number>`count(*)` })
     .from(questions)

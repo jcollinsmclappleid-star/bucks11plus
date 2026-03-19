@@ -8,6 +8,7 @@ import { sql, eq, and, desc, inArray } from "drizzle-orm";
 import { db } from "./db";
 import { computeAttemptMetrics, computeFullAnalytics, type AnswerRecord, type DrillAnswerRecord, type HistoricalMetrics } from "./metrics";
 import { sendDiagnosticCompleteEmail } from "./email";
+import { ensureFreePool } from "./seed";
 
 const PROGRAMME_TIERS = new Set([
   "programme8",
@@ -435,6 +436,7 @@ export async function registerRoutes(
       });
 
       const guestId = `guest-${session.id}`;
+      await ensureFreePool();
       const qs = await storage.selectQuestionsForSession(guestId, diagnosticId);
       const safe = qs.map(({ correctAnswer, ...q }) => q);
 
@@ -1491,6 +1493,16 @@ export async function registerRoutes(
     }
     next();
   };
+
+  app.post("/api/admin/seed-free-pool", requireAdmin, async (_req, res, next) => {
+    try {
+      await ensureFreePool();
+      const [{ count }] = await db.select({ count: sql<number>`count(*)` }).from(questions).where(eq(questions.freePool, true));
+      res.json({ success: true, freePoolCount: Number(count) });
+    } catch (error) {
+      next(error);
+    }
+  });
 
   app.get("/api/admin/questions", requireAdmin, async (req, res, next) => {
     try {
