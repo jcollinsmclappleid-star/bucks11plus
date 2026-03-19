@@ -6,12 +6,35 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer,
   BarChart, Bar, Cell,
 } from "recharts";
 import {
-  ArrowRight, AlertTriangle, TrendingUp, TrendingDown, Minus, Target, Shield, Clock, Brain
+  ArrowRight, AlertTriangle, TrendingUp, TrendingDown, Minus, Target, Shield, Clock, Brain, Info
 } from "lucide-react";
+
+function InfoTooltip({ text }: { text: string }) {
+  return (
+    <TooltipProvider delayDuration={200}>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <span className="inline-flex items-center cursor-help ml-1 text-muted-foreground/60 hover:text-muted-foreground transition-colors" tabIndex={0}>
+            <Info className="h-3 w-3" />
+          </span>
+        </TooltipTrigger>
+        <TooltipContent className="max-w-[240px] text-xs leading-relaxed font-normal bg-popover text-popover-foreground border shadow-md">
+          {text}
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+}
 
 interface PDISection {
   pdi: number;
@@ -159,6 +182,29 @@ function AccuracyBar({ label, value }: { label: string; value: number }) {
   );
 }
 
+const TOOLTIPS = {
+  rs: "Readiness Score — overall readiness out of 100, combining accuracy and pace across all sections.",
+  si: "Stability Index — how consistent the score is across attempts. More attempts = higher confidence in the number.",
+  pdi: "Pace Discipline Index — how well your child manages time per question. 100 = perfectly paced; below 60 means rushing or stalling.",
+  wai: "Weighted Accuracy Index — accuracy adjusted for difficulty. Harder correct answers score more than easy ones.",
+  cr: "Concentration Ratio — whether errors are spread randomly or clustered in specific topic areas.",
+  mtq: "Mean Time per Question — average seconds spent on each question in this section.",
+  vr: "Verbal Reasoning — questions testing word relationships, patterns, and language logic.",
+  nvr: "Non-Verbal Reasoning — questions testing shape patterns and spatial reasoning without words.",
+  ec: "English Comprehension — reading passages with questions on understanding, inference, and vocabulary.",
+  ma: "Mathematics — arithmetic, problem-solving, and numerical reasoning questions.",
+  pressureDelta: "Pressure Delta — the drop in accuracy between untimed practice and timed diagnostics. A big gap means pressure (not knowledge) is the problem.",
+  pp: "pp = percentage points. For example, −8 pp means accuracy fell by 8 percentage points under timed conditions.",
+  fatigueFlag: "Fatigue Flag — accuracy or speed drops significantly in the second half of the test, suggesting stamina is affecting results.",
+  gv: "Gap Velocity — how quickly readiness is improving per day. Positive = closing the gap to the pass mark.",
+  primaryConstraint: "Primary Constraint — the single biggest factor currently holding back readiness. Fix this first for the biggest improvement.",
+  impact10: "Estimated readiness points gained if accuracy on this topic improves by 10 percentage points.",
+  weightedAccuracy: "Accuracy adjusted for question difficulty — harder correct answers count for more than easy ones.",
+  volatility: "How much accuracy varies between attempts. High volatility = inconsistent — the child knows this topic sometimes but not reliably.",
+  paceRatio: "Ratio of time used vs the expected time per question. Above 1 = slower than expected; below 1 = faster.",
+  paceSd: "SD = standard deviation of time per question. A high value means pace is erratic — very fast on some, very slow on others.",
+};
+
 function SummaryTab({ data }: { data: AnalyticsData }) {
   const { attempt, si, forecastConfidence, priorities, riskFlags, executiveSummary, nextStepCTA } = data;
 
@@ -175,7 +221,10 @@ function SummaryTab({ data }: { data: AnalyticsData }) {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <Card data-testid="tile-readiness">
           <CardContent className="pt-5 pb-4 text-center">
-            <div className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Readiness</div>
+            <div className="text-xs text-muted-foreground uppercase tracking-wide mb-2 flex items-center justify-center">
+              Readiness
+              <InfoTooltip text={TOOLTIPS.rs} />
+            </div>
             <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-white text-sm font-semibold ${BAND_COLORS[attempt.band]}`} data-testid="badge-readiness-band">
               {attempt.bandLabel}
             </div>
@@ -186,7 +235,10 @@ function SummaryTab({ data }: { data: AnalyticsData }) {
 
         <Card data-testid="tile-confidence">
           <CardContent className="pt-5 pb-4 text-center">
-            <div className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Confidence</div>
+            <div className="text-xs text-muted-foreground uppercase tracking-wide mb-2 flex items-center justify-center">
+              Confidence
+              <InfoTooltip text={TOOLTIPS.si} />
+            </div>
             <div className="flex items-center justify-center gap-1">
               <Shield className="h-4 w-4 text-primary" />
               <span className="text-sm font-semibold" data-testid="text-confidence">{forecastConfidence}</span>
@@ -198,19 +250,47 @@ function SummaryTab({ data }: { data: AnalyticsData }) {
 
         <Card data-testid="tile-pace">
           <CardContent className="pt-5 pb-4">
-            <div className="text-xs text-muted-foreground uppercase tracking-wide mb-2 text-center">Pace Discipline</div>
+            <div className="text-xs text-muted-foreground uppercase tracking-wide mb-2 text-center flex items-center justify-center">
+              Pace Discipline
+              <InfoTooltip text={TOOLTIPS.pdi} />
+            </div>
             <div className="text-2xl font-bold text-center mb-3" data-testid="text-pdi-overall">{Math.round(attempt.pdiOverall)}</div>
             <div className="space-y-1.5">
-              {Object.entries(attempt.pdiSections).map(([section, s]) => (
-                <PDIMiniBar key={section} label={section === "Verbal Reasoning" ? "VR" : section === "Non-Verbal Reasoning" ? "NVR" : section === "English Comprehension" ? "EC" : "MA"} value={s.pdi} />
-              ))}
+              {Object.entries(attempt.pdiSections).map(([section, s]) => {
+                const shortLabel = section === "Verbal Reasoning" ? "VR"
+                  : section === "Non-Verbal Reasoning" ? "NVR"
+                  : section === "English Comprehension" ? "EC"
+                  : "MA";
+                const tooltip = section === "Verbal Reasoning" ? TOOLTIPS.vr
+                  : section === "Non-Verbal Reasoning" ? TOOLTIPS.nvr
+                  : section === "English Comprehension" ? TOOLTIPS.ec
+                  : TOOLTIPS.ma;
+                return (
+                  <div key={section} className="flex items-center gap-2 text-xs">
+                    <span className="w-10 text-muted-foreground shrink-0 flex items-center">
+                      {shortLabel}
+                      <InfoTooltip text={tooltip} />
+                    </span>
+                    <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+                      <div
+                        className={`h-full rounded-full ${s.pdi >= 80 ? "bg-emerald-500" : s.pdi >= 60 ? "bg-amber-500" : "bg-red-500"}`}
+                        style={{ width: `${Math.min(100, Math.max(0, s.pdi))}%` }}
+                      />
+                    </div>
+                    <span className="w-8 text-right font-medium">{Math.round(s.pdi)}</span>
+                  </div>
+                );
+              })}
             </div>
           </CardContent>
         </Card>
 
         <Card data-testid="tile-difficulty">
           <CardContent className="pt-5 pb-4">
-            <div className="text-xs text-muted-foreground uppercase tracking-wide mb-2 text-center">Difficulty Tolerance</div>
+            <div className="text-xs text-muted-foreground uppercase tracking-wide mb-2 text-center flex items-center justify-center">
+              Difficulty Tolerance
+              <InfoTooltip text="How accurately your child answers Easy, Medium, and Hard questions. A big drop-off on Hard questions shows where to focus." />
+            </div>
             <div className="space-y-2 mt-3">
               <AccuracyBar label="Easy" value={attempt.accEasy} />
               <AccuracyBar label="Medium" value={attempt.accMedium} />
@@ -222,7 +302,10 @@ function SummaryTab({ data }: { data: AnalyticsData }) {
 
       {priorities.length > 0 && (
         <div>
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Top Priorities</h3>
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3 flex items-center">
+            Top Priorities
+            <InfoTooltip text="The topics where focused practice will have the biggest impact on readiness. The points estimate assumes 10 percentage points of accuracy improvement on that topic." />
+          </h3>
           <div className="grid md:grid-cols-3 gap-4">
             {priorities.map((p, i) => (
               <Card key={p.subRuleId} data-testid={`card-priority-${i}`}>
@@ -234,8 +317,9 @@ function SummaryTab({ data }: { data: AnalyticsData }) {
                   <div className="text-xs text-muted-foreground mb-1">
                     Current: {p.currentAccuracy}% accuracy, {p.avgTime}s avg
                   </div>
-                  <div className="text-xs font-medium text-primary mb-3" data-testid={`text-impact-${i}`}>
+                  <div className="text-xs font-medium text-primary mb-3 flex items-center" data-testid={`text-impact-${i}`}>
                     ~+{p.impact10} readiness points
+                    <InfoTooltip text={TOOLTIPS.impact10} />
                   </div>
                   <div className="text-xs text-muted-foreground italic">{p.recommendedDrill}</div>
                 </CardContent>
@@ -288,7 +372,10 @@ function InsightsTab({ data }: { data: AnalyticsData }) {
     <div className="space-y-6">
       <Card data-testid="card-primary-constraint">
         <CardHeader className="pb-2">
-          <CardTitle className="text-base">Primary Constraint</CardTitle>
+          <CardTitle className="text-base flex items-center">
+            Primary Constraint
+            <InfoTooltip text={TOOLTIPS.primaryConstraint} />
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-start gap-3">
@@ -318,7 +405,10 @@ function InsightsTab({ data }: { data: AnalyticsData }) {
       {pressureProfile.bySkill.length > 0 && (
         <Card data-testid="card-pressure-profile">
           <CardHeader className="pb-2">
-            <CardTitle className="text-base">Pressure Profile</CardTitle>
+            <CardTitle className="text-base flex items-center">
+              Pressure Profile
+              <InfoTooltip text={TOOLTIPS.pressureDelta} />
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-xs text-muted-foreground mb-3">Drill accuracy versus timed diagnostic accuracy by skill.</p>
@@ -330,8 +420,9 @@ function InsightsTab({ data }: { data: AnalyticsData }) {
                     <span className="text-muted-foreground">Practice: {p.practiceAcc}%</span>
                     <span className="text-muted-foreground">Timed: {p.timedAcc}%</span>
                   </div>
-                  <span className={`font-medium ${p.pressureGapFlag ? "text-red-600" : "text-muted-foreground"}`}>
+                  <span className={`font-medium flex items-center ${p.pressureGapFlag ? "text-red-600" : "text-muted-foreground"}`}>
                     {p.pressureDelta > 0 ? "+" : ""}{p.pressureDelta}pp
+                    <InfoTooltip text={TOOLTIPS.pp} />
                   </span>
                 </div>
               ))}
@@ -350,10 +441,22 @@ function InsightsTab({ data }: { data: AnalyticsData }) {
               <div key={section} className="flex items-center justify-between text-sm">
                 <span className="font-medium">{section}</span>
                 <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                  <span>PDI: {Math.round(s.pdi)}</span>
-                  <span>Ratio: {s.paceRatio}x</span>
-                  <span>Avg: {s.mtq}s</span>
-                  <span>SD: {s.paceSd}s</span>
+                  <span className="flex items-center">
+                    PDI: {Math.round(s.pdi)}
+                    <InfoTooltip text={TOOLTIPS.pdi} />
+                  </span>
+                  <span className="flex items-center">
+                    Ratio: {s.paceRatio}x
+                    <InfoTooltip text={TOOLTIPS.paceRatio} />
+                  </span>
+                  <span className="flex items-center">
+                    Avg: {s.mtq}s
+                    <InfoTooltip text={TOOLTIPS.mtq} />
+                  </span>
+                  <span className="flex items-center">
+                    SD: {s.paceSd}s
+                    <InfoTooltip text={TOOLTIPS.paceSd} />
+                  </span>
                 </div>
               </div>
             ))}
@@ -365,7 +468,10 @@ function InsightsTab({ data }: { data: AnalyticsData }) {
       <Card data-testid="card-trajectory">
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-base">Trajectory</CardTitle>
+            <CardTitle className="text-base flex items-center">
+              Trajectory
+              <InfoTooltip text={TOOLTIPS.gv} />
+            </CardTitle>
             <div className="flex items-center gap-1.5" data-testid="text-trend">
               {trendIcon}
               <span className="text-sm font-medium">{trajectory.trend}</span>
@@ -382,7 +488,7 @@ function InsightsTab({ data }: { data: AnalyticsData }) {
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                 <XAxis dataKey="label" tick={{ fontSize: 11 }} />
                 <YAxis domain={[0, 100]} tick={{ fontSize: 11 }} />
-                <Tooltip />
+                <RechartsTooltip />
                 <Line type="monotone" dataKey="rs" stroke="#6366f1" strokeWidth={2} dot={{ r: 3 }} name="Readiness" />
               </LineChart>
             </ResponsiveContainer>
@@ -394,14 +500,18 @@ function InsightsTab({ data }: { data: AnalyticsData }) {
 
       <Card data-testid="card-fatigue">
         <CardHeader className="pb-2">
-          <CardTitle className="text-base">Fatigue Curve</CardTitle>
+          <CardTitle className="text-base flex items-center">
+            Fatigue Curve
+            <InfoTooltip text={TOOLTIPS.fatigueFlag} />
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <p className="text-xs text-muted-foreground mb-1">Accuracy drift (last third vs first third)</p>
-              <p className={`text-lg font-bold ${attempt.fatigue.accDrop <= -15 ? "text-red-600" : attempt.fatigue.accDrop < 0 ? "text-amber-600" : "text-emerald-600"}`} data-testid="text-fatigue-acc-drop">
+              <p className={`text-lg font-bold flex items-center ${attempt.fatigue.accDrop <= -15 ? "text-red-600" : attempt.fatigue.accDrop < 0 ? "text-amber-600" : "text-emerald-600"}`} data-testid="text-fatigue-acc-drop">
                 {attempt.fatigue.accDrop > 0 ? "+" : ""}{attempt.fatigue.accDrop}pp
+                <InfoTooltip text={TOOLTIPS.pp} />
               </p>
             </div>
             <div>
@@ -483,9 +593,15 @@ function DetailTab({ detailData }: { detailData: DetailData | undefined }) {
               size="sm"
               onClick={() => setMode(m)}
               data-testid={`button-heatmap-${m}`}
-              className="text-xs"
+              className="text-xs flex items-center gap-1"
             >
-              {m === "accuracy" ? "Accuracy" : m === "time" ? "Time" : "Volatility"}
+              {m === "accuracy" ? (
+                <>Weighted Accuracy <InfoTooltip text={TOOLTIPS.weightedAccuracy} /></>
+              ) : m === "time" ? (
+                "Time"
+              ) : (
+                <>Volatility <InfoTooltip text={TOOLTIPS.volatility} /></>
+              )}
             </Button>
           ))}
         </div>
