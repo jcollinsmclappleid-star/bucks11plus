@@ -6,35 +6,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer,
   BarChart, Bar, Cell,
 } from "recharts";
 import {
-  ArrowRight, AlertTriangle, TrendingUp, TrendingDown, Minus, Target, Shield, Clock, Brain, Info
+  ArrowRight, AlertTriangle, TrendingUp, TrendingDown, Minus, Target, Shield, Clock, Brain
 } from "lucide-react";
-
-function InfoTooltip({ text }: { text: string }) {
-  return (
-    <TooltipProvider delayDuration={200}>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <span className="inline-flex items-center cursor-help ml-1 text-muted-foreground/60 hover:text-muted-foreground transition-colors" tabIndex={0}>
-            <Info className="h-3 w-3" />
-          </span>
-        </TooltipTrigger>
-        <TooltipContent className="max-w-[240px] text-xs leading-relaxed font-normal bg-popover text-popover-foreground border shadow-md">
-          {text}
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
-  );
-}
+import { InfoTooltip } from "@/components/shared/InfoTooltip";
 
 interface PDISection {
   pdi: number;
@@ -298,6 +276,23 @@ function SummaryTab({ data }: { data: AnalyticsData }) {
             </div>
           </CardContent>
         </Card>
+      </div>
+
+      <div className="flex items-center justify-center gap-6 text-xs text-muted-foreground">
+        <span className="flex items-center gap-1">
+          <span className="font-medium text-foreground flex items-center">
+            WAI
+            <InfoTooltip text={TOOLTIPS.wai} />
+          </span>
+          <span data-testid="text-wai">{attempt.wai}</span>
+        </span>
+        <span className="flex items-center gap-1">
+          <span className="font-medium text-foreground flex items-center">
+            CR
+            <InfoTooltip text={TOOLTIPS.cr} />
+          </span>
+          <span data-testid="text-cr">{attempt.crScore}</span>
+        </span>
       </div>
 
       {priorities.length > 0 && (
