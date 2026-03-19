@@ -1,6 +1,6 @@
 import { db } from "./db";
 import { diagnostics, questions, articles, practiceSections, users } from "@shared/schema";
-import { sql, eq } from "drizzle-orm";
+import { sql, eq, and, isNotNull, ne, asc, inArray } from "drizzle-orm";
 import { scrypt, randomBytes } from "crypto";
 import { promisify } from "util";
 import type { NvrSequenceConfig, NvrTransformConfig, NvrClassificationConfig } from "@shared/contentTypes";
@@ -244,6 +244,97 @@ async function ensureComprehensionSection() {
   }
 }
 
+async function ensureFreePool() {
+  const [{ count }] = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(questions)
+    .where(eq(questions.freePool, true));
+
+  if (Number(count) > 0) {
+    console.log(`✓ Free pool already seeded (${count} questions)`);
+    return;
+  }
+
+  console.log("Seeding free pool questions...");
+
+  const NON_COMP_TARGETS = { easy: 6, medium: 13, hard: 6 };
+  const NON_COMP_SECTIONS = ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"] as const;
+
+  for (const section of NON_COMP_SECTIONS) {
+    const pool = await db
+      .select()
+      .from(questions)
+      .where(
+        and(
+          eq(questions.section, section),
+          eq(questions.qaStatus, "approved"),
+          isNotNull(questions.skillId),
+          ne(questions.skillId, ""),
+        ),
+      )
+      .orderBy(asc(questions.orderIndex));
+
+    if (pool.length === 0) continue;
+
+    const byDiff: Record<"easy" | "medium" | "hard", typeof pool> = { easy: [], medium: [], hard: [] };
+    for (const q of pool) {
+      const d = q.difficulty as "easy" | "medium" | "hard";
+      if (d in byDiff) byDiff[d].push(q);
+    }
+
+    const selected = [
+      ...byDiff.easy.slice(0, NON_COMP_TARGETS.easy),
+      ...byDiff.medium.slice(0, NON_COMP_TARGETS.medium),
+      ...byDiff.hard.slice(0, NON_COMP_TARGETS.hard),
+    ];
+
+    if (selected.length > 0) {
+      await db.update(questions)
+        .set({ freePool: true })
+        .where(inArray(questions.id, selected.map(q => q.id)));
+      console.log(`  [${section}] marked ${selected.length} questions freePool`);
+    }
+  }
+
+  const compPool = await db
+    .select()
+    .from(questions)
+    .where(
+      and(
+        eq(questions.section, "English Comprehension"),
+        eq(questions.qaStatus, "approved"),
+        sql`render_config->>'passageId' IS NOT NULL`,
+      ),
+    );
+
+  const passageMap = new Map<string, typeof compPool>();
+  for (const q of compPool) {
+    const pid = (q.renderConfig as any)?.passageId as string;
+    if (!pid) continue;
+    if (!passageMap.has(pid)) passageMap.set(pid, []);
+    passageMap.get(pid)!.push(q);
+  }
+
+  const sortedPassages = [...passageMap.entries()]
+    .sort((a, b) => a[1].length - b[1].length)
+    .slice(0, 3);
+
+  for (const [pid, qs] of sortedPassages) {
+    if (qs.length > 0) {
+      await db.update(questions)
+        .set({ freePool: true })
+        .where(inArray(questions.id, qs.map(q => q.id)));
+      console.log(`  [English Comprehension] Passage ${pid}: ${qs.length} questions marked freePool`);
+    }
+  }
+
+  const [{ count: finalCount }] = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(questions)
+    .where(eq(questions.freePool, true));
+  console.log(`✓ Free pool seeded: ${finalCount} questions`);
+}
+
 export async function seedDatabase() {
   // Always ensure admin user exists
   const existingAdmin = await db.query.users.findFirst({
@@ -265,6 +356,7 @@ export async function seedDatabase() {
     await ensurePracticePaperDiagnostics();
     await syncDiagnosticTimings();
     await ensureComprehensionSection();
+    await ensureFreePool();
     return;
   }
 
@@ -520,4 +612,5 @@ export async function seedDatabase() {
   ]);
 
   console.log("Seed data inserted successfully.");
+  await ensureFreePool();
 }
