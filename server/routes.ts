@@ -499,7 +499,7 @@ export async function registerRoutes(
       }
 
       // Use matched answer count so score isn't deflated by any unresolved question IDs
-      const total = answerRecords.length;
+      const total = Object.values(sectionResults).reduce((sum, s) => sum + s.total, 0);
       const rawPercent = total > 0 ? (correct / total) * 100 : 0;
       const forecastScore = Math.round((rawPercent / 100) * 141);
       let band = "Clear Improvement Opportunity";
