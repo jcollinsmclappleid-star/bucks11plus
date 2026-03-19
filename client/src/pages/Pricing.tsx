@@ -37,7 +37,7 @@ function DemoCard({ title, description, testId, children, tierLabel }: { title: 
         </Button>
         {open && (
           <div className="relative border border-dashed border-slate-300 rounded-xl p-4 bg-slate-50/50">
-            <div className="absolute top-2 right-2 bg-slate-200 text-slate-500 text-[9px] font-bold uppercase px-1.5 py-0.5 rounded tracking-wider">
+            <div className="absolute top-2 right-2 bg-slate-200 text-slate-500 text-[9px] font-bold uppercase px-1.5 py-0.5 rounded tracking-wider pointer-events-none">
               Demo
             </div>
             {children}
@@ -349,7 +349,7 @@ export default function Pricing() {
               {availableUpgrades.includes("programme12") && (
                 <Card className="border-primary border-2 shadow-lg flex flex-col relative overflow-hidden" data-testid="card-upgrade-programme12">
                   <div className="absolute top-0 inset-x-0 h-1 bg-primary"></div>
-                  <div className="absolute top-3 right-3 bg-primary text-white px-2 py-0.5 rounded-full font-bold text-[10px] uppercase tracking-wider">
+                  <div className="absolute top-3 right-3 bg-primary text-white px-2 py-0.5 rounded-full font-bold text-[10px] uppercase tracking-wider pointer-events-none">
                     SUBSCRIBER RATE
                   </div>
                   <CardContent className="p-6 pt-8 flex-1">
@@ -383,7 +383,7 @@ export default function Pricing() {
               {availableUpgrades.includes("programme24_plus") && (
                 <Card className="border-brand-amber border-2 shadow-xl flex flex-col relative overflow-hidden" data-testid="card-upgrade-programme24">
                   <div className="absolute top-0 inset-x-0 h-1.5 bg-brand-amber"></div>
-                  <div className="absolute top-3 right-3 bg-brand-amber text-amber-950 px-2 py-0.5 rounded-full font-bold text-[10px] uppercase tracking-wider">
+                  <div className="absolute top-3 right-3 bg-brand-amber text-amber-950 px-2 py-0.5 rounded-full font-bold text-[10px] uppercase tracking-wider pointer-events-none">
                     BEST VALUE
                   </div>
                   <CardContent className="p-6 pt-8 flex-1">
@@ -528,7 +528,7 @@ export default function Pricing() {
 
                 <Card className="border-primary border-2 shadow-lg flex flex-col relative overflow-hidden" data-testid="card-tier-pack-monthly">
                   <div className="absolute top-0 inset-x-0 h-1 bg-primary"></div>
-                  <div className="absolute top-3 right-3 bg-primary text-white px-2.5 py-1 rounded-full font-bold text-[10px] uppercase tracking-wider shadow">
+                  <div className="absolute top-3 right-3 bg-primary text-white px-2.5 py-1 rounded-full font-bold text-[10px] uppercase tracking-wider shadow pointer-events-none">
                     MOST POPULAR
                   </div>
                   <CardHeader className="pb-3 pt-6">
@@ -573,7 +573,7 @@ export default function Pricing() {
 
                 <Card className="border-brand-amber border-2 shadow-xl relative flex flex-col overflow-hidden" data-testid="card-tier-programme24">
                   <div className="absolute top-0 inset-x-0 h-1.5 bg-brand-amber"></div>
-                  <div className="absolute top-3 right-3 bg-brand-amber text-amber-950 px-2.5 py-1 rounded-full font-bold text-[10px] uppercase tracking-wider shadow">
+                  <div className="absolute top-3 right-3 bg-brand-amber text-amber-950 px-2.5 py-1 rounded-full font-bold text-[10px] uppercase tracking-wider shadow pointer-events-none">
                     RECOMMENDED
                   </div>
                   <CardHeader className="pb-3 pt-6">
@@ -687,7 +687,7 @@ export default function Pricing() {
 
                 <Card className="border-brand-amber border-2 shadow-xl relative flex flex-col overflow-hidden" data-testid="card-tier-programme16">
                   <div className="absolute top-0 inset-x-0 h-1.5 bg-brand-amber"></div>
-                  <div className="absolute top-0 right-0 bg-brand-amber text-amber-950 px-4 py-1.5 rounded-bl-lg font-bold text-sm shadow-sm">
+                  <div className="absolute top-0 right-0 bg-brand-amber text-amber-950 px-4 py-1.5 rounded-bl-lg font-bold text-sm shadow-sm pointer-events-none">
                     RECOMMENDED
                   </div>
 
