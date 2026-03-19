@@ -67,12 +67,6 @@ export default function About() {
       <p>
         We are not affiliated with GL Assessment, Buckinghamshire Council, or any grammar school. The "GL-style" label refers to the question format we use, which replicates the structure of the real test — it does not imply any formal relationship with GL Assessment Ltd.
       </p>
-
-      <hr className="my-8" />
-
-      <p className="text-sm text-muted-foreground">
-        11+ Standard is operated by Ianson Systems Ltd, a UK-registered software company. We are independent of GL Assessment, Buckinghamshire Council, and all grammar schools.
-      </p>
     </div>
   );
 }

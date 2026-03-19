@@ -137,9 +137,12 @@ function MainLayout({ children }: { children: React.ReactNode }) {
             </ul>
           </div>
         </div>
-        <div className="container mx-auto max-w-6xl px-4 mt-8 pt-6 border-t border-primary-foreground/10">
+        <div className="container mx-auto max-w-6xl px-4 mt-8 pt-6 border-t border-primary-foreground/10 space-y-1">
           <p className="text-xs text-primary-foreground/40 text-center" data-testid="text-footer-disclaimer">
             This website is an independent educational resource. Not affiliated with The Buckinghamshire Grammar Schools, GL Assessment, or any individual grammar school.
+          </p>
+          <p className="text-xs text-primary-foreground/30 text-center">
+            © {new Date().getFullYear()} Ianson Systems Ltd, a UK software company.
           </p>
         </div>
       </footer>
