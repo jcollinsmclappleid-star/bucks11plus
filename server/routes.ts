@@ -603,6 +603,38 @@ export async function registerRoutes(
     }
   });
 
+  app.post("/api/guest/email-results", async (req, res, next) => {
+    try {
+      const { sessionId, guestToken, email } = req.body;
+      if (!sessionId || !guestToken || !email) {
+        return res.status(400).json({ message: "sessionId, guestToken, and email are required" });
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return res.status(400).json({ message: "Invalid email address" });
+      }
+
+      const session = await storage.getTestSession(sessionId);
+      if (!session) return res.status(404).json({ message: "Session not found" });
+      if (session.guestToken !== guestToken) return res.status(403).json({ message: "Invalid token" });
+      if (!session.completedAt) return res.status(400).json({ message: "Session not yet completed" });
+
+      const { sendGuestResultsEmail } = await import("./email");
+      await sendGuestResultsEmail(
+        email,
+        sessionId,
+        guestToken,
+        session.forecastScore ?? 0,
+        session.band ?? "Not assessed",
+      );
+
+      res.json({ ok: true });
+    } catch (error) {
+      next(error);
+    }
+  });
+
   app.post("/api/guest/claim/:id", requireAuth, async (req, res, next) => {
     try {
       const session = await storage.getTestSession(req.params.id);

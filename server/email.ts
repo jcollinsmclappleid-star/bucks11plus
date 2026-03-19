@@ -82,6 +82,49 @@ async function logEmailEvent(userId: string, emailType: string, eventType: strin
   }
 }
 
+export async function sendGuestResultsEmail(
+  email: string,
+  sessionId: string,
+  guestToken: string,
+  forecastScore: number,
+  band: string,
+): Promise<boolean> {
+  const resultsUrl = `${BASE_URL}/free-results/${sessionId}?token=${guestToken}`;
+
+  const bandColor = band === "On Track" ? "#16a34a" : band === "Within Reach" ? "#d97706" : "#dc2626";
+  const bandBg = band === "On Track" ? "#f0fdf4" : band === "Within Reach" ? "#fffbeb" : "#fef2f2";
+
+  const html = `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.6;color:#1a1a2e;max-width:600px;margin:0 auto;padding:20px;">
+  <div style="text-align:center;margin-bottom:24px;">
+    <strong style="font-size:18px;color:#0d1f30;">11+ Standard</strong>
+  </div>
+  <h2 style="color:#0d1f30;margin-bottom:8px;">Your Free Diagnostic Results</h2>
+  <p style="color:#475569;">Here's the link to your child's Buckinghamshire 11+ readiness results. Bookmark it — you can come back to it any time.</p>
+  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:24px;margin:20px 0;text-align:center;">
+    <p style="font-size:13px;color:#64748b;margin:0 0 4px 0;">GL-Style Forecast Score</p>
+    <p style="font-size:48px;font-weight:800;color:#0d1f30;margin:0 0 8px 0;line-height:1;">${forecastScore}</p>
+    <div style="display:inline-block;background:${bandBg};color:${bandColor};border:1px solid ${bandColor}33;padding:4px 14px;border-radius:999px;font-size:13px;font-weight:700;">${band}</div>
+    <p style="font-size:12px;color:#94a3b8;margin:12px 0 0 0;">Target: 121 · Max: 141</p>
+  </div>
+  <div style="text-align:center;margin:28px 0;">
+    <a href="${resultsUrl}" style="display:inline-block;background:#0d1f30;color:white;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;font-size:15px;">View Full Results & Section Breakdown</a>
+  </div>
+  <p style="font-size:13px;color:#64748b;">Or copy this link into your browser:</p>
+  <p style="font-size:12px;color:#94a3b8;background:#f1f5f9;padding:10px 14px;border-radius:6px;word-break:break-all;">${resultsUrl}</p>
+  <p style="font-size:13px;color:#475569;margin-top:20px;">
+    Create a free 11+ Standard account to save these results permanently, track progress over time, and access targeted practice questions.
+  </p>
+  <hr style="border:none;border-top:1px solid #e5e7eb;margin:32px 0 16px;">
+  <p style="font-size:11px;color:#9ca3af;text-align:center;">11+ Standard · Buckinghamshire 11+ Preparation · Independent readiness assessment, not affiliated with GL Assessment or Buckinghamshire Council.</p>
+</body>
+</html>`;
+
+  return sendEmail(email, "Your 11+ Diagnostic Results — save this link", html);
+}
+
 export async function sendPasswordResetEmail(email: string, resetToken: string): Promise<boolean> {
   const resetUrl = `${BASE_URL}/reset-password?token=${resetToken}`;
 

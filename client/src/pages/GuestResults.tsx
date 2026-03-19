@@ -1,11 +1,12 @@
 import { Link, useParams, useSearch } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, BarChart2, SlidersHorizontal, Sparkles, Clock, Loader2, Lock, TrendingUp, BarChart3, Zap, CheckCircle2, XCircle, ChevronDown, ChevronUp } from "lucide-react";
+import { ArrowRight, BarChart2, SlidersHorizontal, Sparkles, Clock, Loader2, Lock, TrendingUp, BarChart3, Zap, CheckCircle2, XCircle, ChevronDown, ChevronUp, Mail, Send } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { Seo } from "../components/shared/Seo";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { useState } from "react";
+import { Input } from "@/components/ui/input";
 
 type GuestSession = {
   id: string;
@@ -39,6 +40,31 @@ export default function GuestResults() {
   const target = 121;
   const [simAdjustments, setSimAdjustments] = useState<Record<string, number>>({});
   const [showReview, setShowReview] = useState(false);
+  const [emailValue, setEmailValue] = useState("");
+  const [emailSent, setEmailSent] = useState(false);
+  const [emailError, setEmailError] = useState<string | null>(null);
+
+  const emailMutation = useMutation({
+    mutationFn: async (email: string) => {
+      const res = await fetch("/api/guest/email-results", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionId: id, guestToken, email }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || "Failed to send email");
+      }
+      return res.json();
+    },
+    onSuccess: () => {
+      setEmailSent(true);
+      setEmailError(null);
+    },
+    onError: (err: Error) => {
+      setEmailError(err.message || "Failed to send. Please try again.");
+    },
+  });
 
   const { data: session, isLoading } = useQuery<GuestSession>({
     queryKey: [`guest-results-${id}`],
@@ -238,6 +264,60 @@ export default function GuestResults() {
           </Card>
         </div>
       </div>
+
+      <Card className="border-border/60 shadow-sm" data-testid="card-email-results">
+        <CardContent className="p-6 md:p-8">
+          {emailSent ? (
+            <div className="flex items-center gap-4" data-testid="text-email-sent-success">
+              <div className="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center shrink-0">
+                <CheckCircle2 className="h-5 w-5 text-green-600" />
+              </div>
+              <div>
+                <p className="font-semibold text-slate-800">Results sent!</p>
+                <p className="text-sm text-muted-foreground">Check your inbox for the link — bookmark it so you can come back any time.</p>
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                <Mail className="h-5 w-5 text-primary" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-semibold text-slate-800 mb-0.5">Email yourself these results</p>
+                <p className="text-sm text-muted-foreground">Get a permanent link to your results — no account needed.</p>
+              </div>
+              <form
+                className="flex gap-2 w-full sm:w-auto shrink-0"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (emailValue.trim()) emailMutation.mutate(emailValue.trim());
+                }}
+              >
+                <Input
+                  type="email"
+                  placeholder="your@email.com"
+                  value={emailValue}
+                  onChange={(e) => setEmailValue(e.target.value)}
+                  className="w-full sm:w-56"
+                  disabled={emailMutation.isPending}
+                  data-testid="input-email-results"
+                  required
+                />
+                <Button
+                  type="submit"
+                  disabled={emailMutation.isPending || !emailValue.trim()}
+                  data-testid="button-email-results"
+                >
+                  {emailMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                </Button>
+              </form>
+            </div>
+          )}
+          {emailError && (
+            <p className="text-sm text-red-600 mt-3" data-testid="text-email-error">{emailError}</p>
+          )}
+        </CardContent>
+      </Card>
 
       {reviewItems && reviewItems.length > 0 && (
         <Card className="border-border/60 shadow-sm">
