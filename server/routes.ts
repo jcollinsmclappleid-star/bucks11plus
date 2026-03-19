@@ -1170,9 +1170,12 @@ export async function registerRoutes(
       if (!PROGRAMME_TIERS.has(req.user!.subscriptionTier ?? "")) {
         return res.json({ enrolled: false });
       }
-      const enrolment = await storage.getProgrammeEnrolment(req.user!.id);
+      let enrolment = await storage.getProgrammeEnrolment(req.user!.id);
       if (!enrolment) {
-        return res.json({ enrolled: false });
+        // Auto-enrol: user has a programme tier but no enrolment record.
+        // This happens for accounts assigned a tier outside the normal checkout
+        // flow (e.g. admin accounts, manual tier updates). Create it now.
+        enrolment = await storage.createProgrammeEnrolment(req.user!.id);
       }
 
       const milestones = await storage.getProgrammeMilestones(req.user!.id);
