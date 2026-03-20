@@ -19,8 +19,8 @@ function tierLabel(tier: string): string {
     case "programme8":
     case "programme12":
     case "programme16":
-    case "programme16_family":
-    case "programme24_plus": return "Young Scholar Programme";
+    case "programme16_family": return "Young Scholar Programme";
+    case "programme24_plus": return "Programme+";
     default: return "Practice Platform";
   }
 }

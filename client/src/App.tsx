@@ -188,7 +188,7 @@ function AuthGate({ children }: { children: React.ReactNode }) {
 }
 
 function PreviewGate({ children, section, requiredTier }: { children: React.ReactNode; section: string; requiredTier?: "any" | "pack12" | "programme16" }) {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, hasPaidAccess, isProgramme } = useAuth();
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
@@ -198,6 +198,12 @@ function PreviewGate({ children, section, requiredTier }: { children: React.Reac
   }
   if (!user) {
     return <LockedOverlay section={section} requiredTier={requiredTier}>{children}</LockedOverlay>;
+  }
+  if (requiredTier === "pack12" && !hasPaidAccess()) {
+    return <LockedOverlay section={section} requiredTier={requiredTier} loggedIn>{children}</LockedOverlay>;
+  }
+  if (requiredTier === "programme16" && !isProgramme()) {
+    return <LockedOverlay section={section} requiredTier={requiredTier} loggedIn>{children}</LockedOverlay>;
   }
   return <>{children}</>;
 }

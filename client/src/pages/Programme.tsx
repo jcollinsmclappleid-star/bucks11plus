@@ -1,4 +1,4 @@
-import { Link, useLocation } from "wouter";
+import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -8,7 +8,7 @@ import { getQueryFn, apiRequest, queryClient } from "../lib/queryClient";
 import { Seo } from "../components/shared/Seo";
 import {
   CheckCircle2, Circle, Clock, Target, TrendingUp, Activity,
-  ArrowRight, Calendar, PlayCircle, Loader2, Lock, ChevronDown, ChevronUp, ListChecks
+  ArrowRight, Calendar, PlayCircle, Loader2, ChevronDown, ChevronUp, ListChecks
 } from "lucide-react";
 import { useState, useEffect } from "react";
 
@@ -86,8 +86,7 @@ function getPhaseForWeek(week: number) {
 }
 
 export default function Programme() {
-  const { user, isProgramme, hasPaidAccess } = useAuth();
-  const [, navigate] = useLocation();
+  const { user, isProgramme } = useAuth();
   const [expandedWeeks, setExpandedWeeks] = useState<Set<number>>(new Set());
 
   const { data: programme, isLoading } = useQuery<ProgrammeData>({
@@ -135,37 +134,6 @@ export default function Programme() {
     }
   }, [programme?.enrolled, enrolment, currentWeek, currentWeekTasks.length]);
 
-  if (!user) {
-    navigate("/sign-in");
-    return null;
-  }
-
-  if (!isProgramme()) {
-    return (
-      <div className="container mx-auto max-w-4xl px-4 py-20">
-        <Seo title="Programme | 11+ Standard" description="Structured 16-week readiness programme." />
-        <Card className="border-primary/20 shadow-lg">
-          <CardContent className="flex flex-col items-center justify-center p-12 text-center space-y-6">
-            <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center">
-              <Lock className="h-10 w-10 text-primary" />
-            </div>
-            <h1 className="text-3xl font-bold text-primary font-serif">Young Scholar Programme</h1>
-            <p className="text-muted-foreground max-w-lg text-lg">
-              {hasPaidAccess()
-                ? "Upgrade to the Young Scholar Programme to access your personalised 16-week roadmap with milestone diagnostics, gap velocity tracking, and weekly auto-generated plans."
-                : "The Young Scholar Programme provides a guided 16-week roadmap with milestone diagnostics and advanced analytics to ensure your child is fully prepared."
-              }
-            </p>
-            <Button size="lg" className="bg-primary text-lg h-14 px-8" asChild data-testid="button-upgrade-programme">
-              <Link href="/pricing">
-                {hasPaidAccess() ? "Upgrade to Programme" : "View Plans"} <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
 
   if (isLoading) {
     return (

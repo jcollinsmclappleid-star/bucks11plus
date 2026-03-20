@@ -3,34 +3,23 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "../../lib/auth";
 import ChildSwitcher from "./ChildSwitcher";
-import { Menu, X } from "lucide-react";
+import { Menu } from "lucide-react";
 import { useState } from "react";
 
 export default function Navbar() {
   const [location] = useLocation();
-  const { user, logout, isProgramme } = useAuth();
+  const { user, logout } = useAuth();
   const [open, setOpen] = useState(false);
 
-  const appNavLinks = [
+  const navLinks = [
     { href: "/app", label: "Dashboard", show: true },
     { href: "/app/diagnostic", label: "Diagnostics", show: true, matchPrefix: true },
     { href: "/app/practice", label: "Practice", show: true, matchPrefix: true },
     { href: "/app/progress", label: "Progress", show: true },
     { href: "/app/report-archive", label: "Reports", show: true },
-    { href: "/app/programme", label: "Programme", show: !!user && isProgramme() },
-    { href: "/app/analytics", label: "Analytics", show: !!user && isProgramme() },
-    { href: "/app/account", label: "Account", show: !!user },
+    { href: "/app/programme", label: "Programme", show: true },
+    { href: "/app/analytics", label: "Analytics", show: true },
   ];
-
-  const publicNavLinks = [
-    { href: "/free-diagnostic", label: "Free Diagnostic", show: true },
-    { href: "/learn", label: "Learning Hub", show: true },
-    { href: "/pricing", label: "Pricing", show: true },
-    { href: "/how-it-works", label: "How It Works", show: true },
-    { href: "/bucks-11-plus-parent-guide", label: "Parent Guide", show: true },
-  ];
-
-  const navLinks = user ? appNavLinks : publicNavLinks;
 
   const isActive = (href: string, matchPrefix?: boolean) => {
     if (matchPrefix) return location.startsWith(href);
@@ -73,15 +62,12 @@ export default function Navbar() {
               <Button variant="ghost" size="sm" asChild data-testid="link-signin">
                 <Link href="/sign-in">Sign In</Link>
               </Button>
+              <Button size="sm" className="bg-primary" asChild data-testid="link-get-started">
+                <Link href="/sign-up">Get Started</Link>
+              </Button>
             </div>
           ) : (
             <div className="flex items-center gap-4">
-              {isProgramme() && (
-                <>
-                  <Link href="/app/programme" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors" data-testid="link-programme">Programme</Link>
-                  <Link href="/app/analytics" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors" data-testid="link-analytics-nav">Analytics</Link>
-                </>
-              )}
               <ChildSwitcher />
               <Link href="/app/account" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors" data-testid="link-account">
                 {user.childName || user.username}
