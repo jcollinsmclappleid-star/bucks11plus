@@ -244,6 +244,22 @@ async function ensureComprehensionSection() {
   }
 }
 
+export async function repairSeedQuestions() {
+  const result = await db
+    .update(questions)
+    .set({ qaStatus: "approved" })
+    .where(
+      and(
+        eq(questions.qaStatus, "draft"),
+        sql`(id LIKE 'mini-q-%' OR id LIKE 'full-a-q-%' OR id LIKE 'full-b-q-%' OR id LIKE 'mock-%')`,
+      ),
+    );
+  const updated = (result as any).rowCount ?? 0;
+  if (updated > 0) {
+    console.log(`✓ Repaired ${updated} seed questions (draft → approved)`);
+  }
+}
+
 export async function ensureFreePool() {
   const [{ count }] = await db
     .select({ count: sql<number>`count(*)` })
@@ -356,6 +372,7 @@ export async function seedDatabase() {
     await ensurePracticePaperDiagnostics();
     await syncDiagnosticTimings();
     await ensureComprehensionSection();
+    await repairSeedQuestions();
     await ensureFreePool();
     return;
   }
@@ -612,5 +629,6 @@ export async function seedDatabase() {
   ]);
 
   console.log("Seed data inserted successfully.");
+  await repairSeedQuestions();
   await ensureFreePool();
 }

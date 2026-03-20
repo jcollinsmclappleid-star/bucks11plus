@@ -113,6 +113,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
               <li><Link href="/bucks-11-plus-registration" className="hover:text-white transition-colors">Registration Guide</Link></li>
               <li><Link href="/bucks-11-plus-parent-guide" className="hover:text-white transition-colors">Parent Guide (PDF)</Link></li>
               <li><Link href="/learn" className="hover:text-white transition-colors">Learning Hub (30 Guides)</Link></li>
+              <li><Link href="/parent-hub" className="hover:text-white transition-colors">Parent Hub Articles</Link></li>
             </ul>
           </div>
           <div>
@@ -133,7 +134,6 @@ function MainLayout({ children }: { children: React.ReactNode }) {
               <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
               <li><Link href="/safeguarding" className="hover:text-white transition-colors">Safeguarding</Link></li>
               <li><Link href="/refund-policy" className="hover:text-white transition-colors">Refund Policy</Link></li>
-              <li><Link href="/parent-hub" className="hover:text-white transition-colors">Parent Hub</Link></li>
             </ul>
           </div>
         </div>

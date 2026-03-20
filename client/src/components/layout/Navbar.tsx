@@ -11,19 +11,26 @@ export default function Navbar() {
   const { user, logout, isProgramme } = useAuth();
   const [open, setOpen] = useState(false);
 
-  const navLinks = [
+  const appNavLinks = [
     { href: "/app", label: "Dashboard", show: true },
     { href: "/app/diagnostic", label: "Diagnostics", show: true, matchPrefix: true },
     { href: "/app/practice", label: "Practice", show: true, matchPrefix: true },
-    { href: "/app/badges", label: "Accomplishments", show: true },
     { href: "/app/progress", label: "Progress", show: true },
     { href: "/app/report-archive", label: "Reports", show: true },
     { href: "/app/programme", label: "Programme", show: !!user && isProgramme() },
     { href: "/app/analytics", label: "Analytics", show: !!user && isProgramme() },
     { href: "/app/account", label: "Account", show: !!user },
-    { href: "/pricing", label: "Pricing", show: true },
-    { href: "/parent-guide", label: "Parent Guide", show: true },
   ];
+
+  const publicNavLinks = [
+    { href: "/free-diagnostic", label: "Free Diagnostic", show: true },
+    { href: "/learn", label: "Learning Hub", show: true },
+    { href: "/pricing", label: "Pricing", show: true },
+    { href: "/how-it-works", label: "How It Works", show: true },
+    { href: "/bucks-11-plus-parent-guide", label: "Parent Guide", show: true },
+  ];
+
+  const navLinks = user ? appNavLinks : publicNavLinks;
 
   const isActive = (href: string, matchPrefix?: boolean) => {
     if (matchPrefix) return location.startsWith(href);
@@ -50,19 +57,21 @@ export default function Navbar() {
         </Link>
 
         <nav className="hidden md:flex items-center gap-4 lg:gap-6">
-          <Link href="/app" className={`text-sm font-medium transition-colors ${isActive('/app') ? 'text-primary' : 'text-slate-600 hover:text-primary'}`} data-testid="link-dashboard">Dashboard</Link>
-          <Link href="/app/diagnostic" className={`text-sm font-medium transition-colors ${isActive('/app/diagnostic', true) ? 'text-primary' : 'text-slate-600 hover:text-primary'}`} data-testid="link-diagnostics">Diagnostics</Link>
-          <Link href="/app/practice" className={`text-sm font-medium transition-colors ${isActive('/app/practice', true) ? 'text-primary' : 'text-slate-600 hover:text-primary'}`} data-testid="link-practice">Practice</Link>
-          <Link href="/app/progress" className={`text-sm font-medium transition-colors ${isActive('/app/progress') ? 'text-primary' : 'text-slate-600 hover:text-primary'}`} data-testid="link-progress">Progress</Link>
-          <Link href="/app/report-archive" className={`text-sm font-medium transition-colors hidden lg:block ${isActive('/app/report-archive') ? 'text-primary' : 'text-slate-600 hover:text-primary'}`} data-testid="link-reports">Reports</Link>
+          {navLinks.filter(l => l.show).map(link => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={`text-sm font-medium transition-colors ${isActive(link.href, link.matchPrefix) ? 'text-primary' : 'text-slate-600 hover:text-primary'}`}
+              data-testid={`link-${link.label.toLowerCase().replace(/\s/g, '-')}`}
+            >
+              {link.label}
+            </Link>
+          ))}
 
           {!user ? (
             <div className="flex items-center gap-2 ml-2">
               <Button variant="ghost" size="sm" asChild data-testid="link-signin">
                 <Link href="/sign-in">Sign In</Link>
-              </Button>
-              <Button size="sm" asChild className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm" data-testid="link-free-diagnostic">
-                <Link href="/free-diagnostic">Free Diagnostic</Link>
               </Button>
             </div>
           ) : (

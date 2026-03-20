@@ -8,7 +8,7 @@ import { sql, eq, and, desc, inArray } from "drizzle-orm";
 import { db } from "./db";
 import { computeAttemptMetrics, computeFullAnalytics, type AnswerRecord, type DrillAnswerRecord, type HistoricalMetrics } from "./metrics";
 import { sendDiagnosticCompleteEmail } from "./email";
-import { ensureFreePool } from "./seed";
+import { ensureFreePool, repairSeedQuestions } from "./seed";
 
 const PROGRAMME_TIERS = new Set([
   "programme8",
@@ -1499,6 +1499,21 @@ export async function registerRoutes(
       await ensureFreePool();
       const [{ count }] = await db.select({ count: sql<number>`count(*)` }).from(questions).where(eq(questions.freePool, true));
       res.json({ success: true, freePoolCount: Number(count) });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.post("/api/admin/repair-seed-data", requireAdmin, async (_req, res, next) => {
+    try {
+      await repairSeedQuestions();
+      const [freePoolResult] = await db.select({ count: sql<number>`count(*)` }).from(questions).where(eq(questions.freePool, true));
+      if (Number(freePoolResult.count) === 0) {
+        await ensureFreePool();
+      }
+      const [{ total }] = await db.select({ total: sql<number>`count(*)` }).from(questions).where(eq(questions.qaStatus, "approved"));
+      const [{ freePool }] = await db.select({ freePool: sql<number>`count(*)` }).from(questions).where(eq(questions.freePool, true));
+      res.json({ success: true, approvedQuestions: Number(total), freePoolQuestions: Number(freePool) });
     } catch (error) {
       next(error);
     }
