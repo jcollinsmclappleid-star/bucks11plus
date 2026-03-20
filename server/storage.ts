@@ -179,7 +179,7 @@ export class DatabaseStorage implements IStorage {
 
   async selectQuestionsForSession(userId: string, diagnosticId: string): Promise<Question[]> {
     const diag = await this.getDiagnostic(diagnosticId);
-    if (!diag) return [];
+    if (!diag) { console.log(`[QFS] Diagnostic not found: ${diagnosticId}`); return []; }
 
     const isGuestSession = userId.startsWith('guest-');
 
@@ -187,6 +187,8 @@ export class DatabaseStorage implements IStorage {
     // (guests rely on freePool flag instead — freePool questions are always in the practice pool).
     const diagPoolFilter: string[] | null =
       (!isGuestSession && (diag.type === 'full' || diag.type === 'mock')) ? ['diagnostic', 'any'] : null;
+
+    console.log(`[QFS] diag=${diagnosticId} type=${diag.type} isGuest=${isGuestSession} diagPoolFilter=${JSON.stringify(diagPoolFilter)}`);
 
     // Guest sessions bypass the diagnosticId-pinned query entirely.
     // The mini-q-* placeholder questions (diagnosticId='mini-1') are superseded by the
@@ -199,6 +201,8 @@ export class DatabaseStorage implements IStorage {
         diagPoolFilter ? inArray(questions.questionPool, diagPoolFilter) : sql`TRUE`,
       ))
       .orderBy(questions.orderIndex);
+
+    console.log(`[QFS] pinned questions: ${allQuestions.length}`);
 
     const DIFFICULTY_PROFILES: Record<string, { easy: number; medium: number; hard: number }> = {
       mini: { easy: 0.25, medium: 0.50, hard: 0.25 },
@@ -220,10 +224,14 @@ export class DatabaseStorage implements IStorage {
       const poolQuestions = await this.selectPoolQuestions(
         diag.questionCount, diag.sections, userId, allQuestions.map(q => q.id), diffProfile, diag.type, diagPoolFilter, diagnosticId
       );
+      console.log(`[QFS] pool questions returned: ${poolQuestions.length}`);
       allQuestions = [...allQuestions, ...poolQuestions];
     }
 
+    console.log(`[QFS] allQuestions after pool: ${allQuestions.length}`);
+
     if (allQuestions.length === 0) {
+      console.log(`[QFS] EMPTY: isGuest=${isGuestSession} diagPoolFilter=${JSON.stringify(diagPoolFilter)}`);
       // For guest sessions or pool-restricted diagnostics (full/mock), never fall back to
       // unrestricted questions — returning empty signals a seeding problem cleanly.
       if (isGuestSession || diagPoolFilter !== null) return [];
@@ -569,6 +577,8 @@ export class DatabaseStorage implements IStorage {
 
     const results: Question[] = [];
 
+    console.log(`[SPQ] count=${count} sections=${JSON.stringify(sections)} isGuest=${isGuest} poolFilter=${JSON.stringify(poolFilter)} diagType=${diagType}`);
+
     for (const section of sections) {
       let pool = await db.select().from(questions)
         .where(and(
@@ -578,6 +588,8 @@ export class DatabaseStorage implements IStorage {
           isGuest ? eq(questions.freePool, true) : sql`TRUE`,
           poolFilter && poolFilter.length > 0 ? inArray(questions.questionPool, poolFilter) : sql`TRUE`,
         ));
+
+      console.log(`[SPQ] section=${section} rawPool=${pool.length}`);
 
       if (excludeIds.length > 0) {
         pool = pool.filter(q => !excludeIds.includes(q.id));
@@ -735,7 +747,9 @@ export class DatabaseStorage implements IStorage {
       }
     }
 
-    return [...compResults, ...interleaved];
+    const finalResult = [...compResults, ...interleaved];
+    console.log(`[SPQ] returning ${finalResult.length} questions (comp=${compResults.length} nonComp=${interleaved.length})`);
+    return finalResult;
   }
 
   async selectQuestionsForPracticePaper(
@@ -798,16 +812,44 @@ export class DatabaseStorage implements IStorage {
         });
       }
 
-      // Prefer passages with fresh questions; shuffle then pick 1-2
-      const passageList = [...passageMap.values()].sort(() => Math.random() - 0.5);
+      // Prefer passages with the most fresh (uncooled) questions, then shuffle within each tier
+      const scoredPassages = [...passageMap.entries()].map(([pid, qs]) => {
+        const freshCount = qs.filter(q => {
+          const usage = usageMap.get(q.id);
+          return !usage || !usage.lastServedAt || usage.lastServedAt.getTime() <= cooldownCutoff;
+        }).length;
+        return { pid, qs, freshCount };
+      });
+      // Sort: most fresh first; random within same freshness score
+      scoredPassages.sort((a, b) => {
+        if (b.freshCount !== a.freshCount) return b.freshCount - a.freshCount;
+        return Math.random() - 0.5;
+      });
+
       // For a 20q quick paper use 1 passage; for 40q/50q allow up to 2
       const maxPassages = questionCount >= 40 ? 2 : 1;
       let passagesUsed = 0;
 
-      for (const qs of passageList) {
+      for (const { qs } of scoredPassages) {
         if (passagesUsed >= maxPassages || compQuestions.length >= compQuota) break;
         const take = Math.min(qs.length, compQuota - compQuestions.length);
-        compQuestions.push(...qs.slice(0, take));
+        // Prefer fresh questions within the passage; keep them sorted by questionIndex
+        const freshQs = qs.filter(q => {
+          const usage = usageMap.get(q.id);
+          return !usage || !usage.lastServedAt || usage.lastServedAt.getTime() <= cooldownCutoff;
+        });
+        const staleQs = qs.filter(q => {
+          const usage = usageMap.get(q.id);
+          return usage && usage.lastServedAt && usage.lastServedAt.getTime() > cooldownCutoff;
+        });
+        // Use fresh questions first, then stale if needed; sort each group by questionIndex
+        const sortByIndex = (arr: Question[]) => [...arr].sort((a, b) => {
+          const idxA = (a.renderConfig as any)?.questionIndex ?? a.orderIndex;
+          const idxB = (b.renderConfig as any)?.questionIndex ?? b.orderIndex;
+          return idxA - idxB;
+        });
+        const orderedQs = [...sortByIndex(freshQs), ...sortByIndex(staleQs)];
+        compQuestions.push(...orderedQs.slice(0, take));
         passagesUsed++;
       }
     }
