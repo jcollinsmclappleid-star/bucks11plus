@@ -471,7 +471,7 @@ export async function ensureFreePool() {
 }
 
 export async function seedDatabase() {
-  // Always ensure admin user exists
+  // Always ensure admin user exists with full programme24_plus access
   const existingAdmin = await db.query.users.findFirst({
     where: (users, { eq }) => eq(users.username, "admin@bucks11plus.co.uk"),
   });
@@ -482,8 +482,14 @@ export async function seedDatabase() {
       username: "admin@bucks11plus.co.uk",
       password: adminPassword,
       isAdmin: true,
+      subscriptionTier: "programme24_plus",
     });
     console.log("✓ Admin user created: admin@bucks11plus.co.uk / Admin11plus!");
+  } else if (!existingAdmin.isAdmin || existingAdmin.subscriptionTier !== "programme24_plus") {
+    await db.update(users)
+      .set({ isAdmin: true, subscriptionTier: "programme24_plus" })
+      .where(eq(users.username, "admin@bucks11plus.co.uk"));
+    console.log("✓ Admin user updated: isAdmin=true, tier=programme24_plus");
   }
 
   const [existing] = await db.select({ count: sql<number>`count(*)` }).from(diagnostics);
