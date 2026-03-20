@@ -4,6 +4,7 @@ import { sql, eq, and, isNotNull, ne, asc, inArray } from "drizzle-orm";
 import { scrypt, randomBytes } from "crypto";
 import { promisify } from "util";
 import type { NvrSequenceConfig, NvrTransformConfig, NvrClassificationConfig } from "@shared/contentTypes";
+import { FULL_FREE_POOL_QUESTIONS } from "./freePoolData";
 
 const scryptAsync = promisify(scrypt);
 
@@ -410,6 +411,45 @@ async function seedCoreComprehensionQuestions() {
 export async function ensureFreePool() {
   await seedCoreComprehensionQuestions();
 
+  // Always upsert the full embedded question bank (VR x25, Math x19, NVR x25)
+  // This ensures production gets the real question bank even with an empty DB
+  let inserted = 0;
+  for (const q of FULL_FREE_POOL_QUESTIONS) {
+    const sectionType = q.section === "Verbal Reasoning" ? "verbal"
+      : q.section === "Mathematics" ? "numerical"
+      : "nvr";
+    await db.insert(questions).values({
+      id: q.id,
+      section: q.section,
+      type: sectionType,
+      skillId: q.skillId,
+      subRuleId: q.subRuleId,
+      difficulty: q.difficulty,
+      prompt: q.prompt,
+      options: q.options as string[],
+      correctAnswer: q.correctAnswer,
+      renderType: q.renderType,
+      estTimeSeconds: q.estTimeSeconds,
+      renderConfig: q.renderConfig as any,
+      cognitiveLoad: q.cognitiveLoad,
+      trapTypes: q.trapTypes as string[],
+      orderIndex: q.orderIndex,
+      freePool: true,
+      qaStatus: "approved",
+      timeExpected: q.estTimeSeconds,
+      locale: "en-GB",
+      britishSpelling: true,
+      version: 1,
+      qualityScore: 0,
+      questionPool: "practice",
+    }).onConflictDoUpdate({
+      target: questions.id,
+      set: { freePool: true, qaStatus: "approved" },
+    });
+    inserted++;
+  }
+  console.log(`  [Free Pool] Upserted ${inserted} bank questions (VR/Math/NVR)`);
+
   const [{ count }] = await db
     .select({ count: sql<number>`count(*)` })
     .from(questions)
@@ -420,89 +460,7 @@ export async function ensureFreePool() {
     .from(questions)
     .where(and(eq(questions.freePool, true), eq(questions.section, "English Comprehension")));
 
-  if (Number(count) >= 18 && Number(compCount) >= 3) {
-    console.log(`✓ Free pool already seeded (${count} questions, ${compCount} comp)`);
-    return;
-  }
-
-  console.log("Seeding free pool questions...");
-
-  const NON_COMP_TARGETS = { easy: 6, medium: 13, hard: 6 };
-  const NON_COMP_SECTIONS = ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"] as const;
-
-  for (const section of NON_COMP_SECTIONS) {
-    const pool = await db
-      .select()
-      .from(questions)
-      .where(
-        and(
-          eq(questions.section, section),
-          eq(questions.qaStatus, "approved"),
-          isNotNull(questions.skillId),
-          ne(questions.skillId, ""),
-        ),
-      )
-      .orderBy(asc(questions.orderIndex));
-
-    if (pool.length === 0) continue;
-
-    const byDiff: Record<"easy" | "medium" | "hard", typeof pool> = { easy: [], medium: [], hard: [] };
-    for (const q of pool) {
-      const d = q.difficulty as "easy" | "medium" | "hard";
-      if (d in byDiff) byDiff[d].push(q);
-    }
-
-    const selected = [
-      ...byDiff.easy.slice(0, NON_COMP_TARGETS.easy),
-      ...byDiff.medium.slice(0, NON_COMP_TARGETS.medium),
-      ...byDiff.hard.slice(0, NON_COMP_TARGETS.hard),
-    ];
-
-    if (selected.length > 0) {
-      await db.update(questions)
-        .set({ freePool: true })
-        .where(inArray(questions.id, selected.map(q => q.id)));
-      console.log(`  [${section}] marked ${selected.length} questions freePool`);
-    }
-  }
-
-  const compPool = await db
-    .select()
-    .from(questions)
-    .where(
-      and(
-        eq(questions.section, "English Comprehension"),
-        eq(questions.qaStatus, "approved"),
-        sql`render_config->>'passageId' IS NOT NULL`,
-      ),
-    );
-
-  const passageMap = new Map<string, typeof compPool>();
-  for (const q of compPool) {
-    const pid = (q.renderConfig as any)?.passageId as string;
-    if (!pid) continue;
-    if (!passageMap.has(pid)) passageMap.set(pid, []);
-    passageMap.get(pid)!.push(q);
-  }
-
-  const sortedPassages = [...passageMap.entries()]
-    .sort((a, b) => a[1].length - b[1].length)
-    .slice(0, 3);
-
-  for (const [pid, qs] of sortedPassages) {
-    if (qs.length > 0) {
-      await db.update(questions)
-        .set({ freePool: true })
-        .where(inArray(questions.id, qs.map(q => q.id)));
-      console.log(`  [English Comprehension] Passage ${pid}: ${qs.length} questions marked freePool`);
-    }
-  }
-
-  const [{ count: finalCount }] = await db
-    .select({ count: sql<number>`count(*)` })
-    .from(questions)
-    .where(eq(questions.freePool, true));
-  console.log(`✓ Free pool seeded: ${finalCount} questions`);
+  console.log(`✓ Free pool ready: ${count} questions (${compCount} comp)`);
 }
 
 export async function seedDatabase() {
