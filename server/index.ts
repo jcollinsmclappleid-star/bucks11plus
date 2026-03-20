@@ -6,6 +6,7 @@ import { seedDatabase } from "./seed";
 import { runMigrations } from "stripe-replit-sync";
 import { getStripeSync } from "./stripeClient";
 import { WebhookHandlers } from "./webhookHandlers";
+import { runEmailTriggers } from "./email";
 
 const app = express();
 const httpServer = createServer(app);
@@ -135,6 +136,15 @@ app.use((req, res, next) => {
 (async () => {
   await registerRoutes(httpServer, app);
   await seedDatabase().catch(err => console.error("Seed error:", err));
+
+  // Run email nudge triggers every 6 hours
+  const SIX_HOURS = 6 * 60 * 60 * 1000;
+  setTimeout(() => {
+    runEmailTriggers().catch(err => console.error("Email trigger error:", err));
+    setInterval(() => {
+      runEmailTriggers().catch(err => console.error("Email trigger error:", err));
+    }, SIX_HOURS);
+  }, 5 * 60 * 1000); // first run 5 mins after startup
 
   app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
     const status = err.status || err.statusCode || 500;

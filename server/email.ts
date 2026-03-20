@@ -6,7 +6,15 @@ import { storage } from "./storage";
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const RESEND_FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "11+ Standard <noreply@bucks11plustest.co.uk>";
 const EMAIL_SECRET = process.env.EMAIL_SECRET || "11plus-email-secret";
-const BASE_URL = process.env.BASE_URL || "https://bucks11plustest.co.uk";
+
+function getBaseUrl(): string {
+  if (process.env.BASE_URL) return process.env.BASE_URL;
+  const domains = process.env.REPLIT_DOMAINS || "";
+  const prodDomain = domains.split(",").find(d => d.includes(".replit.app") || d.includes(".co.uk"));
+  if (prodDomain) return `https://${prodDomain.trim()}`;
+  return "https://bucks11plustest.co.uk";
+}
+const BASE_URL = getBaseUrl();
 
 async function generateUnsubscribeToken(userId: string): Promise<string> {
   const crypto = await import("crypto");
@@ -211,7 +219,7 @@ export async function sendUpgradeNudge(userId: string) {
       <li><strong>Full timed diagnostics</strong> with detailed PDF reports</li>
       <li><strong>Progress tracking</strong> to see real improvement over time</li>
     </ul>
-    <p>Plans start from <strong>£24.99/month</strong> for the Practice Platform (cancel any time) or <strong>£59</strong> one-time for the 8-week structured programme.</p>
+    <p>Plans start from <strong>£24.99/month</strong> for the Practice Platform (cancel any time) or <strong>£149</strong> one-time for Programme+.</p>
     <div style="text-align:center;margin:24px 0;">
       <a href="${BASE_URL}/pricing" style="display:inline-block;background:#0d1f30;color:white;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold;">View Plans & Pricing</a>
     </div>
@@ -229,20 +237,21 @@ export async function sendProgrammeNudge(userId: string) {
   const childName = user.childName || "your child";
 
   const html = wrapHtml(`
-    <h2 style="color:#0d1f30;margin-bottom:8px;">Take It Further</h2>
-    <p>${childName} has been making great progress with the Practice Platform. The Young Scholar Programme takes preparation to the next level:</p>
+    <h2 style="color:#0d1f30;margin-bottom:8px;">Take It Further with Programme+</h2>
+    <p>${childName} has been making great progress with the Practice Platform. Programme+ takes preparation to the next level — for a single one-time payment of £149.</p>
     <ul style="padding-left:20px;">
-      <li><strong>16-week structured roadmap</strong> with weekly plans</li>
-      <li><strong>Test Day Simulator</strong> — 2-paper exam with timed break</li>
-      <li><strong>Premium Parent Analytics</strong> — gap velocity, forecast stability</li>
-      <li><strong>All 17 Hard drills</strong> unlocked</li>
+      <li><strong>Complete 24-week structured roadmap</strong> with weekly focus plans</li>
+      <li><strong>Test Day Simulator</strong> — full exam simulation with timed conditions</li>
+      <li><strong>Premium parent analytics</strong> — gap velocity, forecast stability</li>
+      <li><strong>All hard-tier drills unlocked</strong> across every subject area</li>
+      <li><strong>Mock Exam papers 2 &amp; 3</strong> for additional exam practice</li>
     </ul>
     <div style="text-align:center;margin:24px 0;">
-      <a href="${BASE_URL}/pricing" style="display:inline-block;background:#0d1f30;color:white;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold;">Explore the Programme</a>
+      <a href="${BASE_URL}/pricing" style="display:inline-block;background:#0d1f30;color:white;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold;">Explore Programme+ — £149 one-time</a>
     </div>
   `, userId, token);
 
-  const sent = await sendEmail(user.email, `${childName} is ready for the next level`, html);
+  const sent = await sendEmail(user.email, `${childName} is ready for Programme+`, html);
   await logEmailEvent(userId, "programme_nudge", sent ? "sent" : "failed");
 }
 
