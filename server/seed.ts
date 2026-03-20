@@ -273,14 +273,155 @@ export async function repairSeedQuestions() {
   }
 }
 
+const P33_TEXT = `The river had been running through the town for longer than the town had existed, and it had seen everything that the river's position allowed it to see: the building of the mill, the burning of the mill, the building of the houses, and the slow weathering of the houses into the kinds of homes that required more maintenance than anyone could reliably provide. It had seen the bridge go up and had watched a series of councils argue about whether to repair or replace it for forty years.\n\nNone of this had made the river wise. It had simply made the river old.\n\nEleven-year-old Jonah had been told that the river was dangerous. He had been told this so many times, in so many combinations of urgency and offhandedness, that the danger had become entirely abstract — a piece of knowledge he carried but did not feel. He sat on the bank with his shoes off, watching the surface of the water, which moved with the unhurried confidence of something that had decided where it was going a very long time ago.\n\nThe surface was brown and unremarkable. But under it, in the parts too deep to see clearly, there was movement of a different kind: the dark drift of something going somewhere that had nothing to do with Jonah or the town or any of the things that occupied the small, urgent geography of his daily life.\n\nThis, he thought, was what was interesting about rivers. They didn't care.`;
+
+const P34_TEXT = `Pain is one of the few things in human experience that is simultaneously universal and essentially private. Every person has felt pain. No person can feel another's. This asymmetry sits at the centre of one of medicine's most persistent problems: how to measure, communicate, and treat something that is, by its nature, accessible only to the person experiencing it.\n\nThe standard clinical tool for pain measurement is the numerical scale: the patient is asked to rate pain from zero to ten. Its simplicity is its virtue and its limitation. What it measures is not pain but a patient's willingness and ability to assign a number — a translation from private experience to public symbol that is mediated by language, culture, expectation, and the particular relationship between the patient and the clinician asking the question. A ten for one patient may represent a different experience from a ten for another.\n\nAttempts to develop more objective measures have been ongoing. Researchers have identified patterns of neural activity in the brain associated with pain states; imaging technology can detect physiological indicators. But the gap between physical correlates and the experience of pain — what philosophers call the 'hard problem' — remains open. We can measure what the brain does when in pain. We cannot measure what it is like.\n\nA related problem affects those who cannot communicate pain verbally: infants, those with certain neurological conditions, people at the end of life. For these groups, assessment depends on observable behaviours — facial expression, body position, physiological changes. The tools developed for this purpose are careful and extensively validated. They are also, at their root, interpretations of external signs rather than reports of internal states.\n\nThe language of pain is private. Medicine is trying, with considerable ingenuity and partial success, to translate it.`;
+
+async function seedCoreComprehensionQuestions() {
+  const seeds = [
+    {
+      id: "comp-p33-q479",
+      section: "English Comprehension",
+      type: "comprehension",
+      skillId: "comp.inference",
+      difficulty: "medium",
+      prompt: "What does 'the river had seen everything that the river's position allowed it to see' suggest?",
+      options: [
+        "Rivers are useful historical witnesses because they remain fixed while the world changes around them",
+        "The writer is using personification to give the river human qualities of observation",
+        "The river has limited but continuous knowledge — it has seen what has passed before it over many centuries",
+        "Rivers remember the history of the places they flow through",
+      ],
+      correctAnswer: "The river has limited but continuous knowledge — it has seen what has passed before it over many centuries",
+      renderConfig: { kind: "comprehension.passage", passageId: "P33", passageText: P33_TEXT, passageTheme: "LITERARY FICTION", passageTitle: "What the River Knows", questionType: "Inference", questionIndex: 0, totalQuestionsInPassage: 14 },
+    },
+    {
+      id: "comp-p33-q481",
+      section: "English Comprehension",
+      type: "comprehension",
+      skillId: "comp.inference",
+      difficulty: "medium",
+      prompt: "What does 'the danger had become entirely abstract' tell us about Jonah's relationship to the warning?",
+      options: [
+        "Repeated warnings without experience have drained the danger of its felt reality",
+        "He is unable to understand what danger means because he is too young",
+        "He understands the danger intellectually but has chosen to ignore it",
+        "Abstract thinking is a sign of intelligence in an eleven-year-old",
+      ],
+      correctAnswer: "Repeated warnings without experience have drained the danger of its felt reality",
+      renderConfig: { kind: "comprehension.passage", passageId: "P33", passageText: P33_TEXT, passageTheme: "LITERARY FICTION", passageTitle: "What the River Knows", questionType: "Inference", questionIndex: 2, totalQuestionsInPassage: 14 },
+    },
+    {
+      id: "comp-p33-q483",
+      section: "English Comprehension",
+      type: "comprehension",
+      skillId: "comp.inference",
+      difficulty: "medium",
+      prompt: "What does the contrast between the surface and what lies beneath the water suggest?",
+      options: [
+        "Rivers are deceptive — their visible surface conceals hidden dangers",
+        "Deep water is more dangerous than shallow water and Jonah should be more careful",
+        "The surface is the ordinary world; beneath it is something indifferent and apart from human concerns",
+        "Underwater movement is more interesting to observe than surface movement",
+      ],
+      correctAnswer: "The surface is the ordinary world; beneath it is something indifferent and apart from human concerns",
+      renderConfig: { kind: "comprehension.passage", passageId: "P33", passageText: P33_TEXT, passageTheme: "LITERARY FICTION", passageTitle: "What the River Knows", questionType: "Inference", questionIndex: 4, totalQuestionsInPassage: 14 },
+    },
+    {
+      id: "comp-p34-q493",
+      section: "English Comprehension",
+      type: "comprehension",
+      skillId: "comp.inference",
+      difficulty: "hard",
+      prompt: "What does 'simultaneously universal and essentially private' mean in the context of pain?",
+      options: [
+        "Pain is experienced by all humans but is accessible only to the individual experiencing it",
+        "Everyone experiences pain the same way but each person describes it differently",
+        "Pain is a public health issue affecting everyone but treatment is privately administered",
+        "The universality of pain makes it easier to study than more private experiences",
+      ],
+      correctAnswer: "Pain is experienced by all humans but is accessible only to the individual experiencing it",
+      renderConfig: { kind: "comprehension.passage", passageId: "P34", passageText: P34_TEXT, passageTheme: "SCIENCE WRITING", passageTitle: "The Language of Pain", questionType: "Inference", questionIndex: 0, totalQuestionsInPassage: 14 },
+    },
+    {
+      id: "comp-p34-q494",
+      section: "English Comprehension",
+      type: "comprehension",
+      skillId: "comp.inference",
+      difficulty: "hard",
+      prompt: "What does the passage identify as the virtue and limitation of the numerical pain scale?",
+      options: [
+        "It is quick to administer but requires patients to understand numbers",
+        "Simplicity makes it accessible but means it measures a translation rather than the experience itself",
+        "Its simplicity makes it easy to use but its numerical nature makes it culture-dependent",
+        "It is universally accepted but gives clinicians only a single data point to work with",
+      ],
+      correctAnswer: "Simplicity makes it accessible but means it measures a translation rather than the experience itself",
+      renderConfig: { kind: "comprehension.passage", passageId: "P34", passageText: P34_TEXT, passageTheme: "SCIENCE WRITING", passageTitle: "The Language of Pain", questionType: "Inference", questionIndex: 1, totalQuestionsInPassage: 14 },
+    },
+    {
+      id: "comp-p34-q495",
+      section: "English Comprehension",
+      type: "comprehension",
+      skillId: "comp.inference",
+      difficulty: "hard",
+      prompt: "What does 'a translation from private experience to public symbol' describe?",
+      options: [
+        "The process of a patient answering questions about their symptoms",
+        "The way doctors translate medical information into language patients can understand",
+        "The act of assigning a number to pain — converting an internal experience into an external sign",
+        "The conversion of physical pain signals into mental awareness by the brain",
+      ],
+      correctAnswer: "The act of assigning a number to pain — converting an internal experience into an external sign",
+      renderConfig: { kind: "comprehension.passage", passageId: "P34", passageText: P34_TEXT, passageTheme: "SCIENCE WRITING", passageTitle: "The Language of Pain", questionType: "Inference", questionIndex: 2, totalQuestionsInPassage: 14 },
+    },
+  ];
+
+  for (const q of seeds) {
+    await db.insert(questions).values({
+      id: q.id,
+      section: q.section,
+      type: q.type,
+      skillId: q.skillId,
+      difficulty: q.difficulty,
+      prompt: q.prompt,
+      options: q.options,
+      correctAnswer: q.correctAnswer,
+      renderType: "comprehension",
+      renderConfig: q.renderConfig,
+      freePool: true,
+      qaStatus: "approved",
+      estTimeSeconds: 60,
+      timeExpected: 60,
+      orderIndex: 0,
+      cognitiveLoad: 3,
+      locale: "en-GB",
+      britishSpelling: true,
+      version: 1,
+      qualityScore: 0,
+      trapTypes: [],
+      subRuleId: "",
+      questionPool: "practice",
+    }).onConflictDoNothing();
+  }
+  console.log(`  [English Comprehension] Core seed passages P33/P34 ensured (6 questions)`);
+}
+
 export async function ensureFreePool() {
+  await seedCoreComprehensionQuestions();
+
   const [{ count }] = await db
     .select({ count: sql<number>`count(*)` })
     .from(questions)
     .where(eq(questions.freePool, true));
 
-  if (Number(count) >= 100) {
-    console.log(`✓ Free pool already seeded (${count} questions)`);
+  const [{ compCount }] = await db
+    .select({ compCount: sql<number>`count(*)` })
+    .from(questions)
+    .where(and(eq(questions.freePool, true), eq(questions.section, "English Comprehension")));
+
+  if (Number(count) >= 18 && Number(compCount) >= 3) {
+    console.log(`✓ Free pool already seeded (${count} questions, ${compCount} comp)`);
     return;
   }
 
