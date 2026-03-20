@@ -166,7 +166,7 @@ export async function ensurePracticePaperDiagnostics() {
     {
       id: "practice-quick",
       title: "Quick Practice Paper",
-      subtitle: "A fast 20-question paper with fresh questions each time",
+      subtitle: "A focused 20-question paper across all four sections",
       type: "practice_paper",
       duration: 15,
       questionCount: 20,
@@ -176,7 +176,7 @@ export async function ensurePracticePaperDiagnostics() {
     {
       id: "practice-full",
       title: "Full Practice Paper",
-      subtitle: "A complete 40-question paper — unique every time",
+      subtitle: "A complete 40-question paper across all four sections",
       type: "practice_paper",
       duration: 30,
       questionCount: 40,
@@ -186,7 +186,7 @@ export async function ensurePracticePaperDiagnostics() {
     {
       id: "practice-mock",
       title: "Mock Exam Paper",
-      subtitle: "50-question exam simulation with fresh questions each attempt",
+      subtitle: "50-question exam simulation across all four sections",
       type: "practice_paper",
       duration: 35,
       questionCount: 50,
@@ -695,7 +695,7 @@ export async function seedDatabase() {
     {
       id: "practice-quick",
       title: "Quick Practice Paper",
-      subtitle: "A fast 20-question paper with fresh questions each time",
+      subtitle: "A focused 20-question paper across all four sections",
       type: "practice_paper",
       duration: 15,
       questionCount: 20,
@@ -705,7 +705,7 @@ export async function seedDatabase() {
     {
       id: "practice-full",
       title: "Full Practice Paper",
-      subtitle: "A complete 40-question paper — unique every time",
+      subtitle: "A complete 40-question paper across all four sections",
       type: "practice_paper",
       duration: 30,
       questionCount: 40,
@@ -715,7 +715,7 @@ export async function seedDatabase() {
     {
       id: "practice-mock",
       title: "Mock Exam Paper",
-      subtitle: "50-question exam simulation with fresh questions each attempt",
+      subtitle: "50-question exam simulation across all four sections",
       type: "practice_paper",
       duration: 35,
       questionCount: 50,

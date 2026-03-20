@@ -124,7 +124,7 @@ export default function Diagnostics() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-border/60 pb-6">
         <div>
           <h1 className="text-3xl font-bold text-primary font-serif" data-testid="text-diagnostics-title">Diagnostics & Practice</h1>
-          <p className="text-muted-foreground mt-2">Take assessments, mock exams, or unlimited practice papers with fresh questions every time.</p>
+          <p className="text-muted-foreground mt-2">Take assessments, mock exams, or unlimited practice papers drawn from our full question bank.</p>
         </div>
         {!hasPaidAccess() && (
           <Button className="bg-brand-amber text-amber-950 hover:bg-brand-amber/90" asChild>
@@ -192,7 +192,7 @@ export default function Diagnostics() {
         <div className="border-t border-border/60 pt-8">
           <h2 className="text-xl font-bold text-primary font-serif mb-1" data-testid="text-section-practice-papers">Practice Papers</h2>
           <p className="text-sm text-muted-foreground mb-6">
-            Unlimited unique papers drawn from the question pool — fresh questions every time, with anti-repeat protection.
+            Unlimited practice papers drawn from our full question bank.
             {practicePaperSessions.length > 0 && (
               <span className="ml-2 font-medium text-primary">
                 {practicePaperSessions.length} paper{practicePaperSessions.length !== 1 ? 's' : ''} completed
