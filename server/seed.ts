@@ -408,10 +408,16 @@ async function seedCoreComprehensionQuestions() {
   console.log(`  [English Comprehension] Core seed passages P33/P34 ensured (6 questions)`);
 }
 
+let _freePoolSeeded = false;
+
 export async function ensureFreePool() {
+  if (_freePoolSeeded) {
+    return;
+  }
+
   await seedCoreComprehensionQuestions();
 
-  // Always upsert the full embedded question bank (VR x25, Math x19, NVR x25)
+  // Upsert the full embedded question bank (VR x25, Math x19, NVR x25)
   // This ensures production gets the real question bank even with an empty DB
   let inserted = 0;
   for (const q of FULL_FREE_POOL_QUESTIONS) {
@@ -461,6 +467,7 @@ export async function ensureFreePool() {
     .where(and(eq(questions.freePool, true), eq(questions.section, "English Comprehension")));
 
   console.log(`✓ Free pool ready: ${count} questions (${compCount} comp)`);
+  _freePoolSeeded = true;
 }
 
 export async function seedDatabase() {

@@ -226,6 +226,19 @@
   cursor: default;
 }
 
+.option-selected {
+  border-color: hsl(210 55% 40%) !important;
+  background: hsl(210 40% 96%) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.option-selected .option-badge {
+  background: hsl(210 55% 12%) !important;
+  color: hsl(210 40% 98%) !important;
+  border-color: hsl(210 55% 12%) !important;
+}
+
 .option-badge {
   width: 2rem;
   height: 2rem;

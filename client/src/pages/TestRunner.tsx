@@ -26,6 +26,7 @@ export default function TestRunner() {
   const [answers, setAnswers] = useState<Array<{ questionId: string; selectedAnswer: string; timeTaken: number }>>([]);
   const [questionStartTime, setQuestionStartTime] = useState<number>(Date.now());
   const [svgSelectedIndex, setSvgSelectedIndex] = useState<number | null>(null);
+  const [pendingSelectedOpt, setPendingSelectedOpt] = useState<string | null>(null);
   const [animKey, setAnimKey] = useState(0);
   const [submitError, setSubmitError] = useState<string | null>(null);
   // Guard against double-submit (last-question click + timer race, or timer firing twice)
@@ -245,6 +246,7 @@ export default function TestRunner() {
     const newAnswers = [...answers, { questionId: question.id, selectedAnswer, timeTaken }];
     setAnswers(newAnswers);
     setSvgSelectedIndex(null);
+    setPendingSelectedOpt(null);
 
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
@@ -465,11 +467,15 @@ export default function TestRunner() {
                 {question.options.map((opt, i) => (
                   <button
                     key={i}
-                    onClick={() => handleNext(opt)}
-                    disabled={submitMutation.isPending}
+                    onClick={() => {
+                      if (pendingSelectedOpt !== null) return;
+                      setPendingSelectedOpt(opt);
+                      setTimeout(() => handleNext(opt), 300);
+                    }}
+                    disabled={submitMutation.isPending || pendingSelectedOpt !== null}
                     data-testid={`button-option-${i}`}
                     aria-label={`Option ${LABELS[i]}`}
-                    className="option-button"
+                    className={`option-button${pendingSelectedOpt === opt ? " option-selected" : ""}`}
                   >
                     <div className="option-badge">{LABELS[i]}</div>
                     <span className="font-medium text-lg text-slate-700">{opt}</span>

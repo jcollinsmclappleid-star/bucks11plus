@@ -437,7 +437,6 @@ export async function registerRoutes(
       });
 
       const guestId = `guest-${session.id}`;
-      await ensureFreePool();
       const qs = await storage.selectQuestionsForSession(guestId, diagnosticId);
       const safe = qs.map(({ correctAnswer, ...q }) => q);
 
