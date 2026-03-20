@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "2Ze23ls4hTCfWjqUKxunP"
+uri = "file://client/public/sitemap.xml"
+type = "unspecified"
+title = "sitemap.xml — ready for Google Search Console"
