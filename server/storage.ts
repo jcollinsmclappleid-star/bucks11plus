@@ -873,20 +873,35 @@ export class DatabaseStorage implements IStorage {
       const workingPool = fresh.length >= perNonCompSection ? fresh : pool;
       const shuffled = workingPool.sort(() => Math.random() - 0.5);
 
-      const easyN = Math.round(perNonCompSection * (isEarlyLearner ? 0.40 : 0.20));
-      const medN = Math.round(perNonCompSection * (isEarlyLearner ? 0.60 : 0.45));
-      const hardN = isEarlyLearner ? 0 : perNonCompSection - easyN - medN;
+      const targetEasy = Math.round(perNonCompSection * (isEarlyLearner ? 0.40 : 0.20));
+      const targetMed  = Math.round(perNonCompSection * (isEarlyLearner ? 0.60 : 0.45));
+      const targetHard = isEarlyLearner ? 0 : perNonCompSection - targetEasy - targetMed;
 
       const byDiff = (d: string) => shuffled.filter(q => q.difficulty === d);
-      let pick = [
-        ...byDiff('easy').slice(0, easyN),
-        ...byDiff('medium').slice(0, medN),
-        ...byDiff('hard').slice(0, Math.max(0, hardN)),
-      ];
+      const easyPool   = byDiff('easy');
+      const medPool    = byDiff('medium');
+      const hardPool   = byDiff('hard');
 
-      if (pick.length < perNonCompSection) {
+      // Cascade shortfalls upward: easy→medium→hard so the total always equals perNonCompSection
+      const easyPick = easyPool.slice(0, targetEasy);
+      const easyShortfall = targetEasy - easyPick.length;
+
+      const adjMed = targetMed + easyShortfall;
+      const medUsed = new Set(easyPick.map(q => q.id));
+      const medPick = medPool.filter(q => !medUsed.has(q.id)).slice(0, adjMed);
+      const medShortfall = adjMed - medPick.length;
+
+      const adjHard = Math.max(0, targetHard + medShortfall);
+      const hardUsed = new Set([...easyPick, ...medPick].map(q => q.id));
+      const hardPick = hardPool.filter(q => !hardUsed.has(q.id)).slice(0, adjHard);
+      const hardShortfall = adjHard - hardPick.length;
+
+      let pick = [...easyPick, ...medPick, ...hardPick];
+
+      // Only use random fill as a last resort if all difficulty tiers are exhausted
+      if (hardShortfall > 0) {
         const usedIds = new Set(pick.map(q => q.id));
-        const extra = shuffled.filter(q => !usedIds.has(q.id)).slice(0, perNonCompSection - pick.length);
+        const extra = shuffled.filter(q => !usedIds.has(q.id)).slice(0, hardShortfall);
         pick = [...pick, ...extra];
       }
 
