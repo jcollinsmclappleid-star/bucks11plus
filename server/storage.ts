@@ -268,8 +268,28 @@ export class DatabaseStorage implements IStorage {
       }
     }
 
-    // Comp questions come first (required for two-phase timer)
-    const orderedComp = [...compPassageMap.values()].flat();
+    // For mini diagnostics and guest sessions: enforce exactly COMP_SLOTS comprehension questions
+    // from the first available passage, then fill remaining slots with weighted non-comp questions.
+    // This guarantees a fixed comp/non-comp split regardless of what the pool query returned.
+    const COMP_SLOTS = (isGuestSession || diag.type === 'mini') ? 3 : 0;
+    let orderedComp: Question[];
+    if (COMP_SLOTS > 0) {
+      // Pick exactly COMP_SLOTS questions from a single passage (first passage alphabetically by passageId)
+      const passages = [...compPassageMap.values()].sort((a, b) => {
+        const pidA = (a[0].renderConfig as any)?.passageId || '';
+        const pidB = (b[0].renderConfig as any)?.passageId || '';
+        return pidA.localeCompare(pidB);
+      });
+      const chosenPassage = passages.length > 0
+        ? passages[Math.floor(Math.random() * passages.length)]
+        : [];
+      orderedComp = chosenPassage.slice(0, COMP_SLOTS);
+    } else {
+      // Full/mock: use all comp questions in their passage groups
+      orderedComp = [...compPassageMap.values()].flat();
+    }
+
+    const nonCompSlots = diag.questionCount - orderedComp.length;
 
     // Round-robin interleave non-comp by canonical section order
     const CANONICAL_ORDER = ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"];
@@ -292,10 +312,8 @@ export class DatabaseStorage implements IStorage {
       }
     }
 
-    // Trim to exactly questionCount: always keep all comp questions, fill remaining slots from interleaved non-comp
-    const compCount = orderedComp.length;
-    const nonCompBudget = Math.max(0, diag.questionCount - compCount);
-    allQuestions = [...orderedComp, ...guestInterleaved.slice(0, nonCompBudget)];
+    // Final assembly: exactly questionCount questions, comp first then non-comp
+    allQuestions = [...orderedComp, ...guestInterleaved.slice(0, Math.max(0, nonCompSlots))];
 
     // For guests, skip usage tracking
     if (isGuestSession) {
