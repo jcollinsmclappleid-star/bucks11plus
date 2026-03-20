@@ -315,6 +315,20 @@ export class DatabaseStorage implements IStorage {
     // Final assembly: exactly questionCount questions, comp first then non-comp
     allQuestions = [...orderedComp, ...guestInterleaved.slice(0, Math.max(0, nonCompSlots))];
 
+    // Top-up pass: if pool shortage left us short of questionCount, backfill with any remaining
+    // approved free-pool questions not already selected (avoids returning fewer than expected).
+    if (allQuestions.length < diag.questionCount && (isGuestSession || diag.type === 'mini')) {
+      const selectedIds = new Set(allQuestions.map(q => q.id));
+      const extras = await db.select().from(questions)
+        .where(and(
+          eq(questions.qaStatus, 'approved'),
+          eq(questions.freePool, true),
+          sql`${questions.skillId} IS NOT NULL AND ${questions.skillId} != ''`,
+        ));
+      const backfill = extras.filter(q => !selectedIds.has(q.id));
+      allQuestions = [...allQuestions, ...backfill.slice(0, diag.questionCount - allQuestions.length)];
+    }
+
     // For guests, skip usage tracking
     if (isGuestSession) {
       return allQuestions.slice(0, diag.questionCount);
