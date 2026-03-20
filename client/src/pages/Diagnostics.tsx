@@ -104,7 +104,7 @@ export default function Diagnostics() {
   }
 
   const completedIds = new Set(sessions?.filter(s => s.completedAt).map(s => s.diagnosticId));
-  const userRank = TIER_RANK[user?.subscriptionTier || "free"] || 0;
+  const userRank = user?.isAdmin ? 99 : (TIER_RANK[user?.subscriptionTier || "free"] || 0);
 
   const isLocked = (requiredTier: string) => {
     const requiredRank = TIER_RANK[requiredTier] || 0;

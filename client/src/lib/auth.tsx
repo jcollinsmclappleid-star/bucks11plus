@@ -96,9 +96,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const PROGRAMME_TIERS = new Set(["programme16", "programme16_family", "programme8", "programme12", "programme24_plus"]);
 
   const isEarlyLearner = () => user?.subscriptionTier === "early_learner";
-  const isPack12 = () => PACK_TIERS.has(user?.subscriptionTier ?? "");
-  const isProgramme = () => PROGRAMME_TIERS.has(user?.subscriptionTier ?? "");
+  const isPack12 = () => !!user?.isAdmin || PACK_TIERS.has(user?.subscriptionTier ?? "");
+  const isProgramme = () => !!user?.isAdmin || PROGRAMME_TIERS.has(user?.subscriptionTier ?? "");
   const hasPaidAccess = () => {
+    if (user?.isAdmin) return true;
     const t = user?.subscriptionTier ?? "";
     return t === "early_learner" || PACK_TIERS.has(t) || PROGRAMME_TIERS.has(t);
   };

@@ -82,7 +82,7 @@ export default function Practice() {
   });
 
   const categories = sections ? Array.from(new Set(sections.map(s => s.category))) : [];
-  const userRank = TIER_RANK[user?.subscriptionTier || "free"] || 0;
+  const userRank = user?.isAdmin ? 99 : (TIER_RANK[user?.subscriptionTier || "free"] || 0);
 
   return (
     <div className="container mx-auto max-w-5xl px-4 py-8 space-y-8">
