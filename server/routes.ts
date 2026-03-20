@@ -1835,30 +1835,82 @@ export async function registerRoutes(
 
   app.get("/sitemap.xml", (_req, res) => {
     const baseUrl = "https://bucks11plustest.co.uk";
-    const staticPages = [
-      "/", "/pricing", "/how-it-works", "/bucks-gl-alignment",
-      "/about", "/parent-hub", "/free-diagnostic",
-      "/terms", "/privacy", "/safeguarding",
-      "/buckinghamshire-11-plus-guide", "/bucks-11-plus-parent-guide",
-      "/bucks-grammar-schools", "/bucks-11-plus-qualifying-score",
-      "/bucks-11-plus-timeline", "/buckinghamshire-secondary-transfer-test",
-      "/how-to-pass-bucks-11-plus", "/bucks-11-plus-registration", "/bucks-11-plus-mistakes",
+    const today = new Date().toISOString().split("T")[0];
+
+    const learnSlugs = [
+      "what-is-the-buckinghamshire-secondary-transfer-test",
+      "buckinghamshire-11-plus-pass-mark-explained",
+      "how-is-the-bucks-11-plus-scored",
+      "bucks-11-plus-test-format-2025-2026",
+      "what-subjects-are-tested-in-the-bucks-11-plus",
+      "buckinghamshire-11-plus-dates-2026",
+      "all-13-buckinghamshire-grammar-schools",
+      "buckinghamshire-grammar-school-catchment-areas",
+      "when-to-start-preparing-for-the-bucks-11-plus",
+      "how-to-prepare-for-the-bucks-11-plus-without-a-tutor",
+      "bucks-11-plus-verbal-reasoning-complete-guide",
+      "bucks-11-plus-maths-syllabus-and-preparation",
+      "bucks-11-plus-non-verbal-and-spatial-reasoning",
+      "11-plus-reading-list-buckinghamshire",
+      "bucks-11-plus-mock-tests-why-they-matter",
+      "how-many-practice-papers-does-my-child-need",
+      "what-happens-on-bucks-11-plus-test-day",
+      "my-child-did-not-pass-the-bucks-11-plus",
+      "bucks-11-plus-appeals-and-review-process",
+      "sitting-the-bucks-11-plus-from-outside-buckinghamshire",
+      "bucks-11-plus-for-children-with-send",
+      "bucks-11-plus-vs-kent-11-plus",
+      "gl-assessment-11-plus-explained",
+      "bucks-11-plus-timed-practice-why-timing-matters",
+      "free-bucks-11-plus-practice-questions",
+      "bucks-11-plus-comprehension-guide",
+      "what-if-my-child-qualifies-but-doesnt-get-a-grammar-school-place",
+      "year-9-grammar-school-entry-buckinghamshire",
     ];
+
     const towns = [
       "high-wycombe", "aylesbury", "beaconsfield", "amersham",
       "chesham", "gerrards-cross", "marlow", "princes-risborough",
     ];
-    const townPages = towns.map(t => `/bucks-11-plus-${t}`);
-    const allPages = [...staticPages, ...townPages];
-    const today = new Date().toISOString().split("T")[0];
+
+    interface SitemapEntry { path: string; priority: string; changefreq: string; }
+
+    const entries: SitemapEntry[] = [
+      { path: "/", priority: "1.0", changefreq: "weekly" },
+      { path: "/free-diagnostic", priority: "0.9", changefreq: "monthly" },
+      { path: "/pricing", priority: "0.8", changefreq: "monthly" },
+      { path: "/how-it-works", priority: "0.8", changefreq: "monthly" },
+      { path: "/how-forecast-works", priority: "0.8", changefreq: "monthly" },
+      { path: "/bucks-gl-alignment", priority: "0.8", changefreq: "monthly" },
+      { path: "/about", priority: "0.8", changefreq: "monthly" },
+      { path: "/contact", priority: "0.8", changefreq: "monthly" },
+      { path: "/site-links", priority: "0.8", changefreq: "monthly" },
+      { path: "/buckinghamshire-11-plus-guide", priority: "0.8", changefreq: "monthly" },
+      { path: "/bucks-11-plus-parent-guide", priority: "0.8", changefreq: "monthly" },
+      { path: "/bucks-grammar-schools", priority: "0.8", changefreq: "monthly" },
+      { path: "/bucks-11-plus-qualifying-score", priority: "0.8", changefreq: "monthly" },
+      { path: "/bucks-11-plus-timeline", priority: "0.8", changefreq: "monthly" },
+      { path: "/buckinghamshire-secondary-transfer-test", priority: "0.8", changefreq: "monthly" },
+      { path: "/how-to-pass-bucks-11-plus", priority: "0.8", changefreq: "monthly" },
+      { path: "/bucks-11-plus-registration", priority: "0.8", changefreq: "monthly" },
+      { path: "/bucks-11-plus-mistakes", priority: "0.8", changefreq: "monthly" },
+      { path: "/parent-hub", priority: "0.8", changefreq: "monthly" },
+      { path: "/learn", priority: "0.8", changefreq: "weekly" },
+      ...learnSlugs.map(s => ({ path: `/learn/${s}`, priority: "0.8", changefreq: "monthly" as const })),
+      ...towns.map(t => ({ path: `/bucks-11-plus-${t}`, priority: "0.8", changefreq: "monthly" as const })),
+      { path: "/terms", priority: "0.3", changefreq: "yearly" },
+      { path: "/privacy", priority: "0.3", changefreq: "yearly" },
+      { path: "/safeguarding", priority: "0.3", changefreq: "yearly" },
+      { path: "/refund-policy", priority: "0.3", changefreq: "yearly" },
+    ];
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${allPages.map(p => `  <url>
-    <loc>${baseUrl}${p}</loc>
+${entries.map(({ path, priority, changefreq }) => `  <url>
+    <loc>${baseUrl}${path}</loc>
     <lastmod>${today}</lastmod>
-    <changefreq>${p === "/" ? "weekly" : "monthly"}</changefreq>
-    <priority>${p === "/" ? "1.0" : p.includes("guide") ? "0.9" : "0.7"}</priority>
+    <changefreq>${changefreq}</changefreq>
+    <priority>${priority}</priority>
   </url>`).join("\n")}
 </urlset>`;
     res.setHeader("Content-Type", "application/xml");
