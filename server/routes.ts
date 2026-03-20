@@ -501,13 +501,27 @@ export async function registerRoutes(
         });
       }
 
-      // Use matched answer count so score isn't deflated by any unresolved question IDs
-      const total = Object.values(sectionResults).reduce((sum, s) => sum + s.total, 0);
-      const rawPercent = total > 0 ? (correct / total) * 100 : 0;
-      const forecastScore = Math.round((rawPercent / 100) * 141);
+      // GL-weighted scoring: each section's accuracy is weighted by its share of the real test
+      const GL_WEIGHTS: Record<string, number> = {
+        "Verbal Reasoning": 0.35,
+        "Mathematics": 0.25,
+        "Non-Verbal Reasoning": 0.25,
+        "English Comprehension": 0.15,
+      };
+      let weightedNumerator = 0;
+      let weightedDenominator = 0;
+      for (const [name, data] of Object.entries(sectionResults)) {
+        if (data.total === 0) continue;
+        const w = GL_WEIGHTS[name] ?? 0.25;
+        weightedNumerator += (data.correct / data.total) * w;
+        weightedDenominator += w;
+      }
+      const weightedPct = weightedDenominator > 0 ? weightedNumerator / weightedDenominator : 0;
+      // Map to standardised score range 69–141 (GL Assessment floor is ~69)
+      const forecastScore = Math.round(69 + weightedPct * 72);
       let band = "Clear Improvement Opportunity";
-      if (rawPercent >= 86) band = "On Track";
-      else if (rawPercent >= 82) band = "Within Reach";
+      if (forecastScore >= 121) band = "On Track";
+      else if (forecastScore >= 115) band = "Within Reach";
 
       const sectionScores = Object.entries(sectionResults).map(([name, data]) => ({
         name,
@@ -869,13 +883,27 @@ export async function registerRoutes(
         });
       }
 
-      // Use matched answer count so score isn't deflated by any unresolved question IDs
-      const total = answerRecords.length;
-      const rawPercent = total > 0 ? (correct / total) * 100 : 0;
-      const forecastScore = Math.round((rawPercent / 100) * 141);
+      // GL-weighted scoring: each section's accuracy is weighted by its share of the real test
+      const GL_WEIGHTS_AUTH: Record<string, number> = {
+        "Verbal Reasoning": 0.35,
+        "Mathematics": 0.25,
+        "Non-Verbal Reasoning": 0.25,
+        "English Comprehension": 0.15,
+      };
+      let weightedNum = 0;
+      let weightedDen = 0;
+      for (const [name, data] of Object.entries(sectionResults)) {
+        if (data.total === 0) continue;
+        const w = GL_WEIGHTS_AUTH[name] ?? 0.25;
+        weightedNum += (data.correct / data.total) * w;
+        weightedDen += w;
+      }
+      const weightedPctAuth = weightedDen > 0 ? weightedNum / weightedDen : 0;
+      // Map to standardised score range 69–141 (GL Assessment floor is ~69)
+      const forecastScore = Math.round(69 + weightedPctAuth * 72);
       let band = "Clear Improvement Opportunity";
-      if (rawPercent >= 86) band = "On Track";
-      else if (rawPercent >= 82) band = "Within Reach";
+      if (forecastScore >= 121) band = "On Track";
+      else if (forecastScore >= 115) band = "Within Reach";
 
       const sectionScores = Object.entries(sectionResults).map(([name, data]) => ({
         name,

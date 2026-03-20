@@ -292,7 +292,10 @@ export class DatabaseStorage implements IStorage {
       }
     }
 
-    allQuestions = [...orderedComp, ...guestInterleaved];
+    // Trim to exactly questionCount: always keep all comp questions, fill remaining slots from interleaved non-comp
+    const compCount = orderedComp.length;
+    const nonCompBudget = Math.max(0, diag.questionCount - compCount);
+    allQuestions = [...orderedComp, ...guestInterleaved.slice(0, nonCompBudget)];
 
     // For guests, skip usage tracking
     if (isGuestSession) {
