@@ -3,6 +3,8 @@ import { diagnostics, questions, articles, practiceSections, users } from "@shar
 import { sql, eq, and, isNotNull, ne, asc, inArray, notInArray } from "drizzle-orm";
 import { scrypt, randomBytes } from "crypto";
 import { promisify } from "util";
+import * as fs from "fs";
+import * as path from "path";
 import type { NvrSequenceConfig, NvrTransformConfig, NvrClassificationConfig } from "@shared/contentTypes";
 import { FULL_FREE_POOL_QUESTIONS } from "./freePoolData";
 
@@ -472,8 +474,188 @@ export async function ensureFreePool() {
 
 let _diagnosticPoolSeeded = false;
 
+const QUESTION_TYPE_TO_SKILL: Record<string, string> = {
+  "Fact Retrieval": "comp.fact_retrieval",
+  "Vocabulary in Context": "comp.vocabulary",
+  "Inference": "comp.inference",
+  "Authorial Intent": "comp.authorial_intent",
+  "Text Structure": "comp.text_structure",
+};
+
+let _questionBankSeeded = false;
+
+export async function ensureQuestionBank() {
+  if (_questionBankSeeded) return;
+
+  const cwd = process.cwd();
+
+  // -- Comprehension: seed P1-P40 passages if practice pool < 100 comp questions
+  const [compRow] = await db
+    .select({ cnt: sql<number>`count(*)` })
+    .from(questions)
+    .where(and(
+      eq(questions.section, "English Comprehension"),
+      eq(questions.qaStatus, "approved"),
+      eq(questions.freePool, false),
+      eq(questions.questionPool, "practice"),
+    ));
+  const compCount = Number(compRow?.cnt || 0);
+
+  if (compCount < 100) {
+    const passagesPath = path.resolve(cwd, "scripts/comprehension/passages.json");
+    const questionsPath = path.resolve(cwd, "scripts/comprehension/questions.json");
+
+    if (fs.existsSync(passagesPath) && fs.existsSync(questionsPath)) {
+      const passagesRaw: Array<{ passage_id: string; title: string; theme: string; text: string }> =
+        JSON.parse(fs.readFileSync(passagesPath, "utf-8"));
+      const questionsRaw: Array<{
+        question_id: string; passage_id: string; question_type: string; difficulty: string;
+        question_text: string; option_a: string; option_b: string; option_c: string; option_d: string;
+        correct_answer: string; explanation: string; qa_status: string;
+      }> = JSON.parse(fs.readFileSync(questionsPath, "utf-8"));
+
+      const passageMap = new Map(passagesRaw.map(p => [p.passage_id, p]));
+
+      const answerMap: Record<string, 0 | 1 | 2 | 3> = { A: 0, B: 1, C: 2, D: 3 };
+
+      let compInserted = 0;
+      const batchSize = 50;
+      const compValues: any[] = [];
+
+      for (let i = 0; i < questionsRaw.length; i++) {
+        const qr = questionsRaw[i];
+        const passage = passageMap.get(qr.passage_id);
+        if (!passage) continue;
+
+        const opts = [qr.option_a, qr.option_b, qr.option_c, qr.option_d];
+        const answerIdx = answerMap[qr.correct_answer.toUpperCase()] ?? 0;
+        const correctAnswerText = opts[answerIdx];
+
+        compValues.push({
+          section: "English Comprehension",
+          type: "comprehension",
+          prompt: qr.question_text,
+          options: opts,
+          correctAnswer: correctAnswerText,
+          difficulty: qr.difficulty,
+          timeExpected: 60,
+          orderIndex: i,
+          skillId: QUESTION_TYPE_TO_SKILL[qr.question_type] || "comp.inference",
+          subRuleId: "",
+          renderType: "comprehension",
+          renderConfig: {
+            kind: "comprehension.passage",
+            passageId: qr.passage_id,
+            passageText: passage.text,
+            passageTitle: passage.title,
+          },
+          trapTypes: [],
+          locale: "en-GB",
+          britishSpelling: true,
+          version: 1,
+          qualityScore: 0,
+          qaStatus: "approved",
+          questionPool: "practice",
+          freePool: false,
+          explanation: qr.explanation || null,
+        });
+      }
+
+      for (let i = 0; i < compValues.length; i += batchSize) {
+        await db.insert(questions).values(compValues.slice(i, i + batchSize) as any);
+        compInserted += Math.min(batchSize, compValues.length - i);
+      }
+      console.log(`  [Question Bank] Seeded ${compInserted} comprehension questions (P1-P40)`);
+    } else {
+      console.warn("  [Question Bank] Comprehension source files not found — skipping comp seed");
+    }
+  } else {
+    console.log(`  [Question Bank] Comp already seeded (${compCount} practice comp questions)`);
+  }
+
+  // -- Non-comp: seed VR/Math/NVR from questions.seed.json if practice pool < 500 non-comp questions
+  const [nonCompRow] = await db
+    .select({ cnt: sql<number>`count(*)` })
+    .from(questions)
+    .where(and(
+      eq(questions.qaStatus, "approved"),
+      eq(questions.freePool, false),
+      eq(questions.questionPool, "practice"),
+      sql`section != 'English Comprehension'`,
+      isNotNull(questions.skillId),
+      ne(questions.skillId, ""),
+    ));
+  const nonCompCount = Number(nonCompRow?.cnt || 0);
+
+  if (nonCompCount < 500) {
+    const seedPath = path.resolve(cwd, "scripts/questions.seed.json");
+    if (fs.existsSync(seedPath)) {
+      const seedData: Array<{
+        section: string; type: string; prompt: string; options: string[];
+        correctAnswer: string; difficulty: string; estTimeSeconds?: number; timeExpected?: number;
+        skillId: string; subRuleId: string; renderType: string; renderConfig: any;
+        trapTypes?: string[]; cognitiveLoad?: number; locale?: string;
+        britishSpelling?: boolean; version?: number; qaStatus?: string; explanation?: string;
+      }> = JSON.parse(fs.readFileSync(seedPath, "utf-8"));
+
+      const nonCompSeed = seedData.filter(q => q.section !== "English Comprehension");
+      console.log(`  [Question Bank] Loading ${nonCompSeed.length} non-comp questions from seed file...`);
+
+      let ncInserted = 0;
+      const batchSize = 50;
+      for (let i = 0; i < nonCompSeed.length; i += batchSize) {
+        const batch = nonCompSeed.slice(i, i + batchSize).map((q, idx) => ({
+          section: q.section,
+          type: q.type,
+          prompt: q.prompt,
+          options: q.options,
+          correctAnswer: q.correctAnswer,
+          difficulty: q.difficulty,
+          timeExpected: q.estTimeSeconds || q.timeExpected || 45,
+          orderIndex: i + idx,
+          skillId: q.skillId,
+          subRuleId: q.subRuleId,
+          renderType: q.renderType,
+          renderConfig: q.renderConfig || {},
+          trapTypes: q.trapTypes || [],
+          cognitiveLoad: q.cognitiveLoad,
+          locale: q.locale || "en-GB",
+          britishSpelling: q.britishSpelling !== false,
+          version: q.version || 1,
+          qualityScore: 0,
+          qaStatus: q.qaStatus || "approved",
+          questionPool: "practice",
+          freePool: false,
+          explanation: q.explanation || null,
+        }));
+        await db.insert(questions).values(batch as any);
+        ncInserted += batch.length;
+      }
+      console.log(`  [Question Bank] Seeded ${ncInserted} non-comp questions (VR/NVR/Math)`);
+    } else {
+      console.warn("  [Question Bank] questions.seed.json not found — skipping non-comp seed");
+    }
+  } else {
+    console.log(`  [Question Bank] Non-comp already seeded (${nonCompCount} practice non-comp questions)`);
+  }
+
+  _questionBankSeeded = true;
+}
+
 export async function ensureDiagnosticPool() {
   if (_diagnosticPoolSeeded) return;
+
+  // Repair: demote any freePool=true questions that were accidentally promoted to 'diagnostic'
+  // These should stay in 'practice' so they remain accessible for guest (freePool) sessions.
+  const accidentallyPromoted = await db.select({ id: questions.id }).from(questions).where(
+    and(eq(questions.freePool, true), eq(questions.questionPool, "diagnostic"))
+  );
+  if (accidentallyPromoted.length > 0) {
+    await db.update(questions)
+      .set({ questionPool: "practice" })
+      .where(inArray(questions.id, accidentallyPromoted.map(q => q.id)));
+    console.log(`  [Diagnostic Pool] Repaired ${accidentallyPromoted.length} freePool questions demoted back to practice`);
+  }
 
   const SECTION_QUOTAS = { easy: 8, medium: 22, hard: 18 };
   const NON_COMP_SECTIONS = ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"];
@@ -482,6 +664,7 @@ export async function ensureDiagnosticPool() {
   let promoted = 0;
 
   // Non-comprehension sections: promote practice → diagnostic to fill quotas
+  // Only promote non-freePool questions to avoid depleting the guest question set
   for (const section of NON_COMP_SECTIONS) {
     const alreadyDiag = await db.select().from(questions).where(
       and(eq(questions.section, section), eq(questions.qaStatus, "approved"), eq(questions.questionPool, "diagnostic"))
@@ -501,9 +684,10 @@ export async function ensureDiagnosticPool() {
         isNotNull(questions.skillId),
         ne(questions.skillId, ""),
         eq(questions.questionPool, "practice"),
+        eq(questions.freePool, false),
         alreadyDiagIds.length > 0 ? notInArray(questions.id, alreadyDiagIds) : sql`TRUE`,
       ))
-      .orderBy(asc(questions.freePool), asc(questions.orderIndex));
+      .orderBy(asc(questions.orderIndex));
 
     const byDiff: Record<string, typeof pool> = { easy: [], medium: [], hard: [] };
     for (const q of pool) {
@@ -645,6 +829,7 @@ export async function seedDatabase() {
     await ensureComprehensionSection();
     await repairSeedQuestions();
     await ensureFreePool();
+    await ensureQuestionBank();
     await ensureDiagnosticPool();
     return;
   }
@@ -903,5 +1088,6 @@ export async function seedDatabase() {
   console.log("Seed data inserted successfully.");
   await repairSeedQuestions();
   await ensureFreePool();
+  await ensureQuestionBank();
   await ensureDiagnosticPool();
 }
