@@ -188,11 +188,14 @@ export class DatabaseStorage implements IStorage {
     const diagPoolFilter: string[] | null =
       (!isGuestSession && (diag.type === 'full' || diag.type === 'mock')) ? ['diagnostic', 'any'] : null;
 
-    let allQuestions = await db.select().from(questions)
+    // Guest sessions bypass the diagnosticId-pinned query entirely.
+    // The mini-q-* placeholder questions (diagnosticId='mini-1') are superseded by the
+    // embedded bank in freePoolData.ts. Going straight to the pool ensures bank questions
+    // are always used, not the simple placeholders.
+    let allQuestions: Question[] = isGuestSession ? [] : await db.select().from(questions)
       .where(and(
         eq(questions.diagnosticId, diagnosticId),
         eq(questions.qaStatus, "approved"),
-        isGuestSession ? eq(questions.freePool, true) : sql`TRUE`,
         diagPoolFilter ? inArray(questions.questionPool, diagPoolFilter) : sql`TRUE`,
       ))
       .orderBy(questions.orderIndex);
