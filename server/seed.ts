@@ -525,7 +525,44 @@ export async function ensureDiagnosticPool() {
     }
   }
 
-  // Comprehension: promote whole passages from practice → diagnostic until quota met
+  // Comprehension: ensure required diagnostic passages are in the diagnostic pool.
+  // DIAGNOSTIC_PASSAGES maps each diagnostic to its exclusive passage set.
+  // These must be promoted first — other passages being in the pool doesn't help
+  // if the specific required passages are missing.
+  const REQUIRED_PASSAGES = ['P3', 'P5', 'P7', 'P10', 'P11', 'P14', 'P16'];
+
+  const allCompDiag = await db.select().from(questions).where(
+    and(
+      eq(questions.section, "English Comprehension"),
+      eq(questions.qaStatus, "approved"),
+      sql`render_config->>'passageId' IS NOT NULL`,
+    )
+  );
+
+  // Group all comp questions by passageId
+  const allCompByPassage = new Map<string, typeof allCompDiag>();
+  for (const q of allCompDiag) {
+    const pid = (q.renderConfig as any)?.passageId as string;
+    if (!pid) continue;
+    if (!allCompByPassage.has(pid)) allCompByPassage.set(pid, []);
+    allCompByPassage.get(pid)!.push(q);
+  }
+
+  // Step 1: Ensure every required passage is in the diagnostic pool
+  for (const pid of REQUIRED_PASSAGES) {
+    const passageQs = allCompByPassage.get(pid) ?? [];
+    const alreadyDiag = passageQs.filter(q => q.questionPool === 'diagnostic');
+    const needsPromotion = passageQs.filter(q => q.questionPool === 'practice');
+    if (alreadyDiag.length === 0 && needsPromotion.length > 0) {
+      const ids = needsPromotion.map(q => q.id);
+      await db.update(questions)
+        .set({ questionPool: "diagnostic" })
+        .where(inArray(questions.id, ids));
+      promoted += ids.length;
+    }
+  }
+
+  // Step 2: Fill remaining quota with other non-freePool passages
   const [alreadyComp] = await db
     .select({ cnt: sql<number>`count(*)` })
     .from(questions)
@@ -534,31 +571,29 @@ export async function ensureDiagnosticPool() {
   const stillNeeded = Math.max(0, COMP_QUESTION_QUOTA - alreadyDiagCompCount);
 
   if (stillNeeded > 0) {
-    const compPool = await db.select().from(questions).where(
+    const extraPool = await db.select().from(questions).where(
       and(
         eq(questions.section, "English Comprehension"),
         eq(questions.qaStatus, "approved"),
         sql`render_config->>'passageId' IS NOT NULL`,
         eq(questions.questionPool, "practice"),
+        eq(questions.freePool, false),
       )
     );
 
-    const passageMap = new Map<string, typeof compPool>();
-    for (const q of compPool) {
+    const extraByPassage = new Map<string, typeof extraPool>();
+    for (const q of extraPool) {
       const pid = (q.renderConfig as any)?.passageId as string;
       if (!pid) continue;
-      if (!passageMap.has(pid)) passageMap.set(pid, []);
-      passageMap.get(pid)!.push(q);
+      if (!extraByPassage.has(pid)) extraByPassage.set(pid, []);
+      extraByPassage.get(pid)!.push(q);
     }
 
-    const sortedPassages = [...passageMap.entries()].sort((a, b) => {
-      const aFree = a[1].some(q => q.freePool) ? 1 : 0;
-      const bFree = b[1].some(q => q.freePool) ? 1 : 0;
-      return aFree - bFree || b[1].length - a[1].length;
-    });
+    const sortedExtra = [...extraByPassage.entries()]
+      .sort((a, b) => b[1].length - a[1].length);
 
     let accumulated = 0;
-    for (const [, qs] of sortedPassages) {
+    for (const [, qs] of sortedExtra) {
       if (accumulated >= stillNeeded) break;
       const ids = qs.map(q => q.id);
       await db.update(questions)
