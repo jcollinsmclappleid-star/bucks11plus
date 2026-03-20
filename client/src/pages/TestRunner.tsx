@@ -187,8 +187,9 @@ export default function TestRunner() {
 
   // Handle transition from reading → answering phase
   const startAnsweringPhase = useCallback(() => {
-    if (!questions) return;
+    if (!questions || questions.length === 0) return;
     const q = questions[currentQuestionIndex];
+    if (!q) return;
     const rc = (q.renderConfig as any) || {};
     const pid = rc.passageId || q.subRuleId || `__comp_${currentQuestionIndex}__`;
     lastReadPassageRef.current = pid;
@@ -262,8 +263,9 @@ export default function TestRunner() {
 
   // Keyboard handler — blocked during reading phase
   useEffect(() => {
-    if (!questions || compReadingActive) return;
+    if (!questions || questions.length === 0 || compReadingActive) return;
     const question = questions[currentQuestionIndex];
+    if (!question) return;
     const isSvgWithVisualOptions = question.renderType === "svg" && (question.renderConfig as any)?.answerOptions;
 
     const handler = (e: KeyboardEvent) => {

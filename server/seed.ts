@@ -1,6 +1,6 @@
 import { db } from "./db";
 import { diagnostics, questions, articles, practiceSections, users } from "@shared/schema";
-import { sql, eq, and, isNotNull, ne, asc, inArray } from "drizzle-orm";
+import { sql, eq, and, isNotNull, ne, asc, inArray, notInArray } from "drizzle-orm";
 import { scrypt, randomBytes } from "crypto";
 import { promisify } from "util";
 import type { NvrSequenceConfig, NvrTransformConfig, NvrClassificationConfig } from "@shared/contentTypes";
@@ -470,6 +470,117 @@ export async function ensureFreePool() {
   _freePoolSeeded = true;
 }
 
+let _diagnosticPoolSeeded = false;
+
+export async function ensureDiagnosticPool() {
+  if (_diagnosticPoolSeeded) return;
+
+  const SECTION_QUOTAS = { easy: 8, medium: 22, hard: 18 };
+  const NON_COMP_SECTIONS = ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics"];
+  const COMP_QUESTION_QUOTA = 96;
+
+  let promoted = 0;
+
+  // Non-comprehension sections: promote practice → diagnostic to fill quotas
+  for (const section of NON_COMP_SECTIONS) {
+    const alreadyDiag = await db.select().from(questions).where(
+      and(eq(questions.section, section), eq(questions.qaStatus, "approved"), eq(questions.questionPool, "diagnostic"))
+    );
+    const alreadyDiagIds = alreadyDiag.map(q => q.id);
+
+    const targetEasy = Math.max(0, SECTION_QUOTAS.easy - alreadyDiag.filter(q => q.difficulty === "easy").length);
+    const targetMedium = Math.max(0, SECTION_QUOTAS.medium - alreadyDiag.filter(q => q.difficulty === "medium").length);
+    const targetHard = Math.max(0, SECTION_QUOTAS.hard - alreadyDiag.filter(q => q.difficulty === "hard").length);
+
+    if (targetEasy + targetMedium + targetHard === 0) continue;
+
+    const pool = await db.select().from(questions)
+      .where(and(
+        eq(questions.section, section),
+        eq(questions.qaStatus, "approved"),
+        isNotNull(questions.skillId),
+        ne(questions.skillId, ""),
+        eq(questions.questionPool, "practice"),
+        alreadyDiagIds.length > 0 ? notInArray(questions.id, alreadyDiagIds) : sql`TRUE`,
+      ))
+      .orderBy(asc(questions.freePool), asc(questions.orderIndex));
+
+    const byDiff: Record<string, typeof pool> = { easy: [], medium: [], hard: [] };
+    for (const q of pool) {
+      const d = q.difficulty || "";
+      if (d in byDiff) byDiff[d].push(q);
+    }
+
+    const toPromote = [
+      ...byDiff.easy.slice(0, targetEasy),
+      ...byDiff.medium.slice(0, targetMedium),
+      ...byDiff.hard.slice(0, targetHard),
+    ];
+
+    if (toPromote.length > 0) {
+      await db.update(questions)
+        .set({ questionPool: "diagnostic" })
+        .where(inArray(questions.id, toPromote.map(q => q.id)));
+      promoted += toPromote.length;
+    }
+  }
+
+  // Comprehension: promote whole passages from practice → diagnostic until quota met
+  const [alreadyComp] = await db
+    .select({ cnt: sql<number>`count(*)` })
+    .from(questions)
+    .where(and(eq(questions.section, "English Comprehension"), eq(questions.questionPool, "diagnostic")));
+  const alreadyDiagCompCount = Number(alreadyComp?.cnt || 0);
+  const stillNeeded = Math.max(0, COMP_QUESTION_QUOTA - alreadyDiagCompCount);
+
+  if (stillNeeded > 0) {
+    const compPool = await db.select().from(questions).where(
+      and(
+        eq(questions.section, "English Comprehension"),
+        eq(questions.qaStatus, "approved"),
+        sql`render_config->>'passageId' IS NOT NULL`,
+        eq(questions.questionPool, "practice"),
+      )
+    );
+
+    const passageMap = new Map<string, typeof compPool>();
+    for (const q of compPool) {
+      const pid = (q.renderConfig as any)?.passageId as string;
+      if (!pid) continue;
+      if (!passageMap.has(pid)) passageMap.set(pid, []);
+      passageMap.get(pid)!.push(q);
+    }
+
+    const sortedPassages = [...passageMap.entries()].sort((a, b) => {
+      const aFree = a[1].some(q => q.freePool) ? 1 : 0;
+      const bFree = b[1].some(q => q.freePool) ? 1 : 0;
+      return aFree - bFree || b[1].length - a[1].length;
+    });
+
+    let accumulated = 0;
+    for (const [, qs] of sortedPassages) {
+      if (accumulated >= stillNeeded) break;
+      const ids = qs.map(q => q.id);
+      await db.update(questions)
+        .set({ questionPool: "diagnostic" })
+        .where(inArray(questions.id, ids));
+      promoted += qs.length;
+      accumulated += qs.length;
+    }
+  }
+
+  const [{ diagCount }] = await db
+    .select({ diagCount: sql<number>`count(*)` })
+    .from(questions)
+    .where(eq(questions.questionPool, "diagnostic"));
+
+  if (promoted > 0) {
+    console.log(`  [Diagnostic Pool] Promoted ${promoted} questions from practice pool`);
+  }
+  console.log(`✓ Diagnostic pool ready: ${diagCount} questions`);
+  _diagnosticPoolSeeded = true;
+}
+
 export async function seedDatabase() {
   // Always ensure admin user exists with full programme24_plus access
   const existingAdmin = await db.query.users.findFirst({
@@ -499,6 +610,7 @@ export async function seedDatabase() {
     await ensureComprehensionSection();
     await repairSeedQuestions();
     await ensureFreePool();
+    await ensureDiagnosticPool();
     return;
   }
 
@@ -756,4 +868,5 @@ export async function seedDatabase() {
   console.log("Seed data inserted successfully.");
   await repairSeedQuestions();
   await ensureFreePool();
+  await ensureDiagnosticPool();
 }
