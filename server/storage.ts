@@ -205,7 +205,15 @@ export class DatabaseStorage implements IStorage {
     };
     const diffProfile = DIFFICULTY_PROFILES[diag.type] || DIFFICULTY_PROFILES.full;
 
-    if (allQuestions.length < diag.questionCount) {
+    // For mini/guest sessions that include English Comprehension: always supplement from the pool
+    // so comprehension questions are guaranteed even when seed questions fill the count.
+    // Mini-q-* seed questions are VR/NVR/Math only — they never contain comprehension.
+    const needsCompSupplement =
+      (isGuestSession || diag.type === 'mini') &&
+      diag.sections.includes('English Comprehension') &&
+      !allQuestions.some(q => q.renderType === 'comprehension');
+
+    if (allQuestions.length < diag.questionCount || needsCompSupplement) {
       const poolQuestions = await this.selectPoolQuestions(
         diag.questionCount, diag.sections, userId, allQuestions.map(q => q.id), diffProfile, diag.type, diagPoolFilter, diagnosticId
       );

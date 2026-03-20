@@ -279,7 +279,7 @@ export async function ensureFreePool() {
     .from(questions)
     .where(eq(questions.freePool, true));
 
-  if (Number(count) > 0) {
+  if (Number(count) >= 100) {
     console.log(`✓ Free pool already seeded (${count} questions)`);
     return;
   }
