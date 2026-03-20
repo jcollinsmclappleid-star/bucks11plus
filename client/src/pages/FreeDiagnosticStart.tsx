@@ -45,7 +45,11 @@ export default function FreeDiagnosticStart() {
         body: JSON.stringify({ diagnosticId: FREE_DIAGNOSTIC_ID }),
       });
       if (!res.ok) throw new Error("Failed to start diagnostic");
-      return res.json();
+      const data = await res.json();
+      if (!data.questions || data.questions.length === 0) {
+        throw new Error("No questions available. Please try again in a moment.");
+      }
+      return data;
     },
     onSuccess: (data) => {
       sessionStorage.setItem("guestToken", data.guestToken);
@@ -154,6 +158,14 @@ export default function FreeDiagnosticStart() {
           </div>
 
           <div className="pt-6 border-t border-border/50 text-center">
+            {startGuestSession.isError && (
+              <div className="mb-4 flex items-start gap-2 p-3 rounded-md bg-red-50 border border-red-200 text-left" data-testid="error-start-diagnostic">
+                <AlertCircle className="h-4 w-4 text-red-500 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-red-700">
+                  {(startGuestSession.error as Error)?.message || "Something went wrong. Please try again."}
+                </p>
+              </div>
+            )}
             <Button
               size="lg"
               className="h-14 px-12 text-lg bg-primary w-full sm:w-auto"

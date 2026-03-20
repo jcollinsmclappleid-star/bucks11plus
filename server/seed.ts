@@ -245,18 +245,31 @@ async function ensureComprehensionSection() {
 }
 
 export async function repairSeedQuestions() {
-  const result = await db
+  const seedIdPattern = sql`(id LIKE 'mini-q-%' OR id LIKE 'full-a-q-%' OR id LIKE 'full-b-q-%' OR id LIKE 'mock-%')`;
+
+  const approveResult = await db
     .update(questions)
     .set({ qaStatus: "approved" })
+    .where(and(eq(questions.qaStatus, "draft"), seedIdPattern));
+  const approved = (approveResult as any).rowCount ?? 0;
+  if (approved > 0) {
+    console.log(`✓ Repaired ${approved} seed questions (draft → approved)`);
+  }
+
+  // Directly mark mini-1 seed questions as free pool (they lack skillId so ensureFreePool skips them)
+  const freePoolResult = await db
+    .update(questions)
+    .set({ freePool: true })
     .where(
       and(
-        eq(questions.qaStatus, "draft"),
-        sql`(id LIKE 'mini-q-%' OR id LIKE 'full-a-q-%' OR id LIKE 'full-b-q-%' OR id LIKE 'mock-%')`,
+        sql`id LIKE 'mini-q-%'`,
+        eq(questions.freePool, false),
+        eq(questions.qaStatus, "approved"),
       ),
     );
-  const updated = (result as any).rowCount ?? 0;
-  if (updated > 0) {
-    console.log(`✓ Repaired ${updated} seed questions (draft → approved)`);
+  const markedFreePool = (freePoolResult as any).rowCount ?? 0;
+  if (markedFreePool > 0) {
+    console.log(`✓ Marked ${markedFreePool} mini-1 seed questions as free pool`);
   }
 }
 
