@@ -11,6 +11,9 @@ import { runEmailTriggers } from "./email";
 const app = express();
 const httpServer = createServer(app);
 
+// Trust Replit's reverse proxy so secure session cookies work in production
+app.set("trust proxy", 1);
+
 declare module "http" {
   interface IncomingMessage {
     rawBody: unknown;
