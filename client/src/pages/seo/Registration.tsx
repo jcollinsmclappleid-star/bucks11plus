@@ -13,8 +13,8 @@ export default function Registration() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
       <Seo
-        title="Bucks 11 Plus Registration | How to Register for the Buckinghamshire 11+"
-        description="Everything you need to know about registering for the Buckinghamshire 11+ test. Who can register, the process, key deadlines, and special arrangements."
+        title="Bucks 11+ Registration (2026) | How to Register for the Secondary Transfer Test"
+        description="Everything parents need to know about registering for the Bucks 11+ Secondary Transfer Test in 2026. Who can register, the process, key deadlines, and special arrangements."
         canonicalPath="/bucks-11-plus-registration"
         schema={[
           breadcrumbSchema(breadcrumbItems),

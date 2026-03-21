@@ -95,8 +95,8 @@ export default function GrammarSchools() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
       <Seo
-        title="Buckinghamshire Grammar Schools | Full Directory of 13 Schools"
-        description="Complete directory of all 13 Buckinghamshire grammar schools with locations, descriptions, and official website links. Find the right grammar school for your child."
+        title="Buckinghamshire Grammar Schools | All 13 Schools | Bucks 11+ Guide"
+        description="Complete directory of all 13 Buckinghamshire grammar schools with locations, type, and official website links. Find the right grammar school for your child and understand what qualifying at 121 means for each."
         canonicalPath="/bucks-grammar-schools"
         schema={[
           breadcrumbSchema(breadcrumbItems),

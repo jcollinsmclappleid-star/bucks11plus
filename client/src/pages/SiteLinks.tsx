@@ -85,8 +85,8 @@ export default function SiteLinks() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-16">
       <Seo
-        title="Site Links | 11+ Standard"
-        description="Explore the main pages, tools, guides, and resources on 11+ Standard — Buckinghamshire 11+ exam preparation."
+        title="All Pages & Resources | 11+ Standard | Bucks 11+ Preparation"
+        description="Browse all pages, tools, guides, and resources on 11+ Standard — the Bucks 11+ diagnostic preparation platform for the Buckinghamshire Secondary Transfer Test."
         canonicalPath="/site-links"
       />
 

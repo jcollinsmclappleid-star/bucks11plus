@@ -162,8 +162,8 @@ export default function Pricing() {
   return (
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
       <Seo
-        title="Buckinghamshire 11+ Preparation Plans & Pricing | 11+ Standard"
-        description="Choose from Free diagnostic, Practice Platform (£24.99/month) or structured programmes from £59–£149. GL-style timed assessments, readiness forecasting, and targeted drill practice for the Bucks 11+."
+        title="Bucks 11+ Preparation Plans & Pricing | 11+ Standard"
+        description="Free diagnostic, Practice Platform at £24.99/month, or Programme+ at £149 one-time. GL-style timed assessments, readiness forecasting, and targeted drill practice for the Bucks 11+ Secondary Transfer Test."
         canonicalPath="/pricing"
       />
 

@@ -36,8 +36,8 @@ export default function QualifyingScore() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
       <Seo
-        title="Bucks 11+ Qualifying Score | What 121 Means & How Standardisation Works"
-        description="Understand the Buckinghamshire 11+ qualifying score of 121, how standardised scores work, and what annual variation means for your child's grammar school application."
+        title="Bucks 11+ Qualifying Score of 121 | How Standardisation Works | 11+ Standard"
+        description="Understand why 121 is the qualifying score for the Buckinghamshire 11+, how standardised scores are calculated, and what your child needs to achieve in each section to hit this benchmark."
         canonicalPath="/bucks-11-plus-qualifying-score"
         schema={[
           breadcrumbSchema(breadcrumbItems),

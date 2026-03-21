@@ -4,8 +4,9 @@ export default function About() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
       <Seo
-        title="About Us | 11+ Standard"
-        description="11+ Standard is an assessment-first preparation platform built for the Buckinghamshire Secondary Transfer Test. Find out how we help families prepare with evidence, not guesswork."
+        title="About 11+ Standard | Bucks 11+ Diagnostic Preparation Platform"
+        description="11+ Standard is a diagnostic-first preparation platform built specifically for the Buckinghamshire Secondary Transfer Test. Learn how we help families target the 121 qualifying score with evidence, not guesswork."
+        canonicalPath="/about"
       />
 
       <h1 className="text-4xl md:text-5xl font-bold text-primary font-serif tracking-tight">

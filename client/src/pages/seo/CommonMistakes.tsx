@@ -13,8 +13,8 @@ export default function CommonMistakes() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
       <Seo
-        title="Common Bucks 11 Plus Mistakes | Preparation Pitfalls to Avoid"
-        description="Avoid the most common Buckinghamshire 11+ preparation mistakes: starting too late, paper-only practice, ignoring timing, and not understanding standardisation."
+        title="Common Bucks 11+ Preparation Mistakes to Avoid (2026) | 11+ Standard"
+        description="The most common mistakes families make preparing for the Bucks 11+ Secondary Transfer Test — starting too late, ignoring timing, paper-only practice, and misunderstanding the 121 standardised score."
         canonicalPath="/bucks-11-plus-mistakes"
         schema={[
           breadcrumbSchema(breadcrumbItems),

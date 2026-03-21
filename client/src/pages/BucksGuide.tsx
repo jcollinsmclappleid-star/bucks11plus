@@ -48,8 +48,8 @@ export default function BucksGuide() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
       <Seo
-        title="Buckinghamshire 11 Plus Guide | Everything You Need to Know | 11+ Standard"
-        description="Complete guide to the Buckinghamshire 11 Plus test. Learn about the 13 grammar schools, qualifying scores, admissions timeline, test format, and how to prepare your child for the Bucks 11+."
+        title="Bucks 11+ Guide (2026) | Grammar Schools, 121 Score & Admissions | 11+ Standard"
+        description="Complete guide to the Bucks 11+ Secondary Transfer Test (2026). Learn about the 13 Buckinghamshire grammar schools, the qualifying score of 121, the admissions timeline, and how to prepare your child."
         canonicalPath="/buckinghamshire-11-plus-guide"
         schema={[faqSchema, breadcrumbSchema(breadcrumbItems)]}
       />

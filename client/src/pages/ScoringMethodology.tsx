@@ -42,8 +42,9 @@ export default function ScoringMethodology() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-12 space-y-10">
       <Seo
-        title="How Forecast Scoring Works | 11+ Standard"
-        description="Understand how 11+ Standard calculates your child's readiness forecast and what the 121 qualifying benchmark means."
+        title="How Bucks 11+ Forecast Scoring Works | 121 Benchmark Explained | 11+ Standard"
+        description="Understand how 11+ Standard calculates your child's readiness forecast against the 121 Bucks 11+ qualifying benchmark, including pace analysis, readiness bands, and what the score can and cannot tell you."
+        canonicalPath="/scoring-methodology"
       />
 
       <div className="border-b border-border/60 pb-8">

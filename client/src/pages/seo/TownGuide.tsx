@@ -41,8 +41,8 @@ export default function TownGuide({ townSlug }: { townSlug: string }) {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
       <Seo
-        title={`Bucks 11 Plus Guide for Parents in ${town.name} | 11+ Standard`}
-        description={`Guide for families in ${town.name} preparing for the Buckinghamshire 11+ grammar school test. Learn how the Secondary Transfer Test works, which grammar schools are closest, and how to assess your child's readiness.`}
+        title={`Bucks 11+ Guide for Parents in ${town.name} (2026) | 11+ Standard`}
+        description={`Guide for families in ${town.name} preparing for the Bucks 11+ Secondary Transfer Test. Find nearby grammar schools, understand the 121 qualifying score, and see how to assess your child's readiness.`}
         canonicalPath={`/bucks-11-plus-${town.slug}`}
         schema={schema}
       />

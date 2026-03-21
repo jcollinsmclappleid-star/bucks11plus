@@ -85,8 +85,8 @@ export default function ParentGuide() {
   return (
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
       <Seo
-        title="Free Buckinghamshire 11+ Parent Guide | Download PDF | 11+ Standard"
-        description="Free guide explaining how the Bucks 11+ grammar school test works, the qualifying score of 121, and how parents can assess readiness before the test."
+        title="Free Bucks 11+ Parent Guide (2026) | Download PDF | 11+ Standard"
+        description="Free downloadable guide for parents preparing for the Bucks 11+ Secondary Transfer Test. Covers the 13 grammar schools, the qualifying score of 121, the admissions timeline, and how to assess your child's readiness."
         canonicalPath="/bucks-11-plus-parent-guide"
         schema={schema}
       />
