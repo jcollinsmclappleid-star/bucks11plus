@@ -85,8 +85,8 @@ export default function ParentGuide() {
   return (
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
       <Seo
-        title="Free Bucks 11+ Parent Guide (2026) | Download PDF | 11+ Standard"
-        description="Free downloadable guide for parents preparing for the Bucks 11+ Secondary Transfer Test. Covers the 13 grammar schools, the qualifying score of 121, the admissions timeline, and how to assess your child's readiness."
+        title="Free Bucks 11 Plus Parent Guide (2026) – 121 Score & Preparation | 11+ Standard"
+        description="Free guide for parents: understand the Bucks 11 Plus format, the 121 qualifying score, and how to assess your child's readiness for the Secondary Transfer Test."
         canonicalPath="/bucks-11-plus-parent-guide"
         schema={schema}
       />

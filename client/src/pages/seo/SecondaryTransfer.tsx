@@ -13,8 +13,8 @@ export default function SecondaryTransfer() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
       <Seo
-        title="Buckinghamshire Secondary Transfer Test (2026) | Structure, Papers & 121 Score"
-        description="Everything parents need to know about the Buckinghamshire Secondary Transfer Test (Bucks 11+): official purpose, four test papers, the 121 qualifying threshold, and grammar school eligibility."
+        title="Bucks 11 Plus Secondary Transfer Test (2026) – Purpose, Format & Structure"
+        description="Understand the Bucks 11 Plus Secondary Transfer Test: its official purpose, four-paper structure, and how standardised scores determine grammar school eligibility."
         canonicalPath="/buckinghamshire-secondary-transfer-test"
         schema={[
           breadcrumbSchema(breadcrumbItems),

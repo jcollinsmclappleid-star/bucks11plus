@@ -26,8 +26,8 @@ export default function Timeline() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
       <Seo
-        title="Bucks 11+ Timeline (2026) | Registration Dates & Admissions Calendar"
-        description="Complete Bucks 11+ admissions timeline for 2026: registration deadlines, test date in September, results in October, and National Offer Day. Plan your child's preparation around key dates."
+        title="Bucks 11 Plus Timeline (2026) – Registration Dates & Admissions Calendar"
+        description="Complete Bucks 11 Plus admissions timeline: registration deadlines, test dates, results day, and National Offer Day. Plan your child's preparation with key 2026 dates."
         canonicalPath="/bucks-11-plus-timeline"
         schema={[
           breadcrumbSchema(breadcrumbItems),

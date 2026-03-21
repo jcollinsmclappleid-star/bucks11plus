@@ -257,8 +257,8 @@ export default function Landing() {
   return (
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
       <Seo
-        title="Bucks 11+ Preparation Platform — Get Your Child Ready for 121 | 11+ Standard"
-        description="The preparation platform built for the Buckinghamshire Secondary Transfer Test. Diagnose exactly where your child stands, target the right skills, and track whether preparation is closing the gap to 121."
+        title="Bucks 11 Plus Practice Test (2026) – Free GL Diagnostic & 121 Score Prep | 11+ Standard"
+        description="Take a free Bucks 11 Plus practice diagnostic. Get an instant GL-style score across maths, verbal, non-verbal and comprehension — benchmarked against the 121 qualifying standard."
         canonicalPath="/"
         schema={{
           "@context": "https://schema.org",

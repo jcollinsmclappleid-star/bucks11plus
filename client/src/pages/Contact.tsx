@@ -8,8 +8,8 @@ export default function Contact() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-16 min-h-[60vh]">
       <Seo
-        title="Contact 11+ Standard | Bucks 11+ Preparation Support"
-        description="Get in touch with the 11+ Standard team for help with your account, the platform, or any questions about Bucks 11+ preparation and the Secondary Transfer Test."
+        title="Contact | Bucks 11 Plus Preparation Help | 11+ Standard"
+        description="Get in touch with the 11+ Standard team for help with your Bucks 11 Plus preparation. We're here to answer your questions about the Secondary Transfer Test."
         canonicalPath="/contact"
       />
 

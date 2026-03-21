@@ -186,8 +186,8 @@ export default function HowItWorks() {
   return (
     <div className="min-h-[calc(100vh-4rem)]">
       <Seo
-        title="How Bucks 11 Plus Preparation Works | Diagnostic-Led Approach | 11+ Standard"
-        description="Structured, assessment-led preparation for the Buckinghamshire 11+ Secondary Transfer Test. Diagnostic benchmark, readiness forecast against the 121 qualifying score, and targeted GL-style practice."
+        title="How Bucks 11 Plus Preparation Works (2026) – Diagnostic-Led Approach | 11+ Standard"
+        description="Assessment-first preparation for the Bucks 11 Plus. Free GL-style diagnostic, 121 readiness forecast, and targeted practice to close the gap before the Secondary Transfer Test."
         canonicalPath="/how-it-works"
         schema={howItWorksFaqSchema}
       />

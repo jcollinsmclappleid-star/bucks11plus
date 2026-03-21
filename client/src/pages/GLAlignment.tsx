@@ -36,8 +36,8 @@ export default function GLAlignment() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
       <Seo
-        title="How 11+ Standard Aligns to GL-Style Reasoning | Bucks 11+ Diagnostic Platform"
-        description="How our independently developed diagnostics align to the GL-style reasoning families used in the Buckinghamshire Secondary Transfer Test — verbal reasoning, non-verbal reasoning, spatial, mathematics, and English comprehension."
+        title="Bucks 11 Plus Subjects Explained – GL-Style Exam Breakdown | 11+ Standard"
+        description="Understand how the Bucks 11 Plus tests verbal reasoning, non-verbal reasoning, maths and English comprehension. See how GL-style assessments work and where children lose marks."
         canonicalPath="/bucks-gl-alignment"
         schema={[
           breadcrumbSchema(breadcrumbItems),

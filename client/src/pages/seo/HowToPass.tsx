@@ -13,8 +13,8 @@ export default function HowToPass() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
       <Seo
-        title="How to Pass the Bucks 11+ (2026) | 121 Score Strategy & Preparation Tips"
-        description="What it takes to pass the Bucks 11+ Secondary Transfer Test. Understand the 121 qualifying score, avoid the most common preparation mistakes, and build the right speed-accuracy balance."
+        title="How to Pass the Bucks 11 Plus (2026) – Strategy, 121 Score & Prep Tips"
+        description="What it takes to pass the Bucks 11 Plus: understanding the 121 qualifying score, avoiding common mistakes, balancing speed with accuracy, and when to start preparing."
         canonicalPath="/how-to-pass-bucks-11-plus"
         schema={[
           breadcrumbSchema(breadcrumbItems),
