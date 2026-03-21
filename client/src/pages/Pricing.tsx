@@ -316,7 +316,7 @@ export default function Pricing() {
               <div className="rounded-2xl border-2 border-brand-amber/40 bg-amber-50/40 p-7 sm:p-8 flex flex-col" data-testid="card-pricing-path-programme">
                 <h3 className="text-xl font-bold text-primary font-serif mb-3">Start with Programme+</h3>
                 <p className="text-slate-600 text-sm leading-relaxed mb-3 flex-1">
-                  26 weeks of all-inclusive structured preparation — diagnostics, roadmap, milestone tracking, and mock exams. No subscription needed.
+                  6 months of all-inclusive structured preparation — diagnostics, roadmap, milestone tracking, and mock exams. No subscription needed.
                 </p>
                 <p className="text-xs text-amber-700 font-medium mb-6">
                   Already subscribing? You can add a structured 12-week programme for £89 once signed in.
@@ -392,10 +392,10 @@ export default function Pricing() {
                       <span className="text-4xl font-bold text-primary">£149</span>
                       <span className="text-slate-500 font-medium text-sm mb-1">one-time</span>
                     </div>
-                    <p className="text-xs text-slate-500 mb-4">Includes 26 weeks of full access — replaces your subscription</p>
+                    <p className="text-xs text-slate-500 mb-4">Includes 6 months of full access — replaces your subscription</p>
                     <ul className="space-y-2">
                       {[
-                        "26-week structured preparation roadmap",
+                        "6-month structured preparation roadmap",
                         "All Hard challenge drills + 3 mock exams",
                         "Milestone diagnostics with auto-tracking",
                         "Weekly personalised task plans",
@@ -478,7 +478,7 @@ export default function Pricing() {
                       <p className="text-sm text-slate-600 mb-4">
                         {currentTier === "early_learner" && "Foundation-level practice with readiness tracking and age-appropriate learning."}
                         {(currentTier === "pack12" || currentTier === "pack12_family" || currentTier === "pack_monthly") && "1,500+ questions, full diagnostics, timed drills, PDF reports and progress tracking."}
-                        {currentTier === "programme24_plus" && "26-week all-inclusive programme: diagnostics, all drills, 3 mock exams, roadmap, milestone tracking, weekly plans and premium analytics."}
+                        {currentTier === "programme24_plus" && "6-month all-inclusive programme: diagnostics, all drills, 3 mock exams, roadmap, milestone tracking, weekly plans and premium analytics."}
                         {(currentTier === "programme8" || currentTier === "programme12" || currentTier === "programme16" || currentTier === "programme16_family") && "Complete preparation: diagnostics, all drills, mock exams, roadmap, milestone tracking, weekly plans and premium analytics."}
                       </p>
                       <Button size="sm" asChild>
@@ -580,14 +580,14 @@ export default function Pricing() {
                   </div>
                   <CardHeader className="pb-3 pt-6">
                     <p className="text-xs font-bold text-brand-amber uppercase tracking-wider mb-1">Programme+</p>
-                    <CardTitle className="text-xl font-serif">All-inclusive · 26 weeks</CardTitle>
+                    <CardTitle className="text-xl font-serif">All-inclusive · 6 months</CardTitle>
                   </CardHeader>
                   <CardContent className="flex-1">
                     <div className="mb-1">
                       <span className="text-4xl font-bold text-primary">£149</span>
                       <span className="text-muted-foreground font-medium"> one-time</span>
                     </div>
-                    <p className="text-xs text-slate-500 mb-1">26 weeks of full access — no subscription needed</p>
+                    <p className="text-xs text-slate-500 mb-1">6 months of full access — no subscription needed</p>
                     <div className="flex items-center gap-1.5 mb-4">
                       <span className="text-[10px] font-bold text-brand-green uppercase tracking-tight bg-green-50 border border-green-200 px-2 py-0.5 rounded-full">
                         All platform access included
@@ -598,7 +598,7 @@ export default function Pricing() {
                         "1,500+ VR, NVR, Maths & Comprehension questions",
                         "Full timed diagnostics (40 questions)",
                         "All 17 Hard challenge drills unlocked",
-                        "26-week structured preparation roadmap",
+                        "6-month structured preparation roadmap",
                         "3 full mock exam simulations",
                         "Milestone diagnostics with auto-tracking",
                         "Weekly personalised task plans",
@@ -950,7 +950,7 @@ export default function Pricing() {
                     { feature: "Premium Parent Analytics dashboard", free: false, pack: false, prog: true },
                     { feature: "Gap velocity & forecast stability metrics", free: false, pack: false, prog: true },
                     { feature: "Fatigue & pressure profiling", free: false, pack: false, prog: true },
-                    { feature: "Access duration", free: "1 use", pack: "6 months", prog: "12 months" },
+                    { feature: "Access duration", free: "1 use", pack: "Monthly", prog: "6 months" },
                   ].map((row, i) => (
                     <tr key={i} className={`border-b border-slate-100 ${i >= 12 ? "bg-amber-50/30" : ""}`} data-testid={`comparison-row-${i}`}>
                       <td className="py-3 px-4 text-slate-700 font-medium">{row.feature}</td>

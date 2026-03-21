@@ -345,19 +345,20 @@ export async function registerRoutes(
         return res.json(safeUser);
       }
 
+      const SUBSCRIPTION_TIERS = new Set(["pack_monthly"]);
       const weeksMap: Record<string, number> = {
         early_learner: 26,
         pack12: 26,
         pack12_family: 26,
-        pack_monthly: 5,
         programme8: 8,
         programme12: 12,
         programme16: 52,
         programme16_family: 52,
         programme24_plus: 24,
       };
-      const weeks = weeksMap[tier] || 12;
-      const expiresAt = new Date(Date.now() + weeks * 7 * 24 * 60 * 60 * 1000);
+      const expiresAt = SUBSCRIPTION_TIERS.has(tier)
+        ? undefined
+        : new Date(Date.now() + (weeksMap[tier] || 12) * 7 * 24 * 60 * 60 * 1000);
 
       await storage.updateUserSubscription(req.user!.id, tier, expiresAt);
 

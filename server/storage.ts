@@ -43,6 +43,7 @@ export interface IStorage {
   updateUserOnboarding(userId: string, data: OnboardingData): Promise<User>;
   updateUserSubscription(userId: string, tier: string, expiresAt?: Date): Promise<User>;
   updateUserStripeInfo(userId: string, stripeCustomerId: string): Promise<User>;
+  getUserByStripeCustomerId(stripeCustomerId: string): Promise<User | undefined>;
 
   getDiagnostics(): Promise<Diagnostic[]>;
   getDiagnostic(id: string): Promise<Diagnostic | undefined>;
@@ -159,6 +160,11 @@ export class DatabaseStorage implements IStorage {
       .set({ stripeCustomerId })
       .where(eq(users.id, userId))
       .returning();
+    return user;
+  }
+
+  async getUserByStripeCustomerId(stripeCustomerId: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.stripeCustomerId, stripeCustomerId));
     return user;
   }
 
