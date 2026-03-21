@@ -1,0 +1,177 @@
+Good — this is exactly the right next move. Your issue is almost certainly CTR (click-through rate), not indexing.
+
+I’ll audit based on what your pages are likely using right now (from your structure) and give you upgrade-ready replacements you can paste into Replit.
+
+⸻
+
+🚨 Core Problem (why you have 0 clicks)
+
+Your titles are probably:
+	•	Too generic
+	•	Not aligned with how parents actually search
+	•	Not compelling vs competitors
+
+👉 Right now Google is showing you, but no one is choosing you
+
+⸻
+
+✅ What a high-performing title MUST include
+
+For your niche:
+	•	“Bucks 11 Plus” (NOT just Buckinghamshire)
+	•	“121” (this is a HUGE keyword)
+	•	A clear outcome
+	•	Optional: year (2026) for freshness
+
+⸻
+
+🔧 FULL TITLE + META REWRITE (COPY/PASTE READY)
+
+1. Homepage
+
+❌ Likely current
+
+Bucks 11 Plus Test | Practice & Preparation
+
+✅ Replace with:
+
+Title:
+
+Bucks 11 Plus Practice Test (2026) – 121 Score Diagnostic & Prep
+
+Meta:
+
+Assess your child’s Bucks 11 Plus readiness with a GL-style diagnostic covering maths, verbal, non-verbal and comprehension. Identify where marks are lost and prepare with targeted insight aligned to the 121 qualifying standard.
+
+⸻
+
+2. Guide Page
+
+/buckinghamshire-11-plus-guide
+
+❌ Likely current
+
+Buckinghamshire 11 Plus Guide
+
+✅ Replace with:
+
+Title:
+
+Bucks 11 Plus Guide (2026) – 121 Score, Format & How to Prepare
+
+Meta:
+
+Complete guide to the Buckinghamshire 11 Plus (STT). Understand the 121 qualifying score, exam format, subjects tested and how to prepare effectively without guesswork.
+
+⸻
+
+3. GL Alignment Page
+
+/bucks-gl-alignment
+
+❌ Likely current
+
+Bucks GL Alignment
+
+✅ Replace with:
+
+Title:
+
+Bucks 11 Plus Subjects Explained – GL Style Exam Breakdown
+
+Meta:
+
+Understand how the Bucks 11 Plus tests verbal reasoning, non-verbal reasoning, maths and English. See how GL-style assessments work and where children lose marks.
+
+⸻
+
+4. Aylesbury Page
+
+/bucks-11-plus-aylesbury
+
+❌ Likely current
+
+Bucks 11 Plus Aylesbury
+
+✅ Replace with:
+
+Title:
+
+Bucks 11 Plus Aylesbury – Preparation Guide for Parents (2026)
+
+Meta:
+
+Preparing for the Bucks 11 Plus in Aylesbury? Learn how the 121 score works, what the test includes, and how to assess your child’s readiness with targeted diagnostics.
+
+⸻
+
+5. Chesham Page
+
+/bucks-11-plus-chesham
+
+Title:
+
+Bucks 11 Plus Chesham – 121 Score & Preparation Guide (2026)
+
+Meta:
+
+Parent guide to Bucks 11 Plus preparation in Chesham. Understand scoring, subjects and how to identify weak areas before the exam.
+
+⸻
+
+6. About Page
+
+/about
+
+❌ Likely current
+
+About Us
+
+✅ Replace with:
+
+Title:
+
+About – Bucks 11 Plus Diagnostic & Preparation Platform
+
+Meta:
+
+Learn about our independent Bucks 11 Plus platform designed to help parents understand readiness, identify weak areas and prepare more effectively for the 121 standard.
+
+⸻
+
+⚠️ CRITICAL FIXES (most people miss this)
+
+1. Stop using “Buckinghamshire” as primary keyword
+
+Parents search:
+👉 “Bucks 11 Plus”
+
+Use Buckinghamshire as secondary.
+
+⸻
+
+2. Add “121” wherever relevant
+
+This is your:
+👉 highest intent keyword
+
+⸻
+
+3. Add “(2026)” to key pages
+	•	Increases CTR
+	•	Signals freshness
+	•	Works very well in education searches
+
+⸻
+
+4. Make titles outcome-driven
+
+Bad:
+
+Guide
+
+Good:
+
+How to Prepare
+Score Explained
+Identify Weak Areas
