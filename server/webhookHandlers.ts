@@ -1,7 +1,7 @@
 import { getStripeSync } from './stripeClient';
 import { storage } from './storage';
 
-const PAID_TIERS = ['pack_monthly', 'pack_plus', 'pack_annual'] as const;
+const PAID_TIERS = ['pack_monthly', 'pack_plus'] as const;
 
 type SubscriptionTier = typeof PAID_TIERS[number];
 

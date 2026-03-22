@@ -178,8 +178,7 @@ export async function registerRoutes(
       const host = req.get('host');
       const protocol = req.protocol;
       const isMonthly = tier === "pack_monthly" || tier === "pack_plus";
-      const isAnnual = tier === "pack_annual";
-      const isSubscription = isMonthly || isAnnual;
+      const isSubscription = isMonthly;
       const mode = isSubscription ? "subscription" : "payment";
 
       const priceId = await findStripePriceForTier(tier);
@@ -194,7 +193,6 @@ export async function registerRoutes(
           unit_amount: unitAmount,
         };
         if (isMonthly) priceData.recurring = { interval: 'month' };
-        if (isAnnual) priceData.recurring = { interval: 'year' };
         lineItems = [{ price_data: priceData, quantity: 1 }];
       }
 
@@ -223,7 +221,7 @@ export async function registerRoutes(
       const validUpgrades: Record<string, string[]> = {
         pack_monthly: ["pack_plus", "pack_annual", "programme24_plus"],
         pack_plus: ["pack_annual", "programme24_plus"],
-        pack_annual: ["programme24_plus"],
+        pack_annual: [],
         pack12: ["pack_plus", "pack_annual", "programme24_plus", "programme16"],
         pack12_family: ["programme16_family"],
         programme8: ["programme12", "programme24_plus"],
@@ -296,8 +294,7 @@ export async function registerRoutes(
       const host = req.get('host');
       const protocol = req.protocol;
       const isMonthlyGuest = tier === "pack_monthly" || tier === "pack_plus";
-      const isAnnualGuest = tier === "pack_annual";
-      const isSubscription = isMonthlyGuest || isAnnualGuest;
+      const isSubscription = isMonthlyGuest;
       const mode = isSubscription ? "subscription" : "payment";
 
       const priceId = await findStripePriceForTier(tier);
@@ -312,7 +309,6 @@ export async function registerRoutes(
           unit_amount: unitAmount,
         };
         if (isMonthlyGuest) priceData.recurring = { interval: 'month' };
-        if (isAnnualGuest) priceData.recurring = { interval: 'year' };
         lineItems = [{ price_data: priceData, quantity: 1 }];
       }
 
@@ -363,11 +359,12 @@ export async function registerRoutes(
         return res.json(safeUser);
       }
 
-      const SUBSCRIPTION_TIERS = new Set(["pack_monthly", "pack_plus", "pack_annual"]);
+      const SUBSCRIPTION_TIERS = new Set(["pack_monthly", "pack_plus"]);
       const weeksMap: Record<string, number> = {
         early_learner: 26,
         pack12: 26,
         pack12_family: 26,
+        pack_annual: 52,
         programme8: 8,
         programme12: 12,
         programme16: 52,

@@ -165,7 +165,7 @@ export default function Account() {
     pack12: "Full access to all diagnostics, drills, PDF reports, and progress tracking for 12 weeks.",
     pack12_family: "Full access for up to 3 children. 12 weeks of access.",
     pack_monthly: "Full access to all diagnostics, drills, PDF reports, and progress tracking. Renews monthly — cancel anytime.",
-    pack_annual: "12 months of full access: all Hard drills, mock exams, analytics, roadmap, milestone diagnostics and weekly plans.",
+    pack_annual: "12 months of full access — one-time payment: all Hard drills, mock exams, analytics, roadmap, milestone diagnostics and weekly plans.",
     programme8: "8-week structured programme with milestone diagnostics, advanced analytics, and a personalised weekly plan.",
     programme12: "12-week structured programme — subscriber add-on with milestone diagnostics and a personalised weekly plan.",
     programme24_plus: "6-month Programme+ with full structured roadmap, milestone diagnostics, advanced analytics, and priority support.",

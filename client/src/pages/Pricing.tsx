@@ -406,9 +406,9 @@ export default function Pricing() {
                   <CardContent className="flex-1">
                     <div className="mb-1">
                       <span className="text-4xl font-bold text-primary">£495</span>
-                      <span className="text-muted-foreground font-medium text-sm"> / year</span>
+                      <span className="text-muted-foreground font-medium text-sm"> one-time</span>
                     </div>
-                    <p className="text-xs text-slate-500 mb-1">One payment · equiv. £41.25/mo</p>
+                    <p className="text-xs text-slate-500 mb-1">12 months access · equiv. £41.25/mo</p>
                     <div className="inline-flex items-center gap-1.5 bg-green-100 border border-green-200 text-green-800 text-[11px] font-bold px-2 py-1 rounded-full mb-4">
                       <CheckCircle2 className="h-3 w-3" />
                       Save £224.88 vs monthly Edge
@@ -1006,9 +1006,9 @@ export default function Pricing() {
                     <p className="text-xs font-bold uppercase tracking-wider text-brand-green mb-1">Bucks Practice Platform Edge — Annual</p>
                     <div className="flex items-end gap-2 mb-1">
                       <span className="text-4xl font-bold text-primary">£495</span>
-                      <span className="text-slate-500 font-medium text-sm mb-1">/ year</span>
+                      <span className="text-slate-500 font-medium text-sm mb-1">one-time</span>
                     </div>
-                    <p className="text-xs text-slate-500 mb-2">One payment · equiv. £41.25/mo</p>
+                    <p className="text-xs text-slate-500 mb-2">12 months access · equiv. £41.25/mo</p>
                     <div className="inline-flex items-center gap-1 text-[11px] font-bold text-green-700 bg-green-100 border border-green-200 px-2 py-0.5 rounded-full mb-4">
                       Save £224.88 vs monthly
                     </div>
