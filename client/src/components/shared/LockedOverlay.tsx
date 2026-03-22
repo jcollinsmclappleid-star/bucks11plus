@@ -12,8 +12,8 @@ interface LockedOverlayProps {
 
 const tierInfo: Record<string, { name: string; price: string }> = {
   any: { name: "any package", price: "" },
-  pack12: { name: "Practice Platform", price: "from £24.99/mo" },
-  programme16: { name: "Programme+", price: "£149 one-time" },
+  pack12: { name: "Practice Platform", price: "from £59.99/mo" },
+  programme16: { name: "Programme+", price: "£349 one-time" },
 };
 
 export default function LockedOverlay({ children, section, requiredTier = "any", loggedIn = false }: LockedOverlayProps) {

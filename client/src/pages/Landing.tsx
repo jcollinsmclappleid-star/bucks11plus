@@ -270,8 +270,8 @@ export default function Landing() {
             { "@type": "Question", name: "How does the free diagnostic work?", acceptedAnswer: { "@type": "Answer", text: "The free diagnostic is a 12-question, 8-minute timed assessment in GL-style format. No account is needed. On completion, parents receive a readiness band (On Track, Within Reach, or Clear Improvement Opportunity), a forecast standardised score toward 121, and a breakdown of performance across the four test sections." } },
             { "@type": "Question", name: "When should my child start preparing for the Bucks 11+?", acceptedAnswer: { "@type": "Answer", text: "Most families begin structured preparation in Year 4 or early Year 5, giving children 12 to 18 months before the September test date. Starting with a diagnostic assessment helps identify specific gaps and ensures preparation time is spent where it will have the most impact." } },
             { "@type": "Question", name: "Is 11+ Standard affiliated with GL Assessment or Buckinghamshire Council?", acceptedAnswer: { "@type": "Answer", text: "No. 11+ Standard is fully independent. We are not affiliated with GL Assessment, Buckinghamshire Council, The Buckinghamshire Grammar Schools (TBGS), or any individual grammar school. The GL-style label refers to the question format we use to replicate the test structure — it does not imply any formal relationship." } },
-            { "@type": "Question", name: "What is included in the Practice Platform?", acceptedAnswer: { "@type": "Answer", text: "The Practice Platform (£24.99/month) includes 1,500+ questions across all four test domains, timed drills by section and difficulty level, full 40-question timed diagnostic papers, a parent analytics dashboard with 10 performance metrics, session-by-session progress tracking, and PDF reports. All can be cancelled at any time." } },
-            { "@type": "Question", name: "What is the difference between the Practice Platform and Programme+?", acceptedAnswer: { "@type": "Answer", text: "The Practice Platform (£24.99/month) is flexible access to the full question bank, drills, and analytics. Programme+ (£149 one-time) includes everything in the Practice Platform plus a structured 24-week preparation programme with week-by-week focus areas and milestone assessments — designed for families who want a complete guided programme rather than self-directed practice." } },
+            { "@type": "Question", name: "What is included in the Practice Platform?", acceptedAnswer: { "@type": "Answer", text: "The Practice Platform (£59.99/month or £495/year) includes 1,500+ questions across all four test domains, timed drills by section and difficulty level, full 40-question timed diagnostic papers, a parent analytics dashboard with 10 performance metrics, session-by-session progress tracking, and PDF reports. Cancel anytime." } },
+            { "@type": "Question", name: "What is the difference between the Practice Platform and Programme+?", acceptedAnswer: { "@type": "Answer", text: "The Practice Platform (from £59.99/month) is flexible access to the full question bank, drills, and analytics. Programme+ (£349 one-time) includes everything in the Practice Platform plus a structured 6-month preparation programme with week-by-week focus areas and milestone assessments — designed for families who want a complete guided programme rather than self-directed practice." } },
           ]
         }}
       />
@@ -408,11 +408,11 @@ export default function Landing() {
               </Link>
               <span className="hidden sm:inline text-white/15">|</span>
               <Link href="/pricing" className="text-white/40 hover:text-white/70 text-sm font-medium transition-colors">
-                Practice Platform — £24.99/mo
+                Practice Platform — from £59.99/mo
               </Link>
               <span className="hidden sm:inline text-white/15">|</span>
               <Link href="/pricing#tiers" className="text-brand-amber/70 hover:text-brand-amber text-sm font-semibold transition-colors">
-                Programme+ — £149 · or £89 add-on for subscribers
+                Programme+ — £349 one-time
               </Link>
             </div>
 
@@ -461,7 +461,7 @@ export default function Landing() {
 
             <div className="rounded-2xl border border-slate-200 bg-white p-6 flex flex-col" data-testid="card-included-pack">
               <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">Practice Platform</p>
-              <h3 className="text-xl font-bold text-primary font-serif mb-1">£24.99<span className="text-sm font-medium text-slate-500">/mo</span></h3>
+              <h3 className="text-xl font-bold text-primary font-serif mb-1">£59.99<span className="text-sm font-medium text-slate-500">/mo</span></h3>
               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight mb-4">Cancel any time</p>
               <ul className="space-y-3 flex-1">
                 {[
@@ -488,10 +488,10 @@ export default function Landing() {
               </div>
               <p className="text-sm font-semibold text-brand-amber uppercase tracking-wider mb-2">Programme+</p>
               <div className="mb-1">
-                <span className="text-xl font-bold text-primary font-serif">£149</span>
+                <span className="text-xl font-bold text-primary font-serif">£349</span>
                 <span className="text-sm font-medium text-slate-500"> one-time</span>
               </div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight mb-1">26 weeks · all-inclusive · no subscription needed</p>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight mb-1">6 months · all-inclusive · no subscription needed</p>
               <span className="inline-block text-[10px] font-bold text-brand-green uppercase tracking-tight bg-green-50 border border-green-200 px-2 py-0.5 rounded-full mb-4 w-fit">
                 Platform access included
               </span>
@@ -523,7 +523,7 @@ export default function Landing() {
               >
                 {checkoutLoading
                   ? <Loader2 className="h-4 w-4 animate-spin" />
-                  : "Get Programme+ — £149"
+                  : "Get Programme+ — £349"
                 }
               </Button>
             </div>
@@ -991,7 +991,7 @@ export default function Landing() {
               <li>✓ Free 12-question GL-style mini diagnostic — no account required, results in under 10 minutes</li>
               <li>✓ Covers all four Bucks 11+ domains: Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension</li>
               <li>✓ Readiness forecast benchmarked against the 121 standardised score qualifying threshold</li>
-              <li>✓ Practice Platform with 1,500+ questions, timed drills, and parent analytics — from £24.99/month</li>
+              <li>✓ Practice Platform with 1,500+ questions, timed drills, and parent analytics — from £59.99/month</li>
               <li>✓ Fully independent — not affiliated with GL Assessment, Buckinghamshire Council, or any grammar school</li>
             </ul>
           </div>
@@ -1055,8 +1055,8 @@ export default function Landing() {
             <div className="space-y-4 mt-4">
               {[
                 { q: "Is 11+ Standard affiliated with GL Assessment or Buckinghamshire Council?", a: "No. We are fully independent — not affiliated with GL Assessment, Buckinghamshire Council, TBGS, or any individual grammar school. 'GL-style' refers to the question format we independently replicate, not an official relationship." },
-                { q: "How is the free diagnostic different from the full paid platform?", a: "The free 12-question mini diagnostic gives you a readiness band, forecast score, and section breakdown with no account needed. The paid Practice Platform (£24.99/month) gives access to 1,500+ questions, full 40-question timed papers, parent analytics, and progress tracking across all sessions." },
-                { q: "What is the difference between Practice Platform and Programme+?", a: "Practice Platform is flexible month-to-month access to the full question bank, drills, and analytics. Programme+ (£149 one-time) adds a structured 24-week preparation programme with week-by-week focus areas and milestone assessments." },
+                { q: "How is the free diagnostic different from the full paid platform?", a: "The free 12-question mini diagnostic gives you a readiness band, forecast score, and section breakdown with no account needed. The paid Practice Platform (from £59.99/month) gives access to 1,500+ questions, full 40-question timed papers, parent analytics, and progress tracking across all sessions." },
+                { q: "What is the difference between Practice Platform and Programme+?", a: "Practice Platform is flexible access to the full question bank, drills, and analytics — monthly at £59.99 or annual at £495. Programme+ (£349 one-time) adds a structured 6-month preparation programme with week-by-week focus areas and milestone assessments." },
                 { q: "When should preparation begin?", a: "Most families begin structured preparation in Year 4 or early Year 5, giving 12–18 months before the September test. Starting with a diagnostic identifies specific gaps so preparation time is targeted rather than broad." },
               ].map((item, i) => (
                 <div key={i} className="border-t border-slate-200 pt-4 first:border-0 first:pt-0">

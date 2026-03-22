@@ -105,7 +105,7 @@ export default function Pricing() {
     }
   };
 
-  const PACK_TIERS = new Set(["pack12", "pack12_family", "pack_monthly"]);
+  const PACK_TIERS = new Set(["pack12", "pack12_family", "pack_monthly", "pack_annual"]);
   const PROGRAMME_TIERS = new Set(["programme8", "programme12", "programme16", "programme16_family", "programme24_plus"]);
 
   const tierRank: Record<string, number> = {
@@ -114,6 +114,7 @@ export default function Pricing() {
     pack12: 1,
     pack12_family: 1,
     pack_monthly: 1,
+    pack_annual: 1,
     programme8: 2,
     programme12: 2,
     programme16: 2,
@@ -126,8 +127,9 @@ export default function Pricing() {
   const isTopTier = currentTier === "programme24_plus" || currentTier === "programme16_family" || currentTier === "programme16";
 
   const upgradeOptions: Record<string, string[]> = {
-    pack_monthly: ["programme12", "programme24_plus"],
-    pack12: ["programme12", "programme24_plus"],
+    pack_monthly: ["pack_annual", "programme24_plus"],
+    pack_annual: ["programme24_plus"],
+    pack12: ["pack_annual", "programme24_plus"],
     pack12_family: ["programme16_family"],
     programme8: ["programme12", "programme24_plus"],
     programme12: ["programme24_plus"],
@@ -163,7 +165,7 @@ export default function Pricing() {
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
       <Seo
         title="Bucks 11 Plus Preparation Plans & Pricing (2026) | 11+ Standard"
-        description="Free GL-style diagnostic, Practice Platform (£24.99/month) and Programme+ (£149 one-time). Targeted Bucks 11 Plus prep built around the 121 qualifying standard."
+        description="Free GL-style diagnostic, Practice Platform (£59.99/month or £495/year) and Programme+ (£349 one-time). Targeted Bucks 11 Plus prep built around the 121 qualifying standard."
         canonicalPath="/pricing"
       />
 
@@ -319,10 +321,10 @@ export default function Pricing() {
                   6 months of all-inclusive structured preparation — diagnostics, roadmap, milestone tracking, and mock exams. No subscription needed.
                 </p>
                 <p className="text-xs text-amber-700 font-medium mb-6">
-                  Already subscribing? You can add a structured 12-week programme for £89 once signed in.
+                  One payment of £349 — includes full platform access for 6 months plus structured coaching.
                 </p>
                 <Button className="w-full h-12 text-sm font-semibold bg-brand-amber text-white hover:bg-brand-amber/90" asChild data-testid="button-pricing-path-programme">
-                  <a href="#tiers">View Programme+ — £149</a>
+                  <a href="#tiers">View Programme+ — £349</a>
                 </Button>
               </div>
             </div>
@@ -336,36 +338,66 @@ export default function Pricing() {
             <div className="text-center mb-8">
               <div className="inline-flex items-center gap-2 bg-brand-amber/10 border border-brand-amber/30 rounded-full px-4 py-1.5 mb-4">
                 <TrendingUp className="h-4 w-4 text-brand-amber" />
-                <span className="text-xs font-bold uppercase tracking-wider text-brand-amber">You're subscribed — add structured coaching</span>
+                <span className="text-xs font-bold uppercase tracking-wider text-brand-amber">Upgrade your plan</span>
               </div>
               <h3 className="text-2xl md:text-3xl font-bold text-primary font-serif mb-3">
-                Ready to add a structured programme?
+                Ready to upgrade?
               </h3>
               <p className="text-slate-600 max-w-2xl mx-auto text-sm leading-relaxed">
-                Your subscription gives you full platform access. A structured programme adds a step-by-step weekly roadmap, milestone diagnostics, and guided preparation on top — at a one-time cost.
+                Switch to Annual to save over £220, or add Programme+ for a fully structured 6-month coaching plan with roadmap, mock exams, and milestone diagnostics.
               </p>
             </div>
             <div className="grid sm:grid-cols-2 gap-5 max-w-2xl mx-auto">
+              {availableUpgrades.includes("pack_annual") && (
+                <Card className="border-primary border-2 shadow-lg flex flex-col relative overflow-hidden" data-testid="card-upgrade-pack-annual">
+                  <div className="absolute top-0 inset-x-0 h-1 bg-primary"></div>
+                  <div className="absolute top-3 right-3 bg-primary text-white px-2 py-0.5 rounded-full font-bold text-[10px] uppercase tracking-wider pointer-events-none">
+                    SAVE £224.88
+                  </div>
+                  <CardContent className="p-6 pt-8 flex-1">
+                    <p className="text-xs font-bold uppercase tracking-wider text-primary mb-1">Practice Platform Annual</p>
+                    <div className="flex items-end gap-2 mb-1">
+                      <span className="text-4xl font-bold text-primary">£495</span>
+                      <span className="text-slate-500 font-medium text-sm mb-1">/ year</span>
+                    </div>
+                    <p className="text-xs text-slate-500 mb-4">Switch from monthly — equivalent to £41.25/month</p>
+                    <ul className="space-y-2">
+                      {[
+                        "Everything in your current plan",
+                        "12 months of full access",
+                        "Save £224.88 vs staying monthly",
+                        "Cancel your monthly subscription",
+                      ].map((f, i) => (
+                        <li key={i} className="flex items-center gap-2 text-sm text-slate-700">
+                          <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0" />{f}
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                  <CardFooter className="px-6 pb-6 pt-0">
+                    <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-11 font-bold" onClick={() => handleUpgrade("pack_annual")} disabled={loading === "upgrade"} data-testid="button-upgrade-pack-annual">
+                      {loading === "upgrade" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Switch to Annual — £495"}
+                    </Button>
+                  </CardFooter>
+                </Card>
+              )}
               {availableUpgrades.includes("programme12") && (
                 <Card className="border-primary border-2 shadow-lg flex flex-col relative overflow-hidden" data-testid="card-upgrade-programme12">
                   <div className="absolute top-0 inset-x-0 h-1 bg-primary"></div>
-                  <div className="absolute top-3 right-3 bg-primary text-white px-2 py-0.5 rounded-full font-bold text-[10px] uppercase tracking-wider pointer-events-none">
-                    SUBSCRIBER RATE
-                  </div>
-                  <CardContent className="p-6 pt-8 flex-1">
+                  <CardContent className="p-6 pt-5 flex-1">
                     <p className="text-xs font-bold uppercase tracking-wider text-primary mb-1">12-Week Structured Programme</p>
                     <div className="flex items-end gap-2 mb-1">
                       <span className="text-4xl font-bold text-primary">£89</span>
                       <span className="text-slate-500 font-medium text-sm mb-1">one-time</span>
                     </div>
-                    <p className="text-xs text-slate-500 mb-4">Add-on for active subscribers · keeps your monthly plan</p>
+                    <p className="text-xs text-slate-500 mb-4">Add-on · keeps your existing plan</p>
                     <ul className="space-y-2">
                       {[
-                        "12-week structured preparation roadmap",
-                        "All Hard challenge drills unlocked",
-                        "4 milestone diagnostics with auto-tracking",
+                        "12-week preparation roadmap",
+                        "All Hard challenge drills",
+                        "4 milestone diagnostics",
                         "Weekly personalised task plans",
-                        "Premium Parent Analytics dashboard",
+                        "Premium Parent Analytics",
                       ].map((f, i) => (
                         <li key={i} className="flex items-center gap-2 text-sm text-slate-700">
                           <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0" />{f}
@@ -384,22 +416,22 @@ export default function Pricing() {
                 <Card className="border-brand-amber border-2 shadow-xl flex flex-col relative overflow-hidden" data-testid="card-upgrade-programme24">
                   <div className="absolute top-0 inset-x-0 h-1.5 bg-brand-amber"></div>
                   <div className="absolute top-3 right-3 bg-brand-amber text-amber-950 px-2 py-0.5 rounded-full font-bold text-[10px] uppercase tracking-wider pointer-events-none">
-                    BEST VALUE
+                    STRUCTURED
                   </div>
                   <CardContent className="p-6 pt-8 flex-1">
-                    <p className="text-xs font-bold uppercase tracking-wider text-brand-amber mb-1">Programme+ · 26 Weeks</p>
+                    <p className="text-xs font-bold uppercase tracking-wider text-brand-amber mb-1">Programme+ · 6 Months</p>
                     <div className="flex items-end gap-2 mb-1">
-                      <span className="text-4xl font-bold text-primary">£149</span>
+                      <span className="text-4xl font-bold text-primary">£349</span>
                       <span className="text-slate-500 font-medium text-sm mb-1">one-time</span>
                     </div>
-                    <p className="text-xs text-slate-500 mb-4">Includes 6 months of full access — replaces your subscription</p>
+                    <p className="text-xs text-slate-500 mb-4">Includes 6 months of full access + structured coaching</p>
                     <ul className="space-y-2">
                       {[
-                        "6-month structured preparation roadmap",
+                        "6-month structured roadmap",
                         "All Hard challenge drills + 3 mock exams",
                         "Milestone diagnostics with auto-tracking",
                         "Weekly personalised task plans",
-                        "Premium Parent Analytics dashboard",
+                        "Premium Parent Analytics",
                       ].map((f, i) => (
                         <li key={i} className="flex items-center gap-2 text-sm font-medium text-primary">
                           <CheckCircle2 className="h-4 w-4 text-brand-amber shrink-0" />{f}
@@ -409,7 +441,7 @@ export default function Pricing() {
                   </CardContent>
                   <CardFooter className="px-6 pb-6 pt-0">
                     <Button className="w-full bg-brand-amber text-white hover:bg-brand-amber/90 h-11 font-bold shadow-md" onClick={() => handleUpgrade("programme24_plus")} disabled={loading === "upgrade"} data-testid="button-upgrade-programme24">
-                      {loading === "upgrade" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Upgrade to Programme+ — £149"}
+                      {loading === "upgrade" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Get Programme+ — £349"}
                     </Button>
                   </CardFooter>
                 </Card>
@@ -467,7 +499,8 @@ export default function Pricing() {
                       <div className="flex items-center gap-3 mb-1">
                         <h3 className="text-xl font-bold text-primary font-serif">
                           {currentTier === "early_learner" && "Early Learner"}
-                          {(currentTier === "pack12" || currentTier === "pack_monthly") && "Practice Platform"}
+                          {(currentTier === "pack12" || currentTier === "pack_monthly") && "Practice Platform — Monthly"}
+                          {currentTier === "pack_annual" && "Practice Platform — Annual"}
                           {currentTier === "pack12_family" && "Practice Platform — Family"}
                           {currentTier === "programme24_plus" && "Programme+"}
                           {(currentTier === "programme8" || currentTier === "programme12" || currentTier === "programme16") && "Young Scholar Programme"}
@@ -478,6 +511,7 @@ export default function Pricing() {
                       <p className="text-sm text-slate-600 mb-4">
                         {currentTier === "early_learner" && "Foundation-level practice with readiness tracking and age-appropriate learning."}
                         {(currentTier === "pack12" || currentTier === "pack12_family" || currentTier === "pack_monthly") && "1,500+ questions, full diagnostics, timed drills, PDF reports and progress tracking."}
+                        {currentTier === "pack_annual" && "12 months of full platform access: 1,500+ questions, diagnostics, drills, PDF reports and progress tracking."}
                         {currentTier === "programme24_plus" && "6-month all-inclusive programme: diagnostics, all drills, 3 mock exams, roadmap, milestone tracking, weekly plans and premium analytics."}
                         {(currentTier === "programme8" || currentTier === "programme12" || currentTier === "programme16" || currentTier === "programme16_family") && "Complete preparation: diagnostics, all drills, mock exams, roadmap, milestone tracking, weekly plans and premium analytics."}
                       </p>
@@ -493,7 +527,7 @@ export default function Pricing() {
 
           {!hasPaidPlan && (
             <div>
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto">
+              <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4 max-w-6xl mx-auto">
 
                 <Card className="border-border/60 shadow-sm flex flex-col hover:border-primary/30 transition-colors" data-testid="card-tier-free">
                   <CardHeader className="pb-3">
@@ -530,29 +564,23 @@ export default function Pricing() {
 
                 <Card className="border-primary border-2 shadow-lg flex flex-col relative overflow-hidden" data-testid="card-tier-pack-monthly">
                   <div className="absolute top-0 inset-x-0 h-1 bg-primary"></div>
-                  <div className="absolute top-3 right-3 bg-primary text-white px-2.5 py-1 rounded-full font-bold text-[10px] uppercase tracking-wider shadow pointer-events-none">
-                    MOST POPULAR
-                  </div>
-                  <CardHeader className="pb-3 pt-6">
+                  <CardHeader className="pb-3 pt-5">
                     <p className="text-xs font-bold text-primary uppercase tracking-wider mb-1">Practice Platform</p>
-                    <CardTitle className="text-xl font-serif">Flexible monthly access</CardTitle>
+                    <CardTitle className="text-xl font-serif">Monthly</CardTitle>
                   </CardHeader>
                   <CardContent className="flex-1">
                     <div className="mb-1">
-                      <span className="text-4xl font-bold text-primary">£24.99</span>
+                      <span className="text-4xl font-bold text-primary">£59.99</span>
                       <span className="text-muted-foreground font-medium text-sm"> / month</span>
                     </div>
-                    <p className="text-xs text-slate-500 mb-4">Cancel any time</p>
-                    <p className="text-sm text-slate-600 mb-4 leading-relaxed">
-                      Full question bank, diagnostics, and drills on a monthly subscription. Add a structured programme at any time.
-                    </p>
+                    <p className="text-xs text-slate-500 mb-4">Cancel any time · No lock-in</p>
                     <ul className="space-y-2">
                       {[
                         "1,500+ VR, NVR, Maths & Comprehension questions",
                         "Full timed diagnostics (40 questions)",
-                        "Easy & Medium drills (19 sections)",
+                        "All drills across 19 sections",
                         "PDF reports & impact simulator",
-                        "Cancel any time",
+                        "Progress tracking dashboard",
                       ].map((f, i) => (
                         <li key={i} className="flex items-start gap-2">
                           <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0 mt-0.5" />
@@ -573,36 +601,74 @@ export default function Pricing() {
                   </CardFooter>
                 </Card>
 
-                <Card className="border-brand-amber border-2 shadow-xl relative flex flex-col overflow-hidden" data-testid="card-tier-programme24">
-                  <div className="absolute top-0 inset-x-0 h-1.5 bg-brand-amber"></div>
-                  <div className="absolute top-3 right-3 bg-brand-amber text-amber-950 px-2.5 py-1 rounded-full font-bold text-[10px] uppercase tracking-wider shadow pointer-events-none">
-                    RECOMMENDED
+                <Card className="border-primary border-2 shadow-xl relative flex flex-col overflow-hidden" data-testid="card-tier-pack-annual">
+                  <div className="absolute top-0 inset-x-0 h-1.5 bg-primary"></div>
+                  <div className="absolute top-3 right-3 bg-primary text-white px-2.5 py-1 rounded-full font-bold text-[10px] uppercase tracking-wider shadow pointer-events-none">
+                    BEST VALUE
                   </div>
                   <CardHeader className="pb-3 pt-6">
-                    <p className="text-xs font-bold text-brand-amber uppercase tracking-wider mb-1">Programme+</p>
-                    <CardTitle className="text-xl font-serif">All-inclusive · 6 months</CardTitle>
+                    <p className="text-xs font-bold text-primary uppercase tracking-wider mb-1">Practice Platform</p>
+                    <CardTitle className="text-xl font-serif">Annual</CardTitle>
                   </CardHeader>
                   <CardContent className="flex-1">
                     <div className="mb-1">
-                      <span className="text-4xl font-bold text-primary">£149</span>
-                      <span className="text-muted-foreground font-medium"> one-time</span>
+                      <span className="text-4xl font-bold text-primary">£495</span>
+                      <span className="text-muted-foreground font-medium text-sm"> / year</span>
                     </div>
-                    <p className="text-xs text-slate-500 mb-1">6 months of full access — no subscription needed</p>
-                    <div className="flex items-center gap-1.5 mb-4">
-                      <span className="text-[10px] font-bold text-brand-green uppercase tracking-tight bg-green-50 border border-green-200 px-2 py-0.5 rounded-full">
-                        All platform access included
-                      </span>
+                    <div className="inline-flex items-center gap-1.5 mb-4 bg-green-50 border border-green-200 rounded-full px-2.5 py-1">
+                      <CheckCircle2 className="h-3 w-3 text-brand-green" />
+                      <span className="text-[11px] font-bold text-green-700">Save £224.88 vs monthly</span>
                     </div>
                     <ul className="space-y-2">
                       {[
-                        "1,500+ VR, NVR, Maths & Comprehension questions",
-                        "Full timed diagnostics (40 questions)",
-                        "All 17 Hard challenge drills unlocked",
-                        "6-month structured preparation roadmap",
+                        "Everything in Monthly",
+                        "12 months of full access",
+                        "Equivalent to £41.25/month",
+                        "One payment, no recurring charges",
+                      ].map((f, i) => (
+                        <li key={i} className="flex items-start gap-2">
+                          <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0 mt-0.5" />
+                          <span className="text-slate-700 text-sm">{f}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                  <CardFooter>
+                    <Button
+                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-11 font-bold"
+                      onClick={() => handleCheckout("pack_annual")}
+                      disabled={loading === "pack_annual"}
+                      data-testid="button-get-pack-annual"
+                    >
+                      {loading === "pack_annual" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Get Annual Access"}
+                    </Button>
+                  </CardFooter>
+                </Card>
+
+                <Card className="border-brand-amber border-2 shadow-xl relative flex flex-col overflow-hidden" data-testid="card-tier-programme24">
+                  <div className="absolute top-0 inset-x-0 h-1.5 bg-brand-amber"></div>
+                  <div className="absolute top-3 right-3 bg-brand-amber text-amber-950 px-2.5 py-1 rounded-full font-bold text-[10px] uppercase tracking-wider shadow pointer-events-none">
+                    STRUCTURED
+                  </div>
+                  <CardHeader className="pb-3 pt-6">
+                    <p className="text-xs font-bold text-brand-amber uppercase tracking-wider mb-1">Programme+</p>
+                    <CardTitle className="text-xl font-serif">6-month plan</CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex-1">
+                    <div className="mb-1">
+                      <span className="text-4xl font-bold text-primary">£349</span>
+                      <span className="text-muted-foreground font-medium"> one-time</span>
+                    </div>
+                    <p className="text-xs text-slate-500 mb-4">6 months · structured coaching included</p>
+                    <ul className="space-y-2">
+                      {[
+                        "Everything in Practice Platform",
+                        "All 17 Hard challenge drills",
+                        "6-month structured roadmap",
                         "3 full mock exam simulations",
-                        "Milestone diagnostics with auto-tracking",
+                        "Milestone diagnostics & tracking",
                         "Weekly personalised task plans",
-                        "Premium Parent Analytics dashboard",
+                        "Premium Parent Analytics",
                       ].map((f, i) => (
                         <li key={i} className="flex items-start gap-2">
                           <CheckCircle2 className="h-4 w-4 text-brand-amber shrink-0 mt-0.5" />
@@ -610,11 +676,6 @@ export default function Pricing() {
                         </li>
                       ))}
                     </ul>
-                    <div className="mt-4 rounded-lg bg-amber-50 border border-brand-amber/20 px-3 py-2.5">
-                      <p className="text-xs text-amber-800 font-medium">
-                        Already subscribed? <span className="font-bold">Add 12-week structured coaching for £89</span> — available after you sign in.
-                      </p>
-                    </div>
                   </CardContent>
                   <CardFooter>
                     <Button
@@ -925,8 +986,8 @@ export default function Pricing() {
                   <tr className="border-b-2 border-slate-200">
                     <th className="text-left py-3 px-4 font-semibold text-slate-600 w-[40%]">Feature</th>
                     <th className="text-center py-3 px-4 font-semibold text-slate-600">Free</th>
-                    <th className="text-center py-3 px-4 font-semibold text-slate-600">Practice Platform</th>
-                    <th className="text-center py-3 px-4 font-bold text-brand-amber">Programme</th>
+                    <th className="text-center py-3 px-4 font-semibold text-slate-600">Practice Platform<br/><span className="text-xs font-normal text-slate-400">from £59.99/mo</span></th>
+                    <th className="text-center py-3 px-4 font-bold text-brand-amber">Programme+<br/><span className="text-xs font-normal text-slate-400">£349 one-time</span></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1334,7 +1395,7 @@ export default function Pricing() {
               disabled={loading === "programme24_plus"}
               data-testid="button-cta-programme"
             >
-              {loading === "programme24_plus" ? <Loader2 className="h-5 w-5 animate-spin" /> : <>Programme+ — £149 <ArrowRight className="ml-2 h-5 w-5" /></>}
+              {loading === "programme24_plus" ? <Loader2 className="h-5 w-5 animate-spin" /> : <>Programme+ — £349 <ArrowRight className="ml-2 h-5 w-5" /></>}
             </Button>
             <Button
               size="lg"
@@ -1344,7 +1405,7 @@ export default function Pricing() {
               disabled={loading === "pack_monthly"}
               data-testid="button-cta-pack"
             >
-              {loading === "pack_monthly" ? <Loader2 className="h-5 w-5 animate-spin" /> : "Practice Platform — £24.99/mo"}
+              {loading === "pack_monthly" ? <Loader2 className="h-5 w-5 animate-spin" /> : "Practice Platform — £59.99/mo"}
             </Button>
           </div>
 

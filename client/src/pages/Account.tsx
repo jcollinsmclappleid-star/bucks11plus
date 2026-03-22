@@ -14,19 +14,22 @@ type Tab = "profile" | "subscription";
 
 const UPGRADE_OPTIONS: Record<string, { tier: string; label: string; price: string; description: string }[]> = {
   pack_monthly: [
-    { tier: "programme12", label: "12-Week Structured Programme", price: "£89", description: "Add a step-by-step roadmap, milestone diagnostics & weekly plans. Keeps your subscription." },
-    { tier: "programme24_plus", label: "Programme+ (26 weeks)", price: "£149", description: "All-inclusive 26-week plan with full access — replaces your subscription." },
+    { tier: "pack_annual", label: "Practice Platform — Annual", price: "£495/yr", description: "Switch to annual and save £224.88 — equivalent to £41.25/month." },
+    { tier: "programme24_plus", label: "Programme+ (6 months)", price: "£349", description: "All-inclusive 6-month plan with full access + structured coaching." },
+  ],
+  pack_annual: [
+    { tier: "programme24_plus", label: "Programme+ (6 months)", price: "£349", description: "Add structured coaching to your annual access." },
   ],
   pack12: [
-    { tier: "programme12", label: "12-Week Structured Programme", price: "£89", description: "Add structured coaching on top of your current access." },
-    { tier: "programme24_plus", label: "Programme+ (26 weeks)", price: "£149", description: "Full all-inclusive 26-week plan." },
+    { tier: "pack_annual", label: "Practice Platform — Annual", price: "£495/yr", description: "Upgrade to annual access and save." },
+    { tier: "programme24_plus", label: "Programme+ (6 months)", price: "£349", description: "Full all-inclusive 6-month plan." },
   ],
   programme8: [
     { tier: "programme12", label: "12-Week Structured Programme", price: "£89", description: "Extend with a longer structured roadmap." },
-    { tier: "programme24_plus", label: "Programme+ (26 weeks)", price: "£149", description: "Full 26-week all-inclusive plan." },
+    { tier: "programme24_plus", label: "Programme+ (6 months)", price: "£349", description: "Full 6-month all-inclusive plan." },
   ],
   programme12: [
-    { tier: "programme24_plus", label: "Programme+ (26 weeks)", price: "£149", description: "Upgrade to the full 26-week all-inclusive plan." },
+    { tier: "programme24_plus", label: "Programme+ (6 months)", price: "£349", description: "Upgrade to the full 6-month all-inclusive plan." },
   ],
 };
 
@@ -158,9 +161,10 @@ export default function Account() {
     pack12: "Full access to all diagnostics, drills, PDF reports, and progress tracking for 12 weeks.",
     pack12_family: "Full access for up to 3 children. 12 weeks of access.",
     pack_monthly: "Full access to all diagnostics, drills, PDF reports, and progress tracking. Renews monthly — cancel anytime.",
+    pack_annual: "Full platform access for 12 months: diagnostics, drills, PDF reports and progress tracking. Annual plan.",
     programme8: "8-week structured programme with milestone diagnostics, advanced analytics, and a personalised weekly plan.",
     programme12: "12-week structured programme — subscriber add-on with milestone diagnostics and a personalised weekly plan.",
-    programme24_plus: "24-week Programme+ with full structured roadmap, milestone diagnostics, advanced analytics, and priority support.",
+    programme24_plus: "6-month Programme+ with full structured roadmap, milestone diagnostics, advanced analytics, and priority support.",
     programme16: "Full access including 16-week structured roadmap, milestone diagnostics, advanced analytics, and weekly plans.",
     programme16_family: "Full programme access for up to 3 children. 16 weeks of access.",
   };

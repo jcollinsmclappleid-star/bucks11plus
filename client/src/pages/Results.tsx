@@ -89,14 +89,14 @@ function getUpsellMessage(tier: string, weakestSection: string, weakestScore: nu
       return {
         title: "Intensify Your Preparation",
         message: `${weakestSection} at ${weakestScore}% would benefit from the Practice Platform's full diagnostic papers and targeted drill sessions across all difficulty levels.`,
-        cta: "Upgrade to Practice Platform — £24.99/mo",
+        cta: "Upgrade to Practice Platform — £59.99/mo",
         tier: "pack_monthly",
       };
     }
     return {
       title: "Ready for More Depth?",
       message: `Your child is making progress. The Practice Platform unlocks full-length diagnostic papers and harder question sets to push their score higher.`,
-      cta: "Upgrade to Practice Platform — £24.99/mo",
+      cta: "Upgrade to Practice Platform — £59.99/mo",
       tier: "pack_monthly",
     };
   }
@@ -104,8 +104,8 @@ function getUpsellMessage(tier: string, weakestSection: string, weakestScore: nu
   if (rank === 1 && overallScore < 121) {
     return {
       title: "Close the Gap with Programme+",
-      message: `At ${overallScore}/141, your child is ${121 - overallScore} points from the 121 standard. The 24-week Programme+ provides a structured weekly plan, mock exams, and milestone tracking to systematically close this gap.`,
-      cta: "Upgrade to Programme+ — £149",
+      message: `At ${overallScore}/141, your child is ${121 - overallScore} points from the 121 standard. The 6-month Programme+ provides a structured weekly plan, mock exams, and milestone tracking to systematically close this gap.`,
+      cta: "Upgrade to Programme+ — £349",
       tier: "programme24_plus",
       isUpgrade: true,
     };

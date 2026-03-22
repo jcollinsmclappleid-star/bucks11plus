@@ -137,7 +137,7 @@ export default function Legal({ type }: { type: 'terms' | 'privacy' | 'safeguard
           body: "11+ Standard is a digital educational platform. All purchases provide immediate access to digital content including diagnostic assessments, practice questions, analytics dashboards and progress tracking tools. Because our products are delivered digitally, our refund policy reflects the nature of digital goods under UK consumer law. Different cancellation rights apply depending on whether you have purchased a monthly subscription or a one-time programme plan — please read the relevant section below."
         },
         {
-          heading: "Monthly Subscription (Practice Platform Monthly — £24.99/mo)",
+          heading: "Monthly Subscription (Practice Platform Monthly — £59.99/mo)",
           body: "If you are on the Practice Platform Monthly subscription, you may cancel at any time via the in-app billing portal on your Account page. Cancellation takes effect at the end of your current billing period — your access will continue until that date and will not be renewed. We do not issue partial-month refunds once a billing period has started. The 14-day cooling-off right (see below) applies to your first monthly payment only and is automatically waived as soon as you access any digital content on the platform. Subsequent monthly renewals are not covered by a cooling-off right."
         },
         {
@@ -158,7 +158,7 @@ export default function Legal({ type }: { type: 'terms' | 'privacy' | 'safeguard
         },
         {
           heading: "Plan Changes & Upgrades",
-          body: "Current plan prices: Practice Platform Monthly £24.99/month; 8-week Programme £59 one-time; 12-week Programme (subscriber add-on) £89 one-time; Programme+ (24 weeks) £149 one-time. If you upgrade from one plan to another (e.g. from Practice Platform to Programme+), the cost of your original plan is deducted from the upgrade price. Downgrades are not available once content from a higher-tier plan has been accessed."
+          body: "Current plan prices: Practice Platform Monthly £59.99/month; Practice Platform Annual £495/year; 12-week Programme (subscriber add-on) £89 one-time; Programme+ (6 months) £349 one-time. If you upgrade from one plan to another (e.g. from Practice Platform to Programme+), please contact support@bucks11plustest.co.uk. Downgrades are not available once content from a higher-tier plan has been accessed."
         },
         {
           heading: "Contact",
