@@ -9,6 +9,7 @@ import type { Diagnostic, Question, TestSession } from "@shared/schema";
 import type { RenderConfig } from "@shared/contentTypes";
 import VisualPrompt from "../components/render/VisualPrompt";
 import { BookOpen, ChevronRight } from "lucide-react";
+import { useAuth } from "../lib/auth";
 
 const LABELS = ["A", "B", "C", "D", "E", "F"];
 const COMP_ANSWER_SECONDS = 45;
@@ -20,6 +21,8 @@ export default function TestRunner() {
   const searchParams = new URLSearchParams(search);
   const isGuest = searchParams.get("guest") === "true";
   const isPractice = searchParams.get("practice") === "true";
+
+  const { user, isLoading: authLoading, hasPaidAccess } = useAuth();
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [timeLeft, setTimeLeft] = useState(0);
@@ -96,6 +99,15 @@ export default function TestRunner() {
   const questions = isGuest ? guestQuestions : isPractice ? practiceQuestions : fetchedQuestions;
   const diagnosticTitle = isGuest ? guestTitle : isPractice ? (practiceDiagnostic?.title || "Practice Paper") : (diagnostic?.title || "");
   const diagnosticDuration = isGuest ? guestDuration : isPractice ? (practiceDiagnostic?.duration || 45) : (diagnostic?.duration || 0);
+
+  useEffect(() => {
+    if (isGuest) return;
+    if (authLoading) return;
+    if (!user) { setLocation("/sign-in"); return; }
+    if (!isPractice && diagnostic && diagnostic.type !== "mini" && !hasPaidAccess()) {
+      setLocation("/pricing");
+    }
+  }, [isGuest, authLoading, user, diagnostic, isPractice]);
 
   const submitMutation = useMutation({
     mutationFn: async (finalAnswers: typeof answers) => {

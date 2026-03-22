@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import type { Question } from "@shared/schema";
 import type { RenderConfig } from "@shared/contentTypes";
 import VisualPrompt from "../components/render/VisualPrompt";
+import { useAuth } from "../lib/auth";
 import { CheckCircle, XCircle, Timer, BookOpen } from "lucide-react";
 
 const LABELS = ["A", "B", "C", "D", "E", "F"];
@@ -33,6 +34,7 @@ export default function DrillRunner() {
   const isTimed = new URLSearchParams(search).get("mode") === "timed";
 
   const [, setLocation] = useLocation();
+  const { user, isLoading: authLoading, hasPaidAccess } = useAuth();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [feedback, setFeedback] = useState<FeedbackState>(null);
   const [svgSelectedIndex, setSvgSelectedIndex] = useState<number | null>(null);
@@ -53,9 +55,16 @@ export default function DrillRunner() {
     queryKey: [`/api/practice-sections/${sectionId}/questions`],
     staleTime: 0,
     gcTime: 0,
+    enabled: !authLoading && !!user && hasPaidAccess(),
   });
   const questions = drillData?.questions;
   const exhaustionWarning = drillData?.exhaustion_warning;
+
+  useEffect(() => {
+    if (authLoading) return;
+    if (!user) { setLocation("/sign-in"); return; }
+    if (!hasPaidAccess()) { setLocation("/pricing"); return; }
+  }, [authLoading, user]);
 
   useEffect(() => {
     if (isTimed && questions && questions.length > 0 && !timerInitialized) {
