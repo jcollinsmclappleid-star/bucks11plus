@@ -1876,14 +1876,40 @@ export async function registerRoutes(
     } catch (error) { next(error); }
   });
 
-  app.get("/sitemap.xml", (_req, res) => {
+  app.get("/sitemap.xml", async (_req, res) => {
     const baseUrl = "https://bucks11plustest.co.uk";
     const today = new Date().toISOString().split("T")[0];
 
-    const towns = [
+    const townSlugs = [
       "high-wycombe", "aylesbury", "beaconsfield", "amersham",
       "chesham", "gerrards-cross", "marlow", "princes-risborough",
+      "great-missenden", "wendover", "chalfont-st-giles",
+      "hazlemere", "buckingham", "flackwell-heath",
     ];
+
+    const grammarSchoolSlugs = [
+      "royal-grammar-school-high-wycombe",
+      "wycombe-high-school",
+      "john-hampden-grammar-school",
+      "sir-william-borlases-grammar-school",
+      "dr-challoners-grammar-school",
+      "dr-challoners-high-school",
+      "beaconsfield-high-school",
+      "chesham-grammar-school",
+      "aylesbury-grammar-school",
+      "aylesbury-high-school",
+      "sir-henry-floyd-grammar-school",
+      "burnham-grammar-school",
+      "the-royal-latin-school",
+    ];
+
+    let parentHubSlugs: string[] = [];
+    try {
+      const hubArticles = await storage.getArticles();
+      parentHubSlugs = hubArticles.map(a => a.slug);
+    } catch {
+      // silently skip if DB unavailable
+    }
 
     interface SitemapEntry { path: string; priority: string; changefreq: string; }
 
@@ -1908,7 +1934,16 @@ export async function registerRoutes(
       { path: "/parent-hub", priority: "0.8", changefreq: "monthly" },
       { path: "/learn", priority: "0.8", changefreq: "weekly" },
       ...learnArticles.map(a => ({ path: `/learn/${a.slug}`, priority: "0.8", changefreq: "monthly" as const })),
-      ...towns.map(t => ({ path: `/bucks-11-plus-${t}`, priority: "0.8", changefreq: "monthly" as const })),
+      ...parentHubSlugs.map(s => ({ path: `/parent-hub/${s}`, priority: "0.7", changefreq: "monthly" as const })),
+      ...townSlugs.map(t => ({ path: `/bucks-11-plus-${t}`, priority: "0.8", changefreq: "monthly" as const })),
+      ...grammarSchoolSlugs.map(s => ({ path: `/grammar-schools/${s}`, priority: "0.8", changefreq: "monthly" as const })),
+      { path: "/preparing-for-11-plus-year-4", priority: "0.8", changefreq: "monthly" },
+      { path: "/preparing-for-11-plus-year-5", priority: "0.8", changefreq: "monthly" },
+      { path: "/preparing-for-11-plus-year-6", priority: "0.8", changefreq: "monthly" },
+      { path: "/11-plus-verbal-reasoning-practice", priority: "0.8", changefreq: "monthly" },
+      { path: "/11-plus-non-verbal-reasoning-practice", priority: "0.8", changefreq: "monthly" },
+      { path: "/11-plus-maths-practice", priority: "0.8", changefreq: "monthly" },
+      { path: "/11-plus-comprehension-practice", priority: "0.8", changefreq: "monthly" },
       { path: "/terms", priority: "0.3", changefreq: "yearly" },
       { path: "/privacy", priority: "0.3", changefreq: "yearly" },
       { path: "/safeguarding", priority: "0.3", changefreq: "yearly" },

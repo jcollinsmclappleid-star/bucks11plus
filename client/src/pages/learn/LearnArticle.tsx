@@ -1,5 +1,6 @@
 import { Link, useParams } from "wouter";
 import { getArticleBySlug, getArticlesByCategory, learnArticles } from "@/data/learn-articles";
+import { Seo } from "@/components/shared/Seo";
 import NotFound from "@/pages/not-found";
 import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
 
@@ -17,8 +18,40 @@ export default function LearnArticle() {
   const prevArticle = currentIndex > 0 ? learnArticles[currentIndex - 1] : null;
   const nextArticle = currentIndex < learnArticles.length - 1 ? learnArticles[currentIndex + 1] : null;
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: article.title,
+    description: article.description,
+    url: `https://bucks11plustest.co.uk/learn/${article.slug}`,
+    publisher: {
+      "@type": "Organization",
+      name: "11+ Standard",
+      url: "https://bucks11plustest.co.uk",
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://bucks11plustest.co.uk/learn/${article.slug}`,
+    },
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: "https://bucks11plustest.co.uk" },
+        { "@type": "ListItem", position: 2, name: "Learning Hub", item: "https://bucks11plustest.co.uk/learn" },
+        { "@type": "ListItem", position: 3, name: article.title, item: `https://bucks11plustest.co.uk/learn/${article.slug}` },
+      ],
+    },
+  };
+
   return (
     <div className="min-h-screen bg-background">
+      <Seo
+        title={`${article.title} | 11+ Standard`}
+        description={article.description}
+        canonicalPath={`/learn/${article.slug}`}
+        schema={articleSchema}
+      />
+
       <div className="bg-muted/30 border-b border-border py-3">
         <div className="container mx-auto max-w-4xl px-4">
           <nav className="flex items-center gap-2 text-sm text-muted-foreground" aria-label="Breadcrumb">

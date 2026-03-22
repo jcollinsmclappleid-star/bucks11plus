@@ -56,14 +56,17 @@ client/src/
 │   │   └── QuestionEditor.tsx # Full editor with live preview + validation
 │   ├── BucksGuide.tsx       # Pillar SEO page: /buckinghamshire-11-plus-guide
 │   ├── seo/
-│   │   ├── GrammarSchools.tsx   # /bucks-grammar-schools
+│   │   ├── GrammarSchools.tsx   # /bucks-grammar-schools (list of all 13, links to individual pages)
+│   │   ├── GrammarSchoolGuide.tsx # /grammar-schools/:slug (13 individual school pages)
 │   │   ├── QualifyingScore.tsx  # /bucks-11-plus-qualifying-score
 │   │   ├── Timeline.tsx         # /bucks-11-plus-timeline
 │   │   ├── SecondaryTransfer.tsx # /buckinghamshire-secondary-transfer-test
 │   │   ├── HowToPass.tsx        # /how-to-pass-bucks-11-plus
 │   │   ├── Registration.tsx     # /bucks-11-plus-registration
 │   │   ├── CommonMistakes.tsx   # /bucks-11-plus-mistakes
-│   │   └── TownGuide.tsx        # /bucks-11-plus-:town (template for 8 towns)
+│   │   ├── TownGuide.tsx        # /bucks-11-plus-:town (14 town guides)
+│   │   ├── YearGroupGuide.tsx   # /preparing-for-11-plus-year-[4/5/6]
+│   │   └── SubjectGuide.tsx     # /11-plus-[verbal-reasoning/non-verbal-reasoning/maths/comprehension]-practice
 │   └── ... (HowItWorks, Methodology, GLAlignment, About, Legal)
 
 server/

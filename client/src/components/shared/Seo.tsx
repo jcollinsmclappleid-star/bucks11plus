@@ -25,14 +25,30 @@ export function Seo({ title, description, canonicalPath, schema }: SeoProps) {
     let ogDesc = document.querySelector('meta[property="og:description"]');
     if (ogDesc) ogDesc.setAttribute('content', description);
 
+    let twTitle = document.querySelector('meta[name="twitter:title"]');
+    if (twTitle) twTitle.setAttribute('content', title);
+
+    let twDesc = document.querySelector('meta[name="twitter:description"]');
+    if (twDesc) twDesc.setAttribute('content', description);
+
     if (canonicalPath) {
+      const fullUrl = `https://bucks11plustest.co.uk${canonicalPath}`;
+
+      let ogUrl = document.querySelector('meta[property="og:url"]') as HTMLMetaElement | null;
+      if (!ogUrl) {
+        ogUrl = document.createElement('meta');
+        ogUrl.setAttribute('property', 'og:url');
+        document.head.appendChild(ogUrl);
+      }
+      ogUrl.setAttribute('content', fullUrl);
+
       let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
       if (!canonical) {
         canonical = document.createElement('link');
         canonical.setAttribute('rel', 'canonical');
         document.head.appendChild(canonical);
       }
-      canonical.setAttribute('href', `https://bucks11plustest.co.uk${canonicalPath}`);
+      canonical.setAttribute('href', fullUrl);
     }
 
     let existingSchema = document.querySelector('script[data-seo-schema]');

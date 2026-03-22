@@ -1,5 +1,6 @@
 import { Link } from "wouter";
 import { learnArticles, LEARN_CATEGORIES, getArticlesByCategory } from "@/data/learn-articles";
+import { Seo } from "@/components/shared/Seo";
 import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
 
 const CATEGORY_ICONS: Record<string, string> = {
@@ -25,6 +26,24 @@ export default function LearnHub() {
 
   return (
     <div className="min-h-screen bg-background">
+      <Seo
+        title={`Buckinghamshire 11+ Learning Hub – ${totalArticles} Free Guides | 11+ Standard`}
+        description={`Free expert guides on every aspect of the Buckinghamshire 11+ Secondary Transfer Test. ${totalArticles} articles covering the GL Assessment format, grammar school admissions, preparation strategy, and more.`}
+        canonicalPath="/learn"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: "Buckinghamshire 11+ Learning Hub",
+          description: `${totalArticles} free guides covering the Bucks 11+ Secondary Transfer Test, GL Assessment format, grammar school admissions, and preparation strategy.`,
+          url: "https://bucks11plustest.co.uk/learn",
+          publisher: {
+            "@type": "Organization",
+            name: "11+ Standard",
+            url: "https://bucks11plustest.co.uk",
+          },
+        }}
+      />
+
       <div className="bg-primary text-primary-foreground py-16">
         <div className="container mx-auto max-w-5xl px-4 text-center">
           <div className="inline-flex items-center gap-2 bg-primary-foreground/10 text-primary-foreground/80 text-sm font-medium px-3 py-1 rounded-full mb-4">

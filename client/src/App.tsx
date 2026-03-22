@@ -59,11 +59,15 @@ import LearnArticle from "./pages/learn/LearnArticle";
 import EarlyDashboard from "./pages/EarlyDashboard";
 import TestDaySimulator from "./pages/TestDaySimulator";
 import GrammarSchools from "./pages/seo/GrammarSchools";
+import GrammarSchoolGuide from "./pages/seo/GrammarSchoolGuide";
 import QualifyingScore from "./pages/seo/QualifyingScore";
 import Timeline from "./pages/seo/Timeline";
 import SecondaryTransfer from "./pages/seo/SecondaryTransfer";
 import TownGuide from "./pages/seo/TownGuide";
+import YearGroupGuide from "./pages/seo/YearGroupGuide";
+import SubjectGuide from "./pages/seo/SubjectGuide";
 import { towns } from "./data/towns";
+import { grammarSchools } from "./data/grammar-schools";
 import { useAuth } from "./lib/auth";
 
 function ScrollToTop() {
@@ -257,6 +261,32 @@ function Router() {
                 <TownGuide townSlug={t.slug} />
               </Route>
             ))}
+            {grammarSchools.map(s => (
+              <Route key={s.slug} path={`/grammar-schools/${s.slug}`}>
+                <GrammarSchoolGuide schoolSlug={s.slug} />
+              </Route>
+            ))}
+            <Route path="/preparing-for-11-plus-year-4">
+              <YearGroupGuide year={4} />
+            </Route>
+            <Route path="/preparing-for-11-plus-year-5">
+              <YearGroupGuide year={5} />
+            </Route>
+            <Route path="/preparing-for-11-plus-year-6">
+              <YearGroupGuide year={6} />
+            </Route>
+            <Route path="/11-plus-verbal-reasoning-practice">
+              <SubjectGuide subject="verbal-reasoning" />
+            </Route>
+            <Route path="/11-plus-non-verbal-reasoning-practice">
+              <SubjectGuide subject="non-verbal-reasoning" />
+            </Route>
+            <Route path="/11-plus-maths-practice">
+              <SubjectGuide subject="maths" />
+            </Route>
+            <Route path="/11-plus-comprehension-practice">
+              <SubjectGuide subject="comprehension" />
+            </Route>
             <Route path="/checkout-success" component={CheckoutSuccess} />
             
             <Route path="/terms">

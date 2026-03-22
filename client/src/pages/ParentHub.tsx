@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { type Article } from "@shared/schema";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Seo } from "@/components/shared/Seo";
 import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
 
 export default function ParentHub() {
@@ -11,6 +12,24 @@ export default function ParentHub() {
 
   return (
     <div className="container mx-auto max-w-5xl px-4 py-16">
+      <Seo
+        title="Parent Hub – Expert 11+ Guides for Bucks Families | 11+ Standard"
+        description="Authoritative guides, methodological transparency, and practical advice for parents navigating the Buckinghamshire 11+ Secondary Transfer Test. Free expert articles."
+        canonicalPath="/parent-hub"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: "The Parent Hub",
+          description: "Authoritative guides and practical advice for parents navigating the Buckinghamshire 11+ Secondary Transfer Test.",
+          url: "https://bucks11plustest.co.uk/parent-hub",
+          publisher: {
+            "@type": "Organization",
+            name: "11+ Standard",
+            url: "https://bucks11plustest.co.uk",
+          },
+        }}
+      />
+
       <div className="mb-10 not-prose">
         <div className="border-l-4 border-primary pl-5 mb-8">
           <h1 className="text-4xl md:text-5xl font-bold text-primary tracking-tight mb-3 font-serif">The Parent Hub</h1>
