@@ -1,6 +1,7 @@
 import { useParams, Link } from "wouter";
 import { ArrowLeft } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
+import { SubscribeCTA } from "../components/shared/SubscribeCTA";
 import { useQuery } from "@tanstack/react-query";
 import { type Article } from "@shared/schema";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -53,19 +54,21 @@ export default function Article() {
         <ArrowLeft className="h-4 w-4" /> Back to Parent Hub
       </Link>
 
-      <div className="space-y-4 mb-12">
-        <div className="flex items-center gap-3 text-sm text-brand-primary font-medium">
+      <div className="border-l-4 border-primary bg-primary/[0.03] rounded-r-xl pl-7 pr-4 py-6 mb-10">
+        <div className="flex items-center gap-3 text-sm text-brand-amber font-semibold mb-3">
           <span data-testid="text-article-category">{article.category}</span>
-          <span className="text-muted-foreground">•</span>
-          <span className="text-muted-foreground" data-testid="text-article-readtime">{article.readTime}</span>
+          <span className="text-slate-300">•</span>
+          <span className="text-slate-500 font-normal" data-testid="text-article-readtime">{article.readTime}</span>
         </div>
-        <h1 className="text-4xl md:text-5xl font-bold text-primary font-serif tracking-tight leading-tight" data-testid="text-article-title">
+        <h1 className="text-4xl md:text-5xl font-bold text-primary font-serif tracking-tight leading-tight mb-3" data-testid="text-article-title">
           {article.title}
         </h1>
-        <p className="text-xl text-muted-foreground leading-relaxed" data-testid="text-article-excerpt">
+        <p className="text-xl text-slate-600 leading-relaxed" data-testid="text-article-excerpt">
           {article.excerpt}
         </p>
       </div>
+
+      <SubscribeCTA />
 
       <div 
         className="prose prose-slate prose-lg max-w-none" 
@@ -77,7 +80,7 @@ export default function Article() {
         <div className="bg-primary text-primary-foreground p-8 rounded-2xl text-center">
           <h3 className="text-2xl font-bold font-serif mb-4">Stop guessing your child's readiness</h3>
           <p className="mb-6 opacity-90">Take our free 8-minute diagnostic to see their current trajectory toward the 121 standard.</p>
-          <Link href="/app" className="inline-block bg-white text-primary px-8 py-3 rounded-md font-medium hover:bg-slate-100 transition-colors" data-testid="link-start-diagnostic">
+          <Link href="/free-diagnostic" className="inline-block bg-white text-primary px-8 py-3 rounded-md font-medium hover:bg-slate-100 transition-colors" data-testid="link-start-diagnostic">
             Start Free Diagnostic
           </Link>
         </div>

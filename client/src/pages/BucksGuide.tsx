@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { Seo } from "../components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "../components/shared/Breadcrumbs";
 import { ContentCTA } from "../components/shared/ContentCTA";
+import { SubscribeCTA } from "../components/shared/SubscribeCTA";
 import { Disclaimer } from "../components/shared/Disclaimer";
 
 const faqItems = [
@@ -56,14 +57,16 @@ export default function BucksGuide() {
 
       <Breadcrumbs items={breadcrumbItems} />
 
-      <h1 className="text-4xl md:text-5xl font-bold text-primary font-serif tracking-tight" data-testid="heading-bucks-guide">
-        The Complete Guide to the Buckinghamshire 11 Plus
-      </h1>
-      <p className="text-xl text-muted-foreground lead">
-        Everything parents need to know about the Bucks 11+, from registration and test format to qualifying scores and preparation strategies.
-      </p>
+      <div className="not-prose mb-8 border-l-4 border-primary bg-primary/[0.03] rounded-r-xl pl-7 pr-6 py-6">
+        <h1 className="text-4xl md:text-5xl font-bold text-primary font-serif tracking-tight mb-3" data-testid="heading-bucks-guide">
+          The Complete Guide to the Buckinghamshire 11 Plus
+        </h1>
+        <p className="text-xl text-slate-600 leading-relaxed">
+          Everything parents need to know about the Bucks 11+, from registration and test format to qualifying scores and preparation strategies.
+        </p>
+      </div>
 
-      <hr className="my-8" />
+      <SubscribeCTA />
 
       <h2 className="text-primary font-serif" data-testid="heading-overview">Overview of the Buckinghamshire 11+</h2>
       <p>

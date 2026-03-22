@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
+import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 
 const breadcrumbItems = [
@@ -36,14 +37,16 @@ export default function Timeline() {
 
       <Breadcrumbs items={breadcrumbItems} />
 
-      <h1 className="text-4xl md:text-5xl font-bold text-primary font-serif tracking-tight" data-testid="heading-timeline">
-        Bucks 11+ Admissions Timeline
-      </h1>
-      <p className="text-xl text-muted-foreground lead">
-        Key dates and deadlines for the Buckinghamshire Secondary Transfer Test — from registration through to National Offer Day.
-      </p>
+      <div className="not-prose mb-8 border-l-4 border-primary bg-primary/[0.03] rounded-r-xl pl-7 pr-6 py-6">
+        <h1 className="text-4xl md:text-5xl font-bold text-primary font-serif tracking-tight mb-3" data-testid="heading-timeline">
+          Bucks 11+ Admissions Timeline
+        </h1>
+        <p className="text-xl text-slate-600 leading-relaxed">
+          Key dates and deadlines for the Buckinghamshire Secondary Transfer Test — from registration through to National Offer Day.
+        </p>
+      </div>
 
-      <hr className="my-8" />
+      <SubscribeCTA />
 
       <h2 className="text-primary font-serif">The Full Admissions Calendar</h2>
       <p>

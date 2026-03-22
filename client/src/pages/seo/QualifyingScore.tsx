@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
+import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 
 const breadcrumbItems = [
@@ -55,14 +56,16 @@ export default function QualifyingScore() {
 
       <Breadcrumbs items={breadcrumbItems} />
 
-      <h1 className="text-4xl md:text-5xl font-bold text-primary font-serif tracking-tight" data-testid="heading-qualifying-score">
-        Bucks 11+ Qualifying Score
-      </h1>
-      <p className="text-xl text-muted-foreground lead">
-        What the 121 qualifying standard means, how scores are standardised, and why the threshold can vary from year to year.
-      </p>
+      <div className="not-prose mb-8 border-l-4 border-primary bg-primary/[0.03] rounded-r-xl pl-7 pr-6 py-6">
+        <h1 className="text-4xl md:text-5xl font-bold text-primary font-serif tracking-tight mb-3" data-testid="heading-qualifying-score">
+          Bucks 11+ Qualifying Score
+        </h1>
+        <p className="text-xl text-slate-600 leading-relaxed">
+          What the 121 qualifying standard means, how scores are standardised, and why the threshold can vary from year to year.
+        </p>
+      </div>
 
-      <hr className="my-8" />
+      <SubscribeCTA />
 
       <h2 className="text-primary font-serif">What Is the Qualifying Score?</h2>
       <p>

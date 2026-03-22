@@ -1,6 +1,7 @@
 import { Seo } from "../../components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "../../components/shared/Breadcrumbs";
 import { ContentCTA } from "../../components/shared/ContentCTA";
+import { SubscribeCTA } from "../../components/shared/SubscribeCTA";
 import { Disclaimer } from "../../components/shared/Disclaimer";
 import { Link } from "wouter";
 
@@ -29,14 +30,16 @@ export default function CommonMistakes() {
 
       <Breadcrumbs items={breadcrumbItems} />
 
-      <h1 className="text-4xl md:text-5xl font-bold text-primary font-serif tracking-tight" data-testid="heading-common-mistakes">
-        Common Bucks 11 Plus Preparation Mistakes
-      </h1>
-      <p className="text-xl text-muted-foreground lead">
-        The most common pitfalls families encounter when preparing for the Buckinghamshire 11+ — and how to avoid them.
-      </p>
+      <div className="not-prose mb-8 border-l-4 border-primary bg-primary/[0.03] rounded-r-xl pl-7 pr-6 py-6">
+        <h1 className="text-4xl md:text-5xl font-bold text-primary font-serif tracking-tight mb-3" data-testid="heading-common-mistakes">
+          Common Bucks 11 Plus Preparation Mistakes
+        </h1>
+        <p className="text-xl text-slate-600 leading-relaxed">
+          The most common pitfalls families encounter when preparing for the Buckinghamshire 11+ — and how to avoid them.
+        </p>
+      </div>
 
-      <hr className="my-8" />
+      <SubscribeCTA />
 
       <h2 className="text-primary font-serif">Mistake 1: Starting Too Late</h2>
       <p>
