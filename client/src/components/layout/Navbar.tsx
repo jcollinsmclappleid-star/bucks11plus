@@ -59,6 +59,9 @@ export default function Navbar() {
 
           {!user ? (
             <div className="flex items-center gap-2 ml-2">
+              <Link href="/pricing" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors" data-testid="link-pricing">
+                Pricing
+              </Link>
               <Button variant="ghost" size="sm" asChild data-testid="link-signin">
                 <Link href="/sign-in">Sign In</Link>
               </Button>
