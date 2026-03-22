@@ -1,5 +1,6 @@
 import { Link } from "wouter";
 import { learnArticles, LEARN_CATEGORIES, getArticlesByCategory } from "@/data/learn-articles";
+import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
 
 const CATEGORY_ICONS: Record<string, string> = {
   "Understanding the Test": "📋",
@@ -77,22 +78,7 @@ export default function LearnHub() {
           })}
         </div>
 
-        <div className="mt-16 bg-primary/5 border border-primary/20 rounded-2xl p-8 text-center">
-          <h2 className="font-serif text-2xl font-bold text-foreground mb-3">
-            Ready to assess where your child stands?
-          </h2>
-          <p className="text-muted-foreground mb-6 max-w-lg mx-auto">
-            Take our free 12-question GL-style mini diagnostic. No account needed — get a full readiness report in under 10 minutes.
-          </p>
-          <Link href="/free-diagnostic">
-            <button
-              data-testid="button-hub-cta-diagnostic"
-              className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors"
-            >
-              Start Free Diagnostic
-            </button>
-          </Link>
-        </div>
+        <SubscribeCTA />
       </div>
     </div>
   );

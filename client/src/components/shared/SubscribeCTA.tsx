@@ -18,7 +18,7 @@ export function SubscribeCTA() {
           <span className="text-[10px] font-bold uppercase tracking-widest text-brand-amber">Bucks Practice Platform — from £24.99/month</span>
         </div>
         <h3 className="text-2xl md:text-[1.65rem] font-bold font-serif text-white mb-2 leading-snug">
-          Practise Smarter — 1,500+ Questions &amp; GL-Style Diagnostics
+          Practice Smarter — 1,500+ Questions &amp; GL-Style Diagnostics
         </h3>
         <p className="text-white/75 text-sm leading-relaxed mb-5 max-w-2xl">
           Everything your child needs to close the gap to 121: a full question bank, timed diagnostics benchmarked against the qualifying standard, targeted drills, and parent analytics — all in one platform.

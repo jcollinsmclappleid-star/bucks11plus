@@ -244,7 +244,7 @@ export default function ParentGuide() {
               <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center">
                 <BarChart3 className="h-5 w-5 text-amber-600" />
               </div>
-              <h3 className="text-lg font-bold text-primary font-serif">Practise Under Timed Conditions</h3>
+              <h3 className="text-lg font-bold text-primary font-serif">Practice Under Timed Conditions</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 The real exam is strictly timed. Start with untimed practice to build accuracy, then introduce time limits gradually. This builds pace discipline without creating pressure too early.
               </p>

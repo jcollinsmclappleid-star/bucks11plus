@@ -76,7 +76,7 @@ export default function CommonMistakes() {
         The Buckinghamshire 11+ is a <strong>strictly timed</strong> assessment. Children have approximately 35–50 seconds per question depending on the section. A correct answer given after 90 seconds is effectively worthless if it means other questions go unanswered.
       </p>
       <p>
-        Yet many families practise entirely without time constraints, or use generous time allowances that bear no resemblance to actual test conditions. This creates a dangerous gap between practice performance and test-day performance.
+        Yet many families practice entirely without time constraints, or use generous time allowances that bear no resemblance to actual test conditions. This creates a dangerous gap between practice performance and test-day performance.
       </p>
       <p>
         A child who achieves 95% accuracy in untimed conditions may drop to 65% when the clock is running. If your preparation doesn't include realistic timing, you will not have an accurate picture of readiness.

@@ -434,7 +434,7 @@ export default function Landing() {
               GL-aligned practice and diagnostics built specifically for the Buckinghamshire Secondary Transfer Test — the exam that determines entry to all 13 Bucks grammar schools.
             </p>
             <p className="text-sm text-slate-500 max-w-2xl mx-auto mt-4 leading-relaxed border-t border-slate-100 pt-4">
-              From their first session, your child practises the way the real test works — timed, interactive, on the device they prefer. They see their scores improve, their forecast move toward 121, and their weakest areas get stronger. That progress — visible and measurable — builds the confidence they'll need on test day.
+              From their first session, your child practices the way the real test works — timed, interactive, on the device they prefer. They see their scores improve, their forecast move toward 121, and their weakest areas get stronger. That progress — visible and measurable — builds the confidence they'll need on test day.
             </p>
           </div>
 
@@ -555,7 +555,7 @@ export default function Landing() {
                 <Smartphone className="h-5 w-5" />
               </div>
               <h3 className="font-bold text-primary text-base leading-tight">Works on Any Device</h3>
-              <p className="text-sm text-slate-500 leading-relaxed">Phone, tablet or laptop — your child practises when and where suits them. Interactive and timed, not a static PDF to work through alone at a dedicated desk.</p>
+              <p className="text-sm text-slate-500 leading-relaxed">Phone, tablet or laptop — your child practices when and where suits them. Interactive and timed, not a static PDF to work through alone at a dedicated desk.</p>
             </div>
             <div className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col gap-3" data-testid="card-platform-diff-analytics">
               <div className="w-11 h-11 rounded-xl bg-primary/5 text-primary flex items-center justify-center border border-primary/10">
@@ -719,7 +719,7 @@ export default function Landing() {
                   <BarChart3 className="h-7 w-7" />
                 </div>
                 <h3 className="font-bold text-primary text-xl">All Four Sections Covered</h3>
-                <p className="text-muted-foreground">Verbal Reasoning, Non-Verbal Reasoning, Maths and English Comprehension — mapped to the exact GL format of the Bucks 11+. Your child practises the right things, in the right structure.</p>
+                <p className="text-muted-foreground">Verbal Reasoning, Non-Verbal Reasoning, Maths and English Comprehension — mapped to the exact GL format of the Bucks 11+. Your child practices the right things, in the right structure.</p>
               </CardContent>
             </Card>
 

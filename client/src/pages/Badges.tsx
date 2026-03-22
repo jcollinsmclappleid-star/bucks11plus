@@ -97,7 +97,7 @@ export default function Badges() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-primary font-serif" data-testid="text-badges-title">Accomplishments</h1>
-          <p className="text-muted-foreground mt-1">Earn badges as you practise and improve.</p>
+          <p className="text-muted-foreground mt-1">Earn badges as you practice and improve.</p>
         </div>
         <div className="flex items-center gap-4">
           <div className="text-center">

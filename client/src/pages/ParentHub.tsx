@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { type Article } from "@shared/schema";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
 
 export default function ParentHub() {
   const { data: articles, isLoading } = useQuery<Article[]>({
@@ -10,11 +11,14 @@ export default function ParentHub() {
 
   return (
     <div className="container mx-auto max-w-5xl px-4 py-16">
-      <div className="mb-16 border-b border-border/50 pb-8">
-        <h1 className="text-4xl md:text-5xl font-bold text-primary tracking-tight mb-4 font-serif">The Parent Hub</h1>
-        <p className="text-xl text-muted-foreground max-w-2xl">
-          Authoritative guides, methodological transparency, and practical advice for navigating the Buckinghamshire 11+.
-        </p>
+      <div className="mb-10 not-prose">
+        <div className="border-l-4 border-primary pl-5 mb-8">
+          <h1 className="text-4xl md:text-5xl font-bold text-primary tracking-tight mb-3 font-serif">The Parent Hub</h1>
+          <p className="text-xl text-muted-foreground max-w-2xl">
+            Authoritative guides, methodological transparency, and practical advice for navigating the Buckinghamshire 11+.
+          </p>
+        </div>
+        <SubscribeCTA />
       </div>
 
       <div className="grid md:grid-cols-3 gap-12">

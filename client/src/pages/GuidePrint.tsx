@@ -1,4 +1,5 @@
 import { DashboardPreviewForecast, DashboardPreviewPace } from "../components/shared/DashboardPreview";
+import { learnArticles, LEARN_CATEGORIES, getArticlesByCategory } from "../data/learn-articles";
 
 export default function GuidePrint() {
   return (
@@ -132,6 +133,136 @@ export default function GuidePrint() {
         <p className="text-sm text-slate-500 mt-4 italic">
           Example data shown for illustration. Actual results reflect your child's individual performance.
         </p>
+      </div>
+
+      <div className="page-break">
+        <h2 className="text-2xl font-serif font-bold text-[#0d1f30] mb-6">Preparation Strategy</h2>
+        <p className="text-sm leading-relaxed mb-4">
+          Effective preparation is diagnostic-led, not volume-led. Many families make the mistake of working through large numbers of practice papers without understanding which areas are weakest or whether progress is actually happening. The most productive preparation identifies specific skill gaps first, then targets practice to close those gaps efficiently.
+        </p>
+        <h3 className="text-lg font-serif font-bold text-[#0d1f30] mt-6 mb-3">When to Start</h3>
+        <p className="text-sm leading-relaxed mb-4">
+          Light-touch exposure to the question formats — verbal reasoning word puzzles, number sequences, shape patterns — is beneficial from Year 4. Structured preparation is most effective when begun in Year 5. Intensive mock testing and timed practice is most valuable in the final 8–12 weeks before the September test date.
+        </p>
+        <h3 className="text-lg font-serif font-bold text-[#0d1f30] mt-6 mb-3">The Role of Timing</h3>
+        <p className="text-sm leading-relaxed mb-4">
+          One of the most consistently underestimated aspects of 11 plus preparation is the time pressure. The GL Assessment format used in Buckinghamshire presents questions at a pace of under a minute each. Children must develop the habit of moving on from difficult questions quickly — staying on a question they cannot solve means missing easier questions later. This skill requires practice under real timed conditions, not just answering questions at leisure.
+        </p>
+        <h3 className="text-lg font-serif font-bold text-[#0d1f30] mt-6 mb-3">Mock Tests</h3>
+        <p className="text-sm leading-relaxed mb-4">
+          Mock tests serve two purposes: familiarisation with the format and measurement of progress. The Bucks test uses audio-recorded instructions to manage section transitions — children who have not practiced with this format often find it unexpectedly pressured on test day. Running two or three full audio-led mock tests in the final weeks is one of the highest-impact preparation steps.
+        </p>
+      </div>
+
+      <div className="page-break">
+        <h2 className="text-2xl font-serif font-bold text-[#0d1f30] mb-6">Subject-by-Subject Guide</h2>
+        <div className="space-y-5">
+          <div>
+            <h3 className="text-lg font-serif font-bold text-[#0d1f30] mb-2">Verbal Reasoning</h3>
+            <p className="text-sm leading-relaxed">
+              Verbal reasoning tests linguistic flexibility and pattern recognition with words. Common question types include word analogies, code-breaking, letter series, hidden words, and word relationships. The question types are finite and learnable — systematic exposure to each type, combined with a strong vocabulary, produces consistent score improvement. Regular reading of age-appropriate books remains one of the best foundations.
+            </p>
+          </div>
+          <div>
+            <h3 className="text-lg font-serif font-bold text-[#0d1f30] mb-2">Non-Verbal Reasoning</h3>
+            <p className="text-sm leading-relaxed">
+              Non-verbal reasoning tests the ability to recognise patterns, sequences, and relationships between shapes without using language. Question types include matrices, series, analogies, odd-one-out, and folding/reflection. Many children find NVR unfamiliar because it is not taught in primary schools. Consistent exposure to the question formats, particularly matrices and series, significantly improves performance. Spatial awareness exercises are helpful as preparation.
+            </p>
+          </div>
+          <div>
+            <h3 className="text-lg font-serif font-bold text-[#0d1f30] mb-2">Mathematics</h3>
+            <p className="text-sm leading-relaxed">
+              The maths element of the Bucks 11 plus goes beyond the Year 5 curriculum — questions test topics including fractions, percentages, ratio, algebra, data interpretation, and multi-step problems. Speed is as important as accuracy. Children should be able to calculate without a calculator and should practice mental arithmetic regularly. Understanding the specific topic areas tested in the Bucks GL Assessment maths section, rather than the general curriculum, is the most efficient route to improvement.
+            </p>
+          </div>
+          <div>
+            <h3 className="text-lg font-serif font-bold text-[#0d1f30] mb-2">English Comprehension</h3>
+            <p className="text-sm leading-relaxed">
+              The comprehension element involves reading a passage and answering questions about it, under time pressure. Question types include inference, vocabulary in context, author intent, and identifying supporting evidence. Wide reading is the best long-term foundation. In preparation, children should practice reading passages quickly, annotating for key points, and answering comprehension questions without re-reading the whole passage each time.
+            </p>
+          </div>
+          <div>
+            <h3 className="text-lg font-serif font-bold text-[#0d1f30] mb-2">Spatial Reasoning</h3>
+            <p className="text-sm leading-relaxed">
+              Spatial reasoning involves mentally manipulating 2D and 3D shapes — rotating, reflecting, unfolding nets, and identifying views. Like NVR, it is not part of the standard curriculum. Children improve quickly with targeted practice and visual exercises. Understanding common question types (nets of cubes, rotated shapes, mirror images) and practicing them specifically is essential.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="page-break">
+        <h2 className="text-2xl font-serif font-bold text-[#0d1f30] mb-6">Test Day &amp; After</h2>
+        <h3 className="text-lg font-serif font-bold text-[#0d1f30] mt-4 mb-3">Test Day Logistics</h3>
+        <p className="text-sm leading-relaxed mb-4">
+          The test is held at allocated test centres in September, typically on a Saturday. Children should arrive on time with an HB pencil, a good eraser, and nothing else — all other equipment is provided. The test uses audio-recorded instructions, so children sit in a room with speakers playing the recorded voice. They should be familiar with this format before test day.
+        </p>
+        <p className="text-sm leading-relaxed mb-4">
+          Children must use a separate answer sheet rather than writing in the question booklet. Answers are machine-scanned, so marks must be clear, answers must align with the correct question number, and erasing must be done cleanly. These mechanics require practice — a child who encounters them for the first time on test day is at a disadvantage.
+        </p>
+        <h3 className="text-lg font-serif font-bold text-[#0d1f30] mt-6 mb-3">Results</h3>
+        <p className="text-sm leading-relaxed mb-4">
+          Results arrive in mid-October. Parents receive the child's standardised score and whether the child has qualified (121 or above) or not qualified. The letter does not give a detailed breakdown by subject. Parents submit their secondary school preferences on the Common Application Form (CAF) by 31 October. National Offer Day is 1 March.
+        </p>
+        <h3 className="text-lg font-serif font-bold text-[#0d1f30] mt-6 mb-3">If Your Child Does Not Qualify</h3>
+        <p className="text-sm leading-relaxed mb-4">
+          Most children in Buckinghamshire do not qualify — this is by design, as the test identifies the top roughly 15–20% of the cohort. Upper schools in Buckinghamshire are strong schools with good Ofsted ratings and GCSE outcomes. There is also a Year 9 entry route into grammar schools for children who did not qualify at Year 6 but wish to try again — this involves a separate test and has its own admissions timeline.
+        </p>
+        <h3 className="text-lg font-serif font-bold text-[#0d1f30] mt-6 mb-3">Appeals</h3>
+        <p className="text-sm leading-relaxed mb-4">
+          Parents can request a review of the test result if they believe there was an error in administration or scoring. Appeals based on test content or scoring methodology are very rarely successful — the standardisation process is robust and independently validated. Appeals on the grounds of an admissions decision (rather than the test result itself) are a separate process and handled by the individual school.
+        </p>
+      </div>
+
+      <div className="page-break">
+        <h2 className="text-2xl font-serif font-bold text-[#0d1f30] mb-6">Buckinghamshire Grammar Schools at a Glance</h2>
+        <p className="text-sm leading-relaxed mb-6">
+          Buckinghamshire has 13 state grammar schools, all using the same Secondary Transfer Test result. A qualifying score of 121 or above makes a child eligible to apply to any of the 13 schools. Places are allocated based on each school's oversubscription criteria — primarily distance from home to school — when more children qualify than there are places available.
+        </p>
+        <div className="grid grid-cols-2 gap-3 text-sm">
+          {[
+            { area: "Aylesbury", schools: ["Aylesbury Grammar School (boys)", "Aylesbury High School (girls)", "Sir Henry Floyd Grammar School (mixed)"] },
+            { area: "High Wycombe", schools: ["Royal Grammar School (boys)", "Wycombe High School (girls)", "John Hampden Grammar School (boys)", "Dr Challoner's High School (girls, Little Chalfont)"] },
+            { area: "Amersham & Chesham", schools: ["Dr Challoner's Grammar School (boys, Amersham)", "Chesham Grammar School (mixed)"] },
+            { area: "Beaconsfield & Burnham", schools: ["Beaconsfield High School (girls)", "Burnham Grammar School (mixed)"] },
+            { area: "Marlow & Buckingham", schools: ["Sir William Borlase's Grammar School (mixed, Marlow)", "Royal Latin School (mixed, Buckingham)"] },
+          ].map(({ area, schools }) => (
+            <div key={area} className="border border-slate-200 rounded-lg p-3">
+              <h4 className="font-bold text-[#0d1f30] text-xs uppercase tracking-wider mb-2">{area}</h4>
+              <ul className="space-y-1">
+                {schools.map(s => <li key={s} className="text-xs text-slate-600">{s}</li>)}
+              </ul>
+            </div>
+          ))}
+        </div>
+        <p className="text-xs text-slate-500 mt-4 italic">
+          Always verify current admissions information directly with Buckinghamshire Council and the individual schools — admissions criteria and distances change year to year.
+        </p>
+      </div>
+
+      <div className="page-break">
+        <h2 className="text-2xl font-serif font-bold text-[#0d1f30] mb-6">Further Reading: In-Depth Guides</h2>
+        <p className="text-sm leading-relaxed mb-6">
+          The following guides are available free at bucks11plustest.co.uk/learn — covering every aspect of the Buckinghamshire 11 plus in detail.
+        </p>
+        <div className="space-y-6">
+          {LEARN_CATEGORIES.map((category) => {
+            const articles = getArticlesByCategory(category);
+            if (articles.length === 0) return null;
+            return (
+              <div key={category}>
+                <h3 className="text-base font-serif font-bold text-[#0d1f30] mb-3 border-b border-slate-200 pb-2">{category}</h3>
+                <ul className="space-y-1.5">
+                  {articles.map((article) => (
+                    <li key={article.slug} className="text-xs text-slate-700">
+                      <span className="font-medium">{article.title}</span>
+                      <span className="text-slate-400 ml-2">bucks11plustest.co.uk/learn/{article.slug}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       <div>

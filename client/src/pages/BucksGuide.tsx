@@ -4,6 +4,16 @@ import { Breadcrumbs, breadcrumbSchema } from "../components/shared/Breadcrumbs"
 import { ContentCTA } from "../components/shared/ContentCTA";
 import { SubscribeCTA } from "../components/shared/SubscribeCTA";
 import { Disclaimer } from "../components/shared/Disclaimer";
+import { learnArticles, LEARN_CATEGORIES, getArticlesByCategory } from "../data/learn-articles";
+
+const CATEGORY_ICONS: Record<string, string> = {
+  "Understanding the Test": "📋",
+  "Grammar Schools & Admissions": "🏫",
+  "Preparation Strategy": "📅",
+  "Subject Guides": "📚",
+  "Test Day & After": "🗓️",
+  "Other Guides": "📄",
+};
 
 const faqItems = [
   {
@@ -212,6 +222,50 @@ export default function BucksGuide() {
       </div>
 
       <ContentCTA />
+
+      <div className="not-prose my-12">
+        <div className="border-l-4 border-primary pl-5 mb-8">
+          <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif mb-2" data-testid="heading-deep-dive">Deep-Dive Guides</h2>
+          <p className="text-muted-foreground">
+            {learnArticles.length} in-depth guides covering every aspect of Bucks 11+ preparation — from understanding how scoring works to what happens after results day.
+          </p>
+        </div>
+
+        <div className="space-y-10">
+          {LEARN_CATEGORIES.map((category) => {
+            const articles = getArticlesByCategory(category);
+            if (articles.length === 0) return null;
+            return (
+              <div key={category}>
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-lg" aria-hidden="true">{CATEGORY_ICONS[category]}</span>
+                  <h3 className="text-lg font-bold text-primary font-serif">{category}</h3>
+                </div>
+                <div className="grid sm:grid-cols-2 gap-3">
+                  {articles.map((article) => (
+                    <Link
+                      key={article.slug}
+                      href={`/learn/${article.slug}`}
+                      data-testid={`link-guide-${article.slug}`}
+                      className="group block bg-white border border-border rounded-xl p-4 hover:border-primary/40 hover:shadow-sm transition-all"
+                    >
+                      <h4 className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors leading-snug mb-1">
+                        {article.title}
+                      </h4>
+                      <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
+                        {article.description}
+                      </p>
+                      <span className="inline-block mt-2 text-xs font-medium text-primary group-hover:underline">
+                        Read guide →
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
 
       <h2 className="text-primary font-serif" data-testid="heading-faq">Frequently Asked Questions</h2>
       {faqItems.map((item, i) => (

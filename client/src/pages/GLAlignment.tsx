@@ -80,7 +80,7 @@ export default function GLAlignment() {
         The Buckinghamshire Secondary Transfer Test is not a general knowledge or curriculum assessment. It is a highly specific standardised test with particular reasoning families, question formats, and time expectations that differ meaningfully from school tests, SATs, and most commercial practice materials.
       </p>
       <p>
-        A child who is strong academically but unfamiliar with GL-style non-verbal reasoning question formats, or who has never practised the pacing demands of a strictly timed multi-section paper, may underperform significantly relative to their actual ability. Domain-by-domain alignment to the real test format means that practice on this platform replicates what children will encounter — not a general approximation of it.
+        A child who is strong academically but unfamiliar with GL-style non-verbal reasoning question formats, or who has never practiced the pacing demands of a strictly timed multi-section paper, may underperform significantly relative to their actual ability. Domain-by-domain alignment to the real test format means that practice on this platform replicates what children will encounter — not a general approximation of it.
       </p>
 
       <h2 className="text-primary font-serif">Verbal Reasoning</h2>

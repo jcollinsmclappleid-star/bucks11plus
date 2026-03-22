@@ -1,6 +1,7 @@
 import { Link, useParams } from "wouter";
 import { getArticleBySlug, getArticlesByCategory, learnArticles } from "@/data/learn-articles";
 import NotFound from "@/pages/not-found";
+import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
 
 export default function LearnArticle() {
   const { slug } = useParams<{ slug: string }>();
@@ -104,29 +105,17 @@ export default function LearnArticle() {
           </div>
         )}
 
-        <div className="mt-10 bg-primary/5 border border-primary/20 rounded-xl p-6 flex flex-col sm:flex-row items-center gap-4 justify-between">
-          <div>
-            <p className="font-semibold text-foreground text-sm">Ready to test your child's current level?</p>
-            <p className="text-muted-foreground text-xs mt-1">Free 12-question mini diagnostic. No account needed.</p>
-          </div>
-          <div className="flex gap-3 shrink-0">
-            <Link href="/learn">
-              <button
-                data-testid="button-article-back-to-hub"
-                className="text-sm px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors"
-              >
-                ← All Guides
-              </button>
-            </Link>
-            <Link href="/free-diagnostic">
-              <button
-                data-testid="button-article-cta-diagnostic"
-                className="text-sm bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"
-              >
-                Free Diagnostic
-              </button>
-            </Link>
-          </div>
+        <SubscribeCTA />
+
+        <div className="mt-6 flex gap-3">
+          <Link href="/learn">
+            <button
+              data-testid="button-article-back-to-hub"
+              className="text-sm px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors"
+            >
+              ← All Guides
+            </button>
+          </Link>
         </div>
       </div>
     </div>

@@ -146,7 +146,7 @@ export const towns: TownData[] = [
         answer: "Yes. All 13 Buckinghamshire grammar schools use the same Secondary Transfer Test, and parents can list up to three grammar schools on their application. Many Chesham families list Chesham Grammar School as one option and one or both of the Challoner's schools as additional preferences. Qualifying at 121 makes a child eligible for consideration at any school they list.",
       },
       {
-        question: "Is non-verbal reasoning harder for children who haven't practised it?",
+        question: "Is non-verbal reasoning harder for children who haven't practiced it?",
         answer: "NVR is not inherently harder than other domains, but children who are unfamiliar with the question formats — sequences, matrices, spatial transformations — often struggle initially simply because they haven't seen the types before. Exposure and practice with timed NVR questions typically produces relatively quick improvement, making it one of the highest-return areas to address early in preparation.",
       },
       {

@@ -208,7 +208,7 @@ export default function DrillRunner() {
           <h1 className="text-2xl font-bold text-primary font-serif">No Questions Found</h1>
           <p className="text-muted-foreground">
             {exhaustionWarning
-              ? "You've practised all available questions in this area — great work! Questions will refresh soon."
+              ? "You've practiced all available questions in this area — great work! Questions will refresh soon."
               : "We couldn't find any questions for this section. Please try another one."}
           </p>
           <Button onClick={() => setLocation("/app/practice")}>Back to Practice</Button>
