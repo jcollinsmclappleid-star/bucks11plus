@@ -92,9 +92,14 @@ export default function Navbar() {
 
         <div className="flex items-center gap-2 md:hidden">
           {!user && (
-            <Button size="sm" asChild className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm text-xs" data-testid="link-free-diagnostic-mobile">
-              <Link href="/free-diagnostic">Free Diagnostic</Link>
-            </Button>
+            <>
+              <Link href="/pricing" className="text-xs font-semibold text-primary/80 hover:text-primary transition-colors shrink-0" data-testid="link-pricing-mobile-header">
+                Pricing
+              </Link>
+              <Button size="sm" asChild className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm text-[11px] px-2.5 h-8 shrink-0 whitespace-nowrap" data-testid="link-free-diagnostic-mobile">
+                <Link href="/free-diagnostic">Bucks 11+ Free Diagnostic</Link>
+              </Button>
+            </>
           )}
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
