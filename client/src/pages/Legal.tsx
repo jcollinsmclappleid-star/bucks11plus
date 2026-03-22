@@ -137,12 +137,12 @@ export default function Legal({ type }: { type: 'terms' | 'privacy' | 'safeguard
           body: "11+ Standard is a digital educational platform. All purchases provide immediate access to digital content including diagnostic assessments, practice questions, analytics dashboards and progress tracking tools. Because our products are delivered digitally, our refund policy reflects the nature of digital goods under UK consumer law. Different cancellation rights apply depending on whether you have purchased a monthly subscription or a one-time programme plan — please read the relevant section below."
         },
         {
-          heading: "Monthly Subscription (Practice Platform Monthly — £59.99/mo)",
-          body: "If you are on the Practice Platform Monthly subscription, you may cancel at any time via the in-app billing portal on your Account page. Cancellation takes effect at the end of your current billing period — your access will continue until that date and will not be renewed. We do not issue partial-month refunds once a billing period has started. The 14-day cooling-off right (see below) applies to your first monthly payment only and is automatically waived as soon as you access any digital content on the platform. Subsequent monthly renewals are not covered by a cooling-off right."
+          heading: "Monthly Subscriptions (Bucks Practice Platform — £24.99/mo or Bucks Practice Platform Edge — £59.99/mo)",
+          body: "If you are on a Bucks Practice Platform monthly subscription, you may cancel at any time via the in-app billing portal on your Account page. Cancellation takes effect at the end of your current billing period — your access will continue until that date and will not be renewed. We do not issue partial-month refunds once a billing period has started. The 14-day cooling-off right (see below) applies to your first monthly payment only and is automatically waived as soon as you access any digital content on the platform. Subsequent monthly renewals are not covered by a cooling-off right."
         },
         {
           heading: "Your Right to Cancel (14-Day Cooling-Off Period) — One-Time Programme Purchases",
-          body: "This section applies to one-time programme plan purchases (8-week, 12-week, and Programme+ 24-week plans). Under the Consumer Contracts (Information, Cancellation and Additional Charges) Regulations 2013, you have 14 days from the date of purchase to cancel your order and receive a full refund — provided you have not accessed, started or used any of the digital content included in your plan. This includes starting a diagnostic, accessing practice questions, viewing dashboard analytics or downloading any reports. For monthly subscriptions, see the section above."
+          body: "This section applies to one-time programme plan purchases (8-week, 12-week, and Bucks Young Scholar Programme 6-month plans). Under the Consumer Contracts (Information, Cancellation and Additional Charges) Regulations 2013, you have 14 days from the date of purchase to cancel your order and receive a full refund — provided you have not accessed, started or used any of the digital content included in your plan. This includes starting a diagnostic, accessing practice questions, viewing dashboard analytics or downloading any reports. For monthly subscriptions, see the section above."
         },
         {
           heading: "When a Refund Cannot Be Issued",
@@ -158,7 +158,7 @@ export default function Legal({ type }: { type: 'terms' | 'privacy' | 'safeguard
         },
         {
           heading: "Plan Changes & Upgrades",
-          body: "Current plan prices: Practice Platform Monthly £59.99/month; Practice Platform Annual £495/year; 12-week Programme (subscriber add-on) £89 one-time; Programme+ (6 months) £349 one-time. If you upgrade from one plan to another (e.g. from Practice Platform to Programme+), please contact support@bucks11plustest.co.uk. Downgrades are not available once content from a higher-tier plan has been accessed."
+          body: "Current plan prices: Bucks Practice Platform £24.99/month; Bucks Practice Platform Edge £59.99/month or £495/year; Bucks Young Scholar Programme £349 one-time. If you upgrade from one plan to another (e.g. from Practice Platform to Young Scholar Programme), please contact support@bucks11plustest.co.uk. Downgrades are not available once content from a higher-tier plan has been accessed."
         },
         {
           heading: "Contact",

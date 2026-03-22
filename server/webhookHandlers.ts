@@ -42,7 +42,7 @@ export class WebhookHandlers {
         return;
       }
 
-      if (user.subscriptionTier === 'pack_monthly' || user.subscriptionTier === 'pack_annual') {
+      if (user.subscriptionTier === 'pack_monthly' || user.subscriptionTier === 'pack_plus' || user.subscriptionTier === 'pack_annual') {
         console.log(`[Webhook] Subscription cancelled for user ${user.id} (${user.subscriptionTier}) — downgrading to free`);
         await storage.updateUserSubscription(user.id, 'free', undefined);
       }

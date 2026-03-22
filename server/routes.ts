@@ -25,7 +25,8 @@ const TIER_RANK: Record<string, number> = {
   pack12: 1,
   pack12_family: 1,
   pack_monthly: 1,
-  pack_annual: 1,
+  pack_plus: 2,
+  pack_annual: 2,
   programme8: 2,
   programme12: 2,
   programme16: 2,
@@ -38,6 +39,7 @@ const ALL_VALID_TIERS = [
   "pack12",
   "pack12_family",
   "pack_monthly",
+  "pack_plus",
   "pack_annual",
   "programme8",
   "programme12",
@@ -50,7 +52,8 @@ const TIER_PRICE_GBP_PENCE: Record<string, number> = {
   early_learner: 4900,
   pack12: 11900,
   pack12_family: 14900,
-  pack_monthly: 5999,
+  pack_monthly: 2499,
+  pack_plus: 5999,
   pack_annual: 49500,
   programme8: 5900,
   programme12: 8900,
@@ -61,15 +64,16 @@ const TIER_PRICE_GBP_PENCE: Record<string, number> = {
 
 const TIER_DISPLAY_NAME: Record<string, string> = {
   early_learner: "Early Learner",
-  pack12: "Practice Platform",
-  pack12_family: "Practice Platform — Family",
-  pack_monthly: "Practice Platform Monthly",
-  pack_annual: "Practice Platform Annual",
+  pack12: "Bucks Practice Platform (Legacy)",
+  pack12_family: "Bucks Practice Platform — Family",
+  pack_monthly: "Bucks Practice Platform",
+  pack_plus: "Bucks Practice Platform Edge",
+  pack_annual: "Bucks Practice Platform Edge Annual",
   programme8: "8 Week Programme",
   programme12: "12 Week Structured Programme (Subscriber Add-on)",
-  programme16: "Young Scholar Programme",
-  programme16_family: "Young Scholar Programme — Family",
-  programme24_plus: "Programme+",
+  programme16: "Bucks Young Scholar Programme",
+  programme16_family: "Bucks Young Scholar Programme — Family",
+  programme24_plus: "Bucks Young Scholar Programme",
 };
 
 async function findStripePriceForTier(tier: string): Promise<string | null> {
@@ -171,7 +175,7 @@ export async function registerRoutes(
 
       const host = req.get('host');
       const protocol = req.protocol;
-      const isMonthly = tier === "pack_monthly";
+      const isMonthly = tier === "pack_monthly" || tier === "pack_plus";
       const isAnnual = tier === "pack_annual";
       const isSubscription = isMonthly || isAnnual;
       const mode = isSubscription ? "subscription" : "payment";
@@ -215,9 +219,10 @@ export async function registerRoutes(
     try {
       const { targetTier } = req.body;
       const validUpgrades: Record<string, string[]> = {
-        pack_monthly: ["pack_annual", "programme24_plus"],
+        pack_monthly: ["pack_plus", "pack_annual", "programme24_plus"],
+        pack_plus: ["pack_annual", "programme24_plus"],
         pack_annual: ["programme24_plus"],
-        pack12: ["pack_annual", "programme24_plus", "programme16"],
+        pack12: ["pack_plus", "pack_annual", "programme24_plus", "programme16"],
         pack12_family: ["programme16_family"],
         programme8: ["programme12", "programme24_plus"],
         programme12: ["programme24_plus"],
@@ -288,7 +293,7 @@ export async function registerRoutes(
       const stripe = await getUncachableStripeClient();
       const host = req.get('host');
       const protocol = req.protocol;
-      const isMonthlyGuest = tier === "pack_monthly";
+      const isMonthlyGuest = tier === "pack_monthly" || tier === "pack_plus";
       const isAnnualGuest = tier === "pack_annual";
       const isSubscription = isMonthlyGuest || isAnnualGuest;
       const mode = isSubscription ? "subscription" : "payment";
@@ -356,7 +361,7 @@ export async function registerRoutes(
         return res.json(safeUser);
       }
 
-      const SUBSCRIPTION_TIERS = new Set(["pack_monthly", "pack_annual"]);
+      const SUBSCRIPTION_TIERS = new Set(["pack_monthly", "pack_plus", "pack_annual"]);
       const weeksMap: Record<string, number> = {
         early_learner: 26,
         pack12: 26,
@@ -1661,7 +1666,7 @@ export async function registerRoutes(
   app.post("/api/admin/switch-tier", requireAdmin, async (req, res, next) => {
     try {
       const { tier } = req.body;
-      const validTiers = ["free", "early_learner", "pack12", "pack12_family", "pack_monthly", "pack_annual", "programme8", "programme12", "programme16", "programme16_family", "programme24_plus"];
+      const validTiers = ["free", "early_learner", "pack12", "pack12_family", "pack_monthly", "pack_plus", "pack_annual", "programme8", "programme12", "programme16", "programme16_family", "programme24_plus"];
       if (!tier || !validTiers.includes(tier)) {
         return res.status(400).json({ message: "Invalid tier" });
       }

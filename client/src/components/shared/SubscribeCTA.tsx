@@ -15,7 +15,7 @@ export function SubscribeCTA() {
       <div className="bg-primary px-7 py-7 md:px-9 md:py-8">
         <div className="flex items-center gap-2 mb-3">
           <Zap className="h-3.5 w-3.5 text-brand-amber" />
-          <span className="text-[10px] font-bold uppercase tracking-widest text-brand-amber">Practice Platform — from £59.99/month</span>
+          <span className="text-[10px] font-bold uppercase tracking-widest text-brand-amber">Bucks Practice Platform — from £24.99/month</span>
         </div>
         <h3 className="text-2xl md:text-[1.65rem] font-bold font-serif text-white mb-2 leading-snug">
           Practise Smarter — 1,500+ Questions &amp; GL-Style Diagnostics

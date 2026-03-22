@@ -13,6 +13,7 @@ import { useState } from "react";
 const TIER_RANK: Record<string, number> = {
   free: 0,
   pack12: 1, pack12_family: 1, pack_monthly: 1,
+  pack_plus: 2, pack_annual: 2,
   programme8: 2, programme12: 2, programme16: 2, programme16_family: 2, programme24_plus: 2,
 };
 
@@ -71,7 +72,7 @@ function DifficultyProgression({ sectionAccuracy }: { sectionAccuracy: Record<st
 }
 
 export default function Practice() {
-  const { user, hasPaidAccess, isProgramme } = useAuth();
+  const { user, hasPaidAccess, isProgramme, isFullPlatform } = useAuth();
   const [timedMode, setTimedMode] = useState(false);
   const { data: sections, isLoading } = useQuery<PracticeSection[]>({
     queryKey: ["/api/practice-sections"],
@@ -152,17 +153,17 @@ export default function Practice() {
           categories.map((category, idx) => {
             const categorySections = sections?.filter(s => s.category === category) || [];
             const hasHardDrills = categorySections.some(s => s.difficulty === 'Hard');
-            const isPack12User = hasPaidAccess() && !isProgramme();
+            const showHardUpgradeBanner = hasPaidAccess() && !isFullPlatform();
             return (
             <section key={idx}>
               <h2 className="text-xl font-bold text-primary mb-4 flex items-center gap-2">
                 <BookOpen className="h-5 w-5 text-brand-primary" /> {category}
               </h2>
-              {hasHardDrills && isPack12User && (
+              {hasHardDrills && showHardUpgradeBanner && (
                 <div className="flex items-center gap-3 rounded-lg border border-violet-200 bg-gradient-to-r from-violet-50 to-indigo-50 p-4 mb-4" data-testid="banner-hard-upgrade">
                   <Zap className="h-5 w-5 text-violet-600 shrink-0" />
                   <div className="flex-1">
-                    <p className="font-medium text-violet-900 text-sm">Unlock all 17 Hard challenge drills with the Young Scholar Programme</p>
+                    <p className="font-medium text-violet-900 text-sm">Unlock all 17 Hard challenge drills with Bucks Practice Platform Edge</p>
                     <p className="text-violet-600 text-xs mt-0.5">You have 6 Hard drills — upgrade to access the remaining 11 for complete exam preparation.</p>
                   </div>
                   <Button size="sm" className="bg-violet-600 hover:bg-violet-700 text-white shrink-0" asChild data-testid="button-upgrade-hard">

@@ -29,6 +29,7 @@ type AuthContextType = {
   isEarlyLearner: () => boolean;
   isPack12: () => boolean;
   isProgramme: () => boolean;
+  isFullPlatform: () => boolean;
   hasPaidAccess: () => boolean;
   isFamilyTier: () => boolean;
   tierLabel: () => string;
@@ -92,12 +93,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await logoutMutation.mutateAsync();
   };
 
-  const PACK_TIERS = new Set(["pack12", "pack12_family", "pack_monthly"]);
+  const PACK_TIERS = new Set(["pack12", "pack12_family", "pack_monthly", "pack_plus", "pack_annual"]);
   const PROGRAMME_TIERS = new Set(["programme16", "programme16_family", "programme8", "programme12", "programme24_plus"]);
+  const FULL_PLATFORM_TIERS = new Set(["pack_plus", "pack_annual", "programme16", "programme16_family", "programme8", "programme12", "programme24_plus"]);
 
   const isEarlyLearner = () => user?.subscriptionTier === "early_learner";
-  const isPack12 = () => !!user?.isAdmin || PACK_TIERS.has(user?.subscriptionTier ?? "");
+  const isPack12 = () => !!user?.isAdmin || PACK_TIERS.has(user?.subscriptionTier ?? "") || PROGRAMME_TIERS.has(user?.subscriptionTier ?? "");
   const isProgramme = () => !!user?.isAdmin || PROGRAMME_TIERS.has(user?.subscriptionTier ?? "");
+  const isFullPlatform = () => !!user?.isAdmin || FULL_PLATFORM_TIERS.has(user?.subscriptionTier ?? "");
   const hasPaidAccess = () => {
     if (user?.isAdmin) return true;
     const t = user?.subscriptionTier ?? "";
@@ -109,20 +112,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!user) return "Free";
     switch (user.subscriptionTier) {
       case "early_learner": return "Early Learner";
-      case "pack12": return "Practice Platform";
-      case "pack12_family": return "Practice Platform (Family)";
-      case "pack_monthly": return "Practice Platform (Monthly)";
-      case "programme8": return "Young Scholar Programme (8-week)";
-      case "programme12": return "Young Scholar Programme (12-week)";
-      case "programme16": return "Young Scholar Programme";
-      case "programme16_family": return "Young Scholar Programme (Family)";
-      case "programme24_plus": return "Programme+";
+      case "pack12": return "Bucks Practice Platform";
+      case "pack12_family": return "Bucks Practice Platform (Family)";
+      case "pack_monthly": return "Bucks Practice Platform";
+      case "pack_plus": return "Bucks Practice Platform Edge";
+      case "pack_annual": return "Bucks Practice Platform Edge (Annual)";
+      case "programme8": return "Bucks Young Scholar Programme (8-week)";
+      case "programme12": return "Bucks Young Scholar Programme (12-week)";
+      case "programme16": return "Bucks Young Scholar Programme";
+      case "programme16_family": return "Bucks Young Scholar Programme (Family)";
+      case "programme24_plus": return "Bucks Young Scholar Programme";
       default: return "Free";
     }
   };
 
   return (
-    <AuthContext.Provider value={{ user: user ?? null, isLoading, login, register, logout, isEarlyLearner, isPack12, isProgramme, hasPaidAccess, isFamilyTier, tierLabel }}>
+    <AuthContext.Provider value={{ user: user ?? null, isLoading, login, register, logout, isEarlyLearner, isPack12, isProgramme, isFullPlatform, hasPaidAccess, isFamilyTier, tierLabel }}>
       {children}
     </AuthContext.Provider>
   );

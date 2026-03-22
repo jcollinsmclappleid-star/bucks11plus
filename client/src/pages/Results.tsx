@@ -136,7 +136,7 @@ function getSectionLabel(section: string): string {
 
 export default function Results() {
   const { id } = useParams<{ id: string }>();
-  const { user, isProgramme, hasPaidAccess } = useAuth();
+  const { user, isProgramme, isFullPlatform, hasPaidAccess } = useAuth();
   const target = 121;
 
   const { data: session, isLoading } = useQuery<TestSession>({
@@ -667,19 +667,19 @@ export default function Results() {
         </Card>
       )}
 
-      {hasPaidAccess() && !isProgramme() && weakest && weakest.score < 70 && (
+      {hasPaidAccess() && !isFullPlatform() && weakest && weakest.score < 70 && (
         <Card className="border-blue-200 bg-gradient-to-br from-blue-50 to-white shadow-sm" data-testid="card-upgrade-upsell">
           <CardContent className="p-6 flex items-center gap-4">
             <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
               <TrendingUp className="h-5 w-5 text-blue-600" />
             </div>
             <div className="flex-1">
-              <h3 className="font-bold text-primary mb-1">Accelerate with the Young Scholar Programme</h3>
+              <h3 className="font-bold text-primary mb-1">Accelerate with Bucks Practice Platform Edge</h3>
               <p className="text-sm text-slate-600">
-                {weakest.name} at {weakest.score}% needs structured improvement. The 16-week programme includes personalised task plans, milestone diagnostics, and premium analytics to close the gap faster.
+                {weakest.name} at {weakest.score}% needs structured improvement. Edge unlocks all 17 Hard drills, premium analytics, and mock exams to close the gap faster.
               </p>
             </div>
-            <Button size="sm" asChild data-testid="button-upgrade-programme">
+            <Button size="sm" asChild data-testid="button-upgrade-edge">
               <Link href="/pricing">Upgrade</Link>
             </Button>
           </CardContent>

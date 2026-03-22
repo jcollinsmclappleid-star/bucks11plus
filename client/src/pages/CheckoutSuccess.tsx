@@ -40,7 +40,12 @@ export default function CheckoutSuccess() {
   }, [user, isLoading, tier]);
 
   const PROGRAMME_TIERS = new Set(["programme8", "programme12", "programme16", "programme16_family"]);
-  const tierLabel = tier === "programme24_plus" ? "Programme+" : PROGRAMME_TIERS.has(tier) ? "Young Scholar Programme" : tier === "early_learner" ? "Early Learner" : tier === "pack_annual" ? "Practice Platform (Annual)" : "Practice Platform";
+  const tierLabel = tier === "programme24_plus" ? "Bucks Young Scholar Programme"
+    : PROGRAMME_TIERS.has(tier) ? "Bucks Young Scholar Programme"
+    : tier === "early_learner" ? "Early Learner"
+    : tier === "pack_plus" ? "Bucks Practice Platform Edge"
+    : tier === "pack_annual" ? "Bucks Practice Platform Edge (Annual)"
+    : "Bucks Practice Platform";
 
   if (processing) {
     return (

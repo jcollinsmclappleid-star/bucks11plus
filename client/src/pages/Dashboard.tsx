@@ -31,7 +31,7 @@ type ProgressData = {
 };
 
 export default function Dashboard() {
-  const { user, hasPaidAccess, isProgramme, isEarlyLearner, tierLabel } = useAuth();
+  const { user, hasPaidAccess, isProgramme, isFullPlatform, isEarlyLearner, tierLabel } = useAuth();
   const [, navigate] = useLocation();
   const target = 121;
 
@@ -280,25 +280,27 @@ export default function Dashboard() {
               </CardContent>
             </Card>
 
-            {isProgramme() && hasData && (
+            {isFullPlatform() && hasData && (
               <Card className="border-primary/20 bg-gradient-to-br from-blue-50 to-white">
                 <CardContent className="p-6 space-y-4">
                   <div className="flex items-center gap-2">
                     <Crown className="h-5 w-5 text-primary" />
-                    <h3 className="font-bold text-primary font-serif">Programme Exclusive</h3>
+                    <h3 className="font-bold text-primary font-serif">{isProgramme() ? "Programme Exclusive" : "Platform Features"}</h3>
                   </div>
                   {testDayConfig?.examDate && <CountdownWidget examDate={testDayConfig.examDate} />}
                   <div className="space-y-3">
-                    <div className="flex items-center gap-3 p-3 rounded-lg bg-white/80 border border-primary/10">
-                      <Map className="h-5 w-5 text-primary shrink-0" />
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-primary">16-Week Roadmap</p>
-                        <p className="text-xs text-muted-foreground">Guided milestones & weekly plans</p>
+                    {isProgramme() && (
+                      <div className="flex items-center gap-3 p-3 rounded-lg bg-white/80 border border-primary/10">
+                        <Map className="h-5 w-5 text-primary shrink-0" />
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-primary">16-Week Roadmap</p>
+                          <p className="text-xs text-muted-foreground">Guided milestones & weekly plans</p>
+                        </div>
+                        <Button size="sm" variant="ghost" asChild data-testid="button-go-programme">
+                          <Link href="/app/programme"><ArrowRight className="h-4 w-4" /></Link>
+                        </Button>
                       </div>
-                      <Button size="sm" variant="ghost" asChild data-testid="button-go-programme">
-                        <Link href="/app/programme"><ArrowRight className="h-4 w-4" /></Link>
-                      </Button>
-                    </div>
+                    )}
                     <div className="flex items-center gap-3 p-3 rounded-lg bg-white/80 border border-primary/10">
                       <BarChart3 className="h-5 w-5 text-primary shrink-0" />
                       <div className="flex-1">
@@ -324,20 +326,20 @@ export default function Dashboard() {
               </Card>
             )}
 
-            {hasPaidAccess() && !isProgramme() && hasData && (
+            {hasPaidAccess() && !isFullPlatform() && hasData && (
               <Card className="border-dashed border-2 border-violet-200 bg-gradient-to-br from-violet-50/50 to-indigo-50/50">
                 <CardContent className="p-6 space-y-4">
                   <div className="flex items-center gap-2">
                     <Zap className="h-5 w-5 text-violet-600" />
-                    <h3 className="font-bold text-violet-900">Upgrade to Programme</h3>
+                    <h3 className="font-bold text-violet-900">Upgrade to Edge</h3>
                   </div>
                   <ul className="space-y-2 text-sm text-violet-700">
                     <li className="flex items-center gap-2"><BarChart3 className="h-4 w-4 shrink-0" /> Premium Parent Analytics dashboard</li>
-                    <li className="flex items-center gap-2"><Map className="h-4 w-4 shrink-0" /> 16-week guided preparation roadmap</li>
-                    <li className="flex items-center gap-2"><Target className="h-4 w-4 shrink-0" /> All Hard-level challenge drills</li>
+                    <li className="flex items-center gap-2"><Target className="h-4 w-4 shrink-0" /> All 17 Hard-level challenge drills</li>
+                    <li className="flex items-center gap-2"><Calendar className="h-4 w-4 shrink-0" /> Test Day Simulator (full mock exams)</li>
                   </ul>
-                  <Button className="w-full bg-violet-600 hover:bg-violet-700 text-white" asChild data-testid="button-upgrade-programme">
-                    <Link href="/pricing#upgrade">Upgrade — Pay the Difference <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                  <Button className="w-full bg-violet-600 hover:bg-violet-700 text-white" asChild data-testid="button-upgrade-edge">
+                    <Link href="/pricing">Upgrade to Edge <ArrowRight className="ml-2 h-4 w-4" /></Link>
                   </Button>
                 </CardContent>
               </Card>

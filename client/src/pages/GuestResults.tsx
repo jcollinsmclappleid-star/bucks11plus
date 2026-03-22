@@ -426,13 +426,13 @@ export default function GuestResults() {
           <Card className="border-border/60 shadow-md hover:shadow-lg transition-shadow" data-testid="card-upsell-pack-monthly">
             <CardContent className="p-6">
               <div className="flex justify-between items-start mb-1">
-                <h3 className="text-xl font-bold text-primary font-serif">Practice Platform</h3>
-                <span className="text-2xl font-bold text-primary">£59.99<span className="text-sm font-medium text-slate-500">/mo</span></span>
+                <h3 className="text-xl font-bold text-primary font-serif">Bucks Practice Platform</h3>
+                <span className="text-2xl font-bold text-primary">£24.99<span className="text-sm font-medium text-slate-500">/mo</span></span>
               </div>
-              <p className="text-xs text-slate-400 mb-3">Cancel any time · or £495/year</p>
+              <p className="text-xs text-slate-400 mb-3">Cancel any time · Full Edge from £59.99/mo</p>
               <p className="text-sm text-slate-600 mb-4">Targeted practice that moves the needle — cancel any time</p>
               <ul className="space-y-2 mb-6">
-                {["1,500+ questions across VR, NVR, Maths & Comprehension", "Easy & Medium drills (19 sections)", "Full timed diagnostics (40 questions)", "PDF reports & impact simulator", "Progress tracking dashboard"].map((f, i) => (
+                {["1,500+ questions across VR, NVR, Maths & Comprehension", "Easy & Medium drills + 6 Hard drills", "Full timed diagnostics (40 questions)", "PDF reports & impact simulator", "Progress tracking dashboard"].map((f, i) => (
                   <li key={i} className="flex items-center gap-2 text-sm text-slate-700">
                     <BarChart3 className="h-4 w-4 text-primary shrink-0" />
                     {f}
@@ -440,7 +440,7 @@ export default function GuestResults() {
                 ))}
               </ul>
               <Button className="w-full" asChild data-testid="button-upsell-pack-monthly">
-                <Link href={`/sign-up?redirect=checkout&tier=pack_monthly&guestSession=${id}`}>Start Monthly — £59.99/mo</Link>
+                <Link href={`/sign-up?redirect=checkout&tier=pack_monthly&guestSession=${id}`}>Start Monthly — £24.99/mo</Link>
               </Button>
             </CardContent>
           </Card>
@@ -451,7 +451,7 @@ export default function GuestResults() {
             </div>
             <CardContent className="p-6">
               <div className="flex justify-between items-start mb-1">
-                <h3 className="text-xl font-bold text-primary font-serif">Programme+</h3>
+                <h3 className="text-xl font-bold text-primary font-serif">Bucks Young Scholar Programme</h3>
                 <span className="text-2xl font-bold text-primary">£349</span>
               </div>
               <p className="text-xs text-slate-400 mb-3">6 months · one-time payment</p>
