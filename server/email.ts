@@ -10,8 +10,9 @@ const EMAIL_SECRET = process.env.EMAIL_SECRET || "11plus-email-secret";
 function getBaseUrl(): string {
   if (process.env.BASE_URL) return process.env.BASE_URL;
   const domains = process.env.REPLIT_DOMAINS || "";
-  const prodDomain = domains.split(",").find(d => d.includes(".replit.app") || d.includes(".co.uk"));
-  if (prodDomain) return `https://${prodDomain.trim()}`;
+  const parts = domains.split(",").map(d => d.trim()).filter(Boolean);
+  const customDomain = parts.find(d => d.includes(".co.uk") || (!d.includes("replit.app") && !d.includes("replit.dev")));
+  if (customDomain) return `https://${customDomain}`;
   return "https://bucks11plustest.co.uk";
 }
 const BASE_URL = getBaseUrl();

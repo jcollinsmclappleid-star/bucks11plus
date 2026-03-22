@@ -50,7 +50,7 @@ RESEND_FROM_EMAIL = "11+ Standard <noreply@bucks11plustest.co.uk>"
 STRIPE_PUBLISHABLE_KEY = "pk_live_51TA4HSDv8IzJrrwIcE28QKqVl2zYobQYqD4x889L6TUP8HuZZgaJCPSp1wTbGgw7HqahSHmDnF3vkZB0HDwRK10500jqRCtBIX"
 
 [userenv.production]
-BASE_URL = "https://11plus-standard.replit.app"
+BASE_URL = "https://bucks11plustest.co.uk"
 
 [[ports]]
 localPort = 5000
