@@ -67,23 +67,29 @@ export default function GuestResults() {
   });
 
   const { data: session, isLoading } = useQuery<GuestSession>({
-    queryKey: [`guest-results-${id}`],
+    queryKey: [`guest-results-${id}-${guestToken}`],
     queryFn: async () => {
-      const res = await fetch(`/api/guest/results/${id}?token=${guestToken}`);
+      const url = guestToken
+        ? `/api/guest/results/${id}?token=${guestToken}`
+        : `/api/guest/results/${id}`;
+      const res = await fetch(url);
       if (!res.ok) throw new Error("Failed to load results");
       return res.json();
     },
-    enabled: !!id && !!guestToken,
+    enabled: !!id,
   });
 
   const { data: reviewItems } = useQuery<ReviewItem[]>({
-    queryKey: [`guest-review-${id}`],
+    queryKey: [`guest-review-${id}-${guestToken}`],
     queryFn: async () => {
-      const res = await fetch(`/api/guest/review/${id}?token=${guestToken}`);
+      const url = guestToken
+        ? `/api/guest/review/${id}?token=${guestToken}`
+        : `/api/guest/review/${id}`;
+      const res = await fetch(url);
       if (!res.ok) throw new Error("Failed to load review");
       return res.json();
     },
-    enabled: !!id && !!guestToken && !!session?.completedAt,
+    enabled: !!id && !!session?.completedAt,
   });
 
   const currentScore = session?.forecastScore || 0;
