@@ -276,7 +276,7 @@ export default function Pricing() {
 
           {!hasPaidPlan && (
             <div>
-              <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4 max-w-6xl mx-auto">
+              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 max-w-7xl mx-auto">
 
                 <Card className="border-border/60 shadow-sm flex flex-col hover:border-primary/30 transition-colors" data-testid="card-tier-free">
                   <CardHeader className="pb-3">
@@ -357,7 +357,7 @@ export default function Pricing() {
                   </div>
                   <CardHeader className="pb-3 pt-6">
                     <p className="text-xs font-bold text-primary uppercase tracking-wider mb-1">Bucks Practice Platform Edge</p>
-                    <CardTitle className="text-xl font-serif">Full Platform</CardTitle>
+                    <CardTitle className="text-xl font-serif">Monthly</CardTitle>
                   </CardHeader>
                   <CardContent className="flex-1">
                     <div className="mb-1">
@@ -379,18 +379,6 @@ export default function Pricing() {
                         </li>
                       ))}
                     </ul>
-                    <div className="mt-4 pt-3 border-t border-slate-200">
-                      <p className="text-xs text-slate-500 mb-2 font-medium">Prefer to pay annually?</p>
-                      <button
-                        className="text-xs text-primary font-bold underline underline-offset-2 hover:text-primary/80 transition-colors"
-                        onClick={() => handleCheckout("pack_annual")}
-                        disabled={loading === "pack_annual"}
-                        data-testid="button-get-pack-annual-link"
-                      >
-                        {loading === "pack_annual" ? "Loading…" : "Get 12 months for £495 — save £224.88 "}
-                        <span className="inline-flex items-center gap-0.5 text-[10px] bg-green-100 text-green-700 font-bold px-1.5 py-0.5 rounded-full ml-1">BEST VALUE</span>
-                      </button>
-                    </div>
                   </CardContent>
                   <CardFooter>
                     <Button
@@ -399,7 +387,53 @@ export default function Pricing() {
                       disabled={loading === "pack_plus"}
                       data-testid="button-get-pack-plus"
                     >
-                      {loading === "pack_plus" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Get Edge — £59.99/mo"}
+                      {loading === "pack_plus" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Get Edge Monthly"}
+                    </Button>
+                  </CardFooter>
+                </Card>
+
+                <Card className="border-brand-green border-2 shadow-xl relative flex flex-col overflow-hidden bg-green-50/30" data-testid="card-tier-pack-annual">
+                  <div className="absolute top-0 inset-x-0 h-1.5 bg-brand-green"></div>
+                  <div className="absolute top-3 right-3 bg-brand-green text-white px-2.5 py-1 rounded-full font-bold text-[10px] uppercase tracking-wider shadow pointer-events-none">
+                    BEST VALUE
+                  </div>
+                  <CardHeader className="pb-3 pt-6">
+                    <p className="text-xs font-bold text-brand-green uppercase tracking-wider mb-1">Bucks Practice Platform Edge</p>
+                    <CardTitle className="text-xl font-serif">Pay Annually</CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex-1">
+                    <div className="mb-1">
+                      <span className="text-4xl font-bold text-primary">£495</span>
+                      <span className="text-muted-foreground font-medium text-sm"> / year</span>
+                    </div>
+                    <p className="text-xs text-slate-500 mb-1">One payment · equiv. £41.25/mo</p>
+                    <div className="inline-flex items-center gap-1.5 bg-green-100 border border-green-200 text-green-800 text-[11px] font-bold px-2 py-1 rounded-full mb-4">
+                      <CheckCircle2 className="h-3 w-3" />
+                      Save £224.88 vs monthly Edge
+                    </div>
+                    <ul className="space-y-2">
+                      {[
+                        "Everything in Bucks Practice Platform",
+                        "All 17 Hard challenge drills",
+                        "Premium Parent Analytics dashboard",
+                        "Mock exam simulations (Test Day Simulator)",
+                        "Full progress forecasting & gap analysis",
+                      ].map((f, i) => (
+                        <li key={i} className="flex items-start gap-2">
+                          <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0 mt-0.5" />
+                          <span className="text-slate-700 text-sm">{f}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                  <CardFooter>
+                    <Button
+                      className="w-full bg-brand-green text-white hover:bg-brand-green/90 h-11 font-bold"
+                      onClick={() => handleCheckout("pack_annual")}
+                      disabled={loading === "pack_annual"}
+                      data-testid="button-get-pack-annual"
+                    >
+                      {loading === "pack_annual" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Get Annual — £495"}
                     </Button>
                   </CardFooter>
                 </Card>
@@ -745,7 +779,7 @@ export default function Pricing() {
                     <th className="text-left py-3 px-4 font-semibold text-slate-600 w-[28%]">Feature</th>
                     <th className="text-center py-3 px-4 font-semibold text-slate-600">Free</th>
                     <th className="text-center py-3 px-4 font-semibold text-slate-600">Practice Platform<br/><span className="text-xs font-normal text-slate-400">£24.99/mo</span></th>
-                    <th className="text-center py-3 px-4 font-semibold text-primary">Platform Edge<br/><span className="text-xs font-normal text-slate-400">£59.99/mo</span></th>
+                    <th className="text-center py-3 px-4 font-semibold text-primary">Platform Edge<br/><span className="text-xs font-normal text-slate-400">£59.99/mo · £495/yr</span></th>
                     <th className="text-center py-3 px-4 font-bold text-brand-amber">Young Scholar<br/><span className="text-xs font-normal text-slate-400">£349 one-time</span></th>
                   </tr>
                 </thead>
@@ -924,7 +958,7 @@ export default function Pricing() {
                 Unlock full platform access with Edge, switch to Annual to save over £220, or add the Young Scholar Programme for a fully structured 6-month coaching plan with roadmap, mock exams, and milestone diagnostics.
               </p>
             </div>
-            <div className="grid sm:grid-cols-2 gap-5 max-w-2xl mx-auto">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-4xl mx-auto">
               {availableUpgrades.includes("pack_plus") && (
                 <Card className="border-primary border-2 shadow-lg flex flex-col relative overflow-hidden" data-testid="card-upgrade-pack-plus">
                   <div className="absolute top-0 inset-x-0 h-1 bg-primary"></div>
@@ -958,24 +992,27 @@ export default function Pricing() {
                 </Card>
               )}
               {availableUpgrades.includes("pack_annual") && (
-                <Card className="border-primary border-2 shadow-lg flex flex-col relative overflow-hidden" data-testid="card-upgrade-pack-annual">
-                  <div className="absolute top-0 inset-x-0 h-1 bg-primary"></div>
-                  <div className="absolute top-3 right-3 bg-primary text-white px-2 py-0.5 rounded-full font-bold text-[10px] uppercase tracking-wider pointer-events-none">
+                <Card className="border-brand-green border-2 shadow-lg flex flex-col relative overflow-hidden bg-green-50/20" data-testid="card-upgrade-pack-annual">
+                  <div className="absolute top-0 inset-x-0 h-1 bg-brand-green"></div>
+                  <div className="absolute top-3 right-3 bg-brand-green text-white px-2 py-0.5 rounded-full font-bold text-[10px] uppercase tracking-wider pointer-events-none">
                     BEST VALUE
                   </div>
                   <CardContent className="p-6 pt-8 flex-1">
-                    <p className="text-xs font-bold uppercase tracking-wider text-primary mb-1">Bucks Practice Platform Edge — Annual</p>
+                    <p className="text-xs font-bold uppercase tracking-wider text-brand-green mb-1">Bucks Practice Platform Edge — Annual</p>
                     <div className="flex items-end gap-2 mb-1">
                       <span className="text-4xl font-bold text-primary">£495</span>
                       <span className="text-slate-500 font-medium text-sm mb-1">/ year</span>
                     </div>
-                    <p className="text-xs text-slate-500 mb-4">Full platform · equivalent to £41.25/month</p>
+                    <p className="text-xs text-slate-500 mb-2">One payment · equiv. £41.25/mo</p>
+                    <div className="inline-flex items-center gap-1 text-[11px] font-bold text-green-700 bg-green-100 border border-green-200 px-2 py-0.5 rounded-full mb-4">
+                      Save £224.88 vs monthly
+                    </div>
                     <ul className="space-y-2">
                       {[
-                        "Everything in your current plan",
-                        "12 months of full access",
-                        "Save £224.88 vs staying monthly",
-                        "Cancel your monthly subscription",
+                        "All 17 Hard challenge drills",
+                        "Premium Parent Analytics",
+                        "Mock exam simulations",
+                        "12 months full access",
                       ].map((f, i) => (
                         <li key={i} className="flex items-center gap-2 text-sm text-slate-700">
                           <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0" />{f}
@@ -984,8 +1021,8 @@ export default function Pricing() {
                     </ul>
                   </CardContent>
                   <CardFooter className="px-6 pb-6 pt-0">
-                    <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-11 font-bold" onClick={() => handleUpgrade("pack_annual")} disabled={loading === "upgrade"} data-testid="button-upgrade-pack-annual">
-                      {loading === "upgrade" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Switch to Annual — £495"}
+                    <Button className="w-full bg-brand-green text-white hover:bg-brand-green/90 h-11 font-bold" onClick={() => handleUpgrade("pack_annual")} disabled={loading === "upgrade"} data-testid="button-upgrade-pack-annual">
+                      {loading === "upgrade" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Get Annual — £495"}
                     </Button>
                   </CardFooter>
                 </Card>
