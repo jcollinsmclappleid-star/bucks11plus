@@ -455,9 +455,9 @@ export default function GuestResults() {
                 <span className="text-2xl font-bold text-primary">£349</span>
               </div>
               <p className="text-xs text-slate-400 mb-3">6 months · one-time payment</p>
-              <p className="text-sm text-slate-600 mb-4">Complete 6-month roadmap with milestone tracking and mock exams</p>
+              <p className="text-sm text-slate-600 mb-4">Full platform access for 6 months — one payment, no subscription</p>
               <ul className="space-y-2 mb-6">
-                {["Everything in Practice Platform, plus:", "All Hard challenge drills unlocked", "3 full mock exam simulations", "6-month guided preparation roadmap", "Milestone diagnostics with auto-tracking", "Weekly personalised task plans", "Premium Parent Analytics dashboard"].map((f, i) => (
+                {["All 17 Hard challenge drills", "Mock exam simulations", "Premium Parent Analytics dashboard", "Guided preparation roadmap", "Milestone diagnostics & auto-tracking", "Weekly personalised task plans", "6 months full access · one payment"].map((f, i) => (
                   <li key={i} className="flex items-center gap-2 text-sm text-slate-700">
                     <TrendingUp className="h-4 w-4 text-brand-amber shrink-0" />
                     {f}

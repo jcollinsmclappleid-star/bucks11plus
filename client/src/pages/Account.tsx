@@ -14,17 +14,15 @@ type Tab = "profile" | "subscription";
 
 const UPGRADE_OPTIONS: Record<string, { tier: string; label: string; price: string; description: string }[]> = {
   pack_monthly: [
-    { tier: "pack_plus", label: "Bucks Practice Platform Edge", price: "£59.99/mo", description: "Unlock all 17 Hard drills, premium analytics, and mock exams." },
-    { tier: "pack_annual", label: "Bucks Practice Platform Edge — Annual", price: "£495/yr", description: "Full platform access for 12 months — save £224.88 vs monthly Edge." },
-    { tier: "programme24_plus", label: "Bucks Young Scholar Programme", price: "£349", description: "All-inclusive 6-month plan with full access + structured coaching." },
+    { tier: "pack_plus", label: "Bucks Practice Platform Edge", price: "£59.99/mo", description: "Full access: all Hard drills, mock exams, analytics, roadmap & weekly plans." },
+    { tier: "pack_annual", label: "Bucks Practice Platform Edge — Annual", price: "£495/yr", description: "Full access for 12 months — save £224.88 vs monthly Edge." },
+    { tier: "programme24_plus", label: "Bucks Young Scholar Programme", price: "£349", description: "6 months of full access, one payment. Same features as Edge." },
   ],
   pack_plus: [
-    { tier: "pack_annual", label: "Bucks Practice Platform Edge — Annual", price: "£495/yr", description: "Switch to annual and lock in full access for 12 months." },
-    { tier: "programme24_plus", label: "Bucks Young Scholar Programme", price: "£349", description: "Add structured coaching with roadmap, milestones and weekly plans." },
+    { tier: "pack_annual", label: "Bucks Practice Platform Edge — Annual", price: "£495/yr", description: "Lock in 12 months of full access — save £224.88 vs staying monthly." },
+    { tier: "programme24_plus", label: "Bucks Young Scholar Programme", price: "£349", description: "6-month fixed plan at one payment — cancel your monthly subscription." },
   ],
-  pack_annual: [
-    { tier: "programme24_plus", label: "Bucks Young Scholar Programme", price: "£349", description: "Add structured coaching to your annual access." },
-  ],
+  pack_annual: [],
   pack12: [
     { tier: "pack_plus", label: "Bucks Practice Platform Edge", price: "£59.99/mo", description: "Unlock all 17 Hard drills, premium analytics and mock exams." },
     { tier: "pack_annual", label: "Bucks Practice Platform Edge — Annual", price: "£495/yr", description: "Upgrade to full annual access and save." },
@@ -167,7 +165,7 @@ export default function Account() {
     pack12: "Full access to all diagnostics, drills, PDF reports, and progress tracking for 12 weeks.",
     pack12_family: "Full access for up to 3 children. 12 weeks of access.",
     pack_monthly: "Full access to all diagnostics, drills, PDF reports, and progress tracking. Renews monthly — cancel anytime.",
-    pack_annual: "Full platform access for 12 months: diagnostics, drills, PDF reports and progress tracking. Annual plan.",
+    pack_annual: "12 months of full access: all Hard drills, mock exams, analytics, roadmap, milestone diagnostics and weekly plans.",
     programme8: "8-week structured programme with milestone diagnostics, advanced analytics, and a personalised weekly plan.",
     programme12: "12-week structured programme — subscriber add-on with milestone diagnostics and a personalised weekly plan.",
     programme24_plus: "6-month Programme+ with full structured roadmap, milestone diagnostics, advanced analytics, and priority support.",

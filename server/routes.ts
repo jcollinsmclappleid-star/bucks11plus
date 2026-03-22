@@ -12,6 +12,8 @@ import { learnArticles } from "../client/src/data/learn-articles";
 import { ensureFreePool, repairSeedQuestions } from "./seed";
 
 const PROGRAMME_TIERS = new Set([
+  "pack_plus",
+  "pack_annual",
   "programme8",
   "programme12",
   "programme16",
@@ -997,7 +999,7 @@ export async function registerRoutes(
   app.get("/api/analytics", requireAuth, async (req, res, next) => {
     try {
       if (!PROGRAMME_TIERS.has(req.user!.subscriptionTier ?? "")) {
-        return res.json({ available: false, gated: true, message: "Premium Parent Analytics is included with the Young Scholar Programme." });
+        return res.json({ available: false, gated: true, message: "Premium Parent Analytics is included with Platform Edge and the Young Scholar Programme." });
       }
       const userId = req.user!.id;
       const sessions = await storage.getUserTestSessions(userId);

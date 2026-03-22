@@ -259,9 +259,9 @@ export default function Pricing() {
                       <p className="text-sm text-slate-600 mb-4">
                         {currentTier === "early_learner" && "Foundation-level practice with readiness tracking and age-appropriate learning."}
                         {(currentTier === "pack12" || currentTier === "pack12_family" || currentTier === "pack_monthly") && "1,500+ questions, full diagnostics, timed drills (including 6 Hard drills), PDF reports and progress tracking."}
-                        {currentTier === "pack_plus" && "Full platform access: all 17 Hard drills, premium analytics, mock exams and progress tracking. Cancel any time."}
-                        {currentTier === "pack_annual" && "12 months of full platform access: all 17 Hard drills, premium analytics, mock exams, PDF reports and progress tracking."}
-                        {currentTier === "programme24_plus" && "6-month all-inclusive programme: diagnostics, all drills, 3 mock exams, roadmap, milestone tracking, weekly plans and premium analytics."}
+                        {currentTier === "pack_plus" && "Full platform access: all 17 Hard drills, mock exams, analytics, roadmap, milestone diagnostics and weekly plans. Cancel any time."}
+                        {currentTier === "pack_annual" && "12 months of full platform access: all 17 Hard drills, mock exams, analytics, roadmap, milestone diagnostics and weekly plans."}
+                        {currentTier === "programme24_plus" && "6-month all-inclusive plan: full platform access including all Hard drills, mock exams, roadmap, milestone diagnostics, weekly plans and premium analytics."}
                         {(currentTier === "programme8" || currentTier === "programme12" || currentTier === "programme16" || currentTier === "programme16_family") && "Complete preparation: diagnostics, all drills, mock exams, roadmap, milestone tracking, weekly plans and premium analytics."}
                       </p>
                       <Button size="sm" asChild>
@@ -369,9 +369,11 @@ export default function Pricing() {
                       {[
                         "Everything in Bucks Practice Platform",
                         "All 17 Hard challenge drills",
+                        "Mock exam simulations",
                         "Premium Parent Analytics dashboard",
-                        "Mock exam simulations (Test Day Simulator)",
-                        "Full progress forecasting & gap analysis",
+                        "Guided preparation roadmap",
+                        "Milestone diagnostics & auto-tracking",
+                        "Weekly personalised task plans",
                       ].map((f, i) => (
                         <li key={i} className="flex items-start gap-2">
                           <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0 mt-0.5" />
@@ -415,9 +417,11 @@ export default function Pricing() {
                       {[
                         "Everything in Bucks Practice Platform",
                         "All 17 Hard challenge drills",
+                        "Mock exam simulations",
                         "Premium Parent Analytics dashboard",
-                        "Mock exam simulations (Test Day Simulator)",
-                        "Full progress forecasting & gap analysis",
+                        "Guided preparation roadmap",
+                        "Milestone diagnostics & auto-tracking",
+                        "Weekly personalised task plans",
                       ].map((f, i) => (
                         <li key={i} className="flex items-start gap-2">
                           <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0 mt-0.5" />
@@ -452,15 +456,16 @@ export default function Pricing() {
                       <span className="text-4xl font-bold text-primary">£349</span>
                       <span className="text-muted-foreground font-medium"> one-time</span>
                     </div>
-                    <p className="text-xs text-slate-500 mb-4">6 months · full platform + structured coaching</p>
+                    <p className="text-xs text-slate-500 mb-4">6 months · same full access as Edge, one payment</p>
                     <ul className="space-y-2">
                       {[
-                        "Everything in Bucks Practice Platform Edge",
-                        "6-month structured preparation roadmap",
-                        "3 full mock exam simulations",
+                        "All 17 Hard challenge drills",
+                        "Mock exam simulations",
+                        "Premium Parent Analytics dashboard",
+                        "Guided preparation roadmap",
                         "Milestone diagnostics & auto-tracking",
                         "Weekly personalised task plans",
-                        "Premium Parent Analytics",
+                        "6 months access · one payment",
                       ].map((f, i) => (
                         <li key={i} className="flex items-start gap-2">
                           <CheckCircle2 className="h-4 w-4 text-brand-amber shrink-0 mt-0.5" />
@@ -797,15 +802,15 @@ export default function Pricing() {
                     { feature: "Practice papers (Quick & Full)", free: false, pack: true, edge: true, prog: true },
                     { feature: "PDF reports & report archive", free: false, pack: true, edge: true, prog: true },
                     { feature: "Impact simulator & progress tracking", free: false, pack: true, edge: true, prog: true },
-                    { feature: "Mock exam simulations", free: false, pack: false, edge: true, prog: "3 exams" },
+                    { feature: "Mock exam simulations", free: false, pack: false, edge: true, prog: true },
                     { feature: "Premium Parent Analytics dashboard", free: false, pack: false, edge: true, prog: true },
                     { feature: "Gap velocity & forecast stability metrics", free: false, pack: false, edge: true, prog: true },
-                    { feature: "Guided preparation roadmap", free: false, pack: false, edge: false, prog: true },
-                    { feature: "Milestone diagnostics with auto-tracking", free: false, pack: false, edge: false, prog: true },
-                    { feature: "Weekly personalised task plans", free: false, pack: false, edge: false, prog: true },
+                    { feature: "Guided preparation roadmap", free: false, pack: false, edge: true, prog: true },
+                    { feature: "Milestone diagnostics with auto-tracking", free: false, pack: false, edge: true, prog: true },
+                    { feature: "Weekly personalised task plans", free: false, pack: false, edge: true, prog: true },
                     { feature: "Access duration", free: "1 use", pack: "Monthly", edge: "Monthly / Annual", prog: "6 months" },
                   ].map((row, i) => (
-                    <tr key={i} className={`border-b border-slate-100 ${i >= 15 ? "bg-amber-50/30" : ""}`} data-testid={`comparison-row-${i}`}>
+                    <tr key={i} className="border-b border-slate-100" data-testid={`comparison-row-${i}`}>
                       <td className="py-3 px-4 text-slate-700 font-medium">{row.feature}</td>
                       {["free", "pack", "edge", "prog"].map((tier) => {
                         const val = row[tier as keyof typeof row];
