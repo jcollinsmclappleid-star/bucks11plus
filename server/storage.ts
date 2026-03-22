@@ -196,11 +196,12 @@ export class DatabaseStorage implements IStorage {
 
     console.log(`[QFS] diag=${diagnosticId} type=${diag.type} isGuest=${isGuestSession} diagPoolFilter=${JSON.stringify(diagPoolFilter)}`);
 
-    // Guest sessions bypass the diagnosticId-pinned query entirely.
+    // Guest sessions AND mini diagnostics bypass the diagnosticId-pinned query entirely.
     // The mini-q-* placeholder questions (diagnosticId='mini-1') are superseded by the
     // embedded bank in freePoolData.ts. Going straight to the pool ensures bank questions
-    // are always used, not the simple placeholders.
-    let allQuestions: Question[] = isGuestSession ? [] : await db.select().from(questions)
+    // are always used for both guest and authenticated mini sessions, not the simple placeholders.
+    const skipPinnedQuery = isGuestSession || diag.type === 'mini';
+    let allQuestions: Question[] = skipPinnedQuery ? [] : await db.select().from(questions)
       .where(and(
         eq(questions.diagnosticId, diagnosticId),
         eq(questions.qaStatus, "approved"),
@@ -238,9 +239,9 @@ export class DatabaseStorage implements IStorage {
 
     if (allQuestions.length === 0) {
       console.log(`[QFS] EMPTY: isGuest=${isGuestSession} diagPoolFilter=${JSON.stringify(diagPoolFilter)}`);
-      // For guest sessions or pool-restricted diagnostics (full/mock), never fall back to
+      // For guest/mini sessions or pool-restricted diagnostics (full/mock), never fall back to
       // unrestricted questions — returning empty signals a seeding problem cleanly.
-      if (isGuestSession || diagPoolFilter !== null) return [];
+      if (skipPinnedQuery || diagPoolFilter !== null) return [];
       return this.getQuestionsByDiagnostic(diagnosticId);
     }
 

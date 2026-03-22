@@ -19,6 +19,7 @@ export default function Navbar() {
     { href: "/app/report-archive", label: "Reports", show: true },
     { href: "/app/programme", label: "Programme", show: true },
     { href: "/app/analytics", label: "Analytics", show: true },
+    { href: "/pricing", label: "Pricing", show: true },
   ];
 
   const isActive = (href: string, matchPrefix?: boolean) => {
@@ -59,9 +60,6 @@ export default function Navbar() {
 
           {!user ? (
             <div className="flex items-center gap-2 ml-2">
-              <Link href="/pricing" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors" data-testid="link-pricing">
-                Pricing
-              </Link>
               <Button variant="ghost" size="sm" asChild data-testid="link-signin">
                 <Link href="/sign-in">Sign In</Link>
               </Button>
@@ -92,14 +90,9 @@ export default function Navbar() {
 
         <div className="flex items-center gap-2 md:hidden">
           {!user && (
-            <>
-              <Link href="/pricing" className="text-xs font-semibold text-primary/80 hover:text-primary transition-colors shrink-0" data-testid="link-pricing-mobile-header">
-                Pricing
-              </Link>
-              <Button size="sm" asChild className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm text-[11px] px-2.5 h-8 shrink-0 whitespace-nowrap" data-testid="link-free-diagnostic-mobile">
-                <Link href="/free-diagnostic">Bucks 11+ Free Diagnostic</Link>
-              </Button>
-            </>
+            <Button size="sm" asChild className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm text-[11px] px-2.5 h-8 shrink-0 whitespace-nowrap" data-testid="link-free-diagnostic-mobile">
+              <Link href="/free-diagnostic">Bucks 11+ Free Diagnostic</Link>
+            </Button>
           )}
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>

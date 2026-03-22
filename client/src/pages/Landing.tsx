@@ -1090,6 +1090,100 @@ export default function Landing() {
         </div>
       </section>
 
+      <section id="pricing" className="py-16 md:py-24 bg-white border-t border-border/30" data-testid="section-pricing">
+        <div className="container mx-auto max-w-6xl px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-3">Simple, Transparent Pricing</h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">Start free. Upgrade when you're ready. Every plan includes the same rigorous GL-style question bank.</p>
+          </div>
+          <div className="grid sm:grid-cols-2 xl:grid-cols-5 gap-4 max-w-7xl mx-auto">
+            <div className="flex flex-col rounded-2xl border border-border/60 bg-white shadow-sm p-6" data-testid="pricing-card-free">
+              <p className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Free Diagnostic</p>
+              <div className="flex items-end gap-1 mb-1">
+                <span className="text-3xl font-bold text-primary">Free</span>
+              </div>
+              <p className="text-xs text-slate-500 mb-4">No account needed</p>
+              <ul className="space-y-1.5 text-sm text-slate-700 mb-6 flex-1">
+                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>12-question GL-style diagnostic</li>
+                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>Readiness band &amp; forecast score</li>
+                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>Section-by-section breakdown</li>
+                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>3 priority improvement areas</li>
+              </ul>
+              <Link href="/free-diagnostic" className="block text-center w-full rounded-lg border border-primary text-primary font-semibold py-2 text-sm hover:bg-primary/5 transition-colors" data-testid="button-pricing-free">Start Free Diagnostic</Link>
+            </div>
+
+            <div className="flex flex-col rounded-2xl border border-border/60 bg-white shadow-sm p-6" data-testid="pricing-card-monthly">
+              <p className="text-xs font-bold uppercase tracking-wider text-brand-amber mb-1">Bucks Practice Platform</p>
+              <div className="flex items-end gap-1 mb-1">
+                <span className="text-3xl font-bold text-primary">£24.99</span>
+                <span className="text-slate-500 text-sm mb-0.5">/mo</span>
+              </div>
+              <p className="text-xs text-slate-500 mb-4">Cancel anytime</p>
+              <ul className="space-y-1.5 text-sm text-slate-700 mb-6 flex-1">
+                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>1,500+ practice questions</li>
+                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>Full 40-question timed papers</li>
+                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>6 Hard challenge drills</li>
+                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>PDF diagnostic reports</li>
+                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>Progress tracking</li>
+              </ul>
+              <Link href="/pricing?autoCheckout=pack_monthly" className="block text-center w-full rounded-lg bg-primary text-white font-semibold py-2 text-sm hover:bg-primary/90 transition-colors" data-testid="button-pricing-monthly">Start Monthly</Link>
+            </div>
+
+            <div className="flex flex-col rounded-2xl border-2 border-primary bg-white shadow-md p-6 relative" data-testid="pricing-card-edge">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Most Popular</div>
+              <p className="text-xs font-bold uppercase tracking-wider text-primary mb-1">Bucks Practice Platform Edge</p>
+              <div className="flex items-end gap-1 mb-1">
+                <span className="text-3xl font-bold text-primary">£59.99</span>
+                <span className="text-slate-500 text-sm mb-0.5">/mo</span>
+              </div>
+              <p className="text-xs text-slate-500 mb-4">Cancel anytime</p>
+              <ul className="space-y-1.5 text-sm text-slate-700 mb-6 flex-1">
+                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>Everything in Practice Platform</li>
+                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>All 17 Hard challenge drills</li>
+                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>Full mock exam simulator</li>
+                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>Advanced parent analytics</li>
+                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>Weekly personalised plans</li>
+              </ul>
+              <Link href="/pricing?autoCheckout=pack_plus" className="block text-center w-full rounded-lg bg-primary text-white font-semibold py-2 text-sm hover:bg-primary/90 transition-colors" data-testid="button-pricing-edge">Get Full Platform</Link>
+            </div>
+
+            <div className="flex flex-col rounded-2xl border border-brand-green/40 bg-green-50/40 shadow-sm p-6 relative" data-testid="pricing-card-annual">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-green-600 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Best Value</div>
+              <p className="text-xs font-bold uppercase tracking-wider text-brand-green mb-1">Edge — Annual</p>
+              <div className="flex items-end gap-1 mb-1">
+                <span className="text-3xl font-bold text-primary">£495</span>
+                <span className="text-slate-500 text-sm mb-0.5">one-time</span>
+              </div>
+              <p className="text-xs text-slate-500 mb-4">12 months · equiv. £41.25/mo</p>
+              <ul className="space-y-1.5 text-sm text-slate-700 mb-6 flex-1">
+                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>Full Edge access for 12 months</li>
+                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>All 17 Hard drills &amp; mock exams</li>
+                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>Advanced analytics &amp; plans</li>
+                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>Save £224.88 vs monthly</li>
+              </ul>
+              <Link href="/pricing?autoCheckout=pack_annual" className="block text-center w-full rounded-lg bg-green-700 text-white font-semibold py-2 text-sm hover:bg-green-800 transition-colors" data-testid="button-pricing-annual">Get Annual Access</Link>
+            </div>
+
+            <div className="flex flex-col rounded-2xl border border-amber-200 bg-amber-50/30 shadow-sm p-6" data-testid="pricing-card-scholar">
+              <p className="text-xs font-bold uppercase tracking-wider text-amber-700 mb-1">Young Scholar Programme</p>
+              <div className="flex items-end gap-1 mb-1">
+                <span className="text-3xl font-bold text-primary">£349</span>
+                <span className="text-slate-500 text-sm mb-0.5">one-time</span>
+              </div>
+              <p className="text-xs text-slate-500 mb-4">24 weeks structured programme</p>
+              <ul className="space-y-1.5 text-sm text-slate-700 mb-6 flex-1">
+                <li className="flex gap-2"><span className="text-amber-600 shrink-0">✓</span>Full platform access</li>
+                <li className="flex gap-2"><span className="text-amber-600 shrink-0">✓</span>Structured 24-week roadmap</li>
+                <li className="flex gap-2"><span className="text-amber-600 shrink-0">✓</span>Milestone diagnostics</li>
+                <li className="flex gap-2"><span className="text-amber-600 shrink-0">✓</span>Priority support</li>
+              </ul>
+              <Link href="/pricing?autoCheckout=programme24_plus" className="block text-center w-full rounded-lg border border-amber-600 text-amber-700 font-semibold py-2 text-sm hover:bg-amber-50 transition-colors" data-testid="button-pricing-scholar">View Programme</Link>
+            </div>
+          </div>
+          <p className="text-center text-xs text-slate-400 mt-8">All prices include VAT. Subscriptions can be cancelled anytime. One-time payments grant access for the stated duration.</p>
+        </div>
+      </section>
+
       <div className="py-6 text-center bg-white">
         <p className="text-xs text-slate-400" data-testid="text-disclaimer">
           Independent readiness assessment. Not affiliated with GL Assessment or Buckinghamshire Council.
