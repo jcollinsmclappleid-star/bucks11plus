@@ -171,86 +171,6 @@ export default function Pricing() {
         canonicalPath="/pricing"
       />
 
-      <section className="py-20 bg-white border-b border-border/50">
-        <div className="container mx-auto max-w-6xl px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4">What the Diagnostic Reveals — In Detail</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Our 8-minute diagnostic isn't just a score. It's a deep-dive into your child's current performance profile.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="flex flex-col items-center text-center p-6">
-              <div className="h-16 w-16 bg-blue-50 rounded-2xl flex items-center justify-center mb-6">
-                <Zap className="h-8 w-8 text-blue-600" />
-              </div>
-              <h3 className="text-xl font-bold text-primary mb-3">Readiness Forecast</h3>
-              <p className="text-slate-600 text-sm leading-relaxed">
-                A proprietary projection against the 121 Buckinghamshire benchmark. Know exactly where they sit today on the "Likelihood Scale" (Developing → Emerging → Strong).
-              </p>
-            </div>
-
-            <div className="flex flex-col items-center text-center p-6">
-              <div className="h-16 w-16 bg-brand-amber/10 rounded-2xl flex items-center justify-center mb-6">
-                <SlidersHorizontal className="h-8 w-8 text-brand-amber" />
-              </div>
-              <h3 className="text-xl font-bold text-primary mb-3">Pace & Pressure Profiling</h3>
-              <p className="text-slate-600 text-sm leading-relaxed">
-                Identify if errors are caused by lack of knowledge or time pressure. We track response velocity per question to see where they stall.
-              </p>
-            </div>
-
-            <div className="flex flex-col items-center text-center p-6">
-              <div className="h-16 w-16 bg-green-50 rounded-2xl flex items-center justify-center mb-6">
-                <CheckCircle2 className="h-8 w-8 text-brand-green" />
-              </div>
-              <h3 className="text-xl font-bold text-primary mb-3">Gap Analysis</h3>
-              <p className="text-slate-600 text-sm leading-relaxed">
-                Instant breakdown across Verbal, Non-Verbal, Maths, and Comprehension. We reveal the single highest-impact focus area to start working on immediately.
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-16 bg-slate-900 rounded-3xl p-8 md:p-12 text-white overflow-hidden relative">
-            <div className="relative z-10 grid md:grid-cols-2 gap-12 items-center">
-              <div>
-                <Badge className="bg-brand-amber text-amber-950 hover:bg-brand-amber mb-4 border-none font-bold">SAMPLE REPORT DATA</Badge>
-                <h3 className="text-2xl md:text-3xl font-bold mb-6 font-serif">Detailed PDF Insights</h3>
-                <p className="text-slate-300 mb-8 leading-relaxed">
-                  Every diagnostic generates a professional report suitable for sharing with tutors. It includes question-by-question analysis, section weighting, and a personalized 14-day improvement plan.
-                </p>
-                <Button size="lg" className="bg-white text-slate-900 hover:bg-slate-100 font-bold" asChild>
-                  <Link href="/free-diagnostic">Start My Free Diagnostic</Link>
-                </Button>
-              </div>
-              <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-6 shadow-2xl">
-                <div className="space-y-4">
-                  <div className="h-2 w-24 bg-white/20 rounded"></div>
-                  <div className="h-4 w-48 bg-white/40 rounded"></div>
-                  <div className="grid grid-cols-2 gap-4 mt-8">
-                    <div className="h-24 bg-white/10 rounded-xl flex flex-col items-center justify-center">
-                      <div className="text-brand-amber font-bold text-2xl">108</div>
-                      <div className="text-[10px] text-white/40 uppercase tracking-widest">Initial Forecast</div>
-                    </div>
-                    <div className="h-24 bg-white/10 rounded-xl flex flex-col items-center justify-center">
-                      <div className="text-green-400 font-bold text-2xl">72%</div>
-                      <div className="text-[10px] text-white/40 uppercase tracking-widest">Accuracy</div>
-                    </div>
-                  </div>
-                  <div className="mt-6 p-4 bg-white/5 rounded-lg border border-white/5">
-                    <div className="text-xs text-white/60 mb-2 font-medium">Top Priority:</div>
-                    <div className="text-sm font-bold text-brand-amber italic">"Non-Verbal Reasoning: Matrices & Analogies"</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* Decorative background element */}
-            <div className="absolute top-0 right-0 -mr-24 -mt-24 h-96 w-96 bg-brand-amber/10 rounded-full blur-3xl"></div>
-          </div>
-        </div>
-      </section>
-
       <section className="relative overflow-hidden pt-20 pb-24 md:pt-28 md:pb-36 border-b border-border/50" style={{ backgroundColor: '#0d1f30' }}>
         <div className="absolute inset-0 z-0 hero-texture"></div>
         <div className="absolute inset-0 z-0 hero-vignette"></div>
@@ -874,6 +794,85 @@ export default function Pricing() {
             </div>
           </div>
           )}
+        </div>
+      </section>
+
+      <section className="py-20 bg-white border-b border-border/50">
+        <div className="container mx-auto max-w-6xl px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4">What the Diagnostic Reveals — In Detail</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Our 8-minute diagnostic isn't just a score. It's a deep-dive into your child's current performance profile.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="flex flex-col items-center text-center p-6">
+              <div className="h-16 w-16 bg-blue-50 rounded-2xl flex items-center justify-center mb-6">
+                <Zap className="h-8 w-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-bold text-primary mb-3">Readiness Forecast</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                A proprietary projection against the 121 Buckinghamshire benchmark. Know exactly where they sit today on the "Likelihood Scale" (Developing → Emerging → Strong).
+              </p>
+            </div>
+
+            <div className="flex flex-col items-center text-center p-6">
+              <div className="h-16 w-16 bg-brand-amber/10 rounded-2xl flex items-center justify-center mb-6">
+                <SlidersHorizontal className="h-8 w-8 text-brand-amber" />
+              </div>
+              <h3 className="text-xl font-bold text-primary mb-3">Pace &amp; Pressure Profiling</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                Identify if errors are caused by lack of knowledge or time pressure. We track response velocity per question to see where they stall.
+              </p>
+            </div>
+
+            <div className="flex flex-col items-center text-center p-6">
+              <div className="h-16 w-16 bg-green-50 rounded-2xl flex items-center justify-center mb-6">
+                <CheckCircle2 className="h-8 w-8 text-brand-green" />
+              </div>
+              <h3 className="text-xl font-bold text-primary mb-3">Gap Analysis</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                Instant breakdown across Verbal, Non-Verbal, Maths, and Comprehension. We reveal the single highest-impact focus area to start working on immediately.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-16 bg-slate-900 rounded-3xl p-8 md:p-12 text-white overflow-hidden relative">
+            <div className="relative z-10 grid md:grid-cols-2 gap-12 items-center">
+              <div>
+                <Badge className="bg-brand-amber text-amber-950 hover:bg-brand-amber mb-4 border-none font-bold">SAMPLE REPORT DATA</Badge>
+                <h3 className="text-2xl md:text-3xl font-bold mb-6 font-serif">Detailed PDF Insights</h3>
+                <p className="text-slate-300 mb-8 leading-relaxed">
+                  Every diagnostic generates a professional report suitable for sharing with tutors. It includes question-by-question analysis, section weighting, and a personalized 14-day improvement plan.
+                </p>
+                <Button size="lg" className="bg-white text-slate-900 hover:bg-slate-100 font-bold" asChild>
+                  <Link href="/free-diagnostic">Start My Free Diagnostic</Link>
+                </Button>
+              </div>
+              <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-6 shadow-2xl">
+                <div className="space-y-4">
+                  <div className="h-2 w-24 bg-white/20 rounded"></div>
+                  <div className="h-4 w-48 bg-white/40 rounded"></div>
+                  <div className="grid grid-cols-2 gap-4 mt-8">
+                    <div className="h-24 bg-white/10 rounded-xl flex flex-col items-center justify-center">
+                      <div className="text-brand-amber font-bold text-2xl">108</div>
+                      <div className="text-[10px] text-white/40 uppercase tracking-widest">Initial Forecast</div>
+                    </div>
+                    <div className="h-24 bg-white/10 rounded-xl flex flex-col items-center justify-center">
+                      <div className="text-green-400 font-bold text-2xl">72%</div>
+                      <div className="text-[10px] text-white/40 uppercase tracking-widest">Accuracy</div>
+                    </div>
+                  </div>
+                  <div className="mt-6 p-4 bg-white/5 rounded-lg border border-white/5">
+                    <div className="text-xs text-white/60 mb-2 font-medium">Top Priority:</div>
+                    <div className="text-sm font-bold text-brand-amber italic">"Non-Verbal Reasoning: Matrices &amp; Analogies"</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="absolute top-0 right-0 -mr-24 -mt-24 h-96 w-96 bg-brand-amber/10 rounded-full blur-3xl"></div>
+          </div>
         </div>
       </section>
 

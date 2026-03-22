@@ -155,6 +155,14 @@ export default function Navbar() {
                     </>
                   ) : (
                     <>
+                      <Link
+                        href="/pricing"
+                        className="block px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100 transition-colors"
+                        onClick={() => setOpen(false)}
+                        data-testid="link-mobile-pricing"
+                      >
+                        Pricing
+                      </Link>
                       <Button className="w-full" asChild>
                         <Link href="/sign-in" onClick={() => setOpen(false)}>Sign In</Link>
                       </Button>

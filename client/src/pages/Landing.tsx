@@ -270,8 +270,8 @@ export default function Landing() {
             { "@type": "Question", name: "How does the free diagnostic work?", acceptedAnswer: { "@type": "Answer", text: "The free diagnostic is a 12-question, 8-minute timed assessment in GL-style format. No account is needed. On completion, parents receive a readiness band (On Track, Within Reach, or Clear Improvement Opportunity), a forecast standardised score toward 121, and a breakdown of performance across the four test sections." } },
             { "@type": "Question", name: "When should my child start preparing for the Bucks 11+?", acceptedAnswer: { "@type": "Answer", text: "Most families begin structured preparation in Year 4 or early Year 5, giving children 12 to 18 months before the September test date. Starting with a diagnostic assessment helps identify specific gaps and ensures preparation time is spent where it will have the most impact." } },
             { "@type": "Question", name: "Is 11+ Standard affiliated with GL Assessment or Buckinghamshire Council?", acceptedAnswer: { "@type": "Answer", text: "No. 11+ Standard is fully independent. We are not affiliated with GL Assessment, Buckinghamshire Council, The Buckinghamshire Grammar Schools (TBGS), or any individual grammar school. The GL-style label refers to the question format we use to replicate the test structure — it does not imply any formal relationship." } },
-            { "@type": "Question", name: "What is included in the Practice Platform?", acceptedAnswer: { "@type": "Answer", text: "The Practice Platform (£59.99/month or £495/year) includes 1,500+ questions across all four test domains, timed drills by section and difficulty level, full 40-question timed diagnostic papers, a parent analytics dashboard with 10 performance metrics, session-by-session progress tracking, and PDF reports. Cancel anytime." } },
-            { "@type": "Question", name: "What is the difference between the Practice Platform and Programme+?", acceptedAnswer: { "@type": "Answer", text: "The Practice Platform (from £59.99/month) is flexible access to the full question bank, drills, and analytics. Programme+ (£349 one-time) includes everything in the Practice Platform plus a structured 6-month preparation programme with week-by-week focus areas and milestone assessments — designed for families who want a complete guided programme rather than self-directed practice." } },
+            { "@type": "Question", name: "What is included in the Bucks Practice Platform?", acceptedAnswer: { "@type": "Answer", text: "The Bucks Practice Platform (£24.99/month) includes 1,500+ questions across all four test domains, timed drills (Easy & Medium), full 40-question timed diagnostic papers, 6 Hard drills, PDF reports and impact simulator. The Platform Edge (£59.99/month or £495/year) adds all 17 Hard drills, full parent analytics, and mock exam simulations. Cancel anytime." } },
+            { "@type": "Question", name: "What is the difference between the Practice Platform and the Young Scholar Programme?", acceptedAnswer: { "@type": "Answer", text: "The Bucks Practice Platform (from £24.99/month) is flexible self-directed access to the question bank, drills, and diagnostics. The Bucks Young Scholar Programme (£349 one-time) includes full platform access plus a structured 6-month preparation programme with a 26-week roadmap, weekly task plans, milestone tracking, and 3 mock exam simulations — designed for families who want complete guided preparation." } },
           ]
         }}
       />
@@ -398,7 +398,7 @@ export default function Landing() {
                 </Link>
               </Button>
               <Button size="lg" variant="outline" className="h-14 px-8 text-lg bg-white/[0.03] border-white/15 text-white/80 hover:bg-white/[0.06] hover:text-white" asChild>
-                <a href="#how-forecast-works">How It Works</a>
+                <Link href="/pricing">View Pricing</Link>
               </Button>
             </div>
 
@@ -408,11 +408,15 @@ export default function Landing() {
               </Link>
               <span className="hidden sm:inline text-white/15">|</span>
               <Link href="/pricing" className="text-white/40 hover:text-white/70 text-sm font-medium transition-colors">
-                Practice Platform — from £59.99/mo
+                Practice Platform — £24.99/mo
+              </Link>
+              <span className="hidden sm:inline text-white/15">|</span>
+              <Link href="/pricing" className="text-white/40 hover:text-white/70 text-sm font-medium transition-colors">
+                Platform Edge — £59.99/mo
               </Link>
               <span className="hidden sm:inline text-white/15">|</span>
               <Link href="/pricing#tiers" className="text-brand-amber/70 hover:text-brand-amber text-sm font-semibold transition-colors">
-                Programme+ — £349 one-time
+                Young Scholar — £349 one-time
               </Link>
             </div>
 
@@ -438,15 +442,16 @@ export default function Landing() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-6">
             <div className="rounded-2xl border border-slate-200 bg-white p-6 flex flex-col" data-testid="card-included-free">
               <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">Free</p>
               <h3 className="text-xl font-bold text-primary font-serif mb-4">£0</h3>
               <ul className="space-y-3 flex-1">
                 {[
-                  "1 timed mini diagnostic (12 questions)",
-                  "Basic readiness forecast vs 121",
-                  "1 sample practice drill",
+                  "Timed mini diagnostic (12 questions)",
+                  "Readiness forecast vs 121",
+                  "Top focus area revealed",
+                  "Sample impact simulator",
                 ].map((f, i) => (
                   <li key={i} className="flex items-start gap-2.5">
                     <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0 mt-0.5" />
@@ -460,16 +465,16 @@ export default function Landing() {
             </div>
 
             <div className="rounded-2xl border border-slate-200 bg-white p-6 flex flex-col" data-testid="card-included-pack">
-              <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">Practice Platform</p>
-              <h3 className="text-xl font-bold text-primary font-serif mb-1">£59.99<span className="text-sm font-medium text-slate-500">/mo</span></h3>
+              <p className="text-sm font-semibold text-primary/60 uppercase tracking-wider mb-2">Bucks Practice Platform</p>
+              <h3 className="text-xl font-bold text-primary font-serif mb-1">£24.99<span className="text-sm font-medium text-slate-500">/mo</span></h3>
               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight mb-4">Cancel any time</p>
               <ul className="space-y-3 flex-1">
                 {[
-                  "1,500+ practice questions across VR, NVR, Maths & Comprehension",
+                  "1,500+ practice questions across all 4 sections",
                   "Easy & Medium drills (19 sections)",
+                  "6 Hard challenge drills",
                   "Full timed diagnostics (40 questions)",
                   "PDF reports & impact simulator",
-                  "Cancel any time",
                 ].map((f, i) => (
                   <li key={i} className="flex items-start gap-2.5">
                     <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0 mt-0.5" />
@@ -478,7 +483,30 @@ export default function Landing() {
                 ))}
               </ul>
               <Button className="w-full mt-6 h-11 text-sm font-semibold bg-primary text-primary-foreground" asChild data-testid="button-included-pack">
-                <Link href="/pricing?autoCheckout=pack_monthly">Start Monthly</Link>
+                <Link href="/pricing?autoCheckout=pack_monthly">Get Monthly Access</Link>
+              </Button>
+            </div>
+
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 flex flex-col" data-testid="card-included-pack-edge">
+              <p className="text-sm font-semibold text-primary/60 uppercase tracking-wider mb-2">Bucks Practice Platform Edge</p>
+              <h3 className="text-xl font-bold text-primary font-serif mb-1">£59.99<span className="text-sm font-medium text-slate-500">/mo</span></h3>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight mb-4">or £495/yr · Cancel any time</p>
+              <ul className="space-y-3 flex-1">
+                {[
+                  "Everything in Practice Platform",
+                  "All 17 Hard challenge drills",
+                  "Full parent analytics dashboard",
+                  "3 mock exam simulations",
+                  "Priority progress tracking",
+                ].map((f, i) => (
+                  <li key={i} className="flex items-start gap-2.5">
+                    <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0 mt-0.5" />
+                    <span className="text-slate-700 text-sm">{f}</span>
+                  </li>
+                ))}
+              </ul>
+              <Button className="w-full mt-6 h-11 text-sm font-semibold bg-primary text-primary-foreground" asChild data-testid="button-included-pack-edge">
+                <Link href="/pricing?autoCheckout=pack_plus">Get Full Platform</Link>
               </Button>
             </div>
 
@@ -486,23 +514,20 @@ export default function Landing() {
               <div className="absolute top-0 right-0 bg-brand-amber text-amber-950 px-3 py-1 rounded-bl-lg font-bold text-xs">
                 RECOMMENDED
               </div>
-              <p className="text-sm font-semibold text-brand-amber uppercase tracking-wider mb-2">Programme+</p>
+              <p className="text-sm font-semibold text-brand-amber uppercase tracking-wider mb-2">Young Scholar Programme</p>
               <div className="mb-1">
                 <span className="text-xl font-bold text-primary font-serif">£349</span>
                 <span className="text-sm font-medium text-slate-500"> one-time</span>
               </div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight mb-1">6 months · all-inclusive · no subscription needed</p>
-              <span className="inline-block text-[10px] font-bold text-brand-green uppercase tracking-tight bg-green-50 border border-green-200 px-2 py-0.5 rounded-full mb-4 w-fit">
-                Platform access included
-              </span>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight mb-4">6 months · all-inclusive · no subscription</p>
               <ul className="space-y-2.5 flex-1 mb-4">
                 {[
-                  "1,500+ practice questions across all 4 sections",
-                  "Full timed diagnostics (40 questions)",
-                  "All 17 Hard challenge drills unlocked",
-                  "26-week structured preparation roadmap",
+                  "Full platform access included",
+                  "All 17 Hard challenge drills",
+                  "26-week structured roadmap",
                   "3 mock exam simulations",
                   "Weekly personalised task plans",
+                  "Milestone tracking & coaching",
                 ].map((f, i) => (
                   <li key={i} className="flex items-start gap-2">
                     <CheckCircle2 className="h-4 w-4 text-brand-amber shrink-0 mt-0.5" />
@@ -510,11 +535,6 @@ export default function Landing() {
                   </li>
                 ))}
               </ul>
-              <div className="rounded-lg bg-white/70 border border-brand-amber/20 px-3 py-2 mb-3">
-                <p className="text-xs text-amber-800">
-                  <span className="font-bold">Already subscribed?</span> Sign in and add a 12-week structured programme for just <span className="font-bold">£89</span>.
-                </p>
-              </div>
               <Button
                 className="w-full h-auto min-h-[2.75rem] py-2 text-sm font-bold bg-brand-amber text-white hover:bg-brand-amber/90 border-none"
                 onClick={handleProgrammeCheckout}
@@ -523,7 +543,7 @@ export default function Landing() {
               >
                 {checkoutLoading
                   ? <Loader2 className="h-4 w-4 animate-spin" />
-                  : "Get Programme+ — £349"
+                  : "Get Young Scholar — £349"
                 }
               </Button>
             </div>
@@ -596,7 +616,7 @@ export default function Landing() {
                 Everything in one place, ready to start today. A structured 26-week plan built around the September test — with diagnostics, targeted drills, mock exams and weekly task plans. No decisions about what to do next: the programme makes them for you.
               </p>
               <Button className="w-full h-12 text-sm font-semibold bg-primary text-primary-foreground" asChild data-testid="button-path-programme">
-                <Link href="/pricing?autoCheckout=programme24_plus">View Programme+ &amp; Enrol</Link>
+                <Link href="/pricing?autoCheckout=programme24_plus">View Young Scholar Programme</Link>
               </Button>
             </div>
           </div>
@@ -991,7 +1011,7 @@ export default function Landing() {
               <li>✓ Free 12-question GL-style mini diagnostic — no account required, results in under 10 minutes</li>
               <li>✓ Covers all four Bucks 11+ domains: Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension</li>
               <li>✓ Readiness forecast benchmarked against the 121 standardised score qualifying threshold</li>
-              <li>✓ Practice Platform with 1,500+ questions, timed drills, and parent analytics — from £59.99/month</li>
+              <li>✓ Bucks Practice Platform with 1,500+ questions, timed drills, and parent analytics — from £24.99/month</li>
               <li>✓ Fully independent — not affiliated with GL Assessment, Buckinghamshire Council, or any grammar school</li>
             </ul>
           </div>
@@ -1055,8 +1075,8 @@ export default function Landing() {
             <div className="space-y-4 mt-4">
               {[
                 { q: "Is 11+ Standard affiliated with GL Assessment or Buckinghamshire Council?", a: "No. We are fully independent — not affiliated with GL Assessment, Buckinghamshire Council, TBGS, or any individual grammar school. 'GL-style' refers to the question format we independently replicate, not an official relationship." },
-                { q: "How is the free diagnostic different from the full paid platform?", a: "The free 12-question mini diagnostic gives you a readiness band, forecast score, and section breakdown with no account needed. The paid Practice Platform (from £59.99/month) gives access to 1,500+ questions, full 40-question timed papers, parent analytics, and progress tracking across all sessions." },
-                { q: "What is the difference between Practice Platform and Programme+?", a: "Practice Platform is flexible access to the full question bank, drills, and analytics — monthly at £59.99 or annual at £495. Programme+ (£349 one-time) adds a structured 6-month preparation programme with week-by-week focus areas and milestone assessments." },
+                { q: "How is the free diagnostic different from the full paid platform?", a: "The free 12-question mini diagnostic gives you a readiness band, forecast score, and section breakdown with no account needed. The paid Bucks Practice Platform (from £24.99/month) gives access to 1,500+ questions, full 40-question timed papers, and progress tracking across all sessions. The Platform Edge (£59.99/month) adds full parent analytics and all Hard drills." },
+                { q: "What is the difference between the Practice Platform and the Young Scholar Programme?", a: "The Bucks Practice Platform (from £24.99/month) is flexible access to the full question bank, drills, and diagnostics. The Bucks Young Scholar Programme (£349 one-time) adds a structured 6-month preparation programme with a 26-week roadmap, weekly task plans, milestone assessments, and 3 mock exams." },
                 { q: "When should preparation begin?", a: "Most families begin structured preparation in Year 4 or early Year 5, giving 12–18 months before the September test. Starting with a diagnostic identifies specific gaps so preparation time is targeted rather than broad." },
               ].map((item, i) => (
                 <div key={i} className="border-t border-slate-200 pt-4 first:border-0 first:pt-0">
