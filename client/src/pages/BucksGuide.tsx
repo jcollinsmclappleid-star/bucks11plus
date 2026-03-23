@@ -275,6 +275,18 @@ export default function BucksGuide() {
         </div>
       ))}
 
+      <div className="not-prose my-8 rounded-xl border border-slate-200 bg-slate-50 p-5 flex items-start gap-4">
+        <div>
+          <p className="text-sm font-semibold text-primary mb-1">Preparing for 11+ outside Buckinghamshire?</p>
+          <p className="text-sm text-slate-600 leading-relaxed">
+            This guide is specific to the Buckinghamshire Secondary Transfer Test. For 11+ preparation covering grammar schools across England, visit{" "}
+            <a href="https://11plustesthub.co.uk" target="_blank" rel="noopener noreferrer" className="text-primary font-medium hover:underline">
+              11plusTestHub.co.uk
+            </a>.
+          </p>
+        </div>
+      </div>
+
       <Disclaimer />
     </div>
   );

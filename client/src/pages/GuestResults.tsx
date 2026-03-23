@@ -511,6 +511,13 @@ export default function GuestResults() {
       </div>
 
       <div className="text-center py-4">
+        <p className="text-xs text-slate-400 mb-2">
+          Preparing for 11+ outside Buckinghamshire?{" "}
+          <a href="https://11plustesthub.co.uk" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">
+            11plusTestHub.co.uk
+          </a>{" "}
+          covers national 11+ preparation across England.
+        </p>
         <p className="text-xs text-slate-400" data-testid="text-guest-disclaimer">
           Independent readiness assessment. Not affiliated with GL Assessment or Buckinghamshire Council.
         </p>

@@ -53,6 +53,10 @@ export default function About() {
         <li>It does not guarantee a grammar school place. No preparation platform can. What it does is give your child the best-structured, most targeted preparation available — and give you the clearest possible picture of whether it is working.</li>
       </ul>
 
+      <p className="text-sm text-slate-500 not-italic">
+        Preparing for 11+ outside Buckinghamshire? <a href="https://11plustesthub.co.uk" target="_blank" rel="noopener noreferrer" className="text-primary font-medium hover:underline">11plusTestHub.co.uk</a> covers 11+ preparation for grammar schools across England.
+      </p>
+
       <h2 className="text-primary font-serif">Why 121?</h2>
       <p>
         The raw score from the Buckinghamshire Secondary Transfer Test — the number of questions answered correctly — is not used directly for selection. It is converted into a standardised score that accounts for the child's age at the time of the test, adjusting for the slight advantage older children have over younger ones in the same cohort. The resulting standardised score runs from roughly 69 to 141, with 121 being the threshold at which a child is considered to have demonstrated the academic ability required for grammar school entry.

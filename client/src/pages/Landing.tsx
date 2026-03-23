@@ -1,7 +1,7 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, CheckCircle2, Target, Clock, BarChart3, Zap, Search, Wrench, TrendingUp, ChevronLeft, ChevronRight, Loader2, Smartphone, Brain, Layers, Hash, BookOpen, Shield, Award, Star, AlertTriangle, ChevronUp, Trophy } from "lucide-react";
+import { ArrowRight, CheckCircle2, Target, Clock, BarChart3, Zap, Search, Wrench, TrendingUp, ChevronLeft, ChevronRight, Loader2, Smartphone, Brain, Layers, Hash, BookOpen, Shield, Award, Star, AlertTriangle, ChevronUp, Trophy, ExternalLink } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 import { useAuth } from "../lib/auth";
 import { apiRequest } from "../lib/queryClient";
@@ -1122,6 +1122,13 @@ export default function Landing() {
               <h3 className="font-semibold text-primary mb-1 group-hover:text-primary/80">Registration Guide</h3>
               <p className="text-sm text-muted-foreground">Step-by-step instructions for registering for the test.</p>
             </Link>
+            <a href="https://11plustesthub.co.uk" target="_blank" rel="noopener noreferrer" className="group p-5 bg-slate-50 rounded-xl border border-dashed border-slate-300 hover:border-primary/30 hover:shadow-md transition-all flex flex-col">
+              <div className="flex items-start justify-between mb-1">
+                <h3 className="font-semibold text-primary group-hover:text-primary/80">11+ Preparation — Other Counties</h3>
+                <ExternalLink className="h-3.5 w-3.5 text-slate-400 shrink-0 mt-0.5 ml-2" />
+              </div>
+              <p className="text-sm text-muted-foreground">11plusTestHub.co.uk covers national 11+ prep for grammar schools across England.</p>
+            </a>
           </div>
           <div className="text-center mt-8">
             <Link href="/site-links" className="text-sm text-primary font-medium hover:underline">
@@ -1196,6 +1203,13 @@ export default function Landing() {
             </p>
             <p className="text-sm text-slate-500 leading-relaxed">
               <strong>This platform is not</strong> a tutoring agency, does not provide one-to-one sessions, and cannot guarantee a grammar school place. It works well alongside a tutor and as a standalone preparation tool for families who prefer a self-directed approach.
+            </p>
+            <p className="text-sm text-slate-400 leading-relaxed mt-3">
+              Preparing for 11+ outside Buckinghamshire?{" "}
+              <a href="https://11plustesthub.co.uk" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">
+                11plusTestHub.co.uk
+              </a>{" "}
+              covers 11+ preparation for grammar schools across England.
             </p>
           </div>
 
