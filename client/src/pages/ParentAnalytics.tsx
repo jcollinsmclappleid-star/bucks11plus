@@ -161,26 +161,26 @@ function AccuracyBar({ label, value }: { label: string; value: number }) {
 }
 
 const TOOLTIPS = {
-  rs: "Readiness Score — overall readiness out of 100, combining accuracy and pace across all sections.",
-  si: "Stability Index — how consistent the score is across attempts. More attempts = higher confidence in the number.",
-  pdi: "Pace Discipline Index — how well your child manages time per question. 100 = perfectly paced; below 60 means rushing or stalling.",
-  wai: "Weighted Accuracy Index — accuracy adjusted for difficulty. Harder correct answers score more than easy ones.",
-  cr: "Concentration Ratio — whether errors are spread randomly or clustered in specific topic areas.",
-  mtq: "Mean Time per Question — average seconds spent on each question in this section.",
-  vr: "Verbal Reasoning — questions testing word relationships, patterns, and language logic.",
-  nvr: "Non-Verbal Reasoning — questions testing shape patterns and spatial reasoning without words.",
-  ec: "English Comprehension — reading passages with questions on understanding, inference, and vocabulary.",
-  ma: "Mathematics — arithmetic, problem-solving, and numerical reasoning questions.",
-  pressureDelta: "Pressure Delta — the drop in accuracy between untimed practice and timed diagnostics. A big gap means pressure (not knowledge) is the problem.",
-  pp: "pp = percentage points. For example, −8 pp means accuracy fell by 8 percentage points under timed conditions.",
-  fatigueFlag: "Fatigue Flag — accuracy or speed drops significantly in the second half of the test, suggesting stamina is affecting results.",
-  gv: "Gap Velocity — how quickly readiness is improving per day. Positive = closing the gap to the pass mark.",
-  primaryConstraint: "Primary Constraint — the single biggest factor currently holding back readiness. Fix this first for the biggest improvement.",
-  impact10: "Estimated readiness points gained if accuracy on this topic improves by 10 percentage points.",
-  weightedAccuracy: "Accuracy adjusted for question difficulty — harder correct answers count for more than easy ones.",
-  volatility: "How much accuracy varies between attempts. High volatility = inconsistent — the child knows this topic sometimes but not reliably.",
-  paceRatio: "Ratio of time used vs the expected time per question. Above 1 = slower than expected; below 1 = faster.",
-  paceSd: "SD = standard deviation of time per question. A high value means pace is erratic — very fast on some, very slow on others.",
+  rs: "Readiness Score — a score out of 100 showing how prepared your child is for the 11+ based on their diagnostic results.",
+  si: "How reliable this score is. The more tests your child has completed, the more confident we are in the number.",
+  pdi: "Timing Score — shows how well your child manages their time during the test. 100 means perfectly paced. Below 60 suggests they are rushing through some sections or spending too long on others.",
+  wai: "Accuracy adjusted for difficulty — getting harder questions right counts for more than easy ones.",
+  cr: "Whether mistakes are spread across all topics or concentrated in just a few. A focused cluster is easier to fix.",
+  mtq: "Average number of seconds spent on each question in this section.",
+  vr: "Verbal Reasoning — word patterns, relationships and language logic questions.",
+  nvr: "Non-Verbal Reasoning — shape patterns and spatial reasoning questions (no words).",
+  ec: "English Comprehension — reading passages with questions on understanding, inference and vocabulary.",
+  ma: "Mathematics — arithmetic, problem-solving and numerical reasoning.",
+  pressureDelta: "The difference in accuracy between relaxed practice and timed test conditions. A large gap means pressure — not gaps in knowledge — is the problem.",
+  pp: "Percentage points. For example, −8 means accuracy fell by 8% under timed conditions compared to practice.",
+  fatigueFlag: "Your child's accuracy or speed drops noticeably in the second half of the test — a sign that stamina may be affecting their results.",
+  gv: "How quickly your child's readiness is improving over time. A positive number means they are making good progress toward the 121 qualifying mark.",
+  primaryConstraint: "The single biggest thing currently holding your child back. Focusing here will have the largest impact on their score.",
+  impact10: "How many readiness points your child could gain if accuracy on this topic improves by 10 percentage points.",
+  weightedAccuracy: "Accuracy adjusted for difficulty — getting harder questions right counts for more than easier ones.",
+  volatility: "How consistent your child is on this topic. High inconsistency means they get it right sometimes but not reliably.",
+  paceRatio: "How fast your child is moving through questions compared to the expected pace. Above 1 = slower than ideal; below 1 = faster.",
+  paceSd: "How much your child's speed varies between questions — a high value means they are rushing some and spending too long on others.",
 };
 
 function SummaryTab({ data }: { data: AnalyticsData }) {
@@ -214,7 +214,7 @@ function SummaryTab({ data }: { data: AnalyticsData }) {
         <Card data-testid="tile-confidence">
           <CardContent className="pt-5 pb-4 text-center">
             <div className="text-xs text-muted-foreground uppercase tracking-wide mb-2 flex items-center justify-center">
-              Confidence
+              Score Reliability
               <InfoTooltip text={TOOLTIPS.si} />
             </div>
             <div className="flex items-center justify-center gap-1">
@@ -222,14 +222,14 @@ function SummaryTab({ data }: { data: AnalyticsData }) {
               <span className="text-sm font-semibold" data-testid="text-confidence">{forecastConfidence}</span>
             </div>
             <div className="text-3xl font-bold mt-2" data-testid="text-stability-index">{si}</div>
-            <div className="text-xs text-muted-foreground">stability index</div>
+            <div className="text-xs text-muted-foreground">based on all tests</div>
           </CardContent>
         </Card>
 
         <Card data-testid="tile-pace">
           <CardContent className="pt-5 pb-4">
             <div className="text-xs text-muted-foreground uppercase tracking-wide mb-2 text-center flex items-center justify-center">
-              Pace Discipline
+              Timing
               <InfoTooltip text={TOOLTIPS.pdi} />
             </div>
             <div className="text-2xl font-bold text-center mb-3" data-testid="text-pdi-overall">{Math.round(attempt.pdiOverall)}</div>
@@ -266,8 +266,8 @@ function SummaryTab({ data }: { data: AnalyticsData }) {
         <Card data-testid="tile-difficulty">
           <CardContent className="pt-5 pb-4">
             <div className="text-xs text-muted-foreground uppercase tracking-wide mb-2 text-center flex items-center justify-center">
-              Difficulty Tolerance
-              <InfoTooltip text="How accurately your child answers Easy, Medium, and Hard questions. A big drop-off on Hard questions shows where to focus." />
+              Harder Questions
+              <InfoTooltip text="How accurately your child answers Easy, Medium, and Hard questions. A large drop on Hard questions shows where extra practice is needed." />
             </div>
             <div className="space-y-2 mt-3">
               <AccuracyBar label="Easy" value={attempt.accEasy} />
@@ -281,14 +281,14 @@ function SummaryTab({ data }: { data: AnalyticsData }) {
       <div className="flex items-center justify-center gap-6 text-xs text-muted-foreground">
         <span className="flex items-center gap-1">
           <span className="font-medium text-foreground flex items-center">
-            WAI
+            Difficulty-adjusted score
             <InfoTooltip text={TOOLTIPS.wai} />
           </span>
           <span data-testid="text-wai">{attempt.wai}</span>
         </span>
         <span className="flex items-center gap-1">
           <span className="font-medium text-foreground flex items-center">
-            CR
+            Topic concentration
             <InfoTooltip text={TOOLTIPS.cr} />
           </span>
           <span data-testid="text-cr">{attempt.crScore}</span>
@@ -298,8 +298,8 @@ function SummaryTab({ data }: { data: AnalyticsData }) {
       {priorities.length > 0 && (
         <div>
           <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3 flex items-center">
-            Top Priorities
-            <InfoTooltip text="The topics where focused practice will have the biggest impact on readiness. The points estimate assumes 10 percentage points of accuracy improvement on that topic." />
+            Where to Focus Next
+            <InfoTooltip text="The topics where focused practice will have the biggest impact on your child's score. The improvement estimate is based on a 10 percentage point accuracy increase on each topic." />
           </h3>
           <div className="grid md:grid-cols-3 gap-4">
             {priorities.map((p, i) => (
@@ -310,10 +310,10 @@ function SummaryTab({ data }: { data: AnalyticsData }) {
                     <Target className="h-4 w-4 text-primary shrink-0" />
                   </div>
                   <div className="text-xs text-muted-foreground mb-1">
-                    Current: {p.currentAccuracy}% accuracy, {p.avgTime}s avg
+                    Getting {p.currentAccuracy}% right · {p.avgTime}s per question on average
                   </div>
                   <div className="text-xs font-medium text-primary mb-3 flex items-center" data-testid={`text-impact-${i}`}>
-                    ~+{p.impact10} readiness points
+                    Could add ~+{p.impact10} points to readiness
                     <InfoTooltip text={TOOLTIPS.impact10} />
                   </div>
                   <div className="text-xs text-muted-foreground italic">{p.recommendedDrill}</div>
@@ -326,7 +326,7 @@ function SummaryTab({ data }: { data: AnalyticsData }) {
 
       {riskFlags.length > 0 && (
         <div>
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Flags</h3>
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">Things to Watch</h3>
           <div className="flex flex-wrap gap-2">
             {riskFlags.map((flag, i) => (
               <div key={i} className="flex items-center gap-1.5 bg-amber-50 border border-amber-200 text-amber-800 rounded-lg px-3 py-1.5 text-xs" data-testid={`flag-risk-${i}`}>
@@ -368,7 +368,7 @@ function InsightsTab({ data }: { data: AnalyticsData }) {
       <Card data-testid="card-primary-constraint">
         <CardHeader className="pb-2">
           <CardTitle className="text-base flex items-center">
-            Primary Constraint
+            Main Focus Area
             <InfoTooltip text={TOOLTIPS.primaryConstraint} />
           </CardTitle>
         </CardHeader>
@@ -377,15 +377,15 @@ function InsightsTab({ data }: { data: AnalyticsData }) {
             <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${constraint.primary.key === "none" ? "bg-emerald-500" : "bg-amber-500"}`} />
             <div>
               <p className="text-sm font-medium mb-1" data-testid="text-constraint-key">
-                {constraint.primary.key === "none" ? "No major constraint" : constraint.primary.key.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase())}
+                {constraint.primary.key === "none" ? "No major weakness identified" : constraint.primary.key.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase())}
               </p>
               <p className="text-sm text-muted-foreground" data-testid="text-constraint-explanation">{constraint.primary.explanation}</p>
-              <p className="text-xs text-primary mt-2">Recommended: {constraint.primary.actionType}</p>
+              <p className="text-xs text-primary mt-2">Suggested next step: {constraint.primary.actionType}</p>
             </div>
           </div>
           {constraint.secondary.length > 0 && (
             <div className="mt-4 pt-3 border-t space-y-2">
-              <p className="text-xs text-muted-foreground uppercase tracking-wide">Secondary Contributors</p>
+              <p className="text-xs text-muted-foreground uppercase tracking-wide">Also worth noting</p>
               {constraint.secondary.map((c, i) => (
                 <div key={i} className="flex items-start gap-2">
                   <div className="w-1.5 h-1.5 rounded-full mt-1.5 bg-muted-foreground/40 shrink-0" />
@@ -401,12 +401,12 @@ function InsightsTab({ data }: { data: AnalyticsData }) {
         <Card data-testid="card-pressure-profile">
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center">
-              Pressure Profile
+              Under Exam Conditions
               <InfoTooltip text={TOOLTIPS.pressureDelta} />
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-xs text-muted-foreground mb-3">Drill accuracy versus timed diagnostic accuracy by skill.</p>
+            <p className="text-xs text-muted-foreground mb-3">How accuracy changes from relaxed practice to timed test conditions, by subject.</p>
             <div className="space-y-2">
               {pressureProfile.bySkill.slice(0, 5).map(p => (
                 <div key={p.skillId} className="flex items-center gap-3 text-xs">
@@ -416,7 +416,7 @@ function InsightsTab({ data }: { data: AnalyticsData }) {
                     <span className="text-muted-foreground">Timed: {p.timedAcc}%</span>
                   </div>
                   <span className={`font-medium flex items-center ${p.pressureGapFlag ? "text-red-600" : "text-muted-foreground"}`}>
-                    {p.pressureDelta > 0 ? "+" : ""}{p.pressureDelta}pp
+                    {p.pressureDelta > 0 ? "+" : ""}{p.pressureDelta}%
                     <InfoTooltip text={TOOLTIPS.pp} />
                   </span>
                 </div>
@@ -428,7 +428,7 @@ function InsightsTab({ data }: { data: AnalyticsData }) {
 
       <Card data-testid="card-pace-analysis">
         <CardHeader className="pb-2">
-          <CardTitle className="text-base">Pace Under Pressure</CardTitle>
+          <CardTitle className="text-base">Time Management by Subject</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
@@ -437,26 +437,22 @@ function InsightsTab({ data }: { data: AnalyticsData }) {
                 <span className="font-medium">{section}</span>
                 <div className="flex items-center gap-4 text-xs text-muted-foreground">
                   <span className="flex items-center">
-                    PDI: {Math.round(s.pdi)}
+                    Timing score: {Math.round(s.pdi)}
                     <InfoTooltip text={TOOLTIPS.pdi} />
                   </span>
                   <span className="flex items-center">
-                    Ratio: {s.paceRatio}x
-                    <InfoTooltip text={TOOLTIPS.paceRatio} />
-                  </span>
-                  <span className="flex items-center">
-                    Avg: {s.mtq}s
+                    Avg: {s.mtq}s per question
                     <InfoTooltip text={TOOLTIPS.mtq} />
                   </span>
                   <span className="flex items-center">
-                    SD: {s.paceSd}s
+                    Variation: {s.paceSd}s
                     <InfoTooltip text={TOOLTIPS.paceSd} />
                   </span>
                 </div>
               </div>
             ))}
           </div>
-          <p className="text-xs text-muted-foreground mt-3">Pace compared to timed section expectations.</p>
+          <p className="text-xs text-muted-foreground mt-3">A timing score of 100 means perfectly paced across the section.</p>
         </CardContent>
       </Card>
 
@@ -464,14 +460,14 @@ function InsightsTab({ data }: { data: AnalyticsData }) {
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between">
             <CardTitle className="text-base flex items-center">
-              Trajectory
+              Score Over Time
               <InfoTooltip text={TOOLTIPS.gv} />
             </CardTitle>
             <div className="flex items-center gap-1.5" data-testid="text-trend">
               {trendIcon}
               <span className="text-sm font-medium">{trajectory.trend}</span>
               {trajectory.gvRS !== 0 && (
-                <span className="text-xs text-muted-foreground">({trajectory.gvRS > 0 ? "+" : ""}{trajectory.gvRS} RS)</span>
+                <span className="text-xs text-muted-foreground">({trajectory.gvRS > 0 ? "+" : ""}{trajectory.gvRS} points)</span>
               )}
             </div>
           </div>
@@ -479,16 +475,16 @@ function InsightsTab({ data }: { data: AnalyticsData }) {
         <CardContent>
           {trajectory.points.length >= 2 ? (
             <ResponsiveContainer width="100%" height={160}>
-              <LineChart data={trajectory.points.map((p, i) => ({ ...p, label: `#${i + 1}` }))}>
+              <LineChart data={trajectory.points.map((p, i) => ({ ...p, label: `Test ${i + 1}` }))}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                 <XAxis dataKey="label" tick={{ fontSize: 11 }} />
                 <YAxis domain={[0, 100]} tick={{ fontSize: 11 }} />
                 <RechartsTooltip />
-                <Line type="monotone" dataKey="rs" stroke="#6366f1" strokeWidth={2} dot={{ r: 3 }} name="Readiness" />
+                <Line type="monotone" dataKey="rs" stroke="#6366f1" strokeWidth={2} dot={{ r: 3 }} name="Readiness Score" />
               </LineChart>
             </ResponsiveContainer>
           ) : (
-            <p className="text-xs text-muted-foreground text-center py-6">Complete multiple diagnostics to see trajectory.</p>
+            <p className="text-xs text-muted-foreground text-center py-6">Complete more than one diagnostic to see how your child's score is changing over time.</p>
           )}
         </CardContent>
       </Card>
@@ -496,21 +492,21 @@ function InsightsTab({ data }: { data: AnalyticsData }) {
       <Card data-testid="card-fatigue">
         <CardHeader className="pb-2">
           <CardTitle className="text-base flex items-center">
-            Fatigue Curve
+            Stamina
             <InfoTooltip text={TOOLTIPS.fatigueFlag} />
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="text-xs text-muted-foreground mb-1">Accuracy drift (last third vs first third)</p>
+              <p className="text-xs text-muted-foreground mb-1">Accuracy in second half vs first half</p>
               <p className={`text-lg font-bold flex items-center ${attempt.fatigue.accDrop <= -15 ? "text-red-600" : attempt.fatigue.accDrop < 0 ? "text-amber-600" : "text-emerald-600"}`} data-testid="text-fatigue-acc-drop">
-                {attempt.fatigue.accDrop > 0 ? "+" : ""}{attempt.fatigue.accDrop}pp
+                {attempt.fatigue.accDrop > 0 ? "+" : ""}{attempt.fatigue.accDrop}%
                 <InfoTooltip text={TOOLTIPS.pp} />
               </p>
             </div>
             <div>
-              <p className="text-xs text-muted-foreground mb-1">Pace drift (last third vs first third)</p>
+              <p className="text-xs text-muted-foreground mb-1">Speed in second half vs first half</p>
               <p className={`text-lg font-bold ${attempt.fatigue.paceDrift >= 6 ? "text-red-600" : attempt.fatigue.paceDrift > 0 ? "text-amber-600" : "text-emerald-600"}`} data-testid="text-fatigue-pace-drift">
                 {attempt.fatigue.paceDrift > 0 ? "+" : ""}{attempt.fatigue.paceDrift}s
               </p>
@@ -519,10 +515,10 @@ function InsightsTab({ data }: { data: AnalyticsData }) {
           {attempt.fatigue.fatigueFlag && (
             <div className="mt-3 flex items-center gap-1.5 text-xs text-amber-700 bg-amber-50 rounded px-2 py-1">
               <AlertTriangle className="h-3 w-3" />
-              Performance drops later in the paper. Consider practising full-length timed sets.
+              Your child's performance drops toward the end of the test. Practising full-length timed sessions can help build stamina.
             </div>
           )}
-          <p className="text-xs text-muted-foreground mt-3">Stability reflects consistency across recent diagnostics.</p>
+          <p className="text-xs text-muted-foreground mt-3">Comparing the first and second halves of the test shows whether tiredness is a factor.</p>
         </CardContent>
       </Card>
     </div>
@@ -591,11 +587,11 @@ function DetailTab({ detailData }: { detailData: DetailData | undefined }) {
               className="text-xs flex items-center gap-1"
             >
               {m === "accuracy" ? (
-                <>Weighted Accuracy <InfoTooltip text={TOOLTIPS.weightedAccuracy} /></>
+                <>Accuracy <InfoTooltip text={TOOLTIPS.weightedAccuracy} /></>
               ) : m === "time" ? (
-                "Time"
+                "Speed"
               ) : (
-                <>Volatility <InfoTooltip text={TOOLTIPS.volatility} /></>
+                <>Consistency <InfoTooltip text={TOOLTIPS.volatility} /></>
               )}
             </Button>
           ))}
@@ -629,9 +625,9 @@ function DetailTab({ detailData }: { detailData: DetailData | undefined }) {
       ))}
 
       <p className="text-xs text-muted-foreground text-center">
-        {mode === "accuracy" && "Accuracy adjusted for difficulty and cognitive load."}
-        {mode === "time" && "Average time per question in seconds."}
-        {mode === "volatility" && "Standard deviation of accuracy across recent diagnostics. Lower is more consistent."}
+        {mode === "accuracy" && "Accuracy adjusted for question difficulty — harder questions count for more."}
+        {mode === "time" && "Average seconds per question. Green = on target, red = spending too long or rushing."}
+        {mode === "volatility" && "How consistent your child is on each topic. Green = reliable, red = getting it right sometimes but not always."}
       </p>
     </div>
   );
@@ -767,8 +763,8 @@ export default function ParentAnalytics() {
     <div className="container mx-auto max-w-5xl px-4 py-8">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-serif font-bold" data-testid="heading-analytics">Readiness Analytics</h1>
-          <p className="text-sm text-muted-foreground mt-1">Performance insights based on your latest diagnostic</p>
+          <h1 className="text-2xl font-serif font-bold" data-testid="heading-analytics">How Is My Child Doing?</h1>
+          <p className="text-sm text-muted-foreground mt-1">Based on your child's most recent diagnostic results</p>
         </div>
         <Link href="/app">
           <Button variant="outline" size="sm">Back to Dashboard</Button>
@@ -777,9 +773,9 @@ export default function ParentAnalytics() {
 
       <Tabs defaultValue="summary" className="w-full">
         <TabsList className="w-full grid grid-cols-3 mb-6">
-          <TabsTrigger value="summary" data-testid="tab-summary">Summary</TabsTrigger>
-          <TabsTrigger value="insights" data-testid="tab-insights">Insights</TabsTrigger>
-          <TabsTrigger value="detail" data-testid="tab-detail">Detail</TabsTrigger>
+          <TabsTrigger value="summary" data-testid="tab-summary">Overview</TabsTrigger>
+          <TabsTrigger value="insights" data-testid="tab-insights">What This Means</TabsTrigger>
+          <TabsTrigger value="detail" data-testid="tab-detail">Topic Breakdown</TabsTrigger>
         </TabsList>
 
         <TabsContent value="summary">

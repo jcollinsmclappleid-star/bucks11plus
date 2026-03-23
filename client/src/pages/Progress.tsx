@@ -54,8 +54,8 @@ export default function Progress() {
       
       <div className="border-b border-border/60 pb-6 flex justify-between items-end">
         <div>
-          <h1 className="text-3xl font-bold text-primary font-serif">Progress & Plan</h1>
-          <p className="text-muted-foreground mt-2">Historical forecast tracking and your preparation journey.</p>
+          <h1 className="text-3xl font-bold text-primary font-serif">Progress</h1>
+          <p className="text-muted-foreground mt-2">See how your child's score is changing and where they stand on the road to 121.</p>
         </div>
       </div>
 
@@ -70,19 +70,19 @@ export default function Progress() {
           <Card className="border-border/60 shadow-sm">
             <CardContent className="p-4 text-center">
               <div className={`text-3xl font-bold ${progress.overallAccuracy >= 75 ? 'text-green-600' : progress.overallAccuracy >= 55 ? 'text-amber-600' : 'text-red-600'}`} data-testid="text-overall-accuracy">{progress.overallAccuracy}%</div>
-              <p className="text-xs text-muted-foreground mt-1">Overall Accuracy</p>
+              <p className="text-xs text-muted-foreground mt-1">Getting Right Overall</p>
             </CardContent>
           </Card>
           <Card className="border-border/60 shadow-sm">
             <CardContent className="p-4 text-center">
               <div className="text-3xl font-bold text-primary" data-testid="text-total-attempts">{progress.totalAttempts}</div>
-              <p className="text-xs text-muted-foreground mt-1">Assessments Taken</p>
+              <p className="text-xs text-muted-foreground mt-1">Tests Completed</p>
             </CardContent>
           </Card>
           <Card className="border-border/60 shadow-sm">
             <CardContent className="p-4 text-center">
               <div className={`text-3xl font-bold ${(progress.latestForecast || 0) >= 121 ? 'text-green-600' : 'text-amber-600'}`} data-testid="text-latest-forecast">{progress.latestForecast || '—'}</div>
-              <p className="text-xs text-muted-foreground mt-1">Latest Forecast</p>
+              <p className="text-xs text-muted-foreground mt-1">Estimated Score Now</p>
             </CardContent>
           </Card>
         </div>
@@ -91,8 +91,8 @@ export default function Progress() {
       <div className="grid md:grid-cols-3 gap-6">
         <Card className="md:col-span-2 border-border/60 shadow-sm">
           <CardHeader className="bg-slate-50/50 border-b border-border/50">
-            <CardTitle className="font-serif">Forecast Trajectory</CardTitle>
-            <CardDescription>Estimated standardized score over time</CardDescription>
+            <CardTitle className="font-serif">Score Over Time</CardTitle>
+            <CardDescription>How your child's estimated score has changed across tests</CardDescription>
           </CardHeader>
           <CardContent className="p-6">
             <div className="h-[300px] w-full">
@@ -119,14 +119,14 @@ export default function Progress() {
                 <div className="p-2 bg-primary/10 rounded-lg">
                   <TrendingUp className="h-5 w-5" />
                 </div>
-                <h3 className="font-bold text-lg font-serif">Velocity</h3>
+                <h3 className="font-bold text-lg font-serif">Progress So Far</h3>
               </div>
               <p className="text-4xl font-bold text-primary mb-2" data-testid="text-velocity">
                 {progress?.velocity !== undefined ? (progress.velocity > 0 ? `+${progress.velocity}` : progress.velocity) : '0'} 
                 <span className="text-sm font-medium text-muted-foreground uppercase tracking-wide ml-2">points</span>
               </p>
               <p className="text-sm text-slate-600">
-                {progress?.totalAttempts ? `Over ${progress.totalAttempts} attempts` : "Take diagnostics to track velocity"}
+                {progress?.totalAttempts ? `Across ${progress.totalAttempts} tests completed` : "Complete a diagnostic to start tracking progress"}
               </p>
             </CardContent>
           </Card>
@@ -138,13 +138,13 @@ export default function Progress() {
                 <div className="p-2 bg-blue-100 rounded-lg text-blue-700">
                   <AlertCircle className="h-5 w-5" />
                 </div>
-                <h3 className="font-bold text-lg font-serif">Latest Band</h3>
+                <h3 className="font-bold text-lg font-serif">Current Level</h3>
               </div>
               <p className="text-sm text-slate-700 leading-relaxed font-medium" data-testid="text-band">
-                {progress?.latestBand || "Complete a diagnostic to see your band."}
+                {progress?.latestBand || "Complete a diagnostic to see your child's current level."}
               </p>
               {progress?.latestForecast && (
-                <p className="text-xs text-muted-foreground mt-2">Current forecast: {progress.latestForecast}</p>
+                <p className="text-xs text-muted-foreground mt-2">Estimated score: {progress.latestForecast} (target: 121)</p>
               )}
             </CardContent>
           </Card>
@@ -155,7 +155,7 @@ export default function Progress() {
         <Card className="border-border/60 shadow-sm" data-testid="card-section-accuracy">
           <CardHeader className="bg-slate-50/50 border-b border-border/50">
             <CardTitle className="flex items-center gap-2 font-serif">
-              <BarChart3 className="h-5 w-5 text-primary" /> Section Accuracy Over All Attempts
+              <BarChart3 className="h-5 w-5 text-primary" /> How They're Performing in Each Subject
             </CardTitle>
           </CardHeader>
           <CardContent className="p-6">
@@ -169,7 +169,7 @@ export default function Progress() {
                   <div className="h-2 w-full rounded-full bg-slate-100 overflow-hidden">
                     <div className={`h-full rounded-full transition-all ${data.pct >= 75 ? 'bg-green-500' : data.pct >= 55 ? 'bg-amber-500' : 'bg-red-500'}`} style={{ width: `${data.pct}%` }}></div>
                   </div>
-                  <p className="text-xs text-muted-foreground">{data.correct}/{data.total} correct across all assessments</p>
+                  <p className="text-xs text-muted-foreground">{data.correct} out of {data.total} correct across all tests</p>
                 </div>
               ))}
             </div>
@@ -182,7 +182,7 @@ export default function Progress() {
           <Card className="border-border/60 shadow-sm">
             <CardHeader>
               <CardTitle className="text-base font-serif flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-primary" /> Gap Velocity
+                <TrendingUp className="h-5 w-5 text-primary" /> Closing the Gap to 121
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -192,14 +192,14 @@ export default function Progress() {
                     {gv.improving ? '-' : '+'}{Math.abs(gv.change)} pts
                   </p>
                   <p className="text-xs text-muted-foreground mt-1">
-                    Gap moved from {gv.oldGap} to {gv.newGap} over {(gv as any).attempts || 'multiple'} attempts
+                    The gap to 121 has {gv.improving ? 'reduced' : 'grown'} from {gv.oldGap} to {gv.newGap} points
                   </p>
                   <p className={`text-xs font-medium mt-2 ${gv.improving ? 'text-green-600' : 'text-amber-600'}`}>
-                    {gv.improving ? "Gap is closing" : "Gap needs attention"}
+                    {gv.improving ? "Moving in the right direction" : "More practice needed to close the gap"}
                   </p>
                 </div>
               ) : (
-                <p className="text-sm text-muted-foreground">Complete 2+ diagnostics to see gap velocity.</p>
+                <p className="text-sm text-muted-foreground">Complete 2 or more tests to see how quickly the gap to 121 is closing.</p>
               )}
             </CardContent>
           </Card>
@@ -207,7 +207,7 @@ export default function Progress() {
           <Card className="border-border/60 shadow-sm">
             <CardHeader>
               <CardTitle className="text-base font-serif flex items-center gap-2">
-                <Activity className="h-5 w-5 text-primary" /> Forecast Stability
+                <Activity className="h-5 w-5 text-primary" /> Score Consistency
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -219,13 +219,13 @@ export default function Progress() {
                   >
                     {fs.status}
                   </Badge>
-                  <p className="text-sm text-muted-foreground mt-2">Std deviation: {fs.stdDev} pts</p>
+                  <p className="text-sm text-muted-foreground mt-2">Score varies by {fs.stdDev} points between tests</p>
                   <p className="text-xs text-muted-foreground mt-1">
-                    {fs.trend === 'improving' ? 'Scores becoming more consistent' : 'Scores are steady'}
+                    {fs.trend === 'improving' ? 'Results are becoming more consistent' : 'Results are holding steady'}
                   </p>
                 </div>
               ) : (
-                <p className="text-sm text-muted-foreground">Complete 2+ diagnostics to see stability.</p>
+                <p className="text-sm text-muted-foreground">Complete 2 or more tests to see how consistent your child's scores are.</p>
               )}
             </CardContent>
           </Card>
