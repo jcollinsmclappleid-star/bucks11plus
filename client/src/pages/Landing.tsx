@@ -509,6 +509,44 @@ export default function Landing() {
         </div>
       </section>
 
+      <section className="py-16 md:py-24 bg-white border-b border-border/30" data-testid="section-assessment-outcomes">
+        <div className="container mx-auto max-w-5xl px-4">
+          <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
+            <div>
+              <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-4">After the Assessment</span>
+              <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif leading-tight mb-5">
+                What You'll Know in 8 Minutes
+              </h2>
+              <p className="text-slate-500 text-base leading-relaxed mb-6">
+                Most parents finish a practice paper knowing their child got some questions wrong. This diagnostic tells you <em>which</em> question types, <em>why</em>, and what to do about it.
+              </p>
+              <Link href="/free-diagnostic">
+                <Button className="h-12 px-7 font-bold bg-primary hover:bg-primary/90" data-testid="button-outcomes-cta">
+                  Start Free Diagnostic <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+              <p className="text-xs text-slate-400 mt-3">No account needed · 8 minutes · instant results</p>
+            </div>
+            <div className="space-y-3">
+              {[
+                { label: "Which question types your child is struggling with — by subject and sub-topic", icon: <Target className="h-4 w-4" />, color: "text-red-600 bg-red-50 border-red-100" },
+                { label: "Where marks are consistently being lost across each GL-style section", icon: <BarChart3 className="h-4 w-4" />, color: "text-amber-600 bg-amber-50 border-amber-100" },
+                { label: "How their performance compares to the 121 qualifying standard", icon: <TrendingUp className="h-4 w-4" />, color: "text-blue-600 bg-blue-50 border-blue-100" },
+                { label: "A clear readiness band — On Track, Within Reach, or Needs Focus", icon: <CheckCircle2 className="h-4 w-4" />, color: "text-emerald-600 bg-emerald-50 border-emerald-100" },
+                { label: "The three highest-impact areas to focus on next — not a generic revision list", icon: <Zap className="h-4 w-4" />, color: "text-violet-600 bg-violet-50 border-violet-100" },
+              ].map((item, i) => (
+                <div key={i} className="flex items-start gap-3 bg-slate-50 rounded-xl border border-slate-100 p-4" data-testid={`outcome-item-${i}`}>
+                  <div className={`p-1.5 rounded-lg border shrink-0 mt-0.5 ${item.color}`}>
+                    {item.icon}
+                  </div>
+                  <p className="text-sm text-slate-700 font-medium leading-snug">{item.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section id="pricing" className="py-16 md:py-24 bg-white border-b border-border/30" data-testid="section-pricing">
         <div className="container mx-auto max-w-6xl px-4">
           <div className="text-center mb-12">
@@ -600,6 +638,45 @@ export default function Landing() {
             </div>
           </div>
           <p className="text-center text-xs text-slate-400 mt-8">All prices include VAT. Subscriptions can be cancelled anytime. One-time payments grant access for the stated duration.</p>
+        </div>
+      </section>
+
+      <section className="py-16 md:py-20 bg-gradient-to-br from-slate-900 to-slate-800 border-b border-border/30" data-testid="section-stop-guessing">
+        <div className="container mx-auto max-w-5xl px-4">
+          <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
+            <div>
+              <span className="inline-block text-xs font-bold text-white/30 uppercase tracking-widest mb-4">The Problem With Random Practice</span>
+              <h2 className="text-3xl md:text-4xl font-bold text-white font-serif leading-tight mb-5">
+                Stop Guessing What to Revise
+              </h2>
+              <p className="text-white/60 text-base leading-relaxed mb-4">
+                Most families approach preparation the same way — more questions, more papers, more tutoring hours. They work hard. But without knowing where the marks are actually being lost, preparation time is spread across everything rather than focused on what matters.
+              </p>
+              <p className="text-brand-amber/90 font-semibold text-base leading-relaxed">
+                This diagnostic removes that uncertainty. Instead of doing more questions, you focus on the right ones.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 gap-4">
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-5 flex items-start gap-4">
+                <div className="w-10 h-10 rounded-xl bg-red-500/20 text-red-400 flex items-center justify-center shrink-0 border border-red-500/20">
+                  <Search className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-white font-semibold text-sm mb-1">Without a diagnostic</p>
+                  <p className="text-white/50 text-sm leading-relaxed">Working through everything. Spending time on topics your child already knows. Not knowing which gaps are costing the most marks.</p>
+                </div>
+              </div>
+              <div className="rounded-2xl border border-brand-amber/20 bg-brand-amber/5 p-5 flex items-start gap-4">
+                <div className="w-10 h-10 rounded-xl bg-brand-amber/20 text-brand-amber flex items-center justify-center shrink-0 border border-brand-amber/20">
+                  <Wrench className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-white font-semibold text-sm mb-1">With a diagnostic</p>
+                  <p className="text-white/50 text-sm leading-relaxed">Three specific priorities, ranked by impact. Practice time goes exactly where it will move the score — with evidence it's working after each session.</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

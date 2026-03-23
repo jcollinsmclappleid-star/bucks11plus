@@ -1,0 +1,188 @@
+I want you to enhance my existing website (Bucks 11 Plus Test platform) to be more outcome-driven, conversion-focused, and SEO-optimised while maintaining a premium, trustworthy feel.
+
+IMPORTANT CONTEXT  
+- This is NOT a generic 11+ practice site  
+- This is a diagnostic-driven product priced at £59.99/month  
+- The goal is to help parents understand exactly where their child is losing marks and what to improve  
+- Target audience: parents preparing children for Buckinghamshire 11+ (GL-style)  
+- The site must feel premium, structured, and high-value — not like a cheap resource  
+
+PRIMARY GOAL  
+Transform the homepage and key sections so that:
+- The value is immediately clear within 3 seconds  
+- The messaging is outcome-led, not feature-led  
+- It justifies a £59.99/month subscription  
+- It improves conversion (trial or sign-up)  
+- It remains SEO-friendly for “Bucks 11 Plus”, “121”, “GL”, etc.
+
+---
+
+HOMEPAGE HERO (CRITICAL)
+
+Replace the existing hero section with:
+
+H1:
+“See Exactly Where Your Child Is Losing Marks in the Bucks 11+”
+
+Subheading:
+“A structured diagnostic assessment that identifies weak areas across GL-style question types — so you can focus preparation where it actually matters.”
+
+Bullet points:
+- Pinpoint weak question types instantly  
+- Understand performance across verbal, non-verbal, maths and comprehension  
+- Get a clear picture of exam readiness  
+
+Primary CTA button:
+“Start Diagnostic Assessment”
+
+Secondary trust line under CTA:
+“Designed to replace guesswork with clear, structured insight”
+
+---
+
+ADD NEW SECTION DIRECTLY UNDER HERO
+
+Title:
+“What You’ll See After the Assessment”
+
+Content (bullet points):
+- Exactly which question types your child is struggling with  
+- Where marks are consistently being lost  
+- Performance across each subject area  
+- A clear indication of current readiness  
+- What to focus on next to improve scores  
+
+This section must be visually prominent and easy to scan.
+
+---
+
+UPGRADE VALUE POSITIONING
+
+Add a new section:
+
+Title:
+“Stop Guessing What to Revise”
+
+Content:
+Explain clearly that most parents rely on random practice and don’t know where marks are being lost. Emphasise that this leads to wasted time.
+
+Then explain:
+“This diagnostic removes that uncertainty by showing exactly what needs to be improved.”
+
+---
+
+HOW IT WORKS (SIMPLIFY AND STRUCTURE)
+
+Create a clean 4-step section:
+
+1. Complete the assessment  
+2. Receive a structured breakdown  
+3. Identify weak areas instantly  
+4. Focus preparation effectively  
+
+Keep language simple, outcome-focused, and easy to scan.
+
+---
+
+DIFFERENTIATION SECTION (VERY IMPORTANT)
+
+Title:
+“More Than Just Practice Questions”
+
+Content:
+- This is not a question bank  
+- It is a diagnostic tool  
+- It shows exactly how a child is performing  
+- It tells parents where to focus  
+
+Add a strong closing line:
+“Instead of doing more questions, you focus on the right ones.”
+
+---
+
+121 / BUCKS POSITIONING
+
+Where relevant, update content to include:
+
+“Understand whether your child is currently on track to reach the 121 qualifying standard used in Buckinghamshire.”
+
+Do not overclaim or guarantee outcomes.
+
+---
+
+TRUST + AUTHORITY
+
+Add a section:
+
+“Designed Around Real 11+ Assessment Standards”
+
+Include:
+- GL-style alignment  
+- Structured methodology  
+- Clear disclaimer (independent, not affiliated with GL or schools)
+
+---
+
+CTA SECTION (BOTTOM)
+
+Title:
+“Start With Clarity”
+
+Content:
+“Understand exactly where your child stands before the exam.”
+
+CTA button:
+“Start Diagnostic Assessment”
+
+Pricing line:
+“£59.99/month — cancel anytime”
+
+Add subtle urgency line:
+“Most parents don’t realise where marks are being lost until it’s too late.”
+
+---
+
+SEO REQUIREMENTS
+
+- Page title:
+“11+ Diagnostic Assessment – Identify Weak Areas & Improve Scores (GL & CEM)”
+
+- Meta description:
+“A structured 11+ diagnostic assessment that reveals exactly where your child is losing marks. Identify weak areas, improve scores, and understand exam readiness.”
+
+- Use keywords naturally:
+“Bucks 11 Plus”
+“121”
+“GL-style”
+“11+ diagnostic”
+
+- Ensure all important text is visible in HTML (not hidden in UI components)
+
+---
+
+UX / DESIGN INSTRUCTIONS
+
+- Keep design clean, premium, and calm  
+- Use strong spacing and readable typography  
+- Make CTAs clearly visible  
+- Avoid clutter or excessive colours  
+- Ensure mobile responsiveness  
+
+---
+
+CONVERSION IMPROVEMENTS
+
+- Add a “See Example Report” placeholder section (can be mock for now)  
+- Emphasise clarity, insight, and direction over quantity of questions  
+- Reinforce outcome at multiple points  
+
+---
+
+DELIVERABLE
+
+Update the homepage layout and content accordingly.  
+Ensure all sections are properly structured with semantic HTML.  
+Keep the tone professional, premium, and parent-focused.
+
+Do NOT make it sound salesy or exaggerated.  
+Focus on clarity, trust, and real value.
