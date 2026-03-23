@@ -72,7 +72,7 @@ export default function Progress() {
 
   return (
     <div className="container mx-auto max-w-5xl px-4 py-8 space-y-8">
-      <Seo title="Progress & Plan | 11+ Standard" description="Track your child's 11+ readiness progress over time." />
+      <Seo title="Progress & Plan | Bucks 11 Plus Tests" description="Track your child's 11+ readiness progress over time." />
 
       <div className="rounded-2xl bg-gradient-to-br from-slate-900 to-slate-700 text-white p-6 md:p-8 shadow-lg relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">

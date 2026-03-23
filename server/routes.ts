@@ -1863,7 +1863,7 @@ export async function registerRoutes(
       return res.status(403).send("<html><body><h2>Invalid unsubscribe link</h2><p>This link may have expired or is invalid.</p></body></html>");
     }
     await db.update(users).set({ emailUnsubscribedAt: new Date(), emailConsent: false }).where(eq(users.id, userId));
-    res.send("<html><body style='font-family:sans-serif;max-width:500px;margin:60px auto;text-align:center;'><h2>Unsubscribed</h2><p>You have been successfully unsubscribed from 11+ Standard emails.</p><p><a href='/'>Return to site</a></p></body></html>");
+    res.send("<html><body style='font-family:sans-serif;max-width:500px;margin:60px auto;text-align:center;'><h2>Unsubscribed</h2><p>You have been successfully unsubscribed from Bucks 11 Plus Tests emails.</p><p><a href='/'>Return to site</a></p></body></html>");
   };
 
   app.get("/api/email/unsubscribe", async (req, res, next) => {

@@ -131,7 +131,7 @@ export default function HowToPass() {
         The most effective preparation strategy combines <strong>diagnostic assessment</strong> with <strong>targeted practice</strong>. Rather than working through every topic equally, a diagnostic identifies exactly where your child falls below the 121 threshold — and targeted drills close those specific gaps.
       </p>
       <p>
-        This is the approach used by 11+ Standard. Our <Link href="/free-diagnostic" className="text-primary hover:underline">free 8-minute diagnostic</Link> measures both accuracy and pacing across all four domains, providing a realistic readiness forecast against the 121 benchmark. From there, the platform prescribes the exact micro-drills needed to close remaining gaps.
+        This is the approach used by Bucks 11 Plus Tests. Our <Link href="/free-diagnostic" className="text-primary hover:underline">free 8-minute diagnostic</Link> measures both accuracy and pacing across all four domains, providing a realistic readiness forecast against the 121 benchmark. From there, the platform prescribes the exact micro-drills needed to close remaining gaps.
       </p>
 
       <ContentCTA />

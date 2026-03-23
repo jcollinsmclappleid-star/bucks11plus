@@ -85,7 +85,7 @@ export default function ParentGuide() {
   return (
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
       <Seo
-        title="Free Bucks 11 Plus Parent Guide (2026) – 121 Score & Preparation | 11+ Standard"
+        title="Free Bucks 11 Plus Parent Guide (2026) – 121 Score & Preparation | Bucks 11 Plus Tests"
         description="Free guide for parents: understand the Bucks 11 Plus format, the 121 qualifying score, and how to assess your child's readiness for the Secondary Transfer Test."
         canonicalPath="/bucks-11-plus-parent-guide"
         schema={schema}

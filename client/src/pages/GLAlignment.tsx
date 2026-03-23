@@ -6,8 +6,8 @@ import { Breadcrumbs, breadcrumbSchema } from "../components/shared/Breadcrumbs"
 
 const faqItems = [
   {
-    question: "Is 11+ Standard officially affiliated with GL Assessment?",
-    answer: "No. 11+ Standard is fully independent. We are not affiliated with, endorsed by, or connected to GL Assessment Ltd. The term 'GL-style' refers to the question formats and reasoning families that GL Assessment uses in the Buckinghamshire Secondary Transfer Test — we independently replicate this structure to give children authentic practice conditions.",
+    question: "Is Bucks 11 Plus Tests officially affiliated with GL Assessment?",
+    answer: "No. Bucks 11 Plus Tests is fully independent. We are not affiliated with, endorsed by, or connected to GL Assessment Ltd. The term 'GL-style' refers to the question formats and reasoning families that GL Assessment uses in the Buckinghamshire Secondary Transfer Test — we independently replicate this structure to give children authentic practice conditions.",
   },
   {
     question: "What is verbal reasoning in the Bucks 11+?",
@@ -36,7 +36,7 @@ export default function GLAlignment() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
       <Seo
-        title="Bucks 11 Plus Subjects Explained – How Our Diagnostic Matches the Real Test | 11+ Standard"
+        title="Bucks 11 Plus Subjects Explained – How Our Diagnostic Matches the Real Test | Bucks 11 Plus Tests"
         description="Understand how the Bucks 11 Plus tests verbal reasoning, non-verbal reasoning, maths and English comprehension. See how our independently developed assessments align to the real test format and where children lose marks."
         canonicalPath="/bucks-gl-alignment"
         schema={[

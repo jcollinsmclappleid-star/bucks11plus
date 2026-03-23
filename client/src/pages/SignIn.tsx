@@ -33,7 +33,7 @@ export default function SignIn() {
 
   return (
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center p-4 bg-slate-50/50">
-      <Seo title="Sign In | 11+ Standard" description="Sign in to your 11+ Standard parent dashboard." />
+      <Seo title="Sign In | Bucks 11 Plus Tests" description="Sign in to your Bucks 11 Plus Tests parent dashboard." />
       <Card className="w-full max-w-md shadow-lg border-border/60">
         <CardHeader className="text-center space-y-2">
           <CardTitle className="text-3xl font-serif text-primary">Welcome Back</CardTitle>

@@ -50,7 +50,7 @@ export default function CheckoutSuccess() {
   if (processing) {
     return (
       <div className="container mx-auto max-w-2xl px-4 py-20">
-        <Seo title="Payment Successful | 11+ Standard" description="Your payment was successful." />
+        <Seo title="Payment Successful | Bucks 11 Plus Tests" description="Your payment was successful." />
         <Card className="border-green-200 shadow-lg">
           <CardContent className="flex flex-col items-center justify-center p-12 text-center space-y-6">
             <Loader2 className="h-12 w-12 animate-spin text-primary" />
@@ -65,7 +65,7 @@ export default function CheckoutSuccess() {
   if (!user && !activated) {
     return (
       <div className="container mx-auto max-w-2xl px-4 py-20">
-        <Seo title="Payment Successful | 11+ Standard" description="Your payment was successful. Create your account to get started." />
+        <Seo title="Payment Successful | Bucks 11 Plus Tests" description="Your payment was successful. Create your account to get started." />
         <Card className="border-green-200 shadow-lg">
           <CardContent className="flex flex-col items-center justify-center p-12 text-center space-y-6">
             <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
@@ -93,7 +93,7 @@ export default function CheckoutSuccess() {
 
   return (
     <div className="container mx-auto max-w-2xl px-4 py-20">
-      <Seo title="Payment Successful | 11+ Standard" description="Your payment was successful." />
+      <Seo title="Payment Successful | Bucks 11 Plus Tests" description="Your payment was successful." />
       <Card className="border-green-200 shadow-lg">
         <CardContent className="flex flex-col items-center justify-center p-12 text-center space-y-6">
           {error ? (

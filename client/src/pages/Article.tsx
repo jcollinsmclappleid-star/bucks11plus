@@ -46,7 +46,7 @@ export default function Article() {
   return (
     <article className="container mx-auto max-w-3xl px-4 py-16">
       <Seo 
-        title={`${article.title} | 11+ Standard Hub`} 
+        title={`${article.title} | Bucks 11 Plus Tests Hub`} 
         description={article.excerpt} 
       />
 

@@ -27,7 +27,7 @@ export default function LearnHub() {
   return (
     <div className="min-h-screen bg-background">
       <Seo
-        title={`Buckinghamshire 11+ Learning Hub – ${totalArticles} Free Guides | 11+ Standard`}
+        title={`Buckinghamshire 11+ Learning Hub – ${totalArticles} Free Guides | Bucks 11 Plus Tests`}
         description={`Free expert guides on every aspect of the Buckinghamshire 11+ Secondary Transfer Test. ${totalArticles} articles covering the GL Assessment format, grammar school admissions, preparation strategy, and more.`}
         canonicalPath="/learn"
         schema={{
@@ -38,7 +38,7 @@ export default function LearnHub() {
           url: "https://bucks11plustest.co.uk/learn",
           publisher: {
             "@type": "Organization",
-            name: "11+ Standard",
+            name: "Bucks 11 Plus Tests",
             url: "https://bucks11plustest.co.uk",
           },
         }}

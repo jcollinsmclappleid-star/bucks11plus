@@ -47,7 +47,7 @@ export default function DiagnosticStart() {
 
   return (
     <div className="container mx-auto max-w-3xl px-4 py-16">
-      <Seo title={`Start ${diagnostic.title} | 11+ Standard`} description={`Begin your ${diagnostic.title} diagnostic assessment.`} />
+      <Seo title={`Start ${diagnostic.title} | Bucks 11 Plus Tests`} description={`Begin your ${diagnostic.title} diagnostic assessment.`} />
       
       <div className="mb-8">
         <Link href="/app/diagnostic" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors" data-testid="link-back-diagnostics">

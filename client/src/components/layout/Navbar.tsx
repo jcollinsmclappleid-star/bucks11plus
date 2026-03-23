@@ -105,7 +105,7 @@ export default function Navbar() {
                 <div className="p-4 border-b border-border/40">
                   <div className="flex items-center gap-3">
                     <div className="flex flex-col leading-none">
-                      <span className="font-serif font-bold text-lg text-primary tracking-tight">11+ Standard</span>
+                      <span className="font-serif font-bold text-lg text-primary tracking-tight">Bucks 11 Plus Tests</span>
                       {user && (
                         <span className="text-xs text-muted-foreground mt-1">{user.childName || user.username}</span>
                       )}

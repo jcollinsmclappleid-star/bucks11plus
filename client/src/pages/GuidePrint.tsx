@@ -30,7 +30,7 @@ export default function GuidePrint() {
               <circle cx="24" cy="24" r="3" fill="#0d1f30" opacity="0.5" />
             </svg>
             <div className="mt-3">
-              <span className="block text-3xl font-serif font-bold text-[#0d1f30]">11+ Standard</span>
+              <span className="block text-3xl font-serif font-bold text-[#0d1f30]">Bucks 11 Plus Tests</span>
             </div>
           </div>
           <h1 className="text-4xl font-serif font-bold text-[#0d1f30] mb-4">The Buckinghamshire 11+ Parent Guide</h1>
@@ -125,7 +125,7 @@ export default function GuidePrint() {
       <div className="page-break">
         <h2 className="text-2xl font-serif font-bold text-[#0d1f30] mb-6">Example Platform Dashboard</h2>
         <p className="text-sm leading-relaxed mb-6">
-          The 11+ Standard platform provides structured readiness analysis. Below is an example of what parents can see after their child completes a diagnostic assessment.
+          The Bucks 11 Plus Tests platform provides structured readiness analysis. Below is an example of what parents can see after their child completes a diagnostic assessment.
         </p>
         <div className="transform scale-90 origin-top-left">
           <DashboardPreviewForecast />

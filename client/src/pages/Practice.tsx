@@ -88,7 +88,7 @@ export default function Practice() {
   return (
     <div className="container mx-auto max-w-5xl px-4 py-8 space-y-8">
       <Seo 
-        title="Practice Bank | 11+ Standard" 
+        title="Practice Bank | Bucks 11 Plus Tests" 
         description="Targeted 11+ practice drills tailored to close your child's specific gaps to the 121 benchmark." 
       />
 

@@ -91,7 +91,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
       <footer className="bg-primary text-primary-foreground/70 py-12 mt-auto">
         <div className="container mx-auto max-w-6xl px-4 grid md:grid-cols-5 gap-8">
           <div>
-            <div className="font-serif font-bold text-xl text-primary-foreground mb-4">11+ Standard</div>
+            <div className="font-serif font-bold text-xl text-primary-foreground mb-4">Bucks 11 Plus Tests</div>
             <p className="text-sm">Independent Buckinghamshire 11+ readiness assessment and preparation.</p>
           </div>
           <div>
@@ -143,7 +143,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
         </div>
         <div className="container mx-auto max-w-6xl px-4 mt-8 pt-6 border-t border-primary-foreground/10 space-y-1.5">
           <p className="text-xs text-primary-foreground/50 text-center">
-            11+ Standard is operated by <strong className="text-primary-foreground/60">Ianson Systems Limited</strong>, a UK-based company developing educational tools and diagnostic assessment platforms to support 11+ preparation.
+            Bucks 11 Plus Tests is operated by <strong className="text-primary-foreground/60">Ianson Systems Limited</strong>, a UK-based company developing educational tools and diagnostic assessment platforms to support 11+ preparation.
           </p>
           <p className="text-xs text-primary-foreground/40 text-center" data-testid="text-footer-disclaimer">
             Independent educational resource. Not affiliated with The Buckinghamshire Grammar Schools, GL Assessment, or any individual grammar school.

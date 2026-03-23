@@ -52,7 +52,7 @@ export default function ProgrammeCompletion() {
 
   return (
     <div className="container mx-auto max-w-5xl px-4 py-8 space-y-8">
-      <Seo title="Programme Completion | 11+ Standard" description="Your programme completion summary and results." />
+      <Seo title="Programme Completion | Bucks 11 Plus Tests" description="Your programme completion summary and results." />
 
       <div className="text-center border-b border-border/60 pb-8">
         <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">

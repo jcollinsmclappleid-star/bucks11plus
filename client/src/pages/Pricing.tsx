@@ -142,7 +142,7 @@ export default function Pricing() {
   const faqs = [
     {
       q: "Is this affiliated with GL Assessment?",
-      a: "No. 11+ Standard is an independent readiness assessment service. Our diagnostics are aligned to GL-style reasoning families used in the Buckinghamshire Secondary Transfer Test, but we are not affiliated with GL Assessment or Buckinghamshire Council."
+      a: "No. Bucks 11 Plus Tests is an independent readiness assessment service. Our diagnostics are aligned to GL-style reasoning families used in the Buckinghamshire Secondary Transfer Test, but we are not affiliated with GL Assessment or Buckinghamshire Council."
     },
     {
       q: "How is this different from Bond books or generic workbooks?",
@@ -166,7 +166,7 @@ export default function Pricing() {
   return (
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
       <Seo
-        title="Bucks 11 Plus Preparation Plans & Pricing (2026) | 11+ Standard"
+        title="Bucks 11 Plus Preparation Plans & Pricing (2026) | Bucks 11 Plus Tests"
         description="Free GL-style diagnostic, Bucks Practice Platform (£24.99/mo), Bucks Practice Platform Edge (£59.99/mo or £495/yr) and Bucks Young Scholar Programme (£349 one-time). Targeted Bucks 11 Plus prep."
         canonicalPath="/pricing"
       />
@@ -183,7 +183,7 @@ export default function Pricing() {
               </h1>
               <p className="text-xl md:text-2xl text-white/60 max-w-3xl mx-auto leading-relaxed mb-10">
                 {isTopTier
-                  ? "You have full access to everything 11+ Standard offers. Head to your dashboard to continue your child's preparation."
+                  ? "You have full access to everything Bucks 11 Plus Tests offers. Head to your dashboard to continue your child's preparation."
                   : "See what's included in your plan and explore options to unlock more features for your child's preparation."}
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">

@@ -180,7 +180,7 @@ export default function Account() {
 
   return (
     <div className="container mx-auto max-w-4xl px-4 py-8 space-y-8">
-      <Seo title="Account | 11+ Standard" description="Manage your account settings and subscription." />
+      <Seo title="Account | Bucks 11 Plus Tests" description="Manage your account settings and subscription." />
 
       <div className="border-b border-border/60 pb-6">
         <h1 className="text-3xl font-bold text-primary font-serif">Account Settings</h1>
@@ -209,7 +209,7 @@ export default function Account() {
               <Card className="border-border/60 shadow-sm">
                 <CardHeader>
                   <CardTitle>Current Plan</CardTitle>
-                  <CardDescription>Manage your access to 11+ Standard</CardDescription>
+                  <CardDescription>Manage your access to Bucks 11 Plus Tests</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="p-4 bg-slate-50 rounded-lg border border-slate-100">

@@ -358,7 +358,7 @@ export default function DrillRunner() {
     <div className="min-h-screen exam-paper-bg flex flex-col font-sans">
       <header className="premium-header px-4 py-3 flex items-center justify-between sticky top-0 z-10">
         <div className="flex items-center gap-4">
-          <div className="font-serif font-bold text-primary text-lg tracking-tight">11+ Standard</div>
+          <div className="font-serif font-bold text-primary text-lg tracking-tight">Bucks 11 Plus Tests</div>
           <div className="h-5 w-px bg-border/60"></div>
           <div className="text-sm font-medium text-muted-foreground">
             {isTimed ? 'Timed Drill' : 'Practice Drill'}

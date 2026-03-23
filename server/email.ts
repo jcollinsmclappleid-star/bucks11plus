@@ -4,7 +4,7 @@ import { eq, and, isNull, lt, sql } from "drizzle-orm";
 import { storage } from "./storage";
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const RESEND_FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "11+ Standard <noreply@bucks11plustest.co.uk>";
+const RESEND_FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "Bucks 11 Plus Tests <noreply@bucks11plustest.co.uk>";
 const EMAIL_SECRET = process.env.EMAIL_SECRET || "11plus-email-secret";
 
 function getBaseUrl(): string {
@@ -66,12 +66,12 @@ function wrapHtml(body: string, userId: string, unsubToken: string): string {
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
 <body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.6;color:#1a1a2e;max-width:600px;margin:0 auto;padding:20px;">
   <div style="text-align:center;margin-bottom:24px;">
-    <strong style="font-size:18px;color:#0d1f30;">11+ Standard</strong>
+    <strong style="font-size:18px;color:#0d1f30;">Bucks 11 Plus Tests</strong>
   </div>
   ${body}
   <hr style="border:none;border-top:1px solid #e5e7eb;margin:32px 0 16px;">
   <p style="font-size:11px;color:#9ca3af;text-align:center;">
-    You're receiving this because you opted in to emails from 11+ Standard.<br>
+    You're receiving this because you opted in to emails from Bucks 11 Plus Tests.<br>
     <a href="${unsubscribeUrl(userId, unsubToken)}" style="color:#6b7280;">Unsubscribe</a>
   </p>
 </body>
@@ -108,7 +108,7 @@ export async function sendGuestResultsEmail(
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
 <body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.6;color:#1a1a2e;max-width:600px;margin:0 auto;padding:20px;">
   <div style="text-align:center;margin-bottom:24px;">
-    <strong style="font-size:18px;color:#0d1f30;">11+ Standard</strong>
+    <strong style="font-size:18px;color:#0d1f30;">Bucks 11 Plus Tests</strong>
   </div>
   <h2 style="color:#0d1f30;margin-bottom:8px;">Your Free Diagnostic Results</h2>
   <p style="color:#475569;">Here's the link to your child's Buckinghamshire 11+ readiness results. Bookmark it — you can come back to it any time.</p>
@@ -124,10 +124,10 @@ export async function sendGuestResultsEmail(
   <p style="font-size:13px;color:#64748b;">Or copy this link into your browser:</p>
   <p style="font-size:12px;color:#94a3b8;background:#f1f5f9;padding:10px 14px;border-radius:6px;word-break:break-all;">${resultsUrl}</p>
   <p style="font-size:13px;color:#475569;margin-top:20px;">
-    Create a free 11+ Standard account to save these results permanently, track progress over time, and access targeted practice questions.
+    Create a free Bucks 11 Plus Tests account to save these results permanently, track progress over time, and access targeted practice questions.
   </p>
   <hr style="border:none;border-top:1px solid #e5e7eb;margin:32px 0 16px;">
-  <p style="font-size:11px;color:#9ca3af;text-align:center;">11+ Standard · Buckinghamshire 11+ Preparation · Independent readiness assessment, not affiliated with GL Assessment or Buckinghamshire Council.</p>
+  <p style="font-size:11px;color:#9ca3af;text-align:center;">Bucks 11 Plus Tests · Buckinghamshire 11+ Preparation · Independent readiness assessment, not affiliated with GL Assessment or Buckinghamshire Council.</p>
 </body>
 </html>`;
 
@@ -142,7 +142,7 @@ export async function sendPasswordResetEmail(email: string, resetToken: string):
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
 <body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.6;color:#1a1a2e;max-width:600px;margin:0 auto;padding:20px;">
   <div style="text-align:center;margin-bottom:24px;">
-    <strong style="font-size:18px;color:#0d1f30;">11+ Standard</strong>
+    <strong style="font-size:18px;color:#0d1f30;">Bucks 11 Plus Tests</strong>
   </div>
   <h2 style="color:#0d1f30;margin-bottom:8px;">Reset Your Password</h2>
   <p>We received a request to reset your password. Click the button below to choose a new one:</p>
@@ -151,11 +151,11 @@ export async function sendPasswordResetEmail(email: string, resetToken: string):
   </div>
   <p style="font-size:13px;color:#64748b;">This link expires in 1 hour. If you didn't request this, you can safely ignore this email — your password won't change.</p>
   <hr style="border:none;border-top:1px solid #e5e7eb;margin:32px 0 16px;">
-  <p style="font-size:11px;color:#9ca3af;text-align:center;">11+ Standard · Buckinghamshire 11+ Preparation</p>
+  <p style="font-size:11px;color:#9ca3af;text-align:center;">Bucks 11 Plus Tests · Buckinghamshire 11+ Preparation</p>
 </body>
 </html>`;
 
-  return sendEmail(email, "Reset your 11+ Standard password", html);
+  return sendEmail(email, "Reset your Bucks 11 Plus Tests password", html);
 }
 
 export async function sendDiagnosticCompleteEmail(userId: string, sessionData: any) {
@@ -214,7 +214,7 @@ export async function sendUpgradeNudge(userId: string) {
 
   const html = wrapHtml(`
     <h2 style="color:#0d1f30;margin-bottom:8px;">Ready for More?</h2>
-    <p>You've had a chance to explore 11+ Standard with the free diagnostic. Here's what unlocking full access gives ${childName}:</p>
+    <p>You've had a chance to explore Bucks 11 Plus Tests with the free diagnostic. Here's what unlocking full access gives ${childName}:</p>
     <ul style="padding-left:20px;">
       <li><strong>1,500+ targeted practice questions</strong> across VR, NVR, Maths & Comprehension</li>
       <li><strong>Full timed diagnostics</strong> with detailed PDF reports</li>

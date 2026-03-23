@@ -119,7 +119,7 @@ export default function Diagnostics() {
 
   return (
     <div className="container mx-auto max-w-5xl px-4 py-8 space-y-10">
-      <Seo title="Diagnostics | 11+ Standard" description="Available mock exams, diagnostic assessments, and unlimited practice papers." />
+      <Seo title="Diagnostics | Bucks 11 Plus Tests" description="Available mock exams, diagnostic assessments, and unlimited practice papers." />
       
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-border/60 pb-6">
         <div>

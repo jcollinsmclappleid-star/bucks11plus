@@ -134,7 +134,7 @@ export default function GuestResults() {
 
   return (
     <div className="container mx-auto max-w-5xl px-4 py-8 space-y-8">
-      <Seo title="Your Diagnostic Results | 11+ Standard" description="View your child's readiness forecast and section breakdown." />
+      <Seo title="Your Diagnostic Results | Bucks 11 Plus Tests" description="View your child's readiness forecast and section breakdown." />
 
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-border/60 pb-6">
         <div>

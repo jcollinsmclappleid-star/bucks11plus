@@ -8,11 +8,11 @@ export default function Legal({ type }: { type: 'terms' | 'privacy' | 'safeguard
       sections: [
         {
           heading: "1. Acceptance of Terms",
-          body: "By accessing or using the 11+ Standard platform (the \"Service\"), you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use the Service. If you are registering on behalf of a child, you confirm that you are the parent or legal guardian of that child and that you accept these terms on their behalf."
+          body: "By accessing or using the Bucks 11 Plus Tests platform (the \"Service\"), you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use the Service. If you are registering on behalf of a child, you confirm that you are the parent or legal guardian of that child and that you accept these terms on their behalf."
         },
         {
           heading: "2. Service Description",
-          body: "11+ Standard is an independent digital education platform providing diagnostic assessments, practice questions, readiness forecasts and progress tracking tools designed to support preparation for the Buckinghamshire 11+ Secondary Transfer Test. The Service is intended for informational and educational purposes only. We do not guarantee any specific score, outcome or grammar school placement. Our readiness forecasts are modelled estimates based on observed performance patterns and are not official standardised scores."
+          body: "Bucks 11 Plus Tests is an independent digital education platform providing diagnostic assessments, practice questions, readiness forecasts and progress tracking tools designed to support preparation for the Buckinghamshire 11+ Secondary Transfer Test. The Service is intended for informational and educational purposes only. We do not guarantee any specific score, outcome or grammar school placement. Our readiness forecasts are modelled estimates based on observed performance patterns and are not official standardised scores."
         },
         {
           heading: "3. User Accounts and Responsibilities",
@@ -32,11 +32,11 @@ export default function Legal({ type }: { type: 'terms' | 'privacy' | 'safeguard
         },
         {
           heading: "7. Intellectual Property",
-          body: "All content on the Service — including but not limited to questions, assessments, reports, text, graphics, logos, designs and software — is the property of 11+ Standard or its licensors and is protected by copyright and other intellectual property laws. You may not copy, reproduce, distribute, modify, create derivative works from, publicly display or otherwise exploit any content from the Service without our prior written consent. Your subscription grants you a limited, non-exclusive, non-transferable licence to access and use the Service for personal, non-commercial educational purposes only."
+          body: "All content on the Service — including but not limited to questions, assessments, reports, text, graphics, logos, designs and software — is the property of Bucks 11 Plus Tests or its licensors and is protected by copyright and other intellectual property laws. You may not copy, reproduce, distribute, modify, create derivative works from, publicly display or otherwise exploit any content from the Service without our prior written consent. Your subscription grants you a limited, non-exclusive, non-transferable licence to access and use the Service for personal, non-commercial educational purposes only."
         },
         {
           heading: "8. Disclaimers and Limitations of Liability",
-          body: "The Service is provided on an \"as is\" and \"as available\" basis. We make no warranties or representations, express or implied, regarding the accuracy, reliability or completeness of the Service or its content. We do not guarantee that the Service will be uninterrupted, error-free or secure. To the maximum extent permitted by law, 11+ Standard shall not be liable for any indirect, incidental, special, consequential or punitive damages, or any loss of profits, data or goodwill, arising from or in connection with your use of the Service. Our total liability to you for any claim arising from or related to the Service shall not exceed the amount you paid to us in the 12 months preceding the claim. Nothing in these terms excludes or limits liability for death or personal injury caused by negligence, fraud or fraudulent misrepresentation, or any other liability that cannot be excluded or limited by English law."
+          body: "The Service is provided on an \"as is\" and \"as available\" basis. We make no warranties or representations, express or implied, regarding the accuracy, reliability or completeness of the Service or its content. We do not guarantee that the Service will be uninterrupted, error-free or secure. To the maximum extent permitted by law, Bucks 11 Plus Tests shall not be liable for any indirect, incidental, special, consequential or punitive damages, or any loss of profits, data or goodwill, arising from or in connection with your use of the Service. Our total liability to you for any claim arising from or related to the Service shall not exceed the amount you paid to us in the 12 months preceding the claim. Nothing in these terms excludes or limits liability for death or personal injury caused by negligence, fraud or fraudulent misrepresentation, or any other liability that cannot be excluded or limited by English law."
         },
         {
           heading: "9. Termination",
@@ -62,7 +62,7 @@ export default function Legal({ type }: { type: 'terms' | 'privacy' | 'safeguard
       sections: [
         {
           heading: "1. Data Controller",
-          body: "11+ Standard is the data controller for personal data collected through this platform. We are committed to protecting your privacy and handling your data in accordance with the UK General Data Protection Regulation (UK GDPR) and the Data Protection Act 2018."
+          body: "Bucks 11 Plus Tests is the data controller for personal data collected through this platform. We are committed to protecting your privacy and handling your data in accordance with the UK General Data Protection Regulation (UK GDPR) and the Data Protection Act 2018."
         },
         {
           heading: "2. Data We Collect",
@@ -124,7 +124,7 @@ export default function Legal({ type }: { type: 'terms' | 'privacy' | 'safeguard
       sections: [
         {
           heading: "",
-          body: "11+ Standard is committed to the safety and wellbeing of all children using our platform. Our platform is designed for parent-led administration, and we do not facilitate direct communication between children and other users on the platform."
+          body: "Bucks 11 Plus Tests is committed to the safety and wellbeing of all children using our platform. Our platform is designed for parent-led administration, and we do not facilitate direct communication between children and other users on the platform."
         }
       ]
     },
@@ -134,7 +134,7 @@ export default function Legal({ type }: { type: 'terms' | 'privacy' | 'safeguard
       sections: [
         {
           heading: "Overview",
-          body: "11+ Standard is a digital educational platform. All purchases provide immediate access to digital content including diagnostic assessments, practice questions, analytics dashboards and progress tracking tools. Because our products are delivered digitally, our refund policy reflects the nature of digital goods under UK consumer law. Different cancellation rights apply depending on whether you have purchased a monthly subscription or a one-time programme plan — please read the relevant section below."
+          body: "Bucks 11 Plus Tests is a digital educational platform. All purchases provide immediate access to digital content including diagnostic assessments, practice questions, analytics dashboards and progress tracking tools. Because our products are delivered digitally, our refund policy reflects the nature of digital goods under UK consumer law. Different cancellation rights apply depending on whether you have purchased a monthly subscription or a one-time programme plan — please read the relevant section below."
         },
         {
           heading: "Monthly Subscriptions (Bucks Practice Platform — £24.99/mo or Bucks Practice Platform Edge — £59.99/mo)",
@@ -173,7 +173,7 @@ export default function Legal({ type }: { type: 'terms' | 'privacy' | 'safeguard
   return (
     <div className="container mx-auto max-w-4xl px-4 py-16 min-h-[60vh]">
       <Seo 
-        title={`${current.title} | 11+ Standard`} 
+        title={`${current.title} | Bucks 11 Plus Tests`} 
         description={`Read our ${current.title.toLowerCase()} to understand our policies and commitments.`} 
       />
       <h1 className="text-4xl md:text-5xl font-bold text-primary font-serif tracking-tight" data-testid="text-legal-title">{current.title}</h1>

@@ -133,7 +133,7 @@ const howItWorksFaqSchema = {
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "How does the 11+ Standard diagnostic work?",
+      "name": "How does the Bucks 11 Plus Tests diagnostic work?",
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "The diagnostic is a timed GL-style assessment covering Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension. It benchmarks your child's accuracy, pacing and readiness against the 121 qualifying standard for Buckinghamshire grammar schools."
@@ -186,7 +186,7 @@ export default function HowItWorks() {
   return (
     <div className="min-h-[calc(100vh-4rem)]">
       <Seo
-        title="How Bucks 11 Plus Preparation Works (2026) – Diagnostic-Led Approach | 11+ Standard"
+        title="How Bucks 11 Plus Preparation Works (2026) – Diagnostic-Led Approach | Bucks 11 Plus Tests"
         description="Assessment-first preparation for the Bucks 11 Plus. Free GL-style diagnostic, 121 readiness forecast, and targeted practice to close the gap before the Secondary Transfer Test."
         canonicalPath="/how-it-works"
         schema={howItWorksFaqSchema}
@@ -200,7 +200,7 @@ export default function HowItWorks() {
             <span className="text-slate-600">How It Works</span>
           </div>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary font-serif tracking-tight mb-5">
-            How 11+ Standard Works
+            How Bucks 11 Plus Tests Works
           </h1>
           <p className="text-lg text-slate-600 leading-relaxed mb-2">
             A structured, assessment-led system for Buckinghamshire 11+ preparation.
@@ -284,7 +284,7 @@ export default function HowItWorks() {
             Many families complete large volumes of questions without knowing whether readiness is improving.
           </p>
           <p className="text-slate-700 font-medium leading-relaxed">
-            11+ Standard is designed to answer one question clearly:
+            Bucks 11 Plus Tests is designed to answer one question clearly:
           </p>
           <p className="text-primary font-serif text-xl sm:text-2xl font-bold mt-4 mb-2">
             Are we on track for 121 under timed conditions?

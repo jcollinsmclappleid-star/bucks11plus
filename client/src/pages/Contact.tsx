@@ -8,8 +8,8 @@ export default function Contact() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-16 min-h-[60vh]">
       <Seo
-        title="Contact | Bucks 11 Plus Preparation Help | 11+ Standard"
-        description="Get in touch with the 11+ Standard team for help with your Bucks 11 Plus preparation. We're here to answer your questions about the Secondary Transfer Test."
+        title="Contact | Bucks 11 Plus Preparation Help | Bucks 11 Plus Tests"
+        description="Get in touch with the Bucks 11 Plus Tests team for help with your Bucks 11 Plus preparation. We're here to answer your questions about the Secondary Transfer Test."
         canonicalPath="/contact"
       />
 
@@ -30,7 +30,7 @@ export default function Contact() {
           <div>
             <h2 className="text-xl font-bold text-primary font-serif mb-2">Email Support</h2>
             <p className="text-muted-foreground text-sm mb-4">
-              For account queries, technical support, refund requests or general questions about 11+ Standard.
+              For account queries, technical support, refund requests or general questions about Bucks 11 Plus Tests.
             </p>
             <a
               href="mailto:support@bucks11plustest.co.uk"

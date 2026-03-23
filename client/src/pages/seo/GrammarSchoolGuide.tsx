@@ -61,7 +61,7 @@ export default function GrammarSchoolGuide({ schoolSlug }: { schoolSlug: string 
   return (
     <div className="min-h-screen bg-background">
       <Seo
-        title={`${school.name} – 11+ Admissions Guide 2026 | 11+ Standard`}
+        title={`${school.name} – 11+ Admissions Guide 2026 | Bucks 11 Plus Tests`}
         description={`Admissions guide for ${school.name} (${GENDER_LABELS[school.gender]}, ${school.town}). Qualifying score, distance cut-off, catchment area, and how to prepare for Bucks 11+ entry.`}
         canonicalPath={`/grammar-schools/${school.slug}`}
         schema={schema}

@@ -255,7 +255,7 @@ export default function Results() {
 
   return (
     <div className="container mx-auto max-w-5xl px-4 py-8 space-y-8">
-      <Seo title="Assessment Results | 11+ Standard" description="View your recent diagnostic results and updated readiness forecast." />
+      <Seo title="Assessment Results | Bucks 11 Plus Tests" description="View your recent diagnostic results and updated readiness forecast." />
 
       {matchingMilestone && (
         <div className="bg-green-50 border border-green-200 rounded-xl p-4 flex items-center gap-3" data-testid="banner-milestone">

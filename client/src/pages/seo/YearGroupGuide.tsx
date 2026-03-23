@@ -21,7 +21,7 @@ const yearContent: Record<number, YearGroupContent> = {
   4: {
     year: 4,
     title: "Preparing for the Bucks 11+ in Year 4",
-    metaTitle: "Preparing for the Bucks 11+ in Year 4 – How to Start | 11+ Standard",
+    metaTitle: "Preparing for the Bucks 11+ in Year 4 – How to Start | Bucks 11 Plus Tests",
     metaDescription: "When and how to start 11+ preparation in Year 4. What Buckinghamshire parents can do now to give their Year 4 child the best foundation for the Secondary Transfer Test.",
     intro: "Year 4 is the earliest point at which most Buckinghamshire families begin thinking seriously about the 11+. The Secondary Transfer Test is still two years away — but the decisions and foundations built in Year 4 often shape how well a child is placed when they finally sit in September of Year 6.",
     sections: [
@@ -73,7 +73,7 @@ const yearContent: Record<number, YearGroupContent> = {
   5: {
     year: 5,
     title: "Preparing for the Bucks 11+ in Year 5",
-    metaTitle: "Preparing for the Bucks 11+ in Year 5 – The Essential Guide | 11+ Standard",
+    metaTitle: "Preparing for the Bucks 11+ in Year 5 – The Essential Guide | Bucks 11 Plus Tests",
     metaDescription: "Year 5 is the most important preparation year for the Buckinghamshire 11+. Everything parents need to know: when to start, how to structure practice, and what to prioritise.",
     intro: "Year 5 is the central year of Buckinghamshire 11+ preparation. The Secondary Transfer Test is sat in September of Year 6, making Year 5 the primary window for structured, purposeful preparation. The decisions made — and the habits built — during Year 5 have more impact on the final result than anything else.",
     sections: [
@@ -134,7 +134,7 @@ const yearContent: Record<number, YearGroupContent> = {
   6: {
     year: 6,
     title: "Preparing for the Bucks 11+ in Year 6",
-    metaTitle: "Preparing for the Bucks 11+ in Year 6 – Final Preparation Guide | 11+ Standard",
+    metaTitle: "Preparing for the Bucks 11+ in Year 6 – Final Preparation Guide | Bucks 11 Plus Tests",
     metaDescription: "The Bucks 11+ is sat in September of Year 6. Everything families need to do in the final weeks before the Secondary Transfer Test, from timed mock practice to test day logistics.",
     intro: "By Year 6, the Buckinghamshire Secondary Transfer Test is imminent. The test is sat in September — within the first few weeks of the school year. Year 6 preparation is therefore almost entirely about the summer holidays: maintaining sharpness, completing timed mock papers, and building confidence for test day.",
     sections: [

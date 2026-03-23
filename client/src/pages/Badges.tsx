@@ -92,7 +92,7 @@ export default function Badges() {
 
   return (
     <div className="container mx-auto max-w-6xl px-4 py-8 space-y-8">
-      <Seo title="Accomplishments | 11+ Standard" description="Track your achievements and earn badges as you prepare for the 11+ exam." />
+      <Seo title="Accomplishments | Bucks 11 Plus Tests" description="Track your achievements and earn badges as you prepare for the 11+ exam." />
 
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>

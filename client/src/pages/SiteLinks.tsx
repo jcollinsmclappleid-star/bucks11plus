@@ -17,7 +17,7 @@ const sections: LinkSection[] = [
   {
     heading: "Main Pages",
     links: [
-      { title: "Home", description: "11+ Standard — Buckinghamshire 11+ exam preparation aligned to the GL-style Secondary Transfer Test.", href: "/" },
+      { title: "Home", description: "Bucks 11 Plus Tests — Buckinghamshire 11+ exam preparation aligned to the GL-style Secondary Transfer Test.", href: "/" },
       { title: "Pricing & Plans", description: "Compare all subscription tiers from the free diagnostic through to the full Young Scholar Programme.", href: "/pricing" },
       { title: "How It Works", description: "Understand how the platform forecasts your child's readiness using GL-aligned diagnostics and scoring.", href: "/how-it-works" },
       { title: "Free Baseline Diagnostic", description: "Take a free 8-minute assessment to see where your child stands — no account needed.", href: "/free-diagnostic" },
@@ -108,8 +108,8 @@ const sections: LinkSection[] = [
     heading: "Company & Trust",
     links: [
       { title: "About Us", description: "Who we are and why we built an independent 11+ preparation platform for Buckinghamshire families.", href: "/about" },
-      { title: "Contact Us", description: "Get in touch with the 11+ Standard team for questions or support.", href: "/contact" },
-      { title: "Terms of Service", description: "Terms and conditions governing use of the 11+ Standard platform.", href: "/terms" },
+      { title: "Contact Us", description: "Get in touch with the Bucks 11 Plus Tests team for questions or support.", href: "/contact" },
+      { title: "Terms of Service", description: "Terms and conditions governing use of the Bucks 11 Plus Tests platform.", href: "/terms" },
       { title: "Privacy Policy", description: "How we collect, use and protect your personal data.", href: "/privacy" },
       { title: "Safeguarding Policy", description: "Our commitment to child safety and safeguarding responsibilities.", href: "/safeguarding" },
       { title: "Refund Policy", description: "Our refund terms for all subscription tiers.", href: "/refund-policy" },
@@ -121,8 +121,8 @@ export default function SiteLinks() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-16">
       <Seo
-        title="All Pages & Resources | Bucks 11 Plus Preparation | 11+ Standard"
-        description="Browse all pages, tools, guides and resources on 11+ Standard — Bucks 11 Plus preparation platform for the Secondary Transfer Test."
+        title="All Pages & Resources | Bucks 11 Plus Preparation | Bucks 11 Plus Tests"
+        description="Browse all pages, tools, guides and resources on Bucks 11 Plus Tests — Bucks 11 Plus preparation platform for the Secondary Transfer Test."
         canonicalPath="/site-links"
       />
 
@@ -130,7 +130,7 @@ export default function SiteLinks() {
         Site Links
       </h1>
       <p className="text-muted-foreground max-w-2xl mb-12">
-        Use this page to find the most important sections of 11+ Standard. Whether you are looking for preparation tools, 
+        Use this page to find the most important sections of Bucks 11 Plus Tests. Whether you are looking for preparation tools, 
         guides about the Buckinghamshire 11+, or information about our platform, everything is listed below.
       </p>
 

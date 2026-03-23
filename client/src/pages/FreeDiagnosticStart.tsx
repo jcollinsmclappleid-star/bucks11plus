@@ -85,7 +85,7 @@ export default function FreeDiagnosticStart() {
   return (
     <div className="container mx-auto max-w-3xl px-4 py-16">
       <Seo
-        title="Free Baseline Diagnostic | 11+ Standard"
+        title="Free Baseline Diagnostic | Bucks 11 Plus Tests"
         description="Take a free 8-minute diagnostic to see where your child stands against the Bucks 121 benchmark. No account needed."
       />
 

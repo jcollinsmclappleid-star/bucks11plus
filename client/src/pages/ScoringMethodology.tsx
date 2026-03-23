@@ -42,7 +42,7 @@ export default function ScoringMethodology() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-12 space-y-10">
       <Seo
-        title="Bucks 11 Plus Scoring Explained – What the 121 Standardised Score Means | 11+ Standard"
+        title="Bucks 11 Plus Scoring Explained – What the 121 Standardised Score Means | Bucks 11 Plus Tests"
         description="How the Bucks 11 Plus 121 standardised score works and what our readiness forecast means for your child's grammar school application."
         canonicalPath="/scoring-methodology"
       />

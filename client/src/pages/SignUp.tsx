@@ -58,7 +58,7 @@ export default function SignUp() {
 
   return (
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center p-4 bg-slate-50/50">
-      <Seo title="Sign Up | 11+ Standard" description="Create an account to start your child's 11+ readiness journey." />
+      <Seo title="Sign Up | Bucks 11 Plus Tests" description="Create an account to start your child's 11+ readiness journey." />
       <Card className="w-full max-w-md shadow-lg border-border/60">
         <CardHeader className="text-center space-y-2">
           <CardTitle className="text-3xl font-serif text-primary">Create Account</CardTitle>

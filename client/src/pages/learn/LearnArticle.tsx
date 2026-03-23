@@ -26,7 +26,7 @@ export default function LearnArticle() {
     url: `https://bucks11plustest.co.uk/learn/${article.slug}`,
     publisher: {
       "@type": "Organization",
-      name: "11+ Standard",
+      name: "Bucks 11 Plus Tests",
       url: "https://bucks11plustest.co.uk",
     },
     mainEntityOfPage: {
@@ -46,7 +46,7 @@ export default function LearnArticle() {
   return (
     <div className="min-h-screen bg-background">
       <Seo
-        title={`${article.title} | 11+ Standard`}
+        title={`${article.title} | Bucks 11 Plus Tests`}
         description={article.description}
         canonicalPath={`/learn/${article.slug}`}
         schema={articleSchema}

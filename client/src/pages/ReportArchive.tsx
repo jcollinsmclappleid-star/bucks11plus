@@ -19,7 +19,7 @@ export default function ReportArchive() {
 
   return (
     <div className="container mx-auto max-w-5xl px-4 py-8 space-y-8">
-      <Seo title="Report Archive | 11+ Standard" description="Download historical PDF reports of your child's 11+ diagnostics." />
+      <Seo title="Report Archive | Bucks 11 Plus Tests" description="Download historical PDF reports of your child's 11+ diagnostics." />
       
       <div className="border-b border-border/60 pb-6">
         <h1 className="text-3xl font-bold text-primary font-serif">Report Archive</h1>

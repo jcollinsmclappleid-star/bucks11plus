@@ -453,7 +453,7 @@ function StabilityAndBands() {
 
 export function DashboardPreviewForecast() {
   return (
-    <ScreenshotFrame title="11+ Standard — Readiness Dashboard">
+    <ScreenshotFrame title="Bucks 11 Plus Tests — Readiness Dashboard">
       <div className="space-y-4" data-testid="dashboard-preview-forecast">
         <ReadinessGauge />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -467,7 +467,7 @@ export function DashboardPreviewForecast() {
 
 export function DashboardPreviewPace() {
   return (
-    <ScreenshotFrame title="11+ Standard — Skill Gap Analysis">
+    <ScreenshotFrame title="Bucks 11 Plus Tests — Skill Gap Analysis">
       <div className="space-y-4" data-testid="dashboard-preview-pace">
         <ImpactSimulator />
         <PaceAnalysis />
@@ -480,7 +480,7 @@ export function DashboardPreviewPace() {
 
 export function DashboardPreviewTrajectory() {
   return (
-    <ScreenshotFrame title="11+ Standard — Progress Tracking">
+    <ScreenshotFrame title="Bucks 11 Plus Tests — Progress Tracking">
       <div className="space-y-4" data-testid="dashboard-preview-trajectory">
         <TrajectoryChart />
         <StabilityAndBands />

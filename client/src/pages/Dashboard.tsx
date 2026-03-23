@@ -77,7 +77,7 @@ export default function Dashboard() {
   return (
     <div className="container mx-auto max-w-6xl px-4 py-8 space-y-8">
       <Seo
-        title="Dashboard | 11+ Standard"
+        title="Dashboard | Bucks 11 Plus Tests"
         description="View your child's 11+ readiness forecast, pace analysis, and priority focus areas."
       />
 
@@ -116,7 +116,7 @@ export default function Dashboard() {
               <Target className="h-10 w-10 text-primary" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-primary font-serif mb-2">Welcome to 11+ Standard</h2>
+              <h2 className="text-2xl font-bold text-primary font-serif mb-2">Welcome to Bucks 11 Plus Tests</h2>
               <p className="text-muted-foreground max-w-md">
                 Take a free 8-minute Mini Diagnostic to get your child's initial readiness forecast against the 121 benchmark.
               </p>

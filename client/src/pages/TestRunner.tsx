@@ -354,7 +354,7 @@ export default function TestRunner() {
     <div className="min-h-screen exam-paper-bg flex flex-col font-sans">
       <header className="premium-header px-4 py-3 flex items-center justify-between sticky top-0 z-10">
         <div className="flex items-center gap-2 md:gap-4 min-w-0">
-          <div className="font-serif font-bold text-primary text-lg tracking-tight shrink-0 hidden md:block">11+ Standard</div>
+          <div className="font-serif font-bold text-primary text-lg tracking-tight shrink-0 hidden md:block">Bucks 11 Plus Tests</div>
           <div className="font-serif font-bold text-primary text-lg tracking-tight shrink-0 md:hidden">11+</div>
           <div className="h-5 w-px bg-border/60 shrink-0 hidden md:block"></div>
           <div className="text-sm font-medium text-muted-foreground truncate hidden md:block">{diagnosticTitle}</div>

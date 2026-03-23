@@ -13,7 +13,7 @@ export default function ParentHub() {
   return (
     <div className="container mx-auto max-w-5xl px-4 py-16">
       <Seo
-        title="Parent Hub – Expert 11+ Guides for Bucks Families | 11+ Standard"
+        title="Parent Hub – Expert 11+ Guides for Bucks Families | Bucks 11 Plus Tests"
         description="Authoritative guides, methodological transparency, and practical advice for parents navigating the Buckinghamshire 11+ Secondary Transfer Test. Free expert articles."
         canonicalPath="/parent-hub"
         schema={{
@@ -24,7 +24,7 @@ export default function ParentHub() {
           url: "https://bucks11plustest.co.uk/parent-hub",
           publisher: {
             "@type": "Organization",
-            name: "11+ Standard",
+            name: "Bucks 11 Plus Tests",
             url: "https://bucks11plustest.co.uk",
           },
         }}

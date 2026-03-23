@@ -221,7 +221,7 @@ export default function Programme() {
 
   return (
     <div className="container mx-auto max-w-6xl px-4 py-8 space-y-8">
-      <Seo title="Programme Dashboard | 11+ Standard" description="Your 16-week structured readiness programme." />
+      <Seo title="Programme Dashboard | Bucks 11 Plus Tests" description="Your 16-week structured readiness programme." />
 
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-border/60 pb-6">
         <div>
