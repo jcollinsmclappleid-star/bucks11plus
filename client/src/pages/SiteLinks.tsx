@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { Seo } from "../components/shared/Seo";
 import { ArrowRight } from "lucide-react";
+import { learnArticles, LEARN_CATEGORIES, getArticlesByCategory } from "@/data/learn-articles";
 
 interface SiteLink {
   title: string;
@@ -158,6 +159,35 @@ export default function SiteLinks() {
           </div>
         </section>
       ))}
+
+      {LEARN_CATEGORIES.map((category) => {
+        const articles = getArticlesByCategory(category);
+        if (articles.length === 0) return null;
+        return (
+          <section key={category} className="mb-12">
+            <h2 className="text-xl font-bold text-primary font-serif border-b border-border/50 pb-3 mb-6">
+              Learning Hub: {category}
+            </h2>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {articles.map((article) => (
+                <Link
+                  key={article.slug}
+                  href={`/learn/${article.slug}`}
+                  className="group block p-4 rounded-xl border border-border/40 bg-white hover:border-primary/30 hover:shadow-md transition-all"
+                  data-testid={`link-site-learn-${article.slug}`}
+                >
+                  <h3 className="font-semibold text-primary group-hover:text-primary/80 transition-colors mb-1">
+                    {article.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">
+                    {article.description}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          </section>
+        );
+      })}
 
       <div className="mt-16 p-8 rounded-2xl bg-primary text-center">
         <h2 className="text-2xl font-bold text-primary-foreground font-serif mb-3">
