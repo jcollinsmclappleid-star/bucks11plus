@@ -497,7 +497,7 @@ export default function Landing() {
                 Platform Edge — £59.99/mo
               </Link>
               <span className="hidden sm:inline text-white/15">|</span>
-              <Link href="/pricing#tiers" className="text-brand-amber/70 hover:text-brand-amber text-sm font-semibold transition-colors">
+              <Link href="/pricing#tiers" className="text-white/40 hover:text-white/70 text-sm font-medium transition-colors">
                 Young Scholar — £349 one-time
               </Link>
             </div>

@@ -69,6 +69,7 @@ import SubjectGuide from "./pages/seo/SubjectGuide";
 import { towns } from "./data/towns";
 import { grammarSchools } from "./data/grammar-schools";
 import { useAuth } from "./lib/auth";
+import ChatWidget from "./components/shared/ChatWidget";
 
 function ScrollToTop() {
   const [pathname] = useLocation();
@@ -87,7 +88,8 @@ function MainLayout({ children }: { children: React.ReactNode }) {
         {children}
       </main>
       <AdminTierSwitcher />
-      
+      <ChatWidget />
+
       <footer className="bg-primary text-primary-foreground/70 py-12 mt-auto">
         <div className="container mx-auto max-w-6xl px-4 grid md:grid-cols-5 gap-8">
           <div>

@@ -1900,6 +1900,43 @@ export async function registerRoutes(
     } catch (error) { next(error); }
   });
 
+  app.post("/api/contact/chat", async (req, res, next) => {
+    try {
+      const { name, email, message } = req.body;
+      if (!email || !message) return res.status(400).json({ message: "Email and message are required" });
+
+      const RESEND_API_KEY = process.env.RESEND_API_KEY;
+      const FROM = process.env.RESEND_FROM_EMAIL || "Bucks 11 Plus Tests <noreply@bucks11plustest.co.uk>";
+
+      const html = `
+        <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
+          <h2 style="color:#1e3a5f">New support message — Bucks 11 Plus Tests</h2>
+          <p><strong>From:</strong> ${name || "(not given)"}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <hr style="border:1px solid #e2e8f0;margin:16px 0"/>
+          <p style="white-space:pre-wrap">${message.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</p>
+        </div>`;
+
+      if (RESEND_API_KEY) {
+        await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
+          body: JSON.stringify({
+            from: FROM,
+            to: ["support@bucks11plus.co.uk"],
+            reply_to: email,
+            subject: `Support enquiry from ${name || email}`,
+            html,
+          }),
+        });
+      } else {
+        console.log(`[Chat] No RESEND_API_KEY — suppressed email from ${email}: ${message}`);
+      }
+
+      res.json({ success: true });
+    } catch (error) { next(error); }
+  });
+
   app.get("/sitemap.xml", async (_req, res) => {
     const baseUrl = "https://bucks11plustest.co.uk";
     const today = new Date().toISOString().split("T")[0];

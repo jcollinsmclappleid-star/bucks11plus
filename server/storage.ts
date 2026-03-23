@@ -338,8 +338,8 @@ export class DatabaseStorage implements IStorage {
       }
     }
 
-    // Final assembly: exactly questionCount questions, comp first then non-comp
-    allQuestions = [...orderedComp, ...guestInterleaved.slice(0, Math.max(0, nonCompSlots))];
+    // Final assembly: exactly questionCount questions, non-comp first then comp last
+    allQuestions = [...guestInterleaved.slice(0, Math.max(0, nonCompSlots)), ...orderedComp];
 
     // Top-up pass: if pool shortage left us short of questionCount, backfill with any remaining
     // approved free-pool questions not already selected (avoids returning fewer than expected).

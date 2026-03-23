@@ -1,8 +1,7 @@
 import { Link, useParams, useSearch } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, BarChart2, SlidersHorizontal, Sparkles, Clock, Loader2, Lock, TrendingUp, BarChart3, Zap, CheckCircle2, XCircle, ChevronDown, ChevronUp, Mail, Send } from "lucide-react";
-import { Slider } from "@/components/ui/slider";
+import { ArrowRight, BarChart2, Sparkles, Clock, Loader2, Lock, TrendingUp, BarChart3, Zap, CheckCircle2, XCircle, ChevronDown, ChevronUp, Mail, Send } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useState } from "react";
@@ -38,7 +37,6 @@ export default function GuestResults() {
   const urlToken = new URLSearchParams(search).get("token");
   const guestToken = urlToken || sessionStorage.getItem("guestToken") || "";
   const target = 121;
-  const [simAdjustments, setSimAdjustments] = useState<Record<string, number>>({});
   const [showReview, setShowReview] = useState(false);
   const [emailValue, setEmailValue] = useState("");
   const [emailSent, setEmailSent] = useState(false);
@@ -97,21 +95,6 @@ export default function GuestResults() {
   const paceData = session?.paceData || [];
   const weakestSection = sectionScores.length > 0 ? [...sectionScores].sort((a, b) => a.score - b.score)[0] : null;
 
-  const simScore = (() => {
-    if (sectionScores.length === 0) return currentScore;
-    const totalQuestions = sectionScores.reduce((s, sec) => s + sec.total, 0);
-    let totalCorrect = 0;
-    for (const sec of sectionScores) {
-      const adj = simAdjustments[sec.name] || 0;
-      const newScore = Math.min(100, sec.score + adj);
-      totalCorrect += (newScore / 100) * sec.total;
-    }
-    const newPercent = (totalCorrect / totalQuestions) * 100;
-    return Math.round((newPercent / 100) * 141);
-  })();
-  const simGap = target - simScore;
-  const hasSimChanges = Object.values(simAdjustments).some(v => v !== 0);
-
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
@@ -154,81 +137,38 @@ export default function GuestResults() {
                 <circle cx="50" cy="50" r="40" className="stroke-slate-100" strokeWidth="12" fill="none" />
                 <circle
                   cx="50" cy="50" r="40"
-                  className={`${(hasSimChanges ? simScore : currentScore) >= 121 ? 'stroke-green-500' : (hasSimChanges ? simScore : currentScore) >= 110 ? 'stroke-amber-400' : 'stroke-red-400'}`}
+                  className={`${currentScore >= 121 ? 'stroke-green-500' : currentScore >= 110 ? 'stroke-amber-400' : 'stroke-red-400'}`}
                   strokeWidth="12"
                   fill="none"
                   strokeDasharray="251.2"
-                  strokeDashoffset={251.2 - (251.2 * ((hasSimChanges ? simScore : currentScore) / 141))}
+                  strokeDashoffset={251.2 - (251.2 * (currentScore / 141))}
                   style={{ transition: 'stroke-dashoffset 0.5s ease-out' }}
                 />
                 <line x1="50" y1="2" x2="50" y2="15" className="stroke-primary" strokeWidth="2" transform={`rotate(${(121/141)*360} 50 50)`} />
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-6xl font-bold text-primary" data-testid="text-guest-score">{hasSimChanges ? simScore : currentScore}</span>
-                <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1">{hasSimChanges ? "Simulated" : "Forecast"}</span>
+                <span className="text-6xl font-bold text-primary" data-testid="text-guest-score">{currentScore}</span>
+                <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1">Forecast</span>
               </div>
             </div>
 
             <div>
               <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-bold border mb-3 shadow-sm ${
-                (hasSimChanges ? simScore : currentScore) >= 121 ? 'bg-green-100 text-green-800 border-green-200' :
-                (hasSimChanges ? simScore : currentScore) >= 110 ? 'bg-amber-100 text-amber-800 border-amber-200' :
+                currentScore >= 121 ? 'bg-green-100 text-green-800 border-green-200' :
+                currentScore >= 110 ? 'bg-amber-100 text-amber-800 border-amber-200' :
                 'bg-red-100 text-red-800 border-red-200'
               }`} data-testid="text-guest-band">
-                <Sparkles className="h-4 w-4" /> {hasSimChanges ? (simScore >= 121 ? "On Track" : simScore >= 116 ? "Within Reach" : "Clear Improvement Opportunity") : (session.band || "Unknown")}
+                <Sparkles className="h-4 w-4" /> {session.band || "Unknown"}
               </div>
               <p className="text-muted-foreground text-lg">
-                {(hasSimChanges ? simGap : target - currentScore) > 0 ? (
-                  <>Your child is currently showing a <strong className="text-primary">{hasSimChanges ? simGap : target - currentScore} point gap</strong> to the 121 standard.</>
+                {(target - currentScore) > 0 ? (
+                  <>Your child is currently showing a <strong className="text-primary">{target - currentScore} point gap</strong> to the 121 standard.</>
                 ) : (
                   <>Your child is <strong className="text-green-700">meeting or exceeding</strong> the 121 standard!</>
                 )}
               </p>
             </div>
 
-            <div className="w-full bg-white p-6 rounded-2xl border border-border shadow-sm text-left mt-4">
-              <div className="flex items-center gap-2 mb-4">
-                <SlidersHorizontal className="h-5 w-5 text-primary" />
-                <h4 className="font-bold text-primary text-lg font-serif">Impact Simulator</h4>
-              </div>
-              <p className="text-sm text-muted-foreground mb-4">Drag the sliders to see how improving each section shifts the forecast.</p>
-              <div className="space-y-4">
-                {sectionScores.map((section) => {
-                  const adj = simAdjustments[section.name] || 0;
-                  const newVal = Math.min(100, section.score + adj);
-                  return (
-                    <div key={section.name} className="space-y-1.5">
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm font-medium text-slate-700">{section.name}</span>
-                        <span className="text-sm font-bold text-primary">{newVal}%</span>
-                      </div>
-                      <Slider
-                        value={[adj]}
-                        onValueChange={([v]) => setSimAdjustments(prev => ({ ...prev, [section.name]: v }))}
-                        min={0}
-                        max={Math.min(50, 100 - section.score)}
-                        step={5}
-                        className="w-full"
-                        data-testid={`slider-sim-${section.name}`}
-                      />
-                      <div className="flex justify-between text-[10px] text-muted-foreground">
-                        <span>Current: {section.score}%</span>
-                        {adj > 0 && <span className="text-green-600 font-semibold">+{adj}%</span>}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-              {hasSimChanges && (
-                <button
-                  onClick={() => setSimAdjustments({})}
-                  className="text-xs text-muted-foreground hover:text-primary mt-3 underline"
-                  data-testid="button-reset-sim"
-                >
-                  Reset simulator
-                </button>
-              )}
-            </div>
           </CardContent>
         </Card>
 
@@ -435,10 +375,10 @@ export default function GuestResults() {
                 <h3 className="text-xl font-bold text-primary font-serif">Bucks Practice Platform</h3>
                 <span className="text-2xl font-bold text-primary">£24.99<span className="text-sm font-medium text-slate-500">/mo</span></span>
               </div>
-              <p className="text-xs text-slate-400 mb-3">Cancel any time · Full Edge from £59.99/mo</p>
+              <p className="text-xs text-slate-400 mb-3">Cancel any time</p>
               <p className="text-sm text-slate-600 mb-4">Targeted practice that moves the needle — cancel any time</p>
               <ul className="space-y-2 mb-6">
-                {["1,500+ questions across VR, NVR, Maths & Comprehension", "Easy & Medium drills + 6 Hard drills", "Full timed diagnostics (40 questions)", "PDF reports & impact simulator", "Progress tracking dashboard"].map((f, i) => (
+                {["1,500+ questions across VR, NVR, Maths & Comprehension", "Easy & Medium drills + 6 Hard drills", "Full timed diagnostics (40 questions)", "PDF reports", "Progress tracking dashboard"].map((f, i) => (
                   <li key={i} className="flex items-center gap-2 text-sm text-slate-700">
                     <BarChart3 className="h-4 w-4 text-primary shrink-0" />
                     {f}
@@ -451,27 +391,27 @@ export default function GuestResults() {
             </CardContent>
           </Card>
 
-          <Card className="border-brand-amber border-2 shadow-xl relative" data-testid="card-upsell-programme24">
+          <Card className="border-brand-amber border-2 shadow-xl relative" data-testid="card-upsell-pack-plus">
             <div className="absolute top-0 right-0 bg-brand-amber text-amber-950 px-3 py-1 rounded-bl-lg font-bold text-xs">
               RECOMMENDED
             </div>
             <CardContent className="p-6">
               <div className="flex justify-between items-start mb-1">
-                <h3 className="text-xl font-bold text-primary font-serif">Bucks Young Scholar Programme</h3>
-                <span className="text-2xl font-bold text-primary">£349</span>
+                <h3 className="text-xl font-bold text-primary font-serif">Platform Edge</h3>
+                <span className="text-2xl font-bold text-primary">£59.99<span className="text-sm font-medium text-slate-500">/mo</span></span>
               </div>
-              <p className="text-xs text-slate-400 mb-3">6 months · one-time payment</p>
-              <p className="text-sm text-slate-600 mb-4">Full platform access for 6 months — one payment, no subscription</p>
+              <p className="text-xs text-slate-400 mb-3">Or £495/year · cancel any time</p>
+              <p className="text-sm text-slate-600 mb-4">Full analytics and every Hard drill — the complete preparation edge</p>
               <ul className="space-y-2 mb-6">
-                {["All 17 Hard challenge drills", "Mock exam simulations", "Premium Parent Analytics dashboard", "Guided preparation roadmap", "Milestone diagnostics & auto-tracking", "Weekly personalised task plans", "6 months full access · one payment"].map((f, i) => (
+                {["Everything in Practice Platform", "All 17 Hard challenge drills", "Full Parent Analytics dashboard", "Mock exam simulations", "Detailed pace & accuracy breakdown", "Priority gap identification"].map((f, i) => (
                   <li key={i} className="flex items-center gap-2 text-sm text-slate-700">
                     <TrendingUp className="h-4 w-4 text-brand-amber shrink-0" />
                     {f}
                   </li>
                 ))}
               </ul>
-              <Button className="w-full bg-primary" asChild data-testid="button-upsell-programme24">
-                <Link href={`/sign-up?redirect=checkout&tier=programme24_plus&guestSession=${id}`}>Get Programme+ — £349</Link>
+              <Button className="w-full bg-primary" asChild data-testid="button-upsell-pack-plus">
+                <Link href={`/sign-up?redirect=checkout&tier=pack_plus&guestSession=${id}`}>Get Platform Edge — £59.99/mo</Link>
               </Button>
             </CardContent>
           </Card>
@@ -491,9 +431,9 @@ export default function GuestResults() {
         <div className="absolute inset-0 bg-white/60 backdrop-blur-[2px] z-10 flex flex-col items-center justify-center p-6 text-center">
           <Lock className="h-10 w-10 text-slate-300 mb-3" />
           <h3 className="text-xl font-bold text-primary mb-2">Premium Analytics Dashboard</h3>
-          <p className="text-xs font-semibold text-brand-amber uppercase tracking-wide mb-2">Included with Young Scholar Programme</p>
+          <p className="text-xs font-semibold text-brand-amber uppercase tracking-wide mb-2">Included with Platform Edge</p>
           <p className="text-sm text-muted-foreground mb-4 max-w-md">
-            See detailed readiness metrics, pace discipline analysis, fatigue indicators, and personalised improvement priorities.
+            See detailed readiness metrics, pace analysis, section breakdowns, and personalised improvement priorities.
           </p>
           <Button asChild data-testid="button-preview-analytics">
             <Link href="/pricing#demos">Preview What You'll Get</Link>
