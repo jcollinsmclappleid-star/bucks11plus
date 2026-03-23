@@ -1,7 +1,7 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, CheckCircle2, Target, Clock, BarChart3, Zap, Search, Wrench, TrendingUp, ChevronLeft, ChevronRight, Loader2, Smartphone } from "lucide-react";
+import { ArrowRight, CheckCircle2, Target, Clock, BarChart3, Zap, Search, Wrench, TrendingUp, ChevronLeft, ChevronRight, Loader2, Smartphone, Brain, Layers, Hash, BookOpen, Shield, Award, Star, AlertTriangle, ChevronUp, Trophy } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 import { useAuth } from "../lib/auth";
 import { apiRequest } from "../lib/queryClient";
@@ -18,90 +18,129 @@ type TabId = (typeof showcaseTabs)[number]["id"];
 
 function ForecastPanel() {
   return (
-    <div className="flex flex-col items-center gap-6" data-testid="showcase-forecast">
-      <div className="relative w-40 h-40 md:w-52 md:h-52">
-        <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="40" className="stroke-slate-200" strokeWidth="10" fill="none" />
-          <circle cx="50" cy="50" r="40" className="stroke-brand-amber" strokeWidth="10" fill="none" strokeDasharray="251.2" strokeDashoffset={251.2 - (251.2 * (114 / 141))} />
-          <line x1="50" y1="4" x2="50" y2="14" className="stroke-primary/60" strokeWidth="1.5" transform={`rotate(${(121/141)*360} 50 50)`} />
-        </svg>
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-4xl md:text-5xl font-bold text-primary">114</span>
-          <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1">Est. Score</span>
+    <div className="flex flex-col items-center gap-5 w-full max-w-sm mx-auto" data-testid="showcase-forecast">
+      <div className="w-full rounded-2xl bg-gradient-to-br from-slate-900 to-slate-700 text-white p-6 relative overflow-hidden shadow-lg">
+        <div className="absolute -top-6 -right-6 w-32 h-32 rounded-full bg-white/5" />
+        <div className="absolute -bottom-8 -left-4 w-24 h-24 rounded-full bg-white/5" />
+        <div className="relative z-10">
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-xs font-bold uppercase tracking-widest text-white/50">Readiness Forecast</span>
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30">Amber — Borderline</span>
+          </div>
+          <div className="flex items-end gap-4">
+            <div>
+              <div className="text-6xl font-bold leading-none">114</div>
+              <div className="text-xs text-white/50 mt-1">estimated score</div>
+            </div>
+            <div className="flex-1 pb-1">
+              <div className="flex justify-between text-[10px] text-white/40 mb-1">
+                <span>Current</span>
+                <span className="text-amber-300 font-bold">121 Target</span>
+              </div>
+              <div className="h-3 w-full bg-white/10 rounded-full overflow-hidden">
+                <div className="h-full bg-amber-400 rounded-full" style={{ width: `${(114/130)*100}%` }} />
+              </div>
+              <div className="text-right text-[10px] text-amber-300 font-bold mt-1">7 points to go</div>
+            </div>
+          </div>
         </div>
       </div>
-      <div className="text-center space-y-3 max-w-sm">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-amber-50 text-amber-700 text-sm font-bold border border-amber-200">
-          Borderline (Amber)
+
+      <div className="grid grid-cols-3 gap-3 w-full">
+        <div className="rounded-xl bg-white border border-slate-200 p-3 text-center shadow-sm">
+          <div className="text-xl font-bold text-emerald-600">82%</div>
+          <div className="text-[10px] text-slate-500 mt-0.5">Maths</div>
+          <div className="h-1 rounded-full bg-emerald-400 mt-1.5 mx-auto w-2/3" />
         </div>
-        <h3 className="text-xl md:text-2xl font-bold text-primary font-serif">7 points gap to 121</h3>
-        <p className="text-sm text-slate-500 leading-relaxed">
-          Clear readiness band shows exactly where your child stands against the Bucks qualifying benchmark.
-        </p>
-        <p className="text-[11px] text-slate-400 italic pt-1">
-          Illustrative example. Scores are modelled from performance patterns and are not official standardised results.
-        </p>
+        <div className="rounded-xl bg-white border border-slate-200 p-3 text-center shadow-sm">
+          <div className="text-xl font-bold text-amber-600">72%</div>
+          <div className="text-[10px] text-slate-500 mt-0.5">Verbal</div>
+          <div className="h-1 rounded-full bg-amber-400 mt-1.5 mx-auto w-2/3" />
+        </div>
+        <div className="rounded-xl bg-white border border-red-100 p-3 text-center shadow-sm">
+          <div className="text-xl font-bold text-red-600">58%</div>
+          <div className="text-[10px] text-slate-500 mt-0.5">NVR</div>
+          <div className="h-1 rounded-full bg-red-400 mt-1.5 mx-auto w-2/3" />
+        </div>
       </div>
+
+      <div className="w-full rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 flex items-center gap-3">
+        <div className="p-1.5 bg-amber-400 rounded-lg text-white shrink-0">
+          <Target className="h-4 w-4" />
+        </div>
+        <div>
+          <p className="text-xs font-bold text-amber-800">Main focus area: Non-Verbal Reasoning</p>
+          <p className="text-[10px] text-amber-600 mt-0.5">Closing this gap could add 4–5 points to the forecast</p>
+        </div>
+      </div>
+
+      <p className="text-[10px] text-slate-400 italic text-center">
+        Illustrative example. Scores are modelled from performance patterns and are not official standardised results.
+      </p>
     </div>
   );
 }
 
 function SectionsPanel() {
   const sections = [
-    { name: "Verbal Reasoning", score: 72, color: "bg-amber-500", items: "18/25", subs: [
+    { name: "Verbal Reasoning", score: 72, bar: "bg-violet-500", badge: "bg-violet-100 text-violet-700", iconBg: "bg-violet-100 text-violet-700", border: "border-violet-100", icon: <Brain className="h-3.5 w-3.5" />, items: "18/25", subs: [
       { name: "Letter Patterns", score: 80 }, { name: "Vocab & Synonyms", score: 60 }, { name: "Code Sequences", score: 75 }
     ]},
-    { name: "Non-Verbal Reasoning", score: 58, color: "bg-red-500", items: "14/24", subs: [
+    { name: "Non-Verbal Reasoning", score: 58, bar: "bg-red-500", badge: "bg-red-100 text-red-700", iconBg: "bg-blue-100 text-blue-700", border: "border-red-100", icon: <Layers className="h-3.5 w-3.5" />, items: "14/24", subs: [
       { name: "Spatial Sequences", score: 50 }, { name: "Rotation & Reflection", score: 55 }, { name: "Classification", score: 65 }
     ]},
-    { name: "Mathematics", score: 80, color: "bg-green-500", items: "20/25", subs: [
+    { name: "Mathematics", score: 80, bar: "bg-emerald-500", badge: "bg-emerald-100 text-emerald-700", iconBg: "bg-emerald-100 text-emerald-700", border: "border-emerald-100", icon: <Hash className="h-3.5 w-3.5" />, items: "20/25", subs: [
       { name: "Arithmetic", score: 85 }, { name: "Fractions & Ratios", score: 70 }, { name: "Data Interpretation", score: 80 }
     ]},
-    { name: "English Comprehension", score: 66, color: "bg-amber-500", items: "16/24", subs: [
+    { name: "English Comprehension", score: 66, bar: "bg-amber-500", badge: "bg-amber-100 text-amber-700", iconBg: "bg-amber-100 text-amber-700", border: "border-amber-100", icon: <BookOpen className="h-3.5 w-3.5" />, items: "16/24", subs: [
       { name: "Inference & Deduction", score: 62 }, { name: "Authorial Intent", score: 70 }, { name: "Vocabulary in Context", score: 75 }
     ]},
   ];
   return (
-    <div className="space-y-4 w-full max-w-md mx-auto" data-testid="showcase-sections">
-      <div className="text-center mb-2">
-        <h3 className="text-lg font-bold text-primary font-serif">Section-by-Section Accuracy</h3>
-        <p className="text-xs text-muted-foreground mt-1">See exactly where strengths and gaps lie — down to sub-skill level</p>
+    <div className="space-y-3 w-full max-w-md mx-auto" data-testid="showcase-sections">
+      <div className="text-center mb-3">
+        <h3 className="text-lg font-bold text-primary font-serif">How They're Performing in Each Subject</h3>
+        <p className="text-xs text-muted-foreground mt-1">Every result broken down to sub-topic level — see exactly what to practise</p>
       </div>
       {sections.map((s, i) => (
-        <div key={i} className="bg-white rounded-xl border border-slate-200 p-4">
-          <div className="flex justify-between items-center mb-2">
-            <span className="font-semibold text-primary text-sm">{s.name}</span>
-            <span className="text-xs text-muted-foreground">{s.items} correct</span>
-          </div>
-          <div className="h-2.5 bg-slate-100 rounded-full overflow-hidden">
-            <div className={`h-full rounded-full ${s.color} transition-all duration-700`} style={{ width: `${s.score}%` }}></div>
-          </div>
-          <div className="flex justify-between mt-1.5 mb-2">
-            <span className="text-xs font-bold text-primary">{s.score}%</span>
-            <span className={`text-[10px] font-bold ${s.score >= 75 ? "text-green-600" : s.score >= 65 ? "text-amber-600" : "text-red-600"}`}>
-              {s.score >= 75 ? "On Track" : s.score >= 65 ? "Borderline" : "Focus Area"}
+        <div key={i} className={`bg-white rounded-xl border ${s.border} p-4 shadow-sm`}>
+          <div className="flex items-center justify-between mb-2.5">
+            <div className="flex items-center gap-2">
+              <div className={`p-1.5 rounded-lg ${s.iconBg}`}>{s.icon}</div>
+              <span className="font-semibold text-slate-800 text-sm">{s.name}</span>
+            </div>
+            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${s.badge}`}>
+              {s.score >= 75 ? "Strong" : s.score >= 65 ? "Developing" : "Needs focus"}
             </span>
           </div>
-          <div className="ml-2 border-l-2 border-slate-100 pl-3 space-y-1">
+          <div className="flex items-center gap-2 mb-2.5">
+            <div className="flex-1 h-2.5 bg-slate-100 rounded-full overflow-hidden">
+              <div className={`h-full rounded-full ${s.bar}`} style={{ width: `${s.score}%` }} />
+            </div>
+            <span className="text-xs font-bold text-slate-700 w-8 text-right">{s.score}%</span>
+          </div>
+          <div className="ml-1 pl-3 border-l-2 border-slate-100 space-y-1">
             {s.subs.map((sub, j) => (
               <div key={j} className="flex items-center justify-between text-[11px]">
                 <span className="text-slate-500">{sub.name}</span>
                 <div className="flex items-center gap-1.5 shrink-0">
-                  <div className="w-12 h-1.5 rounded-full bg-slate-100 overflow-hidden">
-                    <div className={`h-full rounded-full ${sub.score >= 75 ? 'bg-green-500' : sub.score >= 60 ? 'bg-amber-500' : 'bg-red-500'}`} style={{ width: `${sub.score}%` }}></div>
+                  <div className="w-14 h-1.5 rounded-full bg-slate-100 overflow-hidden">
+                    <div className={`h-full rounded-full ${sub.score >= 75 ? 'bg-emerald-500' : sub.score >= 60 ? 'bg-amber-500' : 'bg-red-500'}`} style={{ width: `${sub.score}%` }} />
                   </div>
-                  <span className={`font-bold text-[10px] ${sub.score >= 75 ? 'text-green-600' : sub.score >= 60 ? 'text-amber-600' : 'text-red-600'}`}>{sub.score}%</span>
+                  <span className={`font-bold text-[10px] w-7 text-right ${sub.score >= 75 ? 'text-emerald-600' : sub.score >= 60 ? 'text-amber-600' : 'text-red-600'}`}>{sub.score}%</span>
                 </div>
               </div>
             ))}
           </div>
         </div>
       ))}
-      <div className="bg-red-50 border border-red-200 rounded-lg p-3 flex items-start gap-2">
-        <Target className="h-4 w-4 text-red-500 mt-0.5 shrink-0" />
+      <div className="bg-red-50 border border-red-200 rounded-xl p-3 flex items-start gap-2.5">
+        <div className="p-1.5 bg-red-500 rounded-lg text-white shrink-0">
+          <Target className="h-3.5 w-3.5" />
+        </div>
         <div>
-          <p className="text-xs font-bold text-red-800">Priority Focus: Non-Verbal Reasoning</p>
-          <p className="text-[11px] text-red-600 mt-0.5">Spatial sequences and pattern rotation need targeted practice</p>
+          <p className="text-xs font-bold text-red-800">Priority 1: Non-Verbal Reasoning</p>
+          <p className="text-[11px] text-red-600 mt-0.5">Spatial sequences and pattern rotation need targeted practice — could add ~5 points</p>
         </div>
       </div>
     </div>
@@ -109,59 +148,73 @@ function SectionsPanel() {
 }
 
 function AnalyticsPanel() {
+  const tiles = [
+    { value: "78", label: "Readiness Score", sub: "Borderline", iconBg: "bg-amber-500", icon: <Award className="h-4 w-4" />, topBar: "bg-amber-500" },
+    { value: "82", label: "Timing Score", sub: "Well-paced", iconBg: "bg-violet-500", icon: <Clock className="h-4 w-4" />, topBar: "bg-violet-500" },
+    { value: "High", label: "Score Reliability", sub: "4 tests taken", iconBg: "bg-blue-500", icon: <Shield className="h-4 w-4" />, topBar: "bg-blue-500" },
+    { value: "74%", label: "Difficulty-adjusted", sub: "Accuracy", iconBg: "bg-emerald-500", icon: <Zap className="h-4 w-4" />, topBar: "bg-emerald-500" },
+  ];
+  const priorities = [
+    { label: "NVR: Spatial sequences", gain: "+6 pts", color: "bg-red-500" },
+    { label: "VR: Letter patterns", gain: "+4 pts", color: "bg-amber-500" },
+    { label: "Maths: Ratio problems", gain: "+3 pts", color: "bg-blue-400" },
+  ];
   return (
-    <div className="space-y-4 w-full max-w-md mx-auto" data-testid="showcase-analytics">
-      <div className="text-center mb-2">
-        <h3 className="text-lg font-bold text-primary font-serif">Parent Analytics</h3>
-        <p className="text-xs text-muted-foreground mt-1">10 metrics that tell you what's really happening</p>
+    <div className="space-y-3 w-full max-w-md mx-auto" data-testid="showcase-analytics">
+      <div className="text-center mb-3">
+        <h3 className="text-lg font-bold text-primary font-serif">How Is My Child Doing?</h3>
+        <p className="text-xs text-muted-foreground mt-1">Deep diagnostics that tell you what's really happening — and what to do next</p>
       </div>
+
       <div className="grid grid-cols-2 gap-3">
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-center">
-          <div className="text-2xl font-bold text-primary">78</div>
-          <div className="text-[10px] text-muted-foreground font-medium">Readiness Score</div>
-          <div className="text-[10px] font-bold text-amber-700 mt-0.5">Borderline</div>
-        </div>
-        <div className="bg-white border border-slate-200 rounded-xl p-3 text-center">
-          <div className="text-2xl font-bold text-primary">82</div>
-          <div className="text-[10px] text-muted-foreground font-medium">Pace Discipline</div>
-          <div className="text-[10px] font-bold text-green-600 mt-0.5">Good</div>
-        </div>
-        <div className="bg-white border border-slate-200 rounded-xl p-3 text-center">
-          <div className="text-2xl font-bold text-primary">0.72</div>
-          <div className="text-[10px] text-muted-foreground font-medium">Weighted Accuracy</div>
-        </div>
-        <div className="bg-white border border-slate-200 rounded-xl p-3 text-center">
-          <div className="text-2xl font-bold text-primary">68</div>
-          <div className="text-[10px] text-muted-foreground font-medium">Forecast Stability</div>
-        </div>
-      </div>
-      <div className="bg-white border border-slate-200 rounded-xl p-3">
-        <div className="text-[10px] font-bold text-primary mb-2">Fatigue Analysis</div>
-        <div className="flex gap-2 items-end">
-          <div className="flex-1">
-            <div className="flex items-end gap-1 h-12">
-              <div className="flex-1 bg-green-400 rounded-t" style={{ height: "100%" }}></div>
-              <div className="flex-1 bg-green-300 rounded-t" style={{ height: "85%" }}></div>
-              <div className="flex-1 bg-amber-400 rounded-t" style={{ height: "65%" }}></div>
-            </div>
-            <div className="flex text-[8px] text-muted-foreground mt-1 gap-1">
-              <span className="flex-1 text-center">Start</span>
-              <span className="flex-1 text-center">Mid</span>
-              <span className="flex-1 text-center">End</span>
+        {tiles.map((t, i) => (
+          <div key={i} className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+            <div className={`h-1 w-full ${t.topBar}`} />
+            <div className="p-3 text-center">
+              <div className="flex justify-center mb-1.5">
+                <div className={`p-1.5 rounded-lg text-white ${t.iconBg}`}>{t.icon}</div>
+              </div>
+              <div className="text-2xl font-bold text-primary">{t.value}</div>
+              <div className="text-[10px] text-muted-foreground font-medium leading-tight">{t.label}</div>
+              <div className="text-[9px] font-semibold text-slate-400 mt-0.5">{t.sub}</div>
             </div>
           </div>
-          <div className="text-right">
-            <div className="text-xs font-bold text-amber-600">-11%</div>
-            <div className="text-[9px] text-muted-foreground">accuracy drop</div>
+        ))}
+      </div>
+
+      <div className="bg-white border border-slate-200 rounded-xl p-3 shadow-sm">
+        <div className="flex items-center gap-2 mb-2.5">
+          <div className="p-1 bg-orange-100 text-orange-700 rounded-md">
+            <Zap className="h-3.5 w-3.5" />
+          </div>
+          <div className="text-xs font-bold text-primary">Stamina</div>
+          <span className="ml-auto text-[10px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">-11% accuracy drop</span>
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          <div className="rounded-lg bg-emerald-50 border border-emerald-100 p-2 text-center">
+            <div className="text-base font-bold text-emerald-700">79%</div>
+            <div className="text-[9px] text-slate-500 mt-0.5">First half</div>
+          </div>
+          <div className="rounded-lg bg-amber-50 border border-amber-100 p-2 text-center">
+            <div className="text-base font-bold text-amber-700">68%</div>
+            <div className="text-[9px] text-slate-500 mt-0.5">Second half</div>
           </div>
         </div>
+        <p className="text-[10px] text-slate-500 mt-2">Accuracy drops in the second half — stamina practice will help.</p>
       </div>
-      <div className="bg-white border border-slate-200 rounded-xl p-3">
-        <div className="text-[10px] font-bold text-primary mb-1.5">Top 3 Priorities</div>
-        {["NVR: Spatial sequences", "VR: Letter patterns", "Maths: Ratio problems"].map((p, i) => (
-          <div key={i} className="flex items-center gap-1.5 text-[11px] text-slate-600 py-0.5">
-            <div className={`w-1.5 h-1.5 rounded-full ${i === 0 ? "bg-red-500" : i === 1 ? "bg-amber-500" : "bg-amber-400"}`}></div>
-            {p}
+
+      <div className="bg-white border border-slate-200 rounded-xl p-3 shadow-sm">
+        <div className="flex items-center gap-2 mb-2.5">
+          <div className="p-1 bg-primary/10 rounded-md">
+            <Target className="h-3.5 w-3.5 text-primary" />
+          </div>
+          <div className="text-xs font-bold text-primary">Where to Focus Next</div>
+        </div>
+        {priorities.map((p, i) => (
+          <div key={i} className="flex items-center gap-2 py-1 border-b border-slate-50 last:border-0">
+            <div className={`w-5 h-5 rounded-full ${p.color} text-white flex items-center justify-center text-[10px] font-bold shrink-0`}>{i + 1}</div>
+            <span className="text-[11px] text-slate-700 flex-1">{p.label}</span>
+            <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${i === 0 ? 'bg-red-100 text-red-700' : i === 1 ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'}`}>{p.gain}</span>
           </div>
         ))}
       </div>
@@ -171,53 +224,82 @@ function AnalyticsPanel() {
 
 function ProgressPanel() {
   return (
-    <div className="space-y-4 w-full max-w-md mx-auto" data-testid="showcase-progress">
-      <div className="text-center mb-2">
-        <h3 className="text-lg font-bold text-primary font-serif">Progress Tracking</h3>
-        <p className="text-xs text-muted-foreground mt-1">Watch the gap close over time</p>
+    <div className="space-y-3 w-full max-w-md mx-auto" data-testid="showcase-progress">
+      <div className="text-center mb-3">
+        <h3 className="text-lg font-bold text-primary font-serif">Progress Over Time</h3>
+        <p className="text-xs text-muted-foreground mt-1">Watch the gap to 121 close test by test</p>
       </div>
-      <div className="bg-white border border-slate-200 rounded-xl p-4">
-        <div className="text-xs font-bold text-primary mb-3">Score Trajectory</div>
-        <svg viewBox="0 0 240 90" className="w-full h-24">
-          <line x1="0" y1="22" x2="240" y2="22" stroke="#e2e8f0" strokeWidth="1" strokeDasharray="4" />
-          <text x="228" y="18" fontSize="8" fill="#94a3b8">121</text>
-          <path d="M 20 70 L 80 55 L 150 40 L 220 28" fill="none" stroke="#3b82f6" strokeWidth="2.5" strokeLinecap="round" />
-          <circle cx="20" cy="70" r="4" fill="#94a3b8" />
-          <circle cx="80" cy="55" r="4" fill="#64748b" />
-          <circle cx="150" cy="40" r="4" fill="#3b82f6" />
-          <circle cx="220" cy="28" r="4" fill="#3b82f6" />
-          <text x="10" y="82" fontSize="8" fill="#94a3b8">Wk 1</text>
-          <text x="68" y="67" fontSize="8" fill="#94a3b8">Wk 6</text>
-          <text x="138" y="52" fontSize="8" fill="#94a3b8">Wk 12</text>
-          <text x="205" y="22" fontSize="8" fill="#3b82f6">Wk 16</text>
-          <text x="14" y="66" fontSize="7" fill="#64748b">105</text>
-          <text x="74" y="51" fontSize="7" fill="#64748b">110</text>
-          <text x="144" y="36" fontSize="7" fill="#3b82f6">114</text>
-          <text x="214" y="40" fontSize="7" fill="#3b82f6">117</text>
+
+      <div className="w-full rounded-2xl bg-gradient-to-br from-slate-900 to-slate-700 text-white p-5 relative overflow-hidden shadow-lg">
+        <div className="absolute -top-6 -right-6 w-28 h-28 rounded-full bg-white/5" />
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <TrendingUp className="h-4 w-4 text-emerald-400" />
+            <span className="text-xs font-bold uppercase tracking-wide text-white/60">Score Over Time</span>
+          </div>
+          <span className="text-xs font-bold text-emerald-400 bg-emerald-400/20 px-2 py-0.5 rounded-full">↑ Improving</span>
+        </div>
+        <svg viewBox="0 0 240 80" className="w-full h-20">
+          <defs>
+            <linearGradient id="scoreAreaGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.3" />
+              <stop offset="100%" stopColor="#f59e0b" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+          <line x1="0" y1="18" x2="240" y2="18" stroke="#f59e0b" strokeWidth="0.8" strokeDasharray="4 3" opacity="0.5" />
+          <text x="220" y="14" fontSize="7" fill="#f59e0b" fontWeight="bold">121</text>
+          <path d="M 20 65 L 75 52 L 140 37 L 210 24 L 210 80 L 20 80 Z" fill="url(#scoreAreaGrad)" />
+          <path d="M 20 65 L 75 52 L 140 37 L 210 24" fill="none" stroke="#f59e0b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          <circle cx="20" cy="65" r="3.5" fill="#94a3b8" />
+          <circle cx="75" cy="52" r="3.5" fill="#94a3b8" />
+          <circle cx="140" cy="37" r="3.5" fill="#f59e0b" />
+          <circle cx="210" cy="24" r="4.5" fill="#f59e0b" stroke="white" strokeWidth="1.5" />
+          <text x="13" y="78" fontSize="7" fill="#94a3b8">Test 1</text>
+          <text x="60" y="66" fontSize="7" fill="#94a3b8">Test 2</text>
+          <text x="128" y="51" fontSize="7" fill="#f59e0b">Test 3</text>
+          <text x="194" y="20" fontSize="7" fill="#f59e0b" fontWeight="bold">Test 4</text>
+          <text x="13" y="61" fontSize="7" fill="rgba(255,255,255,0.5)">105</text>
+          <text x="68" y="49" fontSize="7" fill="rgba(255,255,255,0.5)">110</text>
+          <text x="133" y="33" fontSize="7" fill="#f59e0b">114</text>
+          <text x="196" y="40" fontSize="7" fill="#f59e0b" fontWeight="bold">117</text>
         </svg>
       </div>
+
       <div className="grid grid-cols-3 gap-3">
-        <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 text-center">
-          <div className="text-xl font-bold text-blue-700">+12</div>
-          <div className="text-[10px] text-muted-foreground font-medium">Points gained</div>
+        <div className="rounded-xl border-0 bg-gradient-to-br from-emerald-50 to-emerald-100/60 p-3 text-center shadow-sm">
+          <div className="flex justify-center mb-1.5">
+            <div className="p-1 bg-emerald-500 rounded-md text-white"><TrendingUp className="h-3 w-3" /></div>
+          </div>
+          <div className="text-xl font-bold text-emerald-700">+12</div>
+          <div className="text-[10px] text-slate-500 font-medium">Points gained</div>
         </div>
-        <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 text-center">
-          <div className="text-sm font-bold text-blue-700">Improving</div>
-          <div className="text-[10px] text-muted-foreground font-medium">Trend</div>
+        <div className="rounded-xl border-0 bg-gradient-to-br from-blue-50 to-blue-100/60 p-3 text-center shadow-sm">
+          <div className="flex justify-center mb-1.5">
+            <div className="p-1 bg-blue-500 rounded-md text-white"><BarChart3 className="h-3 w-3" /></div>
+          </div>
+          <div className="text-xl font-bold text-blue-700">4</div>
+          <div className="text-[10px] text-slate-500 font-medium">Tests taken</div>
         </div>
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-center">
-          <div className="text-sm font-bold text-amber-700">Borderline</div>
-          <div className="text-[10px] text-muted-foreground font-medium">Band</div>
+        <div className="rounded-xl border-0 bg-gradient-to-br from-amber-50 to-amber-100/60 p-3 text-center shadow-sm">
+          <div className="flex justify-center mb-1.5">
+            <div className="p-1 bg-amber-500 rounded-md text-white"><Trophy className="h-3 w-3" /></div>
+          </div>
+          <div className="text-xl font-bold text-amber-700">117</div>
+          <div className="text-[10px] text-slate-500 font-medium">Latest score</div>
         </div>
       </div>
-      <div className="bg-white border border-slate-200 rounded-xl p-3">
-        <div className="text-[10px] font-bold text-primary mb-1.5">Gap Velocity</div>
-        <div className="flex items-center gap-3">
-          <div className="text-sm text-red-500 font-medium line-through">16 pt gap</div>
-          <ArrowRight className="h-4 w-4 text-blue-600" />
-          <div className="text-sm font-bold text-blue-700">4 pt gap</div>
+
+      <div className="bg-white border border-slate-200 rounded-xl p-3 shadow-sm">
+        <div className="flex items-center gap-2 mb-2.5">
+          <div className="p-1 bg-emerald-100 rounded-md text-emerald-700"><ChevronUp className="h-3.5 w-3.5" /></div>
+          <div className="text-xs font-bold text-primary">Closing the Gap to 121</div>
         </div>
-        <div className="text-[10px] text-muted-foreground mt-1">Gap narrowing at ~3 points per diagnostic cycle</div>
+        <div className="flex items-center gap-3 text-sm">
+          <span className="px-2.5 py-1 rounded-lg bg-red-100 text-red-700 font-bold text-xs">16 pts gap</span>
+          <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
+          <span className="px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-700 font-bold text-xs">4 pts gap</span>
+        </div>
+        <p className="text-[10px] text-muted-foreground mt-2">Gap narrowing by ~3 points per diagnostic — on track for 121 within 6 weeks</p>
       </div>
     </div>
   );
