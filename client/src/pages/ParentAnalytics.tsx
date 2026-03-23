@@ -857,7 +857,7 @@ export default function ParentAnalytics() {
         <div className="text-center mb-10">
           <h1 className="text-3xl font-bold text-primary font-serif mb-3" data-testid="heading-analytics-gated">Premium Parent Analytics</h1>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Deep readiness insights exclusively for Young Scholar Programme families.
+            Included with Platform Edge (£59.99/mo), the Annual plan (£495/yr), and the Young Scholar Programme.
           </p>
         </div>
 
@@ -866,13 +866,13 @@ export default function ParentAnalytics() {
             <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
               <Shield className="h-8 w-8 text-primary" />
             </div>
-            <h2 className="text-2xl font-bold text-primary font-serif mb-2">Included with the Young Scholar Programme</h2>
+            <h2 className="text-2xl font-bold text-primary font-serif mb-2">Included with Platform Edge and above</h2>
             <p className="text-muted-foreground max-w-md mb-6">
-              Upgrade to unlock readiness scoring, pace discipline analysis, fatigue profiling, gap velocity tracking, and personalised improvement priorities.
+              Upgrade to unlock readiness scoring, timing analysis, stamina profiling, gap tracking to 121, and personalised improvement priorities.
             </p>
             <Link href="/pricing">
               <Button size="lg" className="bg-primary text-lg h-12 px-8" data-testid="button-upgrade-analytics">
-                View Programme <ArrowRight className="ml-2 h-5 w-5" />
+                View Pricing <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
           </div>
@@ -886,22 +886,24 @@ export default function ParentAnalytics() {
                 <div className="text-xs text-muted-foreground">out of 100</div>
               </CardContent></Card>
               <Card><CardContent className="pt-5 pb-4 text-center">
-                <div className="text-xs text-muted-foreground uppercase mb-2">Confidence</div>
-                <div className="text-sm font-semibold">Moderate</div>
-                <div className="text-3xl font-bold mt-2">68</div>
-                <div className="text-xs text-muted-foreground">stability index</div>
+                <div className="text-xs text-muted-foreground uppercase mb-2">Score Reliability</div>
+                <div className="text-sm font-semibold">Good</div>
+                <div className="text-3xl font-bold mt-2">High</div>
+                <div className="text-xs text-muted-foreground">4 tests taken</div>
               </CardContent></Card>
               <Card><CardContent className="pt-5 pb-4 text-center">
-                <div className="text-xs text-muted-foreground uppercase mb-2">Pace Discipline</div>
+                <div className="text-xs text-muted-foreground uppercase mb-2">Timing Score</div>
                 <div className="text-3xl font-bold">82</div>
+                <div className="text-xs text-muted-foreground">Well-paced</div>
               </CardContent></Card>
               <Card><CardContent className="pt-5 pb-4 text-center">
-                <div className="text-xs text-muted-foreground uppercase mb-2">Weighted Accuracy</div>
-                <div className="text-3xl font-bold">0.72</div>
+                <div className="text-xs text-muted-foreground uppercase mb-2">Difficulty-adjusted</div>
+                <div className="text-3xl font-bold">74%</div>
+                <div className="text-xs text-muted-foreground">accuracy</div>
               </CardContent></Card>
             </div>
             <Card><CardContent className="p-4">
-              <div className="text-sm font-bold text-primary mb-2">Top 3 Improvement Priorities</div>
+              <div className="text-sm font-bold text-primary mb-2">Where to Focus Next</div>
               <div className="space-y-2">
                 {["NVR: Spatial sequences — 42% accuracy", "VR: Letter patterns — 55% accuracy", "Maths: Ratio problems — 60% accuracy"].map((p, i) => (
                   <div key={i} className="flex items-center gap-2 text-sm text-slate-600">
@@ -912,15 +914,15 @@ export default function ParentAnalytics() {
               </div>
             </CardContent></Card>
             <Card><CardContent className="p-4">
-              <div className="text-sm font-bold text-primary mb-2">Fatigue Analysis</div>
+              <div className="text-sm font-bold text-primary mb-2">Stamina</div>
               <div className="flex gap-4">
                 <div className="flex-1 bg-green-50 rounded-lg p-3 text-center">
                   <div className="text-lg font-bold text-green-700">82%</div>
-                  <div className="text-xs text-muted-foreground">First third accuracy</div>
+                  <div className="text-xs text-muted-foreground">First half accuracy</div>
                 </div>
                 <div className="flex-1 bg-amber-50 rounded-lg p-3 text-center">
                   <div className="text-lg font-bold text-amber-700">71%</div>
-                  <div className="text-xs text-muted-foreground">Last third accuracy</div>
+                  <div className="text-xs text-muted-foreground">Second half accuracy</div>
                 </div>
               </div>
             </CardContent></Card>

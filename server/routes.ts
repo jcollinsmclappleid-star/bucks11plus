@@ -246,38 +246,62 @@ export async function registerRoutes(
         customerId = customer.id;
       }
 
-      const currentAmount = TIER_PRICE_GBP_PENCE[currentTier] || 0;
       const targetAmount = TIER_PRICE_GBP_PENCE[targetTier] || 0;
-      const difference = Math.max(0, targetAmount - currentAmount);
 
       const host = req.get('host');
       const protocol = req.protocol;
 
-      const session = await stripe.checkout.sessions.create({
-        customer: customerId,
-        payment_method_types: ['card'],
-        line_items: [{
-          price_data: {
-            currency: 'gbp',
-            product_data: {
-              name: `Upgrade to ${TIER_DISPLAY_NAME[targetTier] || targetTier}`,
-              description: `Upgrade difference from ${TIER_DISPLAY_NAME[currentTier] || currentTier}`,
-            },
-            unit_amount: difference > 0 ? difference : targetAmount,
-          },
-          quantity: 1,
-        }],
-        mode: 'payment',
-        success_url: `${protocol}://${host}/app/checkout-success?tier=${targetTier}&session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${protocol}://${host}/pricing`,
-        metadata: {
-          userId: user.id,
-          tier: targetTier,
-          upgradeFrom: currentTier,
-        },
-      });
+      const MONTHLY_SUBSCRIPTION_TIERS = new Set(["pack_monthly", "pack_plus"]);
+      const isSubscriptionUpgrade = MONTHLY_SUBSCRIPTION_TIERS.has(targetTier);
 
-      res.json({ url: session.url, difference: (difference || targetAmount) / 100 });
+      let session;
+      if (isSubscriptionUpgrade) {
+        const priceId = await findStripePriceForTier(targetTier);
+        const lineItems = priceId
+          ? [{ price: priceId, quantity: 1 }]
+          : [{
+              price_data: {
+                currency: 'gbp',
+                product_data: { name: TIER_DISPLAY_NAME[targetTier] || targetTier },
+                unit_amount: targetAmount,
+                recurring: { interval: 'month' as const },
+              },
+              quantity: 1,
+            }];
+        session = await stripe.checkout.sessions.create({
+          customer: customerId,
+          payment_method_types: ['card'],
+          line_items: lineItems,
+          mode: 'subscription',
+          success_url: `${protocol}://${host}/app/checkout-success?tier=${targetTier}&session_id={CHECKOUT_SESSION_ID}`,
+          cancel_url: `${protocol}://${host}/pricing`,
+          metadata: { userId: user.id, tier: targetTier, upgradeFrom: currentTier },
+        });
+      } else {
+        const currentAmount = TIER_PRICE_GBP_PENCE[currentTier] || 0;
+        const difference = Math.max(0, targetAmount - currentAmount);
+        session = await stripe.checkout.sessions.create({
+          customer: customerId,
+          payment_method_types: ['card'],
+          line_items: [{
+            price_data: {
+              currency: 'gbp',
+              product_data: {
+                name: `Upgrade to ${TIER_DISPLAY_NAME[targetTier] || targetTier}`,
+                description: `Upgrade from ${TIER_DISPLAY_NAME[currentTier] || currentTier}`,
+              },
+              unit_amount: difference > 0 ? difference : targetAmount,
+            },
+            quantity: 1,
+          }],
+          mode: 'payment',
+          success_url: `${protocol}://${host}/app/checkout-success?tier=${targetTier}&session_id={CHECKOUT_SESSION_ID}`,
+          cancel_url: `${protocol}://${host}/pricing`,
+          metadata: { userId: user.id, tier: targetTier, upgradeFrom: currentTier },
+        });
+      }
+
+      res.json({ url: session.url });
     } catch (error) {
       next(error);
     }
