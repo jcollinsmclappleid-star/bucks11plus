@@ -509,6 +509,91 @@ export default function Landing() {
         </div>
       </section>
 
+      <section id="see-product" className="py-16 md:py-24 bg-slate-50 border-b border-border/30 relative">
+        <div className="container mx-auto max-w-5xl px-4">
+          <div className="text-center mb-8">
+            <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">Here's How We Show You</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4" data-testid="text-showcase-title">
+              What the Diagnostic Reveals — In Detail
+            </h2>
+            <p className="text-lg text-slate-500 max-w-2xl mx-auto leading-relaxed">
+              Explore a sample diagnostic report to see how performance is analysed across accuracy, pace, stability and skill type — and how priorities are set.
+            </p>
+          </div>
+
+          <div className="relative mb-6">
+            <button
+              onClick={() => scrollTabs("left")}
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white border border-slate-200 rounded-full shadow-sm flex items-center justify-center md:hidden"
+              aria-label="Scroll tabs left"
+            >
+              <ChevronLeft className="h-4 w-4 text-slate-500" />
+            </button>
+            <div
+              ref={scrollRef}
+              className="flex gap-2 overflow-x-auto scrollbar-hide px-10 md:px-0 md:justify-center snap-x snap-mandatory"
+              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            >
+              {showcaseTabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`px-5 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap transition-all snap-center ${
+                    activeTab === tab.id
+                      ? "bg-primary text-white shadow-md"
+                      : "bg-white text-slate-600 border border-slate-200 hover:border-primary/30 hover:text-primary"
+                  }`}
+                  data-testid={`tab-${tab.id}`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+            <button
+              onClick={() => scrollTabs("right")}
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white border border-slate-200 rounded-full shadow-sm flex items-center justify-center md:hidden"
+              aria-label="Scroll tabs right"
+            >
+              <ChevronRight className="h-4 w-4 text-slate-500" />
+            </button>
+          </div>
+
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 md:p-10 relative min-h-[380px]">
+            <div className="absolute top-3 right-3 bg-slate-100 text-slate-400 text-[9px] font-bold uppercase px-2 py-0.5 rounded tracking-wider">
+              Example Data
+            </div>
+
+            {activeTab === "forecast" && <ForecastPanel />}
+            {activeTab === "sections" && <SectionsPanel />}
+            {activeTab === "analytics" && <AnalyticsPanel />}
+            {activeTab === "progress" && <ProgressPanel />}
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
+            <Button size="lg" className="h-13 px-8 bg-brand-amber text-amber-950 hover:bg-amber-400 font-bold shadow-md border-none" asChild data-testid="button-try-diagnostic-showcase">
+              <Link href="/free-diagnostic">
+                Try It Free — 8 Minutes <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+            </Button>
+            <span className="text-sm text-muted-foreground flex items-center gap-1">
+              <Zap className="h-4 w-4 text-brand-amber" /> No sign-up required
+            </span>
+          </div>
+
+          <p className="text-xs text-slate-400 text-center mt-4 italic">
+            Example based on sample student data. Your child's real results will populate after their diagnostic.
+          </p>
+
+          <div className="text-center mt-6">
+            <Button variant="outline" className="h-11 px-6 font-semibold" asChild data-testid="button-see-more-platform">
+              <Link href="/bucks-11-plus-parent-guide#platform-preview">
+                See More <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
       <section className="py-16 md:py-24 bg-white border-b border-border/30" data-testid="section-assessment-outcomes">
         <div className="container mx-auto max-w-5xl px-4">
           <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
@@ -748,91 +833,6 @@ export default function Landing() {
                 <Link href="/pricing?autoCheckout=programme24_plus">View Young Scholar Programme</Link>
               </Button>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="see-product" className="py-16 md:py-24 bg-slate-50 border-b border-border/30 relative">
-        <div className="container mx-auto max-w-5xl px-4">
-          <div className="text-center mb-8">
-            <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">Here's How We Show You</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4" data-testid="text-showcase-title">
-              What the Diagnostic Reveals — In Detail
-            </h2>
-            <p className="text-lg text-slate-500 max-w-2xl mx-auto leading-relaxed">
-              Explore a sample diagnostic report to see how performance is analysed across accuracy, pace, stability and skill type — and how priorities are set.
-            </p>
-          </div>
-
-          <div className="relative mb-6">
-            <button
-              onClick={() => scrollTabs("left")}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white border border-slate-200 rounded-full shadow-sm flex items-center justify-center md:hidden"
-              aria-label="Scroll tabs left"
-            >
-              <ChevronLeft className="h-4 w-4 text-slate-500" />
-            </button>
-            <div
-              ref={scrollRef}
-              className="flex gap-2 overflow-x-auto scrollbar-hide px-10 md:px-0 md:justify-center snap-x snap-mandatory"
-              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-            >
-              {showcaseTabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`px-5 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap transition-all snap-center ${
-                    activeTab === tab.id
-                      ? "bg-primary text-white shadow-md"
-                      : "bg-white text-slate-600 border border-slate-200 hover:border-primary/30 hover:text-primary"
-                  }`}
-                  data-testid={`tab-${tab.id}`}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-            <button
-              onClick={() => scrollTabs("right")}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-white border border-slate-200 rounded-full shadow-sm flex items-center justify-center md:hidden"
-              aria-label="Scroll tabs right"
-            >
-              <ChevronRight className="h-4 w-4 text-slate-500" />
-            </button>
-          </div>
-
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 md:p-10 relative min-h-[380px]">
-            <div className="absolute top-3 right-3 bg-slate-100 text-slate-400 text-[9px] font-bold uppercase px-2 py-0.5 rounded tracking-wider">
-              Example Data
-            </div>
-
-            {activeTab === "forecast" && <ForecastPanel />}
-            {activeTab === "sections" && <SectionsPanel />}
-            {activeTab === "analytics" && <AnalyticsPanel />}
-            {activeTab === "progress" && <ProgressPanel />}
-          </div>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
-            <Button size="lg" className="h-13 px-8 bg-brand-amber text-amber-950 hover:bg-amber-400 font-bold shadow-md border-none" asChild data-testid="button-try-diagnostic-showcase">
-              <Link href="/free-diagnostic">
-                Try It Free — 8 Minutes <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-            </Button>
-            <span className="text-sm text-muted-foreground flex items-center gap-1">
-              <Zap className="h-4 w-4 text-brand-amber" /> No sign-up required
-            </span>
-          </div>
-
-          <p className="text-xs text-slate-400 text-center mt-4 italic">
-            Example based on sample student data. Your child's real results will populate after their diagnostic.
-          </p>
-
-          <div className="text-center mt-6">
-            <Button variant="outline" className="h-11 px-6 font-semibold" asChild data-testid="button-see-more-platform">
-              <Link href="/bucks-11-plus-parent-guide#platform-preview">
-                See More <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
           </div>
         </div>
       </section>
