@@ -25,8 +25,8 @@ const subjectData: Record<Subject, SubjectContent> = {
   "verbal-reasoning": {
     subject: "verbal-reasoning",
     title: "Bucks 11+ Verbal Reasoning: Question Types, Strategy & Practice",
-    metaTitle: "Bucks 11+ Verbal Reasoning Practice – GL Assessment Guide | 11+ Standard",
-    metaDescription: "Complete guide to verbal reasoning in the Buckinghamshire 11+ GL Assessment. Question types, preparation strategies, and how to improve VR scores before the Secondary Transfer Test.",
+    metaTitle: "Bucks 11+ Verbal Reasoning Practice – Secondary Transfer Test Guide | 11+ Standard",
+    metaDescription: "Complete guide to verbal reasoning in the Buckinghamshire 11+ Secondary Transfer Test. Question types, preparation strategies, and how to improve VR scores before the real test.",
     intro: "Verbal reasoning is one of the four core domains of the Buckinghamshire Secondary Transfer Test. It tests a child's ability to understand and use language logically — including word relationships, codes, sequences, and linguistic problem-solving. Strong verbal reasoning is closely tied to reading ability and vocabulary breadth.",
     questionTypes: [
       { type: "Word relationships", description: "Identify synonyms, antonyms, and related words from a set of options" },
@@ -37,7 +37,7 @@ const subjectData: Record<Subject, SubjectContent> = {
       { type: "Compound words", description: "Find a word that completes two separate words when added to the end of one and the beginning of another" },
       { type: "Number sequences in VR", description: "Identify the rule governing a number sequence and find the missing value" },
     ],
-    preparationAdvice: "Verbal reasoning is closely tied to vocabulary and reading breadth. Children who read widely — fiction, non-fiction, quality newspapers — develop the word knowledge that makes verbal reasoning questions feel accessible rather than alien. Vocabulary exercises, word games (crosswords, Scrabble), and deliberate attention to unusual words encountered in reading all contribute to VR performance. In addition to general language development, specific exposure to the GL Assessment question formats is important — particularly letter codes and compound words, which have a distinctive format that requires familiarisation.",
+    preparationAdvice: "Verbal reasoning is closely tied to vocabulary and reading breadth. Children who read widely — fiction, non-fiction, quality newspapers — develop the word knowledge that makes verbal reasoning questions feel accessible rather than alien. Vocabulary exercises, word games (crosswords, Scrabble), and deliberate attention to unusual words encountered in reading all contribute to VR performance. In addition to general language development, specific exposure to the question formats used in the Secondary Transfer Test is important — particularly letter codes and compound words, which have a distinctive format that requires familiarisation.",
     commonMistakes: "The most common verbal reasoning error is reading too quickly and missing the precise relationship being tested. Children often choose the first plausible answer rather than checking all options. A systematic approach — eliminating wrong answers before selecting the best — is more reliable than instinct, particularly under time pressure. Another common mistake is unfamiliarity with letter-code question mechanics, which require a specific logical approach that is rarely encountered outside test preparation.",
     sections: [
       {
@@ -60,7 +60,7 @@ const subjectData: Record<Subject, SubjectContent> = {
       },
       {
         question: "How do I help my child improve at verbal reasoning?",
-        answer: "The most effective strategies are: encourage regular reading of varied material, work through GL Assessment-style verbal reasoning practice questions by type, focus specifically on question types that are causing errors (letter codes and compound words are common weak spots), and build vocabulary deliberately through reading and word games.",
+        answer: "The most effective strategies are: encourage regular reading of varied material, work through 11+ verbal reasoning practice questions by type, focus specifically on question types that are causing errors (letter codes and compound words are common weak spots), and build vocabulary deliberately through reading and word games.",
       },
       {
         question: "What is a letter code question?",
@@ -71,8 +71,8 @@ const subjectData: Record<Subject, SubjectContent> = {
   "non-verbal-reasoning": {
     subject: "non-verbal-reasoning",
     title: "Bucks 11+ Non-Verbal Reasoning & Spatial: Guide & Practice",
-    metaTitle: "Bucks 11+ Non-Verbal Reasoning Practice – GL Assessment Guide | 11+ Standard",
-    metaDescription: "Complete guide to non-verbal and spatial reasoning in the Buckinghamshire 11+ GL Assessment. Question types, preparation strategies, and how to improve NVR scores.",
+    metaTitle: "Bucks 11+ Non-Verbal Reasoning Practice – Secondary Transfer Test Guide | 11+ Standard",
+    metaDescription: "Complete guide to non-verbal and spatial reasoning in the Buckinghamshire 11+ Secondary Transfer Test. Question types, preparation strategies, and how to improve NVR scores.",
     intro: "Non-verbal reasoning (NVR) and spatial reasoning are combined into a single domain in the Buckinghamshire Secondary Transfer Test. They test a child's ability to work with shapes, patterns, sequences, and spatial relationships — without using words or numbers. NVR is the domain most commonly unfamiliar to children before test preparation begins.",
     questionTypes: [
       { type: "Matrices", description: "Find the missing piece in a 3×3 or 2×2 grid of shapes where each row and column follows a rule" },
@@ -118,8 +118,8 @@ const subjectData: Record<Subject, SubjectContent> = {
   "maths": {
     subject: "maths",
     title: "Bucks 11+ Maths: Question Types, Strategy & Practice",
-    metaTitle: "Bucks 11+ Maths Practice – GL Assessment Mathematical Reasoning Guide | 11+ Standard",
-    metaDescription: "Complete guide to mathematical reasoning in the Buckinghamshire 11+ GL Assessment. Topics covered, common question types, and how to prepare for the maths section of the Secondary Transfer Test.",
+    metaTitle: "Bucks 11+ Maths Practice – Secondary Transfer Test Maths Guide | 11+ Standard",
+    metaDescription: "Complete guide to mathematical reasoning in the Buckinghamshire 11+ Secondary Transfer Test. Topics covered, common question types, and how to prepare for the maths section.",
     intro: "Mathematical reasoning is one of the four core domains of the Buckinghamshire Secondary Transfer Test. The maths questions in the Bucks 11+ go beyond the Year 5 curriculum — they require fluency, multi-step thinking, and the ability to apply mathematical concepts in unfamiliar contexts under timed conditions.",
     questionTypes: [
       { type: "Number operations", description: "Addition, subtraction, multiplication, and division with whole numbers, decimals, and fractions" },
@@ -150,7 +150,7 @@ const subjectData: Record<Subject, SubjectContent> = {
     faq: [
       {
         question: "Does the Bucks 11+ maths go beyond KS2 curriculum?",
-        answer: "Yes. The mathematical reasoning content in the Buckinghamshire Secondary Transfer Test extends into topics covered in early Year 6 and beyond — including ratio and proportion, simple algebra, and data handling. Children preparing for the test need to cover this extended range, which is one reason why GL Assessment-specific preparation materials are more appropriate than general KS2 maths resources alone.",
+        answer: "Yes. The mathematical reasoning content in the Buckinghamshire Secondary Transfer Test extends into topics covered in early Year 6 and beyond — including ratio and proportion, simple algebra, and data handling. Children preparing for the test need to cover this extended range, which is one reason why Bucks 11+ preparation materials are more appropriate than general KS2 maths resources alone.",
       },
       {
         question: "My child is strong at school maths but struggles with the test format — why?",
@@ -165,8 +165,8 @@ const subjectData: Record<Subject, SubjectContent> = {
   "comprehension": {
     subject: "comprehension",
     title: "Bucks 11+ English Comprehension: Question Types, Strategy & Practice",
-    metaTitle: "Bucks 11+ English Comprehension Practice – GL Assessment Guide | 11+ Standard",
-    metaDescription: "Complete guide to English comprehension in the Buckinghamshire 11+ GL Assessment. Question types, reading strategies, and how to improve comprehension scores before the Secondary Transfer Test.",
+    metaTitle: "Bucks 11+ English Comprehension Practice – Secondary Transfer Test Guide | 11+ Standard",
+    metaDescription: "Complete guide to English comprehension in the Buckinghamshire 11+ Secondary Transfer Test. Question types, reading strategies, and how to improve comprehension scores before test day.",
     intro: "English comprehension is one of the four core domains of the Buckinghamshire Secondary Transfer Test. It tests a child's ability to read a passage carefully and accurately — and to answer questions that probe literal understanding, inference, vocabulary in context, and language use. It is the domain most directly built by strong reading habits.",
     questionTypes: [
       { type: "Literal retrieval", description: "Find information directly stated in the passage" },
@@ -176,7 +176,7 @@ const subjectData: Record<Subject, SubjectContent> = {
       { type: "Language and structure", description: "Questions about the effect of specific language choices on the reader" },
       { type: "Summary and main idea", description: "Identify the main theme or central point of a section or the whole passage" },
     ],
-    preparationAdvice: "English comprehension is the domain most directly built by reading — specifically, reading varied and challenging material and thinking carefully about what it means. Children who read widely (fiction and non-fiction across different genres) and who discuss what they have read — what the author intended, what certain phrases mean, why a word was chosen — develop the comprehension skills that transfer directly to the test. In addition to general reading, specific practice with GL Assessment-style comprehension passages is important for familiarity with the question format, answer choices, and time management.",
+    preparationAdvice: "English comprehension is the domain most directly built by reading — specifically, reading varied and challenging material and thinking carefully about what it means. Children who read widely (fiction and non-fiction across different genres) and who discuss what they have read — what the author intended, what certain phrases mean, why a word was chosen — develop the comprehension skills that transfer directly to the test. In addition to general reading, specific practice with Secondary Transfer Test-style comprehension passages is important for familiarity with the question format, answer choices, and time management.",
     commonMistakes: "The most common comprehension errors are: (1) misreading the question and answering what the child thinks the question asked, not what it actually asks; (2) choosing an answer that sounds right in general rather than one that is supported by the specific text; (3) inference questions answered based on general knowledge rather than what the passage says; and (4) running out of time and not reaching the later questions. Answering only from the text — not from outside knowledge — is the single most important discipline in comprehension.",
     sections: [
       {
@@ -199,7 +199,7 @@ const subjectData: Record<Subject, SubjectContent> = {
       },
       {
         question: "My child reads a lot but still struggles with comprehension questions — why?",
-        answer: "Reading for pleasure and answering multiple-choice comprehension questions are different skills. Children who read widely for pleasure often have strong comprehension in general, but may struggle with the specific demands of test-format questions: choosing between five similar-seeming options, answering exactly what the question asks (not what it seems to ask), and justifying answers from the text rather than from intuition. Specific practice with GL Assessment-style comprehension passages addresses these test-specific skills.",
+        answer: "Reading for pleasure and answering multiple-choice comprehension questions are different skills. Children who read widely for pleasure often have strong comprehension in general, but may struggle with the specific demands of test-format questions: choosing between five similar-seeming options, answering exactly what the question asks (not what it seems to ask), and justifying answers from the text rather than from intuition. Specific practice with Secondary Transfer Test comprehension passages addresses these test-specific skills.",
       },
       {
         question: "Is comprehension marked separately from verbal reasoning?",

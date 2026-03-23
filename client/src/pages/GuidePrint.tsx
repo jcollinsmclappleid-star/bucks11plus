@@ -172,7 +172,7 @@ export default function GuidePrint() {
           <div>
             <h3 className="text-lg font-serif font-bold text-[#0d1f30] mb-2">Mathematics</h3>
             <p className="text-sm leading-relaxed">
-              The maths element of the Bucks 11 plus goes beyond the Year 5 curriculum — questions test topics including fractions, percentages, ratio, algebra, data interpretation, and multi-step problems. Speed is as important as accuracy. Children should be able to calculate without a calculator and should practice mental arithmetic regularly. Understanding the specific topic areas tested in the Bucks GL Assessment maths section, rather than the general curriculum, is the most efficient route to improvement.
+              The maths element of the Bucks 11 plus goes beyond the Year 5 curriculum — questions test topics including fractions, percentages, ratio, algebra, data interpretation, and multi-step problems. Speed is as important as accuracy. Children should be able to calculate without a calculator and should practice mental arithmetic regularly. Understanding the specific topic areas tested in the Secondary Transfer Test maths section, rather than the general curriculum, is the most efficient route to improvement.
             </p>
           </div>
           <div>

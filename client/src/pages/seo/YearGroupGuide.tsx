@@ -49,7 +49,7 @@ const yearContent: Record<number, YearGroupContent> = {
     faq: [
       {
         question: "Should I buy practice papers for my Year 4 child?",
-        answer: "Not yet, for most children. Year 4 is better spent on broad foundations — reading widely, building number fluency, doing puzzles. GL Assessment-style practice papers are most effectively used in Year 5 once your child is ready to work on timed test conditions. Starting practice papers in Year 4 often reduces their effectiveness later, as children become familiar with specific papers rather than developing underlying skills.",
+        answer: "Not yet, for most children. Year 4 is better spent on broad foundations — reading widely, building number fluency, doing puzzles. Bucks 11+ practice papers are most effectively used in Year 5 once your child is ready to work on timed test conditions. Starting practice papers in Year 4 often reduces their effectiveness later, as children become familiar with specific papers rather than developing underlying skills.",
       },
       {
         question: "Should I start tutoring in Year 4?",
@@ -91,11 +91,11 @@ const yearContent: Record<number, YearGroupContent> = {
       },
       {
         heading: "Structuring Year 5 Preparation",
-        body: "Effective Year 5 preparation typically follows a staged approach. In the autumn and spring terms, the focus should be on identifying gaps and building skills: working through domain-specific practice, addressing weak areas, and developing familiarity with GL Assessment question types. In the summer term and through the summer holidays, the focus shifts to full mock papers under timed conditions, reviewing performance by domain, and building pace and confidence. The two 45-minute papers should feel familiar — not startling — by September.",
+        body: "Effective Year 5 preparation typically follows a staged approach. In the autumn and spring terms, the focus should be on identifying gaps and building skills: working through domain-specific practice, addressing weak areas, and developing familiarity with the question types used in the Secondary Transfer Test. In the summer term and through the summer holidays, the focus shifts to full mock papers under timed conditions, reviewing performance by domain, and building pace and confidence. The two 45-minute papers should feel familiar — not startling — by September.",
       },
       {
         heading: "The Audio Format: Often Overlooked",
-        body: "One of the most distinctive features of the Bucks GL Assessment test is that all instructions are delivered via audio recording. A recorded voice tells children when to start each section, how many questions it contains, and when to stop. The voice will not repeat itself, will not pause, and cannot be asked questions. Children who encounter this format for the first time on test day find it unexpectedly pressuring. Practising with audio-led mock tests in Year 5 and early Year 6 builds the specific familiarity needed to work confidently under these conditions.",
+        body: "One of the most distinctive features of the Buckinghamshire Secondary Transfer Test is that all instructions are delivered via audio recording. A recorded voice tells children when to start each section, how many questions it contains, and when to stop. The voice will not repeat itself, will not pause, and cannot be asked questions. Children who encounter this format for the first time on test day find it unexpectedly pressuring. Practising with audio-led mock tests in Year 5 and early Year 6 builds the specific familiarity needed to work confidently under these conditions.",
       },
       {
         heading: "How Much Preparation Is Enough?",
@@ -152,7 +152,7 @@ const yearContent: Record<number, YearGroupContent> = {
       },
       {
         heading: "The Audio Format — Practise This Specifically",
-        body: "The Bucks GL Assessment uses audio instructions — a recorded voice that directs children through each section, telling them when to start, how many questions are in each section, and when to stop. This voice cannot be paused or repeated. Children should practise with audio-format tests specifically, not just paper-based ones. The combination of a ticking clock and a recorded voice can cause unexpected panic on test day if children haven't experienced it before. Familiarity removes this as a variable.",
+        body: "The Buckinghamshire Secondary Transfer Test uses audio instructions — a recorded voice that directs children through each section, telling them when to start, how many questions are in each section, and when to stop. This voice cannot be paused or repeated. Children should practise with audio-format tests specifically, not just paper-based ones. The combination of a ticking clock and a recorded voice can cause unexpected panic on test day if children haven't experienced it before. Familiarity removes this as a variable.",
       },
       {
         heading: "Test Day Logistics",
