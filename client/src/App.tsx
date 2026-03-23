@@ -141,12 +141,15 @@ function MainLayout({ children }: { children: React.ReactNode }) {
             </ul>
           </div>
         </div>
-        <div className="container mx-auto max-w-6xl px-4 mt-8 pt-6 border-t border-primary-foreground/10 space-y-1">
-          <p className="text-xs text-primary-foreground/40 text-center" data-testid="text-footer-disclaimer">
-            This website is an independent educational resource. Not affiliated with The Buckinghamshire Grammar Schools, GL Assessment, or any individual grammar school.
+        <div className="container mx-auto max-w-6xl px-4 mt-8 pt-6 border-t border-primary-foreground/10 space-y-1.5">
+          <p className="text-xs text-primary-foreground/50 text-center">
+            11+ Standard is operated by <strong className="text-primary-foreground/60">Ianson Systems Limited</strong>, a UK-based company developing educational tools and diagnostic assessment platforms to support 11+ preparation.
           </p>
-          <p className="text-xs text-primary-foreground/30 text-center">
-            © {new Date().getFullYear()} Ianson Systems Ltd, a UK software company.
+          <p className="text-xs text-primary-foreground/40 text-center" data-testid="text-footer-disclaimer">
+            Independent educational resource. Not affiliated with The Buckinghamshire Grammar Schools, GL Assessment, or any individual grammar school.
+          </p>
+          <p className="text-xs text-primary-foreground/25 text-center">
+            © {new Date().getFullYear()} Ianson Systems Limited. Registered in England &amp; Wales.
           </p>
         </div>
       </footer>

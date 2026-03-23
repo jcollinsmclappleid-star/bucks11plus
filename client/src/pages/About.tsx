@@ -1,4 +1,6 @@
 import { Seo } from "../components/shared/Seo";
+import { Link } from "wouter";
+import { Building2, Mail, ShieldCheck } from "lucide-react";
 
 export default function About() {
   return (
@@ -72,6 +74,44 @@ export default function About() {
       <p>
         We are not affiliated with GL Assessment, Buckinghamshire Council, or any grammar school. The "GL-style" label refers to the question format we use, which replicates the structure of the real test — it does not imply any formal relationship with GL Assessment Ltd.
       </p>
+
+      <hr className="my-8" />
+
+      <div className="not-prose">
+        <div className="rounded-2xl border border-slate-200 bg-slate-50 overflow-hidden">
+          <div className="bg-primary px-7 py-5 flex items-center gap-3">
+            <Building2 className="h-5 w-5 text-primary-foreground/80 shrink-0" />
+            <h2 className="text-lg font-bold font-serif text-primary-foreground m-0">Platform Operator</h2>
+          </div>
+          <div className="px-7 py-6 space-y-5">
+            <p className="text-slate-700 leading-relaxed">
+              11+ Standard is operated by <strong className="text-primary">Ianson Systems Limited</strong>, a UK-based company that develops educational tools and diagnostic assessment platforms to support 11+ preparation.
+            </p>
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="flex items-start gap-3 bg-white rounded-xl border border-slate-200 p-4">
+                <ShieldCheck className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-semibold text-primary mb-0.5">Registered in England &amp; Wales</p>
+                  <p className="text-xs text-slate-500 leading-relaxed">Ianson Systems Limited is a UK-registered private limited company.</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 bg-white rounded-xl border border-slate-200 p-4">
+                <Mail className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-semibold text-primary mb-0.5">Contact &amp; Support</p>
+                  <p className="text-xs text-slate-500 leading-relaxed">
+                    For enquiries, please use our{" "}
+                    <Link href="/contact" className="text-primary hover:underline font-medium">contact form</Link>.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <p className="text-xs text-slate-400 leading-relaxed border-t border-slate-200 pt-4">
+              11+ Standard is an independent platform. Ianson Systems Limited has no affiliation with GL Assessment, Buckinghamshire Council, The Buckinghamshire Grammar Schools (TBGS), or any individual grammar school.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
