@@ -525,6 +525,31 @@ function InsightsTab({ data }: { data: AnalyticsData }) {
   );
 }
 
+const SKILL_DISPLAY_NAMES: Record<string, string> = {
+  VR: "Verbal Reasoning",
+  NVR: "Non-Verbal Reasoning",
+  EC: "English Comprehension",
+  MA: "Mathematics",
+  verbal: "Verbal Reasoning",
+  nonverbal: "Non-Verbal Reasoning",
+  comprehension: "English Comprehension",
+  math: "Mathematics",
+  mathematics: "Mathematics",
+  Other: "Other Topics",
+};
+
+function getSkillDisplayName(skillId: string): string {
+  if (SKILL_DISPLAY_NAMES[skillId]) return SKILL_DISPLAY_NAMES[skillId];
+  const first = skillId.split(".")[0];
+  if (SKILL_DISPLAY_NAMES[first]) return SKILL_DISPLAY_NAMES[first];
+  return skillId.replace(/\./g, " — ").replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase());
+}
+
+function getTopicLabel(subRuleId: string): string {
+  const raw = subRuleId.split(".").pop() ?? subRuleId;
+  return raw.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase());
+}
+
 function DetailTab({ detailData }: { detailData: DetailData | undefined }) {
   const [mode, setMode] = useState<"accuracy" | "time" | "volatility">("accuracy");
 
@@ -532,7 +557,7 @@ function DetailTab({ detailData }: { detailData: DetailData | undefined }) {
     return (
       <Card>
         <CardContent className="py-10 text-center text-muted-foreground text-sm">
-          Complete a diagnostic to see detailed sub-rule analysis.
+          Complete a diagnostic to see how your child is performing on each topic.
         </CardContent>
       </Card>
     );
@@ -545,89 +570,125 @@ function DetailTab({ detailData }: { detailData: DetailData | undefined }) {
     grouped[skill].push(entry);
   }
 
-  function getCellColor(entry: HeatmapEntry): string {
+  function getRowColor(entry: HeatmapEntry): { bar: string; badge: string; label: string } {
     if (mode === "accuracy") {
       const v = entry.weightedAccuracy;
-      if (v >= 80) return "bg-emerald-100 text-emerald-800";
-      if (v >= 60) return "bg-emerald-50 text-emerald-700";
-      if (v >= 40) return "bg-amber-50 text-amber-700";
-      return "bg-red-50 text-red-700";
+      if (v >= 80) return { bar: "bg-emerald-500", badge: "bg-emerald-100 text-emerald-800", label: "Strong" };
+      if (v >= 60) return { bar: "bg-emerald-400", badge: "bg-emerald-50 text-emerald-700", label: "Good" };
+      if (v >= 40) return { bar: "bg-amber-400", badge: "bg-amber-50 text-amber-700", label: "Developing" };
+      return { bar: "bg-red-400", badge: "bg-red-50 text-red-700", label: "Needs focus" };
     }
     if (mode === "time") {
       const v = entry.avgTime;
-      if (v <= 25) return "bg-emerald-100 text-emerald-800";
-      if (v <= 35) return "bg-emerald-50 text-emerald-700";
-      if (v <= 45) return "bg-amber-50 text-amber-700";
-      return "bg-red-50 text-red-700";
+      if (v <= 25) return { bar: "bg-emerald-500", badge: "bg-emerald-100 text-emerald-800", label: "On target" };
+      if (v <= 35) return { bar: "bg-emerald-400", badge: "bg-emerald-50 text-emerald-700", label: "Acceptable" };
+      if (v <= 45) return { bar: "bg-amber-400", badge: "bg-amber-50 text-amber-700", label: "A little slow" };
+      return { bar: "bg-red-400", badge: "bg-red-50 text-red-700", label: "Too slow" };
     }
     const v = entry.volatility;
-    if (v <= 5) return "bg-emerald-100 text-emerald-800";
-    if (v <= 15) return "bg-amber-50 text-amber-700";
-    return "bg-red-50 text-red-700";
+    if (v <= 5) return { bar: "bg-emerald-500", badge: "bg-emerald-100 text-emerald-800", label: "Reliable" };
+    if (v <= 15) return { bar: "bg-amber-400", badge: "bg-amber-50 text-amber-700", label: "Sometimes" };
+    return { bar: "bg-red-400", badge: "bg-red-50 text-red-700", label: "Inconsistent" };
   }
 
-  function getCellValue(entry: HeatmapEntry): string {
-    if (mode === "accuracy") return `${entry.weightedAccuracy}%`;
-    if (mode === "time") return `${entry.avgTime}s`;
-    return `${entry.volatility}`;
+  function getRowValue(entry: HeatmapEntry): string {
+    if (mode === "accuracy") return `${entry.weightedAccuracy}% correct`;
+    if (mode === "time") return `${entry.avgTime}s per question`;
+    return entry.volatility <= 5 ? "Gets it reliably" : entry.volatility <= 15 ? "Sometimes gets it" : "Hit-and-miss";
   }
+
+  function getBarWidth(entry: HeatmapEntry): number {
+    if (mode === "accuracy") return Math.min(100, entry.weightedAccuracy);
+    if (mode === "time") return Math.min(100, Math.max(0, 100 - (entry.avgTime - 10) * 2));
+    return Math.min(100, Math.max(0, 100 - entry.volatility * 3));
+  }
+
+  const modeDescriptions = {
+    accuracy: "How many questions your child is getting right in each topic. Green = strong, amber = developing, red = needs more practice.",
+    time: "How quickly your child works through each topic. Green = on target for the test timing, red = spending too long on questions.",
+    volatility: "Whether your child's results are consistent or hit-and-miss. Green = reliably correct, red = getting it right sometimes but not always.",
+  };
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-2">
-        <span className="text-sm font-medium text-muted-foreground">View:</span>
-        <div className="flex gap-1">
+    <div className="space-y-5">
+      <div className="rounded-xl border border-border/50 bg-slate-50 p-4 space-y-3">
+        <p className="text-sm font-medium text-slate-700">
+          This view shows how your child is performing on each topic within every subject — broken down by accuracy, speed, and consistency.
+        </p>
+        <div className="flex flex-wrap gap-3 text-xs">
+          <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-emerald-500 shrink-0" />Strong / On target</span>
+          <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-amber-400 shrink-0" />Developing / Some gaps</span>
+          <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-red-400 shrink-0" />Needs more practice</span>
+        </div>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="text-sm font-medium text-muted-foreground shrink-0">Show me:</span>
+        <div className="flex flex-wrap gap-1.5">
           {(["accuracy", "time", "volatility"] as const).map(m => (
-            <Button
+            <button
               key={m}
-              variant={mode === m ? "default" : "outline"}
-              size="sm"
               onClick={() => setMode(m)}
               data-testid={`button-heatmap-${m}`}
-              className="text-xs flex items-center gap-1"
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors border ${
+                mode === m
+                  ? "bg-primary text-white border-primary"
+                  : "bg-white text-slate-700 border-border hover:border-primary/40"
+              }`}
             >
-              {m === "accuracy" ? (
-                <>Accuracy <InfoTooltip text={TOOLTIPS.weightedAccuracy} /></>
-              ) : m === "time" ? (
-                "Speed"
-              ) : (
-                <>Consistency <InfoTooltip text={TOOLTIPS.volatility} /></>
-              )}
-            </Button>
+              {m === "accuracy" ? "How many they're getting right" : m === "time" ? "How fast they're working" : "How consistent they are"}
+            </button>
           ))}
         </div>
       </div>
 
+      <div className="rounded-lg bg-blue-50 border border-blue-100 px-4 py-2.5 text-xs text-blue-800">
+        {modeDescriptions[mode]}
+      </div>
+
       {Object.entries(grouped).sort(([a], [b]) => a.localeCompare(b)).map(([skill, entries]) => (
-        <Card key={skill}>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm">{formatSubRule(skill)}</CardTitle>
+        <Card key={skill} data-testid={`card-subject-${skill}`}>
+          <CardHeader className="pb-3 border-b border-border/40">
+            <CardTitle className="text-base font-serif">{getSkillDisplayName(skill)}</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
-              {entries.sort((a, b) => a.subRuleId.localeCompare(b.subRuleId)).map(entry => (
+          <CardContent className="pt-3 space-y-2">
+            {entries.sort((a, b) => {
+              if (mode === "accuracy") return a.weightedAccuracy - b.weightedAccuracy;
+              if (mode === "time") return b.avgTime - a.avgTime;
+              return b.volatility - a.volatility;
+            }).map(entry => {
+              const colors = getRowColor(entry);
+              const barW = getBarWidth(entry);
+              const label = getTopicLabel(entry.subRuleId);
+              return (
                 <div
                   key={entry.subRuleId}
-                  className={`rounded-lg px-3 py-2 ${getCellColor(entry)}`}
-                  title={`Accuracy: ${entry.weightedAccuracy}% | Time: ${entry.avgTime}s | Attempts: ${entry.attempts} | Volatility: ${entry.volatility}`}
-                  data-testid={`cell-heatmap-${entry.subRuleId}`}
+                  className="flex items-center gap-3 py-2 border-b border-border/20 last:border-0"
+                  data-testid={`row-topic-${entry.subRuleId}`}
                 >
-                  <div className="text-[10px] font-medium truncate mb-0.5">
-                    {entry.subRuleId.split(".").pop()?.replace(/_/g, " ")}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-sm font-medium text-slate-800 leading-snug">{label}</span>
+                      <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ml-2 shrink-0 ${colors.badge}`}>
+                        {colors.label}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div className={`h-full rounded-full ${colors.bar}`} style={{ width: `${barW}%` }} />
+                      </div>
+                      <span className="text-xs text-muted-foreground shrink-0 w-36 text-right">{getRowValue(entry)} · {entry.attempts} {entry.attempts === 1 ? "question" : "questions"}</span>
+                    </div>
                   </div>
-                  <div className="text-sm font-bold">{getCellValue(entry)}</div>
-                  <div className="text-[10px] opacity-70">{entry.attempts} attempts</div>
                 </div>
-              ))}
-            </div>
+              );
+            })}
           </CardContent>
         </Card>
       ))}
 
-      <p className="text-xs text-muted-foreground text-center">
-        {mode === "accuracy" && "Accuracy adjusted for question difficulty — harder questions count for more."}
-        {mode === "time" && "Average seconds per question. Green = on target, red = spending too long or rushing."}
-        {mode === "volatility" && "How consistent your child is on each topic. Green = reliable, red = getting it right sometimes but not always."}
+      <p className="text-xs text-muted-foreground text-center pb-2">
+        Topics are sorted by those needing the most attention first. Accuracy is adjusted for question difficulty — harder questions count for more.
       </p>
     </div>
   );
