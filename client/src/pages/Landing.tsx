@@ -632,6 +632,89 @@ export default function Landing() {
         </div>
       </section>
 
+      <section className="py-16 md:py-20 bg-gradient-to-br from-slate-900 to-slate-800 border-b border-border/30" data-testid="section-stop-guessing">
+        <div className="container mx-auto max-w-5xl px-4">
+          <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
+            <div>
+              <span className="inline-block text-xs font-bold text-white/30 uppercase tracking-widest mb-4">The Problem With Random Practice</span>
+              <h2 className="text-3xl md:text-4xl font-bold text-white font-serif leading-tight mb-5">
+                Stop Guessing What to Revise
+              </h2>
+              <p className="text-white/60 text-base leading-relaxed mb-4">
+                Most families approach preparation the same way — more questions, more papers, more tutoring hours. They work hard. But without knowing where the marks are actually being lost, preparation time is spread across everything rather than focused on what matters.
+              </p>
+              <p className="text-brand-amber/90 font-semibold text-base leading-relaxed">
+                This diagnostic removes that uncertainty. Instead of doing more questions, you focus on the right ones.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 gap-4">
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-5 flex items-start gap-4">
+                <div className="w-10 h-10 rounded-xl bg-red-500/20 text-red-400 flex items-center justify-center shrink-0 border border-red-500/20">
+                  <Search className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-white font-semibold text-sm mb-1">Without a diagnostic</p>
+                  <p className="text-white/50 text-sm leading-relaxed">Working through everything. Spending time on topics your child already knows. Not knowing which gaps are costing the most marks.</p>
+                </div>
+              </div>
+              <div className="rounded-2xl border border-brand-amber/20 bg-brand-amber/5 p-5 flex items-start gap-4">
+                <div className="w-10 h-10 rounded-xl bg-brand-amber/20 text-brand-amber flex items-center justify-center shrink-0 border border-brand-amber/20">
+                  <Wrench className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-white font-semibold text-sm mb-1">With a diagnostic</p>
+                  <p className="text-white/50 text-sm leading-relaxed">Three specific priorities, ranked by impact. Practice time goes exactly where it will move the score — with evidence it's working after each session.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-14 md:py-20 bg-slate-50 border-b border-border/30" data-testid="section-platform-differentiator">
+        <div className="container mx-auto max-w-5xl px-4">
+          <div className="text-center mb-10">
+            <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">Why This Works</span>
+            <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif mb-3">
+              This Is a Preparation Platform. Not a Question Bank.
+            </h2>
+            <p className="text-slate-500 max-w-2xl mx-auto leading-relaxed">
+              Most preparation resources give you material to work through. This platform tells you what to work on — based on where your child actually is — and shows you whether it's making a difference.
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col gap-3" data-testid="card-platform-diff-next">
+              <div className="w-11 h-11 rounded-xl bg-primary/5 text-primary flex items-center justify-center border border-primary/10">
+                <Target className="h-5 w-5" />
+              </div>
+              <h3 className="font-bold text-primary text-base leading-tight">Tells You What to Focus on Next</h3>
+              <p className="text-sm text-slate-500 leading-relaxed">After every diagnostic, the three highest-impact priorities are identified and matched to targeted drills. You're not guessing where to spend the time — the data decides.</p>
+            </div>
+            <div className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col gap-3" data-testid="card-platform-diff-device">
+              <div className="w-11 h-11 rounded-xl bg-primary/5 text-primary flex items-center justify-center border border-primary/10">
+                <Smartphone className="h-5 w-5" />
+              </div>
+              <h3 className="font-bold text-primary text-base leading-tight">Works on Any Device</h3>
+              <p className="text-sm text-slate-500 leading-relaxed">Phone, tablet or laptop — your child practices when and where suits them. Interactive and timed, not a static PDF to work through alone at a dedicated desk.</p>
+            </div>
+            <div className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col gap-3" data-testid="card-platform-diff-analytics">
+              <div className="w-11 h-11 rounded-xl bg-primary/5 text-primary flex items-center justify-center border border-primary/10">
+                <BarChart3 className="h-5 w-5" />
+              </div>
+              <h3 className="font-bold text-primary text-base leading-tight">Parent Visibility Without Micromanaging</h3>
+              <p className="text-sm text-slate-500 leading-relaxed">The parent analytics dashboard shows readiness score, pace discipline, fatigue patterns and top priorities. You know what's happening — without sitting beside them for every session.</p>
+            </div>
+            <div className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col gap-3" data-testid="card-platform-diff-tracking">
+              <div className="w-11 h-11 rounded-xl bg-primary/5 text-primary flex items-center justify-center border border-primary/10">
+                <TrendingUp className="h-5 w-5" />
+              </div>
+              <h3 className="font-bold text-primary text-base leading-tight">Shows Whether It's Working</h3>
+              <p className="text-sm text-slate-500 leading-relaxed">Score trajectory, forecast movement toward 121, gap velocity over time. You can see preparation making a difference — or know early if a different focus is needed.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section id="pricing" className="py-16 md:py-24 bg-white border-b border-border/30" data-testid="section-pricing">
         <div className="container mx-auto max-w-6xl px-4">
           <div className="text-center mb-12">
@@ -723,89 +806,6 @@ export default function Landing() {
             </div>
           </div>
           <p className="text-center text-xs text-slate-400 mt-8">All prices include VAT. Subscriptions can be cancelled anytime. One-time payments grant access for the stated duration.</p>
-        </div>
-      </section>
-
-      <section className="py-16 md:py-20 bg-gradient-to-br from-slate-900 to-slate-800 border-b border-border/30" data-testid="section-stop-guessing">
-        <div className="container mx-auto max-w-5xl px-4">
-          <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
-            <div>
-              <span className="inline-block text-xs font-bold text-white/30 uppercase tracking-widest mb-4">The Problem With Random Practice</span>
-              <h2 className="text-3xl md:text-4xl font-bold text-white font-serif leading-tight mb-5">
-                Stop Guessing What to Revise
-              </h2>
-              <p className="text-white/60 text-base leading-relaxed mb-4">
-                Most families approach preparation the same way — more questions, more papers, more tutoring hours. They work hard. But without knowing where the marks are actually being lost, preparation time is spread across everything rather than focused on what matters.
-              </p>
-              <p className="text-brand-amber/90 font-semibold text-base leading-relaxed">
-                This diagnostic removes that uncertainty. Instead of doing more questions, you focus on the right ones.
-              </p>
-            </div>
-            <div className="grid grid-cols-1 gap-4">
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-5 flex items-start gap-4">
-                <div className="w-10 h-10 rounded-xl bg-red-500/20 text-red-400 flex items-center justify-center shrink-0 border border-red-500/20">
-                  <Search className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="text-white font-semibold text-sm mb-1">Without a diagnostic</p>
-                  <p className="text-white/50 text-sm leading-relaxed">Working through everything. Spending time on topics your child already knows. Not knowing which gaps are costing the most marks.</p>
-                </div>
-              </div>
-              <div className="rounded-2xl border border-brand-amber/20 bg-brand-amber/5 p-5 flex items-start gap-4">
-                <div className="w-10 h-10 rounded-xl bg-brand-amber/20 text-brand-amber flex items-center justify-center shrink-0 border border-brand-amber/20">
-                  <Wrench className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="text-white font-semibold text-sm mb-1">With a diagnostic</p>
-                  <p className="text-white/50 text-sm leading-relaxed">Three specific priorities, ranked by impact. Practice time goes exactly where it will move the score — with evidence it's working after each session.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-14 md:py-20 bg-slate-50 border-b border-border/30" data-testid="section-platform-differentiator">
-        <div className="container mx-auto max-w-5xl px-4">
-          <div className="text-center mb-10">
-            <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">Why This Works</span>
-            <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif mb-3">
-              This Is a Preparation Platform. Not a Question Bank.
-            </h2>
-            <p className="text-slate-500 max-w-2xl mx-auto leading-relaxed">
-              Most preparation resources give you material to work through. This platform tells you what to work on — based on where your child actually is — and shows you whether it's making a difference.
-            </p>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col gap-3" data-testid="card-platform-diff-next">
-              <div className="w-11 h-11 rounded-xl bg-primary/5 text-primary flex items-center justify-center border border-primary/10">
-                <Target className="h-5 w-5" />
-              </div>
-              <h3 className="font-bold text-primary text-base leading-tight">Tells You What to Focus on Next</h3>
-              <p className="text-sm text-slate-500 leading-relaxed">After every diagnostic, the three highest-impact priorities are identified and matched to targeted drills. You're not guessing where to spend the time — the data decides.</p>
-            </div>
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col gap-3" data-testid="card-platform-diff-device">
-              <div className="w-11 h-11 rounded-xl bg-primary/5 text-primary flex items-center justify-center border border-primary/10">
-                <Smartphone className="h-5 w-5" />
-              </div>
-              <h3 className="font-bold text-primary text-base leading-tight">Works on Any Device</h3>
-              <p className="text-sm text-slate-500 leading-relaxed">Phone, tablet or laptop — your child practices when and where suits them. Interactive and timed, not a static PDF to work through alone at a dedicated desk.</p>
-            </div>
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col gap-3" data-testid="card-platform-diff-analytics">
-              <div className="w-11 h-11 rounded-xl bg-primary/5 text-primary flex items-center justify-center border border-primary/10">
-                <BarChart3 className="h-5 w-5" />
-              </div>
-              <h3 className="font-bold text-primary text-base leading-tight">Parent Visibility Without Micromanaging</h3>
-              <p className="text-sm text-slate-500 leading-relaxed">The parent analytics dashboard shows readiness score, pace discipline, fatigue patterns and top priorities. You know what's happening — without sitting beside them for every session.</p>
-            </div>
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col gap-3" data-testid="card-platform-diff-tracking">
-              <div className="w-11 h-11 rounded-xl bg-primary/5 text-primary flex items-center justify-center border border-primary/10">
-                <TrendingUp className="h-5 w-5" />
-              </div>
-              <h3 className="font-bold text-primary text-base leading-tight">Shows Whether It's Working</h3>
-              <p className="text-sm text-slate-500 leading-relaxed">Score trajectory, forecast movement toward 121, gap velocity over time. You can see preparation making a difference — or know early if a different focus is needed.</p>
-            </div>
-          </div>
         </div>
       </section>
 
