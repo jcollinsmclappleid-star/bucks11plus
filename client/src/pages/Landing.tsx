@@ -512,6 +512,21 @@ export default function Landing() {
       <section className="py-16 md:py-24 bg-white border-b border-border/30" data-testid="section-assessment-outcomes">
         <div className="container mx-auto max-w-5xl px-4">
           <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
+            <div>
+              <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-4">After the Assessment</span>
+              <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif leading-tight mb-5">
+                What You'll Know in 8 Minutes
+              </h2>
+              <p className="text-slate-500 text-base leading-relaxed mb-6">
+                Most parents finish a practice paper knowing their child got some questions wrong. This diagnostic tells you <em>which</em> question types, <em>why</em>, and what to do about it.
+              </p>
+              <Link href="/free-diagnostic">
+                <Button className="h-12 px-7 font-bold bg-primary hover:bg-primary/90" data-testid="button-outcomes-cta">
+                  Start Free Diagnostic <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+              <p className="text-xs text-slate-400 mt-3">No account needed · 8 minutes · instant results</p>
+            </div>
             <div className="space-y-3">
               {[
                 { label: "Which question types your child is struggling with — by subject and sub-topic", icon: <Target className="h-4 w-4" />, color: "text-red-600 bg-red-50 border-red-100" },
@@ -527,21 +542,6 @@ export default function Landing() {
                   <p className="text-sm text-slate-700 font-medium leading-snug">{item.label}</p>
                 </div>
               ))}
-            </div>
-            <div>
-              <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-4">After the Assessment</span>
-              <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif leading-tight mb-5">
-                What You'll Know in 8 Minutes
-              </h2>
-              <p className="text-slate-500 text-base leading-relaxed mb-6">
-                Most parents finish a practice paper knowing their child got some questions wrong. This diagnostic tells you <em>which</em> question types, <em>why</em>, and what to do about it.
-              </p>
-              <Link href="/free-diagnostic">
-                <Button className="h-12 px-7 font-bold bg-primary hover:bg-primary/90" data-testid="button-outcomes-cta">
-                  Start Free Diagnostic <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
-              <p className="text-xs text-slate-400 mt-3">No account needed · 8 minutes · instant results</p>
             </div>
           </div>
         </div>
