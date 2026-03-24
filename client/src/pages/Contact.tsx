@@ -13,12 +13,21 @@ export default function Contact() {
         canonicalPath="/contact"
       />
 
-      <div className="text-center mb-12">
+      <div className="mb-12 pb-8 border-b border-slate-200">
+        <div className="flex items-center gap-2 mb-4 justify-center">
+          <div className="h-8 w-8 rounded-lg bg-primary text-primary-foreground flex items-center justify-center">
+            <span className="text-sm font-bold">✓</span>
+          </div>
+          <span className="text-xs font-semibold text-primary uppercase tracking-widest">Bucks 11 Plus Tests</span>
+        </div>
         <h1 className="text-4xl md:text-5xl font-bold text-primary font-serif tracking-tight mb-4" data-testid="text-contact-title">
           Contact Us
         </h1>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
           Have a question about our platform, your account or the Buckinghamshire 11+? We're here to help.
+        </p>
+        <p className="text-xs text-slate-500 mt-6">
+          Operated by <span className="font-semibold text-slate-700">Ianson Systems Limited</span>
         </p>
       </div>
 
