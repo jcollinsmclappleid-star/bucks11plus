@@ -1,59 +1,90 @@
 import { Link } from "wouter";
 import { Seo } from "../components/shared/Seo";
 import { Button } from "@/components/ui/button";
-import { Send, Loader2 } from "lucide-react";
+import { Send, Loader2, MessageSquare, Clock, Heart } from "lucide-react";
 import { useState } from "react";
 
 export default function Contact() {
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 min-h-[60vh]">
+    <div className="min-h-[100vh] bg-gradient-to-b from-blue-50 via-white to-slate-50">
       <Seo
         title="Contact | Bucks 11 Plus Preparation Help | Bucks 11 Plus Tests"
         description="Get in touch with the Bucks 11 Plus Tests team for help with your Bucks 11 Plus preparation. We're here to answer your questions about the Secondary Transfer Test."
         canonicalPath="/contact"
       />
 
-      <div className="mb-12 pb-8 border-b border-slate-200">
-        <div className="flex items-center gap-2 mb-4 justify-center">
-          <div className="h-8 w-8 rounded-lg bg-primary text-primary-foreground flex items-center justify-center">
-            <span className="text-sm font-bold">✓</span>
+      <div className="container mx-auto max-w-4xl px-4 py-16">
+        <div className="mb-16 text-center">
+          <div className="flex items-center gap-2 mb-4 justify-center">
+            <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-primary to-blue-600 text-primary-foreground flex items-center justify-center shadow-md">
+              <span className="text-lg font-bold">✓</span>
+            </div>
+            <span className="text-xs font-semibold text-primary uppercase tracking-widest">Bucks 11 Plus Tests</span>
           </div>
-          <span className="text-xs font-semibold text-primary uppercase tracking-widest">Bucks 11 Plus Tests</span>
-        </div>
-        <h1 className="text-4xl md:text-5xl font-bold text-primary font-serif tracking-tight mb-4" data-testid="text-contact-title">
-          Contact Us
-        </h1>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Have a question about our platform, your account or the Buckinghamshire 11+? We're here to help.
-        </p>
-        <p className="text-xs text-slate-500 mt-6">
-          Operated by <span className="font-semibold text-slate-700">Ianson Systems Limited</span>
-        </p>
-      </div>
+          <h1 className="text-4xl md:text-5xl font-bold text-primary font-serif tracking-tight mb-4" data-testid="text-contact-title">
+            We're Here to Help
+          </h1>
+          <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed mb-8">
+            Questions about your child's progress, the platform, or the Buckinghamshire 11+? Our team is ready to support you on your preparation journey.
+          </p>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto mb-8">
+            <div className="bg-white rounded-lg border border-emerald-100 p-4">
+              <Clock className="h-5 w-5 text-emerald-600 mx-auto mb-2" />
+              <p className="text-sm font-medium text-slate-700">Fast Response</p>
+              <p className="text-xs text-slate-500">Within 1 working day</p>
+            </div>
+            <div className="bg-white rounded-lg border border-amber-100 p-4">
+              <MessageSquare className="h-5 w-5 text-amber-600 mx-auto mb-2" />
+              <p className="text-sm font-medium text-slate-700">Always Listen</p>
+              <p className="text-xs text-slate-500">Your feedback matters</p>
+            </div>
+            <div className="bg-white rounded-lg border border-violet-100 p-4">
+              <Heart className="h-5 w-5 text-violet-600 mx-auto mb-2" />
+              <p className="text-sm font-medium text-slate-700">Genuine Care</p>
+              <p className="text-xs text-slate-500">We're on your side</p>
+            </div>
+          </div>
 
-      <div className="max-w-xl mx-auto">
-        <div className="rounded-2xl border border-slate-200 bg-white p-8 md:p-10" data-testid="card-contact-form">
-          <h2 className="text-xl font-bold text-primary font-serif mb-1">Send a Message</h2>
-          <p className="text-sm text-muted-foreground mb-6">We'll get back to you within 1 working day.</p>
-          <ContactForm />
+          <p className="text-xs text-slate-500 mt-6">
+            Operated by <span className="font-semibold text-slate-700">Ianson Systems Limited</span>
+          </p>
         </div>
 
-        <div className="mt-8 rounded-2xl border border-slate-200 bg-slate-50 p-6 md:p-8" data-testid="card-contact-info">
-          <h3 className="font-bold text-primary font-serif mb-3">Before you get in touch</h3>
-          <ul className="space-y-2 text-sm text-muted-foreground">
-            <li className="flex items-start gap-2">
-              <span className="text-primary font-bold mt-0.5">•</span>
-              <span>For refund requests, please include your account email and order reference. See our <Link href="/refund-policy" className="text-primary underline underline-offset-2 hover:text-primary/80">Refund Policy</Link> for eligibility details.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-primary font-bold mt-0.5">•</span>
-              <span>For technical issues, let us know which browser and device you're using so we can help faster.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-primary font-bold mt-0.5">•</span>
-              <span>For questions about the Buckinghamshire 11+ process, check our <Link href="/buckinghamshire-11-plus-guide" className="text-primary underline underline-offset-2 hover:text-primary/80">Bucks 11+ Guide</Link> which covers registration, timelines and qualifying scores.</span>
-            </li>
-          </ul>
+        <div className="max-w-xl mx-auto">
+          <div className="rounded-2xl border border-primary/10 bg-white shadow-lg p-8 md:p-10" data-testid="card-contact-form">
+            <div className="flex items-center gap-2 mb-6">
+              <div className="h-6 w-6 rounded bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center text-white text-xs font-bold">
+                ✓
+              </div>
+              <h2 className="text-lg font-bold text-primary font-serif">Send us a Message</h2>
+            </div>
+            <p className="text-sm text-slate-600 mb-6">Fill out the form below and we'll be in touch shortly.</p>
+            <ContactForm />
+          </div>
+
+          <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="rounded-2xl border border-emerald-100 bg-emerald-50 p-6" data-testid="card-contact-tip-1">
+              <div className="h-8 w-8 rounded bg-emerald-200 text-emerald-700 flex items-center justify-center text-sm font-bold mb-3">?</div>
+              <h3 className="font-bold text-emerald-900 mb-2">Technical Help</h3>
+              <p className="text-sm text-emerald-800">Let us know your browser and device — we can troubleshoot faster that way.</p>
+            </div>
+            <div className="rounded-2xl border border-amber-100 bg-amber-50 p-6" data-testid="card-contact-tip-2">
+              <div className="h-8 w-8 rounded bg-amber-200 text-amber-700 flex items-center justify-center text-sm font-bold mb-3">📋</div>
+              <h3 className="font-bold text-amber-900 mb-2">Refund or Billing</h3>
+              <p className="text-sm text-amber-800">Have your account email and order reference handy. Check our <Link href="/refund-policy" className="text-amber-700 underline underline-offset-2 hover:text-amber-800 font-semibold">Refund Policy</Link> for details.</p>
+            </div>
+            <div className="rounded-2xl border border-violet-100 bg-violet-50 p-6" data-testid="card-contact-tip-3">
+              <div className="h-8 w-8 rounded bg-violet-200 text-violet-700 flex items-center justify-center text-sm font-bold mb-3">📚</div>
+              <h3 className="font-bold text-violet-900 mb-2">11+ Questions</h3>
+              <p className="text-sm text-violet-800">Check our <Link href="/buckinghamshire-11-plus-guide" className="text-violet-700 underline underline-offset-2 hover:text-violet-800 font-semibold">Bucks 11+ Guide</Link> for timelines, registration, and qualifying scores.</p>
+            </div>
+            <div className="rounded-2xl border border-blue-100 bg-blue-50 p-6" data-testid="card-contact-tip-4">
+              <div className="h-8 w-8 rounded bg-blue-200 text-blue-700 flex items-center justify-center text-sm font-bold mb-3">💬</div>
+              <h3 className="font-bold text-blue-900 mb-2">Chat Widget</h3>
+              <p className="text-sm text-blue-800">See the message button in the bottom right? Click it anytime for quick support.</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

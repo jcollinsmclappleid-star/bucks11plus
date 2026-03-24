@@ -20,6 +20,7 @@ export default function Navbar() {
     { href: "/app/programme", label: "Programme", show: true },
     { href: "/app/analytics", label: "Analytics", show: true },
     { href: "/pricing", label: "Pricing", show: true },
+    { href: "/contact", label: "Contact", show: true },
   ];
 
   const isActive = (href: string, matchPrefix?: boolean) => {
