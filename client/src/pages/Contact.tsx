@@ -141,9 +141,7 @@ function ContactForm() {
           data-testid="select-contact-type"
         >
           <option value="general">General Enquiry</option>
-          <option value="billing">Account / Billing</option>
           <option value="technical">Technical Issue</option>
-          <option value="refund">Refund Request</option>
           <option value="other">Other</option>
         </select>
       </div>
