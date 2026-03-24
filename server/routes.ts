@@ -1910,7 +1910,10 @@ export async function registerRoutes(
 
       const html = `
         <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
-          <h2 style="color:#1e3a5f">New support message — Bucks 11 Plus Tests</h2>
+          <div style="background:#f0f4f8;border-left:4px solid #0d1f30;padding:12px;margin-bottom:20px;font-size:13px;color:#475569">
+            <strong>Source:</strong> Bucks 11 Plus Tests — bucks11plustest.co.uk
+          </div>
+          <h2 style="color:#1e3a5f">Chat Widget Enquiry</h2>
           <p><strong>From:</strong> ${name || "(not given)"}</p>
           <p><strong>Email:</strong> ${email}</p>
           <hr style="border:1px solid #e2e8f0;margin:16px 0"/>
@@ -1923,14 +1926,62 @@ export async function registerRoutes(
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
           body: JSON.stringify({
             from: FROM,
-            to: ["support@bucks11plus.co.uk"],
+            to: ["support@11plustesthub.co.uk"],
             reply_to: email,
-            subject: `Support enquiry from ${name || email}`,
+            subject: `[Bucks 11 Plus Tests] Chat enquiry from ${name || email}`,
             html,
           }),
         });
       } else {
         console.log(`[Chat] No RESEND_API_KEY — suppressed email from ${email}: ${message}`);
+      }
+
+      res.json({ success: true });
+    } catch (error) { next(error); }
+  });
+
+  app.post("/api/contact/enquiry", async (req, res, next) => {
+    try {
+      const { name, email, enquiryType, message } = req.body;
+      if (!email || !message) return res.status(400).json({ message: "Email and message are required" });
+
+      const RESEND_API_KEY = process.env.RESEND_API_KEY;
+      const FROM = process.env.RESEND_FROM_EMAIL || "Bucks 11 Plus Tests <noreply@bucks11plustest.co.uk>";
+
+      const enquiryTypeLabel = {
+        general: "General Enquiry",
+        billing: "Account / Billing",
+        technical: "Technical Issue",
+        refund: "Refund Request",
+        other: "Other"
+      }[enquiryType] || enquiryType;
+
+      const html = `
+        <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
+          <div style="background:#f0f4f8;border-left:4px solid #0d1f30;padding:12px;margin-bottom:20px;font-size:13px;color:#475569">
+            <strong>Source:</strong> Bucks 11 Plus Tests — bucks11plustest.co.uk
+          </div>
+          <h2 style="color:#1e3a5f">${enquiryTypeLabel}</h2>
+          <p><strong>From:</strong> ${name || "(not given)"}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <hr style="border:1px solid #e2e8f0;margin:16px 0"/>
+          <p style="white-space:pre-wrap">${message.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</p>
+        </div>`;
+
+      if (RESEND_API_KEY) {
+        await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
+          body: JSON.stringify({
+            from: FROM,
+            to: ["support@11plustesthub.co.uk"],
+            reply_to: email,
+            subject: `[Bucks 11 Plus Tests] ${enquiryTypeLabel} — ${name || email}`,
+            html,
+          }),
+        });
+      } else {
+        console.log(`[Enquiry] No RESEND_API_KEY — suppressed email from ${email}: ${message}`);
       }
 
       res.json({ success: true });

@@ -52,7 +52,7 @@ export default function Legal({ type }: { type: 'terms' | 'privacy' | 'safeguard
         },
         {
           heading: "12. Contact",
-          body: "If you have any questions about these Terms of Service, please contact us at support@bucks11plustest.co.uk."
+          body: "If you have any questions about these Terms of Service, please contact us at support@11plustesthub.co.uk."
         }
       ]
     },
@@ -98,7 +98,7 @@ export default function Legal({ type }: { type: 'terms' | 'privacy' | 'safeguard
         },
         {
           heading: "9. Your Rights Under UK GDPR",
-          body: "Under UK data protection law, you have the following rights: Right of access — to request a copy of the personal data we hold about you. Right to rectification — to request correction of inaccurate or incomplete data. Right to erasure — to request deletion of your personal data, subject to legal retention requirements. Right to restrict processing — to request that we limit how we use your data. Right to data portability — to receive your data in a structured, commonly used format. Right to object — to object to processing based on legitimate interests. Right to withdraw consent — where processing is based on consent, you may withdraw it at any time. To exercise any of these rights, please contact us at support@bucks11plustest.co.uk. We will respond to your request within 30 days."
+          body: "Under UK data protection law, you have the following rights: Right of access — to request a copy of the personal data we hold about you. Right to rectification — to request correction of inaccurate or incomplete data. Right to erasure — to request deletion of your personal data, subject to legal retention requirements. Right to restrict processing — to request that we limit how we use your data. Right to data portability — to receive your data in a structured, commonly used format. Right to object — to object to processing based on legitimate interests. Right to withdraw consent — where processing is based on consent, you may withdraw it at any time. To exercise any of these rights, please contact us at support@11plustesthub.co.uk. We will respond to your request within 30 days."
         },
         {
           heading: "10. Data Security",
@@ -114,7 +114,7 @@ export default function Legal({ type }: { type: 'terms' | 'privacy' | 'safeguard
         },
         {
           heading: "13. Contact and Complaints",
-          body: "If you have any questions about this Privacy Policy or wish to exercise your data protection rights, please contact us at support@bucks11plustest.co.uk. If you are unsatisfied with our response, you have the right to lodge a complaint with the Information Commissioner's Office (ICO) at ico.org.uk."
+          body: "If you have any questions about this Privacy Policy or wish to exercise your data protection rights, please contact us at support@11plustesthub.co.uk. If you are unsatisfied with our response, you have the right to lodge a complaint with the Information Commissioner's Office (ICO) at ico.org.uk."
         }
       ]
     },
@@ -150,19 +150,19 @@ export default function Legal({ type }: { type: 'terms' | 'privacy' | 'safeguard
         },
         {
           heading: "How to Request a Refund",
-          body: "If you are within the 14-day window and have not accessed any digital content, please email us at support@bucks11plustest.co.uk with your account email address and order reference. We aim to process all eligible refund requests within 5 working days. Refunds will be returned to the original payment method."
+          body: "If you are within the 14-day window and have not accessed any digital content, please email us at support@11plustesthub.co.uk with your account email address and order reference. We aim to process all eligible refund requests within 5 working days. Refunds will be returned to the original payment method."
         },
         {
           heading: "Exceptional Circumstances",
-          body: "If you experience a technical issue that prevents you from using the platform as intended, please contact us at support@bucks11plustest.co.uk. We will review each case individually and may offer a partial refund, credit, or extension at our discretion."
+          body: "If you experience a technical issue that prevents you from using the platform as intended, please contact us at support@11plustesthub.co.uk. We will review each case individually and may offer a partial refund, credit, or extension at our discretion."
         },
         {
           heading: "Plan Changes & Upgrades",
-          body: "Current plan prices: Bucks Practice Platform £24.99/month; Bucks Practice Platform Edge £59.99/month or £495/year; Bucks Young Scholar Programme £349 one-time. If you upgrade from one plan to another (e.g. from Practice Platform to Young Scholar Programme), please contact support@bucks11plustest.co.uk. Downgrades are not available once content from a higher-tier plan has been accessed."
+          body: "Current plan prices: Bucks Practice Platform £24.99/month; Bucks Practice Platform Edge £59.99/month or £495/year; Bucks Young Scholar Programme £349 one-time. If you upgrade from one plan to another (e.g. from Practice Platform to Young Scholar Programme), please contact support@11plustesthub.co.uk. Downgrades are not available once content from a higher-tier plan has been accessed."
         },
         {
           heading: "Contact",
-          body: "For any questions about this refund policy or to request a refund, please email support@bucks11plustest.co.uk."
+          body: "For any questions about this refund policy or to request a refund, please email support@11plustesthub.co.uk."
         }
       ]
     }

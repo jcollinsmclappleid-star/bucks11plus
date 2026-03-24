@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { Seo } from "../components/shared/Seo";
 import { Button } from "@/components/ui/button";
-import { Mail, Send } from "lucide-react";
+import { Send, Loader2 } from "lucide-react";
 import { useState } from "react";
 
 export default function Contact() {
@@ -23,29 +23,7 @@ export default function Contact() {
       </div>
 
       <div className="max-w-xl mx-auto">
-        <div className="rounded-2xl border border-slate-200 bg-white p-8 md:p-10 text-center space-y-6" data-testid="card-contact-email">
-          <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
-            <Mail className="h-8 w-8 text-primary" />
-          </div>
-          <div>
-            <h2 className="text-xl font-bold text-primary font-serif mb-2">Email Support</h2>
-            <p className="text-muted-foreground text-sm mb-4">
-              For account queries, technical support, refund requests or general questions about Bucks 11 Plus Tests.
-            </p>
-            <a
-              href="mailto:support@bucks11plustest.co.uk"
-              className="inline-flex items-center gap-2 text-lg font-semibold text-primary hover:text-primary/80 transition-colors underline underline-offset-4"
-              data-testid="link-support-email"
-            >
-              support@bucks11plustest.co.uk
-            </a>
-          </div>
-          <p className="text-sm text-muted-foreground">
-            We aim to respond to all enquiries within 1 working day.
-          </p>
-        </div>
-
-        <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-8 md:p-10" data-testid="card-contact-form">
+        <div className="rounded-2xl border border-slate-200 bg-white p-8 md:p-10" data-testid="card-contact-form">
           <h2 className="text-xl font-bold text-primary font-serif mb-1">Send a Message</h2>
           <p className="text-sm text-muted-foreground mb-6">We'll get back to you within 1 working day.</p>
           <ContactForm />
@@ -74,7 +52,45 @@ export default function Contact() {
 }
 
 function ContactForm() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [enquiryType, setEnquiryType] = useState<string>("general");
+  const [message, setMessage] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!email.trim() || !message.trim()) return;
+    
+    setSubmitting(true);
+    setError(null);
+    
+    try {
+      const res = await fetch("/api/contact/enquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name.trim(),
+          email: email.trim(),
+          enquiryType,
+          message: message.trim()
+        })
+      });
+      
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.message || "Failed to send message");
+      }
+      
+      setSubmitted(true);
+    } catch (err: any) {
+      setError(err.message || "Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   if (submitted) {
     return (
@@ -89,27 +105,26 @@ function ContactForm() {
   }
 
   return (
-    <form
-      onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }}
-      className="space-y-4"
-      data-testid="contact-form"
-    >
+    <form onSubmit={handleSubmit} className="space-y-4" data-testid="contact-form">
       <div>
-        <label htmlFor="contact-name" className="block text-sm font-medium text-primary mb-1.5">Your Name</label>
+        <label htmlFor="contact-name" className="block text-sm font-medium text-primary mb-1.5">Your Name (optional)</label>
         <input
           id="contact-name"
           type="text"
-          required
+          value={name}
+          onChange={e => setName(e.target.value)}
           placeholder="Full name"
           className="w-full rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm text-primary placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40"
           data-testid="input-contact-name"
         />
       </div>
       <div>
-        <label htmlFor="contact-email" className="block text-sm font-medium text-primary mb-1.5">Email Address</label>
+        <label htmlFor="contact-email" className="block text-sm font-medium text-primary mb-1.5">Email Address <span className="text-red-500">*</span></label>
         <input
           id="contact-email"
           type="email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
           required
           placeholder="you@example.com"
           className="w-full rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm text-primary placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40"
@@ -117,9 +132,27 @@ function ContactForm() {
         />
       </div>
       <div>
-        <label htmlFor="contact-message" className="block text-sm font-medium text-primary mb-1.5">Message</label>
+        <label htmlFor="contact-type" className="block text-sm font-medium text-primary mb-1.5">Enquiry Type <span className="text-red-500">*</span></label>
+        <select
+          id="contact-type"
+          value={enquiryType}
+          onChange={e => setEnquiryType(e.target.value)}
+          className="w-full rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/40"
+          data-testid="select-contact-type"
+        >
+          <option value="general">General Enquiry</option>
+          <option value="billing">Account / Billing</option>
+          <option value="technical">Technical Issue</option>
+          <option value="refund">Refund Request</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div>
+        <label htmlFor="contact-message" className="block text-sm font-medium text-primary mb-1.5">Message <span className="text-red-500">*</span></label>
         <textarea
           id="contact-message"
+          value={message}
+          onChange={e => setMessage(e.target.value)}
           required
           rows={5}
           placeholder="How can we help?"
@@ -127,8 +160,20 @@ function ContactForm() {
           data-testid="input-contact-message"
         />
       </div>
-      <Button type="submit" className="w-full h-11 bg-primary text-primary-foreground font-semibold" data-testid="button-contact-submit">
-        <Send className="mr-2 h-4 w-4" /> Send Message
+      {error && (
+        <p className="text-sm text-red-600" data-testid="contact-form-error">{error}</p>
+      )}
+      <Button 
+        type="submit" 
+        disabled={submitting || !email.trim() || !message.trim()}
+        className="w-full h-11 bg-primary text-primary-foreground font-semibold" 
+        data-testid="button-contact-submit"
+      >
+        {submitting ? (
+          <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Sending…</>
+        ) : (
+          <><Send className="mr-2 h-4 w-4" /> Send Message</>
+        )}
       </Button>
     </form>
   );

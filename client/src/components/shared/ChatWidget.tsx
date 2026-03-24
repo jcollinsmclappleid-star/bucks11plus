@@ -56,7 +56,7 @@ export default function ChatWidget() {
           <div className="bg-primary px-5 py-4 flex items-center justify-between">
             <div>
               <p className="font-bold text-primary-foreground text-sm">Contact Support</p>
-              <p className="text-primary-foreground/60 text-xs mt-0.5">We'll reply to support@bucks11plus.co.uk</p>
+              <p className="text-primary-foreground/60 text-xs mt-0.5">We're here to help</p>
             </div>
             <button
               onClick={handleClose}
@@ -131,7 +131,7 @@ export default function ChatWidget() {
                 )}
               </Button>
               <p className="text-[10px] text-slate-400 text-center leading-relaxed">
-                Messages go to support@bucks11plus.co.uk — we aim to reply within one working day.
+                We aim to reply within one working day.
               </p>
             </form>
           )}
