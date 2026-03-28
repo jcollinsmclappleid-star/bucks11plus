@@ -4,6 +4,16 @@ import { cn } from "@/lib/utils";
 
 type SubjectColor = "violet" | "emerald" | "blue" | "amber";
 
+interface Example {
+  id: number;
+  subject: string;
+  color: SubjectColor;
+  type: string;
+  question: string;
+  options: string[];
+  sequenceItems?: string[];
+}
+
 const SUBJECT_COLORS: Record<SubjectColor, {
   bg: string; border: string; tag: string; optionHover: string;
 }> = {
@@ -33,7 +43,7 @@ const SUBJECT_COLORS: Record<SubjectColor, {
   },
 };
 
-const EXAMPLES = [
+const EXAMPLES: Example[] = [
   {
     id: 1,
     subject: "Verbal Reasoning",
@@ -67,9 +77,10 @@ const EXAMPLES = [
     id: 4,
     subject: "Non-Verbal Reasoning",
     color: "blue" as SubjectColor,
-    type: "Matrix Pattern",
-    question: "In a number grid, each row doubles across. Row 1: 2, 4, 8. Row 2: 3, 6, 12. What number completes Row 3: 4, 8, ___?",
-    options: ["12", "14", "16", "20"],
+    type: "Pattern Sequence",
+    question: "Each arrow rotates 90° clockwise. Which arrow comes next in the sequence?",
+    sequenceItems: ["↑", "→", "↓", "←", "↑", "→", "↓", "?"],
+    options: ["↑", "→", "←", "↓"],
   },
   {
     id: 5,
@@ -105,7 +116,7 @@ const EXAMPLES = [
   },
 ];
 
-function QuestionCard({ example }: { example: typeof EXAMPLES[number] }) {
+function QuestionCard({ example }: { example: Example }) {
   const c = SUBJECT_COLORS[example.color];
   return (
     <div
@@ -124,11 +135,31 @@ function QuestionCard({ example }: { example: typeof EXAMPLES[number] }) {
         </span>
       </div>
 
-      <p className="text-sm font-medium text-slate-800 leading-relaxed mb-4 flex-1">
+      <p className="text-sm font-medium text-slate-800 leading-relaxed mb-3">
         {example.question}
       </p>
 
-      <div className="space-y-2">
+      {example.sequenceItems && (
+        <div className="mb-4 rounded-xl bg-white/80 border border-white/70 p-3">
+          <div className="flex flex-wrap gap-1.5 items-center justify-center">
+            {example.sequenceItems.map((item, i) => (
+              <div
+                key={i}
+                className={cn(
+                  "w-8 h-8 rounded-lg flex items-center justify-center text-base font-bold border",
+                  item === "?"
+                    ? "bg-blue-100 border-blue-300 text-blue-500 text-lg"
+                    : "bg-white border-slate-200 text-slate-700"
+                )}
+              >
+                {item}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div className={cn("space-y-2", !example.sequenceItems && "flex-1 mt-1")}>
         {example.options.map((opt, i) => (
           <div
             key={i}
