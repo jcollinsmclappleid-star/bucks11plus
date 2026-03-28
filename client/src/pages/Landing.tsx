@@ -1159,106 +1159,209 @@ export default function Landing() {
         </div>
       </section>
 
-      <section className="py-14 bg-white border-t border-slate-100" aria-label="Platform overview">
-        <div className="container mx-auto max-w-4xl px-4">
+      <section className="bg-slate-50 border-t border-slate-200" aria-label="Platform overview">
 
-          <div className="mb-10">
-            <h2 className="text-2xl font-bold text-primary font-serif mb-4">At a Glance</h2>
-            <ul className="space-y-2 text-sm text-slate-600 list-none pl-0">
-              <li>✓ Free 12-question GL-style mini diagnostic — no account required, results in under 10 minutes</li>
-              <li>✓ Covers all four Bucks 11+ domains: Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension</li>
-              <li>✓ Readiness forecast benchmarked against the 121 standardised score qualifying threshold</li>
-              <li>✓ Bucks Practice Platform with 1,500+ questions, timed drills, and parent analytics — from £24.99/month</li>
-              <li>✓ Fully independent — not affiliated with GL Assessment, Buckinghamshire Council, or any grammar school</li>
-            </ul>
+        {/* Section header */}
+        <div className="border-b border-slate-200 bg-white">
+          <div className="container mx-auto max-w-4xl px-4 py-10">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="h-px flex-1 bg-gradient-to-r from-transparent to-slate-200" />
+              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Platform Reference</span>
+              <div className="h-px flex-1 bg-gradient-to-l from-transparent to-slate-200" />
+            </div>
+            <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif text-center mb-2">About Bucks 11 Plus Tests</h2>
+            <p className="text-sm text-slate-500 text-center max-w-xl mx-auto">Everything parents need to know about the platform, the diagnostic, and how we help children prepare for the Buckinghamshire Secondary Transfer Test.</p>
+          </div>
+        </div>
+
+        <div className="container mx-auto max-w-4xl px-4 py-12 space-y-12">
+
+          {/* At a Glance */}
+          <div>
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
+                <Zap className="h-4 w-4 text-primary" />
+              </div>
+              <h2 className="text-xl font-bold text-primary font-serif">At a Glance</h2>
+            </div>
+            <div className="grid sm:grid-cols-2 gap-3">
+              {[
+                "Free 12-question GL-style mini diagnostic — no account required, results in under 10 minutes",
+                "Covers all four Bucks 11+ domains: Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension",
+                "Readiness forecast benchmarked against the 121 standardised score qualifying threshold",
+                "Bucks Practice Platform with 1,500+ questions, timed drills, and parent analytics — from £24.99/month",
+                "Fully independent — not affiliated with GL Assessment, Buckinghamshire Council, or any grammar school",
+              ].map((item, i) => (
+                <div key={i} className="flex items-start gap-3 bg-white rounded-xl border border-slate-200 px-4 py-3">
+                  <CheckCircle2 className="h-4 w-4 text-primary/60 shrink-0 mt-0.5" />
+                  <p className="text-sm text-slate-600 leading-relaxed">{item}</p>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <div className="mb-10">
-            <h2 className="text-2xl font-bold text-primary font-serif mb-4">What the Diagnostic Covers</h2>
-            <p className="text-slate-600 leading-relaxed mb-4">
-              The Buckinghamshire Secondary Transfer Test (also called the Secondary Transfer Test or STT) is produced by GL Assessment and covers four assessed domains. Our diagnostic replicates this structure using independently developed GL-style question families:
+          {/* Divider */}
+          <hr className="border-slate-200" />
+
+          {/* What the Diagnostic Covers */}
+          <div>
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
+                <Layers className="h-4 w-4 text-primary" />
+              </div>
+              <h2 className="text-xl font-bold text-primary font-serif">What the Diagnostic Covers</h2>
+            </div>
+            <p className="text-sm text-slate-500 leading-relaxed mb-5 ml-11">
+              The Buckinghamshire Secondary Transfer Test (STT) is produced by GL Assessment and covers four assessed domains. Our diagnostic replicates this structure using independently developed GL-style question families:
             </p>
-            <div className="grid sm:grid-cols-2 gap-4 not-prose">
-              <div className="bg-slate-50 rounded-xl border border-slate-200 p-5">
-                <h3 className="font-bold text-primary text-sm mb-2">Verbal Reasoning</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">Word relationships, alphabetical codes, missing letters, analogies, and logical deduction using language. Tests vocabulary breadth and rule-application speed.</p>
+            <div className="grid sm:grid-cols-2 gap-4">
+              {[
+                { label: "Verbal Reasoning", color: "border-l-violet-400 bg-violet-50", dot: "bg-violet-400", text: "Word relationships, alphabetical codes, missing letters, analogies, and logical deduction using language. Tests vocabulary breadth and rule-application speed." },
+                { label: "Non-Verbal & Spatial Reasoning", color: "border-l-blue-400 bg-blue-50", dot: "bg-blue-400", text: "Pattern sequences, matrices, shape analogies, spatial rotation, and reflection. Tests logical reasoning without language — a domain not covered in the primary school curriculum." },
+                { label: "Mathematics", color: "border-l-emerald-400 bg-emerald-50", dot: "bg-emerald-400", text: "Arithmetic fluency, fractions, data interpretation, multi-step word problems, and geometry. Goes beyond the Year 6 curriculum into applied reasoning under time pressure." },
+                { label: "English Comprehension", color: "border-l-amber-400 bg-amber-50", dot: "bg-amber-400", text: "Reading passages with multiple-choice questions covering literal comprehension, inference, vocabulary in context, and author technique. Two-phase timed — reading time separate from response time." },
+              ].map((s, i) => (
+                <div key={i} className={`rounded-xl border border-slate-200 border-l-4 p-5 ${s.color}`}>
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className={`w-2 h-2 rounded-full ${s.dot}`} />
+                    <h3 className="font-bold text-primary text-sm">{s.label}</h3>
+                  </div>
+                  <p className="text-xs text-slate-600 leading-relaxed">{s.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Divider */}
+          <hr className="border-slate-200" />
+
+          {/* What Parents Receive */}
+          <div>
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
+                <BarChart3 className="h-4 w-4 text-primary" />
               </div>
-              <div className="bg-slate-50 rounded-xl border border-slate-200 p-5">
-                <h3 className="font-bold text-primary text-sm mb-2">Non-Verbal and Spatial Reasoning</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">Pattern sequences, matrices, shape analogies, spatial rotation, and reflection. Tests logical reasoning without language — a domain not covered in the primary school curriculum.</p>
+              <h2 className="text-xl font-bold text-primary font-serif">What Parents Receive</h2>
+            </div>
+            <p className="text-sm text-slate-500 mb-5 ml-11">After the free diagnostic, parents receive all of the following — instantly, with no account required:</p>
+            <div className="space-y-3 ml-11">
+              {[
+                { label: "A readiness band", desc: "On Track, Within Reach, or Clear Improvement Opportunity — relative to the 121 qualifying standard" },
+                { label: "A forecast standardised score", desc: "Where your child is currently tracking against the 121 threshold, in the same scale as the real test" },
+                { label: "Section-by-section accuracy", desc: "Which of the four domains are strong and which need attention" },
+                { label: "Pacing analysis", desc: "Whether your child is working at the speed the real test requires" },
+                { label: "Three priority next steps", desc: "The specific areas where targeted practice will have the highest impact on the overall score" },
+              ].map((item, i) => (
+                <div key={i} className="flex items-start gap-3">
+                  <CheckCircle2 className="h-4 w-4 text-primary/60 shrink-0 mt-0.5" />
+                  <p className="text-sm text-slate-700 leading-relaxed">
+                    <span className="font-semibold text-primary">{item.label}</span>
+                    <span className="text-slate-500"> — {item.desc}</span>
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Divider */}
+          <hr className="border-slate-200" />
+
+          {/* What Does 121 Mean */}
+          <div>
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
+                <Hash className="h-4 w-4 text-primary" />
               </div>
-              <div className="bg-slate-50 rounded-xl border border-slate-200 p-5">
-                <h3 className="font-bold text-primary text-sm mb-2">Mathematics</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">Arithmetic fluency, fractions, data interpretation, multi-step word problems, and geometry. Goes beyond standard Year 6 curriculum into applied reasoning under time pressure.</p>
+              <h2 className="text-xl font-bold text-primary font-serif">What Does 121 Mean?</h2>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-5">
+              <div className="shrink-0 flex flex-col items-center justify-center bg-primary rounded-2xl px-7 py-5 text-white text-center min-w-[110px]">
+                <span className="text-5xl font-bold font-serif leading-none">121</span>
+                <span className="text-[10px] font-semibold uppercase tracking-widest mt-2 text-white/70">Qualifying Score</span>
               </div>
-              <div className="bg-slate-50 rounded-xl border border-slate-200 p-5">
-                <h3 className="font-bold text-primary text-sm mb-2">English Comprehension</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">Reading passages with multiple-choice questions covering literal comprehension, inference, vocabulary in context, and author technique. Two-phase timed — reading time separate from response time.</p>
+              <div>
+                <p className="text-sm text-slate-600 leading-relaxed mb-3">
+                  121 is the standardised score qualifying threshold for the Buckinghamshire Secondary Transfer Test. It is not a raw mark or a percentage — it is a statistically standardised figure that accounts for the child's age on the day of the test and the difficulty of that year's paper.
+                </p>
+                <p className="text-sm text-slate-600 leading-relaxed mb-3">
+                  Children who achieve 121 or above are deemed to have qualified and are eligible to be considered for a place at any of the 13 Buckinghamshire grammar schools. Qualifying does not guarantee a place — oversubscription criteria at each school (typically distance-based) determine final allocation among all qualifying applicants.
+                </p>
+                <Link href="/bucks-11-plus-qualifying-score" className="text-sm text-primary hover:underline font-medium inline-flex items-center gap-1">
+                  Full explanation of the 121 qualifying score <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
               </div>
             </div>
           </div>
 
-          <div className="mb-10">
-            <h2 className="text-2xl font-bold text-primary font-serif mb-4">What Parents Receive</h2>
-            <p className="text-slate-600 leading-relaxed mb-3">After the free diagnostic, parents receive:</p>
-            <ul className="space-y-1.5 text-sm text-slate-600 list-none pl-0">
-              <li>✓ <strong>A readiness band</strong> — On Track, Within Reach, or Clear Improvement Opportunity — relative to the 121 qualifying standard</li>
-              <li>✓ <strong>A forecast standardised score</strong> — where your child is currently tracking against the 121 threshold</li>
-              <li>✓ <strong>Section-by-section accuracy</strong> — which of the four domains are strong and which need attention</li>
-              <li>✓ <strong>Pacing analysis</strong> — whether your child is working at the speed the real test requires</li>
-              <li>✓ <strong>Three priority next steps</strong> — the specific areas where targeted practice will have the highest impact on the overall score</li>
-            </ul>
+          {/* Divider */}
+          <hr className="border-slate-200" />
+
+          {/* Who This Platform Is For */}
+          <div>
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
+                <BookOpen className="h-4 w-4 text-primary" />
+              </div>
+              <h2 className="text-xl font-bold text-primary font-serif">Who This Platform Is For</h2>
+            </div>
+            <div className="space-y-4 ml-11">
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Bucks 11 Plus Tests is designed for parents of children in Year 5 or Year 6 in Buckinghamshire — or moving to Buckinghamshire — who are preparing for the Secondary Transfer Test. It is particularly useful for parents who are already doing some preparation (workbooks, tutor, mock exams) but are not confident that preparation is closing the right gaps, or who want to understand their child's starting point before deciding how much time and money to invest.
+              </p>
+              <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
+                <p className="text-sm text-slate-500 leading-relaxed">
+                  <span className="font-semibold text-slate-700">This platform is not</span> a tutoring agency, does not provide one-to-one sessions, and cannot guarantee a grammar school place. It works well alongside a tutor and as a standalone preparation tool for families who prefer a self-directed approach.
+                </p>
+              </div>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Preparing for 11+ outside Buckinghamshire?{" "}
+                <a href="https://11plustesthub.co.uk" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">
+                  11plusTestHub.co.uk
+                </a>{" "}
+                covers 11+ preparation for grammar schools across England.
+              </p>
+            </div>
           </div>
 
-          <div className="mb-10">
-            <h2 className="text-2xl font-bold text-primary font-serif mb-3">What Does 121 Mean?</h2>
-            <p className="text-slate-600 leading-relaxed">
-              121 is the standardised score qualifying threshold for the Buckinghamshire Secondary Transfer Test. It is not a raw mark or a percentage — it is a statistically standardised figure that accounts for the child's age on the day of the test and the difficulty of that year's paper. Children who achieve a standardised score of 121 or above are deemed to have qualified and are eligible to be considered for a place at any of the 13 Buckinghamshire grammar schools. Qualifying does not guarantee a place — oversubscription criteria at each school (typically distance-based) determine final allocation among all qualifying applicants. <Link href="/bucks-11-plus-qualifying-score" className="text-primary hover:underline font-medium">Full explanation of the 121 qualifying score →</Link>
-            </p>
-          </div>
+          {/* Divider */}
+          <hr className="border-slate-200" />
 
-          <div className="mb-10">
-            <h2 className="text-2xl font-bold text-primary font-serif mb-3">Who This Platform Is For</h2>
-            <p className="text-slate-600 leading-relaxed mb-3">
-              Bucks 11 Plus Tests is designed for parents of children in Year 5 or Year 6 in Buckinghamshire — or moving to Buckinghamshire — who are preparing for the Secondary Transfer Test. It is particularly useful for parents who are already doing some preparation (workbooks, tutor, mock exams) but are not confident that preparation is closing the right gaps, or who want to understand their child's starting point before deciding how much time and money to invest.
-            </p>
-            <p className="text-sm text-slate-500 leading-relaxed">
-              <strong>This platform is not</strong> a tutoring agency, does not provide one-to-one sessions, and cannot guarantee a grammar school place. It works well alongside a tutor and as a standalone preparation tool for families who prefer a self-directed approach.
-            </p>
-            <p className="text-sm text-slate-400 leading-relaxed mt-3">
-              Preparing for 11+ outside Buckinghamshire?{" "}
-              <a href="https://11plustesthub.co.uk" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">
-                11plusTestHub.co.uk
-              </a>{" "}
-              covers 11+ preparation for grammar schools across England.
-            </p>
-          </div>
-
-          <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
-            <h2 className="text-lg font-bold text-primary font-serif mb-2">Frequently Asked Questions</h2>
-            <div className="space-y-4 mt-4">
+          {/* FAQ */}
+          <div>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
+                <Search className="h-4 w-4 text-primary" />
+              </div>
+              <h2 className="text-xl font-bold text-primary font-serif">Frequently Asked Questions</h2>
+            </div>
+            <div className="space-y-0 rounded-2xl border border-slate-200 bg-white overflow-hidden divide-y divide-slate-100">
               {[
                 { q: "Is Bucks 11 Plus Tests affiliated with GL Assessment or Buckinghamshire Council?", a: "No. We are fully independent — not affiliated with GL Assessment, Buckinghamshire Council, TBGS, or any individual grammar school. 'GL-style' refers to the question format we independently replicate, not an official relationship." },
                 { q: "How is the free diagnostic different from the full paid platform?", a: "The free 12-question mini diagnostic gives you a readiness band, forecast score, and section breakdown with no account needed. The paid Bucks Practice Platform (from £24.99/month) gives access to 1,500+ questions, full 40-question timed papers, and progress tracking across all sessions. The Platform Edge (£59.99/month) adds full parent analytics and all Hard drills." },
                 { q: "What is the difference between the Practice Platform and the Young Scholar Programme?", a: "The Bucks Practice Platform (from £24.99/month) is flexible access to the full question bank, drills, and diagnostics. The Bucks Young Scholar Programme (£349 one-time) adds a structured 6-month preparation programme with a 26-week roadmap, weekly task plans, milestone assessments, and 3 mock exams." },
                 { q: "When should preparation begin?", a: "Most families begin structured preparation in Year 4 or early Year 5, giving 12–18 months before the September test. Starting with a diagnostic identifies specific gaps so preparation time is targeted rather than broad." },
               ].map((item, i) => (
-                <div key={i} className="border-t border-slate-200 pt-4 first:border-0 first:pt-0">
-                  <p className="text-sm font-semibold text-primary mb-1">{item.q}</p>
-                  <p className="text-sm text-slate-600 leading-relaxed">{item.a}</p>
+                <div key={i} className="px-6 py-5">
+                  <p className="text-sm font-semibold text-primary mb-2 flex items-start gap-2">
+                    <span className="mt-0.5 shrink-0 w-5 h-5 rounded-full bg-primary/10 text-primary text-[10px] font-bold flex items-center justify-center">Q</span>
+                    {item.q}
+                  </p>
+                  <p className="text-sm text-slate-500 leading-relaxed pl-7">{item.a}</p>
                 </div>
               ))}
             </div>
           </div>
 
         </div>
-      </section>
 
-      <div className="py-6 text-center bg-white">
-        <p className="text-xs text-slate-400" data-testid="text-disclaimer">
-          Independent readiness assessment. Not affiliated with GL Assessment or Buckinghamshire Council.
-        </p>
-      </div>
+        {/* Footer disclaimer */}
+        <div className="border-t border-slate-200 bg-white py-6 text-center">
+          <p className="text-xs text-slate-400" data-testid="text-disclaimer">
+            Independent readiness assessment. Not affiliated with GL Assessment or Buckinghamshire Council. Operated by Ianson Systems Limited.
+          </p>
+        </div>
+
+      </section>
     </div>
   );
 }
