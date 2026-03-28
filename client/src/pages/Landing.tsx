@@ -692,50 +692,6 @@ export default function Landing() {
         </div>
       </section>
 
-      <section className="py-14 md:py-20 bg-slate-50 border-b border-border/30" data-testid="section-platform-differentiator">
-        <div className="container mx-auto max-w-5xl px-4">
-          <div className="text-center mb-10">
-            <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">Why This Works</span>
-            <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif mb-3">
-              This Is a Preparation Platform. Not a Question Bank.
-            </h2>
-            <p className="text-slate-500 max-w-2xl mx-auto leading-relaxed">
-              Most preparation resources give you material to work through. This platform tells you what to work on — based on where your child actually is — and shows you whether it's making a difference.
-            </p>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col gap-3" data-testid="card-platform-diff-next">
-              <div className="w-11 h-11 rounded-xl bg-primary/5 text-primary flex items-center justify-center border border-primary/10">
-                <Target className="h-5 w-5" />
-              </div>
-              <h3 className="font-bold text-primary text-base leading-tight">Tells You What to Focus on Next</h3>
-              <p className="text-sm text-slate-500 leading-relaxed">After every diagnostic, the three highest-impact priorities are identified and matched to targeted drills. You're not guessing where to spend the time — the data decides.</p>
-            </div>
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col gap-3" data-testid="card-platform-diff-device">
-              <div className="w-11 h-11 rounded-xl bg-primary/5 text-primary flex items-center justify-center border border-primary/10">
-                <Smartphone className="h-5 w-5" />
-              </div>
-              <h3 className="font-bold text-primary text-base leading-tight">Works on Any Device</h3>
-              <p className="text-sm text-slate-500 leading-relaxed">Phone, tablet or laptop — your child practices when and where suits them. Interactive and timed, not a static PDF to work through alone at a dedicated desk.</p>
-            </div>
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col gap-3" data-testid="card-platform-diff-analytics">
-              <div className="w-11 h-11 rounded-xl bg-primary/5 text-primary flex items-center justify-center border border-primary/10">
-                <BarChart3 className="h-5 w-5" />
-              </div>
-              <h3 className="font-bold text-primary text-base leading-tight">Parent Visibility Without Micromanaging</h3>
-              <p className="text-sm text-slate-500 leading-relaxed">The parent analytics dashboard shows readiness score, pace discipline, fatigue patterns and top priorities. You know what's happening — without sitting beside them for every session.</p>
-            </div>
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col gap-3" data-testid="card-platform-diff-tracking">
-              <div className="w-11 h-11 rounded-xl bg-primary/5 text-primary flex items-center justify-center border border-primary/10">
-                <TrendingUp className="h-5 w-5" />
-              </div>
-              <h3 className="font-bold text-primary text-base leading-tight">Shows Whether It's Working</h3>
-              <p className="text-sm text-slate-500 leading-relaxed">Score trajectory, forecast movement toward 121, gap velocity over time. You can see preparation making a difference — or know early if a different focus is needed.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section id="pricing" className="py-16 md:py-24 bg-white border-b border-border/30" data-testid="section-pricing">
         <div className="container mx-auto max-w-6xl px-4">
           <div className="text-center mb-12">
@@ -830,334 +786,64 @@ export default function Landing() {
         </div>
       </section>
 
-      <section className="py-14 md:py-20 bg-white border-b border-border/30">
-        <div className="container mx-auto max-w-4xl px-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif text-center mb-10" data-testid="text-dual-path-title">
-            How Would You Like to Begin?
-          </h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="rounded-2xl border border-slate-200 bg-white p-7 sm:p-8 flex flex-col" data-testid="card-path-diagnostic">
-              <h3 className="text-xl font-bold text-primary font-serif mb-3">Find Out Exactly Where They Stand</h3>
-              <p className="text-slate-600 text-sm leading-relaxed mb-6 flex-1">
-                Take an 8-minute timed diagnostic to see your child's readiness band, their performance across all four sections, and the three priorities that will move the score most. No sign-up required.
-              </p>
-              <Button variant="outline" className="w-full h-12 text-sm font-semibold" asChild data-testid="button-path-diagnostic">
-                <Link href="/free-diagnostic">Start Free Diagnostic</Link>
-              </Button>
-            </div>
-            <div className="rounded-2xl border-2 border-primary/20 bg-slate-50 p-7 sm:p-8 flex flex-col" data-testid="card-path-programme">
-              <h3 className="text-xl font-bold text-primary font-serif mb-3">Begin the Full Preparation Programme</h3>
-              <p className="text-slate-600 text-sm leading-relaxed mb-6 flex-1">
-                Everything in one place, ready to start today. A structured 26-week plan built around the September test — with diagnostics, targeted drills, mock exams and weekly task plans. No decisions about what to do next: the programme makes them for you.
-              </p>
-              <Button className="w-full h-12 text-sm font-semibold bg-primary text-primary-foreground" asChild data-testid="button-path-programme">
-                <Link href="/pricing?autoCheckout=programme24_plus">View Young Scholar Programme</Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-12 md:py-16 bg-white border-b border-border/30">
-        <div className="container mx-auto max-w-4xl px-4">
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10 text-sm text-slate-500">
-            <span className="flex items-center gap-2 font-medium">
-              <CheckCircle2 className="h-4 w-4 text-primary/50" /> Independent assessment
-            </span>
-            <span className="flex items-center gap-2 font-medium">
-              <CheckCircle2 className="h-4 w-4 text-primary/50" /> Structured diagnostic methodology
-            </span>
-            <span className="flex items-center gap-2 font-medium">
-              <CheckCircle2 className="h-4 w-4 text-primary/50" /> Not affiliated with GL or Bucks Council
-            </span>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-20 bg-slate-50 border-b border-border/50 relative">
-        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent"></div>
-        <div className="container mx-auto max-w-6xl px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-primary mb-4 font-serif">Preparation That Matches the Real Test</h2>
-            <p className="text-lg text-muted-foreground">The Buckinghamshire Secondary Transfer Test is specific — in format, timing and content. Every question, drill and diagnostic on this platform reflects that exactly.</p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="bg-white border-border/50 shadow-sm hover:shadow-md transition-shadow group">
-              <CardContent className="p-8 text-center space-y-4">
-                <div className="mx-auto w-14 h-14 bg-brand-primary/5 text-brand-primary rounded-2xl flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300 border border-brand-primary/10">
-                  <BarChart3 className="h-7 w-7" />
-                </div>
-                <h3 className="font-bold text-primary text-xl">All Four Sections Covered</h3>
-                <p className="text-muted-foreground">Verbal Reasoning, Non-Verbal Reasoning, Maths and English Comprehension — mapped to the exact GL format of the Bucks 11+. Your child practices the right things, in the right structure.</p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white border-border/50 shadow-sm hover:shadow-md transition-shadow group">
-              <CardContent className="p-8 text-center space-y-4">
-                <div className="mx-auto w-14 h-14 bg-brand-primary/5 text-brand-primary rounded-2xl flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300 border border-brand-primary/10">
-                  <Clock className="h-7 w-7" />
-                </div>
-                <h3 className="font-bold text-primary text-xl">Timed from the Start</h3>
-                <p className="text-muted-foreground">The real test is fast. Pace discipline matters as much as accuracy — and working under timed conditions is a skill that improves with practice. Every diagnostic and drill reflects this.</p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white border-border/50 shadow-sm hover:shadow-md transition-shadow group">
-              <CardContent className="p-8 text-center space-y-4">
-                <div className="mx-auto w-14 h-14 bg-brand-amber/10 text-brand-amber rounded-2xl flex items-center justify-center border group-hover:scale-110 transition-transform duration-300 border-brand-amber/20">
-                  <Target className="h-7 w-7" />
-                </div>
-                <h3 className="font-bold text-primary text-xl">Always Benchmarked Against 121</h3>
-                <p className="text-muted-foreground">Every result, every forecast, every analytics view is positioned against 121. So the question is always "where are they relative to where they need to be?" — not just "how did they do?"</p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      <section id="how-forecast-works" className="py-20 md:py-28 bg-slate-50 relative overflow-hidden">
-        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent"></div>
-        <div className="container mx-auto max-w-6xl px-4">
-          <div className="text-center mb-6">
-            <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">The Process</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4">
-              How It Works — In Practice
+      <section className="py-14 md:py-20 bg-slate-50 border-b border-border/30" data-testid="section-platform-differentiator">
+        <div className="container mx-auto max-w-5xl px-4">
+          <div className="text-center mb-10">
+            <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">Why This Works</span>
+            <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif mb-3">
+              This Is a Preparation Platform. Not a Question Bank.
             </h2>
-            <p className="text-lg text-slate-500 max-w-2xl mx-auto">
-              In a competitive cohort, working hard is not enough. Preparation needs to be measured, directed and tracked — so effort goes where it will actually change the outcome.
+            <p className="text-slate-500 max-w-2xl mx-auto leading-relaxed">
+              Most preparation resources give you material to work through. This platform tells you what to work on — based on where your child actually is — and shows you whether it's making a difference.
             </p>
           </div>
-
-          <div className="mt-14 grid md:grid-cols-2 gap-6 lg:gap-8">
-            <div className="group relative bg-white rounded-2xl border border-slate-200 p-7 sm:p-8 hover:border-primary/20 hover:shadow-lg transition-all duration-300" data-testid="step-diagnostic-benchmark">
-              <div className="flex items-center gap-4 mb-5">
-                <div className="w-12 h-12 rounded-xl bg-primary text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
-                  <Search className="h-5 w-5" />
-                </div>
-                <div>
-                  <span className="text-[11px] font-bold text-primary/40 uppercase tracking-widest">Step 1</span>
-                  <h3 className="text-xl font-bold text-primary font-serif leading-tight">Diagnostic Benchmark</h3>
-                </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col gap-3" data-testid="card-platform-diff-next">
+              <div className="w-11 h-11 rounded-xl bg-primary/5 text-primary flex items-center justify-center border border-primary/10">
+                <Target className="h-5 w-5" />
               </div>
-              <p className="text-slate-600 leading-relaxed mb-5">
-                Start with a timed, GL-style diagnostic across Verbal Reasoning, Non-Verbal Reasoning, Maths and English Comprehension — including section pacing.
-              </p>
-              <div className="space-y-2.5 mb-5">
-                <div className="flex items-start gap-2.5 text-sm text-slate-600">
-                  <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
-                  <span>Clear baseline across key sub-skills</span>
-                </div>
-                <div className="flex items-start gap-2.5 text-sm text-slate-600">
-                  <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
-                  <span>Pace indicators by section</span>
-                </div>
-                <div className="flex items-start gap-2.5 text-sm text-slate-600">
-                  <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
-                  <span>Initial readiness band with 121 context</span>
-                </div>
-              </div>
-              <p className="text-xs text-slate-400 italic border-t border-slate-100 pt-3">
-                The starting point — so preparation is directed, not scattered.
-              </p>
+              <h3 className="font-bold text-primary text-base leading-tight">Tells You What to Focus on Next</h3>
+              <p className="text-sm text-slate-500 leading-relaxed">After every diagnostic, the three highest-impact priorities are identified and matched to targeted drills. You're not guessing where to spend the time — the data decides.</p>
             </div>
-
-            <div className="group relative bg-white rounded-2xl border border-slate-200 p-7 sm:p-8 hover:border-primary/20 hover:shadow-lg transition-all duration-300" data-testid="step-readiness-forecast">
-              <div className="flex items-center gap-4 mb-5">
-                <div className="w-12 h-12 rounded-xl bg-primary text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
-                  <Target className="h-5 w-5" />
-                </div>
-                <div>
-                  <span className="text-[11px] font-bold text-primary/40 uppercase tracking-widest">Step 2</span>
-                  <h3 className="text-xl font-bold text-primary font-serif leading-tight">Readiness Forecast</h3>
-                </div>
+            <div className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col gap-3" data-testid="card-platform-diff-device">
+              <div className="w-11 h-11 rounded-xl bg-primary/5 text-primary flex items-center justify-center border border-primary/10">
+                <Smartphone className="h-5 w-5" />
               </div>
-              <p className="text-slate-600 leading-relaxed mb-5">
-                We model performance against qualifying benchmarks using difficulty-aware accuracy, pace analysis, and concentration of errors.
-              </p>
-              <div className="space-y-2.5 mb-5">
-                <div className="flex items-start gap-2.5 text-sm text-slate-600">
-                  <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
-                  <span>Readiness band: Secure / Borderline / Development Required</span>
-                </div>
-                <div className="flex items-start gap-2.5 text-sm text-slate-600">
-                  <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
-                  <span>Top 3 priorities identified (what to fix first)</span>
-                </div>
-                <div className="flex items-start gap-2.5 text-sm text-slate-600">
-                  <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
-                  <span>Key risks surfaced (pace, hard-tier drop, volatility)</span>
-                </div>
-              </div>
-              <p className="text-xs text-slate-400 italic border-t border-slate-100 pt-3">
-                Removes the guesswork — so you know exactly where to direct the next month of preparation.
-              </p>
+              <h3 className="font-bold text-primary text-base leading-tight">Works on Any Device</h3>
+              <p className="text-sm text-slate-500 leading-relaxed">Phone, tablet or laptop — your child practices when and where suits them. Interactive and timed, not a static PDF to work through alone at a dedicated desk.</p>
             </div>
-
-            <div className="group relative bg-white rounded-2xl border border-slate-200 p-7 sm:p-8 hover:border-primary/20 hover:shadow-lg transition-all duration-300" data-testid="step-targeted-development">
-              <div className="flex items-center gap-4 mb-5">
-                <div className="w-12 h-12 rounded-xl bg-primary text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
-                  <Wrench className="h-5 w-5" />
-                </div>
-                <div>
-                  <span className="text-[11px] font-bold text-primary/40 uppercase tracking-widest">Step 3</span>
-                  <h3 className="text-xl font-bold text-primary font-serif leading-tight">Targeted Development</h3>
-                </div>
+            <div className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col gap-3" data-testid="card-platform-diff-analytics">
+              <div className="w-11 h-11 rounded-xl bg-primary/5 text-primary flex items-center justify-center border border-primary/10">
+                <BarChart3 className="h-5 w-5" />
               </div>
-              <p className="text-slate-600 leading-relaxed mb-5">
-                Practice is directed to the areas that most influence readiness — not broad repetition across everything.
-              </p>
-              <div className="space-y-2.5 mb-5">
-                <div className="flex items-start gap-2.5 text-sm text-slate-600">
-                  <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
-                  <span>Drills mapped to specific rule types</span>
-                </div>
-                <div className="flex items-start gap-2.5 text-sm text-slate-600">
-                  <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
-                  <span>Visual NVR sequences and patterns</span>
-                </div>
-                <div className="flex items-start gap-2.5 text-sm text-slate-600">
-                  <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
-                  <span>Timed section blocks with progressive difficulty</span>
-                </div>
-              </div>
-              <p className="text-xs text-slate-400 italic border-t border-slate-100 pt-3">
-                Not more practice. Better practice — focused on what will actually move the score.
-              </p>
+              <h3 className="font-bold text-primary text-base leading-tight">Parent Visibility Without Micromanaging</h3>
+              <p className="text-sm text-slate-500 leading-relaxed">The parent analytics dashboard shows readiness score, session progress by topic, and your child's current improvement priorities. You know what's happening — without sitting beside them for every session.</p>
             </div>
-
-            <div className="group relative bg-white rounded-2xl border border-slate-200 p-7 sm:p-8 hover:border-primary/20 hover:shadow-lg transition-all duration-300" data-testid="step-measured-progression">
-              <div className="flex items-center gap-4 mb-5">
-                <div className="w-12 h-12 rounded-xl bg-primary text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
-                  <TrendingUp className="h-5 w-5" />
-                </div>
-                <div>
-                  <span className="text-[11px] font-bold text-primary/40 uppercase tracking-widest">Step 4</span>
-                  <h3 className="text-xl font-bold text-primary font-serif leading-tight">Measured Progression</h3>
-                </div>
+            <div className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col gap-3" data-testid="card-platform-diff-tracking">
+              <div className="w-11 h-11 rounded-xl bg-primary/5 text-primary flex items-center justify-center border border-primary/10">
+                <TrendingUp className="h-5 w-5" />
               </div>
-              <p className="text-slate-600 leading-relaxed mb-5">
-                Progress is re-checked at structured milestones so improvement becomes visible — not assumed.
-              </p>
-              <div className="space-y-2.5 mb-5">
-                <div className="flex items-start gap-2.5 text-sm text-slate-600">
-                  <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
-                  <span>Score trajectory toward 121 tracked over time</span>
-                </div>
-                <div className="flex items-start gap-2.5 text-sm text-slate-600">
-                  <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
-                  <span>Pace discipline and stability monitored</span>
-                </div>
-                <div className="flex items-start gap-2.5 text-sm text-slate-600">
-                  <CheckCircle2 className="h-4 w-4 text-primary/50 mt-0.5 shrink-0" />
-                  <span>Movement between readiness bands made clear</span>
-                </div>
-              </div>
-              <p className="text-xs text-slate-400 italic border-t border-slate-100 pt-3">
-                Evidence that preparation is working — week by week, as September approaches.
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-12 space-y-4">
-            <div className="rounded-2xl bg-amber-50 border border-amber-200/60 p-6 sm:p-8" data-testid="section-urgency-timeline">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-5">
-                <div className="w-10 h-10 rounded-xl bg-brand-amber/10 border border-brand-amber/20 flex items-center justify-center shrink-0">
-                  <Clock className="h-5 w-5 text-brand-amber" />
-                </div>
-                <div>
-                  <p className="font-bold text-amber-900 text-base">The timeline is shorter than most families realise</p>
-                  <p className="text-amber-700 text-sm mt-0.5">Registration for the Secondary Transfer Test opens in the spring of Year 5. The test itself takes place in September of Year 6.</p>
-                </div>
-              </div>
-              <div className="grid sm:grid-cols-3 gap-3 text-sm mb-4">
-                <div className="bg-white/70 rounded-xl border border-amber-200/40 px-4 py-3">
-                  <p className="font-bold text-amber-900">Spring of Year 5</p>
-                  <p className="text-amber-700 text-xs mt-0.5">Registration window opens</p>
-                </div>
-                <div className="bg-white/70 rounded-xl border border-amber-200/40 px-4 py-3">
-                  <p className="font-bold text-amber-900">September, Year 6</p>
-                  <p className="text-amber-700 text-xs mt-0.5">Secondary Transfer Test</p>
-                </div>
-                <div className="bg-white/70 rounded-xl border border-amber-200/40 px-4 py-3">
-                  <p className="font-bold text-amber-900">October, Year 6</p>
-                  <p className="text-amber-700 text-xs mt-0.5">Test results published</p>
-                </div>
-              </div>
-              <p className="text-amber-800 text-sm leading-relaxed">
-                Children who begin structured preparation earlier have more time to close the gaps that matter. Starting with a diagnostic is the fastest way to understand where that time should go.
-              </p>
-            </div>
-
-            <div className="rounded-2xl bg-gradient-to-br from-primary/[0.03] to-primary/[0.07] border border-primary/10 p-7 sm:p-10 text-center">
-              <p className="text-slate-700 font-medium text-lg leading-relaxed mb-1">
-                Are we actually on track for 121?
-              </p>
-              <p className="text-primary font-serif text-xl sm:text-2xl font-bold mt-3 mb-3">
-                Find out in 8 minutes. No sign-up required.
-              </p>
-              <p className="text-slate-500 text-sm mb-5">
-                A clear readiness band, section-by-section breakdown, and your child's top three priorities — instantly.
-              </p>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-                <Button size="lg" className="h-12 px-8 bg-primary text-primary-foreground shadow-md" asChild data-testid="button-start-diagnostic-process">
-                  <Link href="/free-diagnostic">Start Free Diagnostic</Link>
-                </Button>
-                <Button variant="outline" className="h-12 px-6" asChild data-testid="link-how-it-works-detail">
-                  <Link href="/how-it-works">
-                    See Full Process <ArrowRight className="ml-1.5 h-4 w-4" />
-                  </Link>
-                </Button>
-              </div>
+              <h3 className="font-bold text-primary text-base leading-tight">Shows Whether It's Working</h3>
+              <p className="text-sm text-slate-500 leading-relaxed">After every session you can see whether the key priorities are improving. Progress is tracked across all four sections so you know early if a different focus is needed.</p>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="py-16 bg-slate-50/50">
-        <div className="container mx-auto max-w-5xl px-4">
-          <h2 className="text-2xl font-bold text-primary font-serif text-center mb-2">Buckinghamshire 11+ Resources</h2>
-          <p className="text-muted-foreground text-center mb-10 max-w-xl mx-auto">Free guides and information to help you navigate the grammar school admissions process.</p>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <Link href="/buckinghamshire-11-plus-guide" className="group p-5 bg-white rounded-xl border border-border/40 hover:border-primary/30 hover:shadow-md transition-all">
-              <h3 className="font-semibold text-primary mb-1 group-hover:text-primary/80">Complete Bucks 11+ Guide</h3>
-              <p className="text-sm text-muted-foreground">Everything you need to know about the exam, scoring and admissions.</p>
-            </Link>
-            <Link href="/bucks-grammar-schools" className="group p-5 bg-white rounded-xl border border-border/40 hover:border-primary/30 hover:shadow-md transition-all">
-              <h3 className="font-semibold text-primary mb-1 group-hover:text-primary/80">All 13 Grammar Schools</h3>
-              <p className="text-sm text-muted-foreground">Directory of every Buckinghamshire grammar school and their admissions.</p>
-            </Link>
-            <Link href="/bucks-11-plus-qualifying-score" className="group p-5 bg-white rounded-xl border border-border/40 hover:border-primary/30 hover:shadow-md transition-all">
-              <h3 className="font-semibold text-primary mb-1 group-hover:text-primary/80">Qualifying Score Explained</h3>
-              <p className="text-sm text-muted-foreground">What the standardised 121 benchmark means and how it works.</p>
-            </Link>
-            <Link href="/how-to-pass-bucks-11-plus" className="group p-5 bg-white rounded-xl border border-border/40 hover:border-primary/30 hover:shadow-md transition-all">
-              <h3 className="font-semibold text-primary mb-1 group-hover:text-primary/80">How to Pass the 11+</h3>
-              <p className="text-sm text-muted-foreground">Strategies and tips to help your child reach the qualifying score.</p>
-            </Link>
-            <Link href="/bucks-11-plus-timeline" className="group p-5 bg-white rounded-xl border border-border/40 hover:border-primary/30 hover:shadow-md transition-all">
-              <h3 className="font-semibold text-primary mb-1 group-hover:text-primary/80">Admissions Timeline</h3>
-              <p className="text-sm text-muted-foreground">Key dates from registration through to results and allocation.</p>
-            </Link>
-            <Link href="/bucks-11-plus-registration" className="group p-5 bg-white rounded-xl border border-border/40 hover:border-primary/30 hover:shadow-md transition-all">
-              <h3 className="font-semibold text-primary mb-1 group-hover:text-primary/80">Registration Guide</h3>
-              <p className="text-sm text-muted-foreground">Step-by-step instructions for registering for the test.</p>
-            </Link>
-            <a href="https://11plustesthub.co.uk" target="_blank" rel="noopener noreferrer" className="group p-5 bg-slate-50 rounded-xl border border-dashed border-slate-300 hover:border-primary/30 hover:shadow-md transition-all flex flex-col">
-              <div className="flex items-start justify-between mb-1">
-                <h3 className="font-semibold text-primary group-hover:text-primary/80">11+ Preparation — Other Counties</h3>
-                <ExternalLink className="h-3.5 w-3.5 text-slate-400 shrink-0 mt-0.5 ml-2" />
-              </div>
-              <p className="text-sm text-muted-foreground">11plusTestHub.co.uk covers national 11+ prep for grammar schools across England.</p>
-            </a>
-          </div>
-          <div className="text-center mt-8">
-            <Link href="/site-links" className="text-sm text-primary font-medium hover:underline">
-              View all pages and resources →
-            </Link>
+      <section className="py-14 bg-white border-b border-border/30">
+        <div className="container mx-auto max-w-3xl px-4 text-center">
+          <p className="text-slate-500 text-sm mb-6">Not sure where to start? The free 8-minute diagnostic requires no account and takes less time than a practice paper.</p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Button size="lg" className="h-12 px-8 font-bold bg-primary hover:bg-primary/90 text-white" asChild data-testid="button-cta-diagnostic">
+              <Link href="/free-diagnostic">Start Free Diagnostic</Link>
+            </Button>
+            <Button variant="outline" size="lg" className="h-12 px-6 font-semibold" asChild data-testid="button-cta-programme">
+              <Link href="/pricing?autoCheckout=programme24_plus">View Young Scholar Programme</Link>
+            </Button>
           </div>
         </div>
       </section>
+
 
       <section className="bg-slate-50 border-t border-slate-200" aria-label="Platform overview">
 

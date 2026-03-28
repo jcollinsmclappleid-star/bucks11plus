@@ -74,15 +74,6 @@ const EXAMPLES: Example[] = [
     ],
   },
   {
-    id: 4,
-    subject: "Non-Verbal Reasoning",
-    color: "blue" as SubjectColor,
-    type: "Pattern Sequence",
-    question: "Each arrow rotates 90° clockwise. Which arrow comes next in the sequence?",
-    sequenceItems: ["↑", "→", "↓", "←", "↑", "→", "↓", "?"],
-    options: ["↑", "→", "←", "↓"],
-  },
-  {
     id: 5,
     subject: "Verbal Reasoning",
     color: "violet" as SubjectColor,

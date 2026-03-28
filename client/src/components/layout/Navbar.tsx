@@ -19,6 +19,8 @@ export default function Navbar() {
     { href: "/app/report-archive", label: "Reports", show: true },
     { href: "/app/programme", label: "Programme", show: true },
     { href: "/app/analytics", label: "Analytics", show: true },
+    { href: "/how-it-works", label: "How It Works", show: true },
+    { href: "/bucks-11-plus-parent-guide", label: "Free Guide", show: true },
     { href: "/pricing", label: "Pricing", show: true },
     { href: "/contact", label: "Contact", show: true },
   ];
