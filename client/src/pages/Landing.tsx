@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, CheckCircle2, Target, Clock, BarChart3, Zap, Search, Wrench, TrendingUp, ChevronLeft, ChevronRight, Loader2, Smartphone, Brain, Layers, Hash, BookOpen, Shield, Award, Star, AlertTriangle, ChevronUp, Trophy, ExternalLink } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
+import { SampleQuestionsCarousel } from "../components/shared/SampleQuestionsCarousel";
 import { useAuth } from "../lib/auth";
 import { apiRequest } from "../lib/queryClient";
 import { useState, useRef } from "react";
@@ -590,6 +591,26 @@ export default function Landing() {
                 See More <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
+          </div>
+
+          <div className="mt-14 pt-10 border-t border-slate-200">
+            <div className="text-center mb-6">
+              <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-2">Try the Platform</span>
+              <h3 className="text-2xl font-bold text-primary font-serif mb-2">Sample Practice Questions</h3>
+              <p className="text-sm text-slate-500 max-w-xl mx-auto">
+                Swipe through to see the question types your child will practise — across all four GL-style subjects.
+              </p>
+            </div>
+            <SampleQuestionsCarousel className="md:px-8" />
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-8">
+              <Button asChild className="h-11 px-6 bg-brand-amber text-amber-950 hover:bg-brand-amber/90 font-bold" data-testid="button-sample-questions-subscribe">
+                <Link href="/pricing">Subscribe from £24.99/month <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              </Button>
+              <Button asChild variant="outline" className="h-11 px-6 font-semibold" data-testid="button-sample-questions-free">
+                <Link href="/free-diagnostic">Take the Free Diagnostic First</Link>
+              </Button>
+            </div>
+            <p className="text-[11px] text-slate-400 text-center mt-3">Cancel any time · No lock-in</p>
           </div>
         </div>
       </section>

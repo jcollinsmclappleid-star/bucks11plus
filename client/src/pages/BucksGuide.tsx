@@ -1,4 +1,5 @@
 import { Link } from "wouter";
+import { ChevronDown, Download } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "../components/shared/Breadcrumbs";
 import { GuideConversionBlock } from "../components/shared/GuideConversionBlock";
@@ -78,7 +79,19 @@ export default function BucksGuide() {
 
       <SubscribeCTA />
 
-      <h2 className="text-primary font-serif" data-testid="heading-overview">Overview of the Buckinghamshire 11+</h2>
+      <div className="not-prose flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 py-4 mb-2 border-y border-slate-100 bg-slate-50/60 rounded-xl px-4 text-sm">
+        <a href="#deep-dive" className="inline-flex items-center gap-2 text-primary font-semibold hover:underline underline-offset-2" data-testid="link-scroll-deep-dive">
+          <ChevronDown className="h-4 w-4" />
+          Scroll to see all {learnArticles.length} in-depth preparation guides
+        </a>
+        <span className="hidden sm:block text-slate-300">·</span>
+        <Link href="/bucks-11-plus-parent-guide" className="inline-flex items-center gap-2 text-primary font-semibold hover:underline underline-offset-2" data-testid="link-download-guide">
+          <Download className="h-4 w-4" />
+          Download the complete guide to read later
+        </Link>
+      </div>
+
+      <h2 className="text-primary font-serif font-bold" data-testid="heading-overview">Overview of the Buckinghamshire 11+</h2>
       <p>
         The Buckinghamshire 11 Plus — officially called the <strong>Secondary Transfer Test (STT)</strong> — is a selective entrance examination taken by children in Year 6 (typically in September). It determines eligibility for places at the 13 state-funded grammar schools across Buckinghamshire.
       </p>
@@ -89,7 +102,7 @@ export default function BucksGuide() {
         Each year, approximately 6,000–7,000 children sit the test, with around 30–35% achieving the qualifying score. Competition varies by school, with some grammar schools significantly more oversubscribed than others.
       </p>
 
-      <h2 className="text-primary font-serif" data-testid="heading-grammar-schools">The 13 Buckinghamshire Grammar Schools</h2>
+      <h2 className="text-primary font-serif font-bold" data-testid="heading-grammar-schools">The 13 Buckinghamshire Grammar Schools</h2>
       <p>
         Buckinghamshire is home to 13 state-funded grammar schools, making it one of the largest selective education systems in England. Each school has its own character, catchment priorities, and oversubscription criteria.
       </p>
@@ -112,7 +125,7 @@ export default function BucksGuide() {
         For detailed profiles of each school, including catchment areas and oversubscription criteria, see our <Link href="/bucks-grammar-schools" className="text-primary font-medium">Buckinghamshire Grammar Schools directory</Link>.
       </p>
 
-      <h2 className="text-primary font-serif" data-testid="heading-how-test-works">How the Test Works</h2>
+      <h2 className="text-primary font-serif font-bold" data-testid="heading-how-test-works">How the Test Works</h2>
       <p>
         The Buckinghamshire Secondary Transfer Test is typically held in mid-September of Year 6. Children sit the test at their primary school (if registered in-county) or at a designated test centre. The test consists of two separate papers, completed under strict timed conditions.
       </p>
@@ -120,7 +133,7 @@ export default function BucksGuide() {
         Results are released in mid-October, approximately four weeks after the test date. Parents receive a letter indicating whether their child has achieved the <Link href="/bucks-11-plus-qualifying-score" className="text-primary font-medium">qualifying standard</Link> (a standardised score of 121+), along with their individual paper scores.
       </p>
 
-      <h2 className="text-primary font-serif" data-testid="heading-test-contents">What the Test Contains</h2>
+      <h2 className="text-primary font-serif font-bold" data-testid="heading-test-contents">What the Test Contains</h2>
       <p>
         The Bucks 11+ covers four reasoning domains, all assessed in a GL Assessment format:
       </p>
@@ -151,7 +164,7 @@ export default function BucksGuide() {
         </div>
       </div>
 
-      <h2 className="text-primary font-serif" data-testid="heading-timeline">Admissions Timeline</h2>
+      <h2 className="text-primary font-serif font-bold" data-testid="heading-timeline">Admissions Timeline</h2>
       <p>
         The <Link href="/bucks-11-plus-timeline" className="text-primary font-medium">Buckinghamshire 11+ admissions timeline</Link> follows a structured annual cycle. Key dates for families to note:
       </p>
@@ -192,7 +205,7 @@ export default function BucksGuide() {
         </table>
       </div>
 
-      <h2 className="text-primary font-serif" data-testid="heading-scores">Understanding Standardised Scores</h2>
+      <h2 className="text-primary font-serif font-bold" data-testid="heading-scores">Understanding Standardised Scores</h2>
       <p>
         Raw test scores are converted into <strong>standardised scores</strong> to ensure fairness across children of different ages. A child born in September and a child born in August sitting the same test will have their raw scores adjusted so that age does not confer an advantage.
       </p>
@@ -203,7 +216,7 @@ export default function BucksGuide() {
         It is important to understand that mock test scores from third-party providers — including this platform — are <strong>indicative only</strong>. Only the official GL Assessment papers administered on test day determine the final qualifying decision.
       </p>
 
-      <h2 className="text-primary font-serif" data-testid="heading-preparation">Preparing for the Buckinghamshire 11+</h2>
+      <h2 className="text-primary font-serif font-bold" data-testid="heading-preparation">Preparing for the Buckinghamshire 11+</h2>
       <p>
         Effective preparation combines three elements: <strong>diagnostic assessment</strong> to identify current strengths and weaknesses, <strong>targeted practice</strong> to close specific gaps, and <strong>timed conditions</strong> to build the speed and accuracy required on test day.
       </p>
@@ -217,13 +230,13 @@ export default function BucksGuide() {
       <div className="not-prose my-8 rounded-xl border border-slate-200 bg-white p-6">
         <p className="text-sm text-muted-foreground mb-2">Want a summary you can keep?</p>
         <Link href="/bucks-11-plus-parent-guide" className="text-primary font-semibold hover:underline">
-          Download our free Buckinghamshire 11+ Parent Guide (PDF) &rarr;
+          Download our free 22-page Buckinghamshire 11+ Parent Guide (PDF) &rarr;
         </Link>
       </div>
 
       <GuideConversionBlock />
 
-      <div className="not-prose my-12">
+      <div className="not-prose my-12" id="deep-dive">
         <div className="border-l-4 border-primary pl-5 mb-8">
           <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif mb-2" data-testid="heading-deep-dive">Deep-Dive Guides</h2>
           <p className="text-muted-foreground">
@@ -267,7 +280,7 @@ export default function BucksGuide() {
         </div>
       </div>
 
-      <h2 className="text-primary font-serif" data-testid="heading-faq">Frequently Asked Questions</h2>
+      <h2 className="text-primary font-serif font-bold" data-testid="heading-faq">Frequently Asked Questions</h2>
       {faqItems.map((item, i) => (
         <div key={i} className="mb-6" data-testid={`faq-item-${i}`}>
           <h3 className="text-lg font-bold text-foreground font-serif">{item.question}</h3>

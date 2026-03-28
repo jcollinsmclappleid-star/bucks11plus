@@ -1,91 +1,17 @@
-import { useRef } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, ChevronLeft, ChevronRight, Target, Zap, ChevronsDown } from "lucide-react";
+import { ArrowRight, Target, Zap, ChevronsDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { SampleQuestionsCarousel } from "./SampleQuestionsCarousel";
 
 type SubjectColor = "violet" | "emerald" | "blue" | "amber";
 
-const SUBJECT_COLORS: Record<SubjectColor, {
-  bg: string; border: string; tag: string; bar: string;
-}> = {
-  violet: {
-    bg: "bg-violet-50",
-    border: "border-violet-200",
-    tag: "bg-violet-100 text-violet-800",
-    bar: "bg-violet-500",
-  },
-  emerald: {
-    bg: "bg-emerald-50",
-    border: "border-emerald-200",
-    tag: "bg-emerald-100 text-emerald-800",
-    bar: "bg-emerald-500",
-  },
-  blue: {
-    bg: "bg-blue-50",
-    border: "border-blue-200",
-    tag: "bg-blue-100 text-blue-800",
-    bar: "bg-blue-500",
-  },
-  amber: {
-    bg: "bg-amber-50",
-    border: "border-amber-200",
-    tag: "bg-amber-100 text-amber-800",
-    bar: "bg-amber-500",
-  },
+const SUBJECT_BAR_COLORS: Record<SubjectColor, string> = {
+  violet: "bg-violet-500",
+  emerald: "bg-emerald-500",
+  blue: "bg-blue-500",
+  amber: "bg-amber-500",
 };
-
-const EXAMPLES = [
-  {
-    id: 1,
-    subject: "Verbal Reasoning",
-    color: "violet" as SubjectColor,
-    type: "Word Codes",
-    question: "If GARDEN = HBSEFO in a letter code, what does NATURE equal in the same code?",
-    options: ["OBUVMF", "NBUVOF", "OBUVSF", "OBUVMG"],
-  },
-  {
-    id: 2,
-    subject: "Mathematics",
-    color: "emerald" as SubjectColor,
-    type: "Multi-Step Problem",
-    question: "A bag of 24 apples costs £3.60. How much would 40 apples cost at the same price per apple?",
-    options: ["£5.00", "£5.60", "£6.00", "£6.40"],
-  },
-  {
-    id: 3,
-    subject: "English Comprehension",
-    color: "amber" as SubjectColor,
-    type: "Inference",
-    question: "\"Marcus kept his eyes fixed firmly on the floor as Mrs Henley read the test scores aloud.\" What does this tell us about Marcus?",
-    options: ["He was tired after the test", "He was proud of his result", "He felt uncomfortable or embarrassed", "He was angry at Mrs Henley"],
-  },
-  {
-    id: 4,
-    subject: "Non-Verbal Reasoning",
-    color: "blue" as SubjectColor,
-    type: "Spatial Rotation",
-    question: "A shape is rotated 90° clockwise, then reflected along a vertical axis. Which option shows the final result?",
-    options: ["Option A", "Option B", "Option C", "Option D"],
-    isNvr: true,
-  },
-  {
-    id: 5,
-    subject: "Verbal Reasoning",
-    color: "violet" as SubjectColor,
-    type: "Analogy",
-    question: "AUTHOR is to BOOK as COMPOSER is to _____.",
-    options: ["Piano", "Symphony", "Concert", "Musician"],
-  },
-  {
-    id: 6,
-    subject: "Mathematics",
-    color: "emerald" as SubjectColor,
-    type: "Percentages",
-    question: "In a class of 32 students, 75% passed a spelling test. How many students did not pass?",
-    options: ["6", "8", "10", "12"],
-  },
-];
 
 function ScoreMockup() {
   const subjects = [
@@ -131,14 +57,8 @@ function ScoreMockup() {
 
         <div className="mb-1">
           <div className="h-3.5 rounded-full bg-slate-100 overflow-hidden relative">
-            <div
-              className="h-full rounded-full bg-primary transition-all duration-700"
-              style={{ width: "89%" }}
-            />
-            <div
-              className="absolute top-0 bottom-0 w-0.5 bg-amber-400"
-              style={{ left: "93.1%" }}
-            />
+            <div className="h-full rounded-full bg-primary" style={{ width: "89%" }} />
+            <div className="absolute top-0 bottom-0 w-0.5 bg-amber-400" style={{ left: "93.1%" }} />
           </div>
           <div className="flex justify-between text-[10px] text-muted-foreground mt-1.5">
             <span>70</span>
@@ -159,7 +79,7 @@ function ScoreMockup() {
               </div>
               <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
                 <div
-                  className={cn("h-full rounded-full", SUBJECT_COLORS[sub.color].bar)}
+                  className={cn("h-full rounded-full", SUBJECT_BAR_COLORS[sub.color])}
                   style={{ width: `${sub.score}%` }}
                 />
               </div>
@@ -171,7 +91,7 @@ function ScoreMockup() {
           <p className="text-xs leading-relaxed text-slate-600">
             <span className="font-semibold text-slate-800">Recommended focus: </span>
             Non-Verbal Reasoning is the biggest drag on overall score. Targeted practice
-            across spatial rotation and matrix patterns is the fastest route to qualifying.
+            across matrix patterns and classification is the fastest route to qualifying.
           </p>
         </div>
       </div>
@@ -179,68 +99,7 @@ function ScoreMockup() {
   );
 }
 
-function QuestionCard({ example }: { example: typeof EXAMPLES[number] }) {
-  const c = SUBJECT_COLORS[example.color];
-  return (
-    <div
-      className={cn(
-        "rounded-2xl border p-5 flex flex-col min-w-[288px] w-[288px] sm:min-w-[320px] sm:w-[320px] flex-shrink-0 snap-start h-full",
-        c.bg, c.border
-      )}
-    >
-      <div className="flex items-center justify-between mb-3">
-        <span className={cn("text-[10px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full", c.tag)}>
-          {example.subject}
-        </span>
-        <span className="text-[10px] font-medium text-muted-foreground bg-white/70 rounded-full px-2 py-0.5 border border-white/50">
-          {example.type}
-        </span>
-      </div>
-
-      {example.isNvr && (
-        <div className="mb-3 bg-white/70 rounded-xl border border-white p-3 flex items-center justify-center gap-2 flex-wrap">
-          <div className="h-9 w-9 border-2 border-blue-400 rounded-sm" />
-          <div className="h-9 w-9 border-2 border-blue-400 rotate-45 flex-shrink-0" />
-          <div className="h-9 w-9 border-2 border-blue-400 rounded-full" />
-          <div className="h-9 w-9 bg-blue-100 border-2 border-dashed border-blue-300 rounded-sm flex items-center justify-center">
-            <span className="text-sm font-black text-blue-500">?</span>
-          </div>
-        </div>
-      )}
-
-      <p className="text-sm font-medium text-slate-800 leading-relaxed mb-4 flex-1">
-        {example.question}
-      </p>
-
-      <div className="space-y-2">
-        {example.options.map((opt, i) => (
-          <div
-            key={i}
-            className="flex items-center gap-2.5 bg-white/70 rounded-lg border border-white/60 px-3 py-2"
-          >
-            <div className="h-5 w-5 rounded-full bg-white border border-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-500 flex-shrink-0">
-              {String.fromCharCode(65 + i)}
-            </div>
-            <span className="text-xs text-slate-700 leading-snug">{opt}</span>
-          </div>
-        ))}
-      </div>
-
-      <p className="mt-3 pt-3 border-t border-white/60 text-[10px] text-muted-foreground">
-        Platform Edge · 1,500+ questions like this
-      </p>
-    </div>
-  );
-}
-
 export function GuideConversionBlock() {
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  const scroll = (dir: "left" | "right") => {
-    if (!scrollRef.current) return;
-    scrollRef.current.scrollBy({ left: dir === "right" ? 340 : -340, behavior: "smooth" });
-  };
-
   return (
     <div className="not-prose my-14 space-y-7">
       <ScoreMockup />
@@ -251,35 +110,7 @@ export function GuideConversionBlock() {
         <ChevronsDown className="h-4 w-4 text-primary/60" />
       </div>
 
-      <div className="relative">
-        <div
-          ref={scrollRef}
-          className="flex gap-4 overflow-x-auto pb-3 snap-x snap-mandatory"
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-        >
-          {EXAMPLES.map((example) => (
-            <QuestionCard key={example.id} example={example} />
-          ))}
-          <div className="min-w-[1px] flex-shrink-0" />
-        </div>
-        <button
-          onClick={() => scroll("left")}
-          aria-label="Scroll left"
-          className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-5 h-9 w-9 rounded-full bg-white border border-slate-200 shadow-md items-center justify-center hover:bg-slate-50 transition-colors z-10"
-        >
-          <ChevronLeft className="h-5 w-5 text-slate-600" />
-        </button>
-        <button
-          onClick={() => scroll("right")}
-          aria-label="Scroll right"
-          className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-5 h-9 w-9 rounded-full bg-white border border-slate-200 shadow-md items-center justify-center hover:bg-slate-50 transition-colors z-10"
-        >
-          <ChevronRight className="h-5 w-5 text-slate-600" />
-        </button>
-        <div className="flex justify-center gap-1.5 mt-3 md:hidden">
-          <p className="text-[11px] text-muted-foreground">← Swipe to see more examples →</p>
-        </div>
-      </div>
+      <SampleQuestionsCarousel />
 
       <div className="rounded-2xl bg-primary overflow-hidden shadow-xl">
         <div className="px-7 py-8 md:px-9 md:py-9">

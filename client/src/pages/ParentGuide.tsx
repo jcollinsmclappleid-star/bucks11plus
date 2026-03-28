@@ -100,7 +100,7 @@ export default function ParentGuide() {
           <div className="text-center space-y-6">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/[0.03]">
               <BookOpen className="h-4 w-4 text-brand-amber" />
-              <span className="text-xs font-semibold text-white/60 uppercase tracking-wider">Free Download</span>
+              <span className="text-xs font-semibold text-white/60 uppercase tracking-wider">Free 22-Page Guide</span>
             </div>
 
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.12] font-serif max-w-4xl mx-auto" data-testid="text-guide-title">
@@ -109,15 +109,17 @@ export default function ParentGuide() {
             </h1>
 
             <p className="text-lg md:text-xl text-white/65 max-w-3xl mx-auto leading-relaxed">
-              Understand how the Bucks grammar school test works and how to assess your child's readiness.
+              A comprehensive 22-page guide covering everything you need to understand the Bucks grammar school test and prepare your child effectively.
             </p>
 
             <ul className="max-w-md mx-auto text-left space-y-3 pt-4">
               {[
-                "The 13 Buckinghamshire grammar schools",
-                "The qualifying score of 121 explained",
-                "The admissions timeline for parents",
-                "How readiness can be measured before the test",
+                "All 13 Buckinghamshire grammar schools covered",
+                "The qualifying score of 121 — fully explained",
+                "The admissions timeline from Year 4 to results day",
+                "Example GL-style questions across all 4 subjects",
+                "Platform subscription plans and pricing inside",
+                `${30} in-depth preparation guides referenced`,
               ].map((item, i) => (
                 <li key={i} className="flex items-start gap-3 text-white/70 text-sm">
                   <CheckCircle2 className="h-5 w-5 text-brand-amber shrink-0 mt-0.5" />
@@ -128,7 +130,7 @@ export default function ParentGuide() {
 
             <div className="pt-8">
               <Button size="lg" className="h-14 px-10 text-lg bg-brand-amber text-white hover:bg-brand-amber/90 font-bold shadow-lg shadow-brand-amber/15 border-none" onClick={scrollToForm} data-testid="button-hero-download">
-                Download the Free Guide <Download className="ml-2 h-5 w-5" />
+                Download the Free 22-Page Guide <Download className="ml-2 h-5 w-5" />
               </Button>
             </div>
           </div>
