@@ -110,9 +110,10 @@ const EXAMPLES: Example[] = [
     id: 8,
     subject: "Non-Verbal Reasoning",
     color: "blue" as SubjectColor,
-    type: "Odd One Out",
-    question: "Four of these five items follow the same rule. Which is the odd one out? 8, 27, 36, 64, 125",
-    options: ["8", "27", "36", "64"],
+    type: "Spatial Folding",
+    question: "A square sheet of paper is folded in half left-to-right, then folded in half top-to-bottom. A single hole is punched through all layers. When fully unfolded, how many holes appear?",
+    sequenceItems: ["⬜", "|fold→", "▬ ×2", "|fold↓", "◼ ×4", "|punch", "?"],
+    options: ["2", "3", "4", "8"],
   },
 ];
 
@@ -142,19 +143,30 @@ function QuestionCard({ example }: { example: Example }) {
       {example.sequenceItems && (
         <div className="mb-4 rounded-xl bg-white/80 border border-white/70 p-3">
           <div className="flex flex-wrap gap-1.5 items-center justify-center">
-            {example.sequenceItems.map((item, i) => (
-              <div
-                key={i}
-                className={cn(
-                  "w-8 h-8 rounded-lg flex items-center justify-center text-base font-bold border",
-                  item === "?"
-                    ? "bg-blue-100 border-blue-300 text-blue-500 text-lg"
-                    : "bg-white border-slate-200 text-slate-700"
-                )}
-              >
-                {item}
-              </div>
-            ))}
+            {example.sequenceItems.map((item, i) => {
+              const isBlank = item === "?";
+              const isStepLabel = item.startsWith("|");
+              if (isStepLabel) {
+                return (
+                  <span key={i} className="text-[10px] font-bold text-slate-400 px-0.5 select-none">
+                    {item.slice(1)}
+                  </span>
+                );
+              }
+              return (
+                <div
+                  key={i}
+                  className={cn(
+                    "min-w-[2rem] h-8 px-2 rounded-lg flex items-center justify-center text-sm font-bold border",
+                    isBlank
+                      ? "bg-blue-100 border-blue-300 text-blue-500"
+                      : "bg-white border-slate-200 text-slate-700"
+                  )}
+                >
+                  {item}
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
