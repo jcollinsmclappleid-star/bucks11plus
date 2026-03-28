@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { Seo } from "../components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "../components/shared/Breadcrumbs";
-import { ContentCTA } from "../components/shared/ContentCTA";
+import { GuideConversionBlock } from "../components/shared/GuideConversionBlock";
 import { SubscribeCTA } from "../components/shared/SubscribeCTA";
 import { Disclaimer } from "../components/shared/Disclaimer";
 import { learnArticles, LEARN_CATEGORIES, getArticlesByCategory } from "../data/learn-articles";
@@ -221,7 +221,7 @@ export default function BucksGuide() {
         </Link>
       </div>
 
-      <ContentCTA />
+      <GuideConversionBlock />
 
       <div className="not-prose my-12">
         <div className="border-l-4 border-primary pl-5 mb-8">
