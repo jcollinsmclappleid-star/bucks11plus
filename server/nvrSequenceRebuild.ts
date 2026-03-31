@@ -7,8 +7,16 @@
  *   - ROTATION: shape rotates in 90° or 45° steps (asymmetric shapes only)
  *   - SIZE: shape grows in 10-12 unit steps (large enough to see clearly)
  *   - COUNT: number of shapes increases 1→2→3→4
- *   - FILL: fill property progresses none→dotted→hatched→solid
+ *   - FILL: fill ALTERNATES between two values (none↔solid, dotted↔hatched, etc.)
  *   - DUAL: two shapes, each following an independent rule
+ *
+ * COGNITIVE DESIGN RULES:
+ *   - ROTATION wrong options: never use any angle shown in sequence frames (0,90,180).
+ *     Use 225° and 315° as traps for 90° seqs; 0° and 180° for 45° seqs.
+ *   - FILL wrong options: two are fills never shown in the sequence; one is the
+ *     "alternating trap" (the fill the student might pick by repeating the wrong half).
+ *   - COUNT wrong options: cnt(3) = last-frame trap (one seen); cnt(5) and cnt(6) = new.
+ *   - SIZE wrong options: last_frame_size = last-frame trap; correct±step = cognitive traps.
  */
 
 import { db } from "./db";
@@ -48,6 +56,7 @@ const POS: Record<number, Array<{ x: number; y: number }>> = {
   3: [{ x: 18, y: 50 }, { x: 50, y: 50 }, { x: 82, y: 50 }],
   4: [{ x: 12, y: 50 }, { x: 37, y: 50 }, { x: 63, y: 50 }, { x: 88, y: 50 }],
   5: [{ x: 10, y: 50 }, { x: 28, y: 50 }, { x: 50, y: 50 }, { x: 72, y: 50 }, { x: 90, y: 50 }],
+  6: [{ x: 8, y: 50 }, { x: 24, y: 50 }, { x: 41, y: 50 }, { x: 59, y: 50 }, { x: 76, y: 50 }, { x: 92, y: 50 }],
 };
 
 function cnt(n: number, shape: string, fill = "none") {
@@ -74,6 +83,8 @@ const PROMPT_SEQ = "Which shape comes next in the sequence?";
 const FREE_QUESTIONS: QDef[] = [
 
   // ── ROTATION 90° ── (free, questions 1-10) ────────────────────────────────
+  // Frames show 0°→90°→180°; correct=270°
+  // Wrong options: 225° (between last shown and correct), 315° (one step past correct), 0° (cyclic trap)
   {
     id: "005b9782-028e-4793-8b36-a710ea036a1c",
     correctAnswer: "C",
@@ -87,9 +98,9 @@ const FREE_QUESTIONS: QDef[] = [
     ],
     answerOptions: placeOpts("C",
       fr(sh("triangle", 50, 50, 38, 270)),   // correct: 270°
-      fr(sh("triangle", 50, 50, 38, 0)),     // wrong: back to 0°
-      fr(sh("triangle", 50, 50, 38, 90)),    // wrong: frame 1
-      fr(sh("triangle", 50, 50, 38, 180)),   // wrong: frame 2
+      fr(sh("triangle", 50, 50, 38, 225)),   // wrong: between last-shown and correct
+      fr(sh("triangle", 50, 50, 38, 315)),   // wrong: one step past correct
+      fr(sh("triangle", 50, 50, 38, 0)),     // wrong: cyclic reset (looks like start)
     ),
   },
   {
@@ -105,9 +116,9 @@ const FREE_QUESTIONS: QDef[] = [
     ],
     answerOptions: placeOpts("A",
       fr(sh("arrow", 50, 50, 38, 270)),
+      fr(sh("arrow", 50, 50, 38, 315)),
+      fr(sh("arrow", 50, 50, 38, 225)),
       fr(sh("arrow", 50, 50, 38, 0)),
-      fr(sh("arrow", 50, 50, 38, 90)),
-      fr(sh("arrow", 50, 50, 38, 180)),
     ),
   },
   {
@@ -116,16 +127,16 @@ const FREE_QUESTIONS: QDef[] = [
     subRuleId: "nvr.sequence.compound_rotate",
     prompt: PROMPT_SEQ,
     frames: [
-      fr(sh("pentagon", 50, 50, 38, 0)),
-      fr(sh("pentagon", 50, 50, 38, 90)),
-      fr(sh("pentagon", 50, 50, 38, 180)),
-      fr(sh("pentagon", 50, 50, 38, 270)),
+      fr(sh("right_triangle", 50, 50, 38, 0)),
+      fr(sh("right_triangle", 50, 50, 38, 90)),
+      fr(sh("right_triangle", 50, 50, 38, 180)),
+      fr(sh("right_triangle", 50, 50, 38, 270)),
     ],
     answerOptions: placeOpts("D",
-      fr(sh("pentagon", 50, 50, 38, 0)),
-      fr(sh("pentagon", 50, 50, 38, 90)),
-      fr(sh("pentagon", 50, 50, 38, 180)),
-      fr(sh("pentagon", 50, 50, 38, 270)),
+      fr(sh("right_triangle", 50, 50, 38, 225)),
+      fr(sh("right_triangle", 50, 50, 38, 0)),
+      fr(sh("right_triangle", 50, 50, 38, 315)),
+      fr(sh("right_triangle", 50, 50, 38, 270)),
     ),
   },
   {
@@ -140,10 +151,10 @@ const FREE_QUESTIONS: QDef[] = [
       fr(sh("semicircle", 50, 50, 38, 270)),
     ],
     answerOptions: placeOpts("B",
-      fr(sh("semicircle", 50, 50, 38, 180)),
+      fr(sh("semicircle", 50, 50, 38, 315)),
       fr(sh("semicircle", 50, 50, 38, 270)),
+      fr(sh("semicircle", 50, 50, 38, 225)),
       fr(sh("semicircle", 50, 50, 38, 0)),
-      fr(sh("semicircle", 50, 50, 38, 90)),
     ),
   },
   {
@@ -158,10 +169,10 @@ const FREE_QUESTIONS: QDef[] = [
       fr(sh("right_triangle", 50, 50, 38, 270)),
     ],
     answerOptions: placeOpts("C",
+      fr(sh("right_triangle", 50, 50, 38, 315)),
       fr(sh("right_triangle", 50, 50, 38, 0)),
-      fr(sh("right_triangle", 50, 50, 38, 90)),
       fr(sh("right_triangle", 50, 50, 38, 270)),
-      fr(sh("right_triangle", 50, 50, 38, 180)),
+      fr(sh("right_triangle", 50, 50, 38, 225)),
     ),
   },
   {
@@ -176,9 +187,9 @@ const FREE_QUESTIONS: QDef[] = [
       fr(sh("triangle", 50, 50, 38, 270, "solid")),
     ],
     answerOptions: placeOpts("D",
-      fr(sh("triangle", 50, 50, 38, 90, "solid")),
-      fr(sh("triangle", 50, 50, 38, 180, "solid")),
+      fr(sh("triangle", 50, 50, 38, 225, "solid")),
       fr(sh("triangle", 50, 50, 38, 0, "solid")),
+      fr(sh("triangle", 50, 50, 38, 315, "solid")),
       fr(sh("triangle", 50, 50, 38, 270, "solid")),
     ),
   },
@@ -195,9 +206,9 @@ const FREE_QUESTIONS: QDef[] = [
     ],
     answerOptions: placeOpts("A",
       fr(sh("arrow", 50, 50, 38, 270, "solid")),
+      fr(sh("arrow", 50, 50, 38, 315, "solid")),
+      fr(sh("arrow", 50, 50, 38, 225, "solid")),
       fr(sh("arrow", 50, 50, 38, 0, "solid")),
-      fr(sh("arrow", 50, 50, 38, 90, "solid")),
-      fr(sh("arrow", 50, 50, 38, 180, "solid")),
     ),
   },
   {
@@ -206,16 +217,16 @@ const FREE_QUESTIONS: QDef[] = [
     subRuleId: "nvr.sequence.compound_rotate",
     prompt: PROMPT_SEQ,
     frames: [
-      fr(sh("pentagon", 50, 50, 38, 0, "solid")),
-      fr(sh("pentagon", 50, 50, 38, 90, "solid")),
-      fr(sh("pentagon", 50, 50, 38, 180, "solid")),
-      fr(sh("pentagon", 50, 50, 38, 270, "solid")),
+      fr(sh("semicircle", 50, 50, 38, 0, "solid")),
+      fr(sh("semicircle", 50, 50, 38, 90, "solid")),
+      fr(sh("semicircle", 50, 50, 38, 180, "solid")),
+      fr(sh("semicircle", 50, 50, 38, 270, "solid")),
     ],
     answerOptions: placeOpts("B",
-      fr(sh("pentagon", 50, 50, 38, 180, "solid")),
-      fr(sh("pentagon", 50, 50, 38, 270, "solid")),
-      fr(sh("pentagon", 50, 50, 38, 0, "solid")),
-      fr(sh("pentagon", 50, 50, 38, 90, "solid")),
+      fr(sh("semicircle", 50, 50, 38, 315, "solid")),
+      fr(sh("semicircle", 50, 50, 38, 270, "solid")),
+      fr(sh("semicircle", 50, 50, 38, 225, "solid")),
+      fr(sh("semicircle", 50, 50, 38, 0, "solid")),
     ),
   },
   {
@@ -231,13 +242,15 @@ const FREE_QUESTIONS: QDef[] = [
     ],
     answerOptions: placeOpts("C",
       fr(sh("semicircle", 50, 50, 38, 0, "solid")),
-      fr(sh("semicircle", 50, 50, 38, 90, "solid")),
+      fr(sh("semicircle", 50, 50, 38, 315, "solid")),
       fr(sh("semicircle", 50, 50, 38, 270, "solid")),
-      fr(sh("semicircle", 50, 50, 38, 180, "solid")),
+      fr(sh("semicircle", 50, 50, 38, 225, "solid")),
     ),
   },
   {
     // 45° rotation — harder variant (still free pool)
+    // Frames show 0°→45°→90°; correct=135°
+    // Wrong options for 45° seqs: 0° (cyclic reset), 180° (double-step confusion), 270° (overshoot)
     id: "5cd76d68-4e77-4784-ba4e-225afc439395",
     correctAnswer: "D",
     subRuleId: "nvr.sequence.compound_rotate",
@@ -249,14 +262,16 @@ const FREE_QUESTIONS: QDef[] = [
       fr(sh("arrow", 50, 50, 38, 135)),
     ],
     answerOptions: placeOpts("D",
-      fr(sh("arrow", 50, 50, 38, 45)),
-      fr(sh("arrow", 50, 50, 38, 90)),
       fr(sh("arrow", 50, 50, 38, 0)),
+      fr(sh("arrow", 50, 50, 38, 180)),
+      fr(sh("arrow", 50, 50, 38, 270)),
       fr(sh("arrow", 50, 50, 38, 135)),
     ),
   },
 
   // ── SIZE 15→25→35→?45 (free, questions 11-15) ─────────────────────────────
+  // Correct = 45 (step +10 from 35)
+  // Wrong options: 40 (step short), 55 (one step too far), 35 (last-shown frame trap)
   {
     id: "6255ad3a-c481-46d3-aaf9-11140b4a8bf2",
     correctAnswer: "A",
@@ -269,10 +284,10 @@ const FREE_QUESTIONS: QDef[] = [
       fr(sh("circle", 50, 50, 45, 0)),
     ],
     answerOptions: placeOpts("A",
-      fr(sh("circle", 50, 50, 45, 0)),
-      fr(sh("circle", 50, 50, 15, 0)),
-      fr(sh("circle", 50, 50, 35, 0)),
-      fr(sh("circle", 50, 50, 55, 0)),
+      fr(sh("circle", 50, 50, 45, 0)),   // correct
+      fr(sh("circle", 50, 50, 40, 0)),   // wrong: step short
+      fr(sh("circle", 50, 50, 55, 0)),   // wrong: one step too far
+      fr(sh("circle", 50, 50, 35, 0)),   // wrong: last-shown frame (trap)
     ),
   },
   {
@@ -287,10 +302,10 @@ const FREE_QUESTIONS: QDef[] = [
       fr(sh("pentagon", 50, 50, 45, 0)),
     ],
     answerOptions: placeOpts("B",
-      fr(sh("pentagon", 50, 50, 15, 0)),
-      fr(sh("pentagon", 50, 50, 45, 0)),
-      fr(sh("pentagon", 50, 50, 35, 0)),
-      fr(sh("pentagon", 50, 50, 55, 0)),
+      fr(sh("pentagon", 50, 50, 45, 0)),  // correct
+      fr(sh("pentagon", 50, 50, 40, 0)),  // wrong: step short
+      fr(sh("pentagon", 50, 50, 55, 0)),  // wrong: overshoot
+      fr(sh("pentagon", 50, 50, 35, 0)),  // wrong: last-frame trap
     ),
   },
   {
@@ -305,10 +320,10 @@ const FREE_QUESTIONS: QDef[] = [
       fr(sh("triangle", 50, 50, 45, 0)),
     ],
     answerOptions: placeOpts("C",
-      fr(sh("triangle", 50, 50, 15, 0)),
-      fr(sh("triangle", 50, 50, 35, 0)),
-      fr(sh("triangle", 50, 50, 45, 0)),
-      fr(sh("triangle", 50, 50, 55, 0)),
+      fr(sh("triangle", 50, 50, 45, 0)),  // correct
+      fr(sh("triangle", 50, 50, 55, 0)),  // wrong: overshoot
+      fr(sh("triangle", 50, 50, 40, 0)),  // wrong: step short
+      fr(sh("triangle", 50, 50, 35, 0)),  // wrong: last-frame trap
     ),
   },
   {
@@ -323,10 +338,10 @@ const FREE_QUESTIONS: QDef[] = [
       fr(sh("star", 50, 50, 45, 0)),
     ],
     answerOptions: placeOpts("D",
-      fr(sh("star", 50, 50, 15, 0)),
-      fr(sh("star", 50, 50, 25, 0)),
-      fr(sh("star", 50, 50, 35, 0)),
-      fr(sh("star", 50, 50, 45, 0)),
+      fr(sh("star", 50, 50, 45, 0)),   // correct
+      fr(sh("star", 50, 50, 55, 0)),   // wrong: overshoot
+      fr(sh("star", 50, 50, 35, 0)),   // wrong: last-frame trap
+      fr(sh("star", 50, 50, 40, 0)),   // wrong: step short
     ),
   },
   {
@@ -341,14 +356,15 @@ const FREE_QUESTIONS: QDef[] = [
       fr(sh("diamond", 50, 50, 45, 0)),
     ],
     answerOptions: placeOpts("A",
-      fr(sh("diamond", 50, 50, 45, 0)),
-      fr(sh("diamond", 50, 50, 15, 0)),
-      fr(sh("diamond", 50, 50, 25, 0)),
-      fr(sh("diamond", 50, 50, 35, 0)),
+      fr(sh("diamond", 50, 50, 45, 0)),  // correct
+      fr(sh("diamond", 50, 50, 40, 0)),
+      fr(sh("diamond", 50, 50, 55, 0)),
+      fr(sh("diamond", 50, 50, 35, 0)),  // last-frame trap
     ),
   },
 
   // ── COUNT 1→2→3→?4 (free, questions 16-20) ───────────────────────────────
+  // Correct = cnt(4). Wrong: cnt(3)=last-shown trap, cnt(5)=one too many, cnt(6)=two too many
   {
     id: "949f1ed6-630c-4f2a-908d-857b85ff4d36",
     correctAnswer: "B",
@@ -356,10 +372,10 @@ const FREE_QUESTIONS: QDef[] = [
     prompt: PROMPT_SEQ,
     frames: [cnt(1, "circle"), cnt(2, "circle"), cnt(3, "circle"), cnt(4, "circle")],
     answerOptions: placeOpts("B",
-      cnt(4, "circle"),
-      cnt(3, "circle"),
-      cnt(1, "circle"),
-      cnt(5, "circle"),
+      cnt(4, "circle"),   // correct
+      cnt(3, "circle"),   // wrong: last-shown frame count (trap)
+      cnt(5, "circle"),   // wrong: one too many
+      cnt(6, "circle"),   // wrong: two too many
     ),
   },
   {
@@ -369,10 +385,10 @@ const FREE_QUESTIONS: QDef[] = [
     prompt: PROMPT_SEQ,
     frames: [cnt(1, "triangle"), cnt(2, "triangle"), cnt(3, "triangle"), cnt(4, "triangle")],
     answerOptions: placeOpts("C",
-      cnt(1, "triangle"),
-      cnt(2, "triangle"),
-      cnt(4, "triangle"),
+      cnt(4, "triangle"),   // correct
+      cnt(3, "triangle"),   // last-frame trap
       cnt(5, "triangle"),
+      cnt(6, "triangle"),
     ),
   },
   {
@@ -382,10 +398,10 @@ const FREE_QUESTIONS: QDef[] = [
     prompt: PROMPT_SEQ,
     frames: [cnt(1, "pentagon"), cnt(2, "pentagon"), cnt(3, "pentagon"), cnt(4, "pentagon")],
     answerOptions: placeOpts("D",
-      cnt(1, "pentagon"),
-      cnt(2, "pentagon"),
+      cnt(4, "pentagon"),   // correct
+      cnt(3, "pentagon"),   // last-frame trap
       cnt(5, "pentagon"),
-      cnt(4, "pentagon"),
+      cnt(6, "pentagon"),
     ),
   },
   {
@@ -395,10 +411,10 @@ const FREE_QUESTIONS: QDef[] = [
     prompt: PROMPT_SEQ,
     frames: [cnt(1, "star"), cnt(2, "star"), cnt(3, "star"), cnt(4, "star")],
     answerOptions: placeOpts("A",
-      cnt(4, "star"),
-      cnt(1, "star"),
-      cnt(2, "star"),
+      cnt(4, "star"),   // correct
+      cnt(3, "star"),   // last-frame trap
       cnt(5, "star"),
+      cnt(6, "star"),
     ),
   },
   {
@@ -408,102 +424,111 @@ const FREE_QUESTIONS: QDef[] = [
     prompt: PROMPT_SEQ,
     frames: [cnt(1, "diamond"), cnt(2, "diamond"), cnt(3, "diamond"), cnt(4, "diamond")],
     answerOptions: placeOpts("B",
-      cnt(1, "diamond"),
-      cnt(4, "diamond"),
+      cnt(4, "diamond"),   // correct
+      cnt(3, "diamond"),   // last-frame trap
       cnt(5, "diamond"),
-      cnt(2, "diamond"),
+      cnt(6, "diamond"),
     ),
   },
 
-  // ── FILL none→dotted→hatched→?solid (free, questions 21-25) ─────────────
+  // ── FILL — ALTERNATING pattern (free, questions 21-25) ───────────────────
+  // Pattern: fill alternates between two values over 4 frames.
+  // Frames 0 and 2 show fill_A; frames 1 and 3 show fill_B.
+  // Correct answer = fill_B (appeared once in frame 1, now returns).
+  // Wrong options: two fills never shown + the alternating-fill trap (fill_A).
   {
+    // pentagon: none→solid→none→?solid
     id: "c1aae4a5-c041-4a8d-a4b9-dd20a08fb238",
     correctAnswer: "C",
     subRuleId: "nvr.sequence.compound_fill_cycle",
     prompt: PROMPT_SEQ,
     frames: [
       fr(sh("pentagon", 50, 50, 38, 0, "none")),
-      fr(sh("pentagon", 50, 50, 38, 0, "dotted")),
-      fr(sh("pentagon", 50, 50, 38, 0, "hatched")),
+      fr(sh("pentagon", 50, 50, 38, 0, "solid")),
+      fr(sh("pentagon", 50, 50, 38, 0, "none")),
       fr(sh("pentagon", 50, 50, 38, 0, "solid")),
     ],
     answerOptions: placeOpts("C",
-      fr(sh("pentagon", 50, 50, 38, 0, "none")),
-      fr(sh("pentagon", 50, 50, 38, 0, "hatched")),
-      fr(sh("pentagon", 50, 50, 38, 0, "solid")),
-      fr(sh("pentagon", 50, 50, 38, 0, "dotted")),
+      fr(sh("pentagon", 50, 50, 38, 0, "hatched")),  // wrong: never shown
+      fr(sh("pentagon", 50, 50, 38, 0, "dotted")),   // wrong: never shown
+      fr(sh("pentagon", 50, 50, 38, 0, "solid")),    // correct
+      fr(sh("pentagon", 50, 50, 38, 0, "none")),     // wrong: alternating trap
     ),
   },
   {
+    // triangle: dotted→none→dotted→?none
     id: "cc76f0e5-dd48-4430-a16d-64679bc1691f",
     correctAnswer: "D",
     subRuleId: "nvr.sequence.compound_fill_cycle",
     prompt: PROMPT_SEQ,
     frames: [
+      fr(sh("triangle", 50, 50, 38, 0, "dotted")),
       fr(sh("triangle", 50, 50, 38, 0, "none")),
       fr(sh("triangle", 50, 50, 38, 0, "dotted")),
-      fr(sh("triangle", 50, 50, 38, 0, "hatched")),
-      fr(sh("triangle", 50, 50, 38, 0, "solid")),
+      fr(sh("triangle", 50, 50, 38, 0, "none")),
     ],
     answerOptions: placeOpts("D",
-      fr(sh("triangle", 50, 50, 38, 0, "none")),
-      fr(sh("triangle", 50, 50, 38, 0, "dotted")),
-      fr(sh("triangle", 50, 50, 38, 0, "hatched")),
-      fr(sh("triangle", 50, 50, 38, 0, "solid")),
+      fr(sh("triangle", 50, 50, 38, 0, "solid")),    // wrong: never shown
+      fr(sh("triangle", 50, 50, 38, 0, "hatched")),  // wrong: never shown
+      fr(sh("triangle", 50, 50, 38, 0, "dotted")),   // wrong: alternating trap
+      fr(sh("triangle", 50, 50, 38, 0, "none")),     // correct
     ),
   },
   {
+    // hexagon: hatched→dotted→hatched→?dotted
     id: "d70b9b47-4ff6-4287-8f5f-be6d4600ae09",
     correctAnswer: "A",
     subRuleId: "nvr.sequence.compound_fill_cycle",
     prompt: PROMPT_SEQ,
     frames: [
-      fr(sh("hexagon", 50, 50, 38, 0, "none")),
+      fr(sh("hexagon", 50, 50, 38, 0, "hatched")),
       fr(sh("hexagon", 50, 50, 38, 0, "dotted")),
       fr(sh("hexagon", 50, 50, 38, 0, "hatched")),
-      fr(sh("hexagon", 50, 50, 38, 0, "solid")),
+      fr(sh("hexagon", 50, 50, 38, 0, "dotted")),
     ],
     answerOptions: placeOpts("A",
-      fr(sh("hexagon", 50, 50, 38, 0, "solid")),
-      fr(sh("hexagon", 50, 50, 38, 0, "none")),
-      fr(sh("hexagon", 50, 50, 38, 0, "dotted")),
-      fr(sh("hexagon", 50, 50, 38, 0, "hatched")),
+      fr(sh("hexagon", 50, 50, 38, 0, "dotted")),    // correct
+      fr(sh("hexagon", 50, 50, 38, 0, "none")),      // wrong: never shown
+      fr(sh("hexagon", 50, 50, 38, 0, "solid")),     // wrong: never shown
+      fr(sh("hexagon", 50, 50, 38, 0, "hatched")),   // wrong: alternating trap
     ),
   },
   {
+    // star: solid→none→solid→?none
     id: "e8b2fd50-97d2-4d47-9767-11b253cc9079",
     correctAnswer: "B",
     subRuleId: "nvr.sequence.compound_fill_cycle",
     prompt: PROMPT_SEQ,
     frames: [
-      fr(sh("star", 50, 50, 38, 0, "none")),
-      fr(sh("star", 50, 50, 38, 0, "dotted")),
-      fr(sh("star", 50, 50, 38, 0, "hatched")),
       fr(sh("star", 50, 50, 38, 0, "solid")),
+      fr(sh("star", 50, 50, 38, 0, "none")),
+      fr(sh("star", 50, 50, 38, 0, "solid")),
+      fr(sh("star", 50, 50, 38, 0, "none")),
     ],
     answerOptions: placeOpts("B",
-      fr(sh("star", 50, 50, 38, 0, "none")),
-      fr(sh("star", 50, 50, 38, 0, "solid")),
-      fr(sh("star", 50, 50, 38, 0, "dotted")),
-      fr(sh("star", 50, 50, 38, 0, "hatched")),
+      fr(sh("star", 50, 50, 38, 0, "hatched")),  // wrong: never shown
+      fr(sh("star", 50, 50, 38, 0, "none")),     // correct
+      fr(sh("star", 50, 50, 38, 0, "dotted")),   // wrong: never shown
+      fr(sh("star", 50, 50, 38, 0, "solid")),    // wrong: alternating trap
     ),
   },
   {
+    // diamond: none→hatched→none→?hatched
     id: "e8bca49d-3693-4156-b805-72e837c709a9",
     correctAnswer: "C",
     subRuleId: "nvr.sequence.compound_fill_cycle",
     prompt: PROMPT_SEQ,
     frames: [
       fr(sh("diamond", 50, 50, 38, 0, "none")),
-      fr(sh("diamond", 50, 50, 38, 0, "dotted")),
       fr(sh("diamond", 50, 50, 38, 0, "hatched")),
-      fr(sh("diamond", 50, 50, 38, 0, "solid")),
-    ],
-    answerOptions: placeOpts("C",
       fr(sh("diamond", 50, 50, 38, 0, "none")),
       fr(sh("diamond", 50, 50, 38, 0, "hatched")),
-      fr(sh("diamond", 50, 50, 38, 0, "solid")),
-      fr(sh("diamond", 50, 50, 38, 0, "dotted")),
+    ],
+    answerOptions: placeOpts("C",
+      fr(sh("diamond", 50, 50, 38, 0, "solid")),    // wrong: never shown
+      fr(sh("diamond", 50, 50, 38, 0, "dotted")),   // wrong: never shown
+      fr(sh("diamond", 50, 50, 38, 0, "hatched")),  // correct
+      fr(sh("diamond", 50, 50, 38, 0, "none")),     // wrong: alternating trap
     ),
   },
 ];
@@ -516,6 +541,8 @@ const FREE_QUESTIONS: QDef[] = [
 const NONFREE_QUESTIONS: QDef[] = [
 
   // ── ROTATION 45° (harder — non-free) ──────────────────────────────────────
+  // Frames show 0°→45°→90°; correct=135°
+  // Wrong options: 0° (cyclic reset), 180° (student applies 90° step), 270° (overshoot)
   {
     id: "1b206e87-ab88-4463-bfc0-0bdbe2e16d82",
     correctAnswer: "D",
@@ -528,9 +555,9 @@ const NONFREE_QUESTIONS: QDef[] = [
       fr(sh("right_triangle", 50, 50, 38, 135)),
     ],
     answerOptions: placeOpts("D",
-      fr(sh("right_triangle", 50, 50, 38, 45)),
-      fr(sh("right_triangle", 50, 50, 38, 90)),
       fr(sh("right_triangle", 50, 50, 38, 0)),
+      fr(sh("right_triangle", 50, 50, 38, 180)),
+      fr(sh("right_triangle", 50, 50, 38, 270)),
       fr(sh("right_triangle", 50, 50, 38, 135)),
     ),
   },
@@ -547,9 +574,9 @@ const NONFREE_QUESTIONS: QDef[] = [
     ],
     answerOptions: placeOpts("A",
       fr(sh("arrow", 50, 50, 38, 135, "solid")),
-      fr(sh("arrow", 50, 50, 38, 45, "solid")),
       fr(sh("arrow", 50, 50, 38, 0, "solid")),
-      fr(sh("arrow", 50, 50, 38, 90, "solid")),
+      fr(sh("arrow", 50, 50, 38, 180, "solid")),
+      fr(sh("arrow", 50, 50, 38, 270, "solid")),
     ),
   },
   {
@@ -558,16 +585,16 @@ const NONFREE_QUESTIONS: QDef[] = [
     subRuleId: "nvr.sequence.compound_rotate",
     prompt: PROMPT_SEQ,
     frames: [
-      fr(sh("pentagon", 50, 50, 38, 0, "solid")),
-      fr(sh("pentagon", 50, 50, 38, 45, "solid")),
-      fr(sh("pentagon", 50, 50, 38, 90, "solid")),
-      fr(sh("pentagon", 50, 50, 38, 135, "solid")),
+      fr(sh("triangle", 50, 50, 38, 0, "solid")),
+      fr(sh("triangle", 50, 50, 38, 45, "solid")),
+      fr(sh("triangle", 50, 50, 38, 90, "solid")),
+      fr(sh("triangle", 50, 50, 38, 135, "solid")),
     ],
     answerOptions: placeOpts("B",
-      fr(sh("pentagon", 50, 50, 38, 45, "solid")),
-      fr(sh("pentagon", 50, 50, 38, 135, "solid")),
-      fr(sh("pentagon", 50, 50, 38, 0, "solid")),
-      fr(sh("pentagon", 50, 50, 38, 90, "solid")),
+      fr(sh("triangle", 50, 50, 38, 0, "solid")),
+      fr(sh("triangle", 50, 50, 38, 135, "solid")),
+      fr(sh("triangle", 50, 50, 38, 180, "solid")),
+      fr(sh("triangle", 50, 50, 38, 270, "solid")),
     ),
   },
   {
@@ -583,9 +610,9 @@ const NONFREE_QUESTIONS: QDef[] = [
     ],
     answerOptions: placeOpts("C",
       fr(sh("triangle", 50, 50, 38, 0, "solid")),
-      fr(sh("triangle", 50, 50, 38, 45, "solid")),
+      fr(sh("triangle", 50, 50, 38, 180, "solid")),
       fr(sh("triangle", 50, 50, 38, 135, "solid")),
-      fr(sh("triangle", 50, 50, 38, 90, "solid")),
+      fr(sh("triangle", 50, 50, 38, 270, "solid")),
     ),
   },
   {
@@ -601,13 +628,15 @@ const NONFREE_QUESTIONS: QDef[] = [
     ],
     answerOptions: placeOpts("D",
       fr(sh("semicircle", 50, 50, 38, 0, "solid")),
-      fr(sh("semicircle", 50, 50, 38, 45, "solid")),
-      fr(sh("semicircle", 50, 50, 38, 90, "solid")),
+      fr(sh("semicircle", 50, 50, 38, 180, "solid")),
+      fr(sh("semicircle", 50, 50, 38, 270, "solid")),
       fr(sh("semicircle", 50, 50, 38, 135, "solid")),
     ),
   },
 
   // ── SIZE — larger growth (non-free) ──────────────────────────────────────
+  // For 12→24→36→?48: wrong=42 (step short), 60 (one step too far), 36 (last-frame trap)
+  // For 10→22→34→?46: wrong=40 (step short), 58 (one step too far), 34 (last-frame trap)
   {
     id: "60cc1411-fa0b-4b50-b9e4-cdaa22b67b18",
     correctAnswer: "A",
@@ -620,10 +649,10 @@ const NONFREE_QUESTIONS: QDef[] = [
       fr(sh("hexagon", 50, 50, 48, 0)),
     ],
     answerOptions: placeOpts("A",
-      fr(sh("hexagon", 50, 50, 48, 0)),
-      fr(sh("hexagon", 50, 50, 12, 0)),
-      fr(sh("hexagon", 50, 50, 36, 0)),
-      fr(sh("hexagon", 50, 50, 60, 0)),
+      fr(sh("hexagon", 50, 50, 48, 0)),   // correct
+      fr(sh("hexagon", 50, 50, 42, 0)),   // wrong: step short
+      fr(sh("hexagon", 50, 50, 60, 0)),   // wrong: one step too far
+      fr(sh("hexagon", 50, 50, 36, 0)),   // wrong: last-frame trap
     ),
   },
   {
@@ -638,10 +667,10 @@ const NONFREE_QUESTIONS: QDef[] = [
       fr(sh("arrow", 50, 50, 48, 0)),
     ],
     answerOptions: placeOpts("B",
-      fr(sh("arrow", 50, 50, 12, 0)),
-      fr(sh("arrow", 50, 50, 48, 0)),
-      fr(sh("arrow", 50, 50, 36, 0)),
-      fr(sh("arrow", 50, 50, 60, 0)),
+      fr(sh("arrow", 50, 50, 48, 0)),   // correct
+      fr(sh("arrow", 50, 50, 42, 0)),   // wrong: step short
+      fr(sh("arrow", 50, 50, 60, 0)),   // wrong: overshoot
+      fr(sh("arrow", 50, 50, 36, 0)),   // wrong: last-frame trap
     ),
   },
   {
@@ -656,10 +685,10 @@ const NONFREE_QUESTIONS: QDef[] = [
       fr(sh("square", 50, 50, 48, 0)),
     ],
     answerOptions: placeOpts("C",
-      fr(sh("square", 50, 50, 12, 0)),
-      fr(sh("square", 50, 50, 36, 0)),
-      fr(sh("square", 50, 50, 48, 0)),
-      fr(sh("square", 50, 50, 60, 0)),
+      fr(sh("square", 50, 50, 48, 0)),   // correct
+      fr(sh("square", 50, 50, 42, 0)),   // wrong: step short
+      fr(sh("square", 50, 50, 60, 0)),   // wrong: overshoot
+      fr(sh("square", 50, 50, 36, 0)),   // wrong: last-frame trap
     ),
   },
   {
@@ -675,10 +704,10 @@ const NONFREE_QUESTIONS: QDef[] = [
       fr(sh("circle", 50, 50, 46, 0)),
     ],
     answerOptions: placeOpts("D",
-      fr(sh("circle", 50, 50, 10, 0)),
-      fr(sh("circle", 50, 50, 34, 0)),
-      fr(sh("circle", 50, 50, 58, 0)),
-      fr(sh("circle", 50, 50, 46, 0)),
+      fr(sh("circle", 50, 50, 46, 0)),   // correct
+      fr(sh("circle", 50, 50, 58, 0)),   // wrong: overshoot
+      fr(sh("circle", 50, 50, 34, 0)),   // wrong: last-frame trap
+      fr(sh("circle", 50, 50, 40, 0)),   // wrong: step short
     ),
   },
   {
@@ -693,10 +722,10 @@ const NONFREE_QUESTIONS: QDef[] = [
       fr(sh("star", 50, 50, 48, 0)),
     ],
     answerOptions: placeOpts("A",
-      fr(sh("star", 50, 50, 48, 0)),
-      fr(sh("star", 50, 50, 12, 0)),
-      fr(sh("star", 50, 50, 24, 0)),
-      fr(sh("star", 50, 50, 60, 0)),
+      fr(sh("star", 50, 50, 48, 0)),   // correct
+      fr(sh("star", 50, 50, 42, 0)),   // wrong: step short
+      fr(sh("star", 50, 50, 60, 0)),   // wrong: one step too far
+      fr(sh("star", 50, 50, 36, 0)),   // wrong: last-frame trap
     ),
   },
 
@@ -708,10 +737,10 @@ const NONFREE_QUESTIONS: QDef[] = [
     prompt: PROMPT_SEQ,
     frames: [cnt(1, "hexagon"), cnt(2, "hexagon"), cnt(3, "hexagon"), cnt(4, "hexagon")],
     answerOptions: placeOpts("B",
-      cnt(1, "hexagon"),
-      cnt(4, "hexagon"),
+      cnt(4, "hexagon"),   // correct
+      cnt(3, "hexagon"),   // last-frame trap
       cnt(5, "hexagon"),
-      cnt(2, "hexagon"),
+      cnt(6, "hexagon"),
     ),
   },
   {
@@ -721,10 +750,10 @@ const NONFREE_QUESTIONS: QDef[] = [
     prompt: PROMPT_SEQ,
     frames: [cnt(1, "arrow"), cnt(2, "arrow"), cnt(3, "arrow"), cnt(4, "arrow")],
     answerOptions: placeOpts("C",
-      cnt(2, "arrow"),
-      cnt(1, "arrow"),
-      cnt(4, "arrow"),
+      cnt(4, "arrow"),   // correct
+      cnt(3, "arrow"),   // last-frame trap
       cnt(5, "arrow"),
+      cnt(6, "arrow"),
     ),
   },
   {
@@ -734,10 +763,10 @@ const NONFREE_QUESTIONS: QDef[] = [
     prompt: PROMPT_SEQ,
     frames: [cnt(1, "square", "solid"), cnt(2, "square", "solid"), cnt(3, "square", "solid"), cnt(4, "square", "solid")],
     answerOptions: placeOpts("D",
-      cnt(1, "square", "solid"),
-      cnt(2, "square", "solid"),
+      cnt(4, "square", "solid"),   // correct
+      cnt(3, "square", "solid"),   // last-frame trap
       cnt(5, "square", "solid"),
-      cnt(4, "square", "solid"),
+      cnt(6, "square", "solid"),
     ),
   },
   {
@@ -747,10 +776,10 @@ const NONFREE_QUESTIONS: QDef[] = [
     prompt: PROMPT_SEQ,
     frames: [cnt(1, "circle", "solid"), cnt(2, "circle", "solid"), cnt(3, "circle", "solid"), cnt(4, "circle", "solid")],
     answerOptions: placeOpts("A",
-      cnt(4, "circle", "solid"),
-      cnt(2, "circle", "solid"),
-      cnt(1, "circle", "solid"),
+      cnt(4, "circle", "solid"),   // correct
+      cnt(3, "circle", "solid"),   // last-frame trap
       cnt(5, "circle", "solid"),
+      cnt(6, "circle", "solid"),
     ),
   },
   {
@@ -760,69 +789,73 @@ const NONFREE_QUESTIONS: QDef[] = [
     prompt: PROMPT_SEQ,
     frames: [cnt(1, "triangle", "solid"), cnt(2, "triangle", "solid"), cnt(3, "triangle", "solid"), cnt(4, "triangle", "solid")],
     answerOptions: placeOpts("B",
+      cnt(4, "triangle", "solid"),   // correct
+      cnt(3, "triangle", "solid"),   // last-frame trap
       cnt(5, "triangle", "solid"),
-      cnt(4, "triangle", "solid"),
-      cnt(1, "triangle", "solid"),
-      cnt(2, "triangle", "solid"),
+      cnt(6, "triangle", "solid"),
     ),
   },
 
-  // ── FILL — varied shapes/rotations (non-free) ─────────────────────────────
+  // ── FILL — alternating pattern, varied shapes/rotations (non-free) ─────────────────────────────
   {
+    // pentagon at 45°: solid→dotted→solid→?dotted
     id: "b16d83df-3bd0-47a6-a40e-126132f3f5fb",
     correctAnswer: "C",
     subRuleId: "nvr.sequence.compound_fill_cycle",
     prompt: PROMPT_SEQ,
     frames: [
-      fr(sh("pentagon", 50, 50, 38, 45, "none")),
-      fr(sh("pentagon", 50, 50, 38, 45, "dotted")),
-      fr(sh("pentagon", 50, 50, 38, 45, "hatched")),
       fr(sh("pentagon", 50, 50, 38, 45, "solid")),
+      fr(sh("pentagon", 50, 50, 38, 45, "dotted")),
+      fr(sh("pentagon", 50, 50, 38, 45, "solid")),
+      fr(sh("pentagon", 50, 50, 38, 45, "dotted")),
     ],
     answerOptions: placeOpts("C",
-      fr(sh("pentagon", 50, 50, 38, 45, "none")),
-      fr(sh("pentagon", 50, 50, 38, 45, "dotted")),
-      fr(sh("pentagon", 50, 50, 38, 45, "solid")),
-      fr(sh("pentagon", 50, 50, 38, 45, "hatched")),
+      fr(sh("pentagon", 50, 50, 38, 45, "hatched")),  // wrong: never shown
+      fr(sh("pentagon", 50, 50, 38, 45, "none")),     // wrong: never shown
+      fr(sh("pentagon", 50, 50, 38, 45, "dotted")),   // correct
+      fr(sh("pentagon", 50, 50, 38, 45, "solid")),    // wrong: alternating trap
     ),
   },
   {
+    // square: hatched→none→hatched→?none
     id: "b282b9ab-d1b5-409e-be61-0735496b61b6",
     correctAnswer: "D",
     subRuleId: "nvr.sequence.compound_fill_cycle",
     prompt: PROMPT_SEQ,
     frames: [
-      fr(sh("square", 50, 50, 38, 0, "none")),
-      fr(sh("square", 50, 50, 38, 0, "dotted")),
       fr(sh("square", 50, 50, 38, 0, "hatched")),
-      fr(sh("square", 50, 50, 38, 0, "solid")),
+      fr(sh("square", 50, 50, 38, 0, "none")),
+      fr(sh("square", 50, 50, 38, 0, "hatched")),
+      fr(sh("square", 50, 50, 38, 0, "none")),
     ],
     answerOptions: placeOpts("D",
-      fr(sh("square", 50, 50, 38, 0, "none")),
-      fr(sh("square", 50, 50, 38, 0, "dotted")),
-      fr(sh("square", 50, 50, 38, 0, "hatched")),
-      fr(sh("square", 50, 50, 38, 0, "solid")),
+      fr(sh("square", 50, 50, 38, 0, "solid")),    // wrong: never shown
+      fr(sh("square", 50, 50, 38, 0, "dotted")),   // wrong: never shown
+      fr(sh("square", 50, 50, 38, 0, "hatched")),  // wrong: alternating trap
+      fr(sh("square", 50, 50, 38, 0, "none")),     // correct
     ),
   },
   {
+    // hexagon at 30°: dotted→solid→dotted→?solid
     id: "c7b8b236-39d6-455d-bc18-eb7226c84584",
     correctAnswer: "A",
     subRuleId: "nvr.sequence.compound_fill_cycle",
     prompt: PROMPT_SEQ,
     frames: [
-      fr(sh("hexagon", 50, 50, 38, 30, "none")),
       fr(sh("hexagon", 50, 50, 38, 30, "dotted")),
-      fr(sh("hexagon", 50, 50, 38, 30, "hatched")),
+      fr(sh("hexagon", 50, 50, 38, 30, "solid")),
+      fr(sh("hexagon", 50, 50, 38, 30, "dotted")),
       fr(sh("hexagon", 50, 50, 38, 30, "solid")),
     ],
     answerOptions: placeOpts("A",
-      fr(sh("hexagon", 50, 50, 38, 30, "solid")),
-      fr(sh("hexagon", 50, 50, 38, 30, "none")),
-      fr(sh("hexagon", 50, 50, 38, 30, "dotted")),
-      fr(sh("hexagon", 50, 50, 38, 30, "hatched")),
+      fr(sh("hexagon", 50, 50, 38, 30, "solid")),    // correct
+      fr(sh("hexagon", 50, 50, 38, 30, "none")),     // wrong: never shown
+      fr(sh("hexagon", 50, 50, 38, 30, "hatched")),  // wrong: never shown
+      fr(sh("hexagon", 50, 50, 38, 30, "dotted")),   // wrong: alternating trap
     ),
   },
   {
+    // star: none→dotted→none→?dotted
     id: "c871a244-6e46-40e8-9b64-0979dc164630",
     correctAnswer: "B",
     subRuleId: "nvr.sequence.compound_fill_cycle",
@@ -830,32 +863,33 @@ const NONFREE_QUESTIONS: QDef[] = [
     frames: [
       fr(sh("star", 50, 50, 38, 0, "none")),
       fr(sh("star", 50, 50, 38, 0, "dotted")),
-      fr(sh("star", 50, 50, 38, 0, "hatched")),
-      fr(sh("star", 50, 50, 38, 0, "solid")),
+      fr(sh("star", 50, 50, 38, 0, "none")),
+      fr(sh("star", 50, 50, 38, 0, "dotted")),
     ],
     answerOptions: placeOpts("B",
-      fr(sh("star", 50, 50, 38, 0, "none")),
-      fr(sh("star", 50, 50, 38, 0, "solid")),
-      fr(sh("star", 50, 50, 38, 0, "dotted")),
-      fr(sh("star", 50, 50, 38, 0, "hatched")),
+      fr(sh("star", 50, 50, 38, 0, "hatched")),  // wrong: never shown
+      fr(sh("star", 50, 50, 38, 0, "dotted")),   // correct
+      fr(sh("star", 50, 50, 38, 0, "solid")),    // wrong: never shown
+      fr(sh("star", 50, 50, 38, 0, "none")),     // wrong: alternating trap
     ),
   },
   {
+    // circle: solid→hatched→solid→?hatched
     id: "c8fc40dd-8db1-43bd-9921-e769c5dedcb4",
     correctAnswer: "C",
     subRuleId: "nvr.sequence.compound_fill_cycle",
     prompt: PROMPT_SEQ,
     frames: [
-      fr(sh("circle", 50, 50, 38, 0, "none")),
-      fr(sh("circle", 50, 50, 38, 0, "dotted")),
+      fr(sh("circle", 50, 50, 38, 0, "solid")),
       fr(sh("circle", 50, 50, 38, 0, "hatched")),
       fr(sh("circle", 50, 50, 38, 0, "solid")),
+      fr(sh("circle", 50, 50, 38, 0, "hatched")),
     ],
     answerOptions: placeOpts("C",
-      fr(sh("circle", 50, 50, 38, 0, "none")),
-      fr(sh("circle", 50, 50, 38, 0, "hatched")),
-      fr(sh("circle", 50, 50, 38, 0, "solid")),
-      fr(sh("circle", 50, 50, 38, 0, "dotted")),
+      fr(sh("circle", 50, 50, 38, 0, "none")),     // wrong: never shown
+      fr(sh("circle", 50, 50, 38, 0, "dotted")),   // wrong: never shown
+      fr(sh("circle", 50, 50, 38, 0, "hatched")),  // correct
+      fr(sh("circle", 50, 50, 38, 0, "solid")),    // wrong: alternating trap
     ),
   },
 

@@ -195,4 +195,46 @@ export async function applyQuestionQualityFixes() {
     .where(eq(questions.id, "ae3618d4-3f38-4163-a7e5-a3faddbd97a1"));
 
   console.log(`  [Quality] Maths + VR anagram fixes applied`);
+
+  // ── Fix 6: Digit puzzle — "3 more than" should be "3 times" ─────────────
+  // 963: h=9=3×3=3u ✓, t=6=(9+3)/2 ✓, 9+6+3=18 ✓
+  // "3 more than" gives h=u+3 which has NO integer solution (6u+9=36 → u=4.5)
+  await db.update(questions)
+    .set({
+      prompt: "I am a three-digit number. My hundreds digit is 3 times my units digit. My tens digit is the mean of my hundreds and units digits. The sum of my digits is 18. What am I?",
+    })
+    .where(eq(questions.id, "d574b62f-ea8d-4302-95fa-95f943966848"));
+
+  // ── Fix 7: Number pyramid — unsolvable numbers → solvable ───────────────
+  // Old: "3, □, 7, 2 → top=40" has no integer solution (3□ = 14)
+  // New: "4, □, 6, 2 → top=42" → □=6 (24+3×6=42 ✓), options {5,6,4,8} still valid
+  await db.update(questions)
+    .set({
+      prompt: "In a number pyramid, each brick is the sum of the two bricks below it. The bottom row is: 4, □, 6, 2. The top brick is 42. What number replaces □?",
+      correctAnswer: "6",
+    })
+    .where(eq(questions.id, "c3eb112d-8dd9-49f6-b3ae-31e6f12f49f0"));
+
+  // ── Fix 8: Seating arrangement — 6-person circle has wrong answer ────────
+  // Old: "Six pupils in a circle... who to right of Nina?" → "Oscar" (WRONG)
+  // New: 4-person square table gives unambiguous answer = "Pip"
+  // Max(1) opposite Nina(3), Oscar(2) to right of Max → to right of Nina = Pip(4)
+  await db.update(questions)
+    .set({
+      prompt: "Four pupils sit around a round table: Max, Nina, Oscar and Pip. Max sits opposite Nina. Oscar sits to the right of Max. Who sits to the right of Nina?",
+      correctAnswer: "Pip",
+    })
+    .where(eq(questions.id, "85189751-7dd8-4670-a8d4-80475b2c6fca"));
+
+  // ── Fix 9: Sentence completion — "alliance/rivalry" ambiguity ────────────
+  // Old: "The ____ between the two countries lasted for decades" (both work)
+  // New: "The two countries formed a trade ____ that benefited both economies"
+  // "Trade alliance that benefited both" = clearly alliance; rivalry doesn't fit
+  await db.update(questions)
+    .set({
+      prompt: "The two countries formed a trade ____ that benefited both economies.",
+    })
+    .where(eq(questions.id, "619a2b0d-1b1b-452a-94a5-78dfc50c863e"));
+
+  console.log(`  [Quality] Maths + VR misc question fixes applied (digit_puzzle, pyramid, seating, sentence_completion)`);
 }
