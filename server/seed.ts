@@ -7,6 +7,7 @@ import * as fs from "fs";
 import * as path from "path";
 import type { NvrSequenceConfig, NvrTransformConfig, NvrClassificationConfig } from "@shared/contentTypes";
 import { FULL_FREE_POOL_QUESTIONS } from "./freePoolData";
+import { applyQuestionQualityFixes } from "./questionQualityFixes";
 
 const scryptAsync = promisify(scrypt);
 
@@ -831,6 +832,7 @@ export async function seedDatabase() {
     await ensureFreePool();
     await ensureQuestionBank();
     await ensureDiagnosticPool();
+    await applyQuestionQualityFixes();
     return;
   }
 
@@ -1090,4 +1092,5 @@ export async function seedDatabase() {
   await ensureFreePool();
   await ensureQuestionBank();
   await ensureDiagnosticPool();
+  await applyQuestionQualityFixes();
 }
