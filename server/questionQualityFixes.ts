@@ -79,6 +79,73 @@ function scaleFrame(frame: Frame, factor: number): Frame {
 
 const OPTION_LETTERS = ["A", "B", "C", "D"] as const;
 
+// ─── Symmetric shape replacement ─────────────────────────────────────────────
+// Shapes that look unchanged after 90° or 180° rotation (or horizontal reflection):
+//   square (90° sym), hexagon (60° sym), circle (fully sym), diamond (= rotated square),
+//   star (72° sym), cross (90° sym).
+// These must be replaced with asymmetric shapes in rotation/reflection transform questions
+// so the transformation is visually obvious to the student.
+const SYMMETRIC_SHAPES: Record<string, string> = {
+  square:  "right_triangle",
+  hexagon: "arrow",
+  circle:  "semicircle",
+  diamond: "kite",
+  star:    "arrow",
+  cross:   "arrow",
+};
+
+/**
+ * In nvr.transform rotation/reflection questions, replace rotationally-symmetric
+ * shapes with clearly asymmetric ones in BOTH the promptFrames AND answerOptions.
+ * Positions, rotation values and fills are preserved — only the shape name changes —
+ * so all answer logic remains valid; the transformation just becomes visible.
+ */
+async function fixTransformSymmetricShapes() {
+  const rotateSubRules = [
+    "nvr.transform.rotate_90",
+    "nvr.transform.rotate_180",
+    "nvr.transform.rotate_reflect",
+    "nvr.transform.reflect_dash",
+    "nvr.transform.reflect_fill",
+  ];
+
+  const tfQs = await db
+    .select()
+    .from(questions)
+    .where(eq(questions.skillId, "nvr.transform"));
+
+  let fixed = 0;
+  for (const q of tfQs) {
+    if (!rotateSubRules.includes(q.subRuleId ?? "")) continue;
+    const rc = q.renderConfig as any;
+    if (!rc?.promptFrames || !rc?.answerOptions) continue;
+
+    let changed = false;
+
+    const replaceInFrame = (frame: Frame) => {
+      for (const el of frame.elements) {
+        if (el.type === "shape" && SYMMETRIC_SHAPES[el.shape]) {
+          el.shape = SYMMETRIC_SHAPES[el.shape];
+          changed = true;
+        }
+      }
+    };
+
+    for (const frame of rc.promptFrames) replaceInFrame(frame);
+    for (const opt of rc.answerOptions) replaceInFrame(opt);
+
+    if (changed) {
+      await db
+        .update(questions)
+        .set({ renderConfig: rc as any })
+        .where(eq(questions.id, q.id));
+      fixed++;
+    }
+  }
+
+  console.log(`  [Quality] Transform symmetric shapes replaced: ${fixed} questions updated`);
+}
+
 /**
  * Rebuild transform question answer options so wrong options are visually
  * distinct from the correct answer. Keeps correct option untouched.
@@ -151,7 +218,10 @@ export async function applyQuestionQualityFixes() {
   // ── Fix 1: NVR sequence — complete rebuild with proper patterns ────────────
   await rebuildNvrSequenceQuestions();
 
-  // ── Fix 2: NVR transform — distinctly different wrong options ─────────────
+  // ── Fix 2a: NVR transform — replace symmetric shapes so rotation is visible ─
+  await fixTransformSymmetricShapes();
+
+  // ── Fix 2b: NVR transform — distinctly different wrong options ────────────
   await fixTransformAnswerOptions();
 
   // ── Fix 3: Maths two_rule — prompt had starting value 4 (correct answer 19)

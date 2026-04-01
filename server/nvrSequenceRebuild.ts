@@ -303,18 +303,18 @@ const FREE_QUESTIONS: QDef[] = [
     correctAnswer: "A",
     subRuleId: "nvr.sequence.compound_rotate",
     prompt: PROMPT_SEQ,
-    explanation: "Shape grows by 12 units each step and rotates 90° clockwise each step.",
+    explanation: "Shape grows by 18 units each step and rotates 90° clockwise each step.",
     frames: [
-      fr(sh("triangle", 50, 50, 22, 0)),
-      fr(sh("triangle", 50, 50, 34, 90)),
-      fr(sh("triangle", 50, 50, 46, 180)),
-      fr(sh("triangle", 50, 50, 58, 270)),
+      fr(sh("triangle", 50, 50, 20, 0)),
+      fr(sh("triangle", 50, 50, 38, 90)),
+      fr(sh("triangle", 50, 50, 56, 180)),
+      fr(sh("triangle", 50, 50, 74, 270)),
     ],
     answerOptions: placeOpts("A",
-      fr(sh("triangle", 50, 50, 58, 270)),   // correct
-      fr(sh("triangle", 50, 50, 58, 225)),   // tracked size only
-      fr(sh("triangle", 50, 50, 52, 270)),   // tracked rotation only
-      fr(sh("triangle", 50, 50, 46, 270)),   // last-frame size trap
+      fr(sh("triangle", 50, 50, 74, 270)),   // correct
+      fr(sh("triangle", 50, 50, 74, 225)),   // tracked size only
+      fr(sh("triangle", 50, 50, 65, 270)),   // tracked rotation only
+      fr(sh("triangle", 50, 50, 56, 270)),   // last-frame size trap
     ),
   },
   {
@@ -322,18 +322,18 @@ const FREE_QUESTIONS: QDef[] = [
     correctAnswer: "B",
     subRuleId: "nvr.sequence.compound_rotate",
     prompt: PROMPT_SEQ,
-    explanation: "Shape grows by 12 units each step and rotates 90° clockwise each step.",
+    explanation: "Shape grows by 18 units each step and rotates 90° clockwise each step.",
     frames: [
-      fr(sh("arrow", 50, 50, 22, 0)),
-      fr(sh("arrow", 50, 50, 34, 90)),
-      fr(sh("arrow", 50, 50, 46, 180)),
-      fr(sh("arrow", 50, 50, 58, 270)),
+      fr(sh("arrow", 50, 50, 20, 0)),
+      fr(sh("arrow", 50, 50, 38, 90)),
+      fr(sh("arrow", 50, 50, 56, 180)),
+      fr(sh("arrow", 50, 50, 74, 270)),
     ],
     answerOptions: placeOpts("B",
-      fr(sh("arrow", 50, 50, 58, 270)),   // correct
-      fr(sh("arrow", 50, 50, 58, 225)),   // tracked size only
-      fr(sh("arrow", 50, 50, 52, 270)),   // tracked rotation only
-      fr(sh("arrow", 50, 50, 46, 270)),   // last-frame trap
+      fr(sh("arrow", 50, 50, 74, 270)),   // correct
+      fr(sh("arrow", 50, 50, 74, 225)),   // tracked size only
+      fr(sh("arrow", 50, 50, 65, 270)),   // tracked rotation only
+      fr(sh("arrow", 50, 50, 56, 270)),   // last-frame trap
     ),
   },
   {
@@ -341,18 +341,18 @@ const FREE_QUESTIONS: QDef[] = [
     correctAnswer: "C",
     subRuleId: "nvr.sequence.compound_rotate",
     prompt: PROMPT_SEQ,
-    explanation: "Shape grows by 12 units each step and rotates 90° clockwise each step.",
+    explanation: "Shape grows by 18 units each step and rotates 90° clockwise each step.",
     frames: [
-      fr(sh("semicircle", 50, 50, 22, 0)),
-      fr(sh("semicircle", 50, 50, 34, 90)),
-      fr(sh("semicircle", 50, 50, 46, 180)),
-      fr(sh("semicircle", 50, 50, 58, 270)),
+      fr(sh("semicircle", 50, 50, 20, 0)),
+      fr(sh("semicircle", 50, 50, 38, 90)),
+      fr(sh("semicircle", 50, 50, 56, 180)),
+      fr(sh("semicircle", 50, 50, 74, 270)),
     ],
     answerOptions: placeOpts("C",
-      fr(sh("semicircle", 50, 50, 58, 270)),   // correct
-      fr(sh("semicircle", 50, 50, 58, 225)),   // tracked size only
-      fr(sh("semicircle", 50, 50, 52, 270)),   // tracked rotation only
-      fr(sh("semicircle", 50, 50, 46, 270)),   // last-frame trap
+      fr(sh("semicircle", 50, 50, 74, 270)),   // correct
+      fr(sh("semicircle", 50, 50, 74, 225)),   // tracked size only
+      fr(sh("semicircle", 50, 50, 65, 270)),   // tracked rotation only
+      fr(sh("semicircle", 50, 50, 56, 270)),   // last-frame trap
     ),
   },
   {
@@ -360,18 +360,18 @@ const FREE_QUESTIONS: QDef[] = [
     correctAnswer: "D",
     subRuleId: "nvr.sequence.compound_rotate",
     prompt: PROMPT_SEQ,
-    explanation: "Shape grows by 12 units each step and rotates 90° clockwise each step.",
+    explanation: "Shape grows by 18 units each step and rotates 90° clockwise each step.",
     frames: [
-      fr(sh("right_triangle", 50, 50, 22, 0)),
-      fr(sh("right_triangle", 50, 50, 34, 90)),
-      fr(sh("right_triangle", 50, 50, 46, 180)),
-      fr(sh("right_triangle", 50, 50, 58, 270)),
+      fr(sh("right_triangle", 50, 50, 20, 0)),
+      fr(sh("right_triangle", 50, 50, 38, 90)),
+      fr(sh("right_triangle", 50, 50, 56, 180)),
+      fr(sh("right_triangle", 50, 50, 74, 270)),
     ],
     answerOptions: placeOpts("D",
-      fr(sh("right_triangle", 50, 50, 58, 270)),   // correct
-      fr(sh("right_triangle", 50, 50, 58, 225)),   // tracked size only
-      fr(sh("right_triangle", 50, 50, 52, 270)),   // tracked rotation only
-      fr(sh("right_triangle", 50, 50, 46, 270)),   // last-frame trap
+      fr(sh("right_triangle", 50, 50, 74, 270)),   // correct
+      fr(sh("right_triangle", 50, 50, 74, 225)),   // tracked size only
+      fr(sh("right_triangle", 50, 50, 65, 270)),   // tracked rotation only
+      fr(sh("right_triangle", 50, 50, 56, 270)),   // last-frame trap
     ),
   },
   {
@@ -379,18 +379,18 @@ const FREE_QUESTIONS: QDef[] = [
     correctAnswer: "A",
     subRuleId: "nvr.sequence.compound_rotate",
     prompt: PROMPT_SEQ,
-    explanation: "Shape grows by 12 units each step and rotates 90° clockwise each step.",
+    explanation: "Shape grows by 18 units each step and rotates 90° clockwise each step.",
     frames: [
-      fr(sh("triangle", 50, 50, 22, 0, "solid")),
-      fr(sh("triangle", 50, 50, 34, 90, "solid")),
-      fr(sh("triangle", 50, 50, 46, 180, "solid")),
-      fr(sh("triangle", 50, 50, 58, 270, "solid")),
+      fr(sh("triangle", 50, 50, 20, 0, "solid")),
+      fr(sh("triangle", 50, 50, 38, 90, "solid")),
+      fr(sh("triangle", 50, 50, 56, 180, "solid")),
+      fr(sh("triangle", 50, 50, 74, 270, "solid")),
     ],
     answerOptions: placeOpts("A",
-      fr(sh("triangle", 50, 50, 58, 270, "solid")),   // correct
-      fr(sh("triangle", 50, 50, 58, 225, "solid")),   // tracked size only
-      fr(sh("triangle", 50, 50, 52, 270, "solid")),   // tracked rotation only
-      fr(sh("triangle", 50, 50, 46, 270, "solid")),   // last-frame trap
+      fr(sh("triangle", 50, 50, 74, 270, "solid")),   // correct
+      fr(sh("triangle", 50, 50, 74, 225, "solid")),   // tracked size only
+      fr(sh("triangle", 50, 50, 65, 270, "solid")),   // tracked rotation only
+      fr(sh("triangle", 50, 50, 56, 270, "solid")),   // last-frame trap
     ),
   },
 
@@ -724,18 +724,18 @@ const NONFREE_QUESTIONS: QDef[] = [
     correctAnswer: "A",
     subRuleId: "nvr.sequence.compound_rotate",
     prompt: PROMPT_SEQ,
-    explanation: "Shape grows by 12 units each step and rotates 90° clockwise each step.",
+    explanation: "Shape grows by 18 units each step and rotates 90° clockwise each step.",
     frames: [
-      fr(sh("arrow", 50, 50, 22, 0, "solid")),
-      fr(sh("arrow", 50, 50, 34, 90, "solid")),
-      fr(sh("arrow", 50, 50, 46, 180, "solid")),
-      fr(sh("arrow", 50, 50, 58, 270, "solid")),
+      fr(sh("arrow", 50, 50, 20, 0, "solid")),
+      fr(sh("arrow", 50, 50, 38, 90, "solid")),
+      fr(sh("arrow", 50, 50, 56, 180, "solid")),
+      fr(sh("arrow", 50, 50, 74, 270, "solid")),
     ],
     answerOptions: placeOpts("A",
-      fr(sh("arrow", 50, 50, 58, 270, "solid")),   // correct
-      fr(sh("arrow", 50, 50, 58, 225, "solid")),   // tracked size only
-      fr(sh("arrow", 50, 50, 52, 270, "solid")),   // tracked rotation only
-      fr(sh("arrow", 50, 50, 46, 270, "solid")),   // last-frame trap
+      fr(sh("arrow", 50, 50, 74, 270, "solid")),   // correct
+      fr(sh("arrow", 50, 50, 74, 225, "solid")),   // tracked size only
+      fr(sh("arrow", 50, 50, 65, 270, "solid")),   // tracked rotation only
+      fr(sh("arrow", 50, 50, 56, 270, "solid")),   // last-frame trap
     ),
   },
   {
@@ -743,18 +743,18 @@ const NONFREE_QUESTIONS: QDef[] = [
     correctAnswer: "B",
     subRuleId: "nvr.sequence.compound_rotate",
     prompt: PROMPT_SEQ,
-    explanation: "Shape grows by 12 units each step and rotates 90° clockwise each step.",
+    explanation: "Shape grows by 18 units each step and rotates 90° clockwise each step.",
     frames: [
-      fr(sh("right_triangle", 50, 50, 22, 0, "solid")),
-      fr(sh("right_triangle", 50, 50, 34, 90, "solid")),
-      fr(sh("right_triangle", 50, 50, 46, 180, "solid")),
-      fr(sh("right_triangle", 50, 50, 58, 270, "solid")),
+      fr(sh("right_triangle", 50, 50, 20, 0, "solid")),
+      fr(sh("right_triangle", 50, 50, 38, 90, "solid")),
+      fr(sh("right_triangle", 50, 50, 56, 180, "solid")),
+      fr(sh("right_triangle", 50, 50, 74, 270, "solid")),
     ],
     answerOptions: placeOpts("B",
-      fr(sh("right_triangle", 50, 50, 58, 270, "solid")),   // correct
-      fr(sh("right_triangle", 50, 50, 58, 225, "solid")),   // tracked size only
-      fr(sh("right_triangle", 50, 50, 52, 270, "solid")),   // tracked rotation only
-      fr(sh("right_triangle", 50, 50, 46, 270, "solid")),   // last-frame trap
+      fr(sh("right_triangle", 50, 50, 74, 270, "solid")),   // correct
+      fr(sh("right_triangle", 50, 50, 74, 225, "solid")),   // tracked size only
+      fr(sh("right_triangle", 50, 50, 65, 270, "solid")),   // tracked rotation only
+      fr(sh("right_triangle", 50, 50, 56, 270, "solid")),   // last-frame trap
     ),
   },
   {
@@ -762,38 +762,38 @@ const NONFREE_QUESTIONS: QDef[] = [
     correctAnswer: "C",
     subRuleId: "nvr.sequence.compound_rotate",
     prompt: PROMPT_SEQ,
-    explanation: "Shape grows by 12 units each step and rotates 90° clockwise each step.",
+    explanation: "Shape grows by 18 units each step and rotates 90° clockwise each step.",
     frames: [
-      fr(sh("semicircle", 50, 50, 22, 0, "solid")),
-      fr(sh("semicircle", 50, 50, 34, 90, "solid")),
-      fr(sh("semicircle", 50, 50, 46, 180, "solid")),
-      fr(sh("semicircle", 50, 50, 58, 270, "solid")),
+      fr(sh("semicircle", 50, 50, 20, 0, "solid")),
+      fr(sh("semicircle", 50, 50, 38, 90, "solid")),
+      fr(sh("semicircle", 50, 50, 56, 180, "solid")),
+      fr(sh("semicircle", 50, 50, 74, 270, "solid")),
     ],
     answerOptions: placeOpts("C",
-      fr(sh("semicircle", 50, 50, 58, 270, "solid")),   // correct
-      fr(sh("semicircle", 50, 50, 58, 225, "solid")),   // tracked size only
-      fr(sh("semicircle", 50, 50, 52, 270, "solid")),   // tracked rotation only
-      fr(sh("semicircle", 50, 50, 46, 270, "solid")),   // last-frame trap
+      fr(sh("semicircle", 50, 50, 74, 270, "solid")),   // correct
+      fr(sh("semicircle", 50, 50, 74, 225, "solid")),   // tracked size only
+      fr(sh("semicircle", 50, 50, 65, 270, "solid")),   // tracked rotation only
+      fr(sh("semicircle", 50, 50, 56, 270, "solid")),   // last-frame trap
     ),
   },
   {
-    // Different size range: 15→27→39→?51 (step=12). Uses hatched fill.
+    // Different size range: 14→32→50→?68 (step=18). Uses hatched fill.
     id: "74803f6e-5e40-4f69-9bf8-eb26b1989294",
     correctAnswer: "D",
     subRuleId: "nvr.sequence.compound_rotate",
     prompt: PROMPT_SEQ,
-    explanation: "Shape grows by 12 units each step and rotates 90° clockwise each step.",
+    explanation: "Shape grows by 18 units each step and rotates 90° clockwise each step.",
     frames: [
-      fr(sh("triangle", 50, 50, 15, 0, "hatched")),
-      fr(sh("triangle", 50, 50, 27, 90, "hatched")),
-      fr(sh("triangle", 50, 50, 39, 180, "hatched")),
-      fr(sh("triangle", 50, 50, 51, 270, "hatched")),
+      fr(sh("triangle", 50, 50, 14, 0, "hatched")),
+      fr(sh("triangle", 50, 50, 32, 90, "hatched")),
+      fr(sh("triangle", 50, 50, 50, 180, "hatched")),
+      fr(sh("triangle", 50, 50, 68, 270, "hatched")),
     ],
     answerOptions: placeOpts("D",
-      fr(sh("triangle", 50, 50, 51, 270, "hatched")),   // correct
-      fr(sh("triangle", 50, 50, 51, 225, "hatched")),   // tracked size only
-      fr(sh("triangle", 50, 50, 45, 270, "hatched")),   // tracked rotation only
-      fr(sh("triangle", 50, 50, 39, 270, "hatched")),   // last-frame trap
+      fr(sh("triangle", 50, 50, 68, 270, "hatched")),   // correct
+      fr(sh("triangle", 50, 50, 68, 225, "hatched")),   // tracked size only
+      fr(sh("triangle", 50, 50, 59, 270, "hatched")),   // tracked rotation only
+      fr(sh("triangle", 50, 50, 50, 270, "hatched")),   // last-frame trap
     ),
   },
   {
@@ -801,18 +801,18 @@ const NONFREE_QUESTIONS: QDef[] = [
     correctAnswer: "A",
     subRuleId: "nvr.sequence.compound_rotate",
     prompt: PROMPT_SEQ,
-    explanation: "Shape grows by 12 units each step and rotates 90° clockwise each step.",
+    explanation: "Shape grows by 18 units each step and rotates 90° clockwise each step.",
     frames: [
-      fr(sh("arrow", 50, 50, 15, 0, "hatched")),
-      fr(sh("arrow", 50, 50, 27, 90, "hatched")),
-      fr(sh("arrow", 50, 50, 39, 180, "hatched")),
-      fr(sh("arrow", 50, 50, 51, 270, "hatched")),
+      fr(sh("arrow", 50, 50, 14, 0, "hatched")),
+      fr(sh("arrow", 50, 50, 32, 90, "hatched")),
+      fr(sh("arrow", 50, 50, 50, 180, "hatched")),
+      fr(sh("arrow", 50, 50, 68, 270, "hatched")),
     ],
     answerOptions: placeOpts("A",
-      fr(sh("arrow", 50, 50, 51, 270, "hatched")),   // correct
-      fr(sh("arrow", 50, 50, 51, 225, "hatched")),   // tracked size only
-      fr(sh("arrow", 50, 50, 45, 270, "hatched")),   // tracked rotation only
-      fr(sh("arrow", 50, 50, 39, 270, "hatched")),   // last-frame trap
+      fr(sh("arrow", 50, 50, 68, 270, "hatched")),   // correct
+      fr(sh("arrow", 50, 50, 68, 225, "hatched")),   // tracked size only
+      fr(sh("arrow", 50, 50, 59, 270, "hatched")),   // tracked rotation only
+      fr(sh("arrow", 50, 50, 50, 270, "hatched")),   // last-frame trap
     ),
   },
 
