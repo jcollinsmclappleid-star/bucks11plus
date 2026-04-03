@@ -11,8 +11,9 @@ import {
 const stemTemplates = [
   'Shape A is to Shape B as Shape C is to…?',
   'If Shape A becomes Shape B, what does Shape C become?',
-  'Shape A transforms into Shape B. Apply the same rule to Shape C.',
+  'Two things changed from Shape A to Shape B. Apply both changes to Shape C.',
   'Which option shows Shape C after the same transformation as A → B?',
+  'Look carefully — two rules changed from A to B. What does Shape C become?',
 ];
 
 function applyRotation(el: SvgElement, degrees: number): SvgElement {
@@ -87,6 +88,10 @@ function getTransformDefs(rng: () => number): TransformDef[] {
   ] as FillPattern[][], rng);
   const scaleFactor = pick([0.7, 1.3], rng);
 
+  const rotLabel = rotAngle === 90 ? 'a quarter-turn clockwise'
+    : rotAngle === 180 ? 'a half-turn'
+    : 'a three-quarter turn clockwise';
+
   return [
     {
       subRuleId: 'nvr.transform.rotate_reflect',
@@ -96,7 +101,7 @@ function getTransformDefs(rng: () => number): TransformDef[] {
         (el) => reflectX(el),
         (el) => reflectY(applyRotation(el, rotAngle)),
       ],
-      explanation: `Each element is rotated ${rotAngle}° and reflected horizontally.`,
+      explanation: `Two things changed: each shape was turned ${rotLabel}, then flipped left-to-right like a mirror held at the side.`,
       traps: ['partial_rule', 'wrong_axis', 'wrong_rotation'],
       distractorStyleId: 'rotate_reflect',
     },
@@ -108,7 +113,7 @@ function getTransformDefs(rng: () => number): TransformDef[] {
         (el) => toggleFill(el, fillCycle),
         (el) => toggleFill(reflectY(el), fillCycle),
       ],
-      explanation: `Each element is reflected horizontally and its fill pattern changes.`,
+      explanation: `Two things changed: each shape was flipped left-to-right like a mirror held at the side, and its shading pattern changed.`,
       traps: ['partial_rule', 'wrong_fill', 'wrong_axis'],
       distractorStyleId: 'reflect_fill',
     },
@@ -120,7 +125,7 @@ function getTransformDefs(rng: () => number): TransformDef[] {
         (el) => scaleSize(el, scaleFactor),
         (el) => scaleSize(applyRotation(el, (rotAngle + 90) % 360), scaleFactor),
       ],
-      explanation: `Each element is rotated ${rotAngle}° and scaled by ${scaleFactor}x.`,
+      explanation: `Two things changed: each shape was turned ${rotLabel} and also changed in size.`,
       traps: ['partial_rule', 'wrong_rotation', 'wrong_size'],
       distractorStyleId: 'rotate_scale',
     },
@@ -132,7 +137,7 @@ function getTransformDefs(rng: () => number): TransformDef[] {
         (el) => toggleDash(el),
         (el) => toggleDash(reflectY(el)),
       ],
-      explanation: `Each element is reflected horizontally and line styles toggle between solid and dashed.`,
+      explanation: `Two things changed: each shape was flipped left-to-right like a mirror held at the side, and its outline changed between solid and dashed.`,
       traps: ['partial_rule', 'wrong_axis', 'wrong_style'],
       distractorStyleId: 'reflect_dash',
     },
@@ -167,7 +172,7 @@ export function generateTransformationQuestions(): GeneratedQuestion[] {
 
       const frameA = buildCompoundFrame(
         rng, config.numShapes, config.shapePool, config.fillPool,
-        config.addLine, config.addDots,
+        false, config.addDots,
       );
 
       frameA.elements = frameA.elements.map(el => {
@@ -182,7 +187,7 @@ export function generateTransformationQuestions(): GeneratedQuestion[] {
 
       const frameC = buildCompoundFrame(
         rng, config.numShapes, config.shapePool, config.fillPool,
-        config.addLine, config.addDots,
+        false, config.addDots,
       );
 
       frameC.elements = frameC.elements.map(el => {
@@ -227,7 +232,7 @@ export function generateTransformationQuestions(): GeneratedQuestion[] {
         qaStatus: 'approved',
         locale: 'en-GB',
         britishSpelling: true,
-        version: 2,
+        version: 3,
         stemVariantId: `stem_transform_${stemIdx}`,
         layoutVariantId: `compound_${config.numShapes}el`,
         shapePaletteId: `transform_palette_${i % 6}`,

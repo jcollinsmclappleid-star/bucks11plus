@@ -56,7 +56,7 @@ const transformDefs: TransformDef[] = [
       (el) => applyRotation(el, 270),
       (el) => applyRotation(el, 45),
     ],
-    explanation: 'Each element is rotated 90° clockwise.',
+    explanation: 'Each shape is turned a quarter-turn clockwise (90°).',
     traps: ['wrong_rotation', 'reversed_direction'],
     distractorStyleId: 'wrong_rotation',
   },
@@ -68,7 +68,7 @@ const transformDefs: TransformDef[] = [
       (el) => applyRotation(el, 270),
       (el) => reflectX(el),
     ],
-    explanation: 'Each element is rotated 180°.',
+    explanation: 'Each shape is turned a half-turn (180°) — like turning it upside down.',
     traps: ['wrong_rotation', 'partial_rule'],
     distractorStyleId: 'wrong_rotation',
   },
@@ -80,7 +80,7 @@ const transformDefs: TransformDef[] = [
       (el) => applyRotation(el, 180),
       (el) => { const r = reflectX(el); return applyRotation(r, 45); },
     ],
-    explanation: 'Each element is reflected horizontally (across the vertical axis).',
+    explanation: 'Each shape is flipped left-to-right — like a mirror held at the side.',
     traps: ['wrong_axis', 'partial_rule'],
     distractorStyleId: 'wrong_axis',
   },
@@ -92,7 +92,7 @@ const transformDefs: TransformDef[] = [
       (el) => applyRotation(el, 180),
       (el) => { const r = reflectY(el); return applyRotation(r, 90); },
     ],
-    explanation: 'Each element is reflected vertically (across the horizontal axis).',
+    explanation: 'Each shape is flipped top-to-bottom — like a mirror held underneath.',
     traps: ['wrong_axis', 'partial_rule'],
     distractorStyleId: 'wrong_axis',
   },
@@ -130,7 +130,7 @@ export function generateRotationReflectionQuestions(): GeneratedQuestion[] {
 
         const frameA = buildCompoundFrame(
           rng, config.numShapes, config.shapePool, config.fillPool,
-          config.addLine, config.addDots,
+          false, config.addDots,
         );
 
         frameA.elements = frameA.elements.map(el => {
@@ -145,7 +145,7 @@ export function generateRotationReflectionQuestions(): GeneratedQuestion[] {
 
         const frameC = buildCompoundFrame(
           rng, config.numShapes, config.shapePool, config.fillPool,
-          config.addLine, config.addDots,
+          false, config.addDots,
         );
 
         frameC.elements = frameC.elements.map(el => {
@@ -190,7 +190,7 @@ export function generateRotationReflectionQuestions(): GeneratedQuestion[] {
           qaStatus: 'approved',
           locale: 'en-GB',
           britishSpelling: true,
-          version: 2,
+          version: 3,
           stemVariantId: `stem_rr_${stemIdx}`,
           layoutVariantId: `compound_${config.numShapes}el`,
           shapePaletteId: `rr_palette_${i % 6}`,

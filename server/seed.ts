@@ -643,6 +643,89 @@ export async function ensureQuestionBank() {
   _questionBankSeeded = true;
 }
 
+async function reseedQuestionType(opts: {
+  type: string;
+  label: string;
+  versionThreshold: number;
+  seedPath: string;
+}): Promise<void> {
+  const { type, label, versionThreshold, seedPath } = opts;
+
+  const stale = await db
+    .select({ id: questions.id })
+    .from(questions)
+    .where(
+      and(
+        eq(questions.type, type),
+        eq(questions.questionPool, "practice"),
+        sql`COALESCE((render_config->>'version')::int, version, 1) < ${versionThreshold}`,
+      ),
+    );
+
+  if (stale.length === 0) {
+    console.log(`  [Reseed] ${label}: all questions up to date (v${versionThreshold})`);
+    return;
+  }
+
+  const staleIds = stale.map((q) => q.id);
+  await db.delete(questions).where(inArray(questions.id, staleIds));
+  console.log(`  [Reseed] ${label}: deleted ${staleIds.length} stale questions (version < ${versionThreshold})`);
+
+  if (!fs.existsSync(seedPath)) {
+    console.warn(`  [Reseed] ${label}: seed file not found at ${seedPath} — skipping insert`);
+    return;
+  }
+
+  const seedData: Array<{
+    section: string; type: string; prompt: string; options: string[];
+    correctAnswer: string; difficulty: string; estTimeSeconds?: number; timeExpected?: number;
+    skillId: string; subRuleId: string; renderType: string; renderConfig: any;
+    trapTypes?: string[]; cognitiveLoad?: number; locale?: string;
+    britishSpelling?: boolean; version?: number; qaStatus?: string; explanation?: string;
+  }> = JSON.parse(fs.readFileSync(seedPath, "utf-8"));
+
+  const fresh = seedData.filter((q) => q.type === type);
+
+  const batchSize = 50;
+  let inserted = 0;
+  for (let i = 0; i < fresh.length; i += batchSize) {
+    const batch = fresh.slice(i, i + batchSize).map((q, idx) => ({
+      section: q.section,
+      type: q.type,
+      prompt: q.prompt,
+      options: q.options,
+      correctAnswer: q.correctAnswer,
+      difficulty: q.difficulty,
+      timeExpected: q.estTimeSeconds || q.timeExpected || 45,
+      orderIndex: i + idx,
+      skillId: q.skillId,
+      subRuleId: q.subRuleId,
+      renderType: q.renderType,
+      renderConfig: q.renderConfig || {},
+      trapTypes: q.trapTypes || [],
+      cognitiveLoad: q.cognitiveLoad,
+      locale: q.locale || "en-GB",
+      britishSpelling: q.britishSpelling !== false,
+      version: q.version || 1,
+      qualityScore: 0,
+      qaStatus: q.qaStatus || "approved",
+      questionPool: "practice",
+      freePool: false,
+      explanation: q.explanation || null,
+    }));
+    await db.insert(questions).values(batch as any);
+    inserted += batch.length;
+  }
+  console.log(`  [Reseed] ${label}: inserted ${inserted} fresh questions at v${versionThreshold}`);
+}
+
+export async function ensureNvrGeneratorReseeds() {
+  const seedPath = path.resolve(process.cwd(), "scripts/questions.seed.json");
+  await reseedQuestionType({ type: "symmetry",           label: "NVR symmetry",           versionThreshold: 4, seedPath });
+  await reseedQuestionType({ type: "rotation_reflection", label: "NVR rotation_reflection", versionThreshold: 3, seedPath });
+  await reseedQuestionType({ type: "transformation",      label: "NVR transformation",      versionThreshold: 3, seedPath });
+}
+
 export async function ensureDiagnosticPool() {
   if (_diagnosticPoolSeeded) return;
 

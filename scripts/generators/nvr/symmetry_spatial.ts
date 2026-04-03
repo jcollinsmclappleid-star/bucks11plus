@@ -19,6 +19,7 @@ function getSymmetryConfig(diff: string) {
   return {
     ...base,
     shapePool: asymmetricShapes.filter(s => (base.shapePool as readonly string[]).includes(s)),
+    addLine: diff === 'hard',
   };
 }
 
@@ -71,11 +72,8 @@ export function generateSymmetryQuestions(): GeneratedQuestion[] {
     }
 
     if (config.addLine) {
-      leftElements.push(makeLine(
-        10, 20 + Math.floor(rng() * 60),
-        40, 20 + Math.floor(rng() * 60),
-        rng() > 0.5,
-      ));
+      const lineY = 20 + Math.floor(rng() * 60);
+      leftElements.push(makeLine(10, lineY, 40, lineY, rng() > 0.5));
     }
 
     const leftHalf: SvgFrame = { elements: leftElements };
@@ -149,7 +147,7 @@ export function generateSymmetryQuestions(): GeneratedQuestion[] {
       qaStatus: 'approved',
       locale: 'en-GB',
       britishSpelling: true,
-      version: 2,
+      version: 4,
       stemVariantId: `symmetry_stem_${stemIdx}`,
       shapePaletteId: `symmetry_palette_${i % 6}`,
       densityLevel: diff === 'easy' ? 'low' : diff === 'medium' ? 'medium' : 'high',

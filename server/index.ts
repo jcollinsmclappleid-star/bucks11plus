@@ -2,7 +2,7 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
-import { seedDatabase } from "./seed";
+import { seedDatabase, ensureNvrGeneratorReseeds } from "./seed";
 import { runMigrations } from "stripe-replit-sync";
 import { getStripeSync } from "./stripeClient";
 import { WebhookHandlers } from "./webhookHandlers";
@@ -139,6 +139,7 @@ app.use((req, res, next) => {
 (async () => {
   await registerRoutes(httpServer, app);
   await seedDatabase().catch(err => console.error("Seed error:", err));
+  await ensureNvrGeneratorReseeds().catch(err => console.error("NVR reseed error:", err));
 
   // Run email nudge triggers every 6 hours
   const SIX_HOURS = 6 * 60 * 60 * 1000;
