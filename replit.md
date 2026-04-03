@@ -227,15 +227,19 @@ content/
 
 ## SEO Infrastructure
 - `robots.txt` at `/robots.txt` allowing all crawlers, pointing to sitemap
-- `GET /sitemap.xml` server route with all public pages + 8 town pages
-- `Seo` component supports `canonicalPath` and `schema` (JSON-LD) props
-- Shared components: `ContentCTA.tsx`, `Disclaimer.tsx`, `Breadcrumbs.tsx` (with BreadcrumbList schema)
-- Pillar page: `/buckinghamshire-11-plus-guide` with FAQ JSON-LD
-- Cluster pages: grammar schools, qualifying score, timeline, secondary transfer test
-- High-value pages: how to pass, registration, common mistakes
-- 8 local town pages via TownGuide template + `client/src/data/towns.ts` data
-- Footer: 5 columns (Brand, Platform, Resources, Local Guides, Legal)
-- Target domain: `bucks11plustest.co.uk` (canonical URLs and sitemap)
+- `GET /sitemap.xml` server route — **121 URLs** (all public pages, towns, grammar schools, glossary, high-volume pages)
+- `Seo` component supports `canonicalPath` and `schema` (JSON-LD) props (SPA pages)
+- **Full SSR architecture** — Googlebot receives pre-rendered HTML for all content pages:
+  - `server/ssrShared.ts` — `ssrShell()`, breadcrumbs, footer, CTA box, FAQ section, disclaimer
+  - `server/ssrPages.ts` — Town guides (16), Grammar school guides (13), Subject guides (4), Year-group guides (3), Learn Hub + 30 articles
+  - `server/ssrGlossary.ts` — Glossary index + 22 term pages (DefinedTerm schema)
+  - `server/ssrHighVolume.ts` — **9 new high-volume pages** (test dates 2025/2026, past papers, results, sample questions, score calculator, tutors, appeals, registration)
+- Schema markup: BreadcrumbList + FAQPage + Article + DefinedTerm + Event (test date pages) + HowTo on all relevant pages
+- Town page depth: ~2,600 words each (expanded with prep timeline, 121 explainer, cross-links)
+- Grammar school depth: ~2,400 words each (at-a-glance table, admissions timeline, domain explainer)
+- **og:image fix**: `vite-plugin-meta-images.ts` updated to use canonical production domain (was overriding with Replit dev URL)
+- Target domain: `bucks11plustest.co.uk` (canonical URLs, sitemap, og:image, Twitter card)
+- Footer: 6 columns (Brand, Platform, Key Dates, Resources, Local Guides, Legal) — E-E-A-T trust signals
 
 ## Parent Guide / Lead Capture
 - Landing page: `/bucks-11-plus-parent-guide` with hero, 3-column explainer, guide previews, dashboard previews, email capture form, FAQ with JSON-LD

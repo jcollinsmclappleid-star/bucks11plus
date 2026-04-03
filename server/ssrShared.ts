@@ -187,7 +187,8 @@ function ssrFooter(): string {
   <div class="ssr-footer-inner">
     <div>
       <div class="ssr-footer-brand">Bucks 11 Plus Tests</div>
-      <p class="ssr-footer-desc">Independent Buckinghamshire 11+ readiness assessment and preparation. Operated by Ianson Systems Limited.</p>
+      <p class="ssr-footer-desc">Independent GL-style diagnostic and preparation platform for the Buckinghamshire Secondary Transfer Test. Developed by Ianson Systems Limited — a UK educational technology company.</p>
+      <p class="ssr-footer-desc" style="margin-top:0.5rem;font-size:0.75rem;opacity:0.6;">Admissions guidance written and reviewed with reference to official TBGS and Buckinghamshire Council published materials.</p>
     </div>
     <div class="ssr-footer-col">
       <h4>Platform</h4>
@@ -202,14 +203,25 @@ function ssrFooter(): string {
       </ul>
     </div>
     <div class="ssr-footer-col">
+      <h4>Key Dates</h4>
+      <ul>
+        <li><a href="/bucks-11-plus-test-date-2026">Test Date 2026</a></li>
+        <li><a href="/bucks-11-plus-test-date-2025">Test Date 2025</a></li>
+        <li><a href="/bucks-11-plus-results">Results Guide</a></li>
+        <li><a href="/bucks-11-plus-appeals">Appeals</a></li>
+        <li><a href="/bucks-11-plus-registration-guide">Registration</a></li>
+        <li><a href="/bucks-11-plus-timeline">Full Timeline</a></li>
+      </ul>
+    </div>
+    <div class="ssr-footer-col">
       <h4>Resources</h4>
       <ul>
         <li><a href="/buckinghamshire-11-plus-guide">Bucks 11+ Guide</a></li>
         <li><a href="/bucks-grammar-schools">Grammar Schools</a></li>
-        <li><a href="/bucks-11-plus-qualifying-score">Qualifying Score</a></li>
-        <li><a href="/bucks-11-plus-timeline">Admissions Timeline</a></li>
-        <li><a href="/how-to-pass-bucks-11-plus">How to Pass</a></li>
-        <li><a href="/bucks-11-plus-registration">Registration Guide</a></li>
+        <li><a href="/bucks-11-plus-sample-questions">Sample Questions</a></li>
+        <li><a href="/bucks-11-plus-past-papers">Practice Papers</a></li>
+        <li><a href="/bucks-11-plus-score-calculator">Scoring Explained</a></li>
+        <li><a href="/11-plus-tutors-buckinghamshire">Tutors Guide</a></li>
         <li><a href="/learn">Learning Hub</a></li>
         <li><a href="/glossary">11+ Glossary</a></li>
       </ul>
@@ -237,9 +249,10 @@ function ssrFooter(): string {
     </div>
   </div>
   <div class="ssr-footer-bottom">
-    <p>Bucks 11 Plus Tests is operated by <strong>Ianson Systems Limited</strong>, a UK-based company developing educational tools and diagnostic assessment platforms to support 11+ preparation.</p>
-    <p>Independent educational resource. Not affiliated with The Buckinghamshire Grammar Schools, GL Assessment, or any individual grammar school.</p>
-    <p>&copy; ${year} Ianson Systems Limited. Registered in England &amp; Wales.</p>
+    <p>Bucks 11 Plus Tests is operated by <strong>Ianson Systems Limited</strong> — a UK educational technology company developing diagnostic assessment platforms to support 11+ preparation in Buckinghamshire.</p>
+    <p>Independent educational resource. Not affiliated with The Buckinghamshire Grammar Schools (TBGS), GL Assessment Limited, or any individual grammar school or local authority.</p>
+    <p>All admissions information is for guidance only. Always verify current details directly with your school, Buckinghamshire Council, and the grammar school concerned.</p>
+    <p>&copy; ${year} Ianson Systems Limited. Registered in England &amp; Wales. Contact: <a href="mailto:support@bucks11plustest.co.uk" style="color:rgba(248,250,252,0.4);">support@bucks11plustest.co.uk</a></p>
   </div>
 </footer>`;
 }

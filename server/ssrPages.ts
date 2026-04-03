@@ -29,7 +29,8 @@ export function getTownHtml(slug: string): string | null {
     </div>
     ${ssrCtaBox()}
     <section class="ssr-section">
-      <h2>Nearby Grammar Schools</h2>
+      <h2>Nearby Grammar Schools for ${esc(town.name)} Families</h2>
+      <p>Children in ${esc(town.name)} who qualify at the 121 threshold on the Secondary Transfer Test can apply to any of Buckinghamshire's 13 grammar schools. In practice, most families in ${esc(town.name)} focus applications on schools within reasonable distance — typically the schools below. Qualification must come first; places are then allocated by each school's oversubscription criteria, primarily distance from the school gate.</p>
       <div class="ssr-cards">
         ${town.nearbySchools.map(s => `
           <a class="ssr-card" href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">
@@ -43,16 +44,45 @@ export function getTownHtml(slug: string): string | null {
 
       <h2>Why Starting Early Matters in ${esc(town.name)}</h2>
       <p>${esc(town.whyEarly)}</p>
+      <p>The window for structured 11+ preparation is shorter than most families expect. Registration for the Secondary Transfer Test closes in June of Year 5 — approximately 15 months before the September Year 6 test date. Families who wait until this deadline approaches to begin preparation face a compressed timeline. Diagnostic assessment in Year 4 or early Year 5 is strongly recommended: it establishes a baseline across all four domains and identifies which specific areas need focused attention before the preparation window narrows.</p>
+
+      <h2>The Secondary Transfer Test: What ${esc(town.name)} Children Face</h2>
+      <p>All children sitting the Buckinghamshire Secondary Transfer Test face the same assessment regardless of where they live. The test consists of two 45-minute papers, covering four domains: Verbal Reasoning, Non-Verbal Reasoning (including spatial reasoning), Mathematical Reasoning, and English Comprehension. All questions are multiple choice — five options, one answer per question. Crucially, all instructions are delivered by audio recording, which controls the pace of the test. Children who have not practised under audio-controlled timed conditions are at a disadvantage on test day.</p>
+      <p>The standardised score produced by the test accounts for a child's exact age — younger children in the year group are not penalised. A score of 121 or above qualifies a child for grammar school applications. The score is benchmarked against the national GL Assessment cohort, not just Buckinghamshire children. Typically around 20–25% of Buckinghamshire children achieve a qualifying score.</p>
 
       <h2>Preparation Advice for ${esc(town.name)} Families</h2>
       <p>${esc(town.preparation)}</p>
+      <p>No single preparation approach suits every child. Some children make rapid progress with independent digital practice and minimal parental involvement; others benefit from structured tutor-led sessions and feedback. What all effective preparation has in common: it is diagnostic (identifying specific gaps rather than repeating strong areas), it is progressive (building from domain skills to timed papers), and it includes realistic timed practice under audio conditions in the months before the test.</p>
 
-      <h2>The Unique Challenge</h2>
+      <h2>The Unique Challenge for ${esc(town.name)} Applicants</h2>
       <p>${esc(town.uniqueChallenge)}</p>
+
+      <h2>Preparation Timeline for ${esc(town.name)} Families</h2>
+      <div style="border-left:3px solid #0e1f30;padding-left:1.25rem;margin:1rem 0;">
+        <p style="margin-bottom:0.75rem;"><strong style="color:#0e1f30;">Year 4 or Early Year 5:</strong> Take a diagnostic assessment to establish a baseline across all four domains. Identify which areas are strong and which need dedicated practice. Begin reading regularly in preparation for comprehension.</p>
+        <p style="margin-bottom:0.75rem;"><strong style="color:#0e1f30;">Spring Term Year 5:</strong> Registration opens — confirm whether your school registers automatically or whether you must register directly. Begin domain-specific practice, focusing on the weakest areas identified in the diagnostic. Build familiarity with Verbal Reasoning and Non-Verbal Reasoning question formats.</p>
+        <p style="margin-bottom:0.75rem;"><strong style="color:#0e1f30;">June Year 5:</strong> Registration deadline — confirm registration is complete. Do not miss this. Begin maths topic work for any gaps identified (fractions, percentages, ratio, basic algebra).</p>
+        <p style="margin-bottom:0.75rem;"><strong style="color:#0e1f30;">Summer Holidays (Year 5 to Year 6):</strong> Introduce full timed practice papers. Work through at least 4–6 complete papers under timed conditions. Review every paper carefully — categorise errors by question type to direct remaining preparation.</p>
+        <p style="margin-bottom:0.75rem;"><strong style="color:#0e1f30;">September Year 6 (Test Day):</strong> All children sit the Secondary Transfer Test at their primary school (or assigned test centre for out-of-county children). Ensure your child has had recent practice with audio-controlled timed conditions.</p>
+        <p><strong style="color:#0e1f30;">October Year 6:</strong> Results released — 'qualified' or 'not qualified'. If qualified, submit the SCAF listing grammar school preferences before the October/November deadline.</p>
+      </div>
+
+      <h2>Understanding the 121 Qualifying Score</h2>
+      <p>The qualifying threshold for all Buckinghamshire grammar schools is a standardised score of 121. This is not a percentage or a raw mark — it is a standardised score that accounts for a child's exact date of birth. A child born in August (the youngest in the year group) who achieves the same raw score as a September-born child will receive a higher standardised score, reflecting their relative performance for their age.</p>
+      <p>A score of 100 represents exactly average performance for age on the GL Assessment scale. A score of 121 represents performance approximately 1.4 standard deviations above the mean — roughly the top 8–10% of the national age cohort. In practice, because Buckinghamshire children are typically well-prepared, the proportion qualifying in Buckinghamshire is higher — around 20–25% in most years. This means the competition for grammar school places is significant even among those who have qualified.</p>
+      <p>Qualification does not guarantee a grammar school place. At oversubscribed schools, all qualifying applicants who list the school receive consideration, with places awarded by distance. In competitive admissions years, the effective catchment distance at popular schools can be as low as 0.8–1.5 miles from the school gate. Families in ${esc(town.name)} should research the distance cut-offs at their preferred schools carefully before prioritising SCAF preferences.</p>
     </section>
     ${ssrFaqSection(town.faq)}
     <section class="ssr-related" style="margin-top:2rem;">
-      <h2>More Local Guides</h2>
+      <h2>Essential Guides for ${esc(town.name)} Families</h2>
+      <div class="ssr-related-grid">
+        <a class="ssr-card" href="/bucks-11-plus-test-date-2026"><div class="ssr-card-label">Key dates</div><div class="ssr-card-title">2026 Test Date →</div></a>
+        <a class="ssr-card" href="/bucks-11-plus-past-papers"><div class="ssr-card-label">Materials</div><div class="ssr-card-title">Practice Papers Guide →</div></a>
+        <a class="ssr-card" href="/bucks-11-plus-score-calculator"><div class="ssr-card-label">Scoring</div><div class="ssr-card-title">How Scoring Works →</div></a>
+        <a class="ssr-card" href="/bucks-11-plus-sample-questions"><div class="ssr-card-label">Examples</div><div class="ssr-card-title">Sample Questions →</div></a>
+        <a class="ssr-card" href="/11-plus-tutors-buckinghamshire"><div class="ssr-card-label">Tutoring</div><div class="ssr-card-title">Finding a Tutor →</div></a>
+      </div>
+      <h2 style="margin-top:1.5rem;">More Local Guides</h2>
       <div class="ssr-related-grid">
         ${towns.filter(t => t.slug !== slug).slice(0, 5).map(t => `
           <a class="ssr-card" href="/bucks-11-plus-${esc(t.slug)}">
@@ -112,21 +142,50 @@ export function getGrammarSchoolHtml(slug: string): string | null {
       <p class="ssr-intro">${esc(school.intro)}</p>
     </div>
     ${ssrCtaBox()}
+
+    <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:1.25rem 1.5rem;margin:0 0 1.5rem;">
+      <h2 style="font-family:'Libre Baskerville',serif;font-size:1rem;font-weight:700;color:#166534;margin-bottom:0.75rem;">At a Glance: ${esc(school.shortName)}</h2>
+      <table style="width:100%;border-collapse:collapse;font-size:0.875rem;">
+        <tr style="border-bottom:1px solid #d1fae5;"><td style="padding:0.35rem 0.5rem;font-weight:600;color:#166534;width:45%;">School type</td><td style="padding:0.35rem 0.5rem;color:#166534;">${esc(genderLabel)}</td></tr>
+        <tr style="border-bottom:1px solid #d1fae5;"><td style="padding:0.35rem 0.5rem;font-weight:600;color:#166534;">Location</td><td style="padding:0.35rem 0.5rem;color:#166534;">${esc(school.town)}, Buckinghamshire</td></tr>
+        <tr style="border-bottom:1px solid #d1fae5;"><td style="padding:0.35rem 0.5rem;font-weight:600;color:#166534;">Entry qualification</td><td style="padding:0.35rem 0.5rem;color:#166534;">Standardised score 121+ on the Secondary Transfer Test</td></tr>
+        <tr style="border-bottom:1px solid #d1fae5;"><td style="padding:0.35rem 0.5rem;font-weight:600;color:#166534;">Admissions authority</td><td style="padding:0.35rem 0.5rem;color:#166534;">The school (in conjunction with TBGS)</td></tr>
+        <tr><td style="padding:0.35rem 0.5rem;font-weight:600;color:#166534;">Test format</td><td style="padding:0.35rem 0.5rem;color:#166534;">GL Assessment — two 45-minute papers, audio-paced</td></tr>
+      </table>
+    </div>
+
     <section class="ssr-section">
       <h2>Admissions &amp; Oversubscription Criteria</h2>
       <p>${esc(school.admissionsContext)}</p>
+      <p>All Buckinghamshire grammar schools share the same entry requirement: a standardised score of 121 or above on the Secondary Transfer Test. Qualification is necessary but not sufficient — at oversubscribed schools, qualified applicants compete for places on the basis of each school's published oversubscription criteria. These are typically ordered as: looked-after children, siblings of current pupils, then distance from the school gate in ascending order. All families should read the individual school's admissions policy (available from the school and via Buckinghamshire Council's admissions portal) rather than relying on general summaries.</p>
 
       <h2>Catchment &amp; Location</h2>
       <p>${esc(school.catchmentContext)}</p>
 
       <h2>Distance Cut-Off</h2>
       <p>${esc(school.distanceContext)}</p>
+      <p>Distance cut-offs vary year to year based on the number of qualifying applicants and the proportion who list this school on their SCAF. In years with higher-than-average qualifying rates across Buckinghamshire, the effective catchment distance at popular schools can compress. Families should use any published historical cut-off figures as a guide only — the actual distance for any given year is determined at the point of offer in March.</p>
 
-      <h2>What Makes This School Distinctive</h2>
+      <h2>What Makes ${esc(school.shortName)} Distinctive</h2>
       <p>${esc(school.uniqueFeatures)}</p>
 
-      <h2>Preparation Advice for Applicants</h2>
+      <h2>The Admissions Process for ${esc(school.shortName)}</h2>
+      <p>There is no separate entrance examination for ${esc(school.shortName)} — entry is based entirely on the Buckinghamshire Secondary Transfer Test result. The process for families applying to this school follows the standard Buckinghamshire grammar school admissions timeline:</p>
+      <div style="border-left:3px solid #0e1f30;padding-left:1.25rem;margin:1rem 0;">
+        <p style="margin-bottom:0.5rem;"><strong style="color:#0e1f30;">June (Year 5):</strong> Registration deadline for the Secondary Transfer Test.</p>
+        <p style="margin-bottom:0.5rem;"><strong style="color:#0e1f30;">September (Year 6):</strong> Secondary Transfer Test — all children sit the test at their primary school.</p>
+        <p style="margin-bottom:0.5rem;"><strong style="color:#0e1f30;">October (Year 6):</strong> Results released ('qualified' or 'not qualified').</p>
+        <p style="margin-bottom:0.5rem;"><strong style="color:#0e1f30;">October–November (Year 6):</strong> SCAF deadline — qualified families list grammar school preferences. Include ${esc(school.shortName)} on your SCAF if it is a genuine preference.</p>
+        <p><strong style="color:#0e1f30;">1 March (following year):</strong> National Offer Day — grammar school place offers released.</p>
+      </div>
+
+      <h2>Preparation Advice for ${esc(school.shortName)} Applicants</h2>
       <p>${esc(school.preparationAdvice)}</p>
+      <p>Because ${esc(school.shortName)} is typically oversubscribed, qualifying at the threshold is not sufficient to guarantee a place for families who do not live close to the school. For families in the likely catchment area, qualifying comfortably above 121 reduces the risk of a borderline result that could be questioned in a difficult year. For families outside the typical catchment, qualifying is a prerequisite but the admissions outcome depends on distance — not on how far above 121 a child scores.</p>
+
+      <h2>What the Four Test Domains Look Like</h2>
+      <p>Regardless of which grammar school a family targets, all applicants must qualify via the same Secondary Transfer Test. The four domains are: Verbal Reasoning (word codes, analogies, compound words, sequences), Non-Verbal Reasoning and Spatial Reasoning (matrices, reflections, rotations, nets, cube views), Mathematical Reasoning (number, fractions, percentages, ratio, algebra, shape, data), and English Comprehension (retrieval, inference, vocabulary in context, author technique). All answers are multiple-choice. The test is delivered with audio timing — a recorded voice announces each section and controls the pace throughout.</p>
+      <p>Practice with a GL Assessment-style diagnostic early in Year 5 identifies which domains need the most work before the September Year 6 test. Domain-specific practice, timed papers, and realistic mock conditions in the summer holidays are the core of effective preparation.</p>
 
       <div style="margin:1.5rem 0;padding:1rem 1.25rem;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;">
         <p style="font-size:0.85rem;color:#475569;margin:0;">
@@ -137,7 +196,14 @@ export function getGrammarSchoolHtml(slug: string): string | null {
     </section>
     ${ssrFaqSection(school.faq)}
     <section class="ssr-related" style="margin-top:2rem;">
-      <h2>Other Grammar Schools</h2>
+      <h2>Essential Resources for Applicants</h2>
+      <div class="ssr-related-grid">
+        <a class="ssr-card" href="/bucks-11-plus-test-date-2026"><div class="ssr-card-label">Key dates</div><div class="ssr-card-title">2026 Test Date →</div></a>
+        <a class="ssr-card" href="/bucks-11-plus-score-calculator"><div class="ssr-card-label">Scoring</div><div class="ssr-card-title">How Scoring Works →</div></a>
+        <a class="ssr-card" href="/bucks-11-plus-past-papers"><div class="ssr-card-label">Materials</div><div class="ssr-card-title">Practice Papers Guide →</div></a>
+        <a class="ssr-card" href="/bucks-11-plus-sample-questions"><div class="ssr-card-label">Examples</div><div class="ssr-card-title">Sample Questions →</div></a>
+      </div>
+      <h2 style="margin-top:1.5rem;">Other Grammar Schools</h2>
       <div class="ssr-related-grid">
         ${grammarSchools.filter(s => s.slug !== slug).slice(0, 4).map(s => `
           <a class="ssr-card" href="/grammar-schools/${esc(s.slug)}">

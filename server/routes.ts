@@ -16,6 +16,11 @@ import {
   towns as ssrTowns, grammarSchools as ssrGrammarSchools,
 } from "./ssrPages";
 import { getGlossaryIndexHtml, getGlossaryTermHtml, GLOSSARY_TERMS } from "./ssrGlossary";
+import {
+  getTestDate2026Html, getTestDate2025Html, getPastPapersHtml,
+  getResultsGuideHtml, getSampleQuestionsHtml, getScoreGuideHtml,
+  getTutorsGuideHtml, getAppealsGuideHtml, getRegistrationDetailedHtml,
+} from "./ssrHighVolume";
 
 const PROGRAMME_TIERS = new Set([
   "pack_plus",
@@ -2080,6 +2085,33 @@ Disallow: /reset-password
     });
   }
 
+  // ─── SSR high-volume pages ────────────────────────────────────────────────
+  const highVolumeRoutes: Array<[string, () => string]> = [
+    ["/bucks-11-plus-test-date-2026", getTestDate2026Html],
+    ["/bucks-11-plus-test-date-2025", getTestDate2025Html],
+    ["/bucks-11-plus-past-papers", getPastPapersHtml],
+    ["/bucks-11-plus-practice-papers", getPastPapersHtml],
+    ["/bucks-11-plus-results", getResultsGuideHtml],
+    ["/when-do-bucks-11-plus-results-come-out", getResultsGuideHtml],
+    ["/bucks-11-plus-sample-questions", getSampleQuestionsHtml],
+    ["/bucks-11-plus-score-calculator", getScoreGuideHtml],
+    ["/bucks-11-plus-how-scoring-works", getScoreGuideHtml],
+    ["/11-plus-tutors-buckinghamshire", getTutorsGuideHtml],
+    ["/11-plus-tutors-high-wycombe", getTutorsGuideHtml],
+    ["/11-plus-tutors-aylesbury", getTutorsGuideHtml],
+    ["/bucks-11-plus-appeals", getAppealsGuideHtml],
+    ["/bucks-11-plus-registration-guide", getRegistrationDetailedHtml],
+  ];
+
+  for (const [path, generator] of highVolumeRoutes) {
+    app.get(path, (_req, res) => {
+      const html = generator();
+      res.setHeader("Content-Type", "text/html; charset=utf-8");
+      res.setHeader("Cache-Control", "public, max-age=7200");
+      res.send(html);
+    });
+  }
+
   // ─── SSR glossary ─────────────────────────────────────────────────────────
   app.get("/glossary", (_req, res) => {
     const html = getGlossaryIndexHtml();
@@ -2170,6 +2202,16 @@ Disallow: /reset-password
       { path: "/refund-policy", priority: "0.3", changefreq: "yearly" },
       { path: "/glossary", priority: "0.8", changefreq: "monthly" },
       ...GLOSSARY_TERMS.map(t => ({ path: `/glossary/${t.slug}`, priority: "0.7", changefreq: "monthly" as const })),
+      { path: "/bucks-11-plus-test-date-2026", priority: "0.9", changefreq: "monthly" },
+      { path: "/bucks-11-plus-test-date-2025", priority: "0.8", changefreq: "monthly" },
+      { path: "/bucks-11-plus-past-papers", priority: "0.9", changefreq: "monthly" },
+      { path: "/bucks-11-plus-results", priority: "0.9", changefreq: "monthly" },
+      { path: "/when-do-bucks-11-plus-results-come-out", priority: "0.8", changefreq: "monthly" },
+      { path: "/bucks-11-plus-sample-questions", priority: "0.9", changefreq: "monthly" },
+      { path: "/bucks-11-plus-score-calculator", priority: "0.9", changefreq: "monthly" },
+      { path: "/11-plus-tutors-buckinghamshire", priority: "0.9", changefreq: "monthly" },
+      { path: "/bucks-11-plus-appeals", priority: "0.8", changefreq: "monthly" },
+      { path: "/bucks-11-plus-registration-guide", priority: "0.8", changefreq: "monthly" },
     ];
 
     const staticContentLastmod = "2025-09-01";
