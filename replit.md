@@ -7,7 +7,7 @@ A full-stack web platform for Buckinghamshire 11+ exam preparation, aligned to G
 - **Frontend**: React 19 + Vite + TailwindCSS v4 + Shadcn/UI + wouter routing + TanStack Query
 - **Backend**: Express 5 + TypeScript + Passport.js (local strategy) + express-session (pg-backed)
 - **Database**: PostgreSQL with Drizzle ORM
-- **Payments**: Stripe (one-time payment mode via checkout sessions), stripe-replit-sync for schema sync
+- **Payments**: Stripe (subscription mode via checkout sessions + 7-day free trial on pack_plus), stripe-replit-sync for schema sync
 - **Question Engine**: Rule-tagged questions with skill_id/sub_rule_id, SVG rendering for NVR, chart rendering for data interpretation, anti-repeat via question_usage table
 - **Shared**: Schema definitions in `shared/schema.ts`, content types in `shared/contentTypes.ts`, validation in `shared/contentValidation.ts`
 

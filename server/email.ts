@@ -256,6 +256,74 @@ export async function sendProgrammeNudge(userId: string) {
   await logEmailEvent(userId, "programme_nudge", sent ? "sent" : "failed");
 }
 
+export async function sendTrialWelcomeEmail(userId: string, chargeDate: Date): Promise<boolean> {
+  const user = await storage.getUser(userId);
+  if (!user || !user.email) return false;
+
+  const token = await generateUnsubscribeToken(userId);
+  const childName = user.childName || "your child";
+  const formattedDate = chargeDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  const cancelUrl = `${BASE_URL}/app/account`;
+
+  const html = wrapHtml(`
+    <h2 style="color:#0d1f30;margin-bottom:8px;">Your 7-Day Free Trial Has Started</h2>
+    <p>Welcome to Bucks 11 Plus Tests — ${childName} now has full access to the Platform Edge for 7 days, completely free.</p>
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:20px;margin:20px 0;">
+      <p style="font-size:14px;color:#64748b;margin:0 0 8px 0;font-weight:600;">What's included during your trial:</p>
+      <ul style="padding-left:18px;margin:0;color:#475569;font-size:13px;line-height:1.8;">
+        <li>1,500+ GL-style practice questions (VR, NVR, Maths, Comprehension)</li>
+        <li>All 17 Hard challenge drills</li>
+        <li>Full timed diagnostics &amp; mock exam simulations</li>
+        <li>Premium parent analytics dashboard</li>
+        <li>Guided preparation roadmap &amp; weekly task plans</li>
+      </ul>
+    </div>
+    <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:16px;margin:16px 0;">
+      <p style="font-size:13px;color:#92400e;margin:0;">
+        <strong>Important:</strong> Nothing will be charged until <strong>${formattedDate}</strong>. If you cancel before then, you pay nothing.
+        Your subscription continues at <strong>£59.99/month</strong> after the trial unless cancelled.
+      </p>
+    </div>
+    <div style="text-align:center;margin:28px 0;">
+      <a href="${BASE_URL}/app" style="display:inline-block;background:#0d1f30;color:white;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:700;font-size:15px;">Start Practising Now</a>
+    </div>
+    <p style="font-size:13px;color:#64748b;">To cancel your trial before ${formattedDate}, visit your <a href="${cancelUrl}" style="color:#0d1f30;">account page</a> and click "Manage billing".</p>
+  `, userId, token);
+
+  const sent = await sendEmail(user.email, "Your 7-day free trial has started — Bucks 11 Plus Tests", html);
+  await logEmailEvent(userId, "trial_welcome", sent ? "sent" : "failed", { chargeDate: formattedDate });
+  return sent;
+}
+
+export async function sendTrialReminderEmail(userId: string, chargeDate: Date): Promise<boolean> {
+  const user = await storage.getUser(userId);
+  if (!user || !user.email) return false;
+
+  const token = await generateUnsubscribeToken(userId);
+  const formattedDate = chargeDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  const cancelUrl = `${BASE_URL}/app/account`;
+
+  const html = wrapHtml(`
+    <h2 style="color:#0d1f30;margin-bottom:8px;">Your Trial Ends in 3 Days</h2>
+    <p>Your free trial of the Bucks 11 Plus Tests Platform Edge ends on <strong>${formattedDate}</strong>.</p>
+    <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:16px;margin:20px 0;">
+      <p style="font-size:13px;color:#92400e;margin:0;">
+        On <strong>${formattedDate}</strong>, your card will be charged <strong>£59.99</strong> and your subscription will continue monthly.
+        If you'd prefer not to continue, cancel before then — you keep full access until the trial ends.
+      </p>
+    </div>
+    <div style="text-align:center;margin:24px 0;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <a href="${BASE_URL}/app" style="display:inline-block;background:#0d1f30;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;">Continue Practising</a>
+      <a href="${cancelUrl}" style="display:inline-block;background:white;color:#64748b;border:1px solid #e2e8f0;padding:12px 24px;border-radius:8px;text-decoration:none;font-size:14px;">Manage / Cancel</a>
+    </div>
+    <p style="font-size:13px;color:#64748b;">To cancel, visit your <a href="${cancelUrl}" style="color:#0d1f30;">account page</a> and click "Manage billing". Cancellation is instant.</p>
+  `, userId, token);
+
+  const sent = await sendEmail(user.email, `Your trial ends in 3 days — £59.99 on ${formattedDate}`, html);
+  await logEmailEvent(userId, "trial_reminder", sent ? "sent" : "failed", { chargeDate: formattedDate });
+  return sent;
+}
+
 export async function runEmailTriggers() {
   if (!RESEND_API_KEY) {
     return;

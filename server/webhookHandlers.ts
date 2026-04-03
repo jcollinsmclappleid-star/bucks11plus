@@ -1,5 +1,6 @@
 import { getStripeSync } from './stripeClient';
 import { storage } from './storage';
+import { sendTrialReminderEmail } from './email';
 
 const PAID_TIERS = ['pack_monthly', 'pack_plus'] as const;
 
@@ -39,9 +40,10 @@ export class WebhookHandlers {
       return;
     }
 
-    if (isPaidTier(user.subscriptionTier)) {
+    if (isPaidTier(user.subscriptionTier) || user.trialEndsAt) {
       console.log(`[Webhook] ${reason} for user ${user.id} (${user.subscriptionTier}) — downgrading to free`);
       await storage.updateUserSubscription(user.id, 'free', undefined);
+      await storage.updateUserTrial(user.id, null);
     }
   }
 
@@ -65,14 +67,34 @@ export class WebhookHandlers {
         break;
       }
 
-      // Subscription status changed — catch cancelled, past_due, or unpaid
+      // Subscription status changed — catch cancelled, past_due, unpaid, or trial→active
       case 'customer.subscription.updated': {
         const status: string = obj?.status ?? '';
+        const prevStatus: string = data?.previous_attributes?.status ?? '';
         if (status === 'canceled' || status === 'past_due' || status === 'unpaid') {
           await WebhookHandlers.downgradeByCustomerId(
             customerId,
             `Subscription status → ${status}`
           );
+        } else if (status === 'active' && prevStatus === 'trialing') {
+          // Trial successfully converted to paid — clear the trial badge
+          const user = await storage.getUserByStripeCustomerId(customerId);
+          if (user) {
+            await storage.updateUserTrial(user.id, null);
+            console.log(`[Webhook] Trial converted to active subscription for user ${user.id}`);
+          }
+        }
+        break;
+      }
+
+      // Trial ending soon — send 3-day reminder email
+      case 'customer.subscription.trial_will_end': {
+        const trialEnd: number | null = obj?.trial_end ?? null;
+        const user = await storage.getUserByStripeCustomerId(customerId);
+        if (user && trialEnd) {
+          const chargeDate = new Date(trialEnd * 1000);
+          await sendTrialReminderEmail(user.id, chargeDate);
+          console.log(`[Webhook] Trial reminder sent to user ${user.id}, charge on ${chargeDate.toISOString()}`);
         }
         break;
       }

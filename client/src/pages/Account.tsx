@@ -230,6 +230,16 @@ export default function Account() {
                         {currentTier === "pack_monthly" && (
                           <p className="text-xs text-muted-foreground mt-1">Renews monthly. Cancel any time before your next billing date.</p>
                         )}
+                        {user.trialEndsAt && new Date(user.trialEndsAt) > new Date() && (
+                          <div className="mt-3 p-3 bg-amber-50 rounded-lg border border-amber-200" data-testid="banner-account-trial">
+                            <p className="text-xs font-semibold text-amber-900">
+                              Free trial — {Math.ceil((new Date(user.trialEndsAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24))} days remaining
+                            </p>
+                            <p className="text-xs text-amber-700 mt-0.5">
+                              Nothing charged until {new Date(user.trialEndsAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}. Cancel before then to pay nothing.
+                            </p>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -247,16 +257,22 @@ export default function Account() {
                         <span className="flex items-center gap-2">
                           <ExternalLink className="h-4 w-4 text-muted-foreground" />
                           <span>
-                            {currentTier === "pack_monthly"
-                              ? "Manage billing & cancel subscription"
-                              : "Manage billing"}
+                            {user.trialEndsAt && new Date(user.trialEndsAt) > new Date()
+                              ? "Manage billing & cancel trial"
+                              : currentTier === "pack_monthly" || currentTier === "pack_plus"
+                                ? "Manage billing & cancel subscription"
+                                : "Manage billing"}
                           </span>
                         </span>
                         {manageBillingMutation.isPending && (
                           <span className="text-xs text-muted-foreground">Opening…</span>
                         )}
                       </Button>
-                      {currentTier === "pack_monthly" && (
+                      {user.trialEndsAt && new Date(user.trialEndsAt) > new Date() ? (
+                        <p className="text-xs text-muted-foreground px-1">
+                          Cancel anytime before your trial ends to pay nothing. Access stops immediately on cancellation.
+                        </p>
+                      ) : (currentTier === "pack_monthly" || currentTier === "pack_plus") && (
                         <p className="text-xs text-muted-foreground px-1">
                           Cancellation takes effect at the end of your current billing period. You keep full access until then.
                         </p>

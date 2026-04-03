@@ -382,15 +382,16 @@ export default function Pricing() {
                       ))}
                     </ul>
                   </CardContent>
-                  <CardFooter>
+                  <CardFooter className="flex flex-col gap-2 items-stretch">
                     <Button
                       className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-11 font-bold"
                       onClick={() => handleCheckout("pack_plus")}
                       disabled={loading === "pack_plus"}
                       data-testid="button-get-pack-plus"
                     >
-                      {loading === "pack_plus" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Get Edge Monthly"}
+                      {loading === "pack_plus" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Start 7-Day Free Trial"}
                     </Button>
+                    <p className="text-center text-[11px] text-muted-foreground">7 days free, then £59.99/month. Card required. Cancel anytime.</p>
                   </CardFooter>
                 </Card>
 

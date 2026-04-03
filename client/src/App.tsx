@@ -58,6 +58,7 @@ import LearnHub from "./pages/learn/LearnHub";
 import LearnArticle from "./pages/learn/LearnArticle";
 import EarlyDashboard from "./pages/EarlyDashboard";
 import TestDaySimulator from "./pages/TestDaySimulator";
+import FreeTrial from "./pages/seo/FreeTrial";
 import GrammarSchools from "./pages/seo/GrammarSchools";
 import GrammarSchoolGuide from "./pages/seo/GrammarSchoolGuide";
 import QualifyingScore from "./pages/seo/QualifyingScore";
@@ -251,6 +252,7 @@ function Router() {
             <Route path="/forgot-password" component={ForgotPassword} />
             <Route path="/reset-password" component={ResetPassword} />
             <Route path="/free-diagnostic" component={FreeDiagnosticStart} />
+            <Route path="/free-11-plus-practice-test-trial" component={FreeTrial} />
             <Route path="/free-results/:id" component={GuestResults} />
             <Route path="/bucks-grammar-schools" component={GrammarSchools} />
             <Route path="/bucks-11-plus-qualifying-score" component={QualifyingScore} />

@@ -7,7 +7,7 @@ import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClie
 import { sql, eq, and, desc, inArray } from "drizzle-orm";
 import { db } from "./db";
 import { computeAttemptMetrics, computeFullAnalytics, type AnswerRecord, type DrillAnswerRecord, type HistoricalMetrics } from "./metrics";
-import { sendDiagnosticCompleteEmail } from "./email";
+import { sendDiagnosticCompleteEmail, sendTrialWelcomeEmail } from "./email";
 import { learnArticles } from "../client/src/data/learn-articles";
 import { ensureFreePool, repairSeedQuestions } from "./seed";
 import {
@@ -207,7 +207,7 @@ export async function registerRoutes(
         lineItems = [{ price_data: priceData, quantity: 1 }];
       }
 
-      const session = await stripe.checkout.sessions.create({
+      const sessionParams: any = {
         customer: customerId,
         payment_method_types: ['card'],
         line_items: lineItems,
@@ -218,7 +218,14 @@ export async function registerRoutes(
           userId: user.id,
           tier: tier,
         },
-      });
+      };
+
+      if (tier === 'pack_plus' && mode === 'subscription') {
+        sessionParams.subscription_data = { trial_period_days: 7 };
+        sessionParams.metadata.isTrial = 'true';
+      }
+
+      const session = await stripe.checkout.sessions.create(sessionParams);
 
       res.json({ url: session.url });
     } catch (error) {
@@ -347,14 +354,21 @@ export async function registerRoutes(
         lineItems = [{ price_data: priceData, quantity: 1 }];
       }
 
-      const session = await stripe.checkout.sessions.create({
+      const guestSessionParams: any = {
         payment_method_types: ['card'],
         line_items: lineItems,
         mode,
         success_url: `${protocol}://${host}/checkout-success?tier=${tier}&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${protocol}://${host}/pricing`,
         metadata: { tier },
-      });
+      };
+
+      if (tier === 'pack_plus' && mode === 'subscription') {
+        guestSessionParams.subscription_data = { trial_period_days: 7 };
+        guestSessionParams.metadata.isTrial = 'true';
+      }
+
+      const session = await stripe.checkout.sessions.create(guestSessionParams);
 
       res.json({ url: session.url });
     } catch (error) {
@@ -371,7 +385,8 @@ export async function registerRoutes(
 
       const stripe = await getUncachableStripeClient();
       const checkoutSession = await stripe.checkout.sessions.retrieve(session_id);
-      if (checkoutSession.payment_status !== "paid") {
+      const isTrial = checkoutSession.payment_status === "no_payment_required";
+      if (checkoutSession.payment_status !== "paid" && !isTrial) {
         return res.status(400).json({ message: "Payment not confirmed" });
       }
       const sessionUserId = checkoutSession.metadata?.userId;
@@ -389,7 +404,7 @@ export async function registerRoutes(
 
       const currentRank = TIER_RANK[currentUser.subscriptionTier] || 0;
       const newRank = TIER_RANK[tier] || 0;
-      if (newRank <= currentRank) {
+      if (newRank <= currentRank && !isTrial) {
         const { password: _, ...safeUser } = currentUser;
         return res.json(safeUser);
       }
@@ -411,6 +426,19 @@ export async function registerRoutes(
         : new Date(Date.now() + (weeksMap[tier] || 12) * 7 * 24 * 60 * 60 * 1000);
 
       await storage.updateUserSubscription(req.user!.id, tier, expiresAt);
+
+      if (isTrial && checkoutSession.subscription) {
+        try {
+          const subscription = await stripe.subscriptions.retrieve(checkoutSession.subscription as string);
+          if (subscription.trial_end) {
+            const trialEndDate = new Date(subscription.trial_end * 1000);
+            await storage.updateUserTrial(req.user!.id, trialEndDate);
+            await sendTrialWelcomeEmail(req.user!.id, trialEndDate);
+          }
+        } catch (err) {
+          console.error('[Checkout] Failed to store trial end date:', err);
+        }
+      }
 
       const programmeTiers = new Set(["programme8", "programme12", "programme16", "programme16_family", "programme24_plus"]);
       if (programmeTiers.has(tier)) {

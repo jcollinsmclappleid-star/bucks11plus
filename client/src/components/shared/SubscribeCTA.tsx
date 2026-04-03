@@ -37,8 +37,8 @@ export function SubscribeCTA() {
             className="h-11 px-6 bg-brand-amber text-amber-950 hover:bg-brand-amber/90 font-bold shadow-sm"
             data-testid="button-subscribe-cta-pricing"
           >
-            <Link href="/pricing">
-              See Plans &amp; Start Practising <ArrowRight className="ml-2 h-4 w-4" />
+            <Link href="/free-11-plus-practice-test-trial">
+              Start 7-Day Free Trial <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
           <Button
@@ -47,9 +47,9 @@ export function SubscribeCTA() {
             className="h-11 px-6 border-white/25 text-white bg-transparent hover:bg-white/10 hover:text-white hover:border-white/40"
             data-testid="button-subscribe-cta-diagnostic"
           >
-            <Link href="/free-diagnostic">Try Free First</Link>
+            <Link href="/free-diagnostic">Try Free Diagnostic First</Link>
           </Button>
-          <span className="text-white/45 text-xs sm:ml-1">Cancel any time · No lock-in</span>
+          <span className="text-white/45 text-xs sm:ml-1">7 days free · Card required · Cancel anytime</span>
         </div>
       </div>
     </div>
