@@ -98,7 +98,7 @@ export default function FreeTrial() {
               data-testid="button-hero-start-trial"
             >
               <Link href="/pricing?autoCheckout=pack_plus">
-                Unlock Full Platform Access — Free <ArrowRight className="ml-2 h-5 w-5" />
+                Start Free Trial — Full Platform Access <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
             <Button
@@ -191,7 +191,7 @@ export default function FreeTrial() {
               data-testid="button-mid-start-trial"
             >
               <Link href="/pricing?autoCheckout=pack_plus">
-                Unlock Full Platform Access <ArrowRight className="ml-2 h-5 w-5" />
+                Start Free Trial — Full Platform Access <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
             <p className="text-white/40 text-xs mt-3">Cancel before day 7 and you pay nothing. Stripe secures your card but doesn't charge it.</p>
@@ -254,7 +254,7 @@ export default function FreeTrial() {
             data-testid="button-footer-start-trial"
           >
             <Link href="/pricing?autoCheckout=pack_plus">
-              Unlock Full Platform Access <ArrowRight className="ml-2 h-5 w-5" />
+              Start Free Trial — Full Platform Access <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
           </Button>
           <p className="text-white/40 text-xs mt-4">

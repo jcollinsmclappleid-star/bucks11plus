@@ -411,7 +411,7 @@ export default function GuestResults() {
                 ))}
               </ul>
               <Button className="w-full bg-primary" asChild data-testid="button-upsell-pack-plus">
-                <Link href="/free-11-plus-practice-test-trial">Access the Full Platform — 7 Days Free</Link>
+                <Link href="/free-11-plus-practice-test-trial">Free Trial — Full Platform Access</Link>
               </Button>
             </CardContent>
           </Card>

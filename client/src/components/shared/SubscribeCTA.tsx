@@ -38,7 +38,7 @@ export function SubscribeCTA() {
             data-testid="button-subscribe-cta-pricing"
           >
             <Link href="/free-11-plus-practice-test-trial">
-              Access the Full Platform — 7 Days Free <ArrowRight className="ml-2 h-4 w-4" />
+              Free Trial — Full Platform Access <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
           <Button

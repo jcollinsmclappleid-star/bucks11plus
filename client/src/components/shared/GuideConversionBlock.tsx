@@ -142,7 +142,7 @@ export function GuideConversionBlock() {
               data-testid="button-guide-conversion-subscribe"
             >
               <Link href="/free-11-plus-practice-test-trial">
-                Access the Full Platform — 7 Days Free <ArrowRight className="ml-2 h-4 w-4" />
+                Free Trial — Full Platform Access <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
             <Button

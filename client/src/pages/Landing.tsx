@@ -481,7 +481,7 @@ export default function Landing() {
                 </Link>
               </Button>
               <Button size="lg" variant="outline" className="h-14 px-8 text-lg bg-white/[0.03] border-white/15 text-white/80 hover:bg-white/[0.06] hover:text-white" asChild>
-                <Link href="/free-11-plus-practice-test-trial">Try the Platform — 7 Days Free</Link>
+                <Link href="/free-11-plus-practice-test-trial">Free Trial — Try the Full Platform</Link>
               </Button>
             </div>
 
@@ -595,7 +595,7 @@ export default function Landing() {
 
           <div className="mt-14 pt-10 border-t border-slate-200">
             <div className="text-center mb-6">
-              <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-2">Try the Platform</span>
+              <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-2">Free Trial — Try the Platform</span>
               <h3 className="text-2xl font-bold text-primary font-serif mb-2">Sample Practice Questions</h3>
               <p className="text-sm text-slate-500 max-w-xl mx-auto">
                 Swipe through to see the question types your child will practise — across all four GL-style subjects.
@@ -746,7 +746,7 @@ export default function Landing() {
                 <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>Advanced parent analytics</li>
                 <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>Weekly personalised plans</li>
               </ul>
-              <Link href="/free-11-plus-practice-test-trial" className="block text-center w-full rounded-lg bg-primary text-white font-semibold py-2 text-sm hover:bg-primary/90 transition-colors" data-testid="button-pricing-edge">Try Platform Free — 7 Days</Link>
+              <Link href="/free-11-plus-practice-test-trial" className="block text-center w-full rounded-lg bg-primary text-white font-semibold py-2 text-sm hover:bg-primary/90 transition-colors" data-testid="button-pricing-edge">Free Trial — 7 Days Platform Access</Link>
             </div>
 
             <div className="flex flex-col rounded-2xl border border-brand-green/40 bg-green-50/40 shadow-sm p-6 relative" data-testid="pricing-card-annual">

@@ -70,17 +70,17 @@ function getUpsellMessage(tier: string, weakestSection: string, weakestScore: nu
   if (rank < 0) {
     if (overallScore < 110) {
       return {
-        title: "Unlock the Full Diagnostic & Practice Hub — Free for 7 Days",
+        title: "Free Trial — Unlock the Full Diagnostic & Practice Hub",
         message: `${weakestSection} at ${weakestScore}% needs focused attention. Platform Edge gives your child the complete preparation hub — 1,500+ GL-style questions, full diagnostics, all Hard drills, and a detailed analytics dashboard. Try the full platform free for 7 days.`,
-        cta: "Access the Full Platform — 7 Days Free",
+        cta: "Free Trial — Full Platform Access",
         tier: "pack_plus",
         link: "/free-11-plus-practice-test-trial",
       };
     }
     return {
-      title: "Build Confidence with the Full Platform — 7 Days Free",
+      title: "Free Trial — Build Confidence with the Full Platform",
       message: `Great start! Platform Edge is the complete Diagnostic & Practice Hub — 1,500+ questions, all 17 Hard challenge drills, full diagnostics, and a detailed parent analytics dashboard. Full access, no charge for 7 days.`,
-      cta: "Access the Full Platform — 7 Days Free",
+      cta: "Free Trial — Full Platform Access",
       tier: "pack_plus",
       link: "/free-11-plus-practice-test-trial",
     };
@@ -89,17 +89,17 @@ function getUpsellMessage(tier: string, weakestSection: string, weakestScore: nu
   if (rank === 0) {
     if (weakestScore < 60) {
       return {
-        title: "Access the Full Diagnostic Hub — 7 Days Free",
+        title: "Free Trial — Full Diagnostic Hub Access",
         message: `${weakestSection} at ${weakestScore}% needs hard-level drilling. Platform Edge unlocks all 17 Hard challenge drills, the complete diagnostic suite, and an advanced parent analytics dashboard. Try the full platform free for 7 days.`,
-        cta: "Access the Full Platform — 7 Days Free",
+        cta: "Free Trial — Full Platform Access",
         tier: "pack_plus",
         link: "/free-11-plus-practice-test-trial",
       };
     }
     return {
-      title: "Go Deeper with the Full Platform — 7 Days Free",
+      title: "Free Trial — Go Deeper with the Full Platform",
       message: `Your child is making progress. Platform Edge is the complete Diagnostic & Practice Hub — all Hard drills, full-length mock exams, and detailed gap analysis to push their score to qualifying level. Try it free for 7 days.`,
-      cta: "Access the Full Platform — 7 Days Free",
+      cta: "Free Trial — Full Platform Access",
       tier: "pack_plus",
       link: "/free-11-plus-practice-test-trial",
     };

@@ -118,7 +118,7 @@ export default function Practice() {
           </div>
           {!hasPaidAccess() && (
             <Button className="gap-2 bg-brand-amber text-amber-950 hover:bg-amber-300 font-bold" asChild data-testid="button-unlock-all">
-              <Link href="/free-11-plus-practice-test-trial"><Lock className="h-4 w-4" /> Access Full Platform Free</Link>
+              <Link href="/free-11-plus-practice-test-trial"><Lock className="h-4 w-4" /> Free Trial — Full Platform</Link>
             </Button>
           )}
         </div>
@@ -167,7 +167,7 @@ export default function Practice() {
                     <p className="text-violet-600 text-xs mt-0.5">You have 6 Hard drills — unlock the full platform free for 7 days to access all 17.</p>
                   </div>
                   <Button size="sm" className="bg-violet-600 hover:bg-violet-700 text-white shrink-0" asChild data-testid="button-upgrade-hard">
-                    <Link href="/free-11-plus-practice-test-trial">Unlock Free <ArrowRight className="ml-1 h-3.5 w-3.5" /></Link>
+                    <Link href="/free-11-plus-practice-test-trial">Free Trial <ArrowRight className="ml-1 h-3.5 w-3.5" /></Link>
                   </Button>
                 </div>
               )}
@@ -202,7 +202,7 @@ export default function Practice() {
                             asChild
                             data-testid={`button-start-drill-${drill.id}`}
                           >
-                            <Link href="/free-11-plus-practice-test-trial">Unlock — Full Platform Free</Link>
+                            <Link href="/free-11-plus-practice-test-trial">Start Free Trial</Link>
                           </Button>
                         ) : (
                           <Button 
