@@ -400,7 +400,7 @@ export default function GuestResults() {
                 <h3 className="text-xl font-bold text-primary font-serif">Platform Edge</h3>
                 <span className="text-2xl font-bold text-primary">£59.99<span className="text-sm font-medium text-slate-500">/mo</span></span>
               </div>
-              <p className="text-xs text-slate-400 mb-3">7-day free trial · then £59.99/mo · cancel any time</p>
+              <p className="text-xs text-slate-400 mb-3">Full platform access · 7 days free · then £59.99/mo · cancel any time</p>
               <p className="text-sm text-slate-600 mb-4">Full analytics and every Hard drill — the complete preparation edge</p>
               <ul className="space-y-2 mb-6">
                 {["Everything in Practice Platform", "All 17 Hard challenge drills", "Full Parent Analytics dashboard", "Mock exam simulations", "Detailed pace & accuracy breakdown", "Priority gap identification"].map((f, i) => (
@@ -411,7 +411,7 @@ export default function GuestResults() {
                 ))}
               </ul>
               <Button className="w-full bg-primary" asChild data-testid="button-upsell-pack-plus">
-                <Link href="/free-11-plus-practice-test-trial">Start Free Trial — then £59.99/mo</Link>
+                <Link href="/free-11-plus-practice-test-trial">Access the Full Platform — 7 Days Free</Link>
               </Button>
             </CardContent>
           </Card>

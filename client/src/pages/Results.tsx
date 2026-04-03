@@ -70,17 +70,17 @@ function getUpsellMessage(tier: string, weakestSection: string, weakestScore: nu
   if (rank < 0) {
     if (overallScore < 110) {
       return {
-        title: "Unlock Targeted Practice — Free for 7 Days",
-        message: `${weakestSection} at ${weakestScore}% needs focused attention. Platform Edge gives your child 1,500+ structured questions across all four GL sections, full diagnostics, and hard-level challenge drills — try it free for 7 days.`,
-        cta: "Start 7-Day Free Trial",
+        title: "Unlock the Full Diagnostic & Practice Hub — Free for 7 Days",
+        message: `${weakestSection} at ${weakestScore}% needs focused attention. Platform Edge gives your child the complete preparation hub — 1,500+ GL-style questions, full diagnostics, all Hard drills, and a detailed analytics dashboard. Try the full platform free for 7 days.`,
+        cta: "Access the Full Platform — 7 Days Free",
         tier: "pack_plus",
         link: "/free-11-plus-practice-test-trial",
       };
     }
     return {
-      title: "Build Confidence — Free for 7 Days",
-      message: `Great start! Platform Edge includes unlimited access to 1,500+ questions, all 17 Hard challenge drills, and a full parent analytics dashboard. Try it free for 7 days, no charge until day 8.`,
-      cta: "Start 7-Day Free Trial",
+      title: "Build Confidence with the Full Platform — 7 Days Free",
+      message: `Great start! Platform Edge is the complete Diagnostic & Practice Hub — 1,500+ questions, all 17 Hard challenge drills, full diagnostics, and a detailed parent analytics dashboard. Full access, no charge for 7 days.`,
+      cta: "Access the Full Platform — 7 Days Free",
       tier: "pack_plus",
       link: "/free-11-plus-practice-test-trial",
     };
@@ -89,17 +89,17 @@ function getUpsellMessage(tier: string, weakestSection: string, weakestScore: nu
   if (rank === 0) {
     if (weakestScore < 60) {
       return {
-        title: "Intensify Your Preparation — Free for 7 Days",
-        message: `${weakestSection} at ${weakestScore}% needs hard-level drilling. Platform Edge unlocks all 17 Hard challenge drills, full diagnostic papers, and advanced parent analytics. Try it free for 7 days.`,
-        cta: "Start Free Trial on Platform Edge",
+        title: "Access the Full Diagnostic Hub — 7 Days Free",
+        message: `${weakestSection} at ${weakestScore}% needs hard-level drilling. Platform Edge unlocks all 17 Hard challenge drills, the complete diagnostic suite, and an advanced parent analytics dashboard. Try the full platform free for 7 days.`,
+        cta: "Access the Full Platform — 7 Days Free",
         tier: "pack_plus",
         link: "/free-11-plus-practice-test-trial",
       };
     }
     return {
-      title: "Ready for More Depth?",
-      message: `Your child is making progress. Platform Edge unlocks all Hard question sets, full-length mock exams, and detailed gap analysis — try it free for 7 days to push their score higher.`,
-      cta: "Start Free Trial on Platform Edge",
+      title: "Go Deeper with the Full Platform — 7 Days Free",
+      message: `Your child is making progress. Platform Edge is the complete Diagnostic & Practice Hub — all Hard drills, full-length mock exams, and detailed gap analysis to push their score to qualifying level. Try it free for 7 days.`,
+      cta: "Access the Full Platform — 7 Days Free",
       tier: "pack_plus",
       link: "/free-11-plus-practice-test-trial",
     };

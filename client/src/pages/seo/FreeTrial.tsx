@@ -17,9 +17,9 @@ const features = [
 ];
 
 const steps = [
-  { n: "1", title: "Start your free trial", desc: "Enter your card details — nothing is charged. Stripe securely holds your card for the 7-day period." },
-  { n: "2", title: "7 days of full access", desc: "Your child gets immediate access to everything in Platform Edge. Full GL-style questions, diagnostics, drills, analytics." },
-  { n: "3", title: "After 7 days", desc: "If you're happy, do nothing — £59.99/month is charged automatically. If not, cancel before day 7 and pay nothing." },
+  { n: "1", title: "Unlock the platform", desc: "Enter your card details — nothing is charged. Stripe securely holds your card for the 7-day period." },
+  { n: "2", title: "Full access from day one", desc: "Your child gets immediate access to the complete Diagnostic & Practice Hub — every diagnostic, every Hard drill, analytics, and all 1,500+ GL-style questions." },
+  { n: "3", title: "After 7 days, your choice", desc: "If you're happy, do nothing — £59.99/month is charged automatically. If not, cancel before day 7 and pay absolutely nothing." },
 ];
 
 const faqs = [
@@ -74,21 +74,21 @@ export default function FreeTrial() {
   return (
     <div className="bg-white">
       <Seo
-        title="Free 11 Plus Practice Test Trial — 7 Days Free | Bucks 11 Plus Tests"
-        description="Start a 7-day free trial of the Bucks 11 Plus Tests Platform Edge. Full access to 1,500+ GL-style practice questions, diagnostics, drills and analytics. No charge for 7 days. Cancel anytime."
+        title="7-Day Free Trial — Bucks 11+ Diagnostic & Practice Hub | Bucks 11 Plus Tests"
+        description="Get 7-day free access to the complete Bucks 11+ Diagnostic & Practice Hub — 1,500+ GL-style questions, full diagnostics, all Hard drills, and premium analytics. No charge for 7 days. Cancel anytime."
       />
 
       <section className="bg-primary text-white py-20 px-4">
         <div className="container mx-auto max-w-4xl text-center">
           <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 text-sm font-semibold text-white/90 mb-6">
             <Clock className="h-4 w-4 text-brand-amber" />
-            7 Days Free — No Charge Until Day 7
+            Full Platform Access — No Charge for 7 Days
           </div>
           <h1 className="text-4xl md:text-5xl font-bold font-serif mb-5 leading-tight">
-            Free 11 Plus Practice Test Trial.<br className="hidden md:block" /> Full Access. No Risk.
+            The Bucks 11+ Diagnostic<br className="hidden md:block" /> & Practice Hub. 7 Days Free.
           </h1>
           <p className="text-white/80 text-lg leading-relaxed max-w-2xl mx-auto mb-8">
-            Try the complete Bucks 11 Plus Tests Platform Edge free for 7 days. Your child gets 1,500+ GL-style questions, full diagnostics, all drills, and premium analytics — from the moment you sign up.
+            This isn't a practice test sampler — it's full access to the complete interactive platform. Your child gets every diagnostic, every Hard drill, premium analytics, and 1,500+ GL-style questions from the moment you start.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button
@@ -98,7 +98,7 @@ export default function FreeTrial() {
               data-testid="button-hero-start-trial"
             >
               <Link href="/pricing?autoCheckout=pack_plus">
-                Start Free Trial — No Charge Today <ArrowRight className="ml-2 h-5 w-5" />
+                Unlock Full Platform Access — Free <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
             <Button
@@ -118,10 +118,10 @@ export default function FreeTrial() {
       <section className="py-16 px-4 border-b border-border/40">
         <div className="container mx-auto max-w-4xl">
           <h2 className="text-2xl md:text-3xl font-bold font-serif text-primary text-center mb-3">
-            Everything Included in Your Trial
+            Everything in the Hub — Unlocked for 7 Days
           </h2>
           <p className="text-muted-foreground text-center max-w-xl mx-auto mb-10 text-sm">
-            This isn't a limited preview. Your child gets the same access as a full paid subscriber for all 7 days.
+            Not a preview, not a sample. Your child gets identical access to a full paid subscriber across the entire platform — every tool, every diagnostic, every drill.
           </p>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
             {features.map((f, i) => (
@@ -191,7 +191,7 @@ export default function FreeTrial() {
               data-testid="button-mid-start-trial"
             >
               <Link href="/pricing?autoCheckout=pack_plus">
-                Start Free Trial <ArrowRight className="ml-2 h-5 w-5" />
+                Unlock Full Platform Access <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
             <p className="text-white/40 text-xs mt-3">Cancel before day 7 and you pay nothing. Stripe secures your card but doesn't charge it.</p>
@@ -242,10 +242,10 @@ export default function FreeTrial() {
       <section className="py-20 px-4 bg-primary text-white text-center">
         <div className="container mx-auto max-w-2xl">
           <h2 className="text-3xl md:text-4xl font-bold font-serif mb-4">
-            Ready to Start?
+            Give Your Child the Full Platform — Free for 7 Days
           </h2>
           <p className="text-white/75 mb-8 leading-relaxed">
-            7 days of full access to the Bucks 11 Plus Tests Platform Edge. Card required, nothing charged until day 7. Cancel anytime.
+            Full access to the Bucks 11+ Diagnostic & Practice Hub. Card required to start — nothing charged until day 7. Cancel instantly if it's not right for you.
           </p>
           <Button
             asChild
@@ -254,7 +254,7 @@ export default function FreeTrial() {
             data-testid="button-footer-start-trial"
           >
             <Link href="/pricing?autoCheckout=pack_plus">
-              Start 7-Day Free Trial <ArrowRight className="ml-2 h-5 w-5" />
+              Unlock Full Platform Access <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
           </Button>
           <p className="text-white/40 text-xs mt-4">
