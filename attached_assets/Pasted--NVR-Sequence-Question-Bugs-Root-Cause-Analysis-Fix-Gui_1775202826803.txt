@@ -1,0 +1,205 @@
+# NVR Sequence Question Bugs — Root Cause Analysis & Fix Guide
+
+## Overview
+
+Three independent bugs cause NVR sequence questions to present broken or unsolvable patterns to students. All three interact: a student may get a question wrong for any one of them, or all three at once.
+
+---
+
+## Bug 1 — "Solid" fill is visually indistinguishable from "no fill"
+
+### Symptom
+Questions that use fill alternation as one of their rules appear to have only one visible rule (e.g. rotation). Students cannot perceive the fill changing across frames. Answer options that differ only by fill all look the same.
+
+### Root cause
+The colour constant used for "solid" filled shapes is too close to white. If your codebase has a constant similar to:
+
+```ts
+export const fillMuted = "#E2E8F0";  // Tailwind slate-200 — nearly white
+```
+
+…and the SVG renderer resolves `fill: "solid"` to that colour:
+
+```ts
+case "solid":
+  return fillMuted;
+```
+
+…then on a white card background, a solid-filled pentagon looks the same as an unfilled one. On a phone screen the difference is imperceptible.
+
+### Fix
+Change `fillMuted` to a clearly visible mid-grey:
+
+```ts
+// Before
+export const fillMuted = "#E2E8F0";
+
+// After
+export const fillMuted = "#94A3B8";  // Tailwind slate-400 — clearly visible
+```
+
+No question re-seeding needed. This is a rendering-only change; it takes effect immediately for all existing questions.
+
+---
+
+## Bug 2 — Rules target element index 0, which is a line, not a shape (medium/hard)
+
+### Symptom
+Medium and hard difficulty sequence questions show four frames where the shapes never move, rotate, grow, or change fill. Every frame looks identical. The explanation claims two rules are changing, but nothing visually changes between frames.
+
+### Root cause
+The sequence generator builds frames using a `buildCompoundFrame()` function that — for medium and hard difficulty — pushes a **background line** as the first element in the `elements` array before any shapes:
+
+```ts
+// buildCompoundFrame (medium/hard has addLine: true)
+if (addLine) {
+  elements.push(makeLine(...));  // ← this is elements[0]
+}
+for (let i = 0; i < numShapes; i++) {
+  elements.push(makeShape(...));  // ← shapes are at elements[1], [2], [3]...
+}
+```
+
+The rule engine then checks `targetIndex` to decide which element to modify:
+
+```ts
+// applyRule
+const elements = frame.elements.map((el, idx) => {
+  if (el.type !== 'shape') return el;  // ← lines exit here immediately
+  for (const r of rule.changes) {
+    if (r.targetIndex !== undefined && r.targetIndex !== idx) continue;
+    // apply rule...
+  }
+});
+```
+
+The generator sets `targetIndex = 0` for all rules:
+
+```ts
+selected[0].targetIndex = 0;
+if (selected.length > 1) selected[1].targetIndex = 0;
+```
+
+For easy difficulty (`addLine: false`) this works — `elements[0]` is the first shape.  
+For medium/hard difficulty (`addLine: true`) this silently fails — `elements[0]` is the line, which is skipped by the `if (el.type !== 'shape') return el` guard. No shape ever receives the rule. All frames are identical.
+
+### Fix
+After building the base frame, find the actual index of the first shape element and use that as `targetIndex`:
+
+```ts
+// In generateCompoundSequence(), AFTER buildBaseFrame():
+
+const firstShapeIdx = baseFrame.elements.findIndex(e => e.type === 'shape');
+if (firstShapeIdx === -1) continue;  // no shapes — skip
+
+// Re-assign targetIndex for every rule change
+for (const change of rule.changes) {
+  change.targetIndex = firstShapeIdx;
+}
+```
+
+**After this fix, questions must be re-generated and re-seeded** because the frame data (stored as JSON in `render_config`) was computed with the wrong targetIndex. Existing medium/hard questions in the database still contain broken frame data.
+
+---
+
+## Bug 3 — Rotation of rotationally-symmetric shapes is invisible
+
+### Symptom
+Some sequence questions show frames where the rotating shape appears not to rotate at all, despite the explanation saying "the shape rotates Xº each step." The frames appear static.
+
+### Root cause
+Certain shape + rotation increment combinations produce no perceptible visual change because the shape's rotational symmetry matches the increment:
+
+| Shape | Symmetry | Invisible increment |
+|-------|----------|---------------------|
+| circle | ∞-fold | any increment |
+| hexagon | 6-fold (60°) | 60° |
+| square | 4-fold (90°) | 90° |
+| diamond | 4-fold (90°) | 90° |
+
+Example: a regular hexagon rotated 60° looks **exactly** the same as the original hexagon. A circle is always identical regardless of rotation.
+
+These questions pass the duplicate-frame check only when another rule (fill, position) also has no visible effect, and they fail silently.
+
+### Fix
+Add a guard function and skip any question where the rotation would be invisible:
+
+```ts
+function isRotationInvisible(shape: string, increment: number): boolean {
+  if (shape === 'circle') return true;
+  if (shape === 'hexagon' && increment === 60) return true;
+  if ((shape === 'square' || shape === 'diamond') && increment === 90) return true;
+  return false;
+}
+```
+
+Apply it in the generation loop after the `targetIndex` fix, using `firstShapeIdx` from Bug 2's fix:
+
+```ts
+const rotateChange = rule.changes.find(c => c.type === 'rotate');
+if (rotateChange) {
+  const el = baseFrame.elements[firstShapeIdx];
+  if (el.type === 'shape' && isRotationInvisible(el.shape, rotateChange.increment ?? 0)) {
+    continue;  // regenerate this question with a different seed
+  }
+}
+```
+
+This does not affect 45°-increment squares (square→diamond alternation is clearly visible) or any asymmetric shapes.
+
+---
+
+## Bug 4 — Explanation text is ambiguous (secondary, UX)
+
+### Symptom
+The explanation says "Apply both rules four times from the first frame to find the answer." Children count incorrectly. Some students interpret this as "the answer is four steps after the last frame shown", overshooting by one.
+
+### Fix
+Change the explanation template to be unambiguous:
+
+```ts
+// Before
+explanation: `Two rules change at each step: ${parts}. Apply both rules four times from the first frame to find the answer.`,
+
+// After
+explanation: `Two rules change at each step: ${parts}. Look at the last frame shown and apply both rules one more time to find the answer.`,
+```
+
+Re-seed after this change to update the explanation text stored in the database.
+
+---
+
+## Re-seeding after fixes 2–4
+
+After applying fixes 2, 3, and 4 to the generator, you must replace the questions in your database. The broken frame data is stored in the `render_config` JSON column of each question row.
+
+Safe approach — delete only the free-pool sequence questions (preserving any hardcoded diagnostic questions):
+
+```ts
+import { eq, isNull, and } from "drizzle-orm";
+
+// Delete only free-pool sequence questions (keep diagnostic-linked ones)
+await db.delete(questions).where(
+  and(
+    eq(questions.skillId, 'nvr.sequence'),
+    isNull(questions.diagnosticId)
+  )
+);
+
+// Then generate fresh questions with the fixed generator and insert
+const newQuestions = generateSequenceQuestions();
+for (const q of newQuestions) {
+  await db.insert(questions).values({ ...q });
+}
+```
+
+---
+
+## Summary checklist
+
+| # | File to change | Change | Re-seed? |
+|---|----------------|--------|----------|
+| 1 | `shared/style.ts` (or equivalent) | `fillMuted` `#E2E8F0` → `#94A3B8` | No |
+| 2 | `scripts/generators/nvr/sequence.ts` | Compute `firstShapeIdx`; assign to all `targetIndex` | Yes |
+| 3 | `scripts/generators/nvr/sequence.ts` | Add `isRotationInvisible()` guard | Yes |
+| 4 | `scripts/generators/nvr/sequence.ts` | Update explanation template | Yes |

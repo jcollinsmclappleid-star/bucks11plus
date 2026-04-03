@@ -180,7 +180,7 @@ content/
 ## Design System
 - **Colors**: Deep navy primary (#0d1f30), amber accent, green success, red danger
 - **Typography**: Libre Baskerville (serif headings) + Inter (UI body)
-- **SVG Style**: viewBox 0 0 100 100, strokeWidth 2.5, stroke #1E293B, fill muted #E2E8F0
+- **SVG Style**: viewBox 0 0 100 100, strokeWidth 2.5, stroke #1E293B, fill muted #94A3B8 (slate-400)
 - **SVG Shapes**: circle, square, triangle, pentagon, arrow, star, hexagon, diamond, cross, parallelogram, trapezoid, semicircle, right_triangle, kite
 - **SVG Fill Patterns**: none, solid, hatched, crosshatched, dotted, striped
 - **NVR Frames**: 120px × 120px cards with subtle shadows, numbered labels, clean borders

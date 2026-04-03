@@ -1,6 +1,6 @@
 export const defaultStrokeWidth = 2.5;
 export const neutralStroke = "#1E293B";
-export const fillMuted = "#E2E8F0";
+export const fillMuted = "#94A3B8";
 export const viewBox = "0 0 100 100";
 export const framePadding = 8;
 
