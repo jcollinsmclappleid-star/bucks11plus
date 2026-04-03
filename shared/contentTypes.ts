@@ -38,6 +38,7 @@ export type NvrClassificationConfig = {
   kind: "nvr.classification";
   group: SvgFrame[];
   answerOptions: SvgFrame[];
+  sectionLabel?: string;
 };
 
 export type ChartBarConfig = {

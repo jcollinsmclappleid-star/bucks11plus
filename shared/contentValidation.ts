@@ -58,6 +58,7 @@ const nvrClassificationConfigSchema = z.object({
   kind: z.literal("nvr.classification"),
   group: z.array(svgFrameSchema),
   answerOptions: z.array(svgFrameSchema).min(4).max(6),
+  sectionLabel: z.string().optional(),
 });
 
 const chartBarConfigSchema = z.object({

@@ -140,6 +140,7 @@ export function generateSymmetryQuestions(): GeneratedQuestion[] {
         kind: 'nvr.classification' as const,
         group: [leftHalf],
         answerOptions,
+        sectionLabel: 'Select the correct mirror image',
       },
       trapTypes: ['wrong_axis', 'partial_rule', 'reversed_direction'],
       cognitiveLoad: diff === 'easy' ? 2 : diff === 'medium' ? 4 : 5,
