@@ -143,7 +143,7 @@ function ClassificationLayout({ config, selectedAnswer, onSelectAnswer }: { conf
           ))}
         </div>
       </div>
-      <SectionDivider label="Which one belongs?" />
+      <SectionDivider label="Which one does not belong?" />
       <SvgOptionGrid options={config.answerOptions} selectedIndex={selectedAnswer} onSelect={onSelectAnswer} />
     </div>
   );
