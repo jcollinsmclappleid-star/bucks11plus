@@ -106,7 +106,7 @@ export function GuideConversionBlock() {
 
       <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
         <ChevronsDown className="h-4 w-4 text-primary/60" />
-        <span>Scroll to see practice test examples</span>
+        <span>Explore the interactive platform</span>
         <ChevronsDown className="h-4 w-4 text-primary/60" />
       </div>
 
@@ -117,23 +117,23 @@ export function GuideConversionBlock() {
           <div className="flex items-center gap-2 mb-3">
             <Zap className="h-3.5 w-3.5 text-brand-amber" />
             <span className="text-[10px] font-bold uppercase tracking-widest text-brand-amber">
-              Bucks Practice Platform
+              Bucks 11+ Diagnostic & Practice Hub
             </span>
           </div>
           <h3 className="text-2xl md:text-3xl font-bold font-serif text-white mb-3 leading-snug">
-            Give Your Child the Edge
+            The Complete Interactive Preparation Platform
           </h3>
           <p className="text-white/80 text-sm leading-relaxed mb-3 max-w-2xl">
-            Psychology research is clear: children who practise with{" "}
-            <strong className="text-white">structured, timed, curriculum-mapped questions</strong> consistently
-            outperform those who revise without a system. The children who qualify for Buckinghamshire
-            grammar schools don't get lucky — they build the speed, accuracy, and stamina needed under
-            real test conditions.
+            The children who qualify for Buckinghamshire grammar schools don't get lucky — they
+            build the{" "}
+            <strong className="text-white">speed, accuracy, and stamina</strong> that the real test
+            demands. That requires more than a workbook. It requires a diagnostic-led platform that
+            shows exactly where the gaps are and targets practice precisely.
           </p>
           <p className="text-white/70 text-sm leading-relaxed mb-7 max-w-2xl">
-            Subscribe today for 1,500+ GL-style questions across all four subjects, full timed
-            diagnostics benchmarked against the 121 qualifying score, targeted drills, and
-            printable PDF parent reports.
+            Get full access to the Bucks 11+ Diagnostic & Practice Hub: 1,500+ GL-style questions,
+            full timed diagnostics benchmarked to the 121 standard, all 17 Hard drills, mock exam
+            simulations, and a detailed parent analytics dashboard.
           </p>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 flex-wrap">
             <Button
@@ -142,7 +142,7 @@ export function GuideConversionBlock() {
               data-testid="button-guide-conversion-subscribe"
             >
               <Link href="/free-11-plus-practice-test-trial">
-                Start 7-Day Free Trial <ArrowRight className="ml-2 h-4 w-4" />
+                Access the Full Platform — 7 Days Free <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
             <Button

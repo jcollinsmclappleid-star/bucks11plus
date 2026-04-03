@@ -389,7 +389,7 @@ export default function Pricing() {
                       disabled={loading === "pack_plus"}
                       data-testid="button-get-pack-plus"
                     >
-                      {loading === "pack_plus" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Start 7-Day Free Trial"}
+                      {loading === "pack_plus" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Unlock Full Platform — 7 Days Free"}
                     </Button>
                     <p className="text-center text-[11px] text-muted-foreground">7 days free, then £59.99/month. Card required. Cancel anytime.</p>
                   </CardFooter>

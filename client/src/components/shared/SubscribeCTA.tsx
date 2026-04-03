@@ -3,10 +3,10 @@ import { Button } from "@/components/ui/button";
 import { CheckCircle2, ArrowRight, Zap } from "lucide-react";
 
 const benefits = [
-  "1,500+ VR, NVR, Maths & Comprehension questions",
-  "Full timed GL-style diagnostics (40 questions)",
-  "Drills across all 19 topic areas with progress tracking",
-  "PDF reports benchmarked against the 121 standard",
+  "Full access to the Diagnostic & Practice Hub from day one",
+  "1,500+ GL-style questions across all four test subjects",
+  "All 17 Hard drills + full timed 40-question diagnostics",
+  "Advanced parent analytics benchmarked to the 121 standard",
 ];
 
 export function SubscribeCTA() {
@@ -15,13 +15,13 @@ export function SubscribeCTA() {
       <div className="bg-primary px-7 py-7 md:px-9 md:py-8">
         <div className="flex items-center gap-2 mb-3">
           <Zap className="h-3.5 w-3.5 text-brand-amber" />
-          <span className="text-[10px] font-bold uppercase tracking-widest text-brand-amber">Bucks Practice Platform — from £24.99/month</span>
+          <span className="text-[10px] font-bold uppercase tracking-widest text-brand-amber">Bucks 11+ Diagnostic & Practice Hub — 7 Days Free</span>
         </div>
         <h3 className="text-2xl md:text-[1.65rem] font-bold font-serif text-white mb-2 leading-snug">
-          Practice Smarter — 1,500+ Questions &amp; GL-Style Diagnostics
+          The Complete Interactive Preparation Platform
         </h3>
         <p className="text-white/75 text-sm leading-relaxed mb-5 max-w-2xl">
-          Everything your child needs to close the gap to 121: a full question bank, timed diagnostics benchmarked against the qualifying standard, targeted drills, and parent analytics — all in one platform.
+          Not just practice questions — a full diagnostic and test hub. Your child gets adaptive diagnostics, structured Hard drills, detailed analytics, and mock exam simulations, all benchmarked to the Buckinghamshire 121 qualifying standard.
         </p>
         <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-1.5 mb-6">
           {benefits.map((b, i) => (
@@ -38,7 +38,7 @@ export function SubscribeCTA() {
             data-testid="button-subscribe-cta-pricing"
           >
             <Link href="/free-11-plus-practice-test-trial">
-              Start 7-Day Free Trial <ArrowRight className="ml-2 h-4 w-4" />
+              Access the Full Platform — 7 Days Free <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
           <Button
