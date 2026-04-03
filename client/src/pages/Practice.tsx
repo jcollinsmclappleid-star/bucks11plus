@@ -117,8 +117,8 @@ export default function Practice() {
             </button>
           </div>
           {!hasPaidAccess() && (
-            <Button variant="outline" className="gap-2" asChild data-testid="button-unlock-all">
-              <Link href="/pricing"><Lock className="h-4 w-4" /> Unlock All Drills</Link>
+            <Button className="gap-2 bg-brand-amber text-amber-950 hover:bg-amber-300 font-bold" asChild data-testid="button-unlock-all">
+              <Link href="/free-11-plus-practice-test-trial"><Lock className="h-4 w-4" /> Start Free Trial</Link>
             </Button>
           )}
         </div>
@@ -163,11 +163,11 @@ export default function Practice() {
                 <div className="flex items-center gap-3 rounded-lg border border-violet-200 bg-gradient-to-r from-violet-50 to-indigo-50 p-4 mb-4" data-testid="banner-hard-upgrade">
                   <Zap className="h-5 w-5 text-violet-600 shrink-0" />
                   <div className="flex-1">
-                    <p className="font-medium text-violet-900 text-sm">Unlock all 17 Hard challenge drills with Bucks Practice Platform Edge</p>
-                    <p className="text-violet-600 text-xs mt-0.5">You have 6 Hard drills — upgrade to access the remaining 11 for complete exam preparation.</p>
+                    <p className="font-medium text-violet-900 text-sm">Unlock all 17 Hard challenge drills with Platform Edge</p>
+                    <p className="text-violet-600 text-xs mt-0.5">You have 6 Hard drills — try Platform Edge free for 7 days to access the remaining 11.</p>
                   </div>
                   <Button size="sm" className="bg-violet-600 hover:bg-violet-700 text-white shrink-0" asChild data-testid="button-upgrade-hard">
-                    <Link href="/pricing">Upgrade <ArrowRight className="ml-1 h-3.5 w-3.5" /></Link>
+                    <Link href="/free-11-plus-practice-test-trial">Try Free <ArrowRight className="ml-1 h-3.5 w-3.5" /></Link>
                   </Button>
                 </div>
               )}
@@ -198,12 +198,11 @@ export default function Practice() {
                       <CardContent>
                         {isLocked ? (
                           <Button 
-                            variant="outline" 
-                            className="w-full mt-4" 
-                            disabled
+                            className="w-full mt-4 bg-primary text-white"
+                            asChild
                             data-testid={`button-start-drill-${drill.id}`}
                           >
-                            Locked
+                            <Link href="/free-11-plus-practice-test-trial">Try Free for 7 Days</Link>
                           </Button>
                         ) : (
                           <Button 

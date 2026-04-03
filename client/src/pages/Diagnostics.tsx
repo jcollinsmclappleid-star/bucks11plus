@@ -127,8 +127,8 @@ export default function Diagnostics() {
           <p className="text-muted-foreground mt-2">Take assessments, mock exams, or unlimited practice papers drawn from our full question bank.</p>
         </div>
         {!hasPaidAccess() && (
-          <Button className="bg-brand-amber text-amber-950 hover:bg-brand-amber/90" asChild>
-            <Link href="/pricing" data-testid="link-pricing">Unlock Full Access</Link>
+          <Button className="bg-brand-amber text-amber-950 hover:bg-brand-amber/90 font-bold" asChild>
+            <Link href="/free-11-plus-practice-test-trial" data-testid="link-pricing">Start 7-Day Free Trial</Link>
           </Button>
         )}
       </div>
@@ -146,9 +146,10 @@ export default function Diagnostics() {
                 {locked && (
                   <div className="absolute inset-0 bg-background/40 backdrop-blur-[1px] z-10 flex flex-col items-center justify-center p-6 text-center">
                     <Lock className="h-8 w-8 text-slate-400 mb-2" />
-                    <p className="text-sm font-medium text-slate-600 mb-4">Requires {tierLabel(diag.requiredTier)}</p>
-                    <Button variant="outline" size="sm" asChild data-testid={`button-upgrade-${diag.id}`}>
-                      <Link href="/pricing">View Upgrade Options</Link>
+                    <p className="text-sm font-medium text-slate-600 mb-2">Requires {tierLabel(diag.requiredTier)}</p>
+                    <p className="text-xs text-muted-foreground mb-4">Try Platform Edge free for 7 days</p>
+                    <Button size="sm" className="bg-primary text-white" asChild data-testid={`button-upgrade-${diag.id}`}>
+                      <Link href="/free-11-plus-practice-test-trial">Start Free Trial</Link>
                     </Button>
                   </div>
                 )}
@@ -209,9 +210,10 @@ export default function Diagnostics() {
                   {locked && (
                     <div className="absolute inset-0 bg-background/40 backdrop-blur-[1px] z-10 flex flex-col items-center justify-center p-6 text-center">
                       <Lock className="h-7 w-7 text-slate-400 mb-2" />
-                      <p className="text-sm font-medium text-slate-600 mb-3">Requires {tierLabel(paper.requiredTier)}</p>
-                      <Button variant="outline" size="sm" asChild data-testid={`button-upgrade-paper-${paper.key}`}>
-                        <Link href="/pricing">Upgrade</Link>
+                      <p className="text-sm font-medium text-slate-600 mb-1">Requires {tierLabel(paper.requiredTier)}</p>
+                      <p className="text-xs text-muted-foreground mb-3">Try Platform Edge free for 7 days</p>
+                      <Button size="sm" className="bg-primary text-white" asChild data-testid={`button-upgrade-paper-${paper.key}`}>
+                        <Link href="/free-11-plus-practice-test-trial">Start Free Trial</Link>
                       </Button>
                     </div>
                   )}

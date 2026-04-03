@@ -64,40 +64,44 @@ const TIER_RANK: Record<string, number> = {
   programme24_plus: 2,
 };
 
-function getUpsellMessage(tier: string, weakestSection: string, weakestScore: number, overallScore: number): { title: string; message: string; cta: string; tier: string; isUpgrade?: boolean } | null {
+function getUpsellMessage(tier: string, weakestSection: string, weakestScore: number, overallScore: number): { title: string; message: string; cta: string; tier: string; isUpgrade?: boolean; link?: string } | null {
   const rank = TIER_RANK[tier] ?? -1;
 
   if (rank < 0) {
     if (overallScore < 110) {
       return {
-        title: "Unlock Targeted Practice",
-        message: `${weakestSection} at ${weakestScore}% needs focused attention. The Early Learner pack gives your child structured practice across all four sections with 1,500+ curated questions.`,
-        cta: "View Early Learner — £49",
-        tier: "early_learner",
+        title: "Unlock Targeted Practice — Free for 7 Days",
+        message: `${weakestSection} at ${weakestScore}% needs focused attention. Platform Edge gives your child 1,500+ structured questions across all four GL sections, full diagnostics, and hard-level challenge drills — try it free for 7 days.`,
+        cta: "Start 7-Day Free Trial",
+        tier: "pack_plus",
+        link: "/free-11-plus-practice-test-trial",
       };
     }
     return {
-      title: "Start Building Confidence",
-      message: `Great start! The Early Learner pack includes unlimited access to 1,500+ questions across all sections to build consistent practice habits.`,
-      cta: "View Early Learner — £49",
-      tier: "early_learner",
+      title: "Build Confidence — Free for 7 Days",
+      message: `Great start! Platform Edge includes unlimited access to 1,500+ questions, all 17 Hard challenge drills, and a full parent analytics dashboard. Try it free for 7 days, no charge until day 8.`,
+      cta: "Start 7-Day Free Trial",
+      tier: "pack_plus",
+      link: "/free-11-plus-practice-test-trial",
     };
   }
 
   if (rank === 0) {
     if (weakestScore < 60) {
       return {
-        title: "Intensify Your Preparation",
-        message: `${weakestSection} at ${weakestScore}% would benefit from the Practice Platform's full diagnostic papers and targeted drill sessions across all difficulty levels.`,
-        cta: "Upgrade to Practice Platform — £59.99/mo",
-        tier: "pack_monthly",
+        title: "Intensify Your Preparation — Free for 7 Days",
+        message: `${weakestSection} at ${weakestScore}% needs hard-level drilling. Platform Edge unlocks all 17 Hard challenge drills, full diagnostic papers, and advanced parent analytics. Try it free for 7 days.`,
+        cta: "Start Free Trial on Platform Edge",
+        tier: "pack_plus",
+        link: "/free-11-plus-practice-test-trial",
       };
     }
     return {
       title: "Ready for More Depth?",
-      message: `Your child is making progress. The Practice Platform unlocks full-length diagnostic papers and harder question sets to push their score higher.`,
-      cta: "Upgrade to Practice Platform — £59.99/mo",
-      tier: "pack_monthly",
+      message: `Your child is making progress. Platform Edge unlocks all Hard question sets, full-length mock exams, and detailed gap analysis — try it free for 7 days to push their score higher.`,
+      cta: "Start Free Trial on Platform Edge",
+      tier: "pack_plus",
+      link: "/free-11-plus-practice-test-trial",
     };
   }
 
@@ -522,7 +526,7 @@ export default function Results() {
                 </h3>
                 <p className="text-slate-700 mb-6 leading-relaxed">{upsell.message}</p>
                 <Button size="lg" className="w-full bg-brand-amber text-white hover:bg-brand-amber/90 shadow-lg hover:shadow-xl transition-shadow text-base" asChild>
-                  <Link href={upsell.isUpgrade ? "/pricing#upgrade" : "/pricing#tiers"} data-testid="button-upsell-cta">{upsell.cta} <ArrowRight className="ml-2 h-5 w-5" /></Link>
+                  <Link href={upsell.link ?? (upsell.isUpgrade ? "/pricing#upgrade" : "/pricing#tiers")} data-testid="button-upsell-cta">{upsell.cta} <ArrowRight className="ml-2 h-5 w-5" /></Link>
                 </Button>
               </CardContent>
             </Card>

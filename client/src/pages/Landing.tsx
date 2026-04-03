@@ -481,7 +481,7 @@ export default function Landing() {
                 </Link>
               </Button>
               <Button size="lg" variant="outline" className="h-14 px-8 text-lg bg-white/[0.03] border-white/15 text-white/80 hover:bg-white/[0.06] hover:text-white" asChild>
-                <Link href="/pricing">View Pricing</Link>
+                <Link href="/free-11-plus-practice-test-trial">Start 7-Day Free Trial</Link>
               </Button>
             </div>
 
@@ -604,7 +604,7 @@ export default function Landing() {
             <SampleQuestionsCarousel className="md:px-8" />
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-8">
               <Button asChild className="h-11 px-6 bg-brand-amber text-amber-950 hover:bg-brand-amber/90 font-bold" data-testid="button-sample-questions-subscribe">
-                <Link href="/pricing">Subscribe from £24.99/month <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                <Link href="/free-11-plus-practice-test-trial">Start 7-Day Free Trial <ArrowRight className="ml-2 h-4 w-4" /></Link>
               </Button>
               <Button asChild variant="outline" className="h-11 px-6 font-semibold" data-testid="button-sample-questions-free">
                 <Link href="/free-diagnostic">Take the Free Diagnostic First</Link>
@@ -746,7 +746,7 @@ export default function Landing() {
                 <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>Advanced parent analytics</li>
                 <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>Weekly personalised plans</li>
               </ul>
-              <Link href="/pricing?autoCheckout=pack_plus" className="block text-center w-full rounded-lg bg-primary text-white font-semibold py-2 text-sm hover:bg-primary/90 transition-colors" data-testid="button-pricing-edge">Get Full Platform</Link>
+              <Link href="/free-11-plus-practice-test-trial" className="block text-center w-full rounded-lg bg-primary text-white font-semibold py-2 text-sm hover:bg-primary/90 transition-colors" data-testid="button-pricing-edge">Start Free Trial</Link>
             </div>
 
             <div className="flex flex-col rounded-2xl border border-brand-green/40 bg-green-50/40 shadow-sm p-6 relative" data-testid="pricing-card-annual">

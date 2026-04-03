@@ -70,7 +70,7 @@ export default function Navbar() {
                 <Link href="/sign-in">Sign In</Link>
               </Button>
               <Button size="sm" className="bg-primary" asChild data-testid="link-get-started">
-                <Link href="/sign-up">Get Started</Link>
+                <Link href="/free-11-plus-practice-test-trial">Free Trial</Link>
               </Button>
             </div>
           ) : (
@@ -164,6 +164,9 @@ export default function Navbar() {
                     <>
                       <Button className="w-full" asChild>
                         <Link href="/sign-in" onClick={() => setOpen(false)}>Sign In</Link>
+                      </Button>
+                      <Button className="w-full bg-brand-amber text-amber-950 hover:bg-amber-300 font-bold" asChild>
+                        <Link href="/free-11-plus-practice-test-trial" onClick={() => setOpen(false)}>Start Free Trial</Link>
                       </Button>
                       <Button variant="outline" className="w-full" asChild>
                         <Link href="/sign-up" onClick={() => setOpen(false)}>Create Account</Link>

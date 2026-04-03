@@ -393,14 +393,14 @@ export default function GuestResults() {
 
           <Card className="border-brand-amber border-2 shadow-xl relative" data-testid="card-upsell-pack-plus">
             <div className="absolute top-0 right-0 bg-brand-amber text-amber-950 px-3 py-1 rounded-bl-lg font-bold text-xs">
-              RECOMMENDED
+              7 DAYS FREE
             </div>
             <CardContent className="p-6">
               <div className="flex justify-between items-start mb-1">
                 <h3 className="text-xl font-bold text-primary font-serif">Platform Edge</h3>
                 <span className="text-2xl font-bold text-primary">£59.99<span className="text-sm font-medium text-slate-500">/mo</span></span>
               </div>
-              <p className="text-xs text-slate-400 mb-3">Or £495/year · cancel any time</p>
+              <p className="text-xs text-slate-400 mb-3">7-day free trial · then £59.99/mo · cancel any time</p>
               <p className="text-sm text-slate-600 mb-4">Full analytics and every Hard drill — the complete preparation edge</p>
               <ul className="space-y-2 mb-6">
                 {["Everything in Practice Platform", "All 17 Hard challenge drills", "Full Parent Analytics dashboard", "Mock exam simulations", "Detailed pace & accuracy breakdown", "Priority gap identification"].map((f, i) => (
@@ -411,7 +411,7 @@ export default function GuestResults() {
                 ))}
               </ul>
               <Button className="w-full bg-primary" asChild data-testid="button-upsell-pack-plus">
-                <Link href={`/sign-up?redirect=checkout&tier=pack_plus&guestSession=${id}`}>Get Platform Edge — £59.99/mo</Link>
+                <Link href="/free-11-plus-practice-test-trial">Start Free Trial — then £59.99/mo</Link>
               </Button>
             </CardContent>
           </Card>

@@ -29,7 +29,7 @@ const faqs = [
   },
   {
     q: "How do I cancel before the trial ends?",
-    a: "Log in, go to your Account page, and click "Manage billing & cancel trial." This opens the Stripe Billing Portal where you can cancel instantly. You keep full access until the trial ends.",
+    a: 'Log in, go to your Account page, and click "Manage billing & cancel trial." This opens the Stripe Billing Portal where you can cancel instantly. You keep full access until the trial ends.',
   },
   {
     q: "Can I get a second free trial with a different email?",
