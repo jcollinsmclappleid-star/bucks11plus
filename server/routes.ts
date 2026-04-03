@@ -10,6 +10,12 @@ import { computeAttemptMetrics, computeFullAnalytics, type AnswerRecord, type Dr
 import { sendDiagnosticCompleteEmail } from "./email";
 import { learnArticles } from "../client/src/data/learn-articles";
 import { ensureFreePool, repairSeedQuestions } from "./seed";
+import {
+  getTownHtml, getGrammarSchoolHtml, getSubjectGuideHtml,
+  getYearGroupGuideHtml, getLearnHubHtml, getLearnArticleHtml,
+  towns as ssrTowns, grammarSchools as ssrGrammarSchools,
+} from "./ssrPages";
+import { getGlossaryIndexHtml, getGlossaryTermHtml, GLOSSARY_TERMS } from "./ssrGlossary";
 
 const PROGRAMME_TIERS = new Set([
   "pack_plus",
@@ -1988,6 +1994,108 @@ export async function registerRoutes(
     } catch (error) { next(error); }
   });
 
+  // ─── robots.txt ──────────────────────────────────────────────────────────
+  app.get("/robots.txt", (_req, res) => {
+    res.setHeader("Content-Type", "text/plain");
+    res.send(`User-agent: *
+Allow: /
+
+Sitemap: https://bucks11plustest.co.uk/sitemap.xml
+
+Disallow: /app/
+Disallow: /api/
+Disallow: /sign-in
+Disallow: /sign-up
+Disallow: /forgot-password
+Disallow: /reset-password
+`);
+  });
+
+  // ─── SSR town guides ─────────────────────────────────────────────────────
+  for (const town of ssrTowns) {
+    app.get(`/bucks-11-plus-${town.slug}`, (_req, res) => {
+      const html = getTownHtml(town.slug);
+      if (!html) { res.status(404).send("Not found"); return; }
+      res.setHeader("Content-Type", "text/html; charset=utf-8");
+      res.setHeader("Cache-Control", "public, max-age=3600");
+      res.send(html);
+    });
+  }
+
+  // ─── SSR grammar school guides ───────────────────────────────────────────
+  for (const school of ssrGrammarSchools) {
+    app.get(`/grammar-schools/${school.slug}`, (_req, res) => {
+      const html = getGrammarSchoolHtml(school.slug);
+      if (!html) { res.status(404).send("Not found"); return; }
+      res.setHeader("Content-Type", "text/html; charset=utf-8");
+      res.setHeader("Cache-Control", "public, max-age=3600");
+      res.send(html);
+    });
+  }
+
+  // ─── SSR subject guides ──────────────────────────────────────────────────
+  const subjectRoutes: Record<string, string> = {
+    "/11-plus-verbal-reasoning-practice": "verbal-reasoning",
+    "/11-plus-non-verbal-reasoning-practice": "non-verbal-reasoning",
+    "/11-plus-maths-practice": "maths",
+    "/11-plus-comprehension-practice": "comprehension",
+  };
+  for (const [path, subject] of Object.entries(subjectRoutes)) {
+    app.get(path, (_req, res) => {
+      const html = getSubjectGuideHtml(subject);
+      if (!html) { res.status(404).send("Not found"); return; }
+      res.setHeader("Content-Type", "text/html; charset=utf-8");
+      res.setHeader("Cache-Control", "public, max-age=3600");
+      res.send(html);
+    });
+  }
+
+  // ─── SSR year group guides ───────────────────────────────────────────────
+  for (const year of [4, 5, 6]) {
+    app.get(`/preparing-for-11-plus-year-${year}`, (_req, res) => {
+      const html = getYearGroupGuideHtml(year);
+      if (!html) { res.status(404).send("Not found"); return; }
+      res.setHeader("Content-Type", "text/html; charset=utf-8");
+      res.setHeader("Cache-Control", "public, max-age=3600");
+      res.send(html);
+    });
+  }
+
+  // ─── SSR learn hub ───────────────────────────────────────────────────────
+  app.get("/learn", (_req, res) => {
+    const html = getLearnHubHtml();
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    res.setHeader("Cache-Control", "public, max-age=1800");
+    res.send(html);
+  });
+
+  // ─── SSR learn articles ──────────────────────────────────────────────────
+  for (const article of learnArticles) {
+    app.get(`/learn/${article.slug}`, (_req, res) => {
+      const html = getLearnArticleHtml(article.slug);
+      if (!html) { res.status(404).send("Not found"); return; }
+      res.setHeader("Content-Type", "text/html; charset=utf-8");
+      res.setHeader("Cache-Control", "public, max-age=3600");
+      res.send(html);
+    });
+  }
+
+  // ─── SSR glossary ─────────────────────────────────────────────────────────
+  app.get("/glossary", (_req, res) => {
+    const html = getGlossaryIndexHtml();
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    res.setHeader("Cache-Control", "public, max-age=3600");
+    res.send(html);
+  });
+
+  app.get("/glossary/:slug", (req, res) => {
+    const html = getGlossaryTermHtml(req.params.slug);
+    if (!html) { res.status(404).send("Not found"); return; }
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    res.setHeader("Cache-Control", "public, max-age=3600");
+    res.send(html);
+  });
+
   app.get("/sitemap.xml", async (_req, res) => {
     const baseUrl = "https://bucks11plustest.co.uk";
     const today = new Date().toISOString().split("T")[0];
@@ -2060,13 +2168,17 @@ export async function registerRoutes(
       { path: "/privacy", priority: "0.3", changefreq: "yearly" },
       { path: "/safeguarding", priority: "0.3", changefreq: "yearly" },
       { path: "/refund-policy", priority: "0.3", changefreq: "yearly" },
+      { path: "/glossary", priority: "0.8", changefreq: "monthly" },
+      ...GLOSSARY_TERMS.map(t => ({ path: `/glossary/${t.slug}`, priority: "0.7", changefreq: "monthly" as const })),
     ];
+
+    const staticContentLastmod = "2025-09-01";
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${entries.map(({ path, priority, changefreq }) => `  <url>
     <loc>${baseUrl}${path}</loc>
-    <lastmod>${today}</lastmod>
+    <lastmod>${changefreq === "weekly" ? today : staticContentLastmod}</lastmod>
     <changefreq>${changefreq}</changefreq>
     <priority>${priority}</priority>
   </url>`).join("\n")}
