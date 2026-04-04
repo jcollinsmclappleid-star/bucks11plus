@@ -154,6 +154,14 @@ export default function Navbar() {
                       <Button
                         variant="outline"
                         className="w-full"
+                        asChild
+                        data-testid="link-mobile-account"
+                      >
+                        <Link href="/app/account" onClick={() => setOpen(false)}>Account &amp; Subscription</Link>
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="w-full"
                         onClick={() => { logout(); setOpen(false); }}
                         data-testid="button-mobile-signout"
                       >
