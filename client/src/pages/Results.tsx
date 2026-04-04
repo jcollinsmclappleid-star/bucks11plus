@@ -57,6 +57,8 @@ const TIER_RANK: Record<string, number> = {
   pack12: 1,
   pack12_family: 1,
   pack_monthly: 1,
+  pack_plus: 2,
+  pack_annual: 2,
   programme8: 2,
   programme12: 2,
   programme16: 2,
