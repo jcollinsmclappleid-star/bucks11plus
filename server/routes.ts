@@ -140,34 +140,54 @@ export async function registerRoutes(
   });
 
   app.delete("/api/user", requireAuth, async (req, res, next) => {
+    const userId = req.user!.id;
     try {
-      const userId = req.user!.id;
+      console.log(`[DeleteAccount] Request started — userId=${userId}`);
       const user = await storage.getUser(userId);
 
       if (user?.stripeCustomerId) {
+        let activeSubFound = false;
         try {
           const stripe = await getUncachableStripeClient();
           const subscriptions = await stripe.subscriptions.list({ customer: user.stripeCustomerId, limit: 10 });
-          for (const sub of subscriptions.data) {
-            if (sub.status !== "canceled") {
+          const activeSubs = subscriptions.data.filter(s => s.status !== "canceled");
+          if (activeSubs.length > 0) {
+            activeSubFound = true;
+            console.log(`[DeleteAccount] Found ${activeSubs.length} active subscription(s) — cancelling`);
+            for (const sub of activeSubs) {
               await stripe.subscriptions.cancel(sub.id);
+              console.log(`[DeleteAccount] Stripe subscription cancelled — subId=${sub.id}`);
             }
+          } else {
+            console.log(`[DeleteAccount] No active subscriptions found — proceeding`);
           }
-        } catch (err) {
-          console.error("[DeleteAccount] Stripe cancellation error:", err);
+        } catch (stripeErr) {
+          console.error(`[DeleteAccount] Stripe cancellation FAILED — userId=${userId}`, stripeErr);
+          return res.status(500).json({
+            message: "We could not cancel your subscription right now. Please try again in a moment.",
+            code: "stripe_cancel_failed",
+          });
         }
+        if (activeSubFound) {
+          console.log(`[DeleteAccount] All Stripe subscriptions cancelled successfully`);
+        }
+      } else {
+        console.log(`[DeleteAccount] No Stripe customer — no subscription to cancel`);
       }
 
       await storage.deleteUser(userId);
+      console.log(`[DeleteAccount] Account data deleted — userId=${userId}`);
 
       req.logout((err) => {
         if (err) console.error("[DeleteAccount] Logout error:", err);
         req.session?.destroy?.((destroyErr) => {
           if (destroyErr) console.error("[DeleteAccount] Session destroy error:", destroyErr);
+          console.log(`[DeleteAccount] Session destroyed — userId=${userId}`);
           res.json({ success: true });
         });
       });
     } catch (error) {
+      console.error(`[DeleteAccount] Unexpected error — userId=${userId}`, error);
       next(error);
     }
   });

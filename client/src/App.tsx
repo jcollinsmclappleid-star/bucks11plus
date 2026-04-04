@@ -32,6 +32,7 @@ import ReportArchive from "./pages/ReportArchive";
 import Programme from "./pages/Programme";
 import ProgrammeCompletion from "./pages/ProgrammeCompletion";
 import CheckoutSuccess from "./pages/CheckoutSuccess";
+import AccountDeleted from "./pages/AccountDeleted";
 import DrillRunner from "./pages/DrillRunner";
 import ParentAnalytics from "./pages/ParentAnalytics";
 import FreeDiagnosticStart from "./pages/FreeDiagnosticStart";
@@ -298,7 +299,8 @@ function Router() {
               <SubjectGuide subject="comprehension" />
             </Route>
             <Route path="/checkout-success" component={CheckoutSuccess} />
-            
+            <Route path="/account-deleted" component={AccountDeleted} />
+
             <Route path="/terms">
               <Legal type="terms" />
             </Route>

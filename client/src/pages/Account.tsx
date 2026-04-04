@@ -50,7 +50,9 @@ export default function Account() {
   const [newChildName, setNewChildName] = useState("");
   const [newChildYear, setNewChildYear] = useState("Year 5");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteStep, setDeleteStep] = useState<"retention" | "confirm">("retention");
   const [deleteConfirmText, setDeleteConfirmText] = useState("");
+  const [deleteStripeError, setDeleteStripeError] = useState(false);
   const [newChildSchool, setNewChildSchool] = useState("");
   const [examDate, setExamDate] = useState("");
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
@@ -144,13 +146,21 @@ export default function Account() {
 
   const deleteAccountMutation = useMutation({
     mutationFn: async () => {
-      await apiRequest("DELETE", "/api/user");
+      const res = await fetch("/api/user", { method: "DELETE", credentials: "include" });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw { code: data.code, message: data.message };
+      }
     },
     onSuccess: () => {
-      setLocation("/");
+      setLocation("/account-deleted");
     },
-    onError: () => {
-      toast({ title: "Could not delete account", description: "Please try again or contact support.", variant: "destructive" });
+    onError: (err: any) => {
+      if (err?.code === "stripe_cancel_failed") {
+        setDeleteStripeError(true);
+      } else {
+        toast({ title: "Could not delete account", description: "Please try again or contact support.", variant: "destructive" });
+      }
     },
   });
 
@@ -626,7 +636,7 @@ export default function Account() {
                       variant="outline"
                       size="sm"
                       className="border-red-300 text-red-600 hover:bg-red-50 hover:text-red-700 shrink-0"
-                      onClick={() => { setShowDeleteModal(true); setDeleteConfirmText(""); }}
+                      onClick={() => { setShowDeleteModal(true); setDeleteStep("retention"); setDeleteConfirmText(""); setDeleteStripeError(false); }}
                       data-testid="button-open-delete-account"
                     >
                       Delete Account
@@ -644,52 +654,113 @@ export default function Account() {
     {showDeleteModal && (
       <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" data-testid="modal-delete-account">
         <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center shrink-0">
-              <AlertTriangle className="h-5 w-5 text-red-600" />
-            </div>
-            <div>
-              <h2 className="font-bold text-lg text-slate-900">Delete your account?</h2>
-              <p className="text-sm text-muted-foreground">This will permanently remove all your data.</p>
-            </div>
-          </div>
-          <ul className="text-sm text-slate-700 space-y-1 list-disc list-inside pl-1">
-            <li>All test sessions, results, and progress data will be deleted</li>
-            <li>Any active subscription or free trial will be cancelled immediately</li>
-            <li>Your account cannot be recovered</li>
-          </ul>
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">
-              Type <strong>DELETE</strong> to confirm
-            </label>
-            <input
-              type="text"
-              value={deleteConfirmText}
-              onChange={(e) => setDeleteConfirmText(e.target.value)}
-              className="w-full px-3 py-2 rounded-md border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-red-400"
-              placeholder="DELETE"
-              data-testid="input-delete-confirm"
-            />
-          </div>
-          <div className="flex gap-3 pt-1">
-            <Button
-              variant="outline"
-              className="flex-1"
-              onClick={() => setShowDeleteModal(false)}
-              disabled={deleteAccountMutation.isPending}
-              data-testid="button-cancel-delete"
-            >
-              Cancel
-            </Button>
-            <Button
-              className="flex-1 bg-red-600 hover:bg-red-700 text-white"
-              disabled={deleteConfirmText !== "DELETE" || deleteAccountMutation.isPending}
-              onClick={() => deleteAccountMutation.mutate()}
-              data-testid="button-confirm-delete"
-            >
-              {deleteAccountMutation.isPending ? "Deleting…" : "Delete Account"}
-            </Button>
-          </div>
+
+          {deleteStep === "retention" && (
+            <>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center shrink-0">
+                  <AlertTriangle className="h-5 w-5 text-red-600" />
+                </div>
+                <div>
+                  <h2 className="font-bold text-lg text-slate-900">Before you go…</h2>
+                  <p className="text-sm text-muted-foreground">Are you sure you want to delete your account?</p>
+                </div>
+              </div>
+              <ul className="text-sm text-slate-700 space-y-1 list-disc list-inside pl-1">
+                <li>Deleting your account will permanently remove your data.</li>
+                <li>If you have an active subscription, it will be cancelled automatically.</li>
+                <li>This action cannot be undone.</li>
+              </ul>
+              {hasStripeAccount && (
+                <div className="p-3 bg-amber-50 rounded-lg border border-amber-200 text-sm text-amber-800">
+                  If you only want to stop being charged, you can cancel your subscription without deleting your account.
+                </div>
+              )}
+              <div className="flex flex-col gap-2 pt-1">
+                {hasStripeAccount && (
+                  <Button
+                    variant="outline"
+                    className="w-full border-slate-300"
+                    onClick={() => { setShowDeleteModal(false); manageBillingMutation.mutate(); }}
+                    disabled={manageBillingMutation.isPending}
+                    data-testid="button-cancel-subscription-only"
+                  >
+                    Cancel subscription only
+                  </Button>
+                )}
+                <Button
+                  className="w-full bg-red-600 hover:bg-red-700 text-white"
+                  onClick={() => setDeleteStep("confirm")}
+                  data-testid="button-delete-account-anyway"
+                >
+                  Delete account anyway
+                </Button>
+                <Button
+                  variant="ghost"
+                  className="w-full text-slate-500"
+                  onClick={() => setShowDeleteModal(false)}
+                  data-testid="button-retention-cancel"
+                >
+                  Keep my account
+                </Button>
+              </div>
+            </>
+          )}
+
+          {deleteStep === "confirm" && (
+            <>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center shrink-0">
+                  <AlertTriangle className="h-5 w-5 text-red-600" />
+                </div>
+                <div>
+                  <h2 className="font-bold text-lg text-slate-900">Final confirmation</h2>
+                  <p className="text-sm text-muted-foreground">Type DELETE below to confirm permanent deletion.</p>
+                </div>
+              </div>
+
+              {deleteStripeError && (
+                <div className="p-3 bg-red-50 rounded-lg border border-red-200 text-sm text-red-700" data-testid="error-stripe-cancel">
+                  We could not cancel your subscription right now. Please try again in a moment, or contact support if this continues.
+                </div>
+              )}
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">
+                  Type <strong>DELETE</strong> to confirm
+                </label>
+                <input
+                  type="text"
+                  value={deleteConfirmText}
+                  onChange={(e) => { setDeleteConfirmText(e.target.value); setDeleteStripeError(false); }}
+                  className="w-full px-3 py-2 rounded-md border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-red-400"
+                  placeholder="DELETE"
+                  data-testid="input-delete-confirm"
+                  autoFocus
+                />
+              </div>
+              <div className="flex gap-3 pt-1">
+                <Button
+                  variant="outline"
+                  className="flex-1"
+                  onClick={() => { setDeleteStep("retention"); setDeleteConfirmText(""); setDeleteStripeError(false); }}
+                  disabled={deleteAccountMutation.isPending}
+                  data-testid="button-back-retention"
+                >
+                  Back
+                </Button>
+                <Button
+                  className="flex-1 bg-red-600 hover:bg-red-700 text-white"
+                  disabled={deleteConfirmText !== "DELETE" || deleteAccountMutation.isPending}
+                  onClick={() => deleteAccountMutation.mutate()}
+                  data-testid="button-confirm-delete"
+                >
+                  {deleteAccountMutation.isPending ? "Deleting…" : "Delete Account"}
+                </Button>
+              </div>
+            </>
+          )}
+
         </div>
       </div>
     )}

@@ -1,0 +1,80 @@
+Implement a safe “Delete Account” flow for my app.
+
+OBJECTIVE
+When a user deletes their account, their active subscription must also be cancelled automatically so they are not charged again. This must work cleanly with Stripe and the app database.
+
+REQUIREMENTS
+
+1. Add a “Delete Account” option in account settings.
+2. When clicked, show a confirmation modal with clear warning text:
+   - “Deleting your account will permanently remove your data.”
+   - “If you have an active subscription, it will be cancelled automatically.”
+   - “This action cannot be undone.”
+
+3. Before final deletion, check whether the user has an active Stripe subscription.
+4. If they do:
+   - cancel the Stripe subscription first
+   - preferably cancel immediately unless current codebase is already built around cancel_at_period_end
+   - log the Stripe response and handle failures safely
+5. After successful cancellation, delete or anonymise the user record and related private data in the database.
+6. If subscription cancellation fails, DO NOT delete the account yet. Return an error and tell the user:
+   - “We could not cancel your subscription right now. Please try again in a moment.”
+7. If the user has no active subscription:
+   - proceed directly to account deletion
+8. After success, log the user out and redirect them to a confirmation page.
+
+TECHNICAL BEHAVIOUR
+
+- Use the stored Stripe customer ID / subscription ID from the user record
+- Do not assume deleting the user in the database cancels Stripe automatically
+- Cancel in Stripe explicitly via backend endpoint
+- Backend must validate authenticated user ownership before doing anything
+- Never trust client-side subscription state alone
+- Add audit logs for:
+  - delete request started
+  - subscription found / not found
+  - Stripe cancel success / fail
+  - account deletion success / fail
+
+UI FLOW
+
+Account Settings
+-> Delete Account button
+-> Confirmation modal
+-> User confirms
+-> Backend:
+   1. fetch authenticated user
+   2. find Stripe customer/subscription
+   3. if active subscription exists, cancel it in Stripe
+   4. if Stripe cancel succeeds, delete user data
+   5. destroy session / token
+   6. redirect to “Your account has been deleted and your subscription cancelled” page
+
+OPTIONAL RETENTION STEP
+Before final confirm, add a lightweight retention screen:
+- “Want to cancel instead?”
+- button: “Cancel subscription only”
+- button: “Delete account anyway”
+
+IMPORTANT EDGE CASES
+- If subscription already cancelled, allow deletion
+- If user is on annual plan, still cancel normally with no implied refund unless refund policy says otherwise
+- Handle duplicate clicks safely
+- Prevent partial state where account is deleted but Stripe subscription remains active
+- Add idempotency where practical for Stripe cancellation requests
+
+SUCCESS MESSAGE
+“Your account has been deleted successfully. Any active subscription has been cancelled.”
+
+DELIVERABLES
+- frontend delete account modal
+- backend delete-account endpoint
+- Stripe cancellation logic
+- error handling
+- redirect / success state
+- test the flow end-to-end with:
+  1. active subscriber
+  2. non-subscriber
+  3. Stripe failure case
+
+Please implement this cleanly in the current project structure without breaking existing auth or billing flows.
