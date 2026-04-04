@@ -91,6 +91,48 @@ async function logEmailEvent(userId: string, emailType: string, eventType: strin
   }
 }
 
+export async function sendAdminNotificationEmail(
+  event: "payment" | "trial_start",
+  data: { userEmail: string; tier: string; amount?: string; timestamp: Date },
+): Promise<void> {
+  const adminEmail = "admin@bucks11plus.co.uk";
+  const subject = event === "trial_start"
+    ? `New Trial Started — ${data.userEmail}`
+    : `New Payment — ${data.userEmail}`;
+
+  const html = `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.6;color:#1a1a2e;max-width:600px;margin:0 auto;padding:20px;">
+  <strong style="font-size:16px;color:#0d1f30;">Bucks 11 Plus Tests — Admin Notification</strong>
+  <hr style="border:none;border-top:1px solid #e5e7eb;margin:16px 0;">
+  <p><strong>Event:</strong> ${event === "trial_start" ? "Free Trial Started" : "Payment Received"}</p>
+  <p><strong>User:</strong> ${data.userEmail}</p>
+  <p><strong>Plan:</strong> ${data.tier}</p>
+  ${data.amount ? `<p><strong>Amount:</strong> ${data.amount}</p>` : ""}
+  <p><strong>Time:</strong> ${data.timestamp.toUTCString()}</p>
+  <hr style="border:none;border-top:1px solid #e5e7eb;margin:16px 0;">
+  <p style="font-size:11px;color:#9ca3af;">Ianson Systems Limited · Bucks 11 Plus Tests</p>
+</body>
+</html>`;
+
+  try {
+    if (!RESEND_API_KEY) {
+      console.log(`[AdminEmail] Skipping (no RESEND_API_KEY): ${subject}`);
+      return;
+    }
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
+      body: JSON.stringify({ from: RESEND_FROM_EMAIL, to: [adminEmail], subject, html }),
+    });
+    if (!res.ok) console.error(`[AdminEmail] Send failed: ${res.status}`);
+    else console.log(`[AdminEmail] Sent: ${subject}`);
+  } catch (err) {
+    console.error("[AdminEmail] Error:", err);
+  }
+}
+
 export async function sendGuestResultsEmail(
   email: string,
   sessionId: string,

@@ -83,7 +83,7 @@ export default function CheckoutSuccess() {
               </Button>
             </div>
             <p className="text-xs text-muted-foreground max-w-sm">
-              Already have an account? <Link href={`/sign-in?redirect=/app/checkout-success?tier=${tier}&session_id=${sessionId}`} className="text-primary font-medium underline">Sign in</Link> to activate your plan.
+              Already have an account? <Link href={`/sign-in?redirect=${encodeURIComponent(`/app/checkout-success?tier=${tier}&session_id=${sessionId}`)}`} className="text-primary font-medium underline">Sign in</Link> to activate your plan.
             </p>
           </CardContent>
         </Card>

@@ -115,6 +115,8 @@ export interface IStorage {
 
   getTestDayConfig(userId: string): Promise<TestDayConfig | undefined>;
   setTestDayConfig(data: InsertTestDayConfig): Promise<TestDayConfig>;
+
+  deleteUser(userId: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1938,6 +1940,25 @@ export class DatabaseStorage implements IStorage {
     }
     const [config] = await db.insert(testDayConfig).values(data).returning();
     return config;
+  }
+
+  async deleteUser(userId: string): Promise<void> {
+    const userSessions = await db.select({ id: testSessions.id }).from(testSessions).where(eq(testSessions.userId, userId));
+    const sessionIds = userSessions.map(s => s.id);
+    if (sessionIds.length > 0) {
+      await db.delete(testAnswers).where(inArray(testAnswers.sessionId, sessionIds));
+    }
+    await db.delete(testSessions).where(eq(testSessions.userId, userId));
+    await db.delete(questionUsage).where(eq(questionUsage.userId, userId));
+    await db.delete(emailEvents).where(eq(emailEvents.userId, userId));
+    await db.delete(userBadges).where(eq(userBadges.userId, userId));
+    await db.delete(programmeMilestones).where(eq(programmeMilestones.userId, userId));
+    await db.delete(weeklyPlans).where(eq(weeklyPlans.userId, userId));
+    await db.delete(programmeTasks).where(eq(programmeTasks.userId, userId));
+    await db.delete(programmeEnrolments).where(eq(programmeEnrolments.userId, userId));
+    await db.delete(childProfiles).where(eq(childProfiles.userId, userId));
+    await db.delete(testDayConfig).where(eq(testDayConfig.userId, userId));
+    await db.delete(users).where(eq(users.id, userId));
   }
 }
 

@@ -105,6 +105,19 @@ export default function Pricing() {
     }
   };
 
+  const handleBillingPortal = async () => {
+    setLoading("portal");
+    try {
+      const res = await apiRequest("POST", "/api/stripe/customer-portal", {});
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+    } catch (err) {
+      console.error("Billing portal error:", err);
+    } finally {
+      setLoading(null);
+    }
+  };
+
   const PACK_TIERS = new Set(["pack12", "pack12_family", "pack_monthly", "pack_plus", "pack_annual"]);
   const PROGRAMME_TIERS = new Set(["programme8", "programme12", "programme16", "programme16_family", "programme24_plus"]);
 
@@ -383,15 +396,31 @@ export default function Pricing() {
                     </ul>
                   </CardContent>
                   <CardFooter className="flex flex-col gap-2 items-stretch">
-                    <Button
-                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-11 font-bold"
-                      onClick={() => handleCheckout("pack_plus")}
-                      disabled={loading === "pack_plus"}
-                      data-testid="button-get-pack-plus"
-                    >
-                      {loading === "pack_plus" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Start Free Trial — 7 Days Full Access"}
-                    </Button>
-                    <p className="text-center text-[11px] text-muted-foreground">7 days free, then £59.99/month. Card required. Cancel anytime.</p>
+                    {user?.trialEndsAt && new Date(user.trialEndsAt) > new Date() && currentTier === "pack_plus" ? (
+                      <>
+                        <Button
+                          className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-11 font-bold"
+                          onClick={handleBillingPortal}
+                          disabled={loading === "portal"}
+                          data-testid="button-convert-trial-pricing"
+                        >
+                          {loading === "portal" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Convert to Paid Plan — £59.99/mo"}
+                        </Button>
+                        <p className="text-center text-[11px] text-muted-foreground">You are currently on a free trial. Convert now to continue after your trial ends.</p>
+                      </>
+                    ) : (
+                      <>
+                        <Button
+                          className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-11 font-bold"
+                          onClick={() => handleCheckout("pack_plus")}
+                          disabled={loading === "pack_plus"}
+                          data-testid="button-get-pack-plus"
+                        >
+                          {loading === "pack_plus" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Start Free Trial — 7 Days Full Access"}
+                        </Button>
+                        <p className="text-center text-[11px] text-muted-foreground">7 days free, then £59.99/month. Card required. Cancel anytime.</p>
+                      </>
+                    )}
                   </CardFooter>
                 </Card>
 

@@ -7,7 +7,7 @@ import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClie
 import { sql, eq, and, desc, inArray } from "drizzle-orm";
 import { db } from "./db";
 import { computeAttemptMetrics, computeFullAnalytics, type AnswerRecord, type DrillAnswerRecord, type HistoricalMetrics } from "./metrics";
-import { sendDiagnosticCompleteEmail, sendTrialWelcomeEmail } from "./email";
+import { sendDiagnosticCompleteEmail, sendTrialWelcomeEmail, sendAdminNotificationEmail } from "./email";
 import { learnArticles } from "../client/src/data/learn-articles";
 import { ensureFreePool, repairSeedQuestions } from "./seed";
 import {
@@ -134,6 +134,39 @@ export async function registerRoutes(
       const user = await storage.updateUserOnboarding(req.user!.id, parsed.data);
       const { password: _, ...safeUser } = user;
       res.json(safeUser);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.delete("/api/user", requireAuth, async (req, res, next) => {
+    try {
+      const userId = req.user!.id;
+      const user = await storage.getUser(userId);
+
+      if (user?.stripeCustomerId) {
+        try {
+          const stripe = await getUncachableStripeClient();
+          const subscriptions = await stripe.subscriptions.list({ customer: user.stripeCustomerId, limit: 10 });
+          for (const sub of subscriptions.data) {
+            if (sub.status !== "canceled") {
+              await stripe.subscriptions.cancel(sub.id);
+            }
+          }
+        } catch (err) {
+          console.error("[DeleteAccount] Stripe cancellation error:", err);
+        }
+      }
+
+      await storage.deleteUser(userId);
+
+      req.logout((err) => {
+        if (err) console.error("[DeleteAccount] Logout error:", err);
+        req.session?.destroy?.((destroyErr) => {
+          if (destroyErr) console.error("[DeleteAccount] Session destroy error:", destroyErr);
+          res.json({ success: true });
+        });
+      });
     } catch (error) {
       next(error);
     }
@@ -296,7 +329,8 @@ export async function registerRoutes(
           metadata: { userId: user.id, tier: targetTier, upgradeFrom: currentTier },
         });
       } else {
-        const currentAmount = TIER_PRICE_GBP_PENCE[currentTier] || 0;
+        const onActiveTrial = user.trialEndsAt && new Date(user.trialEndsAt) > new Date();
+        const currentAmount = onActiveTrial ? 0 : (TIER_PRICE_GBP_PENCE[currentTier] || 0);
         const difference = Math.max(0, targetAmount - currentAmount);
         session = await stripe.checkout.sessions.create({
           customer: customerId,
@@ -306,7 +340,9 @@ export async function registerRoutes(
               currency: 'gbp',
               product_data: {
                 name: `Upgrade to ${TIER_DISPLAY_NAME[targetTier] || targetTier}`,
-                description: `Upgrade from ${TIER_DISPLAY_NAME[currentTier] || currentTier}`,
+                description: onActiveTrial
+                  ? `Convert from free trial to ${TIER_DISPLAY_NAME[targetTier] || targetTier}`
+                  : `Upgrade from ${TIER_DISPLAY_NAME[currentTier] || currentTier}`,
               },
               unit_amount: difference > 0 ? difference : targetAmount,
             },
@@ -438,6 +474,20 @@ export async function registerRoutes(
         } catch (err) {
           console.error('[Checkout] Failed to store trial end date:', err);
         }
+        sendAdminNotificationEmail("trial_start", {
+          userEmail: currentUser.email || currentUser.username || req.user!.id,
+          tier,
+          timestamp: new Date(),
+        }).catch(err => console.error('[AdminEmail] trial_start error:', err));
+      } else {
+        const paidPence = checkoutSession.amount_total || 0;
+        const paidStr = paidPence > 0 ? `£${(paidPence / 100).toFixed(2)}` : undefined;
+        sendAdminNotificationEmail("payment", {
+          userEmail: currentUser.email || currentUser.username || req.user!.id,
+          tier,
+          amount: paidStr,
+          timestamp: new Date(),
+        }).catch(err => console.error('[AdminEmail] payment error:', err));
       }
 
       const programmeTiers = new Set(["programme8", "programme12", "programme16", "programme16_family", "programme24_plus"]);

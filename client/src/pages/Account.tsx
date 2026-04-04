@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CreditCard, User, Users, Calendar, Mail, ExternalLink, ArrowRight, TrendingUp } from "lucide-react";
+import { CreditCard, User, Users, Calendar, Mail, ExternalLink, ArrowRight, TrendingUp, AlertTriangle } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { useAuth } from "../lib/auth";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "../lib/queryClient";
@@ -41,6 +41,7 @@ export default function Account() {
   const { user, tierLabel, hasPaidAccess, isFamilyTier, isProgramme } = useAuth();
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const [, setLocation] = useLocation();
   const [activeTab, setActiveTab] = useState<Tab>("profile");
   const [editingProfile, setEditingProfile] = useState<string | null>(null);
   const [editName, setEditName] = useState("");
@@ -48,6 +49,8 @@ export default function Account() {
   const [addingChild, setAddingChild] = useState(false);
   const [newChildName, setNewChildName] = useState("");
   const [newChildYear, setNewChildYear] = useState("Year 5");
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteConfirmText, setDeleteConfirmText] = useState("");
   const [newChildSchool, setNewChildSchool] = useState("");
   const [examDate, setExamDate] = useState("");
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
@@ -136,6 +139,18 @@ export default function Account() {
     },
     onError: () => {
       toast({ title: "Could not open billing portal", description: "Please try again or contact support.", variant: "destructive" });
+    },
+  });
+
+  const deleteAccountMutation = useMutation({
+    mutationFn: async () => {
+      await apiRequest("DELETE", "/api/user");
+    },
+    onSuccess: () => {
+      setLocation("/");
+    },
+    onError: () => {
+      toast({ title: "Could not delete account", description: "Please try again or contact support.", variant: "destructive" });
     },
   });
 
@@ -238,6 +253,15 @@ export default function Account() {
                             <p className="text-xs text-amber-700 mt-0.5">
                               Nothing charged until {new Date(user.trialEndsAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}. Cancel before then to pay nothing.
                             </p>
+                            <Button
+                              size="sm"
+                              className="mt-2 h-7 text-xs"
+                              onClick={() => manageBillingMutation.mutate()}
+                              disabled={manageBillingMutation.isPending}
+                              data-testid="button-convert-trial"
+                            >
+                              Convert to Paid Plan
+                            </Button>
                           </div>
                         )}
                       </div>
@@ -583,11 +607,91 @@ export default function Account() {
                   </div>
                 </CardContent>
               </Card>
+
+              <Card className="border-red-200 shadow-sm bg-red-50/30">
+                <CardHeader>
+                  <div className="flex items-center gap-2">
+                    <AlertTriangle className="h-5 w-5 text-red-500" />
+                    <CardTitle className="text-red-700">Danger Zone</CardTitle>
+                  </div>
+                  <CardDescription>Permanent actions that cannot be undone.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center justify-between p-4 bg-white rounded-lg border border-red-200">
+                    <div className="flex-1 min-w-0 mr-4">
+                      <p className="font-medium text-red-700">Delete Account</p>
+                      <p className="text-sm text-muted-foreground mt-0.5">Permanently delete your account and all associated data. This cannot be undone. Any active subscription will be cancelled immediately.</p>
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="border-red-300 text-red-600 hover:bg-red-50 hover:text-red-700 shrink-0"
+                      onClick={() => { setShowDeleteModal(true); setDeleteConfirmText(""); }}
+                      data-testid="button-open-delete-account"
+                    >
+                      Delete Account
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
             </>
           )}
 
         </div>
       </div>
     </div>
+
+    {showDeleteModal && (
+      <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" data-testid="modal-delete-account">
+        <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center shrink-0">
+              <AlertTriangle className="h-5 w-5 text-red-600" />
+            </div>
+            <div>
+              <h2 className="font-bold text-lg text-slate-900">Delete your account?</h2>
+              <p className="text-sm text-muted-foreground">This will permanently remove all your data.</p>
+            </div>
+          </div>
+          <ul className="text-sm text-slate-700 space-y-1 list-disc list-inside pl-1">
+            <li>All test sessions, results, and progress data will be deleted</li>
+            <li>Any active subscription or free trial will be cancelled immediately</li>
+            <li>Your account cannot be recovered</li>
+          </ul>
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">
+              Type <strong>DELETE</strong> to confirm
+            </label>
+            <input
+              type="text"
+              value={deleteConfirmText}
+              onChange={(e) => setDeleteConfirmText(e.target.value)}
+              className="w-full px-3 py-2 rounded-md border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-red-400"
+              placeholder="DELETE"
+              data-testid="input-delete-confirm"
+            />
+          </div>
+          <div className="flex gap-3 pt-1">
+            <Button
+              variant="outline"
+              className="flex-1"
+              onClick={() => setShowDeleteModal(false)}
+              disabled={deleteAccountMutation.isPending}
+              data-testid="button-cancel-delete"
+            >
+              Cancel
+            </Button>
+            <Button
+              className="flex-1 bg-red-600 hover:bg-red-700 text-white"
+              disabled={deleteConfirmText !== "DELETE" || deleteAccountMutation.isPending}
+              onClick={() => deleteAccountMutation.mutate()}
+              data-testid="button-confirm-delete"
+            >
+              {deleteAccountMutation.isPending ? "Deleting…" : "Delete Account"}
+            </Button>
+          </div>
+        </div>
+      </div>
+    )}
   );
 }
