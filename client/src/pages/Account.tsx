@@ -204,6 +204,7 @@ export default function Account() {
   ];
 
   return (
+    <>
     <div className="container mx-auto max-w-4xl px-4 py-8 space-y-8">
       <Seo title="Account | Bucks 11 Plus Tests" description="Manage your account settings and subscription." />
 
@@ -764,5 +765,6 @@ export default function Account() {
         </div>
       </div>
     )}
+    </>
   );
 }
