@@ -669,7 +669,8 @@ export default function Account() {
               </div>
               <ul className="text-sm text-slate-700 space-y-1 list-disc list-inside pl-1">
                 <li>Deleting your account will permanently remove your data.</li>
-                <li>If you have an active subscription, it will be cancelled automatically.</li>
+                <li>If you have an active subscription, it will be cancelled immediately — you will not be charged for any future billing period.</li>
+                <li>If you are on a free trial, no payment will ever be taken.</li>
                 <li>This action cannot be undone.</li>
               </ul>
               {hasStripeAccount && (
