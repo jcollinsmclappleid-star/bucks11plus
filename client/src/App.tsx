@@ -53,6 +53,7 @@ import QuestionList from "./pages/admin/QuestionList";
 import QuestionEditor from "./pages/admin/QuestionEditor";
 
 import ParentGuide from "./pages/ParentGuide";
+import GuidePrint from "./pages/GuidePrint";
 import SiteLinks from "./pages/SiteLinks";
 import LearnHub from "./pages/learn/LearnHub";
 import LearnArticle from "./pages/learn/LearnArticle";
@@ -247,6 +248,7 @@ function Router() {
             <Route path="/about" component={About} />
             <Route path="/buckinghamshire-11-plus-guide" component={BucksGuide} />
             <Route path="/bucks-11-plus-parent-guide" component={ParentGuide} />
+            <Route path="/guide-print" component={GuidePrint} />
             <Route path="/sign-in" component={SignIn} />
             <Route path="/sign-up" component={SignUp} />
             <Route path="/forgot-password" component={ForgotPassword} />

@@ -37,6 +37,7 @@ export default function ParentGuide() {
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [downloading, setDownloading] = useState(false);
   const [leadId, setLeadId] = useState<number | null>(null);
   const [error, setError] = useState("");
   const formRef = useRef<HTMLDivElement>(null);
@@ -58,10 +59,20 @@ export default function ParentGuide() {
       const data = await res.json();
       setLeadId(data.id);
       setSubmitted(true);
-      const link = document.createElement("a");
-      link.href = "/bucks-11-plus-parent-guide.pdf";
-      link.download = "bucks-11-plus-parent-guide.pdf";
-      link.click();
+      setDownloading(true);
+      try {
+        const pdfRes = await fetch("/api/guide/pdf");
+        if (!pdfRes.ok) throw new Error("PDF generation failed");
+        const blob = await pdfRes.blob();
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "bucks-11-plus-parent-guide.pdf";
+        link.click();
+        URL.revokeObjectURL(url);
+      } finally {
+        setDownloading(false);
+      }
     } catch {
       setError("Something went wrong. Please try again.");
     } finally {
@@ -382,9 +393,15 @@ export default function ParentGuide() {
             {submitted ? (
               <div className="text-center space-y-4" data-testid="guide-download-success">
                 <div className="w-16 h-16 rounded-full bg-green-50 flex items-center justify-center mx-auto">
-                  <CheckCircle2 className="h-8 w-8 text-green-500" />
+                  {downloading ? (
+                    <div className="h-8 w-8 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
+                  ) : (
+                    <CheckCircle2 className="h-8 w-8 text-green-500" />
+                  )}
                 </div>
-                <p className="font-semibold text-primary">Your guide is downloading.</p>
+                <p className="font-semibold text-primary">
+                  {downloading ? "Generating your guide — this takes a few seconds…" : "Your guide is downloading."}
+                </p>
                 <p className="text-sm text-muted-foreground">
                   Want to see where your child stands right now?
                 </p>

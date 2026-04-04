@@ -1763,6 +1763,59 @@ export async function registerRoutes(
     }
   });
 
+  let pdfCache: { buffer: Buffer; generatedAt: number } | null = null;
+  const PDF_CACHE_TTL_MS = 60 * 60 * 1000;
+
+  app.get("/api/guide/pdf", async (req, res, next) => {
+    try {
+      if (pdfCache && Date.now() - pdfCache.generatedAt < PDF_CACHE_TTL_MS) {
+        res.setHeader("Content-Type", "application/pdf");
+        res.setHeader("Content-Disposition", 'attachment; filename="bucks-11-plus-parent-guide.pdf"');
+        res.setHeader("Content-Length", pdfCache.buffer.length);
+        return res.send(pdfCache.buffer);
+      }
+
+      const puppeteer = await import("puppeteer");
+      const port = process.env.PORT || "5000";
+      const url = `http://localhost:${port}/guide-print`;
+
+      const browser = await puppeteer.default.launch({
+        headless: true,
+        args: [
+          "--no-sandbox",
+          "--disable-setuid-sandbox",
+          "--disable-dev-shm-usage",
+          "--disable-gpu",
+          "--no-first-run",
+          "--no-zygote",
+          "--single-process",
+        ],
+      });
+
+      try {
+        const page = await browser.newPage();
+        await page.goto(url, { waitUntil: "networkidle0", timeout: 30000 });
+        await page.emulateMediaType("print");
+        const pdfBuffer = await page.pdf({
+          format: "A4",
+          printBackground: true,
+          margin: { top: "16mm", bottom: "16mm", left: "14mm", right: "14mm" },
+        });
+        const buffer = Buffer.from(pdfBuffer);
+        pdfCache = { buffer, generatedAt: Date.now() };
+
+        res.setHeader("Content-Type", "application/pdf");
+        res.setHeader("Content-Disposition", 'attachment; filename="bucks-11-plus-parent-guide.pdf"');
+        res.setHeader("Content-Length", buffer.length);
+        res.send(buffer);
+      } finally {
+        await browser.close();
+      }
+    } catch (error) {
+      next(error);
+    }
+  });
+
   app.get("/api/child-profiles", requireAuth, async (req, res, next) => {
     try {
       const profiles = await storage.getChildProfiles(req.user!.id);
