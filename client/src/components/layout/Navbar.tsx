@@ -19,6 +19,7 @@ export default function Navbar() {
     { href: "/app/report-archive", label: "Reports", show: true },
     { href: "/app/programme", label: "Programme", show: true },
     { href: "/app/analytics", label: "Analytics", show: true },
+    { href: "/app/account", label: "Account & Subscription", show: !!user, mobileOnly: true },
     { href: "/how-it-works", label: "How It Works", show: true },
     { href: "/bucks-11-plus-parent-guide", label: "Free Guide", show: true },
     { href: "/pricing", label: "Pricing", show: true },
@@ -50,7 +51,7 @@ export default function Navbar() {
         </Link>
 
         <nav className="hidden md:flex items-center gap-4 lg:gap-6">
-          {navLinks.filter(l => l.show).map(link => (
+          {navLinks.filter(l => l.show && !l.mobileOnly).map(link => (
             <Link
               key={link.href}
               href={link.href}
