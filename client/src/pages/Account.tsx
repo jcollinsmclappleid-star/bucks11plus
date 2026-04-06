@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CreditCard, User, Users, Calendar, Mail, ExternalLink, ArrowRight, TrendingUp, AlertTriangle } from "lucide-react";
+import { CreditCard, User, Users, Calendar, Mail, ExternalLink, ArrowRight, TrendingUp, AlertTriangle, CheckCircle2 } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "../lib/auth";
@@ -56,6 +56,8 @@ export default function Account() {
   const [newChildSchool, setNewChildSchool] = useState("");
   const [examDate, setExamDate] = useState("");
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [cancelResult, setCancelResult] = useState<{ cancelledImmediately: boolean } | null>(null);
 
   const { data: profiles = [] } = useQuery<any[]>({
     queryKey: ["/api/child-profiles"],
@@ -141,6 +143,21 @@ export default function Account() {
     },
     onError: () => {
       toast({ title: "Could not open billing portal", description: "Please try again or contact support.", variant: "destructive" });
+    },
+  });
+
+  const cancelSubscriptionMutation = useMutation({
+    mutationFn: async () => {
+      const res = await apiRequest("POST", "/api/stripe/cancel-subscription", {});
+      return res.json();
+    },
+    onSuccess: (data) => {
+      setCancelResult({ cancelledImmediately: data.cancelledImmediately });
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
+    },
+    onError: () => {
+      toast({ title: "Could not cancel subscription", description: "Please try again or contact support.", variant: "destructive" });
+      setShowCancelModal(false);
     },
   });
 
@@ -303,21 +320,16 @@ export default function Account() {
                           <Button
                             variant="outline"
                             className="w-full justify-between h-12 border-red-200 text-red-700 hover:bg-red-50 hover:border-red-300"
-                            onClick={() => manageBillingMutation.mutate()}
-                            disabled={manageBillingMutation.isPending}
+                            onClick={() => { setCancelResult(null); setShowCancelModal(true); }}
                             data-testid="button-cancel-subscription"
                           >
                             <span className="flex items-center gap-2">
-                              <ExternalLink className="h-4 w-4" />
                               <span>
                                 {user.trialEndsAt && new Date(user.trialEndsAt) > new Date()
                                   ? "Cancel free trial"
                                   : "Cancel subscription"}
                               </span>
                             </span>
-                            {manageBillingMutation.isPending && (
-                              <span className="text-xs">Opening…</span>
-                            )}
                           </Button>
                           <p className="text-xs text-muted-foreground px-1">
                             {user.trialEndsAt && new Date(user.trialEndsAt) > new Date()
@@ -665,6 +677,85 @@ export default function Account() {
         </div>
       </div>
     </div>
+
+    {showCancelModal && (
+      <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" data-testid="modal-cancel-subscription">
+        <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 space-y-4">
+          {cancelResult ? (
+            <>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center shrink-0">
+                  <CheckCircle2 className="h-5 w-5 text-green-600" />
+                </div>
+                <div>
+                  <h2 className="font-bold text-lg text-slate-900">Subscription cancelled</h2>
+                  <p className="text-sm text-muted-foreground">
+                    {cancelResult.cancelledImmediately
+                      ? "Your free trial has been cancelled. No payment has been taken."
+                      : "Your subscription will end at the current billing period. You keep full access until then."}
+                  </p>
+                </div>
+              </div>
+              <Button className="w-full" onClick={() => setShowCancelModal(false)} data-testid="button-cancel-modal-close">
+                Close
+              </Button>
+            </>
+          ) : (
+            <>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
+                  <AlertTriangle className="h-5 w-5 text-amber-600" />
+                </div>
+                <div>
+                  <h2 className="font-bold text-lg text-slate-900">
+                    {user?.trialEndsAt && new Date(user.trialEndsAt) > new Date()
+                      ? "Cancel your free trial?"
+                      : "Cancel your subscription?"}
+                  </h2>
+                  <p className="text-sm text-muted-foreground">Please confirm you want to cancel.</p>
+                </div>
+              </div>
+              <div className="p-4 bg-slate-50 rounded-lg border border-slate-100 text-sm text-slate-700 space-y-1">
+                {user?.trialEndsAt && new Date(user.trialEndsAt) > new Date() ? (
+                  <>
+                    <p>Your trial will be cancelled immediately.</p>
+                    <p className="text-green-700 font-medium">You will not be charged — no payment will ever be taken.</p>
+                  </>
+                ) : (
+                  <>
+                    <p>Your subscription will remain active until the end of the current billing period.</p>
+                    <p className="text-muted-foreground">No future payments will be taken after cancellation.</p>
+                  </>
+                )}
+              </div>
+              <div className="flex flex-col gap-2">
+                <Button
+                  className="w-full bg-red-600 hover:bg-red-700 text-white"
+                  onClick={() => cancelSubscriptionMutation.mutate()}
+                  disabled={cancelSubscriptionMutation.isPending}
+                  data-testid="button-confirm-cancel-subscription"
+                >
+                  {cancelSubscriptionMutation.isPending
+                    ? "Cancelling…"
+                    : user?.trialEndsAt && new Date(user.trialEndsAt) > new Date()
+                      ? "Yes, cancel my trial"
+                      : "Yes, cancel my subscription"}
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => setShowCancelModal(false)}
+                  disabled={cancelSubscriptionMutation.isPending}
+                  data-testid="button-cancel-modal-back"
+                >
+                  Keep my subscription
+                </Button>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    )}
 
     {showDeleteModal && (
       <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" data-testid="modal-delete-account">

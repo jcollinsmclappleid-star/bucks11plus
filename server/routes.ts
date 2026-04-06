@@ -220,6 +220,40 @@ export async function registerRoutes(
     }
   });
 
+  app.post("/api/stripe/cancel-subscription", requireAuth, async (req, res, next) => {
+    try {
+      const user = req.user!;
+      if (!user.stripeCustomerId) {
+        return res.status(400).json({ message: "No billing account found." });
+      }
+      const stripe = await getUncachableStripeClient();
+      const subscriptions = await stripe.subscriptions.list({
+        customer: user.stripeCustomerId,
+        limit: 10,
+      });
+      const activeSubs = subscriptions.data.filter(s => s.status !== "canceled");
+      if (activeSubs.length === 0) {
+        return res.status(400).json({ message: "No active subscription found." });
+      }
+      const isOnTrial = user.trialEndsAt && new Date(user.trialEndsAt) > new Date();
+      for (const sub of activeSubs) {
+        if (isOnTrial || sub.status === "trialing") {
+          await stripe.subscriptions.cancel(sub.id);
+        } else {
+          await stripe.subscriptions.update(sub.id, { cancel_at_period_end: true });
+        }
+      }
+      if (isOnTrial) {
+        await storage.updateUserSubscription(user.id, "free", undefined);
+        await storage.updateUserTrial(user.id, null);
+      }
+      const { password: _, ...safeUser } = await storage.getUser(user.id) as any;
+      res.json({ success: true, user: safeUser, cancelledImmediately: !!isOnTrial });
+    } catch (error) {
+      next(error);
+    }
+  });
+
   app.post("/api/checkout", requireAuth, async (req, res, next) => {
     try {
       const { tier } = req.body;
