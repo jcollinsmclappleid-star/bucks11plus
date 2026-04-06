@@ -291,26 +291,40 @@ export default function Account() {
                       >
                         <span className="flex items-center gap-2">
                           <ExternalLink className="h-4 w-4 text-muted-foreground" />
-                          <span>
-                            {user.trialEndsAt && new Date(user.trialEndsAt) > new Date()
-                              ? "Manage billing & cancel trial"
-                              : currentTier === "pack_monthly" || currentTier === "pack_plus"
-                                ? "Manage billing & cancel subscription"
-                                : "Manage billing"}
-                          </span>
+                          <span>Manage billing & payment method</span>
                         </span>
                         {manageBillingMutation.isPending && (
                           <span className="text-xs text-muted-foreground">Opening…</span>
                         )}
                       </Button>
-                      {user.trialEndsAt && new Date(user.trialEndsAt) > new Date() ? (
-                        <p className="text-xs text-muted-foreground px-1">
-                          Cancel anytime before your trial ends to pay nothing. Access stops immediately on cancellation.
-                        </p>
-                      ) : (currentTier === "pack_monthly" || currentTier === "pack_plus") && (
-                        <p className="text-xs text-muted-foreground px-1">
-                          Cancellation takes effect at the end of your current billing period. You keep full access until then.
-                        </p>
+
+                      {(currentTier === "pack_monthly" || currentTier === "pack_plus") && (
+                        <div className="pt-1 space-y-2">
+                          <Button
+                            variant="outline"
+                            className="w-full justify-between h-12 border-red-200 text-red-700 hover:bg-red-50 hover:border-red-300"
+                            onClick={() => manageBillingMutation.mutate()}
+                            disabled={manageBillingMutation.isPending}
+                            data-testid="button-cancel-subscription"
+                          >
+                            <span className="flex items-center gap-2">
+                              <ExternalLink className="h-4 w-4" />
+                              <span>
+                                {user.trialEndsAt && new Date(user.trialEndsAt) > new Date()
+                                  ? "Cancel free trial"
+                                  : "Cancel subscription"}
+                              </span>
+                            </span>
+                            {manageBillingMutation.isPending && (
+                              <span className="text-xs">Opening…</span>
+                            )}
+                          </Button>
+                          <p className="text-xs text-muted-foreground px-1">
+                            {user.trialEndsAt && new Date(user.trialEndsAt) > new Date()
+                              ? "Cancel before your trial ends and you will not be charged."
+                              : "You will keep full access until the end of your current billing period. No future payments will be taken."}
+                          </p>
+                        </div>
                       )}
                     </div>
                   )}
