@@ -390,9 +390,6 @@ export async function registerRoutes(
           metadata: { userId: user.id, tier: targetTier, upgradeFrom: currentTier },
         });
       } else {
-        const onActiveTrial = user.trialEndsAt && new Date(user.trialEndsAt) > new Date();
-        const currentAmount = onActiveTrial ? 0 : (TIER_PRICE_GBP_PENCE[currentTier] || 0);
-        const difference = Math.max(0, targetAmount - currentAmount);
         session = await stripe.checkout.sessions.create({
           customer: customerId,
           payment_method_types: ['card'],
@@ -400,12 +397,9 @@ export async function registerRoutes(
             price_data: {
               currency: 'gbp',
               product_data: {
-                name: `Upgrade to ${TIER_DISPLAY_NAME[targetTier] || targetTier}`,
-                description: onActiveTrial
-                  ? `Convert from free trial to ${TIER_DISPLAY_NAME[targetTier] || targetTier}`
-                  : `Upgrade from ${TIER_DISPLAY_NAME[currentTier] || currentTier}`,
+                name: TIER_DISPLAY_NAME[targetTier] || targetTier,
               },
-              unit_amount: difference > 0 ? difference : targetAmount,
+              unit_amount: targetAmount,
             },
             quantity: 1,
           }],
