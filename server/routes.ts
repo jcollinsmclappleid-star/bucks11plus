@@ -232,10 +232,17 @@ export async function registerRoutes(
         limit: 10,
       });
       const activeSubs = subscriptions.data.filter(s => s.status !== "canceled");
-      if (activeSubs.length === 0) {
-        return res.status(400).json({ message: "No active subscription found." });
-      }
       const isOnTrial = user.trialEndsAt && new Date(user.trialEndsAt) > new Date();
+
+      if (activeSubs.length === 0) {
+        // No Stripe subscription exists (e.g. trial lapsed without payment) —
+        // sync the database to free so the user is in a clean state.
+        await storage.updateUserSubscription(user.id, "free", undefined);
+        await storage.updateUserTrial(user.id, null);
+        const { password: _, ...safeUser } = await storage.getUser(user.id) as any;
+        return res.json({ success: true, user: safeUser, cancelledImmediately: true });
+      }
+
       for (const sub of activeSubs) {
         if (isOnTrial || sub.status === "trialing") {
           await stripe.subscriptions.cancel(sub.id);
@@ -243,12 +250,12 @@ export async function registerRoutes(
           await stripe.subscriptions.update(sub.id, { cancel_at_period_end: true });
         }
       }
-      if (isOnTrial) {
+      if (isOnTrial || activeSubs.some(s => s.status === "trialing")) {
         await storage.updateUserSubscription(user.id, "free", undefined);
         await storage.updateUserTrial(user.id, null);
       }
       const { password: _, ...safeUser } = await storage.getUser(user.id) as any;
-      res.json({ success: true, user: safeUser, cancelledImmediately: !!isOnTrial });
+      res.json({ success: true, user: safeUser, cancelledImmediately: !!(isOnTrial || activeSubs.some(s => s.status === "trialing")) });
     } catch (error) {
       next(error);
     }
