@@ -227,10 +227,33 @@ export async function registerRoutes(
         return res.status(400).json({ message: "No billing account found." });
       }
       const stripe = await getUncachableStripeClient();
-      const subscriptions = await stripe.subscriptions.list({
+      let subscriptions = await stripe.subscriptions.list({
         customer: user.stripeCustomerId,
         limit: 10,
       });
+
+      // Fallback: guest checkout may have created a different Stripe customer.
+      // Search by the user's email to find the real subscription.
+      if (subscriptions.data.length === 0) {
+        const userEmail = user.email || user.username || "";
+        if (userEmail.includes("@")) {
+          const customers = await stripe.customers.search({
+            query: `email:"${userEmail}"`,
+            limit: 5,
+          });
+          for (const cust of customers.data) {
+            if (cust.id === user.stripeCustomerId) continue;
+            const custSubs = await stripe.subscriptions.list({ customer: cust.id, limit: 10 });
+            if (custSubs.data.length > 0) {
+              subscriptions = custSubs;
+              // Update stored customer ID so future lookups work
+              await storage.updateUserStripeInfo(user.id, cust.id);
+              break;
+            }
+          }
+        }
+      }
+
       const activeSubs = subscriptions.data.filter(s => s.status !== "canceled");
       const isOnTrial = user.trialEndsAt && new Date(user.trialEndsAt) > new Date();
 
@@ -517,6 +540,11 @@ export async function registerRoutes(
         : new Date(Date.now() + (weeksMap[tier] || 12) * 7 * 24 * 60 * 60 * 1000);
 
       await storage.updateUserSubscription(req.user!.id, tier, expiresAt);
+
+      // Always save the Stripe customer from the session (guest checkout creates a new customer)
+      if (checkoutSession.customer && typeof checkoutSession.customer === 'string') {
+        await storage.updateUserStripeInfo(req.user!.id, checkoutSession.customer);
+      }
 
       if (isTrial && checkoutSession.subscription) {
         try {
