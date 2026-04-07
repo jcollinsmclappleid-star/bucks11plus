@@ -1,4 +1,5 @@
 import express, { type Request, Response, NextFunction } from "express";
+import helmet from "helmet";
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
@@ -13,6 +14,15 @@ const httpServer = createServer(app);
 
 // Trust Replit's reverse proxy so secure session cookies work in production
 app.set("trust proxy", 1);
+
+// Security headers
+app.use(helmet({
+  contentSecurityPolicy: false,
+  crossOriginEmbedderPolicy: false,
+}));
+
+// Health check (no auth required — used by monitoring/deployment)
+app.get("/api/health", (_req, res) => res.json({ status: "ok" }));
 
 declare module "http" {
   interface IncomingMessage {

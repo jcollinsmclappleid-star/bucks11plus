@@ -33,7 +33,8 @@ export default function SignUp() {
 
       if (guestSessionParam) {
         try {
-          await apiRequest("POST", `/api/guest/claim/${guestSessionParam}`);
+          const guestToken = sessionStorage.getItem("guestToken") || "";
+          await apiRequest("POST", `/api/guest/claim/${guestSessionParam}`, { guestToken });
         } catch {
         }
       }
@@ -98,11 +99,14 @@ export default function SignUp() {
               <Input
                 id="password"
                 type="password"
+                placeholder="At least 8 characters"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                minLength={8}
                 data-testid="input-password"
               />
+              <p className="text-xs text-muted-foreground">Min 8 characters, including at least one letter and one number.</p>
             </div>
             <Button
               type="submit"

@@ -149,7 +149,28 @@ export async function registerRoutes(
         let activeSubFound = false;
         try {
           const stripe = await getUncachableStripeClient();
-          const subscriptions = await stripe.subscriptions.list({ customer: user.stripeCustomerId, limit: 10 });
+          let subscriptions = await stripe.subscriptions.list({ customer: user.stripeCustomerId, limit: 10 });
+
+          // Fallback: guest checkout may have created a different Stripe customer.
+          // Search by email to catch subscriptions under a mismatched customer ID.
+          if (subscriptions.data.length === 0) {
+            const userEmail = user.email || user.username || "";
+            if (userEmail.includes("@")) {
+              const customers = await stripe.customers.search({
+                query: `email:"${userEmail}"`,
+                limit: 5,
+              });
+              for (const cust of customers.data) {
+                if (cust.id === user.stripeCustomerId) continue;
+                const custSubs = await stripe.subscriptions.list({ customer: cust.id, limit: 10 });
+                if (custSubs.data.length > 0) {
+                  subscriptions = custSubs;
+                  break;
+                }
+              }
+            }
+          }
+
           const activeSubs = subscriptions.data.filter(s => s.status !== "canceled");
           if (activeSubs.length > 0) {
             activeSubFound = true;
@@ -866,8 +887,21 @@ export async function registerRoutes(
     try {
       const session = await storage.getTestSession(req.params.id);
       if (!session) return res.status(404).json({ message: "Session not found" });
+
+      // Already belongs to this user — idempotent
+      if (session.userId === req.user!.id) {
+        return res.json(session);
+      }
+
+      // Already claimed by a different user
       if (session.userId && session.userId !== req.user!.id) {
         return res.status(403).json({ message: "Session already claimed" });
+      }
+
+      // Unclaimed — verify the caller holds the guestToken (proves they took the test)
+      const { guestToken } = req.body;
+      if (!guestToken || !session.guestToken || guestToken !== session.guestToken) {
+        return res.status(403).json({ message: "Invalid or missing session token" });
       }
 
       const [updated] = await db.update(testSessions)
@@ -1491,7 +1525,8 @@ export async function registerRoutes(
         return res.status(403).json({ message: "Programme access required" });
       }
       const { sessionId } = req.body;
-      const milestone = await storage.completeMilestone(req.params.id, sessionId);
+      const milestone = await storage.completeMilestone(req.params.id, sessionId, req.user!.id);
+      if (!milestone) return res.status(404).json({ message: "Milestone not found or not authorised" });
       res.json(milestone);
     } catch (error) {
       next(error);
@@ -2158,7 +2193,7 @@ export async function registerRoutes(
           }),
         });
       } else {
-        console.log(`[Chat] No RESEND_API_KEY — suppressed email from ${email}: ${message}`);
+        console.log(`[Chat] No RESEND_API_KEY — suppressed outbound chat message`);
       }
 
       res.json({ success: true });
@@ -2206,7 +2241,7 @@ export async function registerRoutes(
           }),
         });
       } else {
-        console.log(`[Enquiry] No RESEND_API_KEY — suppressed email from ${email}: ${message}`);
+        console.log(`[Enquiry] No RESEND_API_KEY — suppressed outbound enquiry message`);
       }
 
       res.json({ success: true });

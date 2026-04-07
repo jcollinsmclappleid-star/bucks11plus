@@ -127,7 +127,7 @@ export async function sendAdminNotificationEmail(
       body: JSON.stringify({ from: RESEND_FROM_EMAIL, to: [adminEmail], subject, html }),
     });
     if (!res.ok) console.error(`[AdminEmail] Send failed: ${res.status}`);
-    else console.log(`[AdminEmail] Sent: ${subject}`);
+    else console.log(`[AdminEmail] Sent OK`);
   } catch (err) {
     console.error("[AdminEmail] Error:", err);
   }

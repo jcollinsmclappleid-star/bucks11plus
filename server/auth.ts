@@ -5,6 +5,7 @@ import session from "express-session";
 import ConnectPgSimple from "connect-pg-simple";
 import { scrypt, randomBytes, timingSafeEqual } from "crypto";
 import { promisify } from "util";
+import rateLimit from "express-rate-limit";
 import { storage } from "./storage";
 import { pool } from "./db";
 import { db } from "./db";
@@ -12,6 +13,24 @@ import { users } from "@shared/schema";
 import { eq, and, gt } from "drizzle-orm";
 import type { User } from "@shared/schema";
 import { sendPasswordResetEmail } from "./email";
+
+// Rate limiter for auth endpoints — 10 attempts per 15 minutes per IP
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { message: "Too many attempts. Please try again in 15 minutes." },
+  skip: () => process.env.NODE_ENV === "test",
+});
+
+// Password strength: min 8 chars, at least one letter and one number
+function validatePasswordStrength(password: string): string | null {
+  if (password.length < 8) return "Password must be at least 8 characters.";
+  if (!/[a-zA-Z]/.test(password)) return "Password must contain at least one letter.";
+  if (!/[0-9]/.test(password)) return "Password must contain at least one number.";
+  return null;
+}
 
 const scryptAsync = promisify(scrypt);
 
@@ -37,8 +56,12 @@ declare global {
 export function setupAuth(app: Express) {
   const PgStore = ConnectPgSimple(session);
 
+  if (!process.env.SESSION_SECRET) {
+    throw new Error("SESSION_SECRET environment variable must be set");
+  }
+
   const sessionSettings: session.SessionOptions = {
-    secret: process.env.SESSION_SECRET || "eleven-plus-standard-secret-key-2024",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -87,12 +110,15 @@ export function setupAuth(app: Express) {
     }
   });
 
-  app.post("/api/auth/register", async (req, res, next) => {
+  app.post("/api/auth/register", authLimiter, async (req, res, next) => {
     try {
       const { username, password } = req.body;
       if (!username || !password) {
         return res.status(400).json({ message: "Username and password required" });
       }
+
+      const pwError = validatePasswordStrength(password);
+      if (pwError) return res.status(400).json({ message: pwError });
 
       const existing = await storage.getUserByUsername(username);
       if (existing) {
@@ -112,7 +138,7 @@ export function setupAuth(app: Express) {
     }
   });
 
-  app.post("/api/auth/login", (req, res, next) => {
+  app.post("/api/auth/login", authLimiter, (req, res, next) => {
     passport.authenticate("local", (err: any, user: User | false, info: any) => {
       if (err) return next(err);
       if (!user) {
@@ -141,7 +167,7 @@ export function setupAuth(app: Express) {
     res.json(safeUser);
   });
 
-  app.post("/api/auth/forgot-password", async (req, res) => {
+  app.post("/api/auth/forgot-password", authLimiter, async (req, res) => {
     try {
       const { email } = req.body;
       if (!email) {
@@ -176,15 +202,14 @@ export function setupAuth(app: Express) {
     }
   });
 
-  app.post("/api/auth/reset-password", async (req, res) => {
+  app.post("/api/auth/reset-password", authLimiter, async (req, res) => {
     try {
       const { token, password } = req.body;
       if (!token || !password) {
         return res.status(400).json({ message: "Token and new password are required" });
       }
-      if (password.length < 6) {
-        return res.status(400).json({ message: "Password must be at least 6 characters" });
-      }
+      const pwError = validatePasswordStrength(password);
+      if (pwError) return res.status(400).json({ message: pwError });
 
       const [user] = await db.select().from(users).where(
         and(

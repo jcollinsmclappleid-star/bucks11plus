@@ -23,8 +23,12 @@ export default function ResetPassword() {
       setError("Passwords don't match.");
       return;
     }
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters.");
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters.");
+      return;
+    }
+    if (!/[a-zA-Z]/.test(password) || !/[0-9]/.test(password)) {
+      setError("Password must contain at least one letter and one number.");
       return;
     }
 
@@ -95,11 +99,11 @@ export default function ResetPassword() {
                   <Input
                     id="password"
                     type="password"
-                    placeholder="At least 6 characters"
+                    placeholder="At least 8 characters"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    minLength={6}
+                    minLength={8}
                     className="pl-10"
                     data-testid="input-new-password"
                   />

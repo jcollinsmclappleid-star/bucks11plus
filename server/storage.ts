@@ -75,7 +75,7 @@ export interface IStorage {
   updateEnrolmentWeek(enrolmentId: string, week: number): Promise<void>;
   completeEnrolment(enrolmentId: string): Promise<void>;
   getProgrammeMilestones(userId: string): Promise<ProgrammeMilestone[]>;
-  completeMilestone(milestoneId: string, sessionId: string): Promise<ProgrammeMilestone>;
+  completeMilestone(milestoneId: string, sessionId: string, userId: string): Promise<ProgrammeMilestone | null>;
   autoCompleteDiagnosticMilestones(userId: string, diagnosticId: string, sessionId: string): Promise<void>;
   autoCompletePracticeMilestone(userId: string, currentWeek: number): Promise<void>;
   getWeeklyPlans(userId: string): Promise<WeeklyPlan[]>;
@@ -1473,12 +1473,15 @@ export class DatabaseStorage implements IStorage {
       .orderBy(programmeMilestones.week);
   }
 
-  async completeMilestone(milestoneId: string, sessionId: string): Promise<ProgrammeMilestone> {
+  async completeMilestone(milestoneId: string, sessionId: string, userId: string): Promise<ProgrammeMilestone | null> {
     const [milestone] = await db.update(programmeMilestones)
       .set({ completedAt: new Date(), linkedSessionId: sessionId })
-      .where(eq(programmeMilestones.id, milestoneId))
+      .where(and(
+        eq(programmeMilestones.id, milestoneId),
+        eq(programmeMilestones.userId, userId),
+      ))
       .returning();
-    return milestone;
+    return milestone || null;
   }
 
   async autoCompleteDiagnosticMilestones(userId: string, diagnosticId: string, sessionId: string): Promise<void> {
