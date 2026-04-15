@@ -13,7 +13,7 @@ const features = [
   { icon: Zap, title: "All 17 Hard Challenge Drills", desc: "The hardest-tier targeted drills across every subject — the ones that push children from \"Within Reach\" to qualifying." },
   { icon: BarChart3, title: "Premium Analytics Dashboard", desc: "Section-by-section breakdowns, pace analysis, and a forecast score calibrated against the real qualifying standard." },
   { icon: Trophy, title: "Mock Exam Simulations", desc: "Full timed mock exams under real GL-style exam conditions — the closest practice to the actual test day." },
-  { icon: Star, title: "Weekly Task Plans & Roadmap", desc: "Auto-generated weekly focus plans based on diagnostic results, so you always know what to practise next." },
+  { icon: Star, title: "Weekly Task Plans & Roadmap", desc: "Auto-generated weekly focus plans based on diagnostic results, so you always know what to practice next." },
 ];
 
 const steps = [

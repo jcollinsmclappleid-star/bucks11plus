@@ -80,7 +80,7 @@ const sections: LinkSection[] = [
   {
     heading: "Subject Guides",
     links: [
-      { title: "11+ Verbal Reasoning Practice", description: "How verbal reasoning is tested in the Bucks 11+ and how to practise effectively.", href: "/11-plus-verbal-reasoning-practice" },
+      { title: "11+ Verbal Reasoning Practice", description: "How verbal reasoning is tested in the Bucks 11+ and how to practice effectively.", href: "/11-plus-verbal-reasoning-practice" },
       { title: "11+ Non-Verbal Reasoning Practice", description: "Guide to non-verbal reasoning in the Buckinghamshire 11+ — question types and preparation strategies.", href: "/11-plus-non-verbal-reasoning-practice" },
       { title: "11+ Maths Practice", description: "What the 11+ maths paper tests and how to build fluency across the key topics.", href: "/11-plus-maths-practice" },
       { title: "11+ English Comprehension Practice", description: "How comprehension is assessed in the Bucks 11+ and how to develop strong reading skills.", href: "/11-plus-comprehension-practice" },

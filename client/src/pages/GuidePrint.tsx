@@ -479,7 +479,7 @@ export default function GuidePrint() {
           {[
             { mistake: "Starting too late", fix: "Structured preparation should begin in Year 5 — the final weeks before the test are for refinement, not learning new skills." },
             { mistake: "Ignoring weaker subjects", fix: "Focusing on subjects your child already enjoys feels productive but isn't. The biggest score gains come from closing the weakest gaps." },
-            { mistake: "No timed practice", fix: "Children who practise without time pressure are not preparing for the real test. Pace is as critical as accuracy — one without the other is incomplete preparation." },
+            { mistake: "No timed practice", fix: "Children who practice without time pressure are not preparing for the real test. Pace is as critical as accuracy — one without the other is incomplete preparation." },
             { mistake: "No audio format exposure", fix: "The test uses audio-recorded instructions. Children who encounter this format for the first time on test day lose composure. Mock tests with audio are essential." },
           ].map(({ mistake, fix }) => (
             <div key={mistake} className="rounded-lg border border-slate-200 overflow-hidden">
@@ -802,11 +802,11 @@ export default function GuidePrint() {
         </p>
         <h3 className="text-base font-serif font-bold text-[#0d1f30] mb-2">The Audio Format</h3>
         <p className="text-sm leading-relaxed mb-4">
-          Every instruction in the test — when to open the booklet, how many questions are in each section, when to stop writing — is delivered by a pre-recorded voice. The recording will not wait for children who aren't ready, will not repeat instructions, and cannot be paused. Children who are practised with this format work calmly through it. Those who encounter it for the first time are often startled and lose composure during the opening minutes, which affects their performance across the whole paper.
+          Every instruction in the test — when to open the booklet, how many questions are in each section, when to stop writing — is delivered by a pre-recorded voice. The recording will not wait for children who aren't ready, will not repeat instructions, and cannot be paused. Children who are practiced with this format work calmly through it. Those who encounter it for the first time are often startled and lose composure during the opening minutes, which affects their performance across the whole paper.
         </p>
         <h3 className="text-base font-serif font-bold text-[#0d1f30] mb-2">The Answer Sheet</h3>
         <p className="text-sm leading-relaxed mb-4">
-          Children record answers on a separate machine-scanned answer sheet — not in the question booklet. Answers must be in the correct grid position, clearly marked, and erased cleanly if changed. Children who practise this mechanic before test day are significantly less likely to make costly alignment errors under pressure.
+          Children record answers on a separate machine-scanned answer sheet — not in the question booklet. Answers must be in the correct grid position, clearly marked, and erased cleanly if changed. Children who practice this mechanic before test day are significantly less likely to make costly alignment errors under pressure.
         </p>
         <InfoBox color="amber">
           <h4 className="text-xs font-bold text-amber-900 mb-2">Checklist for Test Morning</h4>

@@ -64,7 +64,7 @@ const subjectData: Record<Subject, SubjectContent> = {
       },
       {
         question: "What is a letter code question?",
-        answer: "Letter code questions present a pattern where letters represent other letters or numbers, and ask children to apply the same rule to a new example. For example: if ABC = DEF, what does GHI equal? The answer would be JKL (each letter moves forward by 3). These questions have a distinctive logical format that requires specific familiarisation — children who encounter them for the first time in the actual test typically perform worse than those who have practised them.",
+        answer: "Letter code questions present a pattern where letters represent other letters or numbers, and ask children to apply the same rule to a new example. For example: if ABC = DEF, what does GHI equal? The answer would be JKL (each letter moves forward by 3). These questions have a distinctive logical format that requires specific familiarisation — children who encounter them for the first time in the actual test typically perform worse than those who have practiced them.",
       },
     ],
   },

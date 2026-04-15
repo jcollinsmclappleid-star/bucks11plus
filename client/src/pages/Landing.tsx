@@ -1,11 +1,9 @@
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, CheckCircle2, Target, Clock, BarChart3, Zap, Search, Wrench, TrendingUp, ChevronLeft, ChevronRight, Loader2, Smartphone, Brain, Layers, Hash, BookOpen, Shield, Award, Star, AlertTriangle, ChevronUp, Trophy, ExternalLink } from "lucide-react";
+import { ArrowRight, CheckCircle2, Target, Clock, BarChart3, Zap, Search, Wrench, TrendingUp, ChevronLeft, ChevronRight, Smartphone, Brain, Layers, Hash, BookOpen, Shield, Award, Star, ChevronUp, Trophy, CalendarDays } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 import { SampleQuestionsCarousel } from "../components/shared/SampleQuestionsCarousel";
 import { useAuth } from "../lib/auth";
-import { apiRequest } from "../lib/queryClient";
 import { useState, useRef } from "react";
 
 const showcaseTabs = [
@@ -101,7 +99,7 @@ function SectionsPanel() {
     <div className="space-y-3 w-full max-w-md mx-auto" data-testid="showcase-sections">
       <div className="text-center mb-3">
         <h3 className="text-lg font-bold text-primary font-serif">How They're Performing in Each Subject</h3>
-        <p className="text-xs text-muted-foreground mt-1">Every result broken down to sub-topic level — see exactly what to practise</p>
+        <p className="text-xs text-muted-foreground mt-1">Every result broken down to sub-topic level — see exactly what to practice</p>
       </div>
       {sections.map((s, i) => (
         <div key={i} className={`bg-white rounded-xl border ${s.border} p-4 shadow-sm`}>
@@ -308,28 +306,8 @@ function ProgressPanel() {
 
 export default function Landing() {
   const [activeTab, setActiveTab] = useState<TabId>("sections");
-  const [checkoutLoading, setCheckoutLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
-  const [, navigate] = useLocation();
-
-  async function handleProgrammeCheckout() {
-    const tier = "programme24_plus";
-    if (!user) {
-      navigate(`/pricing?autoCheckout=${tier}`);
-      return;
-    }
-    setCheckoutLoading(true);
-    try {
-      const res = await apiRequest("POST", "/api/checkout/session", { tier });
-      const data = await res.json();
-      if (data.url) window.location.href = data.url;
-    } catch {
-      navigate(`/pricing?autoCheckout=${tier}`);
-    } finally {
-      setCheckoutLoading(false);
-    }
-  }
 
   const scrollTabs = (dir: "left" | "right") => {
     if (scrollRef.current) {
@@ -340,8 +318,8 @@ export default function Landing() {
   return (
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
       <Seo
-        title="Bucks 11 Plus Practice Test (2026) – Free GL Diagnostic & 121 Score Prep | Bucks 11 Plus Tests"
-        description="Take a free Bucks 11 Plus practice diagnostic. Get an instant GL-style score across maths, verbal, non-verbal and comprehension — benchmarked against the 121 qualifying standard."
+        title="Bucks 11 Plus Practice Tests — Free GL Diagnostic Benchmarked to 121 | Bucks 11 Plus Tests"
+        description="Know exactly where your child stands for the Buckinghamshire 11+. Take a free 8-minute GL-style diagnostic and see their forecast score against the 121 qualifying threshold — with the 3 priorities to fix next."
         canonicalPath="/"
         schema={{
           "@context": "https://schema.org",
@@ -353,12 +331,13 @@ export default function Landing() {
             { "@type": "Question", name: "How does the free diagnostic work?", acceptedAnswer: { "@type": "Answer", text: "The free diagnostic is a 12-question, 8-minute timed assessment in GL-style format. No account is needed. On completion, parents receive a readiness band (On Track, Within Reach, or Clear Improvement Opportunity), a forecast standardised score toward 121, and a breakdown of performance across the four test sections." } },
             { "@type": "Question", name: "When should my child start preparing for the Bucks 11+?", acceptedAnswer: { "@type": "Answer", text: "Most families begin structured preparation in Year 4 or early Year 5, giving children 12 to 18 months before the September test date. Starting with a diagnostic assessment helps identify specific gaps and ensures preparation time is spent where it will have the most impact." } },
             { "@type": "Question", name: "Is Bucks 11 Plus Tests affiliated with GL Assessment or Buckinghamshire Council?", acceptedAnswer: { "@type": "Answer", text: "No. Bucks 11 Plus Tests is fully independent. We are not affiliated with GL Assessment, Buckinghamshire Council, The Buckinghamshire Grammar Schools (TBGS), or any individual grammar school. The GL-style label refers to the question format we use to replicate the test structure — it does not imply any formal relationship." } },
-            { "@type": "Question", name: "What is included in the Bucks Practice Platform?", acceptedAnswer: { "@type": "Answer", text: "The Bucks Practice Platform (£24.99/month) includes 1,500+ questions across all four test domains, timed drills (Easy & Medium), full 40-question timed diagnostic papers, 6 Hard drills, PDF reports and impact simulator. The Platform Edge (£59.99/month or £495/year) adds all 17 Hard drills, full parent analytics, and mock exam simulations. Cancel anytime." } },
-            { "@type": "Question", name: "What is the difference between the Practice Platform and the Young Scholar Programme?", acceptedAnswer: { "@type": "Answer", text: "The Bucks Practice Platform (from £24.99/month) is flexible self-directed access to the question bank, drills, and diagnostics. The Bucks Young Scholar Programme (£349 one-time) includes full platform access plus a structured 6-month preparation programme with a 26-week roadmap, weekly task plans, milestone tracking, and 3 mock exam simulations — designed for families who want complete guided preparation." } },
+            { "@type": "Question", name: "What is included in Bucks Plus Edge?", acceptedAnswer: { "@type": "Answer", text: "Bucks Plus Edge (£35/month or £349/year) includes 1,500+ GL-style questions across all four test domains, timed drills, full 40-question and 50-question mock diagnostics, PDF reports, parent analytics, progress tracking, and access to all Hard drills. Cancel anytime." } },
+            { "@type": "Question", name: "What is the difference between the monthly and annual plan?", acceptedAnswer: { "@type": "Answer", text: "Both plans give identical full access to every feature. The monthly plan is £35/month and can be cancelled anytime. The annual plan is £349/year — equivalent to £29.08/month — saving £71 compared to paying monthly for 12 months." } },
           ]
         }}
       />
 
+      {/* ── HERO ── */}
       <section className="relative overflow-hidden pt-12 pb-24 md:pt-16 md:pb-40 border-b border-border/50" style={{ backgroundColor: '#0d1f30' }}>
         <div className="absolute inset-0 z-0 hero-texture"></div>
         <div className="absolute inset-0 z-0 hero-vignette"></div>
@@ -449,12 +428,13 @@ export default function Landing() {
           <div className="text-center space-y-6 mt-12">
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-[1.12] font-serif max-w-4xl mx-auto">
-              One Test. One Number.<br className="hidden md:block" />
-              <span className="text-white/55">One Chance at the School They Want.</span>
+              Most resources give you<br className="hidden md:block" />
+              <span className="text-white/55"> more to practice.</span><br className="hidden md:block" />
+              We show you <span className="text-brand-amber">what to fix.</span>
             </h1>
 
-            <p className="text-lg md:text-xl text-white/65 max-w-3xl mx-auto leading-relaxed">
-              <strong className="text-white/85 font-semibold not-italic">121.</strong> The qualifying score for all 13 Buckinghamshire grammar schools. One test in September that decides which school your child goes to. Most families arrive here already working hard — books, tutors, practice papers. The question is whether that preparation is actually moving the score. This platform answers it directly.
+            <p className="text-lg md:text-xl text-white/65 max-w-3xl mx-auto leading-relaxed" data-testid="text-hero-sub">
+              <strong className="text-white/85 font-semibold not-italic">121.</strong> The qualifying score for all 13 Buckinghamshire grammar schools. If you're already doing the work but aren't certain it's moving your child toward that number — this is built for you. One free diagnostic tells you exactly where they stand, where marks are being lost, and what to focus on next.
             </p>
 
             <div className="pt-3 max-w-xl mx-auto">
@@ -468,39 +448,23 @@ export default function Landing() {
             </p>
 
             <div className="flex items-center justify-center gap-2" data-testid="badge-expertise">
-              <svg viewBox="0 0 16 16" className="w-4 h-4 text-brand-amber/50" fill="currentColor" aria-hidden="true">
-                <path d="M8 0l2.5 5.3L16 6.2l-4 3.8 1 5.5L8 12.9l-5 2.6 1-5.5-4-3.8 5.5-.9z"/>
-              </svg>
+              <Star className="w-4 h-4 text-brand-amber/50" aria-hidden="true" />
               <span className="text-xs font-sans font-semibold uppercase tracking-[0.15em] text-white/40">Purpose-built for the Buckinghamshire Secondary Transfer Test</span>
             </div>
 
             <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Button size="lg" className="h-14 px-10 text-lg bg-brand-amber text-white hover:bg-brand-amber/90 font-bold shadow-lg shadow-brand-amber/15 border-none" asChild>
+              <Button size="lg" className="h-14 px-10 text-lg bg-brand-amber text-white hover:bg-brand-amber/90 font-bold shadow-lg shadow-brand-amber/15 border-none" asChild data-testid="button-hero-primary">
                 <Link href="/free-diagnostic">
                   Start Free Diagnostic <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" className="h-14 px-8 text-lg bg-white/[0.03] border-white/15 text-white/80 hover:bg-white/[0.06] hover:text-white" asChild>
-                <Link href="/free-11-plus-practice-test-trial">Free Trial — Try the Full Platform</Link>
-              </Button>
-            </div>
-
-            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6">
-              <Link href="/free-diagnostic" className="text-white/40 hover:text-white/70 text-sm font-medium transition-colors">
-                Free Diagnostic
-              </Link>
-              <span className="hidden sm:inline text-white/15">|</span>
-              <Link href="/pricing" className="text-white/40 hover:text-white/70 text-sm font-medium transition-colors">
-                Practice Platform — £24.99/mo
-              </Link>
-              <span className="hidden sm:inline text-white/15">|</span>
-              <Link href="/pricing" className="text-white/40 hover:text-white/70 text-sm font-medium transition-colors">
-                Platform Edge — £59.99/mo
-              </Link>
-              <span className="hidden sm:inline text-white/15">|</span>
-              <Link href="/pricing#tiers" className="text-white/40 hover:text-white/70 text-sm font-medium transition-colors">
-                Young Scholar — £349 one-time
-              </Link>
+              <a
+                href="#see-product"
+                className="text-white/60 hover:text-white/90 text-base font-medium transition-colors flex items-center gap-1.5"
+                data-testid="link-hero-secondary"
+              >
+                See how it works <ArrowRight className="h-4 w-4" />
+              </a>
             </div>
 
             <p className="text-[11px] text-white/25 mt-2 max-w-md mx-auto">
@@ -510,7 +474,85 @@ export default function Landing() {
         </div>
       </section>
 
-      <section id="see-product" className="py-16 md:py-24 bg-slate-50 border-b border-border/30 relative">
+      {/* ── DIFFERENTIATION STRIP ── */}
+      <section className="py-10 md:py-14 bg-white border-b border-slate-100" data-testid="section-differentiator-strip">
+        <div className="container mx-auto max-w-5xl px-4">
+          <div className="grid md:grid-cols-3 gap-6 md:gap-8">
+            <div className="flex flex-col items-start gap-3" data-testid="diff-strip-bucks">
+              <div className="w-10 h-10 rounded-xl bg-primary/8 border border-primary/12 flex items-center justify-center shrink-0">
+                <Target className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <h3 className="font-bold text-primary text-base leading-tight mb-1">Bucks-specific, 121-benchmarked</h3>
+                <p className="text-sm text-slate-500 leading-relaxed">Every question is built to match the Buckinghamshire Secondary Transfer Test format. Every result is measured against the 121 qualifying threshold — not a generic percentage score.</p>
+              </div>
+            </div>
+            <div className="flex flex-col items-start gap-3" data-testid="diff-strip-marks">
+              <div className="w-10 h-10 rounded-xl bg-red-50 border border-red-100 flex items-center justify-center shrink-0">
+                <BarChart3 className="h-5 w-5 text-red-600" />
+              </div>
+              <div>
+                <h3 className="font-bold text-primary text-base leading-tight mb-1">Shows where marks are lost — not just where they went wrong</h3>
+                <p className="text-sm text-slate-500 leading-relaxed">The diagnostic breaks down performance by subject and sub-topic. You see exactly which question types are costing marks, and by how much — not just a total score.</p>
+              </div>
+            </div>
+            <div className="flex flex-col items-start gap-3" data-testid="diff-strip-priorities">
+              <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center shrink-0">
+                <Zap className="h-5 w-5 text-amber-600" />
+              </div>
+              <div>
+                <h3 className="font-bold text-primary text-base leading-tight mb-1">Tells you the next 3 priorities to focus on</h3>
+                <p className="text-sm text-slate-500 leading-relaxed">After every diagnostic, the three highest-impact areas are ranked by the points they could add to the forecast. No generic revision lists — just what will move the score fastest.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── WHAT YOU'LL KNOW IN 8 MINUTES ── */}
+      <section className="py-16 md:py-24 bg-slate-50 border-b border-border/30" data-testid="section-assessment-outcomes">
+        <div className="container mx-auto max-w-5xl px-4">
+          <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
+            <div>
+              <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-4">After the Assessment</span>
+              <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif leading-tight mb-5">
+                What You'll Know in 8 Minutes
+              </h2>
+              <p className="text-slate-500 text-base leading-relaxed mb-4">
+                Most parents finish a practice paper knowing their child got some questions wrong. This diagnostic tells you <em>which</em> question types, <em>why</em>, and what to do about it.
+              </p>
+              <p className="text-slate-600 text-base leading-relaxed mb-6">
+                Eight minutes. No account. Your child's real readiness picture — with a clear path forward, not just a score to worry about.
+              </p>
+              <Link href="/free-diagnostic">
+                <Button className="h-12 px-7 font-bold bg-primary hover:bg-primary/90" data-testid="button-outcomes-cta">
+                  Start Free Diagnostic <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+              <p className="text-xs text-slate-400 mt-3">No account needed · 8 minutes · instant results</p>
+            </div>
+            <div className="space-y-3">
+              {[
+                { label: "A readiness band benchmarked against the 121 qualifying score — On Track, Within Reach, or Needs Focus", icon: <CheckCircle2 className="h-4 w-4" />, color: "text-emerald-600 bg-emerald-50 border-emerald-100" },
+                { label: "A forecast standardised score showing exactly how far from 121 your child currently is", icon: <TrendingUp className="h-4 w-4" />, color: "text-blue-600 bg-blue-50 border-blue-100" },
+                { label: "Which question types are costing marks — broken down by subject and sub-topic", icon: <Target className="h-4 w-4" />, color: "text-red-600 bg-red-50 border-red-100" },
+                { label: "Where marks are consistently being lost across each GL-style section", icon: <BarChart3 className="h-4 w-4" />, color: "text-amber-600 bg-amber-50 border-amber-100" },
+                { label: "The three highest-impact priorities to focus on next — ranked by the points they could add", icon: <Zap className="h-4 w-4" />, color: "text-violet-600 bg-violet-50 border-violet-100" },
+              ].map((item, i) => (
+                <div key={i} className="flex items-start gap-3 bg-white rounded-xl border border-slate-100 p-4" data-testid={`outcome-item-${i}`}>
+                  <div className={`p-1.5 rounded-lg border shrink-0 mt-0.5 ${item.color}`}>
+                    {item.icon}
+                  </div>
+                  <p className="text-sm text-slate-700 font-medium leading-snug">{item.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── INTERACTIVE SHOWCASE ── */}
+      <section id="see-product" className="py-16 md:py-24 bg-white border-b border-border/30 relative">
         <div className="container mx-auto max-w-5xl px-4">
           <div className="text-center mb-8">
             <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">Here's How We Show You</span>
@@ -518,7 +560,7 @@ export default function Landing() {
               What the Diagnostic Reveals — In Detail
             </h2>
             <p className="text-lg text-slate-500 max-w-2xl mx-auto leading-relaxed">
-              Explore a sample diagnostic report to see how performance is analysed across accuracy, pace, stability and skill type — and how priorities are set.
+              Explore a sample diagnostic report. This is what parents see after their child's first session — a clear picture of where they are, not just a score.
             </p>
           </div>
 
@@ -585,74 +627,19 @@ export default function Landing() {
             Example based on sample student data. Your child's real results will populate after their diagnostic.
           </p>
 
-          <div className="text-center mt-6">
-            <Button variant="outline" className="h-11 px-6 font-semibold" asChild data-testid="button-see-more-platform">
-              <Link href="/bucks-11-plus-parent-guide#platform-preview">
-                See More <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
-
           <div className="mt-14 pt-10 border-t border-slate-200">
             <div className="text-center mb-6">
-              <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-2">Free Trial — Try the Platform</span>
               <h3 className="text-2xl font-bold text-primary font-serif mb-2">Sample Practice Questions</h3>
               <p className="text-sm text-slate-500 max-w-xl mx-auto">
-                Swipe through to see the question types your child will practise — across all four GL-style subjects.
+                Swipe through to see the question types your child will practice — across all four GL-style subjects.
               </p>
             </div>
             <SampleQuestionsCarousel className="md:px-8" />
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-8">
-              <Button asChild className="h-11 px-6 bg-brand-amber text-amber-950 hover:bg-brand-amber/90 font-bold" data-testid="button-sample-questions-subscribe">
-                <Link href="/free-11-plus-practice-test-trial">Try the Diagnostic & Practice Hub Free <ArrowRight className="ml-2 h-4 w-4" /></Link>
-              </Button>
-              <Button asChild variant="outline" className="h-11 px-6 font-semibold" data-testid="button-sample-questions-free">
-                <Link href="/free-diagnostic">Take the Free Diagnostic First</Link>
-              </Button>
-            </div>
-            <p className="text-[11px] text-slate-400 text-center mt-3">Cancel any time · No lock-in</p>
           </div>
         </div>
       </section>
 
-      <section className="py-16 md:py-24 bg-white border-b border-border/30" data-testid="section-assessment-outcomes">
-        <div className="container mx-auto max-w-5xl px-4">
-          <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
-            <div>
-              <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-4">After the Assessment</span>
-              <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif leading-tight mb-5">
-                What You'll Know in 8 Minutes
-              </h2>
-              <p className="text-slate-500 text-base leading-relaxed mb-6">
-                Most parents finish a practice paper knowing their child got some questions wrong. This diagnostic tells you <em>which</em> question types, <em>why</em>, and what to do about it.
-              </p>
-              <Link href="/free-diagnostic">
-                <Button className="h-12 px-7 font-bold bg-primary hover:bg-primary/90" data-testid="button-outcomes-cta">
-                  Start Free Diagnostic <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
-              <p className="text-xs text-slate-400 mt-3">No account needed · 8 minutes · instant results</p>
-            </div>
-            <div className="space-y-3">
-              {[
-                { label: "Which question types your child is struggling with — by subject and sub-topic", icon: <Target className="h-4 w-4" />, color: "text-red-600 bg-red-50 border-red-100" },
-                { label: "Where marks are consistently being lost across each GL-style section", icon: <BarChart3 className="h-4 w-4" />, color: "text-amber-600 bg-amber-50 border-amber-100" },
-                { label: "How their performance compares to the 121 qualifying standard", icon: <TrendingUp className="h-4 w-4" />, color: "text-blue-600 bg-blue-50 border-blue-100" },
-                { label: "A clear readiness band — On Track, Within Reach, or Needs Focus", icon: <CheckCircle2 className="h-4 w-4" />, color: "text-emerald-600 bg-emerald-50 border-emerald-100" },
-                { label: "The three highest-impact areas to focus on next — not a generic revision list", icon: <Zap className="h-4 w-4" />, color: "text-violet-600 bg-violet-50 border-violet-100" },
-              ].map((item, i) => (
-                <div key={i} className="flex items-start gap-3 bg-slate-50 rounded-xl border border-slate-100 p-4" data-testid={`outcome-item-${i}`}>
-                  <div className={`p-1.5 rounded-lg border shrink-0 mt-0.5 ${item.color}`}>
-                    {item.icon}
-                  </div>
-                  <p className="text-sm text-slate-700 font-medium leading-snug">{item.label}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
+      {/* ── STOP GUESSING ── */}
       <section className="py-16 md:py-20 bg-gradient-to-br from-slate-900 to-slate-800 border-b border-border/30" data-testid="section-stop-guessing">
         <div className="container mx-auto max-w-5xl px-4">
           <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
@@ -662,7 +649,7 @@ export default function Landing() {
                 Stop Guessing What to Revise
               </h2>
               <p className="text-white/60 text-base leading-relaxed mb-4">
-                Most families approach preparation the same way — more questions, more papers, more tutoring hours. They work hard. But without knowing where the marks are actually being lost, preparation time is spread across everything rather than focused on what matters.
+                Most Bucks families approach preparation the same way — more questions, more papers, more tutoring hours. They work hard. But without knowing where the marks are actually being lost, preparation time is spread across everything rather than focused on the gaps that are costing the 121.
               </p>
               <p className="text-brand-amber/90 font-semibold text-base leading-relaxed">
                 This diagnostic removes that uncertainty. Instead of doing more questions, you focus on the right ones.
@@ -675,7 +662,7 @@ export default function Landing() {
                 </div>
                 <div>
                   <p className="text-white font-semibold text-sm mb-1">Without a diagnostic</p>
-                  <p className="text-white/50 text-sm leading-relaxed">Working through everything. Spending time on topics your child already knows. Not knowing which gaps are costing the most marks.</p>
+                  <p className="text-white/50 text-sm leading-relaxed">Working through everything. Spending time on topics already secure. Not knowing which specific gaps are standing between your child and 121.</p>
                 </div>
               </div>
               <div className="rounded-2xl border border-brand-amber/20 bg-brand-amber/5 p-5 flex items-start gap-4">
@@ -684,7 +671,7 @@ export default function Landing() {
                 </div>
                 <div>
                   <p className="text-white font-semibold text-sm mb-1">With a diagnostic</p>
-                  <p className="text-white/50 text-sm leading-relaxed">Three specific priorities, ranked by impact. Practice time goes exactly where it will move the score — with evidence it's working after each session.</p>
+                  <p className="text-white/50 text-sm leading-relaxed">Three specific priorities, ranked by impact on the forecast. Practice time goes exactly where it will move the score — and you can see it working after every session.</p>
                 </div>
               </div>
             </div>
@@ -692,109 +679,16 @@ export default function Landing() {
         </div>
       </section>
 
-      <section id="pricing" className="py-16 md:py-24 bg-white border-b border-border/30" data-testid="section-pricing">
-        <div className="container mx-auto max-w-6xl px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-3">Simple, Transparent Pricing</h2>
-            <p className="text-muted-foreground max-w-xl mx-auto">Start free. Upgrade when you're ready. Every plan includes the same rigorous GL-style question bank.</p>
-          </div>
-          <div className="grid sm:grid-cols-2 xl:grid-cols-5 gap-4 max-w-7xl mx-auto">
-            <div className="flex flex-col rounded-2xl border border-border/60 bg-white shadow-sm p-6" data-testid="pricing-card-free">
-              <p className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Free Diagnostic</p>
-              <div className="flex items-end gap-1 mb-1">
-                <span className="text-3xl font-bold text-primary">Free</span>
-              </div>
-              <p className="text-xs text-slate-500 mb-4">No account needed</p>
-              <ul className="space-y-1.5 text-sm text-slate-700 mb-6 flex-1">
-                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>12-question GL-style diagnostic</li>
-                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>Readiness band &amp; forecast score</li>
-                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>Section-by-section breakdown</li>
-                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>3 priority improvement areas</li>
-              </ul>
-              <Link href="/free-diagnostic" className="block text-center w-full rounded-lg border border-primary text-primary font-semibold py-2 text-sm hover:bg-primary/5 transition-colors" data-testid="button-pricing-free">Start Free Diagnostic</Link>
-            </div>
-
-            <div className="flex flex-col rounded-2xl border border-border/60 bg-white shadow-sm p-6" data-testid="pricing-card-monthly">
-              <p className="text-xs font-bold uppercase tracking-wider text-brand-amber mb-1">Bucks Practice Platform</p>
-              <div className="flex items-end gap-1 mb-1">
-                <span className="text-3xl font-bold text-primary">£24.99</span>
-                <span className="text-slate-500 text-sm mb-0.5">/mo</span>
-              </div>
-              <p className="text-xs text-slate-500 mb-4">Cancel anytime</p>
-              <ul className="space-y-1.5 text-sm text-slate-700 mb-6 flex-1">
-                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>1,500+ practice questions</li>
-                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>Full 40-question timed papers</li>
-                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>6 Hard challenge drills</li>
-                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>PDF diagnostic reports</li>
-                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>Progress tracking</li>
-              </ul>
-              <Link href="/pricing?autoCheckout=pack_monthly" className="block text-center w-full rounded-lg bg-primary text-white font-semibold py-2 text-sm hover:bg-primary/90 transition-colors" data-testid="button-pricing-monthly">Start Monthly</Link>
-            </div>
-
-            <div className="flex flex-col rounded-2xl border-2 border-primary bg-white shadow-md p-6 relative" data-testid="pricing-card-edge">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Most Popular</div>
-              <p className="text-xs font-bold uppercase tracking-wider text-primary mb-1">Bucks Practice Platform Edge</p>
-              <div className="flex items-end gap-1 mb-1">
-                <span className="text-3xl font-bold text-primary">£59.99</span>
-                <span className="text-slate-500 text-sm mb-0.5">/mo</span>
-              </div>
-              <p className="text-xs text-slate-500 mb-4">Cancel anytime</p>
-              <ul className="space-y-1.5 text-sm text-slate-700 mb-6 flex-1">
-                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>Everything in Practice Platform</li>
-                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>All 17 Hard challenge drills</li>
-                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>Full mock exam simulator</li>
-                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>Advanced parent analytics</li>
-                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>Weekly personalised plans</li>
-              </ul>
-              <Link href="/free-11-plus-practice-test-trial" className="block text-center w-full rounded-lg bg-primary text-white font-semibold py-2 text-sm hover:bg-primary/90 transition-colors" data-testid="button-pricing-edge">Free Trial — 7 Days Platform Access</Link>
-            </div>
-
-            <div className="flex flex-col rounded-2xl border border-brand-green/40 bg-green-50/40 shadow-sm p-6 relative" data-testid="pricing-card-annual">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-green-600 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Best Value</div>
-              <p className="text-xs font-bold uppercase tracking-wider text-brand-green mb-1">Edge — Annual</p>
-              <div className="flex items-end gap-1 mb-1">
-                <span className="text-3xl font-bold text-primary">£495</span>
-                <span className="text-slate-500 text-sm mb-0.5">one-time</span>
-              </div>
-              <p className="text-xs text-slate-500 mb-4">12 months · equiv. £41.25/mo</p>
-              <ul className="space-y-1.5 text-sm text-slate-700 mb-6 flex-1">
-                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>Full Edge access for 12 months</li>
-                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>All 17 Hard drills &amp; mock exams</li>
-                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>Advanced analytics &amp; plans</li>
-                <li className="flex gap-2"><span className="text-green-500 shrink-0">✓</span>Save £224.88 vs monthly</li>
-              </ul>
-              <Link href="/pricing?autoCheckout=pack_annual" className="block text-center w-full rounded-lg bg-green-700 text-white font-semibold py-2 text-sm hover:bg-green-800 transition-colors" data-testid="button-pricing-annual">Get Annual Access</Link>
-            </div>
-
-            <div className="flex flex-col rounded-2xl border border-amber-200 bg-amber-50/30 shadow-sm p-6" data-testid="pricing-card-scholar">
-              <p className="text-xs font-bold uppercase tracking-wider text-amber-700 mb-1">Young Scholar Programme</p>
-              <div className="flex items-end gap-1 mb-1">
-                <span className="text-3xl font-bold text-primary">£349</span>
-                <span className="text-slate-500 text-sm mb-0.5">one-time</span>
-              </div>
-              <p className="text-xs text-slate-500 mb-4">24 weeks structured programme</p>
-              <ul className="space-y-1.5 text-sm text-slate-700 mb-6 flex-1">
-                <li className="flex gap-2"><span className="text-amber-600 shrink-0">✓</span>Full platform access</li>
-                <li className="flex gap-2"><span className="text-amber-600 shrink-0">✓</span>Structured 24-week roadmap</li>
-                <li className="flex gap-2"><span className="text-amber-600 shrink-0">✓</span>Milestone diagnostics</li>
-                <li className="flex gap-2"><span className="text-amber-600 shrink-0">✓</span>Priority support</li>
-              </ul>
-              <Link href="/pricing?autoCheckout=programme24_plus" className="block text-center w-full rounded-lg border border-amber-600 text-amber-700 font-semibold py-2 text-sm hover:bg-amber-50 transition-colors" data-testid="button-pricing-scholar">View Programme</Link>
-            </div>
-          </div>
-          <p className="text-center text-xs text-slate-400 mt-8">All prices include VAT. Subscriptions can be cancelled anytime. One-time payments grant access for the stated duration.</p>
-        </div>
-      </section>
-
+      {/* ── PREPARATION PLATFORM DIFFERENTIATOR ── */}
       <section className="py-14 md:py-20 bg-slate-50 border-b border-border/30" data-testid="section-platform-differentiator">
         <div className="container mx-auto max-w-5xl px-4">
           <div className="text-center mb-10">
             <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">Why This Works</span>
             <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif mb-3">
-              This Is a Preparation Platform. Not a Question Bank.
+              A Preparation Platform. Not a Question Bank.
             </h2>
             <p className="text-slate-500 max-w-2xl mx-auto leading-relaxed">
-              Most preparation resources give you material to work through. This platform tells you what to work on — based on where your child actually is — and shows you whether it's making a difference.
+              Most resources give your child more material. This platform tells you <strong className="text-slate-700 font-semibold">what to work on</strong> — based on where they actually are — and shows you whether it's making a difference. Short sessions, any device, watching the forecast close in on 121.
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -803,21 +697,21 @@ export default function Landing() {
                 <Target className="h-5 w-5" />
               </div>
               <h3 className="font-bold text-primary text-base leading-tight">Tells You What to Focus on Next</h3>
-              <p className="text-sm text-slate-500 leading-relaxed">After every diagnostic, the three highest-impact priorities are identified and matched to targeted drills. You're not guessing where to spend the time — the data decides.</p>
+              <p className="text-sm text-slate-500 leading-relaxed">After every diagnostic, the three highest-impact priorities are identified and matched to targeted drills. The data decides — not guesswork.</p>
             </div>
             <div className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col gap-3" data-testid="card-platform-diff-device">
               <div className="w-11 h-11 rounded-xl bg-primary/5 text-primary flex items-center justify-center border border-primary/10">
                 <Smartphone className="h-5 w-5" />
               </div>
               <h3 className="font-bold text-primary text-base leading-tight">Works on Any Device</h3>
-              <p className="text-sm text-slate-500 leading-relaxed">Phone, tablet or laptop — your child practices when and where suits them. Interactive and timed, not a static PDF to work through alone at a dedicated desk.</p>
+              <p className="text-sm text-slate-500 leading-relaxed">Phone, tablet or laptop — 15 minutes before school or at the weekend. Interactive and timed, not a static PDF to work through at a desk.</p>
             </div>
             <div className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col gap-3" data-testid="card-platform-diff-analytics">
               <div className="w-11 h-11 rounded-xl bg-primary/5 text-primary flex items-center justify-center border border-primary/10">
                 <BarChart3 className="h-5 w-5" />
               </div>
               <h3 className="font-bold text-primary text-base leading-tight">Parent Visibility Without Micromanaging</h3>
-              <p className="text-sm text-slate-500 leading-relaxed">The parent analytics dashboard shows readiness score, session progress by topic, and your child's current improvement priorities. You know what's happening — without sitting beside them for every session.</p>
+              <p className="text-sm text-slate-500 leading-relaxed">The parent analytics dashboard shows readiness score, topic-level progress, and current priorities. You know what's happening without sitting beside them for every session.</p>
             </div>
             <div className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col gap-3" data-testid="card-platform-diff-tracking">
               <div className="w-11 h-11 rounded-xl bg-primary/5 text-primary flex items-center justify-center border border-primary/10">
@@ -830,24 +724,121 @@ export default function Landing() {
         </div>
       </section>
 
-      <section className="py-14 bg-white border-b border-border/30">
-        <div className="container mx-auto max-w-3xl px-4 text-center">
-          <p className="text-slate-500 text-sm mb-6">Not sure where to start? The free 8-minute diagnostic requires no account and takes less time than a practice paper.</p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button size="lg" className="h-12 px-8 font-bold bg-primary hover:bg-primary/90 text-white" asChild data-testid="button-cta-diagnostic">
-              <Link href="/free-diagnostic">Start Free Diagnostic</Link>
-            </Button>
-            <Button variant="outline" size="lg" className="h-12 px-6 font-semibold" asChild data-testid="button-cta-programme">
-              <Link href="/pricing?autoCheckout=programme24_plus">View Young Scholar Programme</Link>
-            </Button>
+      {/* ── PRICING ── */}
+      <section id="pricing" className="py-16 md:py-24 bg-white border-b border-border/30" data-testid="section-pricing">
+        <div className="container mx-auto max-w-5xl px-4">
+          <div className="text-center mb-12">
+            <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">Pricing</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-3">Simple, Transparent Pricing</h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">Start with the free diagnostic. Upgrade when you're ready. Both paid plans include every feature.</p>
+          </div>
+
+          {/* Free strip */}
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 px-6 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6" data-testid="pricing-card-free">
+            <div className="flex items-center gap-4">
+              <div>
+                <p className="font-bold text-primary text-sm">Free Diagnostic</p>
+                <p className="text-xs text-slate-500 mt-0.5">No account needed · 12-question GL-style diagnostic · Readiness band · Forecast score · 3 priorities</p>
+              </div>
+            </div>
+            <Link href="/free-diagnostic" className="shrink-0 inline-flex items-center gap-1.5 rounded-lg border border-primary text-primary font-semibold py-2 px-5 text-sm hover:bg-primary/5 transition-colors whitespace-nowrap" data-testid="button-pricing-free">
+              Start Free <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
+
+          {/* Paid plan cards */}
+          <div className="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
+            {/* Monthly */}
+            <div className="flex flex-col rounded-2xl border border-slate-200 bg-white shadow-sm p-7" data-testid="pricing-card-monthly">
+              <p className="text-xs font-bold uppercase tracking-wider text-primary/60 mb-1">Monthly</p>
+              <p className="text-sm font-bold text-primary mb-1">Bucks Plus Edge</p>
+              <div className="flex items-end gap-1 mb-1">
+                <span className="text-4xl font-bold text-primary">£35</span>
+                <span className="text-slate-500 text-sm mb-1">/month</span>
+              </div>
+              <p className="text-xs text-slate-400 mb-6">Cancel anytime</p>
+              <ul className="space-y-2 text-sm text-slate-700 mb-8 flex-1">
+                {[
+                  "1,500+ GL-style practice questions",
+                  "Full 40q and 50q mock diagnostics",
+                  "All Hard-level challenge drills",
+                  "Timed drill bank (all difficulty levels)",
+                  "PDF diagnostic reports",
+                  "Parent analytics dashboard",
+                  "Progress tracking across all sessions",
+                ].map((f, i) => (
+                  <li key={i} className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />{f}</li>
+                ))}
+              </ul>
+              <Link href="/pricing?autoCheckout=pack_plus" className="block text-center w-full rounded-lg bg-primary text-white font-semibold py-2.5 text-sm hover:bg-primary/90 transition-colors" data-testid="button-pricing-monthly">
+                Start Monthly
+              </Link>
+            </div>
+
+            {/* Annual */}
+            <div className="flex flex-col rounded-2xl border-2 border-primary bg-white shadow-md p-7 relative" data-testid="pricing-card-annual">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full whitespace-nowrap">Best Value — Save £71</div>
+              <p className="text-xs font-bold uppercase tracking-wider text-primary mb-1">Annual</p>
+              <p className="text-sm font-bold text-primary mb-1">Bucks Plus Edge</p>
+              <div className="flex items-end gap-1 mb-1">
+                <span className="text-4xl font-bold text-primary">£349</span>
+                <span className="text-slate-500 text-sm mb-1">/year</span>
+              </div>
+              <p className="text-xs text-slate-400 mb-1">equiv. £29.08/month</p>
+              <p className="text-xs text-emerald-600 font-semibold mb-6">Save £71 vs monthly</p>
+              <ul className="space-y-2 text-sm text-slate-700 mb-8 flex-1">
+                {[
+                  "Everything in the monthly plan",
+                  "12 months of full access",
+                  "Priority email support",
+                  "Cancel anytime",
+                ].map((f, i) => (
+                  <li key={i} className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />{f}</li>
+                ))}
+              </ul>
+              <Link href="/pricing?autoCheckout=pack_annual" className="block text-center w-full rounded-lg bg-primary text-white font-semibold py-2.5 text-sm hover:bg-primary/90 transition-colors" data-testid="button-pricing-annual">
+                Get Annual Access
+              </Link>
+            </div>
+          </div>
+
+          <p className="text-center text-xs text-slate-400 mt-8">All prices include VAT. Subscriptions renew automatically and can be cancelled anytime. <Link href="/pricing" className="text-primary hover:underline">See full pricing details →</Link></p>
+        </div>
+      </section>
+
+      {/* ── URGENCY / TIMELINE CALLOUT ── */}
+      <section className="py-12 md:py-16 bg-primary border-b border-border/30" data-testid="section-urgency">
+        <div className="container mx-auto max-w-4xl px-4">
+          <div className="flex flex-col md:flex-row items-center gap-8">
+            <div className="flex items-center gap-4 shrink-0">
+              <div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center">
+                <CalendarDays className="h-7 w-7 text-white" />
+              </div>
+              <div className="text-white">
+                <p className="text-xs font-bold uppercase tracking-widest text-white/50 mb-0.5">Preparation Timeline</p>
+                <p className="text-xl font-bold font-serif leading-tight">September is closer than it feels.</p>
+              </div>
+            </div>
+            <div className="flex-1">
+              <p className="text-white/70 text-sm leading-relaxed mb-4">
+                The Bucks Secondary Transfer Test takes place in September of Year 6. Registration for Buckinghamshire grammar schools typically opens in the spring of Year 5. Children who begin structured, diagnostic-led preparation earlier have a measurable advantage — not because they do more, but because they focus on the right things from the start.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Button className="h-11 px-6 bg-brand-amber text-amber-950 hover:bg-amber-400 font-bold border-none" asChild data-testid="button-urgency-diagnostic">
+                  <Link href="/free-diagnostic">Start Free Diagnostic</Link>
+                </Button>
+                <Button variant="outline" className="h-11 px-6 border-white/25 text-white hover:bg-white/10 font-semibold" asChild data-testid="button-urgency-pricing">
+                  <Link href="/pricing">View Plans</Link>
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-
+      {/* ── ABOUT & FAQ ── */}
       <section className="bg-slate-50 border-t border-slate-200" aria-label="Platform overview">
 
-        {/* Section header */}
         <div className="border-b border-slate-200 bg-white">
           <div className="container mx-auto max-w-4xl px-4 py-10">
             <div className="flex items-center gap-3 mb-3">
@@ -862,7 +853,6 @@ export default function Landing() {
 
         <div className="container mx-auto max-w-4xl px-4 py-12 space-y-12">
 
-          {/* At a Glance */}
           <div>
             <div className="flex items-center gap-3 mb-5">
               <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
@@ -875,7 +865,7 @@ export default function Landing() {
                 "Free 12-question GL-style mini diagnostic — no account required, results in under 10 minutes",
                 "Covers all four Bucks 11+ domains: Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension",
                 "Readiness forecast benchmarked against the 121 standardised score qualifying threshold",
-                "Bucks Practice Platform with 1,500+ questions, timed drills, and parent analytics — from £24.99/month",
+                "Bucks Plus Edge with 1,500+ questions, timed drills, and parent analytics — from £35/month or £349/year",
                 "Fully independent — not affiliated with GL Assessment, Buckinghamshire Council, or any grammar school",
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-3 bg-white rounded-xl border border-slate-200 px-4 py-3">
@@ -886,10 +876,8 @@ export default function Landing() {
             </div>
           </div>
 
-          {/* Divider */}
           <hr className="border-slate-200" />
 
-          {/* What the Diagnostic Covers */}
           <div>
             <div className="flex items-center gap-3 mb-3">
               <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
@@ -918,49 +906,16 @@ export default function Landing() {
             </div>
           </div>
 
-          {/* Divider */}
           <hr className="border-slate-200" />
 
-          {/* What Parents Receive */}
           <div>
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
-                <BarChart3 className="h-4 w-4 text-primary" />
-              </div>
-              <h2 className="text-xl font-bold text-primary font-serif">What Parents Receive</h2>
-            </div>
-            <p className="text-sm text-slate-500 mb-5 ml-11">After the free diagnostic, parents receive all of the following — instantly, with no account required:</p>
-            <div className="space-y-3 ml-11">
-              {[
-                { label: "A readiness band", desc: "On Track, Within Reach, or Clear Improvement Opportunity — relative to the 121 qualifying standard" },
-                { label: "A forecast standardised score", desc: "Where your child is currently tracking against the 121 threshold, in the same scale as the real test" },
-                { label: "Section-by-section accuracy", desc: "Which of the four domains are strong and which need attention" },
-                { label: "Pacing analysis", desc: "Whether your child is working at the speed the real test requires" },
-                { label: "Three priority next steps", desc: "The specific areas where targeted practice will have the highest impact on the overall score" },
-              ].map((item, i) => (
-                <div key={i} className="flex items-start gap-3">
-                  <CheckCircle2 className="h-4 w-4 text-primary/60 shrink-0 mt-0.5" />
-                  <p className="text-sm text-slate-700 leading-relaxed">
-                    <span className="font-semibold text-primary">{item.label}</span>
-                    <span className="text-slate-500"> — {item.desc}</span>
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Divider */}
-          <hr className="border-slate-200" />
-
-          {/* What Does 121 Mean */}
-          <div>
-            <div className="flex items-center gap-3 mb-5">
               <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
                 <Hash className="h-4 w-4 text-primary" />
               </div>
               <h2 className="text-xl font-bold text-primary font-serif">What Does 121 Mean?</h2>
             </div>
-            <div className="flex flex-col sm:flex-row gap-5">
+            <div className="flex flex-col sm:flex-row gap-5 ml-11">
               <div className="shrink-0 flex flex-col items-center justify-center bg-primary rounded-2xl px-7 py-5 text-white text-center min-w-[110px]">
                 <span className="text-5xl font-bold font-serif leading-none">121</span>
                 <span className="text-[10px] font-semibold uppercase tracking-widest mt-2 text-white/70">Qualifying Score</span>
@@ -979,10 +934,8 @@ export default function Landing() {
             </div>
           </div>
 
-          {/* Divider */}
           <hr className="border-slate-200" />
 
-          {/* Who This Platform Is For */}
           <div>
             <div className="flex items-center gap-3 mb-5">
               <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
@@ -992,7 +945,7 @@ export default function Landing() {
             </div>
             <div className="space-y-4 ml-11">
               <p className="text-sm text-slate-600 leading-relaxed">
-                Bucks 11 Plus Tests is designed for parents of children in Year 5 or Year 6 in Buckinghamshire — or moving to Buckinghamshire — who are preparing for the Secondary Transfer Test. It is particularly useful for parents who are already doing some preparation (workbooks, tutor, mock exams) but are not confident that preparation is closing the right gaps, or who want to understand their child's starting point before deciding how much time and money to invest.
+                Bucks 11 Plus Tests is designed for parents of children in Year 5 or Year 6 in Buckinghamshire — or moving to Buckinghamshire — who are preparing for the Secondary Transfer Test. It is particularly useful for parents who are already doing some preparation (workbooks, tutor, practice papers) but are not confident that preparation is closing the right gaps, or who want to understand their child's starting point before deciding how much time and money to invest.
               </p>
               <div className="rounded-xl border border-slate-200 bg-white px-4 py-3">
                 <p className="text-sm text-slate-500 leading-relaxed">
@@ -1009,10 +962,8 @@ export default function Landing() {
             </div>
           </div>
 
-          {/* Divider */}
           <hr className="border-slate-200" />
 
-          {/* FAQ */}
           <div>
             <div className="flex items-center gap-3 mb-6">
               <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
@@ -1023,9 +974,10 @@ export default function Landing() {
             <div className="space-y-0 rounded-2xl border border-slate-200 bg-white overflow-hidden divide-y divide-slate-100">
               {[
                 { q: "Is Bucks 11 Plus Tests affiliated with GL Assessment or Buckinghamshire Council?", a: "No. We are fully independent — not affiliated with GL Assessment, Buckinghamshire Council, TBGS, or any individual grammar school. 'GL-style' refers to the question format we independently replicate, not an official relationship." },
-                { q: "How is the free diagnostic different from the full paid platform?", a: "The free 12-question mini diagnostic gives you a readiness band, forecast score, and section breakdown with no account needed. The paid Bucks Practice Platform (from £24.99/month) gives access to 1,500+ questions, full 40-question timed papers, and progress tracking across all sessions. The Platform Edge (£59.99/month) adds full parent analytics and all Hard drills." },
-                { q: "What is the difference between the Practice Platform and the Young Scholar Programme?", a: "The Bucks Practice Platform (from £24.99/month) is flexible access to the full question bank, drills, and diagnostics. The Bucks Young Scholar Programme (£349 one-time) adds a structured 6-month preparation programme with a 26-week roadmap, weekly task plans, milestone assessments, and 3 mock exams." },
+                { q: "How is the free diagnostic different from the paid platform?", a: "The free 12-question mini diagnostic gives you a readiness band, forecast score, and section breakdown with no account needed. The paid Bucks Plus Edge (£35/month or £349/year) gives access to 1,500+ questions, full 40-question and 50-question mock diagnostics, all Hard drills, parent analytics, and progress tracking across all sessions." },
+                { q: "What is the difference between the monthly and annual plan?", a: "Both plans give identical full access to every feature. The monthly plan is £35/month and can be cancelled anytime. The annual plan is £349/year — equivalent to £29.08/month — saving £71 compared to paying monthly for 12 months." },
                 { q: "When should preparation begin?", a: "Most families begin structured preparation in Year 4 or early Year 5, giving 12–18 months before the September test. Starting with a diagnostic identifies specific gaps so preparation time is targeted rather than broad." },
+                { q: "Can I cancel my subscription?", a: "Yes — monthly and annual subscriptions can be cancelled anytime from your account page. If you cancel, you retain access until the end of the current billing period." },
               ].map((item, i) => (
                 <div key={i} className="px-6 py-5">
                   <p className="text-sm font-semibold text-primary mb-2 flex items-start gap-2">
@@ -1040,9 +992,19 @@ export default function Landing() {
 
         </div>
 
-        {/* Footer disclaimer */}
-        <div className="border-t border-slate-200 bg-white py-6 text-center">
-          <p className="text-xs text-slate-400" data-testid="text-disclaimer">
+        {/* Final CTA */}
+        <div className="border-t border-slate-200 bg-white py-12 text-center">
+          <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif mb-3">Start Free Diagnostic</h2>
+          <p className="text-slate-500 text-sm mb-6 max-w-md mx-auto">No account needed. 8 minutes. See exactly where your child stands — and what to fix next.</p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Button size="lg" className="h-12 px-8 font-bold bg-brand-amber text-amber-950 hover:bg-amber-400 border-none" asChild data-testid="button-cta-final">
+              <Link href="/free-diagnostic"><ArrowRight className="mr-2 h-5 w-5" />Start Free Diagnostic</Link>
+            </Button>
+            <Button variant="outline" size="lg" className="h-12 px-6 font-semibold" asChild data-testid="button-cta-pricing">
+              <Link href="/pricing">View Pricing</Link>
+            </Button>
+          </div>
+          <p className="text-xs text-slate-400 mt-8 max-w-md mx-auto" data-testid="text-disclaimer">
             Independent readiness assessment. Not affiliated with GL Assessment or Buckinghamshire Council. Operated by Ianson Systems Limited.
           </p>
         </div>

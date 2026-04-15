@@ -151,8 +151,8 @@ const yearContent: Record<number, YearGroupContent> = {
         body: "The most important preparation in the weeks before the test is completing practice papers under strict timed conditions. This means: two separate 45-minute sittings, no pausing, no help with individual questions, answers on a separate answer sheet, all in one sitting to simulate the actual test experience. Children who have only done untimed or partially timed practice often struggle with the pace discipline required on test day. Building this through repeated timed sessions in July and August gives children the familiarity needed to work calmly under pressure.",
       },
       {
-        heading: "The Audio Format — Practise This Specifically",
-        body: "The Buckinghamshire Secondary Transfer Test uses audio instructions — a recorded voice that directs children through each section, telling them when to start, how many questions are in each section, and when to stop. This voice cannot be paused or repeated. Children should practise with audio-format tests specifically, not just paper-based ones. The combination of a ticking clock and a recorded voice can cause unexpected panic on test day if children haven't experienced it before. Familiarity removes this as a variable.",
+        heading: "The Audio Format — Practice This Specifically",
+        body: "The Buckinghamshire Secondary Transfer Test uses audio instructions — a recorded voice that directs children through each section, telling them when to start, how many questions are in each section, and when to stop. This voice cannot be paused or repeated. Children should practice with audio-format tests specifically, not just paper-based ones. The combination of a ticking clock and a recorded voice can cause unexpected panic on test day if children haven't experienced it before. Familiarity removes this as a variable.",
       },
       {
         heading: "Test Day Logistics",
