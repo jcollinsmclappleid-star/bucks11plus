@@ -1,0 +1,182 @@
+You are rewriting and restructuring an existing live homepage for a Bucks 11+ website. This is not a brainstorm. This is an implementation task.
+
+Your job is to produce replacement homepage copy and a clearer conversion-focused content structure for mobile-first visitors.
+
+OUTPUT MUST BE DIRECTLY USABLE.
+Do not give generic advice. Do not speak abstractly. Do not explain marketing theory at length. Write final homepage copy, section by section, ready to paste into the site.
+
+BUSINESS CONTEXT:
+This is a Buckinghamshire-specific 11+ preparation platform.
+The audience is parents preparing a child for the Buckinghamshire Secondary Transfer Test.
+The site’s unique value is not “more questions”.
+Its value is diagnostic clarity:
+- showing where marks are being lost
+- benchmarking performance against the 121 qualifying threshold
+- identifying what to focus on next
+- turning practice into a more focused plan
+
+PRIMARY CONVERSION GOAL:
+Increase free diagnostic starts.
+
+SECONDARY GOAL:
+Make the site feel like a specialist Bucks 11+ preparation platform for parents who want evidence, not guesswork.
+
+IGNORE PRICING RESTRUCTURE FOR THIS TASK.
+Do not redesign pricing logic.
+Do not introduce new plans.
+Do not spend time comparing subscription options.
+Only improve homepage conversion through messaging, structure, CTA hierarchy, and copy.
+
+CORE POSITIONING:
+A Bucks-specific, diagnostic-led preparation platform for parents who want evidence, not guesswork.
+
+TARGET PARENT MINDSET:
+These parents are often already doing something:
+- books
+- practice papers
+- tutoring
+- revision
+But they are unsure:
+- whether it is actually improving the score
+- where their child is losing marks
+- whether their child is on track for Bucks
+- what they should focus on next
+
+WHAT THEY WANT:
+- clarity
+- reassurance
+- direction
+- local relevance
+- evidence
+- a smarter way to prepare
+
+VOICE:
+Use a voice that is:
+- calm
+- credible
+- specialist
+- precise
+- parent-reassuring
+- premium but restrained
+- direct and useful
+- Buckinghamshire-specific where relevant
+
+AVOID:
+- hype
+- clichés
+- exaggerated fear language
+- generic edtech copy
+- vague aspirational language
+- feature-dumping without translation into parent value
+- sounding like a tutoring ad
+
+KEY MESSAGE PRIORITY:
+1. Bucks-specific relevance
+2. Diagnostic clarity
+3. What the parent will know after the diagnostic
+4. What to focus on next
+5. Why this is different from generic question banks / random practice
+6. Parent visibility and progress tracking
+7. Content volume and drills
+
+VERY IMPORTANT:
+The homepage currently contains too many overlapping messages and CTAs.
+Your rewrite must create one clean narrative:
+Know where your child stands for the Bucks 11+ — and what to focus on next.
+
+PRIMARY CTA:
+Start Free Diagnostic
+
+SECONDARY CTA:
+Only include one if it supports the main CTA, such as:
+- See Sample Report
+- Explore How It Works
+Do not include competing actions like “try platform”, “compare plans”, “free trial”, etc. above the fold unless absolutely necessary.
+
+MOBILE-FIRST RULES:
+- The copy must scan well on a phone
+- Headings must be clear and not overlong
+- Subheadings should be concise
+- Bullets should be meaningful
+- Sections should flow logically
+- Important proof should appear early
+- The page should feel focused, not crowded
+
+EXISTING SITE THEMES TO PRESERVE AND IMPROVE:
+You should preserve the strongest strategic themes, but rewrite them to be tighter and more conversion-focused:
+- “Built for parents who want evidence, not guesswork”
+- “What you’ll know in 8 minutes”
+- “This is a preparation platform. Not a question bank.”
+- “Stop guessing what to revise”
+- Bucks-specific / 121 qualifying score / GL-style alignment
+
+WHAT TO PRODUCE:
+I need a complete homepage copy pack with section order.
+
+DELIVER THE OUTPUT IN THIS EXACT FORMAT:
+
+1. CONVERSION STRATEGY SUMMARY
+A short, practical summary of the homepage approach in 5–8 bullet points.
+
+2. FINAL HOMEPAGE STRUCTURE
+List the homepage sections in the exact recommended order.
+
+3. FULL REPLACEMENT COPY
+For each section, provide:
+- Section label / eyebrow if needed
+- Headline
+- Supporting copy
+- Bullets if relevant
+- CTA text if relevant
+
+Write copy for these sections:
+A. Hero
+B. What parents will know after the diagnostic
+C. Sample diagnostic report / proof section
+D. Why this works / not just a question bank
+E. Stop guessing what to revise
+F. Sample practice questions section
+G. Parent visibility / progress section
+H. Pricing intro section
+I. Bucks-specific reference / about section
+J. Final CTA section
+
+4. HERO OPTIONS
+Provide 3 headline options and 3 subheadline options, all strong and conversion-focused.
+
+5. CTA SYSTEM
+Recommend:
+- primary CTA wording
+- secondary CTA wording
+- sticky header CTA wording
+- CTA wording for lower sections
+
+6. COPY TO REMOVE OR REWRITE
+List any types of wording that should be removed because they weaken conversion, for example overdramatic lines, generic feature lines, or internal product language.
+
+7. CRO / MOBILE IMPLEMENTATION NOTES
+Give direct implementation notes for the developer/designer, including:
+- how to reduce competing CTAs
+- where to place proof earlier
+- how to simplify top-of-page scanning
+- how to ensure floating chat widgets do not block CTAs
+- how to keep the narrative coherent
+
+COPY REQUIREMENTS:
+- Make the copy feel native to a premium UK parent audience
+- Keep terminology aligned with Bucks / Buckinghamshire
+- Keep references to 121 natural and useful
+- Mention GL-style where relevant
+- Emphasise clarity and next steps more than volume of content
+- Translate features into outcomes
+- Keep every section conversion-aware
+
+DO NOT RETURN:
+- placeholder notes
+- “example copy”
+- high-level suggestions only
+- multiple divergent strategies
+- pricing strategy commentary
+- code
+
+Return one strong homepage direction, ready for implementation.

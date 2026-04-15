@@ -116,7 +116,7 @@ function ForecastSection({ title, index, children }: { title: string; index: num
         className={`grid transition-all duration-200 ${open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
       >
         <div className="overflow-hidden">
-          <div className="px-5 pb-5 sm:px-6 sm:pb-6 pt-1 ml-[3.25rem]">
+          <div className="px-5 pb-5 sm:px-6 sm:pb-6 pt-1 sm:ml-[3.25rem]">
             <div className="prose prose-slate prose-sm max-w-none [&>p]:text-slate-600 [&>p]:leading-relaxed [&>ul]:text-slate-600 [&>ul]:space-y-1.5 [&>ul>li]:leading-relaxed">
               {children}
             </div>

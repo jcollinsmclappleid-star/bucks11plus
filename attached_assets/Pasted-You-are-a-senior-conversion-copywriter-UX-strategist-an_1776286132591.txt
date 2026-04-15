@@ -1,0 +1,213 @@
+You are a senior conversion copywriter, UX strategist, and CRO-focused product marketer. I want you to rewrite and restructure my Bucks 11+ website homepage for higher conversion.
+
+IMPORTANT:
+This is a Buckinghamshire-specific 11+ preparation site. The buyer is the parent, not the child. The goal is not to make the site sound broader or more generic. The goal is to make it convert better with Bucks parents by sharpening the positioning, clarifying the USP, reducing decision friction, and making the free diagnostic the obvious next step.
+
+PRIMARY GOAL:
+Increase free diagnostic starts from parents in Buckinghamshire.
+
+SECONDARY GOAL:
+Make the platform feel like a specialist Bucks 11+ preparation system, not a generic question bank.
+
+DO NOT focus on pricing architecture in this task. Ignore plan restructuring for now. This prompt is specifically about homepage messaging, section order, copy, CTA hierarchy, and conversion-focused UX.
+
+CORE POSITIONING TO BUILD AROUND:
+A Bucks-specific, diagnostic-led preparation platform for parents who want evidence, not guesswork.
+
+CORE USP:
+Most 11+ resources give parents more material.
+This platform shows where marks are being lost, how performance compares with the 121 qualifying standard, and what to focus on next.
+
+TARGET AUDIENCE:
+Parents preparing a child for the Buckinghamshire Secondary Transfer Test / Bucks 11+.
+They are often already doing practice papers, books, or tutoring, but they do not know:
+- whether the preparation is actually working
+- where their child is losing marks
+- whether their child is on track for the Bucks 11+
+- what they should focus on next
+
+WHAT THEY ARE REALLY BUYING:
+- clarity
+- reassurance
+- evidence
+- direction
+- a sense of control
+- a better way to prepare than just doing more random practice
+
+VOICE AND TONE:
+Use a voice that is:
+- calm
+- specialist
+- precise
+- parent-reassuring
+- evidence-led
+- premium but not flashy
+- local and relevant to Bucks
+- credible, not salesy
+- clear, not overly dramatic
+
+DO NOT use:
+- generic edtech language
+- hype
+- “unlock your child’s potential” style clichés
+- over-emotional fear tactics
+- tutoring-centre style pressure
+- vague claims
+- feature dumping
+
+MESSAGE PRIORITY:
+1. Bucks-specific relevance
+2. Diagnostic clarity
+3. What parents will know after the diagnostic
+4. What to focus on next
+5. Evidence-led preparation vs random practice
+6. Parent visibility and progress tracking
+7. Practice questions / drills / volume of content
+
+HOMEPAGE STRATEGY:
+The homepage should revolve around one central promise:
+Know where your child stands for the Bucks 11+ — and what to focus on next.
+
+The site should feel like:
+- a specialist Bucks readiness platform
+- built for parents who want evidence, not guesswork
+- more than a question bank
+- structured, rigorous, and useful
+- designed to remove uncertainty
+
+CONVERSION RULES:
+- One clear primary CTA above the fold: Start Free Diagnostic
+- Any secondary CTA should support the diagnostic, not compete with it
+- Remove or reduce competing CTA noise
+- The free diagnostic should be the main acquisition mechanic
+- The homepage should explain the value of the diagnostic before pushing practice content too hard
+- Every section should move the parent toward the next step with clarity
+- Mobile conversion matters most; simplify for mobile first
+- Chat widgets or floating elements must not cover CTAs or important copy on mobile
+- Make the site feel focused and coherent, not like multiple separate offers stitched together
+
+KEY MESSAGING THEMES TO INCORPORATE:
+- Bucks 11+ / Buckinghamshire-specific
+- GL-style diagnostic
+- benchmarked against the 121 qualifying threshold
+- identifies where marks are being lost
+- shows question-level / topic-level weaknesses
+- gives the three highest-impact next priorities
+- turns preparation into a focused plan
+- helps parents stop guessing what to revise
+- this is a preparation platform, not just a question bank
+
+HERO REQUIREMENTS:
+Rewrite the hero so it is clearer and more conversion-focused than the current dramatic wording.
+The hero must immediately answer:
+- who this is for
+- what the platform does
+- why it is different
+- what the parent should do next
+
+The hero should feel specific and useful, not abstract.
+
+Create:
+- 3 strong hero headline options
+- 3 strong supporting subheadline options
+- 2 CTA options for the main button
+- 2 CTA options for a secondary supporting action if needed
+
+The best headline direction should be around:
+“Know where your child stands for the Bucks 11+”
+Do not just repeat that mechanically; improve it where helpful.
+
+SECTION REORDERING:
+Restructure the homepage into the strongest conversion sequence. I want you to recommend the best order of sections and rewrite each section accordingly.
+
+The ideal flow should likely be:
+1. Hero with clear Bucks-specific diagnostic promise
+2. Immediate explanation of what the parent will know after the diagnostic
+3. Sample diagnostic report / proof of output
+4. Why this works / not just a question bank
+5. Stop guessing what to revise / problem-solution section
+6. Sample practice content as supporting proof, not the main hook
+7. Parent-facing benefits and progress visibility
+8. Pricing / plan section
+9. Bucks-specific reference / FAQ / trust content
+
+You may adjust this if you think another order would convert better, but explain the logic.
+
+COPY REQUIREMENTS:
+Rewrite the homepage copy so it is:
+- sharper
+- more focused
+- less repetitive
+- more parent-centric
+- more Bucks-specific
+- more diagnostic-led
+- more conversion-aware
+
+Do not just make it shorter. Make it stronger.
+
+For each major homepage section, provide:
+- new section heading
+- new supporting copy
+- suggested CTA if relevant
+- brief rationale for why it improves conversion
+
+SECTIONS TO IMPROVE SPECIFICALLY:
+1. Hero
+2. “Built for parents who want evidence, not guesswork”
+3. “What you’ll know in 8 minutes”
+4. “This is a preparation platform. Not a question bank.”
+5. “Stop guessing what to revise”
+6. Sample diagnostic report section
+7. Sample practice questions section
+8. Pricing intro copy
+9. Bucks platform reference / about section
+
+UX / CRO IMPROVEMENTS TO RECOMMEND:
+Review the homepage through a CRO lens and recommend improvements such as:
+- removing competing messages
+- clarifying CTA hierarchy
+- strengthening scanability
+- improving section transitions
+- making the page easier to understand on mobile
+- reducing friction above the fold
+- ensuring the most persuasive proof appears earlier
+- making the diagnostic feel low-friction and high-value
+
+SEO / MESSAGE CONSISTENCY:
+Keep the messaging compatible with SEO for terms like:
+- Bucks 11+
+- Buckinghamshire 11+
+- Bucks 11+ practice
+- Bucks 11+ diagnostic
+- Buckinghamshire Secondary Transfer Test
+- GL-style 11+ practice
+- 121 Bucks qualifying score
+
+Do not keyword-stuff. Keep it natural.
+
+IMPORTANT POSITIONING RULES:
+- Sell clarity, not just content
+- Sell diagnosis, not just difficulty
+- Sell next steps, not just more papers
+- Sell evidence, not just effort
+- Sell focused preparation, not random practice
+- Keep the site about parents needing certainty and direction
+
+DO NOT:
+- turn the site into a generic national 11+ platform
+- overemphasise “hard drills” or content volume
+- use too many plan names or internal product labels
+- lead with features instead of buyer outcomes
+- bury the diagnostic behind too many competing actions
+
+DELIVERABLE FORMAT:
+Give me:
+1. A short summary of the recommended conversion approach
+2. A revised homepage structure in order
+3. Full replacement copy for each key homepage section
+4. 3 hero options
+5. CTA recommendations
+6. CRO / mobile UX recommendations
+7. Any wording that should be removed because it weakens conversion
+
+Write as if you are handing this to a designer/developer/copywriter for implementation, not just giving general advice.

@@ -1,6 +1,12 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
 @keyframes scroll-left {
   0% {
     transform: translateX(0);
@@ -15,6 +21,8 @@
   overflow: hidden;
   white-space: nowrap;
   gap: 2rem;
+  max-width: 100%;
+  width: 100%;
 }
 
 .ticker-content {
