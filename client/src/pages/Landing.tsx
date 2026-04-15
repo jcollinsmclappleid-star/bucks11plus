@@ -430,7 +430,7 @@ export default function Landing() {
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-[1.12] font-serif max-w-4xl mx-auto">
               Most resources give you<br className="hidden md:block" />
               <span className="text-white/55"> more to practice.</span><br className="hidden md:block" />
-              We show you <span className="text-brand-amber">what to fix.</span>
+              We also show you <span className="text-brand-amber">what to fix.</span>
             </h1>
 
             <p className="text-lg md:text-xl text-white/65 max-w-3xl mx-auto leading-relaxed" data-testid="text-hero-sub">
