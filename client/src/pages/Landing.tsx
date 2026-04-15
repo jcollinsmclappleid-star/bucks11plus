@@ -364,6 +364,7 @@ export default function Landing() {
             </div>
 
             <div className="w-full overflow-hidden">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-white/30 text-center mb-2">All 13 Buckinghamshire grammar schools</p>
               <div className="school-ticker">
                 <div className="ticker-content">
                   <span>Aylesbury Grammar</span>
@@ -428,17 +429,17 @@ export default function Landing() {
           <div className="text-center space-y-6 mt-12">
 
             <div className="flex items-center justify-center gap-2" data-testid="badge-platform-type">
-              <span className="text-xs font-sans font-semibold uppercase tracking-[0.15em] text-brand-amber/70">A preparation platform — not a question bank</span>
+              <span className="text-xs font-sans font-semibold uppercase tracking-[0.15em] text-brand-amber/70">Built for the Buckinghamshire 11+</span>
             </div>
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-[1.12] font-serif max-w-4xl mx-auto">
-              Most resources give you<br className="hidden md:block" />
-              <span className="text-white/55"> more to practice.</span><br className="hidden md:block" />
-              We also show you <span className="text-brand-amber">what to fix.</span>
+              1,500+ Bucks 11+ questions.<br className="hidden md:block" />
+              <span className="text-white/55"> Diagnostics that show</span><br className="hidden md:block" />
+              you exactly <span className="text-brand-amber">what to fix.</span>
             </h1>
 
             <p className="text-lg md:text-xl text-white/65 max-w-2xl mx-auto leading-relaxed" data-testid="text-hero-sub">
-              We identify exactly which gaps are costing marks toward the 121 qualifying score. Then we give your child targeted practice to close them — and show you whether it's working.
+              Practice questions, full mock exams and timed drills — all built for the Buckinghamshire 11+. Every result is benchmarked to the 121 qualifying score, with a ranked action plan to close the gaps.
             </p>
 
             <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -456,7 +457,20 @@ export default function Landing() {
               </a>
             </div>
 
-            <p className="text-[11px] text-white/25 mt-2 max-w-md mx-auto">
+            <div className="flex items-center justify-center gap-6 flex-wrap pt-2" data-testid="trust-signal-hero">
+              <div className="flex items-center gap-2 text-white/45 text-xs">
+                <div className="flex gap-0.5">
+                  {[...Array(5)].map((_, i) => <Star key={i} className="h-3 w-3 fill-brand-amber text-brand-amber" />)}
+                </div>
+                <span>Trusted by families across Buckinghamshire</span>
+              </div>
+              <div className="flex items-center gap-1.5 text-white/35 text-xs">
+                <Shield className="h-3.5 w-3.5" />
+                <span>Secure payments · Cancel anytime</span>
+              </div>
+            </div>
+
+            <p className="text-[11px] text-white/25 max-w-md mx-auto">
               Independent readiness assessment. Not affiliated with GL Assessment or Buckinghamshire Council.
             </p>
           </div>
@@ -679,12 +693,14 @@ export default function Landing() {
               <p className="text-xs text-emerald-600 font-semibold mb-6">Save £71 vs monthly</p>
               <ul className="space-y-2 text-sm text-slate-700 mb-8 flex-1">
                 {[
-                  "Everything in the monthly plan",
-                  "12 months of full access",
-                  "Priority email support",
-                  "Cancel anytime",
+                  "Everything in Monthly — identical access",
+                  "1,500+ GL-style practice questions",
+                  "Full-length practice papers (50 questions)",
+                  "Full GL-style mock exams (40 questions)",
+                  "PDF diagnostic reports & analytics",
+                  "12 months · Cancel anytime",
                 ].map((f, i) => (
-                  <li key={i} className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />{f}</li>
+                  <li key={i} className="flex gap-2"><CheckCircle2 className={`h-4 w-4 shrink-0 mt-0.5 ${i === 0 ? 'text-brand-amber' : 'text-emerald-500'}`} /><span className={i === 0 ? 'font-bold text-primary' : ''}>{f}</span></li>
                 ))}
               </ul>
               <Link href="/pricing?autoCheckout=pack_annual" className="block text-center w-full rounded-lg bg-primary text-white font-semibold py-2.5 text-sm hover:bg-primary/90 transition-colors" data-testid="button-pricing-annual">
@@ -693,7 +709,61 @@ export default function Landing() {
             </div>
           </div>
 
-          <p className="text-center text-xs text-slate-400 mt-8">All prices include VAT. Subscriptions renew automatically and can be cancelled anytime. <Link href="/pricing" className="text-primary hover:underline">See full pricing details →</Link></p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
+            <p className="text-center text-xs text-slate-400">All prices include VAT. Subscriptions renew automatically and can be cancelled anytime. <Link href="/pricing" className="text-primary hover:underline">See full pricing details →</Link></p>
+            <div className="flex items-center gap-2 shrink-0 border border-slate-200 rounded-lg px-3 py-1.5 bg-white shadow-sm" data-testid="badge-stripe">
+              <svg width="40" height="16" viewBox="0 0 60 25" fill="none" aria-label="Stripe" role="img">
+                <path d="M5.45 9.77c0-.92.76-1.28 2.01-1.28 1.8 0 4.06.54 5.86 1.5V4.82A15.6 15.6 0 0 0 7.46 4C3.17 4 .25 6.18.25 9.99c0 5.92 8.16 4.98 8.16 7.54 0 1.09-.95 1.44-2.26 1.44-1.96 0-4.47-.8-6.45-1.9v5.24A16.4 16.4 0 0 0 6.15 24c4.4 0 7.44-2.17 7.44-6.03C13.6 11.5 5.45 12.6 5.45 9.77zm16.3-8.33L17 2.56l-.04 16.78H22V1.44h-.25zM28.6 6.1l-.33 1.52h-3.14v16.1h5.06V12.4c1.2-1.56 3.23-1.27 3.86-1.05V6.43c-.65-.24-3.02-.68-5.45.67zm9.7-2.27a2.9 2.9 0 1 0 0-5.8 2.9 2.9 0 0 0 0 5.8zm-2.53 20h5.06V7.62h-5.06v16.1zm14.27-8.5c0-3.28 1.52-4.66 3.97-4.66 2.33 0 3.5 1.3 3.5 4.66v8.5H62.6V14.8C62.6 8.72 59.45 7 56.18 7c-2.55 0-4.42 1.12-5.51 2.97l-.23-2.35H45.5v16.1h5.06V15.33z" fill="#635BFF"/>
+              </svg>
+              <span className="text-[11px] text-slate-400 font-medium">Payments by Stripe</span>
+            </div>
+          </div>
+          <div className="flex items-center justify-center gap-2 mt-4" data-testid="company-trust">
+            <Shield className="h-3.5 w-3.5 text-slate-300" />
+            <p className="text-center text-xs text-slate-400">Registered in England · Operated by Ianson Systems Limited</p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── TESTIMONIALS ── */}
+      <section className="py-14 md:py-18 bg-slate-50 border-b border-border/30" data-testid="section-testimonials-landing">
+        <div className="container mx-auto max-w-5xl px-4">
+          <div className="text-center mb-8">
+            <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-2">What Parents Say</span>
+            <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif">Families preparing with confidence</h2>
+          </div>
+          <div className="grid md:grid-cols-3 gap-5">
+            {[
+              {
+                quote: "The diagnostic showed us exactly where she was losing marks — we dropped the generic practice and focused on NVR sequences. Her scores improved noticeably within three weeks.",
+                name: "Sarah M.",
+                detail: "Parent of Year 5 child, targeting Beaconsfield High",
+              },
+              {
+                quote: "Instead of more questions to wade through, it told us precisely what to fix and in what order. The parent analytics dashboard is incredibly clear.",
+                name: "James T.",
+                detail: "Parent of Year 6 child, targeting Royal Latin",
+              },
+              {
+                quote: "Starting with the free diagnostic was the best thing we did. It showed my son was much stronger in Maths than we thought, and that Verbal Reasoning was the real gap.",
+                name: "Priya K.",
+                detail: "Parent of Year 5 child, targeting Dr Challoner's",
+              },
+            ].map((t, i) => (
+              <div key={i} className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col gap-3 shadow-sm" data-testid={`testimonial-landing-${i}`}>
+                <div className="flex gap-0.5">
+                  {[...Array(5)].map((_, s) => (
+                    <Star key={s} className="h-3.5 w-3.5 fill-brand-amber text-brand-amber" />
+                  ))}
+                </div>
+                <p className="text-sm text-slate-600 leading-relaxed flex-1">"{t.quote}"</p>
+                <div>
+                  <p className="text-sm font-bold text-primary">{t.name}</p>
+                  <p className="text-xs text-slate-400">{t.detail}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -796,8 +866,9 @@ export default function Landing() {
             </div>
             <div className="space-y-0 rounded-2xl border border-slate-200 bg-white overflow-hidden divide-y divide-slate-100">
               {[
+                { q: "Is this platform built specifically for the Buckinghamshire 11+?", a: "Yes — exclusively. Every question, every diagnostic, and every benchmark is built for the Buckinghamshire Secondary Transfer Test. Results are measured against the 121 qualifying threshold, covering all four GL Assessment domains, across all 13 Buckinghamshire grammar schools. This is not a generic 11+ platform repurposed for Bucks." },
                 { q: "Is Bucks 11 Plus Tests affiliated with GL Assessment or Buckinghamshire Council?", a: "No. We are fully independent — not affiliated with GL Assessment, Buckinghamshire Council, TBGS, or any individual grammar school. 'GL-style' refers to the question format we independently replicate, not an official relationship." },
-                { q: "How is the free diagnostic different from the paid platform?", a: "The free 12-question mini diagnostic gives you a readiness band, forecast score, and section breakdown with no account needed. The paid Bucks Plus Edge (£35/month or £349/year) gives access to 1,500+ questions, full 40-question and 50-question mock diagnostics, all Hard drills, parent analytics, and progress tracking across all sessions." },
+                { q: "How is the free diagnostic different from the paid platform?", a: "The free 12-question mini diagnostic gives you a readiness band, forecast score, and section breakdown with no account needed. The paid Bucks Plus Edge (£35/month or £349/year) gives access to 1,500+ questions, full-length practice papers, full GL-style mock exams, all Hard drills, parent analytics, and progress tracking across all sessions." },
                 { q: "What is the difference between the monthly and annual plan?", a: "Both plans give identical full access to every feature. The monthly plan is £35/month and can be cancelled anytime. The annual plan is £349/year — equivalent to £29.08/month — saving £71 compared to paying monthly for 12 months." },
                 { q: "Can I cancel my subscription?", a: "Yes — monthly and annual subscriptions can be cancelled anytime from your account page. If you cancel, you retain access until the end of the current billing period." },
               ].map((item, i) => (
