@@ -433,13 +433,11 @@ export default function Landing() {
             </div>
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-[1.12] font-serif max-w-4xl mx-auto">
-              1,500+ Bucks 11+ questions.<br className="hidden md:block" />
-              <span className="text-white/55"> We also show you</span><br className="hidden md:block" />
-              exactly <span className="text-brand-amber">what to focus on to pass.</span>
+              The preparation platform built to help your child pass the Bucks 11+.
             </h1>
 
             <p className="text-lg md:text-xl text-white/65 max-w-2xl mx-auto leading-relaxed" data-testid="text-hero-sub">
-              Practice questions, full mock exams and timed drills — all built for the Buckinghamshire 11+. Every result is benchmarked to the 121 qualifying score, with a ranked action plan to close the gaps.
+              We go beyond questions. Our diagnostics identify exactly which areas are costing marks, rank your child's highest-impact focus areas, and track real progress toward the 121 qualifying score. With 1,500+ GL-style questions to close every gap.
             </p>
 
             <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
