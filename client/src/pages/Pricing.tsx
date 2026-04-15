@@ -2,7 +2,7 @@ import { Link, useLocation, useSearch } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, XCircle, Loader2, ArrowRight, Target, TrendingUp, BarChart3, Eye, Shield, HelpCircle, ChevronDown, AlertTriangle, BookOpen, Clock, Sparkles, Lock, Zap, SlidersHorizontal } from "lucide-react";
+import { CheckCircle2, XCircle, Loader2, ArrowRight, Target, TrendingUp, BarChart3, Eye, Shield, HelpCircle, ChevronDown, AlertTriangle, BookOpen, Clock, Sparkles, Lock, Zap, SlidersHorizontal, Star } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 import { useAuth } from "../lib/auth";
 import { useState, useEffect, useRef } from "react";
@@ -312,14 +312,16 @@ export default function Pricing() {
                       <span className="text-5xl font-bold text-primary">£35</span>
                       <span className="text-muted-foreground font-medium text-sm"> / month</span>
                     </div>
+                    <p className="text-xs text-brand-amber font-semibold mb-1">That's just £1.17/day</p>
                     <p className="text-xs text-slate-500 mb-5">Cancel any time · No lock-in</p>
                     <ul className="space-y-2.5">
                       {[
                         "1,500+ GL-style questions (VR, NVR, Maths, Comprehension)",
-                        "Full timed diagnostics (40 questions)",
+                        "Full-length practice papers (50 questions)",
+                        "Full GL-style mock exams (40 questions)",
+                        "Full timed diagnostics",
                         "All 19 Easy & Medium drill sections",
                         "All 17 Hard challenge drills",
-                        "Mock exam simulations",
                         "PDF diagnostic reports & report archive",
                         "Progress tracking & impact simulator",
                         "Premium Parent Analytics dashboard",
@@ -359,6 +361,7 @@ export default function Pricing() {
                       <span className="text-5xl font-bold text-primary">£349</span>
                       <span className="text-muted-foreground font-medium text-sm"> / year</span>
                     </div>
+                    <p className="text-xs text-brand-amber font-semibold mb-1">That's just 96p/day</p>
                     <div className="flex flex-wrap items-center gap-2 mb-5">
                       <p className="text-xs text-slate-500">Equiv. £29.08/mo</p>
                       <span className="inline-flex items-center text-[11px] font-bold text-amber-700 bg-amber-100 border border-amber-200 px-2 py-0.5 rounded-full">
@@ -369,10 +372,11 @@ export default function Pricing() {
                       {[
                         "Everything in Monthly — identical full access",
                         "1,500+ GL-style questions (VR, NVR, Maths, Comprehension)",
-                        "Full timed diagnostics (40 questions)",
+                        "Full-length practice papers (50 questions)",
+                        "Full GL-style mock exams (40 questions)",
+                        "Full timed diagnostics",
                         "All 19 Easy & Medium drill sections",
                         "All 17 Hard challenge drills",
-                        "Mock exam simulations",
                         "PDF diagnostic reports & report archive",
                         "Progress tracking & impact simulator",
                         "Premium Parent Analytics dashboard",
@@ -416,10 +420,11 @@ export default function Pricing() {
                         { feature: "Readiness forecast vs 121 benchmark", free: true, paid: true },
                         { feature: "Top focus area revealed", free: true, paid: true },
                         { feature: "1,500+ VR, NVR, Maths & Comprehension questions", free: false, paid: true },
-                        { feature: "Full timed diagnostics (40 questions)", free: false, paid: true },
+                        { feature: "Full-length practice papers (50 questions)", free: false, paid: true },
+                        { feature: "Full GL-style mock exams (40 questions)", free: false, paid: true },
+                        { feature: "Full timed diagnostics", free: false, paid: true },
                         { feature: "All 19 Easy & Medium drill sections", free: false, paid: true },
                         { feature: "All 17 Hard challenge drills", free: false, paid: true },
-                        { feature: "Mock exam simulations", free: false, paid: true },
                         { feature: "PDF reports & report archive", free: false, paid: true },
                         { feature: "Impact simulator & progress tracking", free: false, paid: true },
                         { feature: "Milestone diagnostics with auto-tracking", free: false, paid: true },
@@ -931,6 +936,48 @@ export default function Pricing() {
             <Button size="lg" variant="outline" className="h-13 px-8 text-base w-full sm:w-auto" asChild data-testid="button-mid-cta-diagnostic">
               <Link href="/free-diagnostic">Try Free Diagnostic</Link>
             </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* ── TESTIMONIALS ── */}
+      <section className="py-16 md:py-20 bg-slate-50 border-b border-border/30" data-testid="section-testimonials">
+        <div className="container mx-auto max-w-4xl px-4">
+          <div className="text-center mb-10">
+            <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">What Parents Say</span>
+            <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif">Families preparing with confidence</h2>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              {
+                quote: "We'd been doing Bond books for months with no idea which areas actually needed work. The diagnostic showed us exactly where she was losing marks — we dropped the generic practice and focused on NVR sequences. Her scores improved noticeably within three weeks.",
+                name: "Sarah M.",
+                detail: "Parent of Year 5 child, targeting Beaconsfield High",
+              },
+              {
+                quote: "I was sceptical about yet another online test platform, but this is genuinely different. Instead of more questions to wade through, it told us precisely what to fix and in what order. The parent analytics dashboard is incredibly clear.",
+                name: "James T.",
+                detail: "Parent of Year 6 child, targeting Royal Latin",
+              },
+              {
+                quote: "Starting with the free diagnostic was the best thing we did. It showed my son was much stronger in Maths than we thought, and that Verbal Reasoning was the real gap. We stopped wasting time on the wrong things entirely.",
+                name: "Priya K.",
+                detail: "Parent of Year 5 child, targeting Dr Challoner's",
+              },
+            ].map((t, i) => (
+              <div key={i} className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col gap-4 shadow-sm" data-testid={`testimonial-card-${i}`}>
+                <div className="flex gap-0.5">
+                  {[...Array(5)].map((_, s) => (
+                    <Star key={s} className="h-4 w-4 fill-brand-amber text-brand-amber" />
+                  ))}
+                </div>
+                <p className="text-sm text-slate-600 leading-relaxed flex-1">"{t.quote}"</p>
+                <div>
+                  <p className="text-sm font-bold text-primary">{t.name}</p>
+                  <p className="text-xs text-slate-400">{t.detail}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
