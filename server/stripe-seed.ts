@@ -1,40 +1,19 @@
 import { getUncachableStripeClient } from './stripeClient';
 
-const PRODUCTS = [
+const SUBSCRIPTION_PRODUCTS = [
   {
-    name: 'Early Learner',
-    description: 'Foundation-level 11+ preparation for Year 4 & 5. 6 months of access.',
-    tier: 'early_learner',
-    durationWeeks: '26',
-    priceInPence: 4900,
+    name: 'Bucks Plus Edge',
+    description: 'Full access to all 1,500+ GL-style questions, diagnostics, drills, mock exams, PDF reports, progress tracking and premium analytics. Monthly subscription.',
+    tier: 'pack_plus',
+    priceInPence: 3500,
+    interval: 'month' as const,
   },
   {
-    name: 'Practice Platform',
-    description: 'Self-directed 12-week practice and diagnostics access. Includes full diagnostics, drill bank, PDF reports, progress tracking, likelihood bands, and impact simulator.',
-    tier: 'pack12',
-    durationWeeks: '12',
-    priceInPence: 11900,
-  },
-  {
-    name: 'Practice Platform — Family',
-    description: 'Full Practice Platform access for up to 3 children. 12 weeks.',
-    tier: 'pack12_family',
-    durationWeeks: '12',
-    priceInPence: 14900,
-  },
-  {
-    name: 'Young Scholar Programme',
-    description: '16-week structured programme with milestone diagnostics, advanced analytics, weekly plans, and completion summary.',
-    tier: 'programme16',
-    durationWeeks: '16',
-    priceInPence: 24900,
-  },
-  {
-    name: 'Young Scholar Programme — Family',
-    description: 'Complete Programme access for up to 3 children. 16 weeks.',
-    tier: 'programme16_family',
-    durationWeeks: '16',
+    name: 'Bucks Plus Edge — Annual',
+    description: 'Full access to all 1,500+ GL-style questions, diagnostics, drills, mock exams, PDF reports, progress tracking and premium analytics. Annual subscription.',
+    tier: 'pack_annual',
     priceInPence: 34900,
+    interval: 'year' as const,
   },
 ];
 
@@ -51,7 +30,7 @@ async function seedStripeProducts() {
     }
   }
 
-  for (const product of PRODUCTS) {
+  for (const product of SUBSCRIPTION_PRODUCTS) {
     if (existingTiers.has(product.tier)) {
       console.log(`[Stripe Seed] "${product.name}" (tier: ${product.tier}) already exists, skipping`);
       continue;
@@ -62,19 +41,17 @@ async function seedStripeProducts() {
     const stripeProduct = await stripe.products.create({
       name: product.name,
       description: product.description,
-      metadata: {
-        tier: product.tier,
-        duration_weeks: product.durationWeeks,
-      },
+      metadata: { tier: product.tier },
     });
 
     await stripe.prices.create({
       product: stripeProduct.id,
       unit_amount: product.priceInPence,
       currency: 'gbp',
+      recurring: { interval: product.interval },
     });
 
-    console.log(`[Stripe Seed] Created: ${product.name} — £${(product.priceInPence / 100).toFixed(2)}`);
+    console.log(`[Stripe Seed] Created: ${product.name} — £${(product.priceInPence / 100).toFixed(2)}/${product.interval}`);
   }
 
   console.log('[Stripe Seed] Done.');

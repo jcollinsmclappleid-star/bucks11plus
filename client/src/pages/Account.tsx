@@ -13,28 +13,21 @@ import { useToast } from "@/hooks/use-toast";
 type Tab = "profile" | "subscription";
 
 const UPGRADE_OPTIONS: Record<string, { tier: string; label: string; price: string; description: string }[]> = {
-  pack_monthly: [
-    { tier: "pack_plus", label: "Bucks Practice Platform Edge", price: "£59.99/mo", description: "Full access: all Hard drills, mock exams, analytics, roadmap & weekly plans." },
-    { tier: "pack_annual", label: "Bucks Practice Platform Edge — Annual", price: "£495/yr", description: "Full access for 12 months — save £224.88 vs monthly Edge." },
-    { tier: "programme24_plus", label: "Bucks Young Scholar Programme", price: "£349", description: "6 months of full access, one payment. Same features as Edge." },
-  ],
+  // Active monthly subscribers can switch to annual to save £71
   pack_plus: [
-    { tier: "pack_annual", label: "Bucks Practice Platform Edge — Annual", price: "£495/yr", description: "Lock in 12 months of full access — save £224.88 vs staying monthly." },
-    { tier: "programme24_plus", label: "Bucks Young Scholar Programme", price: "£349", description: "6-month fixed plan at one payment — cancel your monthly subscription." },
+    { tier: "pack_annual", label: "Bucks Plus Edge — Annual", price: "£349/yr", description: "Lock in 12 months of full access — save £71 vs staying on monthly." },
   ],
+  // All other tiers have no upgrade path on new model
   pack_annual: [],
-  pack12: [
-    { tier: "pack_plus", label: "Bucks Practice Platform Edge", price: "£59.99/mo", description: "Unlock all 17 Hard drills, premium analytics and mock exams." },
-    { tier: "pack_annual", label: "Bucks Practice Platform Edge — Annual", price: "£495/yr", description: "Upgrade to full annual access and save." },
-    { tier: "programme24_plus", label: "Bucks Young Scholar Programme", price: "£349", description: "Full all-inclusive 6-month plan." },
-  ],
-  programme8: [
-    { tier: "programme12", label: "12-Week Structured Programme", price: "£89", description: "Extend with a longer structured roadmap." },
-    { tier: "programme24_plus", label: "Programme+ (6 months)", price: "£349", description: "Full 6-month all-inclusive plan." },
-  ],
-  programme12: [
-    { tier: "programme24_plus", label: "Programme+ (6 months)", price: "£349", description: "Upgrade to the full 6-month all-inclusive plan." },
-  ],
+  pack_monthly: [],
+  pack12: [],
+  pack12_family: [],
+  programme8: [],
+  programme12: [],
+  programme16: [],
+  programme16_family: [],
+  programme24_plus: [],
+  early_learner: [],
 };
 
 export default function Account() {
@@ -198,21 +191,25 @@ export default function Account() {
 
   const currentTier = user.subscriptionTier || "free";
   const upgradeOptions = UPGRADE_OPTIONS[currentTier] || [];
-  const isTopTier = currentTier === "programme24_plus" || currentTier === "programme16_family" || currentTier === "programme16";
+  // All paid tiers are equivalent; only pack_plus can upgrade to annual
+  const isTopTier = currentTier !== "free" && currentTier !== "pack_plus";
   const hasStripeAccount = !!user.stripeCustomerId;
 
   const tierDescriptions: Record<string, string> = {
-    free: "Limited to Mini Diagnostic and basic drills.",
-    early_learner: "Foundation-level practice for Year 4 & 5. 6 months of access.",
-    pack12: "Full access to all diagnostics, drills, PDF reports, and progress tracking for 12 weeks.",
-    pack12_family: "Full access for up to 3 children. 12 weeks of access.",
-    pack_monthly: "Full access to all diagnostics, drills, PDF reports, and progress tracking. Renews monthly — cancel anytime.",
-    pack_annual: "12 months of full access — one-time payment: all Hard drills, mock exams, analytics, roadmap, milestone diagnostics and weekly plans.",
-    programme8: "8-week structured programme with milestone diagnostics, advanced analytics, and a personalised weekly plan.",
-    programme12: "12-week structured programme — subscriber add-on with milestone diagnostics and a personalised weekly plan.",
-    programme24_plus: "6-month Programme+ with full structured roadmap, milestone diagnostics, advanced analytics, and priority support.",
-    programme16: "Full access including 16-week structured roadmap, milestone diagnostics, advanced analytics, and weekly plans.",
-    programme16_family: "Full programme access for up to 3 children. 16 weeks of access.",
+    free: "Limited to Mini Diagnostic and basic readiness results.",
+    // Active plans
+    pack_plus: "Bucks Plus Edge — full access billed monthly. Cancel any time. Includes all 1,500+ questions, every drill, mock exams, diagnostics, PDF reports and premium analytics.",
+    pack_annual: "Bucks Plus Edge — Annual. 12 months of full access in one payment. Includes all 1,500+ questions, every drill, mock exams, diagnostics, PDF reports and premium analytics.",
+    // Legacy plans — all mapped to full access
+    early_learner: "Bucks Plus Edge (legacy plan) — full platform access.",
+    pack12: "Bucks Plus Edge (legacy plan) — full platform access.",
+    pack12_family: "Bucks Plus Edge (legacy plan) — full platform access for your family.",
+    pack_monthly: "Bucks Plus Edge (legacy plan) — full platform access billed monthly.",
+    programme8: "Bucks Plus Edge (legacy plan) — full platform access.",
+    programme12: "Bucks Plus Edge (legacy plan) — full platform access.",
+    programme16: "Bucks Plus Edge (legacy plan) — full platform access.",
+    programme16_family: "Bucks Plus Edge (legacy plan) — full platform access for your family.",
+    programme24_plus: "Bucks Plus Edge (legacy plan) — full platform access.",
   };
 
   const navItems: { id: Tab; label: string; icon: React.ReactNode }[] = [
@@ -315,7 +312,7 @@ export default function Account() {
                         )}
                       </Button>
 
-                      {(currentTier === "pack_monthly" || currentTier === "pack_plus") && (
+                      {(currentTier === "pack_monthly" || currentTier === "pack_plus" || currentTier === "pack_annual") && (
                         <div className="pt-1 space-y-2">
                           <Button
                             variant="outline"

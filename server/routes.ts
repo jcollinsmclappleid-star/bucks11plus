@@ -34,40 +34,33 @@ const PROGRAMME_TIERS = new Set([
 
 const TIER_RANK: Record<string, number> = {
   free: 0,
-  early_learner: 0,
+  // Legacy tiers — existing subscribers keep full access (rank 1)
+  early_learner: 1,
   pack12: 1,
   pack12_family: 1,
   pack_monthly: 1,
-  pack_plus: 2,
-  pack_annual: 2,
-  programme8: 2,
-  programme12: 2,
-  programme16: 2,
-  programme16_family: 2,
-  programme24_plus: 2,
+  programme8: 1,
+  programme12: 1,
+  programme16: 1,
+  programme16_family: 1,
+  programme24_plus: 1,
+  // Active plans
+  pack_plus: 1,
+  pack_annual: 1,
 };
 
-const ALL_VALID_TIERS = [
-  "early_learner",
-  "pack12",
-  "pack12_family",
-  "pack_monthly",
-  "pack_plus",
-  "pack_annual",
-  "programme8",
-  "programme12",
-  "programme16",
-  "programme16_family",
-  "programme24_plus",
-];
+// Only the two active plans are available for new checkout
+const ALL_VALID_TIERS = ["pack_plus", "pack_annual"];
 
 const TIER_PRICE_GBP_PENCE: Record<string, number> = {
+  // Active plans — new pricing
+  pack_plus: 3500,    // £35/month
+  pack_annual: 34900, // £349/year
+  // Legacy prices (kept for reference only, not used in new checkout)
   early_learner: 4900,
   pack12: 11900,
   pack12_family: 14900,
   pack_monthly: 2499,
-  pack_plus: 5999,
-  pack_annual: 49500,
   programme8: 5900,
   programme12: 8900,
   programme16: 24900,
@@ -76,17 +69,19 @@ const TIER_PRICE_GBP_PENCE: Record<string, number> = {
 };
 
 const TIER_DISPLAY_NAME: Record<string, string> = {
-  early_learner: "Early Learner",
-  pack12: "Bucks Practice Platform (Legacy)",
-  pack12_family: "Bucks Practice Platform — Family",
-  pack_monthly: "Bucks Practice Platform",
-  pack_plus: "Bucks Practice Platform Edge",
-  pack_annual: "Bucks Practice Platform Edge Annual",
-  programme8: "8 Week Programme",
-  programme12: "12 Week Structured Programme (Subscriber Add-on)",
-  programme16: "Bucks Young Scholar Programme",
-  programme16_family: "Bucks Young Scholar Programme — Family",
-  programme24_plus: "Bucks Young Scholar Programme",
+  // Active plans
+  pack_plus: "Bucks Plus Edge",
+  pack_annual: "Bucks Plus Edge — Annual",
+  // Legacy — shown as Bucks Plus Edge for existing subscribers
+  early_learner: "Bucks Plus Edge (Legacy)",
+  pack12: "Bucks Plus Edge (Legacy)",
+  pack12_family: "Bucks Plus Edge (Legacy)",
+  pack_monthly: "Bucks Plus Edge (Legacy)",
+  programme8: "Bucks Plus Edge (Legacy)",
+  programme12: "Bucks Plus Edge (Legacy)",
+  programme16: "Bucks Plus Edge (Legacy)",
+  programme16_family: "Bucks Plus Edge (Legacy)",
+  programme24_plus: "Bucks Plus Edge (Legacy)",
 };
 
 async function findStripePriceForTier(tier: string): Promise<string | null> {
@@ -326,30 +321,24 @@ export async function registerRoutes(
 
       const host = req.get('host');
       const protocol = req.protocol;
-      const isMonthly = tier === "pack_monthly" || tier === "pack_plus";
-      const isSubscription = isMonthly;
-      const mode = isSubscription ? "subscription" : "payment";
 
-      const priceId = await findStripePriceForTier(tier);
-      let lineItems: any[];
-      if (priceId) {
-        lineItems = [{ price: priceId, quantity: 1 }];
-      } else {
-        const unitAmount = TIER_PRICE_GBP_PENCE[tier] || 0;
-        const priceData: any = {
-          currency: 'gbp',
-          product_data: { name: TIER_DISPLAY_NAME[tier] || tier },
-          unit_amount: unitAmount,
-        };
-        if (isMonthly) priceData.recurring = { interval: 'month' };
-        lineItems = [{ price_data: priceData, quantity: 1 }];
-      }
+      // Both active plans are subscriptions — monthly or annual
+      const interval = tier === "pack_annual" ? "year" : "month";
+      const unitAmount = TIER_PRICE_GBP_PENCE[tier] || 0;
 
       const sessionParams: any = {
         customer: customerId,
         payment_method_types: ['card'],
-        line_items: lineItems,
-        mode,
+        line_items: [{
+          price_data: {
+            currency: 'gbp',
+            product_data: { name: TIER_DISPLAY_NAME[tier] || tier },
+            unit_amount: unitAmount,
+            recurring: { interval },
+          },
+          quantity: 1,
+        }],
+        mode: 'subscription',
         success_url: `${protocol}://${host}/app/checkout-success?tier=${tier}&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${protocol}://${host}/pricing`,
         metadata: {
@@ -357,11 +346,6 @@ export async function registerRoutes(
           tier: tier,
         },
       };
-
-      if (tier === 'pack_plus' && mode === 'subscription') {
-        sessionParams.subscription_data = { trial_period_days: 7 };
-        sessionParams.metadata.isTrial = 'true';
-      }
 
       const session = await stripe.checkout.sessions.create(sessionParams);
 
@@ -375,13 +359,18 @@ export async function registerRoutes(
     try {
       const { targetTier } = req.body;
       const validUpgrades: Record<string, string[]> = {
-        pack_monthly: ["pack_plus", "pack_annual", "programme24_plus"],
-        pack_plus: ["pack_annual", "programme24_plus"],
+        // Active upgrade path: monthly → annual
+        pack_plus: ["pack_annual"],
+        // Legacy upgrade paths: all legacy paid tiers can move to annual
+        pack_monthly: ["pack_annual"],
+        pack12: ["pack_annual"],
+        pack12_family: ["pack_annual"],
+        programme8: ["pack_annual"],
+        programme12: ["pack_annual"],
+        programme16: ["pack_annual"],
+        programme16_family: ["pack_annual"],
+        programme24_plus: ["pack_annual"],
         pack_annual: [],
-        pack12: ["pack_plus", "pack_annual", "programme24_plus", "programme16"],
-        pack12_family: ["programme16_family"],
-        programme8: ["programme12", "programme24_plus"],
-        programme12: ["programme24_plus"],
       };
 
       const user = req.user!;
@@ -407,52 +396,25 @@ export async function registerRoutes(
       const host = req.get('host');
       const protocol = req.protocol;
 
-      const MONTHLY_SUBSCRIPTION_TIERS = new Set(["pack_monthly", "pack_plus"]);
-      const isSubscriptionUpgrade = MONTHLY_SUBSCRIPTION_TIERS.has(targetTier);
-
-      let session;
-      if (isSubscriptionUpgrade) {
-        const priceId = await findStripePriceForTier(targetTier);
-        const lineItems = priceId
-          ? [{ price: priceId, quantity: 1 }]
-          : [{
-              price_data: {
-                currency: 'gbp',
-                product_data: { name: TIER_DISPLAY_NAME[targetTier] || targetTier },
-                unit_amount: targetAmount,
-                recurring: { interval: 'month' as const },
-              },
-              quantity: 1,
-            }];
-        session = await stripe.checkout.sessions.create({
-          customer: customerId,
-          payment_method_types: ['card'],
-          line_items: lineItems,
-          mode: 'subscription',
-          success_url: `${protocol}://${host}/app/checkout-success?tier=${targetTier}&session_id={CHECKOUT_SESSION_ID}`,
-          cancel_url: `${protocol}://${host}/pricing`,
-          metadata: { userId: user.id, tier: targetTier, upgradeFrom: currentTier },
-        });
-      } else {
-        session = await stripe.checkout.sessions.create({
-          customer: customerId,
-          payment_method_types: ['card'],
-          line_items: [{
-            price_data: {
-              currency: 'gbp',
-              product_data: {
-                name: TIER_DISPLAY_NAME[targetTier] || targetTier,
-              },
-              unit_amount: targetAmount,
-            },
-            quantity: 1,
-          }],
-          mode: 'payment',
-          success_url: `${protocol}://${host}/app/checkout-success?tier=${targetTier}&session_id={CHECKOUT_SESSION_ID}`,
-          cancel_url: `${protocol}://${host}/pricing`,
-          metadata: { userId: user.id, tier: targetTier, upgradeFrom: currentTier },
-        });
-      }
+      // All upgrade targets are subscriptions — monthly or annual
+      const upgradeInterval = targetTier === "pack_annual" ? "year" : "month";
+      const session = await stripe.checkout.sessions.create({
+        customer: customerId,
+        payment_method_types: ['card'],
+        line_items: [{
+          price_data: {
+            currency: 'gbp',
+            product_data: { name: TIER_DISPLAY_NAME[targetTier] || targetTier },
+            unit_amount: targetAmount,
+            recurring: { interval: upgradeInterval },
+          },
+          quantity: 1,
+        }],
+        mode: 'subscription',
+        success_url: `${protocol}://${host}/app/checkout-success?tier=${targetTier}&session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${protocol}://${host}/pricing`,
+        metadata: { userId: user.id, tier: targetTier, upgradeFrom: currentTier },
+      });
 
       res.json({ url: session.url });
     } catch (error) {
@@ -470,40 +432,27 @@ export async function registerRoutes(
       const stripe = await getUncachableStripeClient();
       const host = req.get('host');
       const protocol = req.protocol;
-      const isMonthlyGuest = tier === "pack_monthly" || tier === "pack_plus";
-      const isSubscription = isMonthlyGuest;
-      const mode = isSubscription ? "subscription" : "payment";
 
-      const priceId = await findStripePriceForTier(tier);
-      let lineItems: any[];
-      if (priceId) {
-        lineItems = [{ price: priceId, quantity: 1 }];
-      } else {
-        const unitAmount = TIER_PRICE_GBP_PENCE[tier] || 0;
-        const priceData: any = {
-          currency: 'gbp',
-          product_data: { name: TIER_DISPLAY_NAME[tier] || tier },
-          unit_amount: unitAmount,
-        };
-        if (isMonthlyGuest) priceData.recurring = { interval: 'month' };
-        lineItems = [{ price_data: priceData, quantity: 1 }];
-      }
+      // Both active plans are subscriptions — monthly or annual
+      const guestInterval = tier === "pack_annual" ? "year" : "month";
+      const unitAmount = TIER_PRICE_GBP_PENCE[tier] || 0;
 
-      const guestSessionParams: any = {
+      const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
-        line_items: lineItems,
-        mode,
+        line_items: [{
+          price_data: {
+            currency: 'gbp',
+            product_data: { name: TIER_DISPLAY_NAME[tier] || tier },
+            unit_amount: unitAmount,
+            recurring: { interval: guestInterval },
+          },
+          quantity: 1,
+        }],
+        mode: 'subscription',
         success_url: `${protocol}://${host}/checkout-success?tier=${tier}&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${protocol}://${host}/pricing`,
         metadata: { tier },
-      };
-
-      if (tier === 'pack_plus' && mode === 'subscription') {
-        guestSessionParams.subscription_data = { trial_period_days: 7 };
-        guestSessionParams.metadata.isTrial = 'true';
-      }
-
-      const session = await stripe.checkout.sessions.create(guestSessionParams);
+      });
 
       res.json({ url: session.url });
     } catch (error) {
@@ -544,7 +493,7 @@ export async function registerRoutes(
         return res.json(safeUser);
       }
 
-      const SUBSCRIPTION_TIERS = new Set(["pack_monthly", "pack_plus"]);
+      const SUBSCRIPTION_TIERS = new Set(["pack_monthly", "pack_plus", "pack_annual"]);
       const weeksMap: Record<string, number> = {
         early_learner: 26,
         pack12: 26,

@@ -2,7 +2,7 @@ import { getStripeSync } from './stripeClient';
 import { storage } from './storage';
 import { sendTrialReminderEmail } from './email';
 
-const PAID_TIERS = ['pack_monthly', 'pack_plus'] as const;
+const PAID_TIERS = ['pack_monthly', 'pack_plus', 'pack_annual'] as const;
 
 type SubscriptionTier = typeof PAID_TIERS[number];
 

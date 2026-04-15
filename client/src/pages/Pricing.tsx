@@ -118,41 +118,41 @@ export default function Pricing() {
     }
   };
 
-  const PACK_TIERS = new Set(["pack12", "pack12_family", "pack_monthly", "pack_plus", "pack_annual"]);
-  const PROGRAMME_TIERS = new Set(["programme8", "programme12", "programme16", "programme16_family", "programme24_plus"]);
-
   const tierRank: Record<string, number> = {
     free: 0,
-    early_learner: 0,
+    early_learner: 1,
     pack12: 1,
     pack12_family: 1,
     pack_monthly: 1,
-    pack_plus: 2,
-    pack_annual: 2,
-    programme8: 2,
-    programme12: 2,
-    programme16: 2,
-    programme16_family: 2,
-    programme24_plus: 2,
+    pack_plus: 1,
+    pack_annual: 1,
+    programme8: 1,
+    programme12: 1,
+    programme16: 1,
+    programme16_family: 1,
+    programme24_plus: 1,
   };
   const currentTier = user?.subscriptionTier || "free";
   const currentRank = tierRank[currentTier] ?? 0;
   const hasPaidPlan = user && currentRank > 0;
-  const isTopTier = currentTier === "programme24_plus" || currentTier === "programme16_family" || currentTier === "programme16";
+  // On the new model all paid tiers are equivalent; only monthly pack_plus can upgrade to annual
+  const isTopTier = hasPaidPlan && currentTier !== "pack_plus";
 
   const upgradeOptions: Record<string, string[]> = {
-    pack_monthly: ["pack_plus", "pack_annual", "programme24_plus"],
-    pack_plus: ["pack_annual", "programme24_plus"],
-    pack_annual: ["programme24_plus"],
-    pack12: ["pack_plus", "pack_annual", "programme24_plus"],
-    pack12_family: ["programme16_family"],
-    programme8: ["programme12", "programme24_plus"],
-    programme12: ["programme24_plus"],
+    pack_plus: ["pack_annual"],
   };
   const availableUpgrades = upgradeOptions[currentTier] || [];
-  const isUpgradeEligible = user && availableUpgrades.length > 0 && !isTopTier;
+  const isUpgradeEligible = user && availableUpgrades.length > 0;
 
   const faqs = [
+    {
+      q: "What's the difference between Monthly and Annual?",
+      a: "Both plans give you identical access to everything on the platform — 1,500+ questions, full diagnostics, all 17 Hard drills, mock exam simulations, PDF reports, progress tracking, and premium analytics. Annual is simply billed once a year (£349) rather than monthly (£35/mo). Choosing Annual saves you £71 compared to 12 months of monthly billing."
+    },
+    {
+      q: "Can I cancel my monthly subscription at any time?",
+      a: "Yes — cancel any time, no questions asked. Your access continues until the end of the billing period. There are no long-term commitments on the monthly plan."
+    },
     {
       q: "Is this affiliated with GL Assessment?",
       a: "No. Bucks 11 Plus Tests is an independent readiness assessment service. Our diagnostics are aligned to GL-style reasoning families used in the Buckinghamshire Secondary Transfer Test, but we are not affiliated with GL Assessment or Buckinghamshire Council."
@@ -167,11 +167,11 @@ export default function Pricing() {
     },
     {
       q: "Can I start mid-year?",
-      a: "Absolutely. The programme adapts to wherever your child is. Whether you have months or weeks until the test, the diagnostic-led approach ensures every session counts. Earlier is better, but it's never too late to start with clarity."
+      a: "Absolutely. The platform adapts to wherever your child is. Whether you have months or weeks until the test, the diagnostic-led approach ensures every session counts. Earlier is better, but it's never too late to start with clarity."
     },
     {
       q: "What happens after I pay?",
-      a: "You get immediate access to everything in your plan. Start with a full diagnostic to establish your child's baseline, then follow the targeted practice recommendations. For the Young Scholar Programme, your roadmap is generated automatically based on your child's results."
+      a: "You get immediate access to everything in your plan. Start with a full diagnostic to establish your child's baseline, then follow the targeted practice recommendations. Your preparation roadmap and milestone tracking activate automatically based on your child's results."
     }
   ];
 
@@ -180,7 +180,7 @@ export default function Pricing() {
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
       <Seo
         title="Bucks 11 Plus Preparation Plans & Pricing (2026) | Bucks 11 Plus Tests"
-        description="Free GL-style diagnostic, Bucks Practice Platform (£24.99/mo), Bucks Practice Platform Edge (£59.99/mo or £495/yr) and Bucks Young Scholar Programme (£349 one-time). Targeted Bucks 11 Plus prep."
+        description="Free GL-style diagnostic plus Bucks Plus Edge — £35/month or £349/year. Full access to 1,500+ targeted questions, diagnostics, mock exams and progress tracking for Bucks 11 Plus preparation."
         canonicalPath="/pricing"
       />
 
@@ -192,12 +192,12 @@ export default function Pricing() {
           {hasPaidPlan ? (
             <>
               <h1 className="text-4xl md:text-6xl font-bold text-white tracking-tight leading-[1.12] font-serif mb-6" data-testid="text-pricing-hero-title">
-                {isTopTier ? "You're on the complete programme" : "Your current plan & upgrade options"}
+                {isTopTier ? "You have full Bucks Plus Edge access" : "Upgrade to Annual and save £71"}
               </h1>
               <p className="text-xl md:text-2xl text-white/60 max-w-3xl mx-auto leading-relaxed mb-10">
                 {isTopTier
-                  ? "You have full access to everything Bucks 11 Plus Tests offers. Head to your dashboard to continue your child's preparation."
-                  : "See what's included in your plan and explore options to unlock more features for your child's preparation."}
+                  ? "You have complete access to everything on the platform. Head to your dashboard to continue your child's preparation."
+                  : "Switch from monthly to annual billing and lock in 12 months of full access for just £349."}
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
                 <Button size="lg" className="h-14 px-8 text-lg bg-brand-amber text-white hover:bg-brand-amber/90 w-full sm:w-auto font-bold shadow-lg shadow-brand-amber/15 border-none" asChild data-testid="button-hero-dashboard">
@@ -205,7 +205,7 @@ export default function Pricing() {
                 </Button>
                 {!isTopTier && (
                   <Button size="lg" variant="outline" className="h-14 px-8 text-lg w-full sm:w-auto bg-white/[0.03] border-white/15 text-white/80 hover:bg-white/[0.06] hover:text-white" asChild data-testid="button-hero-upgrade">
-                    <a href="#tiers">View Upgrade Options</a>
+                    <a href="#upgrade">Switch to Annual — £349</a>
                   </Button>
                 )}
               </div>
@@ -258,24 +258,14 @@ export default function Pricing() {
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-1">
                         <h3 className="text-xl font-bold text-primary font-serif">
-                          {currentTier === "early_learner" && "Early Learner"}
-                          {(currentTier === "pack12" || currentTier === "pack_monthly") && "Bucks Practice Platform"}
-                          {currentTier === "pack_plus" && "Bucks Practice Platform Edge"}
-                          {currentTier === "pack_annual" && "Bucks Practice Platform Edge — Annual"}
-                          {currentTier === "pack12_family" && "Bucks Practice Platform — Family"}
-                          {currentTier === "programme24_plus" && "Bucks Young Scholar Programme"}
-                          {(currentTier === "programme8" || currentTier === "programme12" || currentTier === "programme16") && "Bucks Young Scholar Programme"}
-                          {currentTier === "programme16_family" && "Bucks Young Scholar Programme — Family"}
+                          {currentTier === "pack_annual" ? "Bucks Plus Edge — Annual" : "Bucks Plus Edge"}
                         </h3>
                         <Badge className="bg-brand-green/10 text-brand-green border-brand-green/20 hover:bg-brand-green/10">Active</Badge>
                       </div>
                       <p className="text-sm text-slate-600 mb-4">
-                        {currentTier === "early_learner" && "Foundation-level practice with readiness tracking and age-appropriate learning."}
-                        {(currentTier === "pack12" || currentTier === "pack12_family" || currentTier === "pack_monthly") && "1,500+ questions, full diagnostics, timed drills (including 6 Hard drills), PDF reports and progress tracking."}
-                        {currentTier === "pack_plus" && "Full platform access: all 17 Hard drills, mock exams, analytics, roadmap, milestone diagnostics and weekly plans. Cancel any time."}
-                        {currentTier === "pack_annual" && "12 months of full platform access: all 17 Hard drills, mock exams, analytics, roadmap, milestone diagnostics and weekly plans."}
-                        {currentTier === "programme24_plus" && "6-month all-inclusive plan: full platform access including all Hard drills, mock exams, roadmap, milestone diagnostics, weekly plans and premium analytics."}
-                        {(currentTier === "programme8" || currentTier === "programme12" || currentTier === "programme16" || currentTier === "programme16_family") && "Complete preparation: diagnostics, all drills, mock exams, roadmap, milestone tracking, weekly plans and premium analytics."}
+                        {currentTier === "pack_annual"
+                          ? "12 months of full platform access — all 1,500+ questions, every drill, mock exams, diagnostics, PDF reports and premium analytics."
+                          : "Full platform access billed monthly — all 1,500+ questions, every drill, mock exams, diagnostics, PDF reports and premium analytics. Cancel any time."}
                       </p>
                       <Button size="sm" asChild>
                         <Link href="/app">Go to Dashboard <ArrowRight className="ml-2 h-4 w-4" /></Link>
@@ -288,170 +278,53 @@ export default function Pricing() {
           )}
 
           {!hasPaidPlan && (
-            <div>
-              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 max-w-7xl mx-auto">
+            <div className="max-w-5xl mx-auto">
+              <div className="mb-8 rounded-2xl bg-slate-100/80 border border-slate-200 p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4" data-testid="card-tier-free">
+                <div className="flex items-center gap-4">
+                  <div className="h-10 w-10 rounded-xl bg-slate-200 flex items-center justify-center shrink-0">
+                    <Sparkles className="h-5 w-5 text-slate-500" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-primary text-sm">Free Diagnostic</p>
+                    <p className="text-xs text-slate-500">12-question timed mini diagnostic — no sign-up needed</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-6">
+                  <div>
+                    <span className="text-2xl font-bold text-primary">£0</span>
+                    <p className="text-[11px] text-slate-400">Always free</p>
+                  </div>
+                  <Button variant="outline" size="sm" className="h-9 px-5 text-sm shrink-0" asChild data-testid="button-get-free">
+                    <Link href="/free-diagnostic">Start Free Diagnostic</Link>
+                  </Button>
+                </div>
+              </div>
 
-                <Card className="border-border/60 shadow-sm flex flex-col hover:border-primary/30 transition-colors" data-testid="card-tier-free">
-                  <CardHeader className="pb-3">
-                    <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1">Free</p>
-                    <CardTitle className="text-xl font-serif">Free Diagnostic</CardTitle>
-                  </CardHeader>
-                  <CardContent className="flex-1">
-                    <div className="mb-4">
-                      <span className="text-4xl font-bold text-primary">£0</span>
-                    </div>
-                    <p className="text-sm text-slate-600 mb-5 leading-relaxed">
-                      Understand exactly where your child stands today with a timed GL-style diagnostic. No sign-up required.
-                    </p>
-                    <ul className="space-y-2">
-                      {[
-                        "Timed mini diagnostic (12 questions)",
-                        "Readiness forecast vs 121 benchmark",
-                        "Top focus area revealed",
-                        "Sample impact simulator",
-                      ].map((f, i) => (
-                        <li key={i} className="flex items-start gap-2">
-                          <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0 mt-0.5" />
-                          <span className="text-slate-700 text-sm">{f}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                  <CardFooter>
-                    <Button className="w-full bg-slate-800 text-white hover:bg-slate-700 h-11" asChild data-testid="button-get-free">
-                      <Link href="/free-diagnostic">Start Free Diagnostic</Link>
-                    </Button>
-                  </CardFooter>
-                </Card>
-
-                <Card className="border-border/60 shadow-sm flex flex-col relative overflow-hidden hover:border-primary/30 transition-colors" data-testid="card-tier-pack-monthly">
-                  <CardHeader className="pb-3 pt-5">
-                    <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1">Bucks Practice Platform</p>
-                    <CardTitle className="text-xl font-serif">Monthly Access</CardTitle>
-                  </CardHeader>
-                  <CardContent className="flex-1">
-                    <div className="mb-1">
-                      <span className="text-4xl font-bold text-primary">£24.99</span>
-                      <span className="text-muted-foreground font-medium text-sm"> / month</span>
-                    </div>
-                    <p className="text-xs text-slate-500 mb-4">Cancel any time · No lock-in</p>
-                    <ul className="space-y-2">
-                      {[
-                        "1,500+ VR, NVR, Maths & Comprehension questions",
-                        "Full timed diagnostics (40 questions)",
-                        "Easy & Medium drills across 19 sections",
-                        "6 Hard challenge drills included",
-                        "PDF reports & impact simulator",
-                        "Progress tracking dashboard",
-                      ].map((f, i) => (
-                        <li key={i} className="flex items-start gap-2">
-                          <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0 mt-0.5" />
-                          <span className="text-slate-700 text-sm">{f}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                  <CardFooter>
-                    <Button
-                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-11 font-bold"
-                      onClick={() => handleCheckout("pack_monthly")}
-                      disabled={loading === "pack_monthly"}
-                      data-testid="button-get-pack-monthly"
-                    >
-                      {loading === "pack_monthly" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Start Monthly"}
-                    </Button>
-                  </CardFooter>
-                </Card>
-
+              <div className="grid sm:grid-cols-2 gap-6">
                 <Card className="border-primary border-2 shadow-xl relative flex flex-col overflow-hidden" data-testid="card-tier-pack-plus">
                   <div className="absolute top-0 inset-x-0 h-1.5 bg-primary"></div>
-                  <div className="absolute top-3 right-3 bg-primary text-white px-2.5 py-1 rounded-full font-bold text-[10px] uppercase tracking-wider shadow pointer-events-none">
-                    ALL ACCESS
-                  </div>
                   <CardHeader className="pb-3 pt-6">
-                    <p className="text-xs font-bold text-primary uppercase tracking-wider mb-1">Bucks Practice Platform Edge</p>
-                    <CardTitle className="text-xl font-serif">Monthly</CardTitle>
+                    <p className="text-xs font-bold text-primary uppercase tracking-wider mb-1">Bucks Plus Edge</p>
+                    <CardTitle className="text-2xl font-serif">Monthly</CardTitle>
                   </CardHeader>
                   <CardContent className="flex-1">
                     <div className="mb-1">
-                      <span className="text-4xl font-bold text-primary">£59.99</span>
+                      <span className="text-5xl font-bold text-primary">£35</span>
                       <span className="text-muted-foreground font-medium text-sm"> / month</span>
                     </div>
-                    <p className="text-xs text-slate-500 mb-4">Cancel any time · No lock-in</p>
-                    <ul className="space-y-2">
+                    <p className="text-xs text-slate-500 mb-5">Cancel any time · No lock-in</p>
+                    <ul className="space-y-2.5">
                       {[
-                        "Everything in Bucks Practice Platform",
+                        "1,500+ GL-style questions (VR, NVR, Maths, Comprehension)",
+                        "Full timed diagnostics (40 questions)",
+                        "All 19 Easy & Medium drill sections",
                         "All 17 Hard challenge drills",
                         "Mock exam simulations",
+                        "PDF diagnostic reports & report archive",
+                        "Progress tracking & impact simulator",
                         "Premium Parent Analytics dashboard",
                         "Guided preparation roadmap",
-                        "Milestone diagnostics & auto-tracking",
-                        "Weekly personalised task plans",
-                      ].map((f, i) => (
-                        <li key={i} className="flex items-start gap-2">
-                          <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0 mt-0.5" />
-                          <span className="text-slate-700 text-sm">{f}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                  <CardFooter className="flex flex-col gap-2 items-stretch">
-                    {user?.trialEndsAt && new Date(user.trialEndsAt) > new Date() && currentTier === "pack_plus" ? (
-                      <>
-                        <Button
-                          className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-11 font-bold"
-                          onClick={handleBillingPortal}
-                          disabled={loading === "portal"}
-                          data-testid="button-convert-trial-pricing"
-                        >
-                          {loading === "portal" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Convert to Paid Plan — £59.99/mo"}
-                        </Button>
-                        <p className="text-center text-[11px] text-muted-foreground">You are currently on a free trial. Convert now to continue after your trial ends.</p>
-                      </>
-                    ) : (
-                      <>
-                        <Button
-                          className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-11 font-bold"
-                          onClick={() => handleCheckout("pack_plus")}
-                          disabled={loading === "pack_plus"}
-                          data-testid="button-get-pack-plus"
-                        >
-                          {loading === "pack_plus" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Start Free Trial — 7 Days Full Access"}
-                        </Button>
-                        <p className="text-center text-[11px] text-muted-foreground">7 days free, then £59.99/month. Card required. Cancel anytime.</p>
-                      </>
-                    )}
-                  </CardFooter>
-                </Card>
-
-                <Card className="border-brand-green border-2 shadow-xl relative flex flex-col overflow-hidden bg-green-50/30" data-testid="card-tier-pack-annual">
-                  <div className="absolute top-0 inset-x-0 h-1.5 bg-brand-green"></div>
-                  <div className="absolute top-3 right-3 bg-brand-green text-white px-2.5 py-1 rounded-full font-bold text-[10px] uppercase tracking-wider shadow pointer-events-none">
-                    BEST VALUE
-                  </div>
-                  <CardHeader className="pb-3 pt-6">
-                    <p className="text-xs font-bold text-brand-green uppercase tracking-wider mb-1">Bucks Practice Platform Edge</p>
-                    <CardTitle className="text-xl font-serif">Pay Annually</CardTitle>
-                  </CardHeader>
-                  <CardContent className="flex-1">
-                    <div className="mb-1">
-                      <span className="text-4xl font-bold text-primary">£495</span>
-                      <span className="text-muted-foreground font-medium text-sm"> one-time</span>
-                    </div>
-                    <p className="text-xs text-slate-500 mb-1">12 months access · equiv. £41.25/mo</p>
-                    <div className="inline-flex items-center gap-1.5 bg-green-100 border border-green-200 text-green-800 text-[11px] font-bold px-2 py-1 rounded-full mb-4">
-                      <CheckCircle2 className="h-3 w-3" />
-                      Save £224.88 vs monthly Edge
-                    </div>
-                    <ul className="space-y-2">
-                      {[
-                        "Everything in Bucks Practice Platform",
-                        "All 17 Hard challenge drills",
-                        "Mock exam simulations",
-                        "Premium Parent Analytics dashboard",
-                        "Guided preparation roadmap",
-                        "Milestone diagnostics & auto-tracking",
-                        "Weekly personalised task plans",
+                        "Milestone diagnostics with auto-tracking",
                       ].map((f, i) => (
                         <li key={i} className="flex items-start gap-2">
                           <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0 mt-0.5" />
@@ -462,406 +335,113 @@ export default function Pricing() {
                   </CardContent>
                   <CardFooter>
                     <Button
-                      className="w-full bg-brand-green text-white hover:bg-brand-green/90 h-11 font-bold"
+                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-12 font-bold text-base"
+                      onClick={() => handleCheckout("pack_plus")}
+                      disabled={loading === "pack_plus"}
+                      data-testid="button-get-pack-plus"
+                    >
+                      {loading === "pack_plus" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Get Bucks Plus Edge — £35/mo"}
+                    </Button>
+                  </CardFooter>
+                </Card>
+
+                <Card className="border-brand-amber border-2 shadow-xl relative flex flex-col overflow-hidden bg-amber-50/20" data-testid="card-tier-pack-annual">
+                  <div className="absolute top-0 inset-x-0 h-1.5 bg-brand-amber"></div>
+                  <div className="absolute top-3 right-3 bg-brand-amber text-amber-950 px-2.5 py-1 rounded-full font-bold text-[10px] uppercase tracking-wider shadow pointer-events-none">
+                    SAVE £71
+                  </div>
+                  <CardHeader className="pb-3 pt-6">
+                    <p className="text-xs font-bold text-brand-amber uppercase tracking-wider mb-1">Bucks Plus Edge — Annual</p>
+                    <CardTitle className="text-2xl font-serif">Annual</CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex-1">
+                    <div className="mb-1">
+                      <span className="text-5xl font-bold text-primary">£349</span>
+                      <span className="text-muted-foreground font-medium text-sm"> / year</span>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2 mb-5">
+                      <p className="text-xs text-slate-500">Equiv. £29.08/mo</p>
+                      <span className="inline-flex items-center text-[11px] font-bold text-amber-700 bg-amber-100 border border-amber-200 px-2 py-0.5 rounded-full">
+                        Save £71 vs monthly
+                      </span>
+                    </div>
+                    <ul className="space-y-2.5">
+                      {[
+                        "Everything in Monthly — identical full access",
+                        "1,500+ GL-style questions (VR, NVR, Maths, Comprehension)",
+                        "Full timed diagnostics (40 questions)",
+                        "All 19 Easy & Medium drill sections",
+                        "All 17 Hard challenge drills",
+                        "Mock exam simulations",
+                        "PDF diagnostic reports & report archive",
+                        "Progress tracking & impact simulator",
+                        "Premium Parent Analytics dashboard",
+                        "Guided preparation roadmap",
+                        "Milestone diagnostics with auto-tracking",
+                      ].map((f, i) => (
+                        <li key={i} className="flex items-start gap-2">
+                          <CheckCircle2 className={`h-4 w-4 shrink-0 mt-0.5 ${i === 0 ? 'text-brand-amber' : 'text-brand-green'}`} />
+                          <span className={`text-sm ${i === 0 ? 'font-bold text-primary' : 'text-slate-700'}`}>{f}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                  <CardFooter>
+                    <Button
+                      className="w-full bg-brand-amber text-amber-950 hover:bg-brand-amber/90 h-12 font-bold text-base shadow-md"
                       onClick={() => handleCheckout("pack_annual")}
                       disabled={loading === "pack_annual"}
                       data-testid="button-get-pack-annual"
                     >
-                      {loading === "pack_annual" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Get Annual — £495"}
-                    </Button>
-                  </CardFooter>
-                </Card>
-
-                <Card className="border-brand-amber border-2 shadow-xl relative flex flex-col overflow-hidden" data-testid="card-tier-programme24">
-                  <div className="absolute top-0 inset-x-0 h-1.5 bg-brand-amber"></div>
-                  <div className="absolute top-3 right-3 bg-brand-amber text-amber-950 px-2.5 py-1 rounded-full font-bold text-[10px] uppercase tracking-wider shadow pointer-events-none">
-                    COACHING
-                  </div>
-                  <CardHeader className="pb-3 pt-6">
-                    <p className="text-xs font-bold text-brand-amber uppercase tracking-wider mb-1">Bucks Young Scholar Programme</p>
-                    <CardTitle className="text-xl font-serif">6-month plan</CardTitle>
-                  </CardHeader>
-                  <CardContent className="flex-1">
-                    <div className="mb-1">
-                      <span className="text-4xl font-bold text-primary">£349</span>
-                      <span className="text-muted-foreground font-medium"> one-time</span>
-                    </div>
-                    <p className="text-xs text-slate-500 mb-4">6 months · same full access as Edge, one payment</p>
-                    <ul className="space-y-2">
-                      {[
-                        "All 17 Hard challenge drills",
-                        "Mock exam simulations",
-                        "Premium Parent Analytics dashboard",
-                        "Guided preparation roadmap",
-                        "Milestone diagnostics & auto-tracking",
-                        "Weekly personalised task plans",
-                        "6 months access · one payment",
-                      ].map((f, i) => (
-                        <li key={i} className="flex items-start gap-2">
-                          <CheckCircle2 className="h-4 w-4 text-brand-amber shrink-0 mt-0.5" />
-                          <span className="text-primary text-sm font-medium">{f}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                  <CardFooter>
-                    <Button
-                      className="w-full bg-brand-amber text-white hover:bg-brand-amber/90 h-11 font-bold shadow-md"
-                      onClick={() => handleCheckout("programme24_plus")}
-                      disabled={loading === "programme24_plus"}
-                      data-testid="button-get-programme24"
-                    >
-                      {loading === "programme24_plus" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Get Young Scholar"}
-                    </Button>
-                  </CardFooter>
-                </Card>
-
-              </div>
-            </div>
-          )}
-
-          {hasPaidPlan && !isTopTier && (
-            <div className="max-w-3xl mx-auto text-center py-6">
-              <p className="text-slate-600">Upgrade options are shown above — choose the programme that fits your timeline.</p>
-            </div>
-          )}
-
-          {false && !isTopTier && (
-            <div className="max-w-4xl mx-auto">
-              <h3 className="text-2xl font-bold text-primary font-serif text-center mb-8">Upgrade Options</h3>
-              <div className={`grid gap-6 ${currentRank < 2 ? "md:grid-cols-2" : "md:grid-cols-1 max-w-xl mx-auto"}`}>
-                {currentRank < 2 && (
-                  <Card className="border-primary/30 shadow-md flex flex-col hover:border-primary/50 transition-colors relative overflow-hidden" data-testid="card-tier-pack12">
-                    <CardHeader className="pb-4">
-                      <p className="text-sm font-semibold text-primary uppercase tracking-wider mb-1">Practice Platform</p>
-                      <CardTitle className="text-2xl font-serif">Targeted exam practice</CardTitle>
-                    </CardHeader>
-                    <CardContent className="flex-1">
-                      <div className="mb-2">
-                        <span className="text-5xl font-bold text-primary">£119</span>
-                        <span className="text-muted-foreground font-medium"> one-time</span>
-                      </div>
-                      <p className="text-sm text-slate-500 mb-6">6 months access</p>
-                      <p className="text-sm text-slate-600 mb-6 leading-relaxed">
-                        1,500+ questions across Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension. Full diagnostics, timed drills, and progress tracking.
-                      </p>
-                      <ul className="space-y-3">
-                        {[
-                          "1,500+ Verbal Reasoning, Non-Verbal Reasoning, Maths & Comprehension questions",
-                          "Easy & Medium drills (19 sections) + 6 Hard drills",
-                          "Full timed diagnostics (40 questions)",
-                          "Practice papers (Quick & Full)",
-                          "PDF reports & report archive",
-                          "Impact simulator & progress tracking",
-                          "6 months of full access",
-                        ].map((feature, i) => (
-                          <li key={i} className="flex items-start gap-3">
-                            <CheckCircle2 className="h-5 w-5 text-brand-green shrink-0 mt-0.5" />
-                            <span className="text-slate-700 text-sm font-medium">{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </CardContent>
-                    <CardFooter>
-                      <Button
-                        className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-12 text-lg"
-                        onClick={() => handleCheckout("pack12")}
-                        disabled={loading === "pack12"}
-                        data-testid="button-get-pack12"
-                      >
-                        {loading === "pack12" ? <Loader2 className="h-5 w-5 animate-spin" /> : "Upgrade to Practice Platform"}
-                      </Button>
-                    </CardFooter>
-                  </Card>
-                )}
-
-                <Card className="border-brand-amber border-2 shadow-xl relative flex flex-col overflow-hidden" data-testid="card-tier-programme16">
-                  <div className="absolute top-0 inset-x-0 h-1.5 bg-brand-amber"></div>
-                  <div className="absolute top-0 right-0 bg-brand-amber text-amber-950 px-4 py-1.5 rounded-bl-lg font-bold text-sm shadow-sm pointer-events-none">
-                    RECOMMENDED
-                  </div>
-
-                  <CardHeader className="pt-8 pb-4">
-                    <p className="text-sm font-semibold text-brand-amber uppercase tracking-wider mb-1">Young Scholar Programme</p>
-                    <CardTitle className="text-2xl font-serif">Complete preparation pathway</CardTitle>
-                  </CardHeader>
-                  <CardContent className="flex-1">
-                    <div className="mb-2">
-                      {isUpgradeEligible ? (
-                        <>
-                          <span className="text-sm text-slate-500 line-through mr-2">£249</span>
-                          <span className="text-5xl font-bold text-primary">{currentTier === "pack12_family" ? "£200" : "£130"}</span>
-                        </>
-                      ) : (
-                        <>
-                          <span className="text-5xl font-bold text-primary">£249</span>
-                          <span className="text-muted-foreground font-medium"> one-time</span>
-                        </>
-                      )}
-                    </div>
-                    {isUpgradeEligible && <p className="text-sm text-brand-green font-medium mb-4">Pay only the difference — upgrade pricing applied</p>}
-                    <p className="text-sm text-slate-600 mb-6 leading-relaxed">
-                      Everything in Practice Platform plus a structured roadmap, mock exams, milestone tracking, and weekly plans. 12 months of full access.
-                    </p>
-                    <ul className="space-y-3">
-                      {[
-                        "Everything in Practice Platform",
-                        "All 17 Hard challenge drills unlocked",
-                        "3 mock exam simulations (50 questions each)",
-                        "Guided preparation roadmap",
-                        "4 milestone diagnostics with auto-tracking",
-                        "Weekly personalised task plans",
-                        "Premium Parent Analytics dashboard",
-                        "12 months of full access",
-                      ].map((feature, i) => (
-                        <li key={i} className="flex items-start gap-3">
-                          <CheckCircle2 className="h-5 w-5 text-brand-amber shrink-0 mt-0.5" />
-                          <span className="text-primary text-sm font-semibold">{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    <Button
-                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-14 text-lg font-bold shadow-md mt-6"
-                      onClick={() => handleCheckout("programme16")}
-                      disabled={loading === "programme16" || loading === "upgrade"}
-                      data-testid="button-get-programme16"
-                    >
-                      {(loading === "programme16" || loading === "upgrade") ? <Loader2 className="h-5 w-5 animate-spin" /> : (isUpgradeEligible ? "Upgrade Now" : "Young Scholar Programme")}
-                    </Button>
-                  </CardContent>
-                </Card>
-              </div>
-
-              {!currentTier.includes("family") && (
-                <div className="mt-10">
-                  <h4 className="text-lg font-bold text-primary font-serif text-center mb-6">Need multiple child profiles?</h4>
-                  <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-                    {currentRank < 3 && (
-                      <Card className="border-border/60 shadow-sm flex flex-col" data-testid="card-tier-pack12-family">
-                        <CardHeader className="pb-4">
-                          <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-1">Practice Platform — Family</p>
-                          <CardTitle className="text-xl font-serif">Up to 3 children</CardTitle>
-                        </CardHeader>
-                        <CardContent className="flex-1">
-                          <div className="mb-2">
-                            <span className="text-4xl font-bold text-primary">£149</span>
-                            <span className="text-muted-foreground font-medium"> one-time</span>
-                          </div>
-                          <p className="text-sm text-slate-500 mb-4">6 months of access for the whole family</p>
-                          <ul className="space-y-2">
-                            {[
-                              "Everything in Practice Platform",
-                              "Up to 3 child profiles",
-                              "Independent progress tracking per child",
-                            ].map((f, i) => (
-                              <li key={i} className="flex items-start gap-2 text-sm">
-                                <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0 mt-0.5" />
-                                <span className="text-slate-700">{f}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </CardContent>
-                        <CardFooter>
-                          <Button
-                            className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-11"
-                            onClick={() => handleCheckout("pack12_family")}
-                            disabled={loading === "pack12_family"}
-                            data-testid="button-get-pack12-family"
-                          >
-                            {loading === "pack12_family" ? <Loader2 className="h-5 w-5 animate-spin" /> : "Get Family Practice Platform"}
-                          </Button>
-                        </CardFooter>
-                      </Card>
-                    )}
-
-                    <Card className="border-brand-amber border-2 shadow-md flex flex-col relative overflow-hidden" data-testid="card-tier-programme16-family">
-                      <div className="absolute top-0 inset-x-0 h-1 bg-brand-amber"></div>
-                      <CardHeader className="pb-4">
-                        <p className="text-sm font-semibold text-brand-amber uppercase tracking-wider mb-1">Young Scholar Programme — Family</p>
-                        <CardTitle className="text-xl font-serif">The complete family pathway</CardTitle>
-                      </CardHeader>
-                      <CardContent className="flex-1">
-                        <div className="mb-2">
-                          <span className="text-4xl font-bold text-primary">£349</span>
-                          <span className="text-muted-foreground font-medium"> one-time</span>
-                        </div>
-                        <p className="text-sm text-slate-500 mb-4">12 months of access for the whole family</p>
-                        <ul className="space-y-2">
-                          {[
-                            "Everything in Young Scholar Programme",
-                            "Up to 3 child profiles",
-                            "Independent roadmaps per child",
-                            "Test Day Simulator for each child",
-                            "Family analytics dashboard",
-                          ].map((f, i) => (
-                            <li key={i} className="flex items-start gap-2 text-sm">
-                              <CheckCircle2 className="h-4 w-4 text-brand-amber shrink-0 mt-0.5" />
-                              <span className="text-primary font-medium">{f}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </CardContent>
-                      <CardFooter>
-                        <Button
-                          className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-11 font-bold"
-                          onClick={() => handleCheckout("programme16_family")}
-                          disabled={loading === "programme16_family"}
-                          data-testid="button-get-programme16-family"
-                        >
-                          {loading === "programme16_family" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Family Young Scholar"}
-                        </Button>
-                      </CardFooter>
-                    </Card>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          {false && !hasPaidPlan && (
-            <div className="mt-12 max-w-4xl mx-auto">
-              <h3 className="text-2xl md:text-3xl font-bold text-primary font-serif text-center mb-4" data-testid="text-family-pricing-title">Family Plans</h3>
-              <p className="text-center text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Preparing multiple children? Family plans include up to 3 child profiles, each with their own independent progress, diagnostics, and practice data.
-              </p>
-              <div className="grid md:grid-cols-2 gap-6">
-                <Card className="border-border/60 shadow-sm flex flex-col" data-testid="card-tier-pack12-family">
-                  <CardHeader className="pb-4">
-                    <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-1">Practice Platform — Family</p>
-                    <CardTitle className="text-xl font-serif">Up to 3 children</CardTitle>
-                  </CardHeader>
-                  <CardContent className="flex-1">
-                    <div className="mb-2">
-                      <span className="text-4xl font-bold text-primary">£149</span>
-                      <span className="text-muted-foreground font-medium"> one-time</span>
-                    </div>
-                    <p className="text-sm text-slate-500 mb-4">6 months of access for the whole family</p>
-                    <ul className="space-y-2">
-                      {[
-                        "Everything in Practice Platform",
-                        "Up to 3 child profiles",
-                        "Independent progress tracking per child",
-                        "Child switcher in navbar",
-                      ].map((f, i) => (
-                        <li key={i} className="flex items-start gap-2 text-sm">
-                          <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0 mt-0.5" />
-                          <span className="text-slate-700">{f}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                  <CardFooter>
-                    <Button
-                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-11"
-                      onClick={() => handleCheckout("pack12_family")}
-                      disabled={loading === "pack12_family"}
-                      data-testid="button-get-pack12-family"
-                    >
-                      {loading === "pack12_family" ? <Loader2 className="h-5 w-5 animate-spin" /> : "Get Family Practice Platform"}
-                    </Button>
-                  </CardFooter>
-                </Card>
-
-                <Card className="border-brand-amber border-2 shadow-md flex flex-col relative overflow-hidden" data-testid="card-tier-programme16-family">
-                  <div className="absolute top-0 inset-x-0 h-1 bg-brand-amber"></div>
-                  <CardHeader className="pb-4">
-                    <p className="text-sm font-semibold text-brand-amber uppercase tracking-wider mb-1">Young Scholar Programme — Family</p>
-                    <CardTitle className="text-xl font-serif">The complete family pathway</CardTitle>
-                  </CardHeader>
-                  <CardContent className="flex-1">
-                    <div className="mb-2">
-                      <span className="text-4xl font-bold text-primary">£349</span>
-                      <span className="text-muted-foreground font-medium"> one-time</span>
-                    </div>
-                    <p className="text-sm text-slate-500 mb-4">12 months of access for the whole family</p>
-                    <ul className="space-y-2">
-                      {[
-                        "Everything in Young Scholar Programme",
-                        "Up to 3 child profiles",
-                        "Independent roadmaps per child",
-                        "Test Day Simulator for each child",
-                        "Family analytics dashboard",
-                      ].map((f, i) => (
-                        <li key={i} className="flex items-start gap-2 text-sm">
-                          <CheckCircle2 className="h-4 w-4 text-brand-amber shrink-0 mt-0.5" />
-                          <span className="text-primary font-medium">{f}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                  <CardFooter>
-                    <Button
-                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-11 font-bold"
-                      onClick={() => handleCheckout("programme16_family")}
-                      disabled={loading === "programme16_family"}
-                      data-testid="button-get-programme16-family"
-                    >
-                      {loading === "programme16_family" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Family Young Scholar"}
+                      {loading === "pack_annual" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Get Annual — £349/year"}
                     </Button>
                   </CardFooter>
                 </Card>
               </div>
-            </div>
-          )}
 
-          {!hasPaidPlan && (
-          <div className="mt-16 max-w-4xl mx-auto" data-testid="comparison-table">
-            <h3 className="text-2xl md:text-3xl font-bold text-primary font-serif text-center mb-8">Feature Comparison</h3>
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse text-sm">
-                <thead>
-                  <tr className="border-b-2 border-slate-200">
-                    <th className="text-left py-3 px-4 font-semibold text-slate-600 w-[28%]">Feature</th>
-                    <th className="text-center py-3 px-4 font-semibold text-slate-600">Free</th>
-                    <th className="text-center py-3 px-4 font-semibold text-slate-600">Practice Platform<br/><span className="text-xs font-normal text-slate-400">£24.99/mo</span></th>
-                    <th className="text-center py-3 px-4 font-semibold text-primary">Platform Edge<br/><span className="text-xs font-normal text-slate-400">£59.99/mo · £495/yr</span></th>
-                    <th className="text-center py-3 px-4 font-bold text-brand-amber">Young Scholar<br/><span className="text-xs font-normal text-slate-400">£349 one-time</span></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    { feature: "Mini diagnostic (12 questions)", free: true, pack: true, edge: true, prog: true },
-                    { feature: "Basic readiness forecast", free: true, pack: true, edge: true, prog: true },
-                    { feature: "Top focus area revealed", free: true, pack: true, edge: true, prog: true },
-                    { feature: "1 sample practice drill", free: true, pack: true, edge: true, prog: true },
-                    { feature: "1,500+ VR, NVR, Maths & Comprehension questions", free: false, pack: true, edge: true, prog: true },
-                    { feature: "Easy & Medium drills (19 sections)", free: false, pack: true, edge: true, prog: true },
-                    { feature: "Hard challenge drills", free: false, pack: "6 sections", edge: "All 17", prog: "All 17" },
-                    { feature: "Badge-based Accomplishments", free: false, pack: true, edge: true, prog: true },
-                    { feature: "Full timed diagnostics (40 questions)", free: false, pack: true, edge: true, prog: true },
-                    { feature: "Practice papers (Quick & Full)", free: false, pack: true, edge: true, prog: true },
-                    { feature: "PDF reports & report archive", free: false, pack: true, edge: true, prog: true },
-                    { feature: "Impact simulator & progress tracking", free: false, pack: true, edge: true, prog: true },
-                    { feature: "Mock exam simulations", free: false, pack: false, edge: true, prog: true },
-                    { feature: "Premium Parent Analytics dashboard", free: false, pack: false, edge: true, prog: true },
-                    { feature: "Gap velocity & forecast stability metrics", free: false, pack: false, edge: true, prog: true },
-                    { feature: "Guided preparation roadmap", free: false, pack: false, edge: true, prog: true },
-                    { feature: "Milestone diagnostics with auto-tracking", free: false, pack: false, edge: true, prog: true },
-                    { feature: "Weekly personalised task plans", free: false, pack: false, edge: true, prog: true },
-                    { feature: "Access duration", free: "1 use", pack: "Monthly", edge: "Monthly / Annual", prog: "6 months" },
-                  ].map((row, i) => (
-                    <tr key={i} className="border-b border-slate-100" data-testid={`comparison-row-${i}`}>
-                      <td className="py-3 px-4 text-slate-700 font-medium">{row.feature}</td>
-                      {["free", "pack", "edge", "prog"].map((tier) => {
-                        const val = row[tier as keyof typeof row];
-                        return (
-                          <td key={tier} className="text-center py-3 px-4">
-                            {val === true ? (
-                              <CheckCircle2 className="h-5 w-5 text-brand-green mx-auto" />
-                            ) : val === false ? (
-                              <XCircle className="h-5 w-5 text-slate-300 mx-auto" />
-                            ) : (
-                              <span className="text-sm font-semibold text-slate-700">{val}</span>
-                            )}
+              <div className="mt-12" data-testid="comparison-table">
+                <h3 className="text-xl font-bold text-primary font-serif text-center mb-6">What's included in full access</h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse text-sm">
+                    <thead>
+                      <tr className="border-b-2 border-slate-200">
+                        <th className="text-left py-3 px-4 font-semibold text-slate-600 w-[55%]">Feature</th>
+                        <th className="text-center py-3 px-4 font-semibold text-slate-600">Free</th>
+                        <th className="text-center py-3 px-4 font-bold text-primary">Bucks Plus Edge<br/><span className="text-xs font-normal text-slate-400">£35/mo or £349/yr</span></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {[
+                        { feature: "Mini diagnostic (12 questions)", free: true, paid: true },
+                        { feature: "Readiness forecast vs 121 benchmark", free: true, paid: true },
+                        { feature: "Top focus area revealed", free: true, paid: true },
+                        { feature: "1,500+ VR, NVR, Maths & Comprehension questions", free: false, paid: true },
+                        { feature: "Full timed diagnostics (40 questions)", free: false, paid: true },
+                        { feature: "All 19 Easy & Medium drill sections", free: false, paid: true },
+                        { feature: "All 17 Hard challenge drills", free: false, paid: true },
+                        { feature: "Mock exam simulations", free: false, paid: true },
+                        { feature: "PDF reports & report archive", free: false, paid: true },
+                        { feature: "Impact simulator & progress tracking", free: false, paid: true },
+                        { feature: "Milestone diagnostics with auto-tracking", free: false, paid: true },
+                        { feature: "Guided preparation roadmap", free: false, paid: true },
+                        { feature: "Premium Parent Analytics dashboard", free: false, paid: true },
+                        { feature: "Badge-based Accomplishments", free: false, paid: true },
+                      ].map((row, i) => (
+                        <tr key={i} className="border-b border-slate-100" data-testid={`comparison-row-${i}`}>
+                          <td className="py-3 px-4 text-slate-700 font-medium">{row.feature}</td>
+                          <td className="text-center py-3 px-4">
+                            {row.free ? <CheckCircle2 className="h-5 w-5 text-brand-green mx-auto" /> : <XCircle className="h-5 w-5 text-slate-300 mx-auto" />}
                           </td>
-                        );
-                      })}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                          <td className="text-center py-3 px-4">
+                            {row.paid ? <CheckCircle2 className="h-5 w-5 text-brand-green mx-auto" /> : <XCircle className="h-5 w-5 text-slate-300 mx-auto" />}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
-          </div>
           )}
         </div>
       </section>
@@ -953,24 +533,24 @@ export default function Pricing() {
             </h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div className="rounded-2xl border border-slate-200 bg-white p-7 sm:p-8 flex flex-col" data-testid="card-pricing-path-diagnostic">
-                <h3 className="text-xl font-bold text-primary font-serif mb-3">Start With a Diagnostic</h3>
+                <h3 className="text-xl font-bold text-primary font-serif mb-3">Start With the Free Diagnostic</h3>
                 <p className="text-slate-600 text-sm leading-relaxed mb-6 flex-1">
-                  Take an 8-minute timed assessment to understand current readiness, pace and performance profile before committing.
+                  Take an 8-minute timed assessment to understand current readiness, pace and performance profile — before committing to any plan.
                 </p>
                 <Button variant="outline" className="w-full h-12 text-sm font-semibold" asChild data-testid="button-pricing-path-diagnostic">
                   <Link href="/free-diagnostic">Start Free Diagnostic</Link>
                 </Button>
               </div>
-              <div className="rounded-2xl border-2 border-brand-amber/40 bg-amber-50/40 p-7 sm:p-8 flex flex-col" data-testid="card-pricing-path-programme">
-                <h3 className="text-xl font-bold text-primary font-serif mb-3">Start with Young Scholar Programme</h3>
+              <div className="rounded-2xl border-2 border-primary/30 bg-primary/[0.03] p-7 sm:p-8 flex flex-col" data-testid="card-pricing-path-subscribe">
+                <h3 className="text-xl font-bold text-primary font-serif mb-3">Start with Bucks Plus Edge</h3>
                 <p className="text-slate-600 text-sm leading-relaxed mb-3 flex-1">
-                  6 months of all-inclusive structured preparation — diagnostics, roadmap, milestone tracking, and mock exams. No subscription needed.
+                  Full access immediately — 1,500+ questions, diagnostics, mock exams, roadmap and premium analytics. Monthly or annual billing.
                 </p>
-                <p className="text-xs text-amber-700 font-medium mb-6">
-                  One payment of £349 — includes full platform access for 6 months plus structured coaching.
+                <p className="text-xs text-primary/70 font-medium mb-6">
+                  £35/month or £349/year (save £71). Cancel monthly any time.
                 </p>
-                <Button className="w-full h-12 text-sm font-semibold bg-brand-amber text-white hover:bg-brand-amber/90" asChild data-testid="button-pricing-path-programme">
-                  <a href="#tiers">View Young Scholar — £349</a>
+                <Button className="w-full h-12 text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90" asChild data-testid="button-pricing-path-subscribe">
+                  <a href="#tiers">View Plans — from £35/mo</a>
                 </Button>
               </div>
             </div>
@@ -980,163 +560,51 @@ export default function Pricing() {
 
       {isUpgradeEligible && (
         <section className="py-12 bg-gradient-to-br from-amber-50 via-amber-50/60 to-white border-b border-brand-amber/20" id="upgrade">
-          <div className="container mx-auto max-w-4xl px-4">
+          <div className="container mx-auto max-w-2xl px-4">
             <div className="text-center mb-8">
               <div className="inline-flex items-center gap-2 bg-brand-amber/10 border border-brand-amber/30 rounded-full px-4 py-1.5 mb-4">
                 <TrendingUp className="h-4 w-4 text-brand-amber" />
-                <span className="text-xs font-bold uppercase tracking-wider text-brand-amber">Upgrade your plan</span>
+                <span className="text-xs font-bold uppercase tracking-wider text-brand-amber">Switch to Annual</span>
               </div>
               <h3 className="text-2xl md:text-3xl font-bold text-primary font-serif mb-3">
-                Ready to upgrade?
+                Save £71 by switching to Annual
               </h3>
-              <p className="text-slate-600 max-w-2xl mx-auto text-sm leading-relaxed">
-                Unlock full platform access with Edge, switch to Annual to save over £220, or add the Young Scholar Programme for a fully structured 6-month coaching plan with roadmap, mock exams, and milestone diagnostics.
+              <p className="text-slate-600 max-w-xl mx-auto text-sm leading-relaxed">
+                You're on monthly billing at £35/month. Switch to Annual for just £349/year — identical access, 12 months locked in.
               </p>
             </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-4xl mx-auto">
-              {availableUpgrades.includes("pack_plus") && (
-                <Card className="border-primary border-2 shadow-lg flex flex-col relative overflow-hidden" data-testid="card-upgrade-pack-plus">
-                  <div className="absolute top-0 inset-x-0 h-1 bg-primary"></div>
-                  <div className="absolute top-3 right-3 bg-primary text-white px-2 py-0.5 rounded-full font-bold text-[10px] uppercase tracking-wider pointer-events-none">
-                    ALL ACCESS
-                  </div>
-                  <CardContent className="p-6 pt-8 flex-1">
-                    <p className="text-xs font-bold uppercase tracking-wider text-primary mb-1">Bucks Practice Platform Edge</p>
-                    <div className="flex items-end gap-2 mb-1">
-                      <span className="text-4xl font-bold text-primary">£59.99</span>
-                      <span className="text-slate-500 font-medium text-sm mb-1">/ month</span>
-                    </div>
-                    <p className="text-xs text-slate-500 mb-4">Upgrade from monthly — full platform access</p>
-                    <ul className="space-y-2">
-                      {[
-                        "All 17 Hard challenge drills",
-                        "Premium Parent Analytics",
-                        "Mock exam simulations",
-                      ].map((f, i) => (
-                        <li key={i} className="flex items-center gap-2 text-sm text-slate-700">
-                          <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0" />{f}
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                  <CardFooter className="px-6 pb-6 pt-0">
-                    <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-11 font-bold" onClick={() => handleUpgrade("pack_plus")} disabled={loading === "upgrade"} data-testid="button-upgrade-pack-plus">
-                      {loading === "upgrade" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Upgrade to Edge — £59.99/mo"}
-                    </Button>
-                  </CardFooter>
-                </Card>
-              )}
+            <div className="max-w-md mx-auto">
               {availableUpgrades.includes("pack_annual") && (
-                <Card className="border-brand-green border-2 shadow-lg flex flex-col relative overflow-hidden bg-green-50/20" data-testid="card-upgrade-pack-annual">
-                  <div className="absolute top-0 inset-x-0 h-1 bg-brand-green"></div>
-                  <div className="absolute top-3 right-3 bg-brand-green text-white px-2 py-0.5 rounded-full font-bold text-[10px] uppercase tracking-wider pointer-events-none">
-                    BEST VALUE
-                  </div>
-                  <CardContent className="p-6 pt-8 flex-1">
-                    <p className="text-xs font-bold uppercase tracking-wider text-brand-green mb-1">Bucks Practice Platform Edge — Annual</p>
-                    <div className="flex items-end gap-2 mb-1">
-                      <span className="text-4xl font-bold text-primary">£495</span>
-                      <span className="text-slate-500 font-medium text-sm mb-1">one-time</span>
-                    </div>
-                    <p className="text-xs text-slate-500 mb-2">12 months access · equiv. £41.25/mo</p>
-                    <div className="inline-flex items-center gap-1 text-[11px] font-bold text-green-700 bg-green-100 border border-green-200 px-2 py-0.5 rounded-full mb-4">
-                      Save £224.88 vs monthly
-                    </div>
-                    <ul className="space-y-2">
-                      {[
-                        "All 17 Hard challenge drills",
-                        "Premium Parent Analytics",
-                        "Mock exam simulations",
-                        "12 months full access",
-                      ].map((f, i) => (
-                        <li key={i} className="flex items-center gap-2 text-sm text-slate-700">
-                          <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0" />{f}
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                  <CardFooter className="px-6 pb-6 pt-0">
-                    <Button className="w-full bg-brand-green text-white hover:bg-brand-green/90 h-11 font-bold" onClick={() => handleUpgrade("pack_annual")} disabled={loading === "upgrade"} data-testid="button-upgrade-pack-annual">
-                      {loading === "upgrade" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Get Annual — £495"}
-                    </Button>
-                  </CardFooter>
-                </Card>
-              )}
-              {availableUpgrades.includes("programme12") && (
-                <Card className="border-primary border-2 shadow-lg flex flex-col relative overflow-hidden" data-testid="card-upgrade-programme12">
-                  <div className="absolute top-0 inset-x-0 h-1 bg-primary"></div>
-                  <CardContent className="p-6 pt-5 flex-1">
-                    <p className="text-xs font-bold uppercase tracking-wider text-primary mb-1">12-Week Structured Programme</p>
-                    <div className="flex items-end gap-2 mb-1">
-                      <span className="text-4xl font-bold text-primary">£89</span>
-                      <span className="text-slate-500 font-medium text-sm mb-1">one-time</span>
-                    </div>
-                    <p className="text-xs text-slate-500 mb-4">Add-on · keeps your existing plan</p>
-                    <ul className="space-y-2">
-                      {[
-                        "12-week preparation roadmap",
-                        "All Hard challenge drills",
-                        "4 milestone diagnostics",
-                        "Weekly personalised task plans",
-                        "Premium Parent Analytics",
-                      ].map((f, i) => (
-                        <li key={i} className="flex items-center gap-2 text-sm text-slate-700">
-                          <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0" />{f}
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                  <CardFooter className="px-6 pb-6 pt-0">
-                    <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-11 font-bold" onClick={() => handleUpgrade("programme12")} disabled={loading === "upgrade"} data-testid="button-upgrade-programme12">
-                      {loading === "upgrade" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Add 12-Week Programme — £89"}
-                    </Button>
-                  </CardFooter>
-                </Card>
-              )}
-              {availableUpgrades.includes("programme24_plus") && (
-                <Card className="border-brand-amber border-2 shadow-xl flex flex-col relative overflow-hidden" data-testid="card-upgrade-programme24">
-                  <div className="absolute top-0 inset-x-0 h-1.5 bg-brand-amber"></div>
+                <Card className="border-brand-amber border-2 shadow-lg flex flex-col relative overflow-hidden bg-amber-50/20" data-testid="card-upgrade-pack-annual">
+                  <div className="absolute top-0 inset-x-0 h-1 bg-brand-amber"></div>
                   <div className="absolute top-3 right-3 bg-brand-amber text-amber-950 px-2 py-0.5 rounded-full font-bold text-[10px] uppercase tracking-wider pointer-events-none">
-                    STRUCTURED
+                    SAVE £71
                   </div>
                   <CardContent className="p-6 pt-8 flex-1">
-                    <p className="text-xs font-bold uppercase tracking-wider text-brand-amber mb-1">Bucks Young Scholar Programme · 6 Months</p>
+                    <p className="text-xs font-bold uppercase tracking-wider text-brand-amber mb-1">Bucks Plus Edge — Annual</p>
                     <div className="flex items-end gap-2 mb-1">
                       <span className="text-4xl font-bold text-primary">£349</span>
-                      <span className="text-slate-500 font-medium text-sm mb-1">one-time</span>
+                      <span className="text-slate-500 font-medium text-sm mb-1">/ year</span>
                     </div>
-                    <p className="text-xs text-slate-500 mb-4">Includes 6 months of full access + structured coaching</p>
+                    <p className="text-xs text-slate-500 mb-2">12 months access · equiv. £29.08/mo</p>
+                    <div className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-700 bg-amber-100 border border-amber-200 px-2 py-0.5 rounded-full mb-4">
+                      Save £71 vs monthly billing
+                    </div>
                     <ul className="space-y-2">
                       {[
-                        "6-month structured roadmap",
-                        "All Hard challenge drills + 3 mock exams",
-                        "Milestone diagnostics with auto-tracking",
-                        "Weekly personalised task plans",
-                        "Premium Parent Analytics",
+                        "Identical access to everything in Monthly",
+                        "12 months of full platform access",
+                        "No further billing for a full year",
                       ].map((f, i) => (
-                        <li key={i} className="flex items-center gap-2 text-sm font-medium text-primary">
+                        <li key={i} className="flex items-center gap-2 text-sm text-slate-700">
                           <CheckCircle2 className="h-4 w-4 text-brand-amber shrink-0" />{f}
                         </li>
                       ))}
                     </ul>
                   </CardContent>
                   <CardFooter className="px-6 pb-6 pt-0">
-                    <Button className="w-full bg-brand-amber text-white hover:bg-brand-amber/90 h-11 font-bold shadow-md" onClick={() => handleUpgrade("programme24_plus")} disabled={loading === "upgrade"} data-testid="button-upgrade-programme24">
-                      {loading === "upgrade" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Get Young Scholar — £349"}
-                    </Button>
-                  </CardFooter>
-                </Card>
-              )}
-              {availableUpgrades.includes("programme16_family") && (
-                <Card className="border-brand-amber border-2 shadow-md flex flex-col" data-testid="card-upgrade-programme16-family">
-                  <CardContent className="p-5 flex-1">
-                    <p className="text-xs font-bold uppercase tracking-wider text-brand-amber mb-1">Young Scholar — Family</p>
-                    <div className="text-3xl font-bold text-primary mb-1">£349</div>
-                    <p className="text-xs text-slate-500 mb-3">Complete family programme — up to 3 children</p>
-                  </CardContent>
-                  <CardFooter className="pt-0">
-                    <Button className="w-full bg-brand-amber text-white hover:bg-brand-amber/90 font-bold" onClick={() => handleUpgrade("programme16_family")} disabled={loading === "upgrade"} data-testid="button-upgrade-programme16-family">
-                      {loading === "upgrade" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Upgrade to Family"}
+                    <Button className="w-full bg-brand-amber text-amber-950 hover:bg-brand-amber/90 h-11 font-bold" onClick={() => handleUpgrade("pack_annual")} disabled={loading === "upgrade"} data-testid="button-upgrade-pack-annual">
+                      {loading === "upgrade" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Switch to Annual — £349"}
                     </Button>
                   </CardFooter>
                 </Card>
@@ -1145,6 +613,7 @@ export default function Pricing() {
           </div>
         </section>
       )}
+
 
       {error && (
         <div className="container mx-auto max-w-4xl px-4 mt-4">
@@ -1507,21 +976,21 @@ export default function Pricing() {
             <Button
               size="lg"
               className="h-14 px-8 text-lg bg-brand-amber text-amber-950 hover:bg-amber-400 w-full sm:w-auto font-bold shadow-lg shadow-brand-amber/20 border-none"
-              onClick={() => handleCheckout("programme24_plus")}
-              disabled={loading === "programme24_plus"}
-              data-testid="button-cta-programme"
+              onClick={() => handleCheckout("pack_annual")}
+              disabled={loading === "pack_annual"}
+              data-testid="button-cta-annual"
             >
-              {loading === "programme24_plus" ? <Loader2 className="h-5 w-5 animate-spin" /> : <>Young Scholar — £349 <ArrowRight className="ml-2 h-5 w-5" /></>}
+              {loading === "pack_annual" ? <Loader2 className="h-5 w-5 animate-spin" /> : <>Annual — £349/year <ArrowRight className="ml-2 h-5 w-5" /></>}
             </Button>
             <Button
               size="lg"
               variant="outline"
               className="h-14 px-8 text-lg w-full sm:w-auto bg-white/5 border-white/20 text-white hover:bg-white/10 hover:text-white backdrop-blur-md"
-              onClick={() => handleCheckout("pack_monthly")}
-              disabled={loading === "pack_monthly"}
-              data-testid="button-cta-pack"
+              onClick={() => handleCheckout("pack_plus")}
+              disabled={loading === "pack_plus"}
+              data-testid="button-cta-monthly"
             >
-              {loading === "pack_monthly" ? <Loader2 className="h-5 w-5 animate-spin" /> : "Practice Platform — £24.99/mo"}
+              {loading === "pack_plus" ? <Loader2 className="h-5 w-5 animate-spin" /> : "Monthly — £35/mo"}
             </Button>
           </div>
 

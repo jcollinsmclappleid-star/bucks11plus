@@ -111,17 +111,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const tierLabel = () => {
     if (!user) return "Free";
     switch (user.subscriptionTier) {
-      case "early_learner": return "Early Learner";
-      case "pack12": return "Bucks Practice Platform";
-      case "pack12_family": return "Bucks Practice Platform (Family)";
-      case "pack_monthly": return "Bucks Practice Platform";
-      case "pack_plus": return "Bucks Practice Platform Edge";
-      case "pack_annual": return "Bucks Practice Platform Edge (Annual)";
-      case "programme8": return "Bucks Young Scholar Programme (8-week)";
-      case "programme12": return "Bucks Young Scholar Programme (12-week)";
-      case "programme16": return "Bucks Young Scholar Programme";
-      case "programme16_family": return "Bucks Young Scholar Programme (Family)";
-      case "programme24_plus": return "Bucks Young Scholar Programme";
+      // Active plans
+      case "pack_plus": return "Bucks Plus Edge";
+      case "pack_annual": return "Bucks Plus Edge — Annual";
+      // Legacy plans — all display as Bucks Plus Edge
+      case "early_learner":
+      case "pack12":
+      case "pack12_family":
+      case "pack_monthly":
+      case "programme8":
+      case "programme12":
+      case "programme16":
+      case "programme16_family":
+      case "programme24_plus": return "Bucks Plus Edge";
       default: return "Free";
     }
   };
