@@ -141,8 +141,8 @@ export function GuideConversionBlock() {
               className="h-11 px-6 bg-brand-amber text-amber-950 hover:bg-brand-amber/90 font-bold shadow-sm"
               data-testid="button-guide-conversion-subscribe"
             >
-              <Link href="/free-11-plus-practice-test-trial">
-                Free Trial — Full Platform Access <ArrowRight className="ml-2 h-4 w-4" />
+              <Link href="/pricing">
+                See Plans & Start Today <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
             <Button
@@ -153,7 +153,7 @@ export function GuideConversionBlock() {
             >
               <Link href="/free-diagnostic">Take the Free 11+ Diagnostic First</Link>
             </Button>
-            <span className="text-white/40 text-xs sm:ml-1">7 days free · Card required · Cancel anytime</span>
+            <span className="text-white/40 text-xs sm:ml-1">From £35/month · Cancel anytime</span>
           </div>
         </div>
       </div>

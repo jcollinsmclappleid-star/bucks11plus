@@ -7,9 +7,9 @@ import { Shield, ChevronUp, ChevronDown } from "lucide-react";
 const TIERS = [
   { value: "free", label: "Free", color: "bg-slate-100 text-slate-700" },
   { value: "early_learner", label: "Early Learner · £49", color: "bg-amber-100 text-amber-800" },
-  { value: "pack_monthly", label: "Bucks Practice Platform · £24.99/mo", color: "bg-blue-100 text-blue-800" },
-  { value: "pack_plus", label: "Bucks Practice Platform Edge · £59.99/mo", color: "bg-indigo-100 text-indigo-800" },
-  { value: "pack_annual", label: "Bucks Platform Edge Annual · £495/yr", color: "bg-indigo-200 text-indigo-900" },
+  { value: "pack_monthly", label: "Bucks Plus Edge Monthly · £35/mo (legacy)", color: "bg-blue-100 text-blue-800" },
+  { value: "pack_plus", label: "Bucks Plus Edge Monthly · £35/mo", color: "bg-indigo-100 text-indigo-800" },
+  { value: "pack_annual", label: "Bucks Plus Edge Annual · £349/yr", color: "bg-indigo-200 text-indigo-900" },
   { value: "pack12", label: "Practice Platform (legacy · £119)", color: "bg-blue-50 text-blue-600" },
   { value: "programme8", label: "8 Week Programme · £59", color: "bg-emerald-100 text-emerald-800" },
   { value: "programme12", label: "12 Week Programme · £89", color: "bg-emerald-100 text-emerald-800" },

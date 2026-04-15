@@ -179,7 +179,7 @@ function QuestionCard({ example }: { example: Example }) {
       </div>
 
       <p className="mt-3 pt-3 border-t border-white/60 text-[10px] text-muted-foreground">
-        Bucks Practice Platform · 1,500+ questions like this
+        Bucks Plus Edge · 1,500+ GL-style questions like this
       </p>
     </div>
   );

@@ -129,7 +129,7 @@ export default function Diagnostics() {
         </div>
         {!hasPaidAccess() && (
           <Button className="bg-brand-amber text-amber-950 hover:bg-brand-amber/90 font-bold" asChild>
-            <Link href="/free-11-plus-practice-test-trial" data-testid="link-pricing">Free Trial — Full Platform</Link>
+            <Link href="/pricing" data-testid="link-pricing">See Plans & Start Today</Link>
           </Button>
         )}
       </div>
@@ -148,9 +148,9 @@ export default function Diagnostics() {
                   <div className="absolute inset-0 bg-background/40 backdrop-blur-[1px] z-10 flex flex-col items-center justify-center p-6 text-center">
                     <Lock className="h-8 w-8 text-slate-400 mb-2" />
                     <p className="text-sm font-medium text-slate-600 mb-2">Requires {tierLabel(diag.requiredTier)}</p>
-                    <p className="text-xs text-muted-foreground mb-4">Free Trial — Full Platform Access</p>
+                    <p className="text-xs text-muted-foreground mb-4">Upgrade to Bucks Plus Edge — from £35/month</p>
                     <Button size="sm" className="bg-primary text-white" asChild data-testid={`button-upgrade-${diag.id}`}>
-                      <Link href="/free-11-plus-practice-test-trial">Start Free Trial</Link>
+                      <Link href="/pricing">See Plans</Link>
                     </Button>
                   </div>
                 )}
@@ -212,9 +212,9 @@ export default function Diagnostics() {
                     <div className="absolute inset-0 bg-background/40 backdrop-blur-[1px] z-10 flex flex-col items-center justify-center p-6 text-center">
                       <Lock className="h-7 w-7 text-slate-400 mb-2" />
                       <p className="text-sm font-medium text-slate-600 mb-1">Requires {tierLabel(paper.requiredTier)}</p>
-                      <p className="text-xs text-muted-foreground mb-3">Free Trial — Full Platform Access</p>
+                      <p className="text-xs text-muted-foreground mb-3">Upgrade to Bucks Plus Edge — from £35/month</p>
                       <Button size="sm" className="bg-primary text-white" asChild data-testid={`button-upgrade-paper-${paper.key}`}>
-                        <Link href="/free-11-plus-practice-test-trial">Start Free Trial</Link>
+                        <Link href="/pricing">See Plans</Link>
                       </Button>
                     </div>
                   )}

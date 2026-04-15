@@ -530,7 +530,7 @@ export default function GuidePrint() {
         </p>
         <div className="grid grid-cols-2 gap-3 mt-3">
           <CTALink href={`${BASE}/free-diagnostic`} label="Start Free Diagnostic" sub="No account needed · 8 minutes" />
-          <CTALink href={`${BASE}/pricing`} label="View Subscription Plans" sub="From £24.99/month" />
+          <CTALink href={`${BASE}/pricing`} label="View Subscription Plans" sub="From £35/month" />
         </div>
       </div>
 
@@ -915,50 +915,37 @@ export default function GuidePrint() {
               urlLabel: "Start Free Diagnostic",
             },
             {
-              name: "Bucks Practice Platform",
-              price: "£24.99",
-              sub: "per month · cancel any time",
+              name: "Bucks Plus Edge Monthly",
+              price: "£35",
+              sub: "per month · cancel any time · no lock-in",
               color: "blue",
               accent: "#0d1f30",
               features: [
                 "1,500+ GL-style practice questions",
                 "All four subject areas: VR, NVR, Maths, English",
-                "Drills across 19 topic areas with progress tracking",
-                "Basic parent progress dashboard",
-              ],
-              url: `${BASE}/pricing`,
-              urlLabel: "Start Monthly Plan",
-            },
-            {
-              name: "Platform Edge",
-              price: "£59.99",
-              sub: "per month · recommended for serious preparation",
-              color: "violet",
-              accent: "#7c3aed",
-              badge: "RECOMMENDED",
-              features: [
-                "Everything in Bucks Practice Platform",
-                "Full timed GL-style diagnostics (40 questions)",
-                "Advanced parent analytics and progress reports",
+                "Full 40q and 50q mock diagnostics",
+                "All Hard-level challenge drills",
                 "PDF diagnostic reports benchmarked to 121",
+                "Parent analytics dashboard",
               ],
               url: `${BASE}/pricing`,
-              urlLabel: "Get Platform Edge",
+              urlLabel: "Start Monthly — £35/mo",
             },
             {
-              name: "Platform Edge Annual",
-              price: "£495",
-              sub: "one-time payment · 52 weeks access",
+              name: "Bucks Plus Edge Annual",
+              price: "£349",
+              sub: "per year · save £71 vs monthly · equiv. £29.08/mo",
               color: "emerald",
               accent: "#059669",
+              badge: "BEST VALUE",
               features: [
-                "Full Platform Edge access for 52 weeks",
+                "Everything in the monthly plan",
+                "12 months of full platform access",
+                "Priority email support",
                 "Best value for Year 5 → test day preparation",
-                "Save over £225 vs monthly billing",
-                "No recurring subscription — single payment",
               ],
               url: `${BASE}/pricing`,
-              urlLabel: "Get Annual Access",
+              urlLabel: "Get Annual Access — £349",
             },
           ].map(({ name, price, sub, accent, badge, features, url, urlLabel }) => (
             <div key={name} className="rounded-xl border overflow-hidden" style={{ borderColor: accent + "40" }}>
@@ -1083,7 +1070,7 @@ export default function GuidePrint() {
                 className="block rounded-xl border-2 border-[#0d1f30] px-6 py-4 text-center no-underline"
                 target="_blank" rel="noopener noreferrer"
               >
-                <span className="text-[#0d1f30] font-bold text-sm block">Subscribe from £24.99/month</span>
+                <span className="text-[#0d1f30] font-bold text-sm block">Subscribe from £35/month</span>
                 <span className="text-slate-500 text-xs">{BASE}/pricing</span>
               </a>
             </div>

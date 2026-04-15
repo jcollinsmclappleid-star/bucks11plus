@@ -857,7 +857,7 @@ export default function ParentAnalytics() {
         <div className="text-center mb-10">
           <h1 className="text-3xl font-bold text-primary font-serif mb-3" data-testid="heading-analytics-gated">Premium Parent Analytics</h1>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Included with Platform Edge (£59.99/mo), the Annual plan (£495/yr), and the Young Scholar Programme.
+            Included with Bucks Plus Edge — available from £35/month or £349/year.
           </p>
         </div>
 
@@ -866,7 +866,7 @@ export default function ParentAnalytics() {
             <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
               <Shield className="h-8 w-8 text-primary" />
             </div>
-            <h2 className="text-2xl font-bold text-primary font-serif mb-2">Included with Platform Edge and above</h2>
+            <h2 className="text-2xl font-bold text-primary font-serif mb-2">Included with Bucks Plus Edge</h2>
             <p className="text-muted-foreground max-w-md mb-6">
               Upgrade to unlock readiness scoring, timing analysis, stamina profiling, gap tracking to 121, and personalised improvement priorities.
             </p>

@@ -90,7 +90,7 @@ export default function Dashboard() {
                 Free trial — {Math.ceil((new Date(user.trialEndsAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24))} days remaining
               </p>
               <p className="text-amber-700 text-xs">
-                £59.99/month starts on {new Date(user.trialEndsAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}. Cancel anytime before then.
+                Subscription starts on {new Date(user.trialEndsAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}. Cancel anytime before then.
               </p>
             </div>
           </div>

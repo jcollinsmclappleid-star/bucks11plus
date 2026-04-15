@@ -372,13 +372,13 @@ export default function GuestResults() {
           <Card className="border-border/60 shadow-md hover:shadow-lg transition-shadow" data-testid="card-upsell-pack-monthly">
             <CardContent className="p-6">
               <div className="flex justify-between items-start mb-1">
-                <h3 className="text-xl font-bold text-primary font-serif">Bucks Practice Platform</h3>
-                <span className="text-2xl font-bold text-primary">£24.99<span className="text-sm font-medium text-slate-500">/mo</span></span>
+                <h3 className="text-xl font-bold text-primary font-serif">Bucks Plus Edge</h3>
+                <span className="text-2xl font-bold text-primary">£35<span className="text-sm font-medium text-slate-500">/mo</span></span>
               </div>
-              <p className="text-xs text-slate-400 mb-3">Cancel any time</p>
-              <p className="text-sm text-slate-600 mb-4">Targeted practice that moves the needle — cancel any time</p>
+              <p className="text-xs text-slate-400 mb-3">Cancel any time · no lock-in</p>
+              <p className="text-sm text-slate-600 mb-4">Full platform access — every feature, monthly flexibility</p>
               <ul className="space-y-2 mb-6">
-                {["1,500+ questions across VR, NVR, Maths & Comprehension", "Easy & Medium drills + 6 Hard drills", "Full timed diagnostics (40 questions)", "PDF reports", "Progress tracking dashboard"].map((f, i) => (
+                {["1,500+ GL-style questions across all four subjects", "Full 40q and 50q mock diagnostics", "All Hard-level challenge drills", "PDF diagnostic reports after every session", "Parent analytics dashboard"].map((f, i) => (
                   <li key={i} className="flex items-center gap-2 text-sm text-slate-700">
                     <BarChart3 className="h-4 w-4 text-primary shrink-0" />
                     {f}
@@ -386,32 +386,32 @@ export default function GuestResults() {
                 ))}
               </ul>
               <Button className="w-full" asChild data-testid="button-upsell-pack-monthly">
-                <Link href={`/sign-up?redirect=checkout&tier=pack_monthly&guestSession=${id}`}>Start Monthly — £24.99/mo</Link>
+                <Link href="/pricing?autoCheckout=pack_plus">Start Monthly — £35/mo</Link>
               </Button>
             </CardContent>
           </Card>
 
-          <Card className="border-brand-amber border-2 shadow-xl relative" data-testid="card-upsell-pack-plus">
-            <div className="absolute top-0 right-0 bg-brand-amber text-amber-950 px-3 py-1 rounded-bl-lg font-bold text-xs">
-              7 DAYS FREE
+          <Card className="border-primary border-2 shadow-xl relative" data-testid="card-upsell-pack-annual">
+            <div className="absolute top-0 right-0 bg-primary text-white px-3 py-1 rounded-bl-lg font-bold text-xs">
+              BEST VALUE
             </div>
             <CardContent className="p-6">
               <div className="flex justify-between items-start mb-1">
-                <h3 className="text-xl font-bold text-primary font-serif">Platform Edge</h3>
-                <span className="text-2xl font-bold text-primary">£59.99<span className="text-sm font-medium text-slate-500">/mo</span></span>
+                <h3 className="text-xl font-bold text-primary font-serif">Bucks Plus Edge</h3>
+                <span className="text-2xl font-bold text-primary">£349<span className="text-sm font-medium text-slate-500">/yr</span></span>
               </div>
-              <p className="text-xs text-slate-400 mb-3">Full platform access · 7 days free · then £59.99/mo · cancel any time</p>
-              <p className="text-sm text-slate-600 mb-4">Full analytics and every Hard drill — the complete preparation edge</p>
+              <p className="text-xs text-emerald-600 font-semibold mb-1">Save £71 vs monthly · equiv. £29.08/mo</p>
+              <p className="text-sm text-slate-600 mb-4">Everything in the monthly plan · 12 months of full access</p>
               <ul className="space-y-2 mb-6">
-                {["Everything in Practice Platform", "All 17 Hard challenge drills", "Full Parent Analytics dashboard", "Mock exam simulations", "Detailed pace & accuracy breakdown", "Priority gap identification"].map((f, i) => (
+                {["1,500+ GL-style questions across all four subjects", "Full 40q and 50q mock diagnostics", "All Hard-level challenge drills", "Priority email support", "Cancel any time"].map((f, i) => (
                   <li key={i} className="flex items-center gap-2 text-sm text-slate-700">
-                    <TrendingUp className="h-4 w-4 text-brand-amber shrink-0" />
+                    <TrendingUp className="h-4 w-4 text-primary shrink-0" />
                     {f}
                   </li>
                 ))}
               </ul>
-              <Button className="w-full bg-primary" asChild data-testid="button-upsell-pack-plus">
-                <Link href="/free-11-plus-practice-test-trial">Free Trial — Full Platform Access</Link>
+              <Button className="w-full bg-primary" asChild data-testid="button-upsell-pack-annual">
+                <Link href="/pricing?autoCheckout=pack_annual">Get Annual Access — £349</Link>
               </Button>
             </CardContent>
           </Card>

@@ -72,48 +72,38 @@ function getUpsellMessage(tier: string, weakestSection: string, weakestScore: nu
   if (rank < 0) {
     if (overallScore < 110) {
       return {
-        title: "Free Trial — Unlock the Full Diagnostic & Practice Hub",
-        message: `${weakestSection} at ${weakestScore}% needs focused attention. Platform Edge gives your child the complete preparation hub — 1,500+ GL-style questions, full diagnostics, all Hard drills, and a detailed analytics dashboard. Try the full platform free for 7 days.`,
-        cta: "Free Trial — Full Platform Access",
+        title: "Unlock the Full Diagnostic & Practice Hub",
+        message: `${weakestSection} at ${weakestScore}% needs focused attention. Bucks Plus Edge gives your child 1,500+ GL-style questions, full diagnostics, all Hard drills, and a detailed analytics dashboard — from £35/month.`,
+        cta: "See Plans & Start Today",
         tier: "pack_plus",
-        link: "/free-11-plus-practice-test-trial",
+        link: "/pricing",
       };
     }
     return {
-      title: "Free Trial — Build Confidence with the Full Platform",
-      message: `Great start! Platform Edge is the complete Diagnostic & Practice Hub — 1,500+ questions, all 17 Hard challenge drills, full diagnostics, and a detailed parent analytics dashboard. Full access, no charge for 7 days.`,
-      cta: "Free Trial — Full Platform Access",
+      title: "Build Confidence with the Full Platform",
+      message: `Great start! Bucks Plus Edge is the complete Diagnostic & Practice Hub — 1,500+ questions, all 17 Hard challenge drills, full diagnostics, and a detailed parent analytics dashboard. From £35/month, cancel any time.`,
+      cta: "See Plans & Start Today",
       tier: "pack_plus",
-      link: "/free-11-plus-practice-test-trial",
+      link: "/pricing",
     };
   }
 
   if (rank === 0) {
     if (weakestScore < 60) {
       return {
-        title: "Free Trial — Full Diagnostic Hub Access",
-        message: `${weakestSection} at ${weakestScore}% needs hard-level drilling. Platform Edge unlocks all 17 Hard challenge drills, the complete diagnostic suite, and an advanced parent analytics dashboard. Try the full platform free for 7 days.`,
-        cta: "Free Trial — Full Platform Access",
+        title: "Upgrade to Full Platform Access",
+        message: `${weakestSection} at ${weakestScore}% needs hard-level drilling. Bucks Plus Edge unlocks all 17 Hard challenge drills, the complete diagnostic suite, and an advanced parent analytics dashboard. From £35/month.`,
+        cta: "See Plans & Start Today",
         tier: "pack_plus",
-        link: "/free-11-plus-practice-test-trial",
+        link: "/pricing",
       };
     }
     return {
-      title: "Free Trial — Go Deeper with the Full Platform",
-      message: `Your child is making progress. Platform Edge is the complete Diagnostic & Practice Hub — all Hard drills, full-length mock exams, and detailed gap analysis to push their score to qualifying level. Try it free for 7 days.`,
-      cta: "Free Trial — Full Platform Access",
+      title: "Go Deeper with the Full Platform",
+      message: `Your child is making progress. Bucks Plus Edge is the complete Diagnostic & Practice Hub — all Hard drills, full-length mock exams, and detailed gap analysis to push their score to qualifying level. From £35/month.`,
+      cta: "See Plans & Start Today",
       tier: "pack_plus",
-      link: "/free-11-plus-practice-test-trial",
-    };
-  }
-
-  if (rank === 1 && overallScore < 121) {
-    return {
-      title: "Close the Gap with Programme+",
-      message: `At ${overallScore}/141, your child is ${121 - overallScore} points from the 121 standard. The 6-month Programme+ provides a structured weekly plan, mock exams, and milestone tracking to systematically close this gap.`,
-      cta: "Upgrade to Programme+ — £349",
-      tier: "programme24_plus",
-      isUpgrade: true,
+      link: "/pricing",
     };
   }
 
