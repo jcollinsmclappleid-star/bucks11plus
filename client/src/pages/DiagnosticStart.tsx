@@ -6,10 +6,24 @@ import { Seo } from "../components/shared/Seo";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Diagnostic, TestSession } from "@shared/schema";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useAuth } from "../lib/auth";
+import { useEffect } from "react";
 
 export default function DiagnosticStart() {
   const { id } = useParams();
   const [, setLocation] = useLocation();
+  const { user, isLoading: authLoading } = useAuth();
+
+  useEffect(() => {
+    if (authLoading) return;
+    if (!user) {
+      if (id === "mini-1") {
+        setLocation("/free-diagnostic");
+      } else {
+        setLocation("/sign-in");
+      }
+    }
+  }, [authLoading, user, id]);
 
   const { data: diagnostic, isLoading } = useQuery<Diagnostic>({
     queryKey: [`/api/diagnostics/${id}`],
@@ -26,7 +40,7 @@ export default function DiagnosticStart() {
     },
   });
 
-  if (isLoading) {
+  if (authLoading || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />

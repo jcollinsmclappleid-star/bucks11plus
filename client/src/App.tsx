@@ -334,7 +334,7 @@ function Router() {
               <PreviewGate section="Diagnostics"><Diagnostics /></PreviewGate>
             </Route>
             <Route path="/app/diagnostic/:id/start">
-              <AuthGate><DiagnosticStart /></AuthGate>
+              <DiagnosticStart />
             </Route>
             <Route path="/app/results/:id">
               <AuthGate><Results /></AuthGate>
