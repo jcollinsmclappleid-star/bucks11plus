@@ -434,8 +434,8 @@ export default function Landing() {
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-[1.12] font-serif max-w-4xl mx-auto">
               1,500+ Bucks 11+ questions.<br className="hidden md:block" />
-              <span className="text-white/55"> Diagnostics that show</span><br className="hidden md:block" />
-              you exactly <span className="text-brand-amber">what to fix.</span>
+              <span className="text-white/55"> We also show you</span><br className="hidden md:block" />
+              exactly <span className="text-brand-amber">what to focus on to pass.</span>
             </h1>
 
             <p className="text-lg md:text-xl text-white/65 max-w-2xl mx-auto leading-relaxed" data-testid="text-hero-sub">
