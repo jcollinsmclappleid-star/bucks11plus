@@ -679,51 +679,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── PREPARATION PLATFORM DIFFERENTIATOR ── */}
-      <section className="py-14 md:py-20 bg-slate-50 border-b border-border/30" data-testid="section-platform-differentiator">
-        <div className="container mx-auto max-w-5xl px-4">
-          <div className="text-center mb-10">
-            <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">Why This Works</span>
-            <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif mb-3">
-              A Preparation Platform. Not a Question Bank.
-            </h2>
-            <p className="text-slate-500 max-w-2xl mx-auto leading-relaxed">
-              Most resources give your child more material. This platform tells you <strong className="text-slate-700 font-semibold">what to work on</strong> — based on where they actually are — and shows you whether it's making a difference. Short sessions, any device, watching the forecast close in on 121.
-            </p>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col gap-3" data-testid="card-platform-diff-next">
-              <div className="w-11 h-11 rounded-xl bg-primary/5 text-primary flex items-center justify-center border border-primary/10">
-                <Target className="h-5 w-5" />
-              </div>
-              <h3 className="font-bold text-primary text-base leading-tight">Tells You What to Focus on Next</h3>
-              <p className="text-sm text-slate-500 leading-relaxed">After every diagnostic, the three highest-impact priorities are identified and matched to targeted drills. The data decides — not guesswork.</p>
-            </div>
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col gap-3" data-testid="card-platform-diff-device">
-              <div className="w-11 h-11 rounded-xl bg-primary/5 text-primary flex items-center justify-center border border-primary/10">
-                <Smartphone className="h-5 w-5" />
-              </div>
-              <h3 className="font-bold text-primary text-base leading-tight">Works on Any Device</h3>
-              <p className="text-sm text-slate-500 leading-relaxed">Phone, tablet or laptop — 15 minutes before school or at the weekend. Interactive and timed, not a static PDF to work through at a desk.</p>
-            </div>
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col gap-3" data-testid="card-platform-diff-analytics">
-              <div className="w-11 h-11 rounded-xl bg-primary/5 text-primary flex items-center justify-center border border-primary/10">
-                <BarChart3 className="h-5 w-5" />
-              </div>
-              <h3 className="font-bold text-primary text-base leading-tight">Parent Visibility Without Micromanaging</h3>
-              <p className="text-sm text-slate-500 leading-relaxed">The parent analytics dashboard shows readiness score, topic-level progress, and current priorities. You know what's happening without sitting beside them for every session.</p>
-            </div>
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col gap-3" data-testid="card-platform-diff-tracking">
-              <div className="w-11 h-11 rounded-xl bg-primary/5 text-primary flex items-center justify-center border border-primary/10">
-                <TrendingUp className="h-5 w-5" />
-              </div>
-              <h3 className="font-bold text-primary text-base leading-tight">Shows Whether It's Working</h3>
-              <p className="text-sm text-slate-500 leading-relaxed">After every session you can see whether the key priorities are improving. Progress is tracked across all four sections so you know early if a different focus is needed.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ── PRICING ── */}
       <section id="pricing" className="py-16 md:py-24 bg-white border-b border-border/30" data-testid="section-pricing">
         <div className="container mx-auto max-w-5xl px-4">
@@ -803,6 +758,51 @@ export default function Landing() {
           </div>
 
           <p className="text-center text-xs text-slate-400 mt-8">All prices include VAT. Subscriptions renew automatically and can be cancelled anytime. <Link href="/pricing" className="text-primary hover:underline">See full pricing details →</Link></p>
+        </div>
+      </section>
+
+      {/* ── PREPARATION PLATFORM DIFFERENTIATOR ── */}
+      <section className="py-14 md:py-20 bg-slate-50 border-b border-border/30" data-testid="section-platform-differentiator">
+        <div className="container mx-auto max-w-5xl px-4">
+          <div className="text-center mb-10">
+            <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">Why This Works</span>
+            <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif mb-3">
+              A Preparation Platform. Not a Question Bank.
+            </h2>
+            <p className="text-slate-500 max-w-2xl mx-auto leading-relaxed">
+              Most resources give your child more material. This platform tells you <strong className="text-slate-700 font-semibold">what to work on</strong> — based on where they actually are — and shows you whether it's making a difference. Short sessions, any device, watching the forecast close in on 121.
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col gap-3" data-testid="card-platform-diff-next">
+              <div className="w-11 h-11 rounded-xl bg-primary/5 text-primary flex items-center justify-center border border-primary/10">
+                <Target className="h-5 w-5" />
+              </div>
+              <h3 className="font-bold text-primary text-base leading-tight">Tells You What to Focus on Next</h3>
+              <p className="text-sm text-slate-500 leading-relaxed">After every diagnostic, the three highest-impact priorities are identified and matched to targeted drills. The data decides — not guesswork.</p>
+            </div>
+            <div className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col gap-3" data-testid="card-platform-diff-device">
+              <div className="w-11 h-11 rounded-xl bg-primary/5 text-primary flex items-center justify-center border border-primary/10">
+                <Smartphone className="h-5 w-5" />
+              </div>
+              <h3 className="font-bold text-primary text-base leading-tight">Works on Any Device</h3>
+              <p className="text-sm text-slate-500 leading-relaxed">Phone, tablet or laptop — 15 minutes before school or at the weekend. Interactive and timed, not a static PDF to work through at a desk.</p>
+            </div>
+            <div className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col gap-3" data-testid="card-platform-diff-analytics">
+              <div className="w-11 h-11 rounded-xl bg-primary/5 text-primary flex items-center justify-center border border-primary/10">
+                <BarChart3 className="h-5 w-5" />
+              </div>
+              <h3 className="font-bold text-primary text-base leading-tight">Parent Visibility Without Micromanaging</h3>
+              <p className="text-sm text-slate-500 leading-relaxed">The parent analytics dashboard shows readiness score, topic-level progress, and current priorities. You know what's happening without sitting beside them for every session.</p>
+            </div>
+            <div className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col gap-3" data-testid="card-platform-diff-tracking">
+              <div className="w-11 h-11 rounded-xl bg-primary/5 text-primary flex items-center justify-center border border-primary/10">
+                <TrendingUp className="h-5 w-5" />
+              </div>
+              <h3 className="font-bold text-primary text-base leading-tight">Shows Whether It's Working</h3>
+              <p className="text-sm text-slate-500 leading-relaxed">After every session you can see whether the key priorities are improving. Progress is tracked across all four sections so you know early if a different focus is needed.</p>
+            </div>
+          </div>
         </div>
       </section>
 

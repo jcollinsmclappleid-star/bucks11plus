@@ -133,6 +133,43 @@ export async function sendAdminNotificationEmail(
   }
 }
 
+export async function sendGuideDownloadAdminEmail(
+  name: string,
+  email: string,
+  downloadedAt: Date,
+): Promise<void> {
+  const subject = `[Bucks 11 Plus Tests] New Guide Download — ${name}`;
+  const html = `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.6;color:#1a1a2e;max-width:600px;margin:0 auto;padding:20px;">
+  <strong style="font-size:16px;color:#0d1f30;">Bucks 11 Plus Tests — Guide Download Notification</strong>
+  <hr style="border:none;border-top:1px solid #e5e7eb;margin:16px 0;">
+  <p><strong>Name:</strong> ${name}</p>
+  <p><strong>Email:</strong> ${email}</p>
+  <p><strong>Downloaded at:</strong> ${downloadedAt.toUTCString()}</p>
+  <hr style="border:none;border-top:1px solid #e5e7eb;margin:16px 0;">
+  <p style="font-size:11px;color:#9ca3af;">Ianson Systems Limited · Bucks 11 Plus Tests</p>
+</body>
+</html>`;
+
+  try {
+    if (!RESEND_API_KEY) {
+      console.log(`[GuideEmail] Skipping (no RESEND_API_KEY): ${subject}`);
+      return;
+    }
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
+      body: JSON.stringify({ from: RESEND_FROM_EMAIL, to: ["support@11plustesthub.co.uk"], subject, html }),
+    });
+    if (!res.ok) console.error(`[GuideEmail] Send failed: ${res.status}`);
+    else console.log(`[GuideEmail] Admin notification sent for ${email}`);
+  } catch (err) {
+    console.error("[GuideEmail] Error:", err);
+  }
+}
+
 export async function sendGuestResultsEmail(
   email: string,
   sessionId: string,

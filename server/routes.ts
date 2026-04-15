@@ -7,7 +7,7 @@ import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClie
 import { sql, eq, and, desc, inArray } from "drizzle-orm";
 import { db } from "./db";
 import { computeAttemptMetrics, computeFullAnalytics, type AnswerRecord, type DrillAnswerRecord, type HistoricalMetrics } from "./metrics";
-import { sendDiagnosticCompleteEmail, sendTrialWelcomeEmail, sendAdminNotificationEmail } from "./email";
+import { sendDiagnosticCompleteEmail, sendTrialWelcomeEmail, sendAdminNotificationEmail, sendGuideDownloadAdminEmail } from "./email";
 import { learnArticles } from "../client/src/data/learn-articles";
 import { ensureFreePool, repairSeedQuestions } from "./seed";
 import {
@@ -1864,6 +1864,7 @@ export async function registerRoutes(
       }
       const lead = await storage.createGuideLead(parsed.data);
       res.json({ id: lead.id, success: true });
+      sendGuideDownloadAdminEmail(parsed.data.name, parsed.data.email, new Date()).catch(() => {});
     } catch (error) {
       next(error);
     }
