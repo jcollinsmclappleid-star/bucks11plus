@@ -331,7 +331,7 @@ export default function Landing() {
             { "@type": "Question", name: "How does the free readiness check work?", acceptedAnswer: { "@type": "Answer", text: "The free readiness check is a 12-question, 8-minute timed assessment in GL-style format. No account is needed. On completion, parents receive a readiness band (On Track, Within Reach, or Clear Improvement Opportunity), a forecast standardised score toward 121, and a breakdown of performance across the four test sections." } },
             { "@type": "Question", name: "When should my child start preparing for the Bucks 11+?", acceptedAnswer: { "@type": "Answer", text: "Most families begin structured preparation in Year 4 or early Year 5, giving children 12 to 18 months before the September test date. Starting with a readiness check helps identify specific gaps and ensures preparation time is spent where it will have the most impact." } },
             { "@type": "Question", name: "Is Bucks 11 Plus Tests affiliated with GL Assessment or Buckinghamshire Council?", acceptedAnswer: { "@type": "Answer", text: "No. Bucks 11 Plus Tests is fully independent. We are not affiliated with GL Assessment, Buckinghamshire Council, The Buckinghamshire Grammar Schools (TBGS), or any individual grammar school. The GL-style label refers to the question format we use to replicate the test structure — it does not imply any formal relationship." } },
-            { "@type": "Question", name: "What is included in Bucks Plus Edge?", acceptedAnswer: { "@type": "Answer", text: "Bucks Plus Edge (£35/month or £349/year) includes 1,500+ GL-style questions across all four test domains, timed drills, full 40-question and 50-question mock diagnostics, PDF reports, parent analytics, progress tracking, and access to all Hard drills. Cancel anytime." } },
+            { "@type": "Question", name: "What is included in Bucks Plus Edge?", acceptedAnswer: { "@type": "Answer", text: "Bucks Plus Edge (£35/month or £349/year) includes 1,500+ GL-style questions across all four test domains, timed drills, full 40-question and 50-question mock readiness checks, PDF reports, parent analytics, progress tracking, and access to all Hard drills. Cancel anytime." } },
             { "@type": "Question", name: "What is the difference between the monthly and annual plan?", acceptedAnswer: { "@type": "Answer", text: "Both plans give identical full access to every feature. The monthly plan is £35/month and can be cancelled anytime. The annual plan is £349/year — equivalent to £29.08/month — saving £71 compared to paying monthly for 12 months." } },
           ]
         }}
@@ -733,7 +733,7 @@ export default function Landing() {
           <div className="grid md:grid-cols-3 gap-5">
             {[
               {
-                quote: "The diagnostic showed us exactly where she was losing marks — we dropped the generic practice and focused on NVR sequences. Her scores improved noticeably within three weeks.",
+                quote: "The readiness check showed us exactly where she was losing marks — we dropped the generic practice and focused on NVR sequences. Her scores improved noticeably within three weeks.",
                 name: "Sarah M.",
                 detail: "Parent of Year 5 child, targeting Beaconsfield High",
               },
@@ -743,7 +743,7 @@ export default function Landing() {
                 detail: "Parent of Year 6 child, targeting Royal Latin",
               },
               {
-                quote: "Starting with the free diagnostic was the best thing we did. It showed my son was much stronger in Maths than we thought, and that Verbal Reasoning was the real gap.",
+                quote: "Starting with the free readiness check was the best thing we did. It showed my son was much stronger in Maths than we thought, and that Verbal Reasoning was the real gap.",
                 name: "Priya K.",
                 detail: "Parent of Year 5 child, targeting Dr Challoner's",
               },

@@ -79,9 +79,9 @@ export default function Article() {
       <div className="mt-16 pt-8 border-t border-border/50">
         <div className="bg-primary text-primary-foreground p-8 rounded-2xl text-center">
           <h3 className="text-2xl font-bold font-serif mb-4">Stop guessing your child's readiness</h3>
-          <p className="mb-6 opacity-90">Take our free 8-minute diagnostic to see their current trajectory toward the 121 standard.</p>
+          <p className="mb-6 opacity-90">Take our free 8-minute readiness check to see their current trajectory toward the 121 standard.</p>
           <Link href="/free-diagnostic" className="inline-block bg-white text-primary px-8 py-3 rounded-md font-medium hover:bg-slate-100 transition-colors" data-testid="link-start-diagnostic">
-            Start Free Diagnostic
+            Start Free Readiness Check
           </Link>
         </div>
       </div>

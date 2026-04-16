@@ -18,7 +18,7 @@ const features = [
 
 const steps = [
   { n: "1", title: "Unlock the platform", desc: "Enter your card details — nothing is charged. Stripe securely holds your card for the 7-day period." },
-  { n: "2", title: "Full access from day one", desc: "Your child gets immediate access to the complete Diagnostic & Practice Hub — every diagnostic, every Hard drill, analytics, and all 1,500+ GL-style questions." },
+  { n: "2", title: "Full access from day one", desc: "Your child gets immediate access to the complete Diagnostic & Practice Hub — every readiness check, every Hard drill, analytics, and all 1,500+ GL-style questions." },
   { n: "3", title: "After 7 days, your choice", desc: "If you're happy, do nothing — £59.99/month is charged automatically. If not, cancel before day 7 and pay absolutely nothing." },
 ];
 
@@ -88,7 +88,7 @@ export default function FreeTrial() {
             The Bucks 11+ Diagnostic<br className="hidden md:block" /> & Practice Hub. 7 Days Free.
           </h1>
           <p className="text-white/80 text-lg leading-relaxed max-w-2xl mx-auto mb-8">
-            This isn't a practice test sampler — it's full access to the complete interactive platform. Your child gets every diagnostic, every Hard drill, premium analytics, and 1,500+ GL-style questions from the moment you start.
+            This isn't a practice test sampler — it's full access to the complete interactive platform. Your child gets every readiness check, every Hard drill, premium analytics, and 1,500+ GL-style questions from the moment you start.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button
@@ -121,7 +121,7 @@ export default function FreeTrial() {
             Everything in the Hub — Unlocked for 7 Days
           </h2>
           <p className="text-muted-foreground text-center max-w-xl mx-auto mb-10 text-sm">
-            Not a preview, not a sample. Your child gets identical access to a full paid subscriber across the entire platform — every tool, every diagnostic, every drill.
+            Not a preview, not a sample. Your child gets identical access to a full paid subscriber across the entire platform — every tool, every readiness check, every drill.
           </p>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
             {features.map((f, i) => (

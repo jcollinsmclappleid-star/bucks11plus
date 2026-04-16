@@ -496,14 +496,14 @@ const YEAR_DATA: Record<number, YearGroupData> = {
       { heading: "How Much Preparation Is Enough?", body: "Most families who support their children through structured preparation allocate 2–4 sessions per week of 30–45 minutes each during term time, with more intensive sessions in the summer holidays. Quality and focus matter more than total hours — a 30-minute session on a specific weakness is more valuable than an hour of generalised practice." },
     ],
     faq: [
-      { question: "My child is in Year 5 and hasn't started preparing yet — is it too late?", answer: "No. Many children begin structured preparation in the spring term of Year 5, or even in the summer term, and achieve strong results. What matters is the quality and targeting of the preparation. Starting with a diagnostic assessment tells you immediately where to focus." },
+      { question: "My child is in Year 5 and hasn't started preparing yet — is it too late?", answer: "No. Many children begin structured preparation in the spring term of Year 5, or even in the summer term, and achieve strong results. What matters is the quality and targeting of the preparation. Starting with a readiness check tells you immediately where to focus." },
       { question: "Should we use a tutor, practice papers, or an online platform?", answer: "Many families use a combination. Online diagnostic platforms establish a clear baseline and identify specific gaps; tutors can then focus their sessions on precisely those areas. Practice papers under timed conditions are important in the final months before the test." },
       { question: "What score does my child need to pass?", answer: "The qualifying threshold is a standardised score of 121. This score is age-adjusted — it accounts for your child's exact date of birth. Achieving 121 qualifies a child for grammar school consideration; the score does not determine which school they attend." },
       { question: "How important is the summer holiday before Year 6?", answer: "Very important. The test is sat in the first weeks of September — just after the summer holidays. Most families maintain 3–5 practice sessions per week throughout the summer, focusing on mock papers under timed conditions. Keeping preparation consistent through the summer is one of the most reliable ways to enter the test in good form." },
     ],
     checklist: [
       "Register for the Secondary Transfer Test before the June deadline",
-      "Complete a diagnostic assessment to establish a starting point",
+      "Complete a readiness check to establish a starting point",
       "Identify the 1–2 domains that need the most work",
       "Build a consistent weekly practice routine (2–4 short sessions)",
       "Introduce timed practice papers in the spring/summer term",

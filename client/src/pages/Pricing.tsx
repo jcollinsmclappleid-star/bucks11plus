@@ -950,7 +950,7 @@ export default function Pricing() {
           <div className="grid md:grid-cols-3 gap-6">
             {[
               {
-                quote: "We'd been doing Bond books for months with no idea which areas actually needed work. The diagnostic showed us exactly where she was losing marks — we dropped the generic practice and focused on NVR sequences. Her scores improved noticeably within three weeks.",
+                quote: "We'd been doing Bond books for months with no idea which areas actually needed work. The readiness check showed us exactly where she was losing marks — we dropped the generic practice and focused on NVR sequences. Her scores improved noticeably within three weeks.",
                 name: "Sarah M.",
                 detail: "Parent of Year 5 child, targeting Beaconsfield High",
               },
@@ -960,7 +960,7 @@ export default function Pricing() {
                 detail: "Parent of Year 6 child, targeting Royal Latin",
               },
               {
-                quote: "Starting with the free diagnostic was the best thing we did. It showed my son was much stronger in Maths than we thought, and that Verbal Reasoning was the real gap. We stopped wasting time on the wrong things entirely.",
+                quote: "Starting with the free readiness check was the best thing we did. It showed my son was much stronger in Maths than we thought, and that Verbal Reasoning was the real gap. We stopped wasting time on the wrong things entirely.",
                 name: "Priya K.",
                 detail: "Parent of Year 5 child, targeting Dr Challoner's",
               },

@@ -85,7 +85,7 @@ export default function ParentHub() {
                 Stop guessing. Find out exactly where your child stands relative to the 121 standard in just 8 minutes.
               </p>
               <Link href="/sign-up" className="block w-full py-2.5 px-4 bg-primary text-primary-foreground text-center rounded-md font-medium hover:bg-primary/90 transition-colors shadow-sm" data-testid="link-start-diagnostic-sidebar">
-                Start Diagnostic
+                Start Readiness Check
               </Link>
             </div>
           </div>

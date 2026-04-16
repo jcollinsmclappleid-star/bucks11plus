@@ -219,7 +219,7 @@ export default function GuidePrint() {
         <InfoBox color="blue">
           <p className="text-xs text-blue-800 leading-relaxed">
             <strong>Reading tip:</strong> This guide is designed to be read in order, but each section also stands alone. If you have a specific question, jump straight to the relevant page using the contents above.
-            All links in this guide are clickable — access the platform, start your free diagnostic, or view subscription plans directly.
+            All links in this guide are clickable — access the platform, start your free readiness check, or view subscription plans directly.
           </p>
         </InfoBox>
       </div>
@@ -285,9 +285,9 @@ export default function GuidePrint() {
         </p>
         <h3 className="text-base font-serif font-bold text-[#0d1f30] mb-2">What Our Platform Provides</h3>
         <p className="text-sm leading-relaxed mb-2">
-          The free 8-minute diagnostic generates a predicted standardised score benchmarked against 121. It identifies your child's current standing across all four subjects and highlights the specific question types with the highest impact on the overall score.
+          The free 8-minute readiness check generates a predicted standardised score benchmarked against 121. It identifies your child's current standing across all four subjects and highlights the specific question types with the highest impact on the overall score.
         </p>
-        <CTALink href={`${BASE}/free-diagnostic`} label="Take the Free 8-Minute Diagnostic" sub={`${BASE}/free-diagnostic`} />
+        <CTALink href={`${BASE}/free-diagnostic`} label="Take the Free 8-Minute Readiness Check" sub={`${BASE}/free-diagnostic`} />
       </div>
 
       {/* PAGE 5 — ADMISSIONS TIMELINE */}
@@ -326,7 +326,7 @@ export default function GuidePrint() {
               title: "Structured Preparation Begins",
               points: [
                 "Begin systematic familiarisation with all four question type groups",
-                "Take a diagnostic assessment to identify strengths and gaps before revision begins",
+                "Take a readiness check to identify strengths and gaps before revision begins",
                 "Focus on the two weakest subject areas first — progress here has most impact",
                 "Develop timed practice habits — pace is as critical as accuracy on test day",
               ],
@@ -451,7 +451,7 @@ export default function GuidePrint() {
           Most families preparing for the Bucks 11+ complete large numbers of practice questions — often hundreds of papers — without ever knowing whether their child's performance is actually improving in the areas that matter most. They know their child got some questions wrong. They don't know which ones, why, or what to do about it.
         </p>
         <p className="text-sm leading-relaxed mb-4">
-          The challenge is not lack of practice material. It is lack of <strong>measurement</strong>. Without structured diagnostic assessment, parents cannot answer the fundamental questions that drive effective preparation:
+          The challenge is not lack of practice material. It is lack of <strong>measurement</strong>. Without a structured readiness check, parents cannot answer the fundamental questions that drive effective preparation:
         </p>
         <div className="grid grid-cols-2 gap-3 my-5">
           {[
@@ -469,9 +469,9 @@ export default function GuidePrint() {
           ))}
         </div>
         <InfoBox color="blue">
-          <h4 className="text-sm font-bold text-blue-900 mb-2">The Diagnostic Approach</h4>
+          <h4 className="text-sm font-bold text-blue-900 mb-2">The Readiness-Led Approach</h4>
           <p className="text-xs text-blue-800 leading-relaxed">
-            A diagnostic approach — one that measures specific skills, identifies gaps, tracks progress over time, and generates actionable priorities — provides the clarity that generic practice cannot. The Bucks 11 Plus Tests platform is built on this principle: every diagnostic produces a predicted standardised score, subject breakdowns, and a specific recommended focus order.
+            A readiness-led approach — one that measures specific skills, identifies gaps, tracks progress over time, and generates actionable priorities — provides the clarity that generic practice cannot. The Bucks 11 Plus Tests platform is built on this principle: every readiness check produces a predicted standardised score, subject breakdowns, and a specific recommended focus order.
           </p>
         </InfoBox>
         <h3 className="text-base font-serif font-bold text-[#0d1f30] mt-5 mb-2">Common Preparation Mistakes</h3>
@@ -500,8 +500,8 @@ export default function GuidePrint() {
         <h3 className="text-base font-serif font-bold text-[#0d1f30] mb-2">The Three-Phase Approach</h3>
         <div className="grid grid-cols-3 gap-3 mb-5">
           {[
-            { phase: "Phase 1", title: "Diagnose", when: "Year 5 start", desc: "Identify current baseline across all four subjects using a structured diagnostic. Pinpoint the two or three weakest skill areas before any targeted practice begins." },
-            { phase: "Phase 2", title: "Target", when: "Year 5–6", desc: "Focus practice on the highest-impact gaps identified in the diagnostic. Use structured question banks and topic-specific drills rather than mixed practice papers." },
+            { phase: "Phase 1", title: "Diagnose", when: "Year 5 start", desc: "Identify current baseline across all four subjects using a structured readiness check. Pinpoint the two or three weakest skill areas before any targeted practice begins." },
+            { phase: "Phase 2", title: "Target", when: "Year 5–6", desc: "Focus practice on the highest-impact gaps identified in the readiness check. Use structured question banks and topic-specific drills rather than mixed practice papers." },
             { phase: "Phase 3", title: "Simulate", when: "Final 8–12 weeks", desc: "Full timed mock tests under authentic conditions, including audio instructions. Track score progression and adjust focus based on improving and remaining gaps." },
           ].map(({ phase, title, when, desc }) => (
             <div key={phase} className="rounded-xl border border-slate-200 overflow-hidden">
@@ -524,12 +524,12 @@ export default function GuidePrint() {
         <p className="text-sm leading-relaxed mb-3">
           Mock tests serve two distinct purposes: familiarisation with the format, and measurement of progress. Run two to three full audio-led mock tests in the final eight weeks — one before the final push, one mid-way, and one as a final check. Use the gap between mock test scores to adjust preparation intensity in the remaining weeks.
         </p>
-        <h3 className="text-base font-serif font-bold text-[#0d1f30] mb-2">Using a Diagnostic Platform</h3>
+        <h3 className="text-base font-serif font-bold text-[#0d1f30] mb-2">Using a Readiness Platform</h3>
         <p className="text-sm leading-relaxed mb-2">
-          A structured digital platform — rather than books or papers alone — enables real-time measurement of progress, adapts question difficulty, and generates specific improvement recommendations. The Bucks 11 Plus Tests platform provides a free 8-minute diagnostic and a full subscription practice service benchmarked against the 121 qualifying standard.
+          A structured digital platform — rather than books or papers alone — enables real-time measurement of progress, adapts question difficulty, and generates specific improvement recommendations. The Bucks 11 Plus Tests platform provides a free 8-minute readiness check and a full subscription practice service benchmarked against the 121 qualifying standard.
         </p>
         <div className="grid grid-cols-2 gap-3 mt-3">
-          <CTALink href={`${BASE}/free-diagnostic`} label="Start Free Diagnostic" sub="No account needed · 8 minutes" />
+          <CTALink href={`${BASE}/free-diagnostic`} label="Start Free Readiness Check" sub="No account needed · 8 minutes" />
           <CTALink href={`${BASE}/pricing`} label="View Subscription Plans" sub="From £35/month" />
         </div>
       </div>
@@ -867,19 +867,19 @@ export default function GuidePrint() {
       <div className="page-break">
         <PageHeader title="The Bucks 11 Plus Tests Platform" subtitle="Structured readiness assessment for Buckinghamshire families" />
         <p className="text-sm leading-relaxed mb-5">
-          The Bucks 11 Plus Tests platform provides GL-style diagnostic assessment and structured practice benchmarked against the Buckinghamshire qualifying score of 121. Below is an example of what parents see after their child completes a full diagnostic assessment.
+          The Bucks 11 Plus Tests platform provides GL-style readiness checks and structured practice benchmarked against the Buckinghamshire qualifying score of 121. Below is an example of what parents see after their child completes a full readiness check.
         </p>
         <div className="transform scale-90 origin-top-left overflow-hidden rounded-xl border border-slate-200">
           <DashboardPreviewForecast />
         </div>
         <p className="text-[11px] text-slate-400 mt-3 italic mb-5">
-          Example data shown for illustration. Your child's real results will populate after their diagnostic assessment.
+          Example data shown for illustration. Your child's real results will populate after their readiness check.
         </p>
         <div className="grid grid-cols-2 gap-3 text-sm">
           {[
-            { icon: "🎯", title: "Free 8-Minute Diagnostic", desc: "Assess all four subjects, get a predicted score against 121, and receive specific improvement priorities. No account needed." },
+            { icon: "🎯", title: "Free 8-Minute Readiness Check", desc: "Assess all four subjects, get a predicted score against 121, and receive specific improvement priorities. No account needed." },
             { icon: "📚", title: "1,500+ Practice Questions", desc: "GL-style questions across Verbal Reasoning, NVR, Mathematics, and English Comprehension — mapped to the Bucks test format." },
-            { icon: "⏱️", title: "Timed Diagnostics", desc: "Full 40-question timed diagnostics with audio-style pacing, benchmarked against the 121 qualifying standard." },
+            { icon: "⏱️", title: "Readiness Checks", desc: "Full 40-question timed readiness checks with audio-style pacing, benchmarked against the 121 qualifying standard." },
             { icon: "📊", title: "Parent Analytics Dashboard", desc: "Track your child's progress over time, see exactly which topics are improving, and get recommended next-practice steps." },
           ].map(({ icon, title, desc }) => (
             <div key={title} className="rounded-xl border border-slate-200 p-4">
@@ -895,24 +895,24 @@ export default function GuidePrint() {
       <div className="page-break">
         <PageHeader title="Subscription Plans & Pricing" subtitle="Access the full Bucks Practice Platform" />
         <p className="text-sm text-slate-500 mb-5">
-          All plans give access to the same GL-style question bank. Higher tiers unlock full diagnostics, platform analytics, and the Young Scholar Programme.
+          All plans give access to the same GL-style question bank. Higher tiers unlock full readiness checks, platform analytics, and the Young Scholar Programme.
         </p>
         <div className="space-y-3">
           {[
             {
-              name: "Free Diagnostic",
+              name: "Free Readiness Check",
               price: "Free",
               sub: "No account needed",
               color: "slate",
               accent: "#64748b",
               features: [
-                "8-minute GL-style diagnostic assessment",
+                "8-minute GL-style readiness check",
                 "Predicted standardised score against 121",
                 "Subject breakdown across all 4 areas",
                 "Recommended improvement priorities",
               ],
               url: `${BASE}/free-diagnostic`,
-              urlLabel: "Start Free Diagnostic",
+              urlLabel: "Start Free Readiness Check",
             },
             {
               name: "Bucks Plus Edge Monthly",
@@ -923,9 +923,9 @@ export default function GuidePrint() {
               features: [
                 "1,500+ GL-style practice questions",
                 "All four subject areas: VR, NVR, Maths, English",
-                "Full 40q and 50q mock diagnostics",
+                "Full 40q and 50q mock readiness checks",
                 "All Hard-level challenge drills",
-                "PDF diagnostic reports benchmarked to 121",
+                "PDF readiness reports benchmarked to 121",
                 "Parent analytics dashboard",
               ],
               url: `${BASE}/pricing`,
@@ -1054,7 +1054,7 @@ export default function GuidePrint() {
               Measure Your Child's Readiness Today
             </h2>
             <p className="text-lg text-slate-500 max-w-md mb-8 leading-relaxed">
-              Take the free 8-minute diagnostic to see exactly where your child stands against the 121 qualifying score — no account needed.
+              Take the free 8-minute readiness check to see exactly where your child stands against the 121 qualifying score — no account needed.
             </p>
             <div className="space-y-3 mb-8">
               <a
@@ -1062,7 +1062,7 @@ export default function GuidePrint() {
                 className="block rounded-xl border-2 border-[#0d1f30] px-6 py-4 text-center no-underline bg-[#0d1f30]"
                 target="_blank" rel="noopener noreferrer"
               >
-                <span className="text-white font-bold text-sm block">Start Free 8-Minute Diagnostic</span>
+                <span className="text-white font-bold text-sm block">Start Free 8-Minute Readiness Check</span>
                 <span className="text-white/60 text-xs">{BASE}/free-diagnostic</span>
               </a>
               <a
@@ -1078,7 +1078,7 @@ export default function GuidePrint() {
               {[
                 { val: "1,500+", label: "Practice Questions" },
                 { val: "121", label: "The Target Score" },
-                { val: "8 min", label: "Free Diagnostic" },
+                { val: "8 min", label: "Free Readiness Check" },
               ].map(({ val, label }) => (
                 <div key={label} className="rounded-lg border border-slate-200 px-2 py-3">
                   <div className="text-2xl font-black text-[#0d1f30]">{val}</div>

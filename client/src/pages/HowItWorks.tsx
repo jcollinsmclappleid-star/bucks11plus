@@ -417,7 +417,7 @@ export default function HowItWorks() {
               <p>This platform does not have access to official cohort-wide performance data and therefore cannot replicate age-standardisation calculations.</p>
               <p>Readiness modelling is based on structured performance indicators rather than predictive score replication.</p>
               <p>Benchmarks are derived from historical performance patterns and timed simulation modelling.</p>
-              <p>Forecast accuracy improves as more diagnostic data is collected.</p>
+              <p>Forecast accuracy improves as more readiness data is collected.</p>
               <p>Individual examination performance may vary due to factors such as anxiety, fatigue, test-day conditions and cohort variability.</p>
               <p>This model is intended to support preparation planning and structured review, not to guarantee outcomes.</p>
             </ForecastSection>
@@ -427,7 +427,7 @@ export default function HowItWorks() {
         <div className="mt-14 text-center">
           <p className="text-lg text-slate-600 mb-6">Ready to establish a structured starting point?</p>
           <Button size="lg" className="h-14 px-10 text-lg bg-primary text-primary-foreground shadow-md hover:shadow-lg transition-shadow" asChild data-testid="button-start-diagnostic">
-            <Link href="/sign-up">Start Free Diagnostic</Link>
+            <Link href="/sign-up">Start Free Readiness Check</Link>
           </Button>
         </div>
 

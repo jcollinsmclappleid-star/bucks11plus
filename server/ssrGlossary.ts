@@ -60,7 +60,7 @@ export const GLOSSARY_TERMS: GlossaryTerm[] = [
     definition: "Verbal reasoning (VR) tests a child's ability to understand and logically manipulate language. In the Buckinghamshire Secondary Transfer Test, VR question types include word analogies, letter codes, odd-one-out (words), compound words, hidden words, synonym/antonym relationships, and number sequences presented in a verbal context. Unlike reading comprehension, verbal reasoning focuses on logical pattern recognition with words and letters rather than understanding a continuous passage. VR performance is closely tied to vocabulary breadth and reading habits.",
     relatedTerms: ["secondary-transfer-test", "non-verbal-reasoning", "english-comprehension", "mathematical-reasoning"],
     faq: [
-      { question: "How can I improve my child's verbal reasoning score?", answer: "The most effective strategies are: encourage daily reading of varied material (builds vocabulary naturally), work through 11+ VR question types systematically (especially letter codes and compound words, which are unfamiliar to most children), and use a diagnostic assessment to identify which specific question types need the most attention." },
+      { question: "How can I improve my child's verbal reasoning score?", answer: "The most effective strategies are: encourage daily reading of varied material (builds vocabulary naturally), work through 11+ VR question types systematically (especially letter codes and compound words, which are unfamiliar to most children), and use a readiness check to identify which specific question types need the most attention." },
     ],
   },
   {
@@ -191,12 +191,12 @@ export const GLOSSARY_TERMS: GlossaryTerm[] = [
   },
   {
     slug: "diagnostic-assessment",
-    term: "Diagnostic Assessment",
+    term: "Readiness Check",
     shortDef: "An assessment designed to identify specific strengths and weaknesses across the four 11+ domains, to focus preparation.",
-    definition: "A diagnostic assessment is a structured test designed not just to produce a score, but to identify specific areas of strength and weakness across the four 11+ domains: verbal reasoning, non-verbal reasoning, mathematical reasoning, and English comprehension. A good diagnostic breaks results down to sub-domain level — for example, showing that a child is strong at maths number questions but weak at word problems, or strong at NVR matrices but weak at spatial rotation questions. This level of detail allows preparation to be focused precisely where it is most needed, making the preparation window far more efficient than general blanket practice.",
+    definition: "A readiness check is a structured test designed not just to produce a score, but to identify specific areas of strength and weakness across the four 11+ domains: verbal reasoning, non-verbal reasoning, mathematical reasoning, and English comprehension. A good readiness check breaks results down to sub-domain level — for example, showing that a child is strong at maths number questions but weak at word problems, or strong at NVR matrices but weak at spatial rotation questions. This level of detail allows preparation to be focused precisely where it is most needed, making the preparation window far more efficient than general blanket practice.",
     relatedTerms: ["verbal-reasoning", "non-verbal-reasoning", "mathematical-reasoning", "english-comprehension", "standardised-score"],
     faq: [
-      { question: "When should my child take a diagnostic assessment?", answer: "The most useful time for a diagnostic assessment is at the start of Year 5 preparation — before intensive practice begins. This establishes a baseline and immediately shows which areas need the most work. A second diagnostic after a period of preparation confirms whether gaps have closed and whether the preparation focus should shift." },
+      { question: "When should my child take a readiness check?", answer: "The most useful time for a readiness check is at the start of Year 5 preparation — before intensive practice begins. This establishes a baseline and immediately shows which areas need the most work. A second readiness check after a period of preparation confirms whether gaps have closed and whether the preparation focus should shift." },
     ],
   },
   {
