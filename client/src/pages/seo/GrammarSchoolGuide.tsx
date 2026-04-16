@@ -146,7 +146,7 @@ export default function GrammarSchoolGuide({ schoolSlug }: { schoolSlug: string 
           <p>{school.preparationAdvice}</p>
           <p>
             <Link href="/free-diagnostic" className="text-primary font-semibold hover:underline">
-              Take the free 11+ diagnostic to find your child's starting point →
+              Take the free 11+ readiness check to find your child's starting point →
             </Link>
           </p>
           <p>

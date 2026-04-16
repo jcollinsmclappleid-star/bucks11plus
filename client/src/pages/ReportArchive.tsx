@@ -19,11 +19,11 @@ export default function ReportArchive() {
 
   return (
     <div className="container mx-auto max-w-5xl px-4 py-8 space-y-8">
-      <Seo title="Report Archive | Bucks 11 Plus Tests" description="Download historical PDF reports of your child's 11+ diagnostics." />
+      <Seo title="Report Archive | Bucks 11 Plus Tests" description="Download historical PDF readiness reports for your child's 11+ preparation." />
       
       <div className="border-b border-border/60 pb-6">
         <h1 className="text-3xl font-bold text-primary font-serif">Report Archive</h1>
-        <p className="text-muted-foreground mt-2">Download comprehensive PDF summaries of past diagnostics.</p>
+        <p className="text-muted-foreground mt-2">Download comprehensive PDF readiness reports from past sessions.</p>
       </div>
 
       <div className="relative">
@@ -34,7 +34,7 @@ export default function ReportArchive() {
             </div>
             <h3 className="text-2xl font-bold text-primary mb-2 font-serif">Unlock Report Archive</h3>
             <p className="text-slate-600 max-w-md mb-6">
-              Practice Platform and Programme users can download highly detailed PDF reports for every diagnostic, perfect for sharing with tutors or keeping offline records.
+              Subscribers can download highly detailed PDF readiness reports for every session, perfect for sharing with tutors or keeping offline records.
             </p>
             <Button size="lg" className="bg-primary shadow-lg" asChild data-testid="button-upgrade-reports">
               <Link href="/pricing">View Upgrade Options</Link>
@@ -51,7 +51,7 @@ export default function ReportArchive() {
             <div className="text-center py-12 bg-slate-50 rounded-xl border border-dashed border-slate-300">
               <p className="text-muted-foreground">No completed assessments found.</p>
               <Button variant="link" asChild>
-                <Link href="/app/diagnostics">Take a diagnostic</Link>
+                <Link href="/app/diagnostics">Take a readiness check</Link>
               </Button>
             </div>
           ) : (

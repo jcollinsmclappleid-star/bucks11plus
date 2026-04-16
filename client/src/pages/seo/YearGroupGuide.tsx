@@ -39,7 +39,7 @@ const yearContent: Record<number, YearGroupContent> = {
       },
       {
         heading: "When Should Formal Preparation Begin?",
-        body: "Most Buckinghamshire families begin structured, test-focused preparation in Year 5 — typically in the autumn or spring term. Some start a term earlier (late Year 4), particularly if a diagnostic assessment reveals specific gaps that need longer to address. Starting too early with formal practice papers can lead to burnout and boredom; starting at the right time with a clear picture of where to focus is far more effective. A diagnostic assessment at the start of Year 5 is the natural entry point for structured preparation.",
+        body: "Most Buckinghamshire families begin structured, test-focused preparation in Year 5 — typically in the autumn or spring term. Some start a term earlier (late Year 4), particularly if a readiness check reveals specific gaps that need longer to address. Starting too early with formal practice papers can lead to burnout and boredom; starting at the right time with a clear picture of where to focus is far more effective. A readiness check at the start of Year 5 is the natural entry point for structured preparation.",
       },
       {
         heading: "Understanding the Registration Timeline",
@@ -67,7 +67,7 @@ const yearContent: Record<number, YearGroupContent> = {
       "Ensure times tables are solid by end of Year 4",
       "Explore puzzles, logic games, and pattern recognition activities",
       "Avoid intense practice paper drilling — save that for Year 5",
-      "Consider a baseline diagnostic in early Year 5 to establish a clear starting point",
+      "Consider a baseline readiness check in early Year 5 to establish a clear starting point",
     ],
   },
   5: {
@@ -79,11 +79,11 @@ const yearContent: Record<number, YearGroupContent> = {
     sections: [
       {
         heading: "Why Year 5 Is the Critical Year",
-        body: "The Buckinghamshire Secondary Transfer Test is sat in September of Year 6 — which is, in practice, just a few weeks after the summer holidays following Year 5. This means that Year 5, including the summer break before Year 6, is the primary preparation window. Families who approach Year 5 with a clear plan and a diagnostic starting point are far better positioned than those who start later or prepare without understanding where their child's specific gaps lie.",
+        body: "The Buckinghamshire Secondary Transfer Test is sat in September of Year 6 — which is, in practice, just a few weeks after the summer holidays following Year 5. This means that Year 5, including the summer break before Year 6, is the primary preparation window. Families who approach Year 5 with a clear plan and a readiness check starting point are far better positioned than those who start later or prepare without understanding where their child's specific gaps lie.",
       },
       {
-        heading: "Start With a Diagnostic Assessment",
-        body: "The most effective Year 5 preparation starts not with a workbook or practice paper, but with a diagnostic assessment. Understanding where your child currently performs across the four test domains — verbal reasoning, non-verbal reasoning, mathematics, and comprehension — tells you where to focus your preparation time. A child who is strong in maths but weaker in verbal reasoning needs a very different preparation plan from one who reads widely but struggles with spatial reasoning. Blanketing all areas equally wastes preparation time that could be concentrated where it has the most impact.",
+        heading: "Start With a Readiness Check",
+        body: "The most effective Year 5 preparation starts not with a workbook or practice paper, but with a readiness check. Understanding where your child currently performs across the four test domains — verbal reasoning, non-verbal reasoning, mathematics, and comprehension — tells you where to focus your preparation time. A child who is strong in maths but weaker in verbal reasoning needs a very different preparation plan from one who reads widely but struggles with spatial reasoning. Blanketing all areas equally wastes preparation time that could be concentrated where it has the most impact.",
       },
       {
         heading: "The Registration Deadline: Do Not Miss It",
@@ -99,13 +99,13 @@ const yearContent: Record<number, YearGroupContent> = {
       },
       {
         heading: "How Much Preparation Is Enough?",
-        body: "There is no single correct answer, but most families who support their children through structured preparation allocate 2–4 sessions per week of 30–45 minutes each during term time, with more intensive sessions in the summer holidays. Quality and focus matter more than total hours — a 30-minute session on a specific weakness identified through diagnostic assessment is more valuable than an hour of generalised practice. Children who are overtired or anxious perform worse on test day regardless of preparation volume.",
+        body: "There is no single correct answer, but most families who support their children through structured preparation allocate 2–4 sessions per week of 30–45 minutes each during term time, with more intensive sessions in the summer holidays. Quality and focus matter more than total hours — a 30-minute session on a specific weakness identified through a readiness check is more valuable than an hour of generalised practice. Children who are overtired or anxious perform worse on test day regardless of preparation volume.",
       },
     ],
     faq: [
       {
         question: "My child is in Year 5 and hasn't started preparing yet — is it too late?",
-        answer: "No. Many children begin structured preparation in the spring term of Year 5, or even in the summer term, and achieve strong results. What matters is the quality and targeting of the preparation, not simply when it begins. Starting with a diagnostic assessment tells you immediately where to focus, allowing even a shorter preparation window to be used effectively.",
+        answer: "No. Many children begin structured preparation in the spring term of Year 5, or even in the summer term, and achieve strong results. What matters is the quality and targeting of the preparation, not simply when it begins. Starting with a readiness check tells you immediately where to focus, allowing even a shorter preparation window to be used effectively.",
       },
       {
         question: "Should we use a tutor, practice papers, or an online platform?",
@@ -122,7 +122,7 @@ const yearContent: Record<number, YearGroupContent> = {
     ],
     checklist: [
       "Register for the Secondary Transfer Test before the June deadline",
-      "Complete a diagnostic assessment to establish a starting point",
+      "Complete a readiness check to establish a starting point",
       "Identify the 1–2 domains that need the most work",
       "Build a consistent weekly practice routine (2–4 short sessions)",
       "Introduce timed practice papers in the spring/summer term",

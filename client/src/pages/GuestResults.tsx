@@ -117,13 +117,13 @@ export default function GuestResults() {
 
   return (
     <div className="container mx-auto max-w-5xl px-4 py-8 space-y-8">
-      <Seo title="Your Diagnostic Results | Bucks 11 Plus Tests" description="View your child's readiness forecast and section breakdown." />
+      <Seo title="Your Readiness Results | Bucks 11 Plus Tests" description="View your child's readiness forecast and section breakdown." />
 
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-border/60 pb-6">
         <div>
-          <h1 className="text-3xl font-bold text-primary font-serif" data-testid="text-guest-results-title">Your Diagnostic Results</h1>
+          <h1 className="text-3xl font-bold text-primary font-serif" data-testid="text-guest-results-title">Your Readiness Results</h1>
           <p className="text-muted-foreground mt-2">
-            Free Baseline Diagnostic completed just now
+            Free Baseline Readiness Check completed just now
           </p>
         </div>
       </div>
@@ -378,7 +378,7 @@ export default function GuestResults() {
               <p className="text-xs text-slate-400 mb-3">Cancel any time · no lock-in</p>
               <p className="text-sm text-slate-600 mb-4">Full platform access — every feature, monthly flexibility</p>
               <ul className="space-y-2 mb-6">
-                {["1,500+ GL-style questions across all four subjects", "Full 40q and 50q mock diagnostics", "All Hard-level challenge drills", "PDF diagnostic reports after every session", "Parent analytics dashboard"].map((f, i) => (
+                {["1,500+ GL-style questions across all four subjects", "Full 40q and 50q mock exams", "All Hard-level challenge drills", "PDF readiness reports after every session", "Parent analytics dashboard"].map((f, i) => (
                   <li key={i} className="flex items-center gap-2 text-sm text-slate-700">
                     <BarChart3 className="h-4 w-4 text-primary shrink-0" />
                     {f}
@@ -403,7 +403,7 @@ export default function GuestResults() {
               <p className="text-xs text-emerald-600 font-semibold mb-1">Save £71 vs monthly · equiv. £29.08/mo</p>
               <p className="text-sm text-slate-600 mb-4">Everything in the monthly plan · 12 months of full access</p>
               <ul className="space-y-2 mb-6">
-                {["1,500+ GL-style questions across all four subjects", "Full 40q and 50q mock diagnostics", "All Hard-level challenge drills", "Priority email support", "Cancel any time"].map((f, i) => (
+                {["1,500+ GL-style questions across all four subjects", "Full 40q and 50q mock exams", "All Hard-level challenge drills", "Priority email support", "Cancel any time"].map((f, i) => (
                   <li key={i} className="flex items-center gap-2 text-sm text-slate-700">
                     <TrendingUp className="h-4 w-4 text-primary shrink-0" />
                     {f}

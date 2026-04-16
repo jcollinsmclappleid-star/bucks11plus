@@ -15,11 +15,11 @@ const faqItems = [
   },
   {
     question: "What is non-verbal reasoning and how is it different from spatial reasoning?",
-    answer: "Non-verbal reasoning (NVR) tests pattern recognition and logical deduction using shapes and symbols rather than words or numbers. Spatial reasoning is a sub-category that specifically tests a child's ability to mentally rotate, reflect, and transform shapes. Both are assessed in the Bucks 11+ and are covered in our diagnostic question bank.",
+    answer: "Non-verbal reasoning (NVR) tests pattern recognition and logical deduction using shapes and symbols rather than words or numbers. Spatial reasoning is a sub-category that specifically tests a child's ability to mentally rotate, reflect, and transform shapes. Both are assessed in the Bucks 11+ and are covered in our readiness check question bank.",
   },
   {
     question: "Why does pacing matter as much as accuracy in the Bucks 11+?",
-    answer: "The Bucks 11+ is strictly timed. A question answered correctly but too slowly is effectively a failed question — because the child who ran out of time at the end answered no question at all for that slot. Our diagnostic tracks time-per-question down to the second and flags where a child's pace creates risk, not just where their accuracy falls short.",
+    answer: "The Bucks 11+ is strictly timed. A question answered correctly but too slowly is effectively a failed question — because the child who ran out of time at the end answered no question at all for that slot. Our readiness check tracks time-per-question down to the second and flags where a child's pace creates risk, not just where their accuracy falls short.",
   },
   {
     question: "How many questions are in each section of the Bucks 11+ test?",
@@ -36,7 +36,7 @@ export default function GLAlignment() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
       <Seo
-        title="Bucks 11 Plus Subjects Explained – How Our Diagnostic Matches the Real Test | Bucks 11 Plus Tests"
+        title="Bucks 11 Plus Subjects Explained – How Our Readiness Check Matches the Real Test | Bucks 11 Plus Tests"
         description="Understand how the Bucks 11 Plus tests verbal reasoning, non-verbal reasoning, maths and English comprehension. See how our independently developed assessments align to the real test format and where children lose marks."
         canonicalPath="/bucks-gl-alignment"
         schema={[
@@ -56,10 +56,10 @@ export default function GLAlignment() {
       <Breadcrumbs items={breadcrumbItems} />
 
       <h1 className="text-4xl md:text-5xl font-bold text-primary font-serif tracking-tight">
-        How Our Diagnostic Aligns to the Bucks 11+ Test Format
+        How Our Readiness Check Aligns to the Bucks 11+ Test Format
       </h1>
       <p className="text-xl text-muted-foreground lead">
-        The Buckinghamshire Secondary Transfer Test uses a GL Assessment format covering four domains. Our independently developed diagnostics replicate this structure — the same question families, the same pacing demands, the same four areas of assessment.
+        The Buckinghamshire Secondary Transfer Test uses a GL Assessment format covering four domains. Our independently developed readiness checks replicate this structure — the same question families, the same pacing demands, the same four areas of assessment.
       </p>
 
       <div className="not-prose bg-amber-50 border border-amber-200 rounded-xl p-5 my-8">
@@ -154,15 +154,15 @@ export default function GLAlignment() {
 
       <h2 className="text-primary font-serif">Timed Conditions and Pace Modelling</h2>
       <p>
-        Accuracy alone does not predict test performance. A question answered correctly in 90 seconds is effectively a failed question in a test where the average available time is 35–45 seconds per item. Our diagnostic engine tracks time-per-question against expected section pacing and uses this to identify pace risk — the specific sections where a child's working speed creates a danger of not completing the paper, regardless of their accuracy on questions they do attempt.
+        Accuracy alone does not predict test performance. A question answered correctly in 90 seconds is effectively a failed question in a test where the average available time is 35–45 seconds per item. Our readiness check engine tracks time-per-question against expected section pacing and uses this to identify pace risk — the specific sections where a child's working speed creates a danger of not completing the paper, regardless of their accuracy on questions they do attempt.
       </p>
       <p>
-        This pacing data is incorporated into the readiness forecast and surfaces as one of the three priority actions parents receive after each diagnostic. A child who is accurate but slow in a specific domain receives targeted pace drills for that domain — not just more accuracy practice. This distinction is one of the most practical ways this platform differs from generic question banks.
+        This pacing data is incorporated into the readiness forecast and surfaces as one of the three priority actions parents receive after each readiness check. A child who is accurate but slow in a specific domain receives targeted pace drills for that domain — not just more accuracy practice. This distinction is one of the most practical ways this platform differs from generic question banks.
       </p>
 
       <h2 className="text-primary font-serif">Difficulty Weighting</h2>
       <p>
-        Our question bank is divided into Easy, Medium, and Hard difficulty bands across all four domains. The diagnostic draws questions from each band in proportions that approximate the real test difficulty distribution — approximately 40% Easy, 40% Medium, and 20% Hard. This means the readiness band and forecast score reflect performance against a realistic test difficulty, not against a question set that is either too forgiving or artificially harder than the actual assessment.
+        Our question bank is divided into Easy, Medium, and Hard difficulty bands across all four domains. The readiness check draws questions from each band in proportions that approximate the real test difficulty distribution — approximately 40% Easy, 40% Medium, and 20% Hard. This means the readiness band and forecast score reflect performance against a realistic test difficulty, not against a question set that is either too forgiving or artificially harder than the actual assessment.
       </p>
 
       <h2 className="text-primary font-serif">Frequently Asked Questions</h2>

@@ -51,9 +51,9 @@ export default function DiagnosticStart() {
   if (!diagnostic) {
     return (
       <div className="container mx-auto max-w-3xl px-4 py-16 text-center">
-        <h1 className="text-2xl font-bold">Diagnostic not found</h1>
+        <h1 className="text-2xl font-bold">Readiness check not found</h1>
         <Link href="/app/diagnostic" className="text-primary hover:underline mt-4 block">
-          Back to Diagnostics
+          Back to Readiness Checks
         </Link>
       </div>
     );
@@ -61,17 +61,17 @@ export default function DiagnosticStart() {
 
   return (
     <div className="container mx-auto max-w-3xl px-4 py-16">
-      <Seo title={`Start ${diagnostic.title} | Bucks 11 Plus Tests`} description={`Begin your ${diagnostic.title} diagnostic assessment.`} />
+      <Seo title={`Start ${diagnostic.title} | Bucks 11 Plus Tests`} description={`Begin your ${diagnostic.title} readiness check.`} />
       
       <div className="mb-8">
         <Link href="/app/diagnostic" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors" data-testid="link-back-diagnostics">
-          ← Back to Diagnostics
+          ← Back to Readiness Checks
         </Link>
       </div>
 
       <Card className="border-border/60 shadow-lg overflow-hidden" data-testid={`card-diagnostic-start-${diagnostic.id}`}>
         <div className="bg-primary p-8 text-center border-b border-primary-foreground/10">
-          <Badge className="bg-white/20 text-white hover:bg-white/20 mb-4 inline-flex">Diagnostic Assessment</Badge>
+          <Badge className="bg-white/20 text-white hover:bg-white/20 mb-4 inline-flex">Readiness Check</Badge>
           <h1 className="text-3xl md:text-4xl font-bold text-primary-foreground font-serif tracking-tight" data-testid="text-diagnostic-title">
             {diagnostic.title}
           </h1>

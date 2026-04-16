@@ -28,7 +28,7 @@ const faqItems = [
   },
   {
     question: "How should parents prepare for the Bucks 11 plus?",
-    answer: "Effective preparation focuses on building familiarity with the four assessed domains (verbal reasoning, non-verbal reasoning, mathematics, and English comprehension) and developing pace discipline under timed conditions. A diagnostic approach that identifies specific skill gaps is more effective than generic practice papers alone.",
+    answer: "Effective preparation focuses on building familiarity with the four assessed domains (verbal reasoning, non-verbal reasoning, mathematics, and English comprehension) and developing pace discipline under timed conditions. A readiness check approach that identifies specific skill gaps is more effective than generic practice papers alone.",
   },
 ];
 
@@ -249,7 +249,7 @@ export default function ParentGuide() {
               </div>
               <h3 className="text-lg font-bold text-primary font-serif">Focus on Weaknesses, Not Strengths</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Children naturally gravitate towards what they're good at. Use diagnostic results to identify the specific areas where targeted practice will have the biggest impact on their overall score.
+                Children naturally gravitate towards what they're good at. Use readiness results to identify the specific areas where targeted practice will have the biggest impact on their overall score.
               </p>
             </div>
 
@@ -312,7 +312,7 @@ export default function ParentGuide() {
           </div>
 
           <DashboardPreviewForecast />
-          <p className="text-center text-xs text-muted-foreground mt-3">Readiness forecast after an 8-minute diagnostic assessment</p>
+          <p className="text-center text-xs text-muted-foreground mt-3">Readiness forecast after an 8-minute readiness check</p>
 
           <div className="mt-14 max-w-3xl mx-auto text-center">
             <h3 className="text-2xl font-bold text-primary font-serif mb-4">Identifying Specific Skill Gaps</h3>
@@ -327,7 +327,7 @@ export default function ParentGuide() {
           <div className="text-center mt-10">
             <Button size="lg" className="h-14 px-10 text-lg bg-brand-amber text-white hover:bg-brand-amber/90 font-bold shadow-lg shadow-brand-amber/15 border-none" asChild data-testid="button-platform-diagnostic">
               <Link href="/free-diagnostic">
-                Start Free Diagnostic <ArrowRight className="ml-2 h-5 w-5" />
+                Start Free Readiness Check <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
           </div>
@@ -352,7 +352,7 @@ export default function ParentGuide() {
                 {[
                   "Structured skill drills targeting specific weaknesses",
                   "Full-length mock exams under timed conditions",
-                  "Milestone diagnostics to track improvement",
+                  "Milestone readiness checks to track improvement",
                   "Readiness tracking dashboard for parents",
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-3 text-sm text-slate-700">
@@ -415,7 +415,7 @@ export default function ParentGuide() {
                     window.location.href = "/free-diagnostic";
                   }}
                 >
-                  Start Free Diagnostic <ArrowRight className="ml-2 h-4 w-4" />
+                  Start Free Readiness Check <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </div>
             ) : (

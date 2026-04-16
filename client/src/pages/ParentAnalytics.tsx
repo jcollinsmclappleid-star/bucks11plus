@@ -162,7 +162,7 @@ function AccuracyBar({ label, value }: { label: string; value: number }) {
 }
 
 const TOOLTIPS = {
-  rs: "Readiness Score — a score out of 100 showing how prepared your child is for the 11+ based on their diagnostic results.",
+  rs: "Readiness Score — a score out of 100 showing how prepared your child is for the 11+ based on their readiness results.",
   si: "How reliable this score is. The more tests your child has completed, the more confident we are in the number.",
   pdi: "Timing Score — shows how well your child manages their time during the test. 100 means perfectly paced. Below 60 suggests they are rushing through some sections or spending too long on others.",
   wai: "Accuracy adjusted for difficulty — getting harder questions right counts for more than easy ones.",
@@ -592,7 +592,7 @@ function InsightsTab({ data }: { data: AnalyticsData }) {
               </LineChart>
             </ResponsiveContainer>
           ) : (
-            <p className="text-xs text-muted-foreground text-center py-6">Complete more than one diagnostic to see how your child's score is changing over time.</p>
+            <p className="text-xs text-muted-foreground text-center py-6">Complete more than one readiness check to see how your child's score is changing over time.</p>
           )}
         </CardContent>
       </Card>
@@ -670,7 +670,7 @@ function DetailTab({ detailData }: { detailData: DetailData | undefined }) {
     return (
       <Card>
         <CardContent className="py-10 text-center text-muted-foreground text-sm">
-          Complete a diagnostic to see how your child is performing on each topic.
+          Complete a readiness check to see how your child is performing on each topic.
         </CardContent>
       </Card>
     );
@@ -937,8 +937,8 @@ export default function ParentAnalytics() {
       <div className="container mx-auto max-w-5xl px-4 py-12 text-center">
         <Brain className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
         <h2 className="text-xl font-semibold mb-2">No analytics yet</h2>
-        <p className="text-muted-foreground mb-4">{analyticsData?.message || "Complete a diagnostic to see your readiness analytics."}</p>
-        <Link href="/app/diagnostic"><Button>Start a Diagnostic</Button></Link>
+        <p className="text-muted-foreground mb-4">{analyticsData?.message || "Complete a readiness check to see your readiness analytics."}</p>
+        <Link href="/app/diagnostic"><Button>Start a Readiness Check</Button></Link>
       </div>
     );
   }
@@ -964,7 +964,7 @@ export default function ParentAnalytics() {
               </div>
             </div>
             <h1 className="text-2xl font-serif font-bold" data-testid="heading-analytics">How Is My Child Doing?</h1>
-            <p className="text-sm text-white/70 mt-1">Based on your child's most recent diagnostic results</p>
+            <p className="text-sm text-white/70 mt-1">Based on your child's most recent readiness results</p>
           </div>
           <div className="flex items-center gap-3 shrink-0">
             <div className="text-center bg-white/10 rounded-xl px-4 py-2 border border-white/20">

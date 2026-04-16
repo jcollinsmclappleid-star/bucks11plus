@@ -147,7 +147,7 @@ export default function Pricing() {
   const faqs = [
     {
       q: "What's the difference between Monthly and Annual?",
-      a: "Both plans give you identical access to everything on the platform — 1,500+ questions, full diagnostics, all 17 Hard drills, mock exam simulations, PDF reports, progress tracking, and premium analytics. Annual is simply billed once a year (£349) rather than monthly (£35/mo). Choosing Annual saves you £71 compared to 12 months of monthly billing."
+      a: "Both plans give you identical access to everything on the platform — 1,500+ questions, full readiness checks, all 17 Hard drills, mock exam simulations, PDF reports, progress tracking, and premium analytics. Annual is simply billed once a year (£349) rather than monthly (£35/mo). Choosing Annual saves you £71 compared to 12 months of monthly billing."
     },
     {
       q: "Can I cancel my monthly subscription at any time?",
@@ -155,7 +155,7 @@ export default function Pricing() {
     },
     {
       q: "Is this affiliated with GL Assessment?",
-      a: "No. Bucks 11 Plus Tests is an independent readiness assessment service. Our diagnostics are aligned to GL-style reasoning families used in the Buckinghamshire Secondary Transfer Test, but we are not affiliated with GL Assessment or Buckinghamshire Council."
+      a: "No. Bucks 11 Plus Tests is an independent readiness assessment service. Our readiness checks are aligned to GL-style reasoning families used in the Buckinghamshire Secondary Transfer Test, but we are not affiliated with GL Assessment or Buckinghamshire Council."
     },
     {
       q: "How is this different from Bond books or generic workbooks?",
@@ -163,15 +163,15 @@ export default function Pricing() {
     },
     {
       q: "What if my child is already scoring well?",
-      a: "Even strong students have hidden weaknesses. Our diagnostics identify subtle gaps in pacing, accuracy under time pressure, and specific reasoning sub-types — things that generic practice won't surface. Knowing your child's exact profile is valuable at every level."
+      a: "Even strong students have hidden weaknesses. Our readiness checks identify subtle gaps in pacing, accuracy under time pressure, and specific reasoning sub-types — things that generic practice won't surface. Knowing your child's exact profile is valuable at every level."
     },
     {
       q: "Can I start mid-year?",
-      a: "Absolutely. The platform adapts to wherever your child is. Whether you have months or weeks until the test, the diagnostic-led approach ensures every session counts. Earlier is better, but it's never too late to start with clarity."
+      a: "Absolutely. The platform adapts to wherever your child is. Whether you have months or weeks until the test, the readiness-led approach ensures every session counts. Earlier is better, but it's never too late to start with clarity."
     },
     {
       q: "What happens after I pay?",
-      a: "You get immediate access to everything in your plan. Start with a full diagnostic to establish your child's baseline, then follow the targeted practice recommendations. Your preparation roadmap and milestone tracking activate automatically based on your child's results."
+      a: "You get immediate access to everything in your plan. Start with a full readiness check to establish your child's baseline, then follow the targeted practice recommendations. Your preparation roadmap and milestone tracking activate automatically based on your child's results."
     }
   ];
 
@@ -180,7 +180,7 @@ export default function Pricing() {
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
       <Seo
         title="Bucks 11 Plus Preparation Plans & Pricing (2026) | Bucks 11 Plus Tests"
-        description="Free GL-style diagnostic plus Bucks Plus Edge — £35/month or £349/year. Full access to 1,500+ targeted questions, diagnostics, mock exams and progress tracking for Bucks 11 Plus preparation."
+        description="Free readiness check plus Bucks Plus Edge — £35/month or £349/year. Full access to 1,500+ targeted questions, readiness checks, mock exams and progress tracking for Bucks 11 Plus preparation."
         canonicalPath="/pricing"
       />
 
@@ -223,7 +223,7 @@ export default function Pricing() {
                   <a href="#tiers">View Plans &amp; Pricing <ArrowRight className="ml-2 h-5 w-5" /></a>
                 </Button>
                 <Button size="lg" variant="outline" className="h-14 px-8 text-lg w-full sm:w-auto bg-white/[0.03] border-white/15 text-white/80 hover:bg-white/[0.06] hover:text-white" asChild data-testid="button-hero-diagnostic">
-                  <Link href="/free-diagnostic">Try Free Diagnostic First</Link>
+                  <Link href="/free-diagnostic">Try Free Readiness Check First</Link>
                 </Button>
               </div>
             </>
@@ -264,8 +264,8 @@ export default function Pricing() {
                       </div>
                       <p className="text-sm text-slate-600 mb-4">
                         {currentTier === "pack_annual"
-                          ? "12 months of full platform access — all 1,500+ questions, every drill, mock exams, diagnostics, PDF reports and premium analytics."
-                          : "Full platform access billed monthly — all 1,500+ questions, every drill, mock exams, diagnostics, PDF reports and premium analytics. Cancel any time."}
+                          ? "12 months of full platform access — all 1,500+ questions, every drill, mock exams, readiness checks, PDF reports and premium analytics."
+                          : "Full platform access billed monthly — all 1,500+ questions, every drill, mock exams, readiness checks, PDF reports and premium analytics. Cancel any time."}
                       </p>
                       <Button size="sm" asChild>
                         <Link href="/app">Go to Dashboard <ArrowRight className="ml-2 h-4 w-4" /></Link>
@@ -285,8 +285,8 @@ export default function Pricing() {
                     <Sparkles className="h-5 w-5 text-slate-500" />
                   </div>
                   <div>
-                    <p className="font-bold text-primary text-sm">Free Diagnostic</p>
-                    <p className="text-xs text-slate-500">12-question timed mini diagnostic — no sign-up needed</p>
+                    <p className="font-bold text-primary text-sm">Free Readiness Check</p>
+                    <p className="text-xs text-slate-500">12-question timed readiness check — no sign-up needed</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-6">
@@ -295,7 +295,7 @@ export default function Pricing() {
                     <p className="text-[11px] text-slate-400">Always free</p>
                   </div>
                   <Button variant="outline" size="sm" className="h-9 px-5 text-sm shrink-0" asChild data-testid="button-get-free">
-                    <Link href="/free-diagnostic">Start Free Diagnostic</Link>
+                    <Link href="/free-diagnostic">Start Free Readiness Check</Link>
                   </Button>
                 </div>
               </div>
@@ -319,14 +319,14 @@ export default function Pricing() {
                         "1,500+ GL-style questions (VR, NVR, Maths, Comprehension)",
                         "Full-length practice papers (50 questions)",
                         "Full GL-style mock exams (40 questions)",
-                        "Full timed diagnostics",
+                        "Full timed readiness checks",
                         "All 19 Easy & Medium drill sections",
                         "All 17 Hard challenge drills",
-                        "PDF diagnostic reports & report archive",
+                        "PDF readiness reports & report archive",
                         "Progress tracking & impact simulator",
                         "Premium Parent Analytics dashboard",
                         "Guided preparation roadmap",
-                        "Milestone diagnostics with auto-tracking",
+                        "Milestone readiness checks with auto-tracking",
                       ].map((f, i) => (
                         <li key={i} className="flex items-start gap-2">
                           <CheckCircle2 className="h-4 w-4 text-brand-green shrink-0 mt-0.5" />
@@ -374,14 +374,14 @@ export default function Pricing() {
                         "1,500+ GL-style questions (VR, NVR, Maths, Comprehension)",
                         "Full-length practice papers (50 questions)",
                         "Full GL-style mock exams (40 questions)",
-                        "Full timed diagnostics",
+                        "Full timed readiness checks",
                         "All 19 Easy & Medium drill sections",
                         "All 17 Hard challenge drills",
-                        "PDF diagnostic reports & report archive",
+                        "PDF readiness reports & report archive",
                         "Progress tracking & impact simulator",
                         "Premium Parent Analytics dashboard",
                         "Guided preparation roadmap",
-                        "Milestone diagnostics with auto-tracking",
+                        "Milestone readiness checks with auto-tracking",
                       ].map((f, i) => (
                         <li key={i} className="flex items-start gap-2">
                           <CheckCircle2 className={`h-4 w-4 shrink-0 mt-0.5 ${i === 0 ? 'text-brand-amber' : 'text-brand-green'}`} />
@@ -416,18 +416,18 @@ export default function Pricing() {
                     </thead>
                     <tbody>
                       {[
-                        { feature: "Mini diagnostic (12 questions)", free: true, paid: true },
+                        { feature: "Quick readiness check (12 questions)", free: true, paid: true },
                         { feature: "Readiness forecast vs 121 benchmark", free: true, paid: true },
                         { feature: "Top focus area revealed", free: true, paid: true },
                         { feature: "1,500+ VR, NVR, Maths & Comprehension questions", free: false, paid: true },
                         { feature: "Full-length practice papers (50 questions)", free: false, paid: true },
                         { feature: "Full GL-style mock exams (40 questions)", free: false, paid: true },
-                        { feature: "Full timed diagnostics", free: false, paid: true },
+                        { feature: "Full timed readiness checks", free: false, paid: true },
                         { feature: "All 19 Easy & Medium drill sections", free: false, paid: true },
                         { feature: "All 17 Hard challenge drills", free: false, paid: true },
                         { feature: "PDF reports & report archive", free: false, paid: true },
                         { feature: "Impact simulator & progress tracking", free: false, paid: true },
-                        { feature: "Milestone diagnostics with auto-tracking", free: false, paid: true },
+                        { feature: "Milestone readiness checks with auto-tracking", free: false, paid: true },
                         { feature: "Guided preparation roadmap", free: false, paid: true },
                         { feature: "Premium Parent Analytics dashboard", free: false, paid: true },
                         { feature: "Badge-based Accomplishments", free: false, paid: true },
@@ -454,9 +454,9 @@ export default function Pricing() {
       <section className="py-20 bg-white border-b border-border/50">
         <div className="container mx-auto max-w-6xl px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4">What the Diagnostic Reveals — In Detail</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4">What the Readiness Check Reveals — In Detail</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Our 8-minute diagnostic isn't just a score. It's a deep-dive into your child's current performance profile.
+              Our 8-minute readiness check isn't just a score. It's a deep-dive into your child's current performance profile.
             </p>
           </div>
 
@@ -498,10 +498,10 @@ export default function Pricing() {
                 <Badge className="bg-brand-amber text-amber-950 hover:bg-brand-amber mb-4 border-none font-bold">SAMPLE REPORT DATA</Badge>
                 <h3 className="text-2xl md:text-3xl font-bold mb-6 font-serif">Detailed PDF Insights</h3>
                 <p className="text-slate-300 mb-8 leading-relaxed">
-                  Every diagnostic generates a professional report suitable for sharing with tutors. It includes question-by-question analysis, section weighting, and a personalized 14-day improvement plan.
+                  Every readiness check generates a professional report suitable for sharing with tutors. It includes question-by-question analysis, section weighting, and a personalized 14-day improvement plan.
                 </p>
                 <Button size="lg" className="bg-white text-slate-900 hover:bg-slate-100 font-bold" asChild>
-                  <Link href="/free-diagnostic">Start My Free Diagnostic</Link>
+                  <Link href="/free-diagnostic">Start My Free Readiness Check</Link>
                 </Button>
               </div>
               <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-6 shadow-2xl">
@@ -538,18 +538,18 @@ export default function Pricing() {
             </h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div className="rounded-2xl border border-slate-200 bg-white p-7 sm:p-8 flex flex-col" data-testid="card-pricing-path-diagnostic">
-                <h3 className="text-xl font-bold text-primary font-serif mb-3">Start With the Free Diagnostic</h3>
+                <h3 className="text-xl font-bold text-primary font-serif mb-3">Start With the Free Readiness Check</h3>
                 <p className="text-slate-600 text-sm leading-relaxed mb-6 flex-1">
                   Take an 8-minute timed assessment to understand current readiness, pace and performance profile — before committing to any plan.
                 </p>
                 <Button variant="outline" className="w-full h-12 text-sm font-semibold" asChild data-testid="button-pricing-path-diagnostic">
-                  <Link href="/free-diagnostic">Start Free Diagnostic</Link>
+                  <Link href="/free-diagnostic">Start Free Readiness Check</Link>
                 </Button>
               </div>
               <div className="rounded-2xl border-2 border-primary/30 bg-primary/[0.03] p-7 sm:p-8 flex flex-col" data-testid="card-pricing-path-subscribe">
                 <h3 className="text-xl font-bold text-primary font-serif mb-3">Start with Bucks Plus Edge</h3>
                 <p className="text-slate-600 text-sm leading-relaxed mb-3 flex-1">
-                  Full access immediately — 1,500+ questions, diagnostics, mock exams, roadmap and premium analytics. Monthly or annual billing.
+                  Full access immediately — 1,500+ questions, readiness checks, mock exams, roadmap and premium analytics. Monthly or annual billing.
                 </p>
                 <p className="text-xs text-primary/70 font-medium mb-6">
                   £35/month or £349/year (save £71). Cancel monthly any time.
@@ -804,7 +804,7 @@ export default function Pricing() {
 
           <div className="text-center mt-8">
             <p className="text-sm text-muted-foreground italic">
-              Example data shown above — your child's real data will populate after their diagnostic.
+              Example data shown above — your child's real data will populate after their readiness check.
             </p>
           </div>
         </div>
@@ -838,17 +838,17 @@ export default function Pricing() {
       <section className="py-20 md:py-28 border-b border-border/30">
         <div className="container mx-auto max-w-4xl px-4">
           <div className="text-center mb-14">
-            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4" data-testid="text-solution-title">A different approach: diagnostic-led preparation</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4" data-testid="text-solution-title">A different approach: readiness-led preparation</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Instead of guessing, start with clarity. Our diagnostics tell you exactly where the gaps are — then guide practice to close them.
+              Instead of guessing, start with clarity. Our readiness checks tell you exactly where the gaps are — then guide practice to close them.
             </p>
           </div>
 
           <div className="grid sm:grid-cols-2 gap-8 max-w-3xl mx-auto">
             {[
-              { icon: Eye, title: "See exactly where gaps are", desc: "Timed diagnostics aligned to GL-style reasoning families pinpoint your child's specific weaknesses" },
+              { icon: Eye, title: "See exactly where gaps are", desc: "Timed readiness checks aligned to GL-style reasoning families pinpoint your child's specific weaknesses" },
               { icon: Target, title: "Practice only what matters", desc: "Targeted drills focus on the highest-impact areas — no wasted effort on topics they've already mastered" },
-              { icon: TrendingUp, title: "Track real progress, not just effort", desc: "Forecast scores, pace metrics, and milestone diagnostics show whether preparation is actually working" },
+              { icon: TrendingUp, title: "Track real progress, not just effort", desc: "Forecast scores, pace metrics, and milestone readiness checks show whether preparation is actually working" },
               { icon: BarChart3, title: "Know your child's realistic readiness", desc: "A clear forecast against the 121 Bucks benchmark — not a vague guess, but a data-driven assessment" },
             ].map((item, i) => (
               <div key={i} className="flex gap-4">
@@ -870,7 +870,7 @@ export default function Pricing() {
           <div className="text-center mb-14">
             <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4" data-testid="text-trust-title">Built on Transparent Principles</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              We believe parents deserve honesty about what a diagnostic system can and cannot do.
+              We believe parents deserve honesty about what a readiness check system can and cannot do.
             </p>
           </div>
 
@@ -904,7 +904,7 @@ export default function Pricing() {
                 </div>
                 <div>
                   <h3 className="font-bold text-primary text-sm mb-1.5">No Outcome Guarantees</h3>
-                  <p className="text-sm text-slate-600 leading-relaxed">We provide structured diagnostics and targeted practice. We never guarantee scores, places, or outcomes.</p>
+                  <p className="text-sm text-slate-600 leading-relaxed">We provide structured readiness checks and targeted practice. We never guarantee scores, places, or outcomes.</p>
                 </div>
               </div>
             </div>
@@ -915,7 +915,7 @@ export default function Pricing() {
                 </div>
                 <div>
                   <h3 className="font-bold text-primary text-sm mb-1.5">Try Before You Commit</h3>
-                  <p className="text-sm text-slate-600 leading-relaxed">The free diagnostic gives you a genuine baseline with no account required. See the quality of the analysis before deciding.</p>
+                  <p className="text-sm text-slate-600 leading-relaxed">The free readiness check gives you a genuine baseline with no account required. See the quality of the analysis before deciding.</p>
                 </div>
               </div>
             </div>
@@ -927,14 +927,14 @@ export default function Pricing() {
         <div className="container mx-auto max-w-3xl px-4 text-center">
           <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif mb-3" data-testid="text-mid-cta-title">Ready to get started?</h2>
           <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
-            Choose a plan above, or try the free diagnostic to see where your child stands first.
+            Choose a plan above, or try the free readiness check to see where your child stands first.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button size="lg" className="h-13 px-8 text-base bg-brand-amber text-white hover:bg-brand-amber/90 w-full sm:w-auto font-bold shadow-lg shadow-brand-amber/15 border-none" asChild data-testid="button-mid-cta-tiers">
               <a href="#tiers">View Plans &amp; Pricing <ArrowRight className="ml-2 h-5 w-5" /></a>
             </Button>
             <Button size="lg" variant="outline" className="h-13 px-8 text-base w-full sm:w-auto" asChild data-testid="button-mid-cta-diagnostic">
-              <Link href="/free-diagnostic">Try Free Diagnostic</Link>
+              <Link href="/free-diagnostic">Try Free Readiness Check</Link>
             </Button>
           </div>
         </div>
@@ -1055,7 +1055,7 @@ export default function Pricing() {
             </span>
             <span className="text-border">|</span>
             <span className="flex items-center gap-2">
-              <Target className="h-4 w-4" /> GL-style aligned diagnostics
+              <Target className="h-4 w-4" /> GL-style aligned readiness checks
             </span>
             <span className="text-border">|</span>
             <span className="flex items-center gap-2">

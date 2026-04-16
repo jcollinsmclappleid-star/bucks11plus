@@ -122,7 +122,7 @@ export default function QualifyingScore() {
         <li><strong>Breadth of ability</strong> — performing strongly across Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension, not just in one area</li>
       </ul>
       <p>
-        Our <Link href="/free-diagnostic" className="text-primary hover:underline">free diagnostic assessment</Link> measures your child's
+        Our <Link href="/free-diagnostic" className="text-primary hover:underline">free readiness check</Link> measures your child's
         current performance against the 121 benchmark, providing a forecast score and identifying specific areas for improvement.
       </p>
 

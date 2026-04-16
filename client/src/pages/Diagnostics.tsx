@@ -120,12 +120,12 @@ export default function Diagnostics() {
 
   return (
     <div className="container mx-auto max-w-5xl px-4 py-8 space-y-10">
-      <Seo title="Diagnostics | Bucks 11 Plus Tests" description="Available mock exams, diagnostic assessments, and unlimited practice papers." />
+      <Seo title="Readiness Checks | Bucks 11 Plus Tests" description="Available mock exams, readiness checks, and unlimited practice papers." />
       
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-border/60 pb-6">
         <div>
-          <h1 className="text-3xl font-bold text-primary font-serif" data-testid="text-diagnostics-title">Diagnostics & Practice</h1>
-          <p className="text-muted-foreground mt-2">Take assessments, mock exams, or unlimited practice papers drawn from our full question bank.</p>
+          <h1 className="text-3xl font-bold text-primary font-serif" data-testid="text-diagnostics-title">Readiness Checks & Practice</h1>
+          <p className="text-muted-foreground mt-2">Take readiness checks, mock exams, or unlimited practice papers drawn from our full question bank.</p>
         </div>
         {!hasPaidAccess() && (
           <Button className="bg-brand-amber text-amber-950 hover:bg-brand-amber/90 font-bold" asChild>
@@ -135,7 +135,7 @@ export default function Diagnostics() {
       </div>
 
       <section>
-        <h2 className="text-xl font-bold text-primary font-serif mb-4" data-testid="text-section-diagnostics">Fixed Diagnostics & Mocks</h2>
+        <h2 className="text-xl font-bold text-primary font-serif mb-4" data-testid="text-section-diagnostics">Fixed Readiness Checks & Mocks</h2>
         <p className="text-sm text-muted-foreground mb-6">Structured assessments to measure progress and recalibrate your forecast score.</p>
         <div className="grid md:grid-cols-2 gap-6">
           {fixedDiagnostics.map((diag) => {
@@ -179,7 +179,7 @@ export default function Diagnostics() {
                     {locked ? 
                       <span>Locked</span> : 
                       <Link href={`/app/diagnostic/${diag.id}/start`}>
-                        {completed ? 'Retake Diagnostic' : 'Start Diagnostic'}
+                        {completed ? 'Retake Readiness Check' : 'Start Readiness Check'}
                       </Link>
                     }
                   </Button>

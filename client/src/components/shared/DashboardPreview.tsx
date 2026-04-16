@@ -360,7 +360,7 @@ function TrajectoryChart() {
         <CardTitle className="flex items-center gap-2 text-lg font-serif">
           <TrendingUp className="h-5 w-5 text-primary" /> Readiness Trajectory
         </CardTitle>
-        <p className="text-xs text-muted-foreground mt-1">Score progression across diagnostic assessments</p>
+        <p className="text-xs text-muted-foreground mt-1">Score progression across readiness checks</p>
       </CardHeader>
       <CardContent className="pb-6">
         <svg viewBox={`0 0 ${svgW} ${svgH}`} className="w-full h-auto">

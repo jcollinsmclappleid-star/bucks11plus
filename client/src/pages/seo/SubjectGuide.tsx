@@ -50,7 +50,7 @@ const subjectData: Record<Subject, SubjectContent> = {
       },
       {
         heading: "How to Improve Quickly",
-        body: "For children who are underperforming in verbal reasoning relative to their overall ability, the fastest improvements typically come from: (1) systematic practice of the specific question types they are getting wrong, (2) building vocabulary through reading and deliberate attention to new words, and (3) learning the 'rules' of format-specific questions like letter codes, which have a learnable logical structure. A diagnostic assessment that identifies which specific question types are causing errors allows practice to be focused precisely where it is needed.",
+        body: "For children who are underperforming in verbal reasoning relative to their overall ability, the fastest improvements typically come from: (1) systematic practice of the specific question types they are getting wrong, (2) building vocabulary through reading and deliberate attention to new words, and (3) learning the 'rules' of format-specific questions like letter codes, which have a learnable logical structure. A readiness check that identifies which specific question types are causing errors allows practice to be focused precisely where it is needed.",
       },
     ],
     faq: [
@@ -97,7 +97,7 @@ const subjectData: Record<Subject, SubjectContent> = {
       },
       {
         heading: "How to Improve NVR Scores Efficiently",
-        body: "The fastest NVR improvement comes from working through question types systematically. Start with matrices and sequences, as these are the most common types. Understand the rule underlying each answer — do not just guess and check. Move to reflections and rotations once the pattern-based questions feel confident. Leave 3D questions (nets, cube views) until last. A diagnostic assessment showing NVR performance by question type tells you precisely where the gaps are, allowing practice to be focused rather than broad.",
+        body: "The fastest NVR improvement comes from working through question types systematically. Start with matrices and sequences, as these are the most common types. Understand the rule underlying each answer — do not just guess and check. Move to reflections and rotations once the pattern-based questions feel confident. Leave 3D questions (nets, cube views) until last. A readiness check showing NVR performance by question type tells you precisely where the gaps are, allowing practice to be focused rather than broad.",
       },
     ],
     faq: [
@@ -203,7 +203,7 @@ const subjectData: Record<Subject, SubjectContent> = {
       },
       {
         question: "Is comprehension marked separately from verbal reasoning?",
-        answer: "In the Buckinghamshire Secondary Transfer Test scoring, comprehension and verbal reasoning contribute to the overall standardised score. The test has two papers, and both cover multiple domains. The final score is a composite standardised score. Parents who want domain-level insight — understanding how their child performed specifically in comprehension versus verbal reasoning — need to request that level of analysis after results are released, or use a diagnostic platform that provides domain breakdowns before the test.",
+        answer: "In the Buckinghamshire Secondary Transfer Test scoring, comprehension and verbal reasoning contribute to the overall standardised score. The test has two papers, and both cover multiple domains. The final score is a composite standardised score. Parents who want domain-level insight — understanding how their child performed specifically in comprehension versus verbal reasoning — need to request that level of analysis after results are released, or use a readiness platform that provides domain breakdowns before the test.",
       },
     ],
   },

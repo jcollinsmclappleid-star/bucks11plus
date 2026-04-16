@@ -4,10 +4,10 @@ import { CheckCircle2, ArrowRight, Zap } from "lucide-react";
 
 const benefits = [
   "1,500+ GL-style questions across all four test subjects",
-  "Full 40q and 50q timed mock diagnostics",
+  "Full 40q and 50q timed mock exams",
   "All Hard-level drills benchmarked to the 121 standard",
   "Parent analytics dashboard — track progress by topic",
-  "PDF diagnostic reports after every session",
+  "PDF readiness reports after every session",
   "Works on phone, tablet or laptop — practice anywhere",
 ];
 
@@ -23,7 +23,7 @@ export function SubscribeCTA() {
           The Complete Bucks 11+ Preparation Platform
         </h3>
         <p className="text-white/75 text-sm leading-relaxed mb-5 max-w-2xl">
-          Everything your child needs to close the gap to 121 — adaptive diagnostics, structured drills, detailed parent analytics, and mock exam simulations, all benchmarked to the Buckinghamshire qualifying standard.
+          Everything your child needs to close the gap to 121 — intelligent readiness checks, structured drills, detailed parent analytics, and mock exam simulations, all benchmarked to the Buckinghamshire qualifying standard.
         </p>
         <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-1.5 mb-6">
           {benefits.map((b, i) => (
@@ -49,7 +49,7 @@ export function SubscribeCTA() {
             className="h-11 px-6 border-white/25 text-white bg-transparent hover:bg-white/10 hover:text-white hover:border-white/40"
             data-testid="button-subscribe-cta-diagnostic"
           >
-            <Link href="/free-diagnostic">Try Free Diagnostic First</Link>
+            <Link href="/free-diagnostic">Try Free Readiness Check First</Link>
           </Button>
           <span className="text-white/45 text-xs sm:ml-1">From £35/month · Cancel anytime · No lock-in</span>
         </div>

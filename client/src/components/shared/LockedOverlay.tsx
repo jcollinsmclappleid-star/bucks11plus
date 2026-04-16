@@ -25,7 +25,7 @@ export default function LockedOverlay({ children, section, requiredTier = "any",
       ? `${section} requires an account upgrade.`
       : `${section} is included with the ${info.name}${info.price ? ` — ${info.price}` : ""}.`
     : requiredTier === "any"
-      ? `You're previewing ${section}. Sign in or take the free diagnostic to get started.`
+      ? `You're previewing ${section}. Sign in or take a free readiness check to get started.`
       : `${section} is included with the ${info.name}${info.price ? ` (${info.price})` : ""}.`;
 
   return (
@@ -48,7 +48,7 @@ export default function LockedOverlay({ children, section, requiredTier = "any",
                 <>
                   <Button size="sm" variant="secondary" asChild data-testid={`button-banner-diagnostic-${section}`}>
                     <Link href="/free-diagnostic">
-                      Free Diagnostic <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                      Free Readiness Check <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
                     </Link>
                   </Button>
                   <Button size="sm" variant="ghost" className="text-primary-foreground/70 hover:text-primary-foreground hover:bg-primary-foreground/10" asChild data-testid={`button-banner-pricing-${section}`}>

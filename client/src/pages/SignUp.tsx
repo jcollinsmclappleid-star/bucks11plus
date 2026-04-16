@@ -67,14 +67,14 @@ export default function SignUp() {
             {showCheckoutNote
               ? `Create your account to continue to checkout`
               : showGuestNote
-                ? "Save your diagnostic results and unlock full access"
+                ? "Save your readiness results and unlock full access"
                 : "Start your structured 11+ preparation"}
           </CardDescription>
         </CardHeader>
         <CardContent>
           {showGuestNote && (
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-6 text-sm text-blue-800">
-              Your free diagnostic results will be saved to your new account.
+              Your free readiness results will be saved to your new account.
             </div>
           )}
           {error && (

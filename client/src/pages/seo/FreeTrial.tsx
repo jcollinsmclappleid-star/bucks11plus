@@ -9,11 +9,11 @@ import { useState } from "react";
 
 const features = [
   { icon: BookOpen, title: "1,500+ GL-Style Questions", desc: "Verbal Reasoning, Non-Verbal Reasoning, Maths and English Comprehension — mapped to the Buckinghamshire 11+ format." },
-  { icon: Target, title: "All Diagnostics Unlocked", desc: "Full timed 40-question diagnostics and mini-diagnostics with GL-style standardised scoring against the 121 threshold." },
+  { icon: Target, title: "All Readiness Checks Unlocked", desc: "Full timed 40-question readiness checks and quick readiness checks with GL-style standardised scoring against the 121 threshold." },
   { icon: Zap, title: "All 17 Hard Challenge Drills", desc: "The hardest-tier targeted drills across every subject — the ones that push children from \"Within Reach\" to qualifying." },
   { icon: BarChart3, title: "Premium Analytics Dashboard", desc: "Section-by-section breakdowns, pace analysis, and a forecast score calibrated against the real qualifying standard." },
   { icon: Trophy, title: "Mock Exam Simulations", desc: "Full timed mock exams under real GL-style exam conditions — the closest practice to the actual test day." },
-  { icon: Star, title: "Weekly Task Plans & Roadmap", desc: "Auto-generated weekly focus plans based on diagnostic results, so you always know what to practice next." },
+  { icon: Star, title: "Weekly Task Plans & Roadmap", desc: "Auto-generated weekly focus plans based on readiness results, so you always know what to practice next." },
 ];
 
 const steps = [
@@ -108,7 +108,7 @@ export default function FreeTrial() {
               className="h-14 px-8 border-white/30 text-white bg-transparent hover:bg-white/10 hover:text-white"
               data-testid="button-hero-free-diagnostic"
             >
-              <Link href="/free-diagnostic">Try Free Diagnostic First</Link>
+              <Link href="/free-diagnostic">Try Free Readiness Check First</Link>
             </Button>
           </div>
           <p className="text-white/50 text-xs mt-4">Card required · £59.99/month after trial · Cancel anytime before day 7</p>

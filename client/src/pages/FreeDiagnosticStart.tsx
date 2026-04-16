@@ -44,7 +44,7 @@ export default function FreeDiagnosticStart() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ diagnosticId: FREE_DIAGNOSTIC_ID }),
       });
-      if (!res.ok) throw new Error("Failed to start diagnostic");
+      if (!res.ok) throw new Error("Failed to start readiness check");
       const data = await res.json();
       if (!data.questions || data.questions.length === 0) {
         throw new Error("No questions available. Please try again in a moment.");
@@ -76,7 +76,7 @@ export default function FreeDiagnosticStart() {
   if (!diagnostic) {
     return (
       <div className="container mx-auto max-w-3xl px-4 py-16 text-center">
-        <h1 className="text-2xl font-bold text-primary">Diagnostic not available</h1>
+        <h1 className="text-2xl font-bold text-primary">Readiness check not available</h1>
         <p className="text-muted-foreground mt-2">Please try again later.</p>
       </div>
     );
@@ -85,8 +85,8 @@ export default function FreeDiagnosticStart() {
   return (
     <div className="container mx-auto max-w-3xl px-4 py-16">
       <Seo
-        title="Free Baseline Diagnostic | Bucks 11 Plus Tests"
-        description="Take a free 8-minute diagnostic to see where your child stands against the Bucks 121 benchmark. No account needed."
+        title="Free Baseline Readiness Check | Bucks 11 Plus Tests"
+        description="Take a free 8-minute readiness check to see where your child stands against the Bucks 121 benchmark. No account needed."
       />
 
       <Card className="border-border/60 shadow-lg overflow-hidden" data-testid="card-free-diagnostic-start">

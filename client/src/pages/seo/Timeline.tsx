@@ -117,7 +117,7 @@ export default function Timeline() {
         activities in Year 4. The key is to build skills progressively rather than cramming in the final weeks.
       </p>
       <p>
-        Our <Link href="/free-diagnostic" className="text-primary hover:underline">free diagnostic assessment</Link> takes
+        Our <Link href="/free-diagnostic" className="text-primary hover:underline">free readiness check</Link> takes
         just 8 minutes and gives you an immediate picture of where your child stands against the 121 benchmark —
         helping you plan the right preparation timeline.
       </p>

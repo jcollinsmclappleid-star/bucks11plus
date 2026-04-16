@@ -162,7 +162,7 @@ function AnalyticsPanel() {
     <div className="space-y-3 w-full max-w-md mx-auto" data-testid="showcase-analytics">
       <div className="text-center mb-3">
         <h3 className="text-lg font-bold text-primary font-serif">How Is My Child Doing?</h3>
-        <p className="text-xs text-muted-foreground mt-1">Deep diagnostics that tell you what's really happening — and what to do next</p>
+        <p className="text-xs text-muted-foreground mt-1">Deep readiness checks that tell you what's really happening — and what to do next</p>
       </div>
 
       <div className="grid grid-cols-2 gap-3">
@@ -298,7 +298,7 @@ function ProgressPanel() {
           <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
           <span className="px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-700 font-bold text-xs">4 pts gap</span>
         </div>
-        <p className="text-[10px] text-muted-foreground mt-2">Gap narrowing by ~3 points per diagnostic — on track for 121 within 6 weeks</p>
+        <p className="text-[10px] text-muted-foreground mt-2">Gap narrowing by ~3 points per readiness check — on track for 121 within 6 weeks</p>
       </div>
     </div>
   );
@@ -318,8 +318,8 @@ export default function Landing() {
   return (
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
       <Seo
-        title="Bucks 11 Plus Practice Tests — Free GL Diagnostic Benchmarked to 121 | Bucks 11 Plus Tests"
-        description="Know exactly where your child stands for the Buckinghamshire 11+. Take a free 8-minute GL-style diagnostic and see their forecast score against the 121 qualifying threshold — with the 3 priorities to fix next."
+        title="Bucks 11 Plus Practice Tests — Free GL Readiness Check Benchmarked to 121 | Bucks 11 Plus Tests"
+        description="Know exactly where your child stands for the Buckinghamshire 11+. Take a free 8-minute GL-style readiness check and see their forecast score against the 121 qualifying threshold — with the 3 priorities to fix next."
         canonicalPath="/"
         schema={{
           "@context": "https://schema.org",
@@ -328,8 +328,8 @@ export default function Landing() {
             { "@type": "Question", name: "What is the Buckinghamshire 11+ Secondary Transfer Test?", acceptedAnswer: { "@type": "Answer", text: "The Buckinghamshire Secondary Transfer Test (STT) is a selective entrance exam taken by children in Year 6, typically in September. It determines eligibility for all 13 state-funded grammar schools in Buckinghamshire. The test is produced by GL Assessment and covers four domains: Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension." } },
             { "@type": "Question", name: "What does 121 mean in the Bucks 11+?", acceptedAnswer: { "@type": "Answer", text: "121 is the standardised score threshold used in Buckinghamshire to determine whether a child qualifies for grammar school. It is not a raw score or percentage — it is a standardised figure that accounts for the child's age on test day and the difficulty of that year's paper. Children who score 121 or above are considered to have qualified and are eligible to be considered for any of the 13 Buckinghamshire grammar schools." } },
             { "@type": "Question", name: "What subjects does the Bucks 11+ test cover?", acceptedAnswer: { "@type": "Answer", text: "The test covers four domains: Verbal Reasoning (vocabulary, word relationships, code problems), Non-Verbal Reasoning and Spatial Reasoning (patterns, sequences, transformations), Mathematics (arithmetic, fractions, word problems), and English Comprehension (reading passages with multiple-choice questions)." } },
-            { "@type": "Question", name: "How does the free diagnostic work?", acceptedAnswer: { "@type": "Answer", text: "The free diagnostic is a 12-question, 8-minute timed assessment in GL-style format. No account is needed. On completion, parents receive a readiness band (On Track, Within Reach, or Clear Improvement Opportunity), a forecast standardised score toward 121, and a breakdown of performance across the four test sections." } },
-            { "@type": "Question", name: "When should my child start preparing for the Bucks 11+?", acceptedAnswer: { "@type": "Answer", text: "Most families begin structured preparation in Year 4 or early Year 5, giving children 12 to 18 months before the September test date. Starting with a diagnostic assessment helps identify specific gaps and ensures preparation time is spent where it will have the most impact." } },
+            { "@type": "Question", name: "How does the free readiness check work?", acceptedAnswer: { "@type": "Answer", text: "The free readiness check is a 12-question, 8-minute timed assessment in GL-style format. No account is needed. On completion, parents receive a readiness band (On Track, Within Reach, or Clear Improvement Opportunity), a forecast standardised score toward 121, and a breakdown of performance across the four test sections." } },
+            { "@type": "Question", name: "When should my child start preparing for the Bucks 11+?", acceptedAnswer: { "@type": "Answer", text: "Most families begin structured preparation in Year 4 or early Year 5, giving children 12 to 18 months before the September test date. Starting with a readiness check helps identify specific gaps and ensures preparation time is spent where it will have the most impact." } },
             { "@type": "Question", name: "Is Bucks 11 Plus Tests affiliated with GL Assessment or Buckinghamshire Council?", acceptedAnswer: { "@type": "Answer", text: "No. Bucks 11 Plus Tests is fully independent. We are not affiliated with GL Assessment, Buckinghamshire Council, The Buckinghamshire Grammar Schools (TBGS), or any individual grammar school. The GL-style label refers to the question format we use to replicate the test structure — it does not imply any formal relationship." } },
             { "@type": "Question", name: "What is included in Bucks Plus Edge?", acceptedAnswer: { "@type": "Answer", text: "Bucks Plus Edge (£35/month or £349/year) includes 1,500+ GL-style questions across all four test domains, timed drills, full 40-question and 50-question mock diagnostics, PDF reports, parent analytics, progress tracking, and access to all Hard drills. Cancel anytime." } },
             { "@type": "Question", name: "What is the difference between the monthly and annual plan?", acceptedAnswer: { "@type": "Answer", text: "Both plans give identical full access to every feature. The monthly plan is £35/month and can be cancelled anytime. The annual plan is £349/year — equivalent to £29.08/month — saving £71 compared to paying monthly for 12 months." } },
@@ -437,13 +437,13 @@ export default function Landing() {
             </h1>
 
             <p className="text-lg md:text-xl text-white/65 max-w-2xl mx-auto leading-relaxed" data-testid="text-hero-sub">
-              We go beyond questions. Our diagnostics identify exactly which areas are costing marks, rank your child's highest-impact focus areas, and track real progress toward the 121 qualifying score. With 1,500+ GL-style questions to close every gap.
+              We go beyond questions. Our intelligent diagnostics identify exactly which areas are costing marks, rank your child's highest-impact focus areas, and track real progress toward the 121 qualifying score. With 1,500+ GL-style questions to close every gap.
             </p>
 
             <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button size="lg" className="h-14 px-10 text-lg bg-brand-amber text-white hover:bg-brand-amber/90 font-bold shadow-lg shadow-brand-amber/15 border-none" asChild data-testid="button-hero-primary">
                 <Link href="/free-diagnostic">
-                  Start Free Diagnostic <ArrowRight className="ml-2 h-5 w-5" />
+                  Start Free Readiness Check <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
               <a
@@ -516,10 +516,10 @@ export default function Landing() {
           <div className="text-center mb-8">
             <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">Here's How We Show You</span>
             <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4" data-testid="text-showcase-title">
-              What the Diagnostic Reveals — In Detail
+              What the Readiness Check Reveals — In Detail
             </h2>
             <p className="text-lg text-slate-500 max-w-2xl mx-auto leading-relaxed">
-              Explore a sample diagnostic report. This is what parents see after their child's first session — a clear picture of where they are, not just a score.
+              Explore a sample readiness report. This is what parents see after their child's first session — a clear picture of where they are, not just a score.
             </p>
           </div>
 
@@ -583,7 +583,7 @@ export default function Landing() {
           </div>
 
           <p className="text-xs text-slate-400 text-center mt-4 italic">
-            Example based on sample student data. Your child's real results will populate after their diagnostic.
+            Example based on sample student data. Your child's real results will populate after their readiness check.
           </p>
 
           <div className="mt-14 pt-10 border-t border-slate-200">
@@ -610,7 +610,7 @@ export default function Landing() {
                 <Search className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-white font-semibold text-sm mb-1">Without a diagnostic</p>
+                <p className="text-white font-semibold text-sm mb-1">Without a readiness check</p>
                 <p className="text-white/50 text-sm leading-relaxed">Working through everything without knowing which specific gaps are standing between your child and 121.</p>
               </div>
             </div>
@@ -619,7 +619,7 @@ export default function Landing() {
                 <Wrench className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-white font-semibold text-sm mb-1">With a diagnostic</p>
+                <p className="text-white font-semibold text-sm mb-1">With a readiness check</p>
                 <p className="text-white/50 text-sm leading-relaxed">Three ranked priorities — practice time goes exactly where it will move the score.</p>
               </div>
             </div>
@@ -633,15 +633,15 @@ export default function Landing() {
           <div className="text-center mb-12">
             <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">Pricing</span>
             <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-3">Simple, Transparent Pricing</h2>
-            <p className="text-muted-foreground max-w-xl mx-auto">Start with the free diagnostic. Upgrade when you're ready. Both paid plans include every feature.</p>
+            <p className="text-muted-foreground max-w-xl mx-auto">Start with the free readiness check. Upgrade when you're ready. Both paid plans include every feature.</p>
           </div>
 
           {/* Free strip */}
           <div className="rounded-2xl border border-slate-200 bg-slate-50 px-6 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6" data-testid="pricing-card-free">
             <div className="flex items-center gap-4">
               <div>
-                <p className="font-bold text-primary text-sm">Free Diagnostic</p>
-                <p className="text-xs text-slate-500 mt-0.5">No account needed · 12-question GL-style diagnostic · Readiness band · Forecast score · 3 priorities</p>
+                <p className="font-bold text-primary text-sm">Free Readiness Check</p>
+                <p className="text-xs text-slate-500 mt-0.5">No account needed · 12-question GL-style readiness check · Readiness band · Forecast score · 3 priorities</p>
               </div>
             </div>
             <Link href="/free-diagnostic" className="shrink-0 inline-flex items-center gap-1.5 rounded-lg border border-primary text-primary font-semibold py-2 px-5 text-sm hover:bg-primary/5 transition-colors whitespace-nowrap" data-testid="button-pricing-free">
@@ -667,7 +667,7 @@ export default function Landing() {
                   "Full GL-style mock exams (40 questions)",
                   "All Hard-level challenge drills",
                   "Timed drill bank (all difficulty levels)",
-                  "PDF diagnostic reports",
+                  "PDF readiness reports",
                   "Parent analytics dashboard",
                 ].map((f, i) => (
                   <li key={i} className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />{f}</li>
@@ -695,7 +695,7 @@ export default function Landing() {
                   "1,500+ GL-style practice questions",
                   "Full-length practice papers (50 questions)",
                   "Full GL-style mock exams (40 questions)",
-                  "PDF diagnostic reports & analytics",
+                  "PDF readiness reports & analytics",
                   "12 months · Cancel anytime",
                 ].map((f, i) => (
                   <li key={i} className="flex gap-2"><CheckCircle2 className={`h-4 w-4 shrink-0 mt-0.5 ${i === 0 ? 'text-brand-amber' : 'text-emerald-500'}`} /><span className={i === 0 ? 'font-bold text-primary' : ''}>{f}</span></li>
@@ -780,7 +780,7 @@ export default function Landing() {
             </div>
             <div className="flex flex-col sm:flex-row gap-3">
               <Button className="h-11 px-6 bg-brand-amber text-amber-950 hover:bg-amber-400 font-bold border-none" asChild data-testid="button-urgency-diagnostic">
-                <Link href="/free-diagnostic">Start Free Diagnostic</Link>
+                <Link href="/free-diagnostic">Start Free Readiness Check</Link>
               </Button>
               <Button variant="outline" className="h-11 px-6 border-white/25 text-white hover:bg-white/10 font-semibold" asChild data-testid="button-urgency-pricing">
                 <Link href="/pricing">View Plans</Link>
@@ -802,10 +802,10 @@ export default function Landing() {
               <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
                 <Layers className="h-4 w-4 text-primary" />
               </div>
-              <h2 className="text-xl font-bold text-primary font-serif">What the Diagnostic Covers</h2>
+              <h2 className="text-xl font-bold text-primary font-serif">What the Readiness Check Covers</h2>
             </div>
             <p className="text-sm text-slate-500 leading-relaxed mb-5 ml-11">
-              The Buckinghamshire Secondary Transfer Test (STT) is produced by GL Assessment and covers four assessed domains. Our diagnostic replicates this structure using independently developed GL-style question families:
+              The Buckinghamshire Secondary Transfer Test (STT) is produced by GL Assessment and covers four assessed domains. Our readiness check replicates this structure using independently developed GL-style question families:
             </p>
             <div className="grid sm:grid-cols-2 gap-4">
               {[
@@ -864,9 +864,9 @@ export default function Landing() {
             </div>
             <div className="space-y-0 rounded-2xl border border-slate-200 bg-white overflow-hidden divide-y divide-slate-100">
               {[
-                { q: "Is this platform built specifically for the Buckinghamshire 11+?", a: "Yes — exclusively. Every question, every diagnostic, and every benchmark is built for the Buckinghamshire Secondary Transfer Test. Results are measured against the 121 qualifying threshold, covering all four GL Assessment domains, across all 13 Buckinghamshire grammar schools. This is not a generic 11+ platform repurposed for Bucks." },
+                { q: "Is this platform built specifically for the Buckinghamshire 11+?", a: "Yes — exclusively. Every question, every readiness check, and every benchmark is built for the Buckinghamshire Secondary Transfer Test. Results are measured against the 121 qualifying threshold, covering all four GL Assessment domains, across all 13 Buckinghamshire grammar schools. This is not a generic 11+ platform repurposed for Bucks." },
                 { q: "Is Bucks 11 Plus Tests affiliated with GL Assessment or Buckinghamshire Council?", a: "No. We are fully independent — not affiliated with GL Assessment, Buckinghamshire Council, TBGS, or any individual grammar school. 'GL-style' refers to the question format we independently replicate, not an official relationship." },
-                { q: "How is the free diagnostic different from the paid platform?", a: "The free 12-question mini diagnostic gives you a readiness band, forecast score, and section breakdown with no account needed. The paid Bucks Plus Edge (£35/month or £349/year) gives access to 1,500+ questions, full-length practice papers, full GL-style mock exams, all Hard drills, parent analytics, and progress tracking across all sessions." },
+                { q: "How is the free readiness check different from the paid platform?", a: "The free quick readiness check gives you a readiness band, forecast score, and section breakdown with no account needed. The paid Bucks Plus Edge (£35/month or £349/year) gives access to 1,500+ questions, full-length practice papers, full GL-style mock exams, all Hard drills, parent analytics, and progress tracking across all sessions." },
                 { q: "What is the difference between the monthly and annual plan?", a: "Both plans give identical full access to every feature. The monthly plan is £35/month and can be cancelled anytime. The annual plan is £349/year — equivalent to £29.08/month — saving £71 compared to paying monthly for 12 months." },
                 { q: "Can I cancel my subscription?", a: "Yes — monthly and annual subscriptions can be cancelled anytime from your account page. If you cancel, you retain access until the end of the current billing period." },
               ].map((item, i) => (
@@ -885,11 +885,11 @@ export default function Landing() {
 
         {/* Final CTA */}
         <div className="border-t border-slate-200 bg-white py-12 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif mb-3">Start Free Diagnostic</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif mb-3">Start Free Readiness Check</h2>
           <p className="text-slate-500 text-sm mb-6 max-w-md mx-auto">No account needed. 8 minutes. See exactly where your child stands — and what to fix next.</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button size="lg" className="h-12 px-8 font-bold bg-brand-amber text-amber-950 hover:bg-amber-400 border-none" asChild data-testid="button-cta-final">
-              <Link href="/free-diagnostic"><ArrowRight className="mr-2 h-5 w-5" />Start Free Diagnostic</Link>
+              <Link href="/free-diagnostic"><ArrowRight className="mr-2 h-5 w-5" />Start Free Readiness Check</Link>
             </Button>
             <Button variant="outline" size="lg" className="h-12 px-6 font-semibold" asChild data-testid="button-cta-pricing">
               <Link href="/pricing">View Pricing</Link>

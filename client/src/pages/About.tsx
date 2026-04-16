@@ -6,7 +6,7 @@ const stats = [
   { value: "1,500+", label: "Practice questions" },
   { value: "4", label: "Test domains covered" },
   { value: "121", label: "The qualifying benchmark" },
-  { value: "Free", label: "Diagnostic — no account needed" },
+  { value: "Free", label: "Readiness check — no account needed" },
 ];
 
 const domains = [
@@ -17,7 +17,7 @@ const domains = [
 ];
 
 const principles = [
-  { icon: Target, heading: "Assessment first", body: "We start with a diagnostic — not a worksheet. Understanding exactly where the gaps are is worth more than hours of unfocused practice." },
+  { icon: Target, heading: "Assessment first", body: "We start with a readiness check — not a worksheet. Understanding exactly where the gaps are is worth more than hours of unfocused practice." },
   { icon: Clock, heading: "Pace matters as much as accuracy", body: "A question answered correctly in 90 seconds is a failed question in a 35-second-per-item test. We track both." },
   { icon: BarChart3, heading: "Benchmarked to 121", body: "Every result, every forecast, and every priority is framed around the real qualifying threshold — the only number that actually matters." },
   { icon: Users, heading: "Parents as partners", body: "We do not hide data behind jargon. Parents receive the same clear, direct information we would want if it were our own child." },
@@ -27,7 +27,7 @@ export default function About() {
   return (
     <div>
       <Seo
-        title="About 11+ Standard | Bucks 11 Plus Diagnostic & Preparation Platform"
+        title="About Bucks 11 Plus Tests | Readiness-Led 11+ Preparation Platform"
         description="11+ Standard is an independent Buckinghamshire 11+ preparation platform — operated by Ianson Systems Limited — helping parents understand their child's readiness and close the gap to 121."
         canonicalPath="/about"
       />
@@ -80,7 +80,7 @@ export default function About() {
 
         <h2 className="text-primary font-serif">Our Approach</h2>
         <p>
-          11+ Standard is an assessment-first platform. Practice without direction is wasted time — so we start with a diagnostic that measures not just accuracy, but pacing: whether your child is working at the speed the real test demands, and where within each subject the gaps are concentrated.
+          11+ Standard is an assessment-first platform. Practice without direction is wasted time — so we start with a readiness check that measures not just accuracy, but pacing: whether your child is working at the speed the real test demands, and where within each subject the gaps are concentrated.
         </p>
         <p>
           From that baseline, every drill session, every full-length timed paper, and every progress review is oriented around a single number: 121.
@@ -113,14 +113,14 @@ export default function About() {
           Every question in our bank follows the question format used in the Buckinghamshire Secondary Transfer Test, spanning all four assessed domains. Questions are weighted across difficulty levels to reflect the real distribution children face in the test itself — not just a library of easy practice problems.
         </p>
         <p>
-          Our question bank and diagnostic methodology were developed with input from an experienced UK primary school leader with specialist expertise in Year 6 and the transition into selective grammar education. This is an educator who understands, from the classroom, what children at this level are genuinely assessed on, where preparation commonly falls short, and what reaching 121 actually demands in practice.
+          Our question bank and readiness methodology were developed with input from an experienced UK primary school leader with specialist expertise in Year 6 and the transition into selective grammar education. This is an educator who understands, from the classroom, what children at this level are genuinely assessed on, where preparation commonly falls short, and what reaching 121 actually demands in practice.
         </p>
       </div>
 
       <div className="bg-slate-50 border-y border-slate-100">
         <div className="container mx-auto max-w-4xl px-4 py-12">
           <h2 className="text-xl font-bold font-serif text-primary mb-2">All four Buckinghamshire 11+ domains</h2>
-          <p className="text-sm text-slate-500 mb-6">Our question bank and diagnostic engine cover every section of the Secondary Transfer Test.</p>
+          <p className="text-sm text-slate-500 mb-6">Our question bank and readiness engine cover every section of the Secondary Transfer Test.</p>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {domains.map((d) => (
               <div key={d.label} className={`rounded-xl border p-5 flex flex-col items-center text-center gap-3 bg-white ${d.color.split(" ").filter(c => c.startsWith("border")).join(" ")}`}>
@@ -157,14 +157,14 @@ export default function About() {
           <div>
             <p className="text-2xl font-bold font-serif text-primary mb-1">Why 121?</p>
             <p className="text-slate-600 leading-relaxed text-sm">
-              The raw score from the Buckinghamshire Secondary Transfer Test is converted into a standardised score that accounts for each child's age at the time of the test. The resulting standardised score runs from roughly 69 to 141, with <strong className="text-primary">121 being the threshold</strong> at which a child is considered to have demonstrated the ability required for grammar school entry. Every diagnostic result, readiness forecast, and progress view in 11+ Standard is framed against this number — because it is the only number on which the decision is made.
+              The raw score from the Buckinghamshire Secondary Transfer Test is converted into a standardised score that accounts for each child's age at the time of the test. The resulting standardised score runs from roughly 69 to 141, with <strong className="text-primary">121 being the threshold</strong> at which a child is considered to have demonstrated the ability required for grammar school entry. Every readiness result, readiness forecast, and progress view in 11+ Standard is framed against this number — because it is the only number on which the decision is made.
             </p>
           </div>
         </div>
 
         <h2 className="text-primary font-serif">Independence and Data</h2>
         <p>
-          11+ Standard collects practice performance data — question-level responses, timing, diagnostic scores, and progress across sessions — for the sole purpose of generating the readiness forecasts, analytics, and guided practice that parents and children use on the platform. This data is never sold, never shared with third parties, and is not passed to schools, local authorities, or GL Assessment under any circumstances.
+          11+ Standard collects practice performance data — question-level responses, timing, readiness scores, and progress across sessions — for the sole purpose of generating the readiness forecasts, analytics, and guided practice that parents and children use on the platform. This data is never sold, never shared with third parties, and is not passed to schools, local authorities, or GL Assessment under any circumstances.
         </p>
         <p>
           We are not affiliated with GL Assessment, Buckinghamshire Council, or any grammar school. The "GL-style" label refers to the question format we use, which replicates the structure of the real test — it does not imply any formal relationship with GL Assessment Ltd.
@@ -179,7 +179,7 @@ export default function About() {
           </div>
           <div className="px-7 py-6 space-y-5">
             <p className="text-slate-700 leading-relaxed">
-              11+ Standard is operated by <strong className="text-primary">Ianson Systems Limited</strong>, a UK-based company that develops educational tools and diagnostic assessment platforms to support 11+ preparation.
+              11+ Standard is operated by <strong className="text-primary">Ianson Systems Limited</strong>, a UK-based company that develops educational tools and readiness assessment platforms to support 11+ preparation.
             </p>
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="flex items-start gap-3 bg-white rounded-xl border border-slate-200 p-4">

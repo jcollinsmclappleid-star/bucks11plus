@@ -27,7 +27,7 @@ const faqItems = [
   },
   {
     question: "When should my child start preparing for the 11 Plus?",
-    answer: "Most families begin structured preparation in Year 4 or the start of Year 5. Starting too early can lead to burnout, while starting too late may not leave enough time to address weaknesses. A diagnostic assessment early in preparation helps identify the right starting point.",
+    answer: "Most families begin structured preparation in Year 4 or the start of Year 5. Starting too early can lead to burnout, while starting too late may not leave enough time to address weaknesses. A readiness check early in preparation helps identify the right starting point.",
   },
   {
     question: "How is the Buckinghamshire 11 Plus scored?",
@@ -218,13 +218,13 @@ export default function BucksGuide() {
 
       <h2 className="text-primary font-serif font-bold" data-testid="heading-preparation">Preparing for the Buckinghamshire 11+</h2>
       <p>
-        Effective preparation combines three elements: <strong>diagnostic assessment</strong> to identify current strengths and weaknesses, <strong>targeted practice</strong> to close specific gaps, and <strong>timed conditions</strong> to build the speed and accuracy required on test day.
+        Effective preparation combines three elements: <strong>readiness check</strong> to identify current strengths and weaknesses, <strong>targeted practice</strong> to close specific gaps, and <strong>timed conditions</strong> to build the speed and accuracy required on test day.
       </p>
       <p>
-        Common mistakes include starting too late, relying exclusively on paper-based practice without timed conditions, and ignoring weaker domains in favour of subjects the child already enjoys. A structured approach, ideally informed by a <Link href="/free-diagnostic" className="text-primary font-medium">diagnostic assessment</Link>, produces significantly better outcomes than unstructured practice alone.
+        Common mistakes include starting too late, relying exclusively on paper-based practice without timed conditions, and ignoring weaker domains in favour of subjects the child already enjoys. A structured approach, ideally informed by a <Link href="/free-diagnostic" className="text-primary font-medium">readiness check</Link>, produces significantly better outcomes than unstructured practice alone.
       </p>
       <p>
-        Our platform provides a free 8-minute diagnostic that measures both accuracy and pacing across all four domains, generating a predicted standardised score and identifying the specific question types where your child needs the most improvement.
+        Our platform provides a free 8-minute readiness check that measures both accuracy and pacing across all four domains, generating a predicted standardised score and identifying the specific question types where your child needs the most improvement.
       </p>
 
       <div className="not-prose my-8 rounded-xl border border-slate-200 bg-white p-6">

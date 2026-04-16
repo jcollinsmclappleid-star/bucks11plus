@@ -197,7 +197,7 @@ export default function Progress() {
                 <span className="text-sm font-medium text-muted-foreground ml-2">points</span>
               </p>
               <p className="text-xs text-slate-500">
-                {progress?.totalAttempts ? `Across ${progress.totalAttempts} tests completed` : "Complete a diagnostic to start tracking progress"}
+                {progress?.totalAttempts ? `Across ${progress.totalAttempts} tests completed` : "Complete a readiness check to start tracking progress"}
               </p>
             </CardContent>
           </Card>
@@ -212,7 +212,7 @@ export default function Progress() {
                 <h3 className="font-bold text-base font-serif">Current Level</h3>
               </div>
               <p className="text-sm text-slate-700 leading-relaxed font-medium" data-testid="text-band">
-                {progress?.latestBand || "Complete a diagnostic to see your child's current level."}
+                {progress?.latestBand || "Complete a readiness check to see your child's current level."}
               </p>
               {forecast && (
                 <div className="mt-3 flex items-center gap-2">
@@ -382,7 +382,7 @@ export default function Progress() {
                   <div className="p-4 bg-white rounded-lg border border-slate-200 shadow-sm flex gap-3">
                     <CheckCircle2 className="h-5 w-5 text-brand-amber shrink-0 mt-0.5" />
                     <div>
-                      <div className="font-bold text-sm text-slate-800">Baseline diagnostic</div>
+                      <div className="font-bold text-sm text-slate-800">Baseline readiness check</div>
                       <div className="text-xs text-muted-foreground mt-1">Establish starting forecast</div>
                     </div>
                   </div>
@@ -403,7 +403,7 @@ export default function Progress() {
                   <div className="p-4 bg-slate-50 rounded-lg border border-slate-100 flex gap-3">
                     <CheckCircle2 className="h-5 w-5 text-slate-300 shrink-0 mt-0.5" />
                     <div>
-                      <div className="font-bold text-sm text-slate-800">Progress diagnostic</div>
+                      <div className="font-bold text-sm text-slate-800">Progress readiness check</div>
                       <div className="text-xs text-muted-foreground mt-1">Mid-point recalibration</div>
                     </div>
                   </div>

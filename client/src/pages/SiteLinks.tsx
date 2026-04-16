@@ -19,9 +19,9 @@ const sections: LinkSection[] = [
     heading: "Main Pages",
     links: [
       { title: "Home", description: "Bucks 11 Plus Tests — Buckinghamshire 11+ exam preparation aligned to the GL-style Secondary Transfer Test.", href: "/" },
-      { title: "Pricing & Plans", description: "Compare all subscription tiers from the free diagnostic through to the full Young Scholar Programme.", href: "/pricing" },
-      { title: "How It Works", description: "Understand how the platform forecasts your child's readiness using GL-aligned diagnostics and scoring.", href: "/how-it-works" },
-      { title: "Free Baseline Diagnostic", description: "Take a free 8-minute assessment to see where your child stands — no account needed.", href: "/free-diagnostic" },
+      { title: "Pricing & Plans", description: "Compare all subscription tiers from the free readiness check through to the full Young Scholar Programme.", href: "/pricing" },
+      { title: "How It Works", description: "Understand how the platform forecasts your child's readiness using GL-aligned readiness checks and scoring.", href: "/how-it-works" },
+      { title: "Free Baseline Readiness Check", description: "Take a free 8-minute assessment to see where your child stands — no account needed.", href: "/free-diagnostic" },
       { title: "GL-Style Alignment", description: "Learn how our questions and scoring mirror the real Buckinghamshire Secondary Transfer Test format.", href: "/bucks-gl-alignment" },
     ],
   },
@@ -29,7 +29,7 @@ const sections: LinkSection[] = [
     heading: "Platform Features",
     links: [
       { title: "Dashboard", description: "Your child's personalised overview showing readiness score, recent results, and next steps.", href: "/app" },
-      { title: "Diagnostics", description: "Timed diagnostic assessments across Verbal Reasoning, Non-Verbal Reasoning, Maths and English.", href: "/app/diagnostic" },
+      { title: "Readiness Checks", description: "Timed readiness checks across Verbal Reasoning, Non-Verbal Reasoning, Maths and English.", href: "/app/diagnostic" },
       { title: "Practice Tests", description: "Targeted topic-by-topic practice to build skills in each section of the 11+ exam.", href: "/app/practice" },
       { title: "Progress Tracking", description: "Detailed charts and trends showing improvement over time against the 121 qualifying benchmark.", href: "/app/progress" },
       { title: "Young Scholar Programme", description: "16-week structured study plan with guided preparation, mock exams, and advanced questions.", href: "/app/programme" },
@@ -194,11 +194,11 @@ export default function SiteLinks() {
           Ready to see where your child stands?
         </h2>
         <p className="text-primary-foreground/80 mb-6 max-w-lg mx-auto">
-          Take our free 8-minute diagnostic to get an instant GL-style readiness score — no account needed.
+          Take our free 8-minute readiness check to get an instant GL-style readiness score — no account needed.
         </p>
         <Link href="/free-diagnostic">
           <span className="inline-flex items-center gap-2 bg-white text-primary font-semibold px-8 py-3 rounded-lg hover:bg-white/90 transition-colors" data-testid="link-site-cta-diagnostic">
-            Take the Free Diagnostic
+            Take the Free Readiness Check
             <ArrowRight className="h-4 w-4" />
           </span>
         </Link>

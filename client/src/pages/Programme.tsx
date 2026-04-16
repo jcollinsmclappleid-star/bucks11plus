@@ -149,7 +149,7 @@ export default function Programme() {
         <div className="bg-amber-50 border border-amber-200 rounded-2xl p-10">
           <h2 className="text-2xl font-bold text-primary font-serif mb-3">Young Scholar Programme</h2>
           <p className="text-slate-600 mb-6 leading-relaxed">
-            The 24-week structured programme includes a personalised roadmap, weekly task plans, milestone diagnostics, and full platform access — everything needed to reach 121.
+            The 24-week structured programme includes a personalised roadmap, weekly task plans, milestone readiness checks, and full platform access — everything needed to reach 121.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/pricing">
@@ -369,9 +369,9 @@ export default function Programme() {
                 {safePlanData.retest.due && (
                   <div className="p-4 bg-green-50 rounded-lg border border-green-100">
                     <div className="font-bold text-sm text-green-800">Re-test due this week</div>
-                    <div className="text-xs text-muted-foreground mt-1">Take a diagnostic to recalibrate your forecast</div>
+                    <div className="text-xs text-muted-foreground mt-1">Take a readiness check to recalibrate your forecast</div>
                     <Button size="sm" className="mt-3" asChild>
-                      <Link href="/app/diagnostic" data-testid="button-retest">Start Diagnostic</Link>
+                      <Link href="/app/diagnostic" data-testid="button-retest">Start Readiness Check</Link>
                     </Button>
                   </div>
                 )}
@@ -403,7 +403,7 @@ export default function Programme() {
                   </p>
                 </div>
               ) : (
-                <p className="text-sm text-muted-foreground">Complete 2+ diagnostics to see gap velocity.</p>
+                <p className="text-sm text-muted-foreground">Complete 2+ readiness checks to see gap velocity.</p>
               )}
             </CardContent>
           </Card>
@@ -431,7 +431,7 @@ export default function Programme() {
                   </p>
                 </div>
               ) : (
-                <p className="text-sm text-muted-foreground">Complete 2+ diagnostics to see stability.</p>
+                <p className="text-sm text-muted-foreground">Complete 2+ readiness checks to see stability.</p>
               )}
             </CardContent>
           </Card>
@@ -467,7 +467,7 @@ export default function Programme() {
                     <Badge variant="outline" className={`text-[10px] ${
                       task.taskType === 'diagnostic' ? 'border-blue-300 text-blue-700' : 'border-slate-300 text-slate-600'
                     }`}>
-                      {task.taskType === 'diagnostic' ? 'Diagnostic' : 'Drill'}
+                      {task.taskType === 'diagnostic' ? 'Readiness Check' : 'Drill'}
                     </Badge>
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">{task.description}</p>
@@ -578,7 +578,7 @@ export default function Programme() {
                               m.milestoneType === 'mock' ? 'border-orange-300 text-orange-700' :
                               'border-slate-300 text-slate-600'
                             }`}>
-                              {m.milestoneType === 'diagnostic' ? 'Diagnostic' :
+                              {m.milestoneType === 'diagnostic' ? 'Readiness Check' :
                                m.milestoneType === 'mock' ? 'Mock Exam' : 'Practice'}
                             </Badge>
                           </div>

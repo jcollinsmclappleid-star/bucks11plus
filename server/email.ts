@@ -189,7 +189,7 @@ export async function sendGuestResultsEmail(
   <div style="text-align:center;margin-bottom:24px;">
     <strong style="font-size:18px;color:#0d1f30;">Bucks 11 Plus Tests</strong>
   </div>
-  <h2 style="color:#0d1f30;margin-bottom:8px;">Your Free Diagnostic Results</h2>
+  <h2 style="color:#0d1f30;margin-bottom:8px;">Your Free Readiness Check Results</h2>
   <p style="color:#475569;">Here's the link to your child's Buckinghamshire 11+ readiness results. Bookmark it — you can come back to it any time.</p>
   <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:24px;margin:20px 0;text-align:center;">
     <p style="font-size:13px;color:#64748b;margin:0 0 4px 0;">GL-Style Forecast Score</p>
@@ -210,7 +210,7 @@ export async function sendGuestResultsEmail(
 </body>
 </html>`;
 
-  return sendEmail(email, "Your 11+ Diagnostic Results — save this link", html);
+  return sendEmail(email, "Your 11+ Readiness Check Results — save this link", html);
 }
 
 export async function sendPasswordResetEmail(email: string, resetToken: string): Promise<boolean> {
@@ -247,8 +247,8 @@ export async function sendDiagnosticCompleteEmail(userId: string, sessionData: a
   const band = sessionData.band || "Not assessed";
 
   const html = wrapHtml(`
-    <h2 style="color:#0d1f30;margin-bottom:8px;">Diagnostic Complete!</h2>
-    <p>Great news — ${childName} has finished their diagnostic assessment.</p>
+    <h2 style="color:#0d1f30;margin-bottom:8px;">Readiness Check Complete!</h2>
+    <p>Great news — ${childName} has finished their readiness check.</p>
     <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:20px;margin:16px 0;text-align:center;">
       <p style="font-size:14px;color:#64748b;margin:0 0 4px;">Forecast Score</p>
       <p style="font-size:36px;font-weight:bold;color:#0d1f30;margin:0;">${forecast}</p>
@@ -260,7 +260,7 @@ export async function sendDiagnosticCompleteEmail(userId: string, sessionData: a
     </div>
   `, userId, token);
 
-  const sent = await sendEmail(user.email, `${childName}'s Diagnostic Results Are Ready`, html);
+  const sent = await sendEmail(user.email, `${childName}'s Readiness Check Results Are Ready`, html);
   await logEmailEvent(userId, "diagnostic_complete", sent ? "sent" : "failed", { forecastScore: forecast });
 }
 
@@ -273,7 +273,7 @@ export async function sendNoDrillNudge(userId: string) {
 
   const html = wrapHtml(`
     <h2 style="color:#0d1f30;margin-bottom:8px;">Time to Start Practising</h2>
-    <p>It's been a few days since ${childName}'s diagnostic — the best time to start targeted practice is now, while the results are fresh.</p>
+    <p>It's been a few days since ${childName}'s readiness check — the best time to start targeted practice is now, while the results are fresh.</p>
     <p>Even 10 minutes of focused drill work can make a measurable difference. We've identified the areas that will have the biggest impact on ${childName}'s score.</p>
     <div style="text-align:center;margin:24px 0;">
       <a href="${BASE_URL}/app/practice" style="display:inline-block;background:#0d1f30;color:white;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold;">Start a Practice Drill</a>
@@ -293,11 +293,11 @@ export async function sendUpgradeNudge(userId: string) {
 
   const html = wrapHtml(`
     <h2 style="color:#0d1f30;margin-bottom:8px;">Ready for More?</h2>
-    <p>You've had a chance to explore Bucks 11 Plus Tests with the free diagnostic. Here's what unlocking full access gives ${childName}:</p>
+    <p>You've had a chance to explore Bucks 11 Plus Tests with the free readiness check. Here's what unlocking full access gives ${childName}:</p>
     <ul style="padding-left:20px;">
       <li><strong>1,500+ targeted practice questions</strong> across VR, NVR, Maths & Comprehension</li>
       <li><strong>Full-length practice papers (50 questions)</strong> and full GL-style mock exams</li>
-      <li><strong>Full timed diagnostics</strong> with detailed PDF reports</li>
+      <li><strong>Full readiness checks</strong> with detailed PDF reports</li>
       <li><strong>Progress tracking</strong> to see real improvement over time</li>
     </ul>
     <p>Bucks Plus Edge starts from <strong>£35/month</strong> (cancel any time) or <strong>£349/year</strong> — saving £71 vs monthly.</p>
@@ -324,7 +324,7 @@ export async function sendProgrammeNudge(userId: string) {
       <li><strong>12 months of full access</strong> — every feature, every question</li>
       <li><strong>Full-length practice papers (50 questions)</strong> and GL-style mock exams</li>
       <li><strong>Premium parent analytics</strong> and progress tracking across all sessions</li>
-      <li><strong>PDF diagnostic reports</strong> and guided preparation roadmap</li>
+      <li><strong>PDF readiness reports</strong> and guided preparation roadmap</li>
     </ul>
     <p><strong>£349/year</strong> — equivalent to £29.08/month. Save £71 vs monthly billing.</p>
     <div style="text-align:center;margin:24px 0;">
@@ -353,7 +353,7 @@ export async function sendTrialWelcomeEmail(userId: string, chargeDate: Date): P
       <ul style="padding-left:18px;margin:0;color:#475569;font-size:13px;line-height:1.8;">
         <li>1,500+ GL-style practice questions (VR, NVR, Maths, Comprehension)</li>
         <li>All 17 Hard challenge drills</li>
-        <li>Full timed diagnostics &amp; mock exam simulations</li>
+        <li>Full readiness checks &amp; mock exam simulations</li>
         <li>Premium parent analytics dashboard</li>
         <li>Guided preparation roadmap &amp; weekly task plans</li>
       </ul>

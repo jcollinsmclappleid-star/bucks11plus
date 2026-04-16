@@ -40,7 +40,7 @@ export default function ProgrammeCompletion() {
     return (
       <div className="container mx-auto max-w-4xl px-4 py-20 text-center">
         <h1 className="text-3xl font-bold text-primary font-serif mb-4">Programme Summary</h1>
-        <p className="text-muted-foreground mb-6">{data?.message || "Complete more diagnostics to generate your summary."}</p>
+        <p className="text-muted-foreground mb-6">{data?.message || "Complete more readiness checks to generate your summary."}</p>
         <Button asChild>
           <Link href="/app/programme">Back to Programme</Link>
         </Button>
@@ -90,7 +90,7 @@ export default function ProgrammeCompletion() {
                 {finalGap <= 0 ? "Target of 121 has been met!" : `${finalGap} points remaining to 121 standard.`}
               </p>
             </div>
-            <p className="text-xs text-muted-foreground">Based on {data.totalAttempts} diagnostic attempts.</p>
+            <p className="text-xs text-muted-foreground">Based on {data.totalAttempts} readiness check attempts.</p>
           </CardContent>
         </Card>
 
@@ -156,7 +156,7 @@ export default function ProgrammeCompletion() {
           <ul className="space-y-3">
             {[
               "Continue 2-3 short practice sessions per week to maintain skills",
-              "Take one timed diagnostic every 2-3 weeks to track stability",
+              "Take one timed readiness check every 2-3 weeks to track stability",
               "Focus on remaining risk areas with targeted 15-minute drills",
               "Simulate exam-day conditions at least once before the test",
               "Maintain a calm routine — avoid cramming in the final week",

@@ -61,7 +61,7 @@ export default function HowToPass() {
           <strong>Starting too late.</strong> Beginning serious preparation in the summer before the September test leaves insufficient time to build the deep vocabulary and reasoning fluency required. Ideally, structured preparation should begin in Year 4 or early Year 5.
         </li>
         <li>
-          <strong>Relying solely on paper practice.</strong> Working through endless practice papers without understanding where weaknesses lie is inefficient. Without diagnostic data, you cannot tell whether a child is struggling with <em>vocabulary breadth</em>, <em>spatial reasoning</em>, or <em>arithmetic speed</em> — each requiring a different intervention.
+          <strong>Relying solely on paper practice.</strong> Working through endless practice papers without understanding where weaknesses lie is inefficient. Without readiness data, you cannot tell whether a child is struggling with <em>vocabulary breadth</em>, <em>spatial reasoning</em>, or <em>arithmetic speed</em> — each requiring a different intervention.
         </li>
         <li>
           <strong>Ignoring timing pressure.</strong> The 11+ is a timed assessment. A child who answers correctly but takes 90 seconds per question will perform very differently from one who completes the same question in 35 seconds. Preparation must include timed conditions from an early stage.
@@ -87,7 +87,7 @@ export default function HowToPass() {
       <ul>
         <li><strong>Timed drills</strong> that build fluency under pressure, not just knowledge.</li>
         <li><strong>Per-question pacing targets</strong> — approximately 35 seconds for Verbal Reasoning, 45 seconds for Non-Verbal Reasoning, and 50 seconds for Mathematics.</li>
-        <li><strong>Regular diagnostic assessment</strong> that measures both accuracy and pacing together, providing a realistic forecast rather than an inflated confidence score.</li>
+        <li><strong>Regular readiness check</strong> that measures both accuracy and pacing together, providing a realistic forecast rather than an inflated confidence score.</li>
       </ul>
 
       <h2 className="text-primary font-serif">When to Start Preparing</h2>
@@ -111,7 +111,7 @@ export default function HowToPass() {
             </tr>
             <tr className="border-b border-slate-100">
               <td className="p-3 font-medium">Year 5 (Spring)</td>
-              <td className="p-3">Focused skill-building with diagnostic assessment, timed practice begins</td>
+              <td className="p-3">Focused skill-building with readiness check, timed practice begins</td>
               <td className="p-3 text-amber-700">Good — sufficient time for most children</td>
             </tr>
             <tr className="border-b border-slate-100">
@@ -128,10 +128,10 @@ export default function HowToPass() {
 
       <h2 className="text-primary font-serif">A Data-Led Approach to Preparation</h2>
       <p>
-        The most effective preparation strategy combines <strong>diagnostic assessment</strong> with <strong>targeted practice</strong>. Rather than working through every topic equally, a diagnostic identifies exactly where your child falls below the 121 threshold — and targeted drills close those specific gaps.
+        The most effective preparation strategy combines <strong>readiness check</strong> with <strong>targeted practice</strong>. Rather than working through every topic equally, a readiness check identifies exactly where your child falls below the 121 threshold — and targeted drills close those specific gaps.
       </p>
       <p>
-        This is the approach used by Bucks 11 Plus Tests. Our <Link href="/free-diagnostic" className="text-primary hover:underline">free 8-minute diagnostic</Link> measures both accuracy and pacing across all four domains, providing a realistic readiness forecast against the 121 benchmark. From there, the platform prescribes the exact micro-drills needed to close remaining gaps.
+        This is the approach used by Bucks 11 Plus Tests. Our <Link href="/free-diagnostic" className="text-primary hover:underline">free 8-minute readiness check</Link> measures both accuracy and pacing across all four domains, providing a realistic readiness forecast against the 121 benchmark. From there, the platform prescribes the exact micro-drills needed to close remaining gaps.
       </p>
 
       <ContentCTA />

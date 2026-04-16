@@ -108,7 +108,7 @@ export default function Dashboard() {
           {hasData ? (
             <div className="mt-1">
               <p className="text-muted-foreground">
-                Based on {latest.diagnosticId.includes("mini") ? "Mini" : "Full"} Diagnostic completed {new Date(latest.completedAt!).toLocaleDateString()}.
+                Based on {latest.diagnosticId.includes("mini") ? "Quick" : "Full"} Readiness Check completed {new Date(latest.completedAt!).toLocaleDateString()}.
               </p>
               <p className="text-xs text-muted-foreground/60 mt-0.5">
                 Forecast calibrated against the 121+ Buckinghamshire qualifying benchmark.{" "}
@@ -118,12 +118,12 @@ export default function Dashboard() {
               </p>
             </div>
           ) : (
-            <p className="text-muted-foreground mt-1">Take your first diagnostic to see your forecast.</p>
+            <p className="text-muted-foreground mt-1">Take your first readiness check to see your forecast.</p>
           )}
         </div>
         <Button className="bg-primary text-primary-foreground" asChild>
           <Link href="/app/diagnostic">
-            {hasData ? "Take Full Diagnostic" : "Start Free Diagnostic"} <ArrowRight className="ml-2 h-4 w-4" />
+            {hasData ? "Take Full Readiness Check" : "Start Free Readiness Check"} <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
         </Button>
       </div>
@@ -137,12 +137,12 @@ export default function Dashboard() {
             <div>
               <h2 className="text-2xl font-bold text-primary font-serif mb-2">Welcome to Bucks 11 Plus Tests</h2>
               <p className="text-muted-foreground max-w-md">
-                Take a free 8-minute Mini Diagnostic to get your child's initial readiness forecast against the 121 benchmark.
+                Take a free 8-minute quick readiness check to get your child's initial readiness forecast against the 121 benchmark.
               </p>
             </div>
             <Button size="lg" className="bg-primary text-lg h-14 px-8" asChild>
               <Link href="/app/diagnostic/mini-1/start" data-testid="button-first-diagnostic">
-                Start Mini Diagnostic <ArrowRight className="ml-2 h-5 w-5" />
+                Start Quick Readiness Check <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
           </CardContent>
@@ -236,7 +236,7 @@ export default function Dashboard() {
                       </div>
                     ))
                 ) : (
-                  <p className="text-sm text-muted-foreground">Complete a diagnostic to see priority areas.</p>
+                  <p className="text-sm text-muted-foreground">Complete a readiness check to see priority areas.</p>
                 )}
                 <Button variant="outline" className="w-full mt-2" asChild>
                   <Link href="/app/practice" data-testid="button-start-practice">
@@ -262,9 +262,9 @@ export default function Dashboard() {
                     <Lock className="h-6 w-6 text-primary" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-lg text-primary">Full Diagnostics Locked</h3>
+                    <h3 className="font-bold text-lg text-primary">Full Readiness Checks Locked</h3>
                     <p className="text-sm text-muted-foreground mt-2 max-w-sm">
-                      Upgrade to unlock full 45-minute diagnostics, complete practice bank, and PDF reports.
+                      Upgrade to unlock full 45-minute readiness checks, complete practice bank, and PDF reports.
                     </p>
                   </div>
                   <Button className="mt-2 bg-primary" asChild>
@@ -293,7 +293,7 @@ export default function Dashboard() {
                       </div>
                     ))
                   ) : (
-                    <p className="text-sm text-muted-foreground">Complete a diagnostic to see pace data.</p>
+                    <p className="text-sm text-muted-foreground">Complete a readiness check to see pace data.</p>
                   )}
                 </div>
               </CardContent>

@@ -13,7 +13,7 @@ export default function Navbar() {
 
   const navLinks = [
     { href: "/app", label: "Dashboard", show: true },
-    { href: "/app/diagnostic", label: "Diagnostics", show: true, matchPrefix: true },
+    { href: "/app/diagnostic", label: "Readiness Checks", show: true, matchPrefix: true },
     { href: "/app/practice", label: "Practice", show: true, matchPrefix: true },
     { href: "/app/progress", label: "Progress", show: true },
     { href: "/app/report-archive", label: "Reports", show: true },
@@ -65,7 +65,7 @@ export default function Navbar() {
           {!user ? (
             <div className="flex items-center gap-2 ml-2">
               <Button size="sm" className="bg-amber-400 hover:bg-amber-300 text-amber-950 font-bold border-none shadow-sm" asChild data-testid="link-free-diagnostic-desktop">
-                <Link href="/free-diagnostic">Free Bucks Diagnostic</Link>
+                <Link href="/free-diagnostic">Free Bucks Readiness Check</Link>
               </Button>
               <Button variant="ghost" size="sm" asChild data-testid="link-signin">
                 <Link href="/sign-in">Sign In</Link>
@@ -98,7 +98,7 @@ export default function Navbar() {
         <div className="flex items-center gap-2 md:hidden">
           {!user && (
             <Button size="sm" asChild className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm text-[11px] px-2.5 h-8 shrink-0 whitespace-nowrap" data-testid="link-free-diagnostic-mobile">
-              <Link href="/free-diagnostic">Bucks 11+ Free Diagnostic</Link>
+              <Link href="/free-diagnostic">Bucks 11+ Free Readiness Check</Link>
             </Button>
           )}
           <Sheet open={open} onOpenChange={setOpen}>

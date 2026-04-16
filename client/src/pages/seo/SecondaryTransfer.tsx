@@ -133,7 +133,7 @@ export default function SecondaryTransfer() {
         experience with the specific reasoning styles used in the Bucks 11+.
       </p>
       <p>
-        Our <Link href="/free-diagnostic" className="text-primary hover:underline">free diagnostic assessment</Link> measures
+        Our <Link href="/free-diagnostic" className="text-primary hover:underline">free readiness check</Link> measures
         your child's readiness across all four domains — Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension —
         in just 8 minutes. It provides a forecast score against the 121 benchmark and identifies the specific
         areas where improvement is needed.

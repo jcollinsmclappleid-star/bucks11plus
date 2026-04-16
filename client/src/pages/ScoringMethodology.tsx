@@ -123,7 +123,7 @@ export default function ScoringMethodology() {
       <section className="space-y-4">
         <h2 className="text-xl font-bold text-primary font-serif">The Four Sections</h2>
         <p className="text-muted-foreground leading-relaxed">
-          Our diagnostics and mocks cover the same four areas as the Buckinghamshire Secondary Transfer Test. Each section score is shown separately on your results page so you can identify where to focus.
+          Our readiness checks and mocks cover the same four areas as the Buckinghamshire Secondary Transfer Test. Each section score is shown separately on your results page so you can identify where to focus.
         </p>
         <div className="grid sm:grid-cols-2 gap-4">
           {sections.map((s) => (
@@ -195,7 +195,7 @@ export default function ScoringMethodology() {
       <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-border/60">
         <Button asChild>
           <Link href="/app/diagnostic">
-            Take a Diagnostic <ArrowRight className="ml-2 h-4 w-4" />
+            Take a Readiness Check <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
         </Button>
         <Button variant="outline" asChild>

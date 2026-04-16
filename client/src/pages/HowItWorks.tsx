@@ -7,9 +7,9 @@ import { Seo } from "../components/shared/Seo";
 const steps = [
   {
     num: 1,
-    title: "Diagnostic Benchmark",
+    title: "Readiness Benchmark",
     icon: Search,
-    intro: "Preparation begins with a timed GL-style diagnostic across:",
+    intro: "Preparation begins with a timed GL-style readiness check across:",
     areas: [
       "Verbal Reasoning",
       "Non-Verbal Reasoning",
@@ -133,10 +133,10 @@ const howItWorksFaqSchema = {
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "How does the Bucks 11 Plus Tests diagnostic work?",
+      "name": "How does the Bucks 11 Plus Tests readiness check work?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The diagnostic is a timed GL-style assessment covering Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension. It benchmarks your child's accuracy, pacing and readiness against the 121 qualifying standard for Buckinghamshire grammar schools."
+        "text": "The readiness check is a timed GL-style assessment covering Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension. It benchmarks your child's accuracy, pacing and readiness against the 121 qualifying standard for Buckinghamshire grammar schools."
       }
     },
     {
@@ -165,10 +165,10 @@ const howItWorksFaqSchema = {
     },
     {
       "@type": "Question",
-      "name": "How often should my child take a diagnostic?",
+      "name": "How often should my child take a readiness check?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "We recommend a diagnostic every 4–6 weeks of targeted practice to track progression across readiness bands. The forecast model improves in accuracy as more diagnostic data is collected over time."
+        "text": "We recommend a readiness check every 4–6 weeks of targeted practice to track progression across readiness bands. The forecast model improves in accuracy as more readiness data is collected over time."
       }
     },
     {
@@ -176,7 +176,7 @@ const howItWorksFaqSchema = {
       "name": "Is this preparation suitable for all Buckinghamshire grammar schools?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. All 13 Buckinghamshire grammar schools use the same GL Assessment Secondary Transfer Test. Our diagnostic and practice content is aligned to the GL-style reasoning formats used across all schools in the county."
+        "text": "Yes. All 13 Buckinghamshire grammar schools use the same GL Assessment Secondary Transfer Test. Our readiness check and practice content is aligned to the GL-style reasoning formats used across all schools in the county."
       }
     }
   ]
@@ -186,8 +186,8 @@ export default function HowItWorks() {
   return (
     <div className="min-h-[calc(100vh-4rem)]">
       <Seo
-        title="How Bucks 11 Plus Preparation Works (2026) – Diagnostic-Led Approach | Bucks 11 Plus Tests"
-        description="Assessment-first preparation for the Bucks 11 Plus. Free GL-style diagnostic, 121 readiness forecast, and targeted practice to close the gap before the Secondary Transfer Test."
+        title="How Bucks 11 Plus Preparation Works (2026) – Readiness-Led Approach | Bucks 11 Plus Tests"
+        description="Assessment-first preparation for the Bucks 11 Plus. Free GL-style readiness check, 121 readiness forecast, and targeted practice to close the gap before the Secondary Transfer Test."
         canonicalPath="/how-it-works"
         schema={howItWorksFaqSchema}
       />
@@ -356,7 +356,7 @@ export default function HowItWorks() {
             </ForecastSection>
 
             <ForecastSection title="Consistency and Trend Analysis" index={5}>
-              <p>Single diagnostic results are not treated as definitive.</p>
+              <p>Single readiness results are not treated as definitive.</p>
               <p>The model evaluates:</p>
               <ul>
                 <li>Performance variance across attempts</li>
@@ -410,7 +410,7 @@ export default function HowItWorks() {
                   </div>
                 </div>
               </div>
-              <p>Readiness status is dynamic and recalculated after each diagnostic.</p>
+              <p>Readiness status is dynamic and recalculated after each readiness check.</p>
             </ForecastSection>
 
             <ForecastSection title="Methodological Limitations" index={8}>

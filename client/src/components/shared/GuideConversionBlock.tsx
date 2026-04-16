@@ -26,7 +26,7 @@ function ScoreMockup() {
       <div className="bg-primary px-6 py-5 flex items-center justify-between">
         <div>
           <p className="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-1">
-            Sample Diagnostic Result
+            Sample Readiness Report
           </p>
           <h4 className="text-xl font-bold font-serif text-white leading-snug">
             Where Does Your Child Sit?
@@ -117,7 +117,7 @@ export function GuideConversionBlock() {
           <div className="flex items-center gap-2 mb-3">
             <Zap className="h-3.5 w-3.5 text-brand-amber" />
             <span className="text-[10px] font-bold uppercase tracking-widest text-brand-amber">
-              Bucks 11+ Diagnostic & Practice Hub
+              Bucks 11+ Readiness & Practice Hub
             </span>
           </div>
           <h3 className="text-2xl md:text-3xl font-bold font-serif text-white mb-3 leading-snug">
@@ -127,12 +127,12 @@ export function GuideConversionBlock() {
             The children who qualify for Buckinghamshire grammar schools don't get lucky — they
             build the{" "}
             <strong className="text-white">speed, accuracy, and stamina</strong> that the real test
-            demands. That requires more than a workbook. It requires a diagnostic-led platform that
+            demands. That requires more than a workbook. It requires a readiness-led platform that
             shows exactly where the gaps are and targets practice precisely.
           </p>
           <p className="text-white/70 text-sm leading-relaxed mb-7 max-w-2xl">
-            Get full access to the Bucks 11+ Diagnostic & Practice Hub: 1,500+ GL-style questions,
-            full timed diagnostics benchmarked to the 121 standard, all 17 Hard drills, mock exam
+            Get full access to the Bucks 11+ Readiness & Practice Hub: 1,500+ GL-style questions,
+            full timed readiness checks benchmarked to the 121 standard, all 17 Hard drills, mock exam
             simulations, and a detailed parent analytics dashboard.
           </p>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 flex-wrap">
@@ -151,7 +151,7 @@ export function GuideConversionBlock() {
               className="h-11 px-6 border-white/25 text-white bg-transparent hover:bg-white/10 hover:text-white hover:border-white/40"
               data-testid="button-guide-conversion-diagnostic"
             >
-              <Link href="/free-diagnostic">Take the Free 11+ Diagnostic First</Link>
+              <Link href="/free-diagnostic">Take the Free 11+ Readiness Check First</Link>
             </Button>
             <span className="text-white/40 text-xs sm:ml-1">From £35/month · Cancel anytime</span>
           </div>

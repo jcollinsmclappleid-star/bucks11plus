@@ -72,8 +72,8 @@ function getUpsellMessage(tier: string, weakestSection: string, weakestScore: nu
   if (rank < 0) {
     if (overallScore < 110) {
       return {
-        title: "Unlock the Full Diagnostic & Practice Hub",
-        message: `${weakestSection} at ${weakestScore}% needs focused attention. Bucks Plus Edge gives your child 1,500+ GL-style questions, full diagnostics, all Hard drills, and a detailed analytics dashboard — from £35/month.`,
+        title: "Unlock the Full Readiness & Practice Hub",
+        message: `${weakestSection} at ${weakestScore}% needs focused attention. Bucks Plus Edge gives your child 1,500+ GL-style questions, full readiness checks, all Hard drills, and a detailed analytics dashboard — from £35/month.`,
         cta: "See Plans & Start Today",
         tier: "pack_plus",
         link: "/pricing",
@@ -81,7 +81,7 @@ function getUpsellMessage(tier: string, weakestSection: string, weakestScore: nu
     }
     return {
       title: "Build Confidence with the Full Platform",
-      message: `Great start! Bucks Plus Edge is the complete Diagnostic & Practice Hub — 1,500+ questions, all 17 Hard challenge drills, full diagnostics, and a detailed parent analytics dashboard. From £35/month, cancel any time.`,
+      message: `Great start! Bucks Plus Edge is the complete Readiness & Practice Hub — 1,500+ questions, all 17 Hard challenge drills, full readiness checks, and a detailed parent analytics dashboard. From £35/month, cancel any time.`,
       cta: "See Plans & Start Today",
       tier: "pack_plus",
       link: "/pricing",
@@ -92,7 +92,7 @@ function getUpsellMessage(tier: string, weakestSection: string, weakestScore: nu
     if (weakestScore < 60) {
       return {
         title: "Upgrade to Full Platform Access",
-        message: `${weakestSection} at ${weakestScore}% needs hard-level drilling. Bucks Plus Edge unlocks all 17 Hard challenge drills, the complete diagnostic suite, and an advanced parent analytics dashboard. From £35/month.`,
+        message: `${weakestSection} at ${weakestScore}% needs hard-level drilling. Bucks Plus Edge unlocks all 17 Hard challenge drills, the complete readiness suite, and an advanced parent analytics dashboard. From £35/month.`,
         cta: "See Plans & Start Today",
         tier: "pack_plus",
         link: "/pricing",
@@ -100,7 +100,7 @@ function getUpsellMessage(tier: string, weakestSection: string, weakestScore: nu
     }
     return {
       title: "Go Deeper with the Full Platform",
-      message: `Your child is making progress. Bucks Plus Edge is the complete Diagnostic & Practice Hub — all Hard drills, full-length mock exams, and detailed gap analysis to push their score to qualifying level. From £35/month.`,
+      message: `Your child is making progress. Bucks Plus Edge is the complete Readiness & Practice Hub — all Hard drills, full-length mock exams, and detailed gap analysis to push their score to qualifying level. From £35/month.`,
       cta: "See Plans & Start Today",
       tier: "pack_plus",
       link: "/pricing",
@@ -251,7 +251,7 @@ export default function Results() {
 
   return (
     <div className="container mx-auto max-w-5xl px-4 py-8 space-y-8">
-      <Seo title="Assessment Results | Bucks 11 Plus Tests" description="View your recent diagnostic results and updated readiness forecast." />
+      <Seo title="Assessment Results | Bucks 11 Plus Tests" description="View your recent readiness results and updated readiness forecast." />
 
       {matchingMilestone && (
         <div className="bg-green-50 border border-green-200 rounded-xl p-4 flex items-center gap-3" data-testid="banner-milestone">
@@ -265,9 +265,9 @@ export default function Results() {
 
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-border/60 pb-6">
         <div>
-          <h1 className="text-3xl font-bold text-primary font-serif" data-testid="text-results-title">Diagnostic Results</h1>
+          <h1 className="text-3xl font-bold text-primary font-serif" data-testid="text-results-title">Readiness Results</h1>
           <p className="text-muted-foreground mt-2">
-            {session.diagnosticId.includes("mini") ? "Mini" : "Full"} Diagnostic completed on {session.completedAt ? new Date(session.completedAt).toLocaleDateString() : "N/A"}
+            {session.diagnosticId.includes("mini") ? "Quick" : "Full"} Readiness Check completed on {session.completedAt ? new Date(session.completedAt).toLocaleDateString() : "N/A"}
           </p>
         </div>
         <div className="flex gap-3">

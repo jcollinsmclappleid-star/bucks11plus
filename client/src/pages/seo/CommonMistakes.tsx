@@ -54,7 +54,7 @@ export default function CommonMistakes() {
 
       <h2 className="text-primary font-serif">Mistake 2: Paper-Only Practice Without Diagnosis</h2>
       <p>
-        Many families purchase stacks of practice papers and work through them sequentially. While practice papers have their place, using them <em>without diagnostic data</em> is like medicating without a diagnosis — you might be treating the wrong problem.
+        Many families purchase stacks of practice papers and work through them sequentially. While practice papers have their place, using them <em>without readiness data</em> is like medicating without a diagnosis — you might be treating the wrong problem.
       </p>
       <p>
         A child who scores 70% on a mixed practice paper could be struggling with completely different things:
@@ -68,7 +68,7 @@ export default function CommonMistakes() {
         Without understanding <em>where</em> and <em>why</em> marks are being lost, practice becomes unfocused and inefficient.
       </p>
       <p>
-        <strong>What to do instead:</strong> Start with a diagnostic assessment that breaks performance down by domain and measures pacing. Then use the diagnostic data to focus practice on the specific areas where your child is below the required standard. Our <Link href="/free-diagnostic" className="text-primary hover:underline">free diagnostic</Link> does exactly this — measuring both accuracy and speed across Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension.
+        <strong>What to do instead:</strong> Start with a readiness check that breaks performance down by domain and measures pacing. Then use the readiness data to focus practice on the specific areas where your child is below the required standard. Our <Link href="/free-diagnostic" className="text-primary hover:underline">free readiness check</Link> does exactly this — measuring both accuracy and speed across Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension.
       </p>
 
       <h2 className="text-primary font-serif">Mistake 3: Ignoring Timing and Pacing</h2>
@@ -108,7 +108,7 @@ export default function CommonMistakes() {
         The four sections of the 11+ — Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension — contribute to the overall standardised score, but children rarely have equal ability across all four. Spending equal time on each section is inefficient if one area is already strong and another is significantly below standard.
       </p>
       <p>
-        <strong>What to do instead:</strong> Use diagnostic data to identify which sections need the most work and allocate preparation time accordingly. A child who consistently scores above the threshold in Mathematics but falls below in Verbal Reasoning should spend the majority of their practice time on vocabulary and verbal logic — not more maths.
+        <strong>What to do instead:</strong> Use readiness data to identify which sections need the most work and allocate preparation time accordingly. A child who consistently scores above the threshold in Mathematics but falls below in Verbal Reasoning should spend the majority of their practice time on vocabulary and verbal logic — not more maths.
       </p>
 
       <h2 className="text-primary font-serif">The Alternative: Data-Led Preparation</h2>
@@ -116,7 +116,7 @@ export default function CommonMistakes() {
         Every mistake above stems from the same root cause: <strong>preparing without data</strong>. When you know exactly where your child stands — which domains are strong, which are weak, where pacing is the problem, and how they compare to the 121 benchmark — preparation becomes focused, efficient, and far less stressful.
       </p>
       <p>
-        Bucks 11 Plus Tests was designed to solve this problem. Our diagnostic measures what matters — accuracy <em>and</em> speed — and translates it into a clear readiness forecast. From there, targeted micro-drills close the specific gaps that stand between your child and the qualifying standard.
+        Bucks 11 Plus Tests was designed to solve this problem. Our readiness check measures what matters — accuracy <em>and</em> speed — and translates it into a clear readiness forecast. From there, targeted micro-drills close the specific gaps that stand between your child and the qualifying standard.
       </p>
 
       <ContentCTA />
