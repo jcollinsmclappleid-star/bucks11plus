@@ -296,10 +296,11 @@ export async function sendUpgradeNudge(userId: string) {
     <p>You've had a chance to explore Bucks 11 Plus Tests with the free diagnostic. Here's what unlocking full access gives ${childName}:</p>
     <ul style="padding-left:20px;">
       <li><strong>1,500+ targeted practice questions</strong> across VR, NVR, Maths & Comprehension</li>
+      <li><strong>Full-length practice papers (50 questions)</strong> and full GL-style mock exams</li>
       <li><strong>Full timed diagnostics</strong> with detailed PDF reports</li>
       <li><strong>Progress tracking</strong> to see real improvement over time</li>
     </ul>
-    <p>Plans start from <strong>£24.99/month</strong> for the Practice Platform (cancel any time) or <strong>£149</strong> one-time for Programme+.</p>
+    <p>Bucks Plus Edge starts from <strong>£35/month</strong> (cancel any time) or <strong>£349/year</strong> — saving £71 vs monthly.</p>
     <div style="text-align:center;margin:24px 0;">
       <a href="${BASE_URL}/pricing" style="display:inline-block;background:#0d1f30;color:white;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold;">View Plans & Pricing</a>
     </div>
@@ -317,21 +318,21 @@ export async function sendProgrammeNudge(userId: string) {
   const childName = user.childName || "your child";
 
   const html = wrapHtml(`
-    <h2 style="color:#0d1f30;margin-bottom:8px;">Take It Further with Programme+</h2>
-    <p>${childName} has been making great progress with the Practice Platform. Programme+ takes preparation to the next level — for a single one-time payment of £149.</p>
+    <h2 style="color:#0d1f30;margin-bottom:8px;">Lock in 12 months for less</h2>
+    <p>${childName} has been making great progress. Switching to the annual plan locks in a full year of access and saves £71 compared to staying on monthly.</p>
     <ul style="padding-left:20px;">
-      <li><strong>Complete 24-week structured roadmap</strong> with weekly focus plans</li>
-      <li><strong>Test Day Simulator</strong> — full exam simulation with timed conditions</li>
-      <li><strong>Premium parent analytics</strong> — gap velocity, forecast stability</li>
-      <li><strong>All hard-tier drills unlocked</strong> across every subject area</li>
-      <li><strong>Mock Exam papers 2 &amp; 3</strong> for additional exam practice</li>
+      <li><strong>12 months of full access</strong> — every feature, every question</li>
+      <li><strong>Full-length practice papers (50 questions)</strong> and GL-style mock exams</li>
+      <li><strong>Premium parent analytics</strong> and progress tracking across all sessions</li>
+      <li><strong>PDF diagnostic reports</strong> and guided preparation roadmap</li>
     </ul>
+    <p><strong>£349/year</strong> — equivalent to £29.08/month. Save £71 vs monthly billing.</p>
     <div style="text-align:center;margin:24px 0;">
-      <a href="${BASE_URL}/pricing" style="display:inline-block;background:#0d1f30;color:white;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold;">Explore Programme+ — £149 one-time</a>
+      <a href="${BASE_URL}/pricing" style="display:inline-block;background:#0d1f30;color:white;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold;">Switch to Annual — £349/year</a>
     </div>
   `, userId, token);
 
-  const sent = await sendEmail(user.email, `${childName} is ready for Programme+`, html);
+  const sent = await sendEmail(user.email, `Save £71 — switch ${childName} to annual access`, html);
   await logEmailEvent(userId, "programme_nudge", sent ? "sent" : "failed");
 }
 
