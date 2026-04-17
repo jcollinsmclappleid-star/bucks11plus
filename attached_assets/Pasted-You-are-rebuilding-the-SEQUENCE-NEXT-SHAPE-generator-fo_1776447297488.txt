@@ -1,0 +1,234 @@
+You are rebuilding the SEQUENCE / NEXT-SHAPE generator for a GL-style inspired 11+ Non-Verbal Reasoning product.
+
+CRITICAL PROBLEM
+The current generator is creating sequence questions where the intended rule may exist internally, but it is not clearly inferable from the rendered panels seen by a child.
+
+This is not acceptable.
+
+A sequence question is only valid if a human can deduce the next figure from the visible evidence in the stem.
+Do not optimise for hidden logic. Optimise for visible, inferable, uniquely deducible logic.
+
+CORE PRINCIPLE
+The rule must live in the rendered evidence, not just in metadata.
+
+A question must satisfy all of the following:
+1. visible rule clarity
+2. sufficient evidence in the stem
+3. unique next answer
+4. mobile-size legibility
+5. human deducibility under time pressure
+
+==================================================
+PART 1 — SEQUENCE SUFFICIENCY RULE
+==================================================
+
+The number of visible stem frames must match the rule complexity.
+
+If showing 3 visible stem frames only:
+- allow only 1 clear rule, or
+- 1 main rule + 1 strongly visible secondary rule
+
+If using 2 independent cycles or a more complex interaction:
+- show 4 visible stem frames before asking for the next one
+
+Reject any item where the next answer depends on a rule that has not been visibly established enough times in the stem.
+
+Examples:
+- A-B-C with a simple rotation or fill progression can be valid
+- A-B-C with two subtle interacting cycles is usually under-evidenced and must be rejected
+- A-B-C-D is preferred for harder sequence logic
+
+==================================================
+PART 2 — VISIBLE EVIDENCE STANDARD
+==================================================
+
+Every rule must be clearly visible in the rendered panels.
+
+Reject any item where:
+- the first 3 stem frames look almost identical
+- the main change is too small to perceive quickly
+- the rule depends on tiny fill differences only
+- the changed object is too small relative to panel size
+- a line or overlap hides the transformation
+- the explanation relies on a change that is not clearly visible
+
+If a human cannot confidently describe what changed between frames 1, 2, and 3, reject the item.
+
+==================================================
+PART 3 — RULE COMPLEXITY BY DIFFICULTY
+==================================================
+
+Easy:
+- 1 clear visible rule
+- examples: rotation, count increase, position shift, obvious fill cycle
+
+Medium:
+- 1 clear primary rule + 1 secondary visible modifier
+- examples: rotation + alternating fill
+- examples: count progression + position movement
+
+Hard:
+- still must remain inferable from visible evidence
+- prefer 4 stem frames
+- use 1 strong main rule + 1 supporting rule
+- avoid 3 subtle rules in a 3-frame stem
+
+Hard questions must be hard because they require disciplined reasoning, not because the evidence is weak or ambiguous.
+
+==================================================
+PART 4 — PRIMARY ATTRIBUTE RULE
+==================================================
+
+Every valid sequence question must have one dominant attribute that a pupil can track first.
+
+Allowed dominant attributes:
+- position
+- orientation
+- count
+- shape family
+- clearly visible fill state
+- size
+- presence/absence
+
+Secondary attributes may support the pattern, but must not replace the need for a clear primary pattern.
+
+Do not create items where all changes are equally tiny or equally unclear.
+
+==================================================
+PART 5 — FILL / OUTLINE / SHADE RULES
+==================================================
+
+Fill changes may only be used if they are highly visible.
+
+Allowed:
+- hollow -> solid
+- solid -> striped
+- striped -> dotted
+only if the difference is large and obvious at mobile size
+
+Reject if:
+- fill differences are tiny
+- shading is faint
+- outline vs internal pattern is hard to distinguish
+- the child would need to zoom to tell states apart
+
+If fill is the key rule, the changing object must be large and isolated enough to see clearly.
+
+==================================================
+PART 6 — STATIC OBJECT RULE
+==================================================
+
+Static objects may be used only if they serve a purpose:
+- anchor
+- reference
+- contrast against the changing object
+
+Do not add shapes that remain static but visually distract from the real rule.
+Do not let static objects make the question look cluttered or imply a false rule.
+
+If only one object changes across the sequence, that changed object must be large enough and prominent enough for the rule to be obvious.
+
+==================================================
+PART 7 — IMAGE-LEVEL VALIDATION
+==================================================
+
+After generating the symbolic rule, render the actual panels and validate the final images.
+
+Run these checks on the rendered question:
+1. Are the changes between stem frames visibly noticeable?
+2. Can a human describe the rule from the image alone?
+3. Are the changes still clear at mobile size?
+4. Does the correct answer follow uniquely from the visible sequence?
+5. Do any distractors feel equally plausible because the stem evidence is insufficient?
+
+If any answer fails, reject and regenerate.
+
+The final rendered item, not the hidden rule state, is the source of truth.
+
+==================================================
+PART 8 — AMBIGUITY REJECTION
+==================================================
+
+Reject any sequence item where:
+- more than one answer could reasonably fit
+- the stem supports multiple plausible rules
+- the intended rule is under-evidenced
+- the explanation sounds more precise than the visible stem actually is
+- the child would have to guess between near-identical options
+
+If the stem does not narrow the answer to one uniquely defensible choice, the item is invalid.
+
+==================================================
+PART 9 — DISTRACTOR RULES
+==================================================
+
+Distractors must be based on likely reasoning mistakes, not on tiny visual variants.
+
+Allowed distractor types:
+- continue primary rule but miss secondary rule
+- apply secondary rule but miss primary rule
+- off-by-one step in count or position
+- correct fill state but wrong orientation
+- correct orientation but wrong size
+- preserve static anchor but transform dynamic object incorrectly
+
+Reject distractors that are similar only because the stem was unclear.
+
+==================================================
+PART 10 — EXPLANATION HONESTY
+==================================================
+
+Every item must include a short explanation.
+
+But explanations must describe only rules that are visibly evidenced in the stem.
+
+Reject any item where the explanation says:
+- “two rules change each step”
+- “the fill cycles through states”
+- “the pattern alternates”
+unless those rules are clearly visible from the actual stem panels.
+
+If the explanation feels smarter than the question looks, the item is broken.
+
+==================================================
+PART 11 — REAL-USE DISPLAY STANDARD
+==================================================
+
+Assume the item is viewed on a mobile-sized screen.
+
+Reject if:
+- changes are too small
+- fill states are too subtle
+- objects overlap confusingly
+- line crossings hide key features
+- the pupil must zoom or stare for too long to identify the rule
+
+Sequence difficulty must come from reasoning, not poor visual communication.
+
+==================================================
+PART 12 — GENERATOR TASK
+==================================================
+
+Please:
+1. audit the current sequence / next-shape generator
+2. identify all items where the visible stem does not sufficiently evidence the intended rule
+3. add a sequence sufficiency validator
+4. add an image-level rendered-evidence validator
+5. add an explanation honesty validator
+6. reject items with under-evidenced multi-rule logic in 3-frame stems
+7. prefer 4-frame stems for harder multi-rule sequences
+8. regenerate the bank so every question is visibly inferable and uniquely solvable
+9. produce a review set of:
+   - 5 easy
+   - 10 medium
+   - 10 hard
+10. for each review item show:
+   - visible primary rule
+   - visible secondary rule if any
+   - why the stem gives enough evidence
+   - why each distractor is wrong
+   - why the answer is uniquely defensible
+
+FINAL INSTRUCTION
+Do not create questions whose logic exists only inside the generator.
+Create questions whose logic is visible, inferable, and fair to a real child under timed exam conditions.

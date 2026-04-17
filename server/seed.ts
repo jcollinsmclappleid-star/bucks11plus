@@ -722,6 +722,7 @@ async function reseedQuestionType(opts: {
 
 export async function ensureNvrGeneratorReseeds() {
   const seedPath = path.resolve(process.cwd(), "scripts/questions.seed.json");
+  await reseedQuestionType({ type: "sequence",            label: "NVR sequence",            versionThreshold: 4, seedPath });
   await reseedQuestionType({ type: "symmetry",           label: "NVR symmetry",           versionThreshold: 4, seedPath });
   await reseedQuestionType({ type: "rotation_reflection", label: "NVR rotation_reflection", versionThreshold: 3, seedPath });
   await reseedQuestionType({ type: "transformation",      label: "NVR transformation",      versionThreshold: 3, seedPath });
