@@ -14,20 +14,19 @@ import {
 } from './shared';
 
 // ─── Version ────────────────────────────────────────────────────────────────────
-// Bump to 5 for this GL human-solver spec rebuild.
-export const SEQUENCE_VERSION = 5;
+// v6: Fixed correctAttrs off-by-one bug (was allFrames[visibleFrames], now allFrames[visibleFrames-1])
+//     Removed all dash/hatched/dual-fill specs. Added size_grow, size_rotate, position_rotate,
+//     count_shrink_rotate, fill_cycle_count, position_fill specs.
+export const SEQUENCE_VERSION = 6;
 
 // ─── Mobile rendering constants ─────────────────────────────────────────────────
 // Frame panels are w-20 h-20 = 80px CSS on mobile.
 // SVG viewBox is 100×100, so 1 SVG unit = 0.8px.
 // Minimum perceptible shape size at mobile: 20 SVG units = 16px.
 // Recommended comfortable size: 24 SVG units = 19px.
-// Hard floor for any shape in any frame: MIN_SHAPE_SIZE.
-const MIN_SHAPE_SIZE = 20;    // hard floor — reject if any shape is below this
-const GOOD_BASE_SIZE = 24;    // default for single-shape specs
-const LARGE_BASE_SIZE = 26;   // for fill/dash specs where the shape should dominate the frame
-// For size-change specs: delta must be large enough to be visually obvious at mobile.
-// Delta 8 = 6.4px change. Minimum for a clearly visible size jump.
+const MIN_SHAPE_SIZE = 20;
+const GOOD_BASE_SIZE = 24;
+const LARGE_BASE_SIZE = 26;
 const MIN_SIZE_DELTA = 8;
 
 // ─── Stem variants ─────────────────────────────────────────────────────────────
@@ -54,9 +53,9 @@ interface SequenceSpec {
   primaryRule: string;
   secondaryRule?: string;
   baseSize?: number;
-  // For count-based specs: how many shapes start the sequence
   countStart?: number;
-  countDelta?: number;   // +1 or -1
+  countDelta?: number;
+  sizeDelta?: number;
 }
 
 // ─── Helper builders ───────────────────────────────────────────────────────────
@@ -66,7 +65,7 @@ function buildAsymRotAngle(rng: () => number): 90 | 180 {
 }
 
 function buildFillCycle2(rng: () => number): FillPattern[] {
-  // Always include solid/none transition — highest contrast at mobile
+  // Always solid/none — highest contrast pair at mobile. No hatched.
   return pick([
     ['none', 'solid'] as FillPattern[],
     ['none', 'solid'] as FillPattern[],
@@ -74,21 +73,137 @@ function buildFillCycle2(rng: () => number): FillPattern[] {
   ], rng);
 }
 
-function buildFillCycle2b(rng: () => number): FillPattern[] {
-  return pick([
-    ['none', 'solid'] as FillPattern[],
-    ['none', 'hatched'] as FillPattern[],
-    ['solid', 'none'] as FillPattern[],
-  ], rng);
+// ─── Frame builders ────────────────────────────────────────────────────────────
+
+/**
+ * Build frames where count grows by 1 each step.
+ * Returns allFrames (visibleFrames + 1 extra, never stored).
+ */
+function buildCountGrowFrames(
+  rng: () => number,
+  startCount: number,
+  totalFrames: number,
+  shapeType: string,
+  fillType: FillPattern,
+  baseSize: number,
+): ShapeAttrs[][] {
+  const positionGrid: [number, number][] = [
+    [30, 35], [70, 35], [30, 65], [70, 65], [50, 50],
+  ];
+  const frames: ShapeAttrs[][] = [];
+  for (let f = 0; f < totalFrames; f++) {
+    const count = startCount + f;
+    const shapes: ShapeAttrs[] = [];
+    for (let i = 0; i < count; i++) {
+      const pos = positionGrid[i % positionGrid.length];
+      shapes.push({ id: i, shape: shapeType, x: pos[0], y: pos[1], size: baseSize, rotation: 0, fill: fillType, dashed: false });
+    }
+    frames.push(shapes);
+  }
+  return frames;
 }
 
-function buildFillCycle3(rng: () => number): FillPattern[] {
-  // All 3-state cycles must pass through solid and none for maximum contrast
-  return pick([
-    ['none', 'solid', 'hatched'] as FillPattern[],
-    ['solid', 'none', 'hatched'] as FillPattern[],
-    ['none', 'hatched', 'solid'] as FillPattern[],
-  ], rng);
+function buildCountShrinkFrames(
+  rng: () => number,
+  startCount: number,
+  totalFrames: number,
+  shapeType: string,
+  fillType: FillPattern,
+  baseSize: number,
+): ShapeAttrs[][] {
+  const positionGrid: [number, number][] = [
+    [30, 35], [70, 35], [30, 65], [70, 65], [50, 50],
+  ];
+  const frames: ShapeAttrs[][] = [];
+  for (let f = 0; f < totalFrames; f++) {
+    const count = startCount - f;
+    const shapes: ShapeAttrs[] = [];
+    for (let i = 0; i < Math.max(0, count); i++) {
+      const pos = positionGrid[i % positionGrid.length];
+      shapes.push({ id: i, shape: shapeType, x: pos[0], y: pos[1], size: baseSize, rotation: 0, fill: fillType, dashed: false });
+    }
+    frames.push(shapes);
+  }
+  return frames;
+}
+
+/**
+ * Build frames where one shape moves through 4 corner positions,
+ * optionally changing fill and/or rotation each step.
+ */
+function buildPositionOrbitFrames(
+  rng: () => number,
+  shape: string,
+  baseSize: number,
+  fill: FillPattern,
+  fillCycle: FillPattern[] | null,
+  totalFrames: number,
+  startRotation: number,
+  rotDelta: number,
+): ShapeAttrs[][] {
+  const orbit: [number, number][] = [
+    [28, 28], [72, 28], [72, 72], [28, 72],
+  ];
+  const frames: ShapeAttrs[][] = [];
+  let currentFill = fill;
+  for (let f = 0; f < totalFrames; f++) {
+    const pos = orbit[f % orbit.length];
+    if (fillCycle) currentFill = fillCycle[f % fillCycle.length];
+    frames.push([{
+      id: 0, shape, x: pos[0], y: pos[1], size: baseSize,
+      rotation: (startRotation + rotDelta * f) % 360,
+      fill: currentFill, dashed: false,
+    }]);
+  }
+  return frames;
+}
+
+/**
+ * Build frames where one shape grows in size each step, with optional rotation.
+ * Returns allFrames (visibleFrames + 1 extra, never stored).
+ */
+function buildSizeGrowFrames(
+  shape: string,
+  fill: FillPattern,
+  baseSize: number,
+  sizeDelta: number,
+  totalFrames: number,
+  startRotation: number,
+  rotDelta: number,
+): ShapeAttrs[][] {
+  const frames: ShapeAttrs[][] = [];
+  for (let f = 0; f < totalFrames; f++) {
+    const size = baseSize + f * sizeDelta;
+    const rotation = (startRotation + rotDelta * f) % 360;
+    frames.push([{ id: 0, shape, x: 50, y: 50, size, rotation, fill, dashed: false }]);
+  }
+  return frames;
+}
+
+/**
+ * Build frames where count grows AND fill alternates each step.
+ */
+function buildFillCycleCountFrames(
+  startCount: number,
+  totalFrames: number,
+  shapeType: string,
+  fillCycle: FillPattern[],
+  baseSize: number,
+): ShapeAttrs[][] {
+  const positionGrid: [number, number][] = [
+    [30, 35], [70, 35], [30, 65], [70, 65], [50, 50],
+  ];
+  const frames: ShapeAttrs[][] = [];
+  for (let f = 0; f < totalFrames; f++) {
+    const count = Math.min(startCount + f, positionGrid.length);
+    const fill = fillCycle[f % fillCycle.length];
+    const shapes: ShapeAttrs[] = [];
+    for (let i = 0; i < count; i++) {
+      shapes.push({ id: i, shape: shapeType, x: positionGrid[i][0], y: positionGrid[i][1], size: baseSize, rotation: 0, fill, dashed: false });
+    }
+    frames.push(shapes);
+  }
+  return frames;
 }
 
 // ─── Validators ────────────────────────────────────────────────────────────────
@@ -132,10 +247,6 @@ function fillCycleIsUnambiguous(visibleFrames: ShapeAttrs[][], rules: Rule[]): b
   return true;
 }
 
-/**
- * GL Human-Solver Standard: reject if ANY shape in ANY frame is below MIN_SHAPE_SIZE.
- * This catches edge-case shrinkage from scaleSize rules reaching the floor.
- */
 function minShapeSizeValid(allFrames: ShapeAttrs[][]): boolean {
   for (const frame of allFrames) {
     for (const shape of frame) {
@@ -145,16 +256,6 @@ function minShapeSizeValid(allFrames: ShapeAttrs[][]): boolean {
   return true;
 }
 
-/**
- * GL Human-Solver Standard: The dominant rule must be unambiguously visible
- * at mobile (80px panel, 0.8px per SVG unit).
- *
- * - Rotation: shape must be ≥ MIN_SHAPE_SIZE (already enforced by minShapeSizeValid)
- * - Fill change: must include 'none' ↔ 'solid' contrast somewhere in the cycle
- * - Size change: delta must be ≥ MIN_SIZE_DELTA (6.4px at mobile)
- * - Count change: always clear — no check needed
- * - Dash toggle: always clear on large shapes — no check needed
- */
 function dominantRuleIsVisible(spec: SequenceSpec, allFrames: ShapeAttrs[][]): boolean {
   for (const rule of spec.rules) {
     if (rule.kind === 'scaleSize') {
@@ -163,19 +264,12 @@ function dominantRuleIsVisible(spec: SequenceSpec, allFrames: ShapeAttrs[][]): b
     if (rule.kind === 'fillCycle') {
       const cycle = rule.cycle;
       const hasHighContrast = (cycle.includes('none') && cycle.includes('solid'));
-      const hasGoodContrast = (cycle.includes('none') && cycle.includes('hatched'));
-      if (!hasHighContrast && !hasGoodContrast) return false;
+      if (!hasHighContrast) return false;
     }
   }
   return true;
 }
 
-/**
- * GL Human-Solver Standard: All 4 answer options must differ by at least one
- * meaningful logical category (count, rotation state, fill state, position).
- * Reject if any two options are visually near-identical (same fill, same rotation,
- * same count, same size within 6 units).
- */
 function answersAreMeaningfullyDistinct(
   correctAttrs: ShapeAttrs[],
   distractorAttrs: ShapeAttrs[][],
@@ -185,8 +279,7 @@ function answersAreMeaningfullyDistinct(
     for (let j = i + 1; j < all.length; j++) {
       const a = all[i];
       const b = all[j];
-      if (a.length !== b.length) continue; // count difference — always distinct
-      // Check if all shapes in the pair are "near-identical"
+      if (a.length !== b.length) continue;
       const nearIdentical = a.every((sa, k) => {
         const sb = b[k];
         if (!sb) return false;
@@ -203,273 +296,93 @@ function answersAreMeaningfullyDistinct(
   return true;
 }
 
-// ─── Count-sequence helpers ────────────────────────────────────────────────────
-
-/**
- * Build a sequence of frames where the count of shapes increases by 1 each step.
- * Each shape is a large, clearly-outlined object at a fixed position.
- * Returns allFrames (visibleFrames + 1 answer frame).
- */
-function buildCountGrowFrames(
-  rng: () => number,
-  startCount: number,
-  totalFrames: number,
-  shapeType: string,
-  fillType: FillPattern,
-  baseSize: number,
-): ShapeAttrs[][] {
-  // Fixed grid positions for up to 5 shapes — well spread across 100×100 viewBox
-  const positionGrid: [number, number][] = [
-    [30, 35], [70, 35], [30, 65], [70, 65], [50, 50],
-  ];
-
-  const frames: ShapeAttrs[][] = [];
-  for (let f = 0; f < totalFrames; f++) {
-    const count = startCount + f;
-    const shapes: ShapeAttrs[] = [];
-    for (let i = 0; i < count; i++) {
-      const pos = positionGrid[i % positionGrid.length];
-      shapes.push({
-        id: i,
-        shape: shapeType,
-        x: pos[0], y: pos[1],
-        size: baseSize,
-        rotation: 0,
-        fill: fillType,
-        dashed: false,
-      });
-    }
-    frames.push(shapes);
-  }
-  return frames;
-}
-
-function buildCountShrinkFrames(
-  rng: () => number,
-  startCount: number,
-  totalFrames: number,
-  shapeType: string,
-  fillType: FillPattern,
-  baseSize: number,
-): ShapeAttrs[][] {
-  const positionGrid: [number, number][] = [
-    [30, 35], [70, 35], [30, 65], [70, 65], [50, 50],
-  ];
-  const frames: ShapeAttrs[][] = [];
-  for (let f = 0; f < totalFrames; f++) {
-    const count = startCount - f;
-    const shapes: ShapeAttrs[] = [];
-    for (let i = 0; i < count; i++) {
-      const pos = positionGrid[i % positionGrid.length];
-      shapes.push({
-        id: i,
-        shape: shapeType,
-        x: pos[0], y: pos[1],
-        size: baseSize,
-        rotation: 0,
-        fill: fillType,
-        dashed: false,
-      });
-    }
-    frames.push(shapes);
-  }
-  return frames;
-}
-
-/**
- * Build a position-orbit sequence: one shape moves through 4 quadrant positions
- * across successive frames. Optionally changes fill at each step.
- * Position order: top-left → top-right → bottom-right → bottom-left → answer: top-left
- */
-function buildPositionOrbitFrames(
-  rng: () => number,
-  shape: string,
-  baseSize: number,
-  fill: FillPattern,
-  fillCycle: FillPattern[] | null,
-  totalFrames: number,
-  startRotation: number,
-  rotDelta: number,
-): ShapeAttrs[][] {
-  const orbit: [number, number][] = [
-    [28, 28], [72, 28], [72, 72], [28, 72],
-  ];
-  const frames: ShapeAttrs[][] = [];
-  let currentFill = fill;
-  for (let f = 0; f < totalFrames; f++) {
-    const pos = orbit[f % orbit.length];
-    if (fillCycle) {
-      currentFill = fillCycle[f % fillCycle.length];
-    }
-    frames.push([{
-      id: 0,
-      shape,
-      x: pos[0], y: pos[1],
-      size: baseSize,
-      rotation: (startRotation + rotDelta * f) % 360,
-      fill: currentFill,
-      dashed: false,
-    }]);
-  }
-  return frames;
-}
-
 // ─── Spec library ──────────────────────────────────────────────────────────────
 
 function buildSequenceSpecs(rng: () => number): SequenceSpec[] {
   const deg = buildAsymRotAngle(rng);
   const fillCycle2 = buildFillCycle2(rng);
-  const fillCycle2b = buildFillCycle2b(rng);
-  const fillCycle3 = buildFillCycle3(rng);
 
   return [
     // ══════════════════════════════════════════════════════════════════════════
     // EASY — 1 rule, 3 visible frames (questionIndex: 2)
-    // Single obvious rule. Large shapes. Answer uniquely deducible from 3 frames.
+    // Frames: [f0, f1, f2]. f2 is hidden as "?". Correct = f2 = allFrames[2].
+    // Child sees f0="1" and f1="2", deduces f2="?".
     // ══════════════════════════════════════════════════════════════════════════
 
     {
-      // Rotation — shape clearly turns 90° or 180° each step
       rules: [{ kind: 'rotate', degrees: deg }],
       subRuleId: 'nvr.sequence.rotate_only',
-      explanation: `Each shape rotates ${deg}° clockwise each step. The three frames show the progression clearly.`,
+      explanation: `Each shape rotates ${deg}° clockwise each step. Frame 1 and Frame 2 show the progression — apply the same rotation to find the ? frame.`,
       difficulty: 'easy',
       shapeRequirement: 'strongly_asymmetric',
       minShapes: 1, maxShapes: 1,
       visibleFrames: 3,
       primaryRule: `rotation ${deg}° clockwise per step`,
-      baseSize: LARGE_BASE_SIZE,  // 26 SVG units — larger so orientation shift is unmistakable
+      baseSize: LARGE_BASE_SIZE,
     },
 
     {
-      // Fill cycles between 2 high-contrast states — solid/none is unmistakable
       rules: [{ kind: 'fillCycle', cycle: fillCycle2 }],
       subRuleId: 'nvr.sequence.fill_cycle_only',
-      explanation: `The fill alternates ${fillCycle2.join(' → ')} each step. Three frames make the pattern obvious.`,
+      explanation: `The fill alternates ${fillCycle2.join(' → ')} each step. Two frames establish the pattern — the ? frame continues the same alternation.`,
       difficulty: 'easy',
       shapeRequirement: 'any',
       minShapes: 1, maxShapes: 1,
       visibleFrames: 3,
       primaryRule: `fill alternates ${fillCycle2.join(' → ')} each step`,
-      baseSize: LARGE_BASE_SIZE,  // 26 SVG units — large so fill is unmistakable
+      baseSize: LARGE_BASE_SIZE,
     },
 
     {
-      // Count GROWS: 1 → 2 → 3 → answer:4. Most obvious pattern at mobile.
-      // Shapes are large, identical, in a stable grid — count is instantly readable.
-      rules: [],  // handled by custom frame builder
+      rules: [],
       subRuleId: 'nvr.sequence.count_grow',
-      explanation: 'One new shape is added each step. Count the shapes: 1 → 2 → 3 → the next frame has 4.',
+      explanation: 'One new shape is added each step. Count the shapes in each frame and continue the pattern to find the ? frame.',
       difficulty: 'easy',
       shapeRequirement: 'count_shapes',
       minShapes: 1, maxShapes: 4,
       visibleFrames: 3,
-      primaryRule: 'count increases by 1 each step (1 → 2 → 3 → 4)',
+      primaryRule: 'count increases by 1 each step',
       baseSize: GOOD_BASE_SIZE,
       countStart: 1,
       countDelta: 1,
     },
 
     {
-      // Count SHRINKS: 4 → 3 → 2 → answer:1. Clear and unambiguous.
       rules: [],
       subRuleId: 'nvr.sequence.count_shrink',
-      explanation: 'One shape is removed each step. Count the shapes: 4 → 3 → 2 → the next frame has 1.',
+      explanation: 'One shape is removed each step. Count the shapes in each frame and continue the pattern to find the ? frame.',
       difficulty: 'easy',
       shapeRequirement: 'count_shapes',
       minShapes: 1, maxShapes: 4,
       visibleFrames: 3,
-      primaryRule: 'count decreases by 1 each step (4 → 3 → 2 → 1)',
+      primaryRule: 'count decreases by 1 each step',
       baseSize: GOOD_BASE_SIZE,
       countStart: 4,
       countDelta: -1,
     },
 
     {
-      // Dash alternates — simple, clearly visible on large shapes
-      rules: [{ kind: 'toggleDash' }],
-      subRuleId: 'nvr.sequence.dash_toggle',
-      explanation: 'The border alternates between solid and dashed each step.',
-      difficulty: 'easy',
-      shapeRequirement: 'any',
-      minShapes: 1, maxShapes: 1,
-      visibleFrames: 3,
-      primaryRule: 'border alternates solid ↔ dashed each step',
-      baseSize: LARGE_BASE_SIZE,  // large so dash pattern is clearly visible
-    },
-
-    {
-      // Size GROWS dramatically: 18 → 24 → 28 → answer:28 (capped, but visibly large jump each step)
-      // Actually: 18 → 26 → answer would be better. Let's do baseSize 18, delta 8:
-      // frame0:18, frame1:26, frame2:28(capped but difference is clear), answer:28 — no good.
-      // Better approach: use 3 steps with delta 8 from base 12: 12→20→28 (3 visible steps show clear growth)
-      // But 12 < MIN_SHAPE_SIZE. Use delta 6 from base 14: 14→20→26→answer:28. That's 4 frames (3 visible + answer)
-      // Validators will catch size < 20 so start at 20: 20→26→28(cap)→answer — cap is bad.
-      // Use delta 8, start at 12: frames are 12,20,28 (3 visible) answer is 28 (capped). Bad — no visible change at answer.
-      // Actually for a 3-visible-frame spec with delta=8: frames=[12,20,28], answer=28 (capped). Not good.
-      // So: make it 4-visible-frame medium spec, OR use delta 4 with bigger range.
-      // Best: start at 16, delta=6, 3 visible: 16→22→28, answer=28. 
-      // Actually 16 < MIN_SHAPE_SIZE, so frame[0]=16 would be rejected. 
-      // Let's make size_grow a 4-frame (medium) spec instead. It fits better there.
-      // For easy, we have rotation, fill, count_grow, count_shrink, dash — that's 5 easy specs, great.
       rules: [{ kind: 'rotate', degrees: 180 }],
       subRuleId: 'nvr.sequence.rotate_180_only',
-      explanation: 'The shape flips 180° each step — it is upside-down in frame 2 and back up in frame 3. The next frame follows the same flip.',
+      explanation: 'The shape flips 180° each step — it alternates between upright and inverted. Find the ? frame by applying the same flip.',
       difficulty: 'easy',
       shapeRequirement: 'strongly_asymmetric',
       minShapes: 1, maxShapes: 1,
       visibleFrames: 3,
       primaryRule: '180° flip each step',
-      baseSize: LARGE_BASE_SIZE,  // 26 SVG units — 180° flip must be unmistakable
+      baseSize: LARGE_BASE_SIZE,
     },
 
     // ══════════════════════════════════════════════════════════════════════════
-    // MEDIUM — 2 rules, 4 visible frames
-    // Primary rule is clear. Secondary is visible but requires tracking two things.
-    // Both rules established within 4 frames. No tiny changes.
+    // MEDIUM — clear rules, 4 visible frames (questionIndex: 3)
+    // Frames: [f0, f1, f2, f3]. f3 is hidden as "?". Correct = f3 = allFrames[3].
+    // Child sees f0="1", f1="2", f2="3", deduces f3="?".
     // ══════════════════════════════════════════════════════════════════════════
 
     {
-      // Rotate + fill cycle — both rules large and clear
-      rules: [
-        { kind: 'rotate', degrees: deg },
-        { kind: 'fillCycle', cycle: fillCycle2 },
-      ],
-      subRuleId: 'nvr.sequence.rotate_fill',
-      explanation: `Each step: the shape rotates ${deg}° AND the fill alternates ${fillCycle2.join(' → ')}. Four frames clearly establish both rules.`,
-      difficulty: 'medium',
-      shapeRequirement: 'strongly_asymmetric',
-      minShapes: 1, maxShapes: 1,
-      visibleFrames: 4,
-      primaryRule: `rotation ${deg}° per step`,
-      secondaryRule: `fill alternates ${fillCycle2.join(' → ')}`,
-      baseSize: LARGE_BASE_SIZE,  // 26 — rotation must be unmistakable alongside fill change
-    },
-
-    {
-      // Rotate + dash toggle — both visually independent and obvious
-      rules: [
-        { kind: 'rotate', degrees: deg },
-        { kind: 'toggleDash' },
-      ],
-      subRuleId: 'nvr.sequence.rotate_dash',
-      explanation: `Each step: the shape rotates ${deg}° AND the border alternates solid/dashed. Both changes are obvious on a large shape across four frames.`,
-      difficulty: 'medium',
-      shapeRequirement: 'strongly_asymmetric',
-      minShapes: 1, maxShapes: 1,
-      visibleFrames: 4,
-      primaryRule: `rotation ${deg}° per step`,
-      secondaryRule: 'border alternates solid ↔ dashed',
-      baseSize: LARGE_BASE_SIZE,  // large so dash pattern reads clearly alongside rotation
-    },
-
-    {
-      // Position orbit — shape moves through 4 quadrant positions, easy to track
-      // One large shape moves top-left → top-right → bottom-right → bottom-left → answer: top-left
-      // Secondary: fill cycles none ↔ solid
-      rules: [],  // handled by buildPositionOrbitFrames
+      rules: [],
       subRuleId: 'nvr.sequence.position_orbit',
-      explanation: `The shape moves to the next corner position each step (top-left → top-right → bottom-right → bottom-left). Track the position to find where it lands next.`,
+      explanation: 'The shape moves to the next corner position each step: top-left → top-right → bottom-right → bottom-left → and so on. Track the position to find the ? frame.',
       difficulty: 'medium',
       shapeRequirement: 'any',
       minShapes: 1, maxShapes: 1,
@@ -479,141 +392,104 @@ function buildSequenceSpecs(rng: () => number): SequenceSpec[] {
     },
 
     {
-      // Size GROWS dramatically: delta=8 means 8 SVG units = 6.4px per step — clearly visible
-      // 4 visible frames: frame0=20, frame1=26, frame2=28(cap), frame3=28(cap)... bad.
-      // Better: start at 12, grow 8 per step: 12→20→26→28→answer:28. frame0=12 < MIN.
-      // Let me try: make size-grow with 3 frames instead, starting 20: 20→26→28→answer:28 (capped).
-      // But answer=28=frame2=frame3=28, so answer is not a unique continuation.
-      // Real issue: 28 is the max (from scaleSize logic). Need a custom max.
-      // Alternative: start at 14, use delta=7 for 4 frames: 14→21→28→35(capped to 28). Not great.
-      // Best: use 3 visible frames with start at 16, delta=8: 16→24→28(cap)
-      //   frame0=16 fails MIN_SHAPE_SIZE validator...
-      // OK: Override scaleSize to allow up to 36. Or use start 20, delta 8, cap 44.
-      // Actually the scaleSize rule caps at Math.max(8, Math.min(28, size+delta)).
-      // To get 3 clear steps, I need to not hit the cap. With baseSize 16, delta 8:
-      //   f0=16, f1=24, f2=28(would be 32 but capped to 28), f_answer would be 28 again.
-      // The scaleSize cap is a problem for grow sequences. Recommendation: relabel this
-      // as a "fill + position" spec instead, avoiding the size-change problem.
-      rules: [
-        { kind: 'fillCycle', cycle: fillCycle2b },
-        { kind: 'toggleDash' },
-      ],
-      subRuleId: 'nvr.sequence.fill_dash',
-      explanation: `The fill cycles ${fillCycle2b.join(' → ')} each step AND the border alternates solid/dashed. Four frames make both rules clear.`,
-      difficulty: 'medium',
-      shapeRequirement: 'any',
-      minShapes: 1, maxShapes: 1,
-      visibleFrames: 4,
-      primaryRule: `fill cycles ${fillCycle2b.join(' → ')} each step`,
-      secondaryRule: 'border alternates solid ↔ dashed',
-      baseSize: LARGE_BASE_SIZE,
-    },
-
-    {
-      // Count + rotation — count grows while shape rotates
-      // 4 frames: count 1→2→3→4 shapes, each shape rotates deg° per step
-      // answer: 5 shapes at rotation 4×deg°
-      // countStart=1 so answer=5 — within the 5-shape position-grid limit
-      rules: [],  // custom builder
+      rules: [],
       subRuleId: 'nvr.sequence.count_rotate',
-      explanation: `One shape is added each step AND the shape rotates ${deg}°. Track both the growing count and the rotating orientation.`,
+      explanation: `One shape is added each step AND each shape rotates ${deg}°. Track both the growing count and the rotating orientation to find the ? frame.`,
       difficulty: 'medium',
       shapeRequirement: 'strongly_asymmetric',
       minShapes: 1, maxShapes: 5,
       visibleFrames: 4,
       primaryRule: 'count increases by 1 each step',
       secondaryRule: `each shape rotates ${deg}° per step`,
-      baseSize: LARGE_BASE_SIZE,  // 26 — rotation must be clear even with multiple shapes
+      baseSize: LARGE_BASE_SIZE,
       countStart: 1,
       countDelta: 1,
     },
 
+    {
+      rules: [],
+      subRuleId: 'nvr.sequence.size_grow',
+      explanation: 'The shape grows larger each step by the same amount. Compare the sizes across the three visible frames, then find the ? frame with the next size in the sequence.',
+      difficulty: 'medium',
+      shapeRequirement: 'any',
+      minShapes: 1, maxShapes: 1,
+      visibleFrames: 4,
+      primaryRule: 'shape grows by a fixed amount each step',
+      baseSize: 20,
+      sizeDelta: 8,
+    },
+
     // ══════════════════════════════════════════════════════════════════════════
-    // HARD — 2 visible rules, 4 visible frames
-    // Hard = two clearly visible rules that interact, OR a rule with a trap.
-    // Hard NEVER means smaller shapes or more ambiguity.
+    // HARD — two clearly visible rules, 4 visible frames
+    // Must track two independent progressions simultaneously.
     // ══════════════════════════════════════════════════════════════════════════
 
     {
-      // Alternating transform + fill: odd steps rotate 90°, even steps reflect.
-      // 4 frames fully establish the alternation.
-      rules: [
-        { kind: 'alternating', ruleA: { kind: 'rotate', degrees: 90 }, ruleB: { kind: 'reflectX' } },
-        { kind: 'fillCycle', cycle: fillCycle2 },
-      ],
-      subRuleId: 'nvr.sequence.alternating_transform_fill',
-      explanation: `Steps alternate: odd steps rotate 90°, even steps reflect horizontally. Fill also alternates ${fillCycle2.join(' → ')} every step. Four frames establish both patterns.`,
+      rules: [],
+      subRuleId: 'nvr.sequence.size_rotate',
+      explanation: `The shape grows larger AND rotates ${deg}° each step. Track both the increasing size and the rotating orientation across the three visible frames to find the ? frame.`,
       difficulty: 'hard',
       shapeRequirement: 'strongly_asymmetric',
       minShapes: 1, maxShapes: 1,
       visibleFrames: 4,
-      primaryRule: 'operations alternate: rotate 90° / reflect horizontally each step',
-      secondaryRule: `fill alternates ${fillCycle2.join(' → ')}`,
-      baseSize: LARGE_BASE_SIZE,  // 26 — rotation/reflection must be unmistakable
+      primaryRule: 'shape grows by a fixed amount each step',
+      secondaryRule: `shape rotates ${deg}° each step`,
+      baseSize: 20,
+      sizeDelta: 8,
     },
 
     {
-      // 180° rotation + 3-state fill cycle — tracking two independent rules
-      rules: [
-        { kind: 'rotate', degrees: 180 },
-        { kind: 'fillCycle', cycle: fillCycle3 },
-      ],
-      subRuleId: 'nvr.sequence.rotate_180_fill_3state',
-      explanation: `Shape flips 180° each step AND cycles through ${fillCycle3.join(' → ')}. Four frames show all three fill states, making both rules fully evidenced.`,
+      rules: [],
+      subRuleId: 'nvr.sequence.position_rotate',
+      explanation: `The shape moves to the next corner AND rotates ${deg}° each step. Track both position and orientation across the three visible frames to find the ? frame.`,
       difficulty: 'hard',
       shapeRequirement: 'strongly_asymmetric',
       minShapes: 1, maxShapes: 1,
       visibleFrames: 4,
-      primaryRule: '180° flip each step',
-      secondaryRule: `fill cycles 3 states: ${fillCycle3.join(' → ')}`,
+      primaryRule: 'shape orbits the four corner positions each step',
+      secondaryRule: `shape rotates ${deg}° each step`,
+      baseSize: GOOD_BASE_SIZE,
+    },
+
+    {
+      rules: [],
+      subRuleId: 'nvr.sequence.count_shrink_rotate',
+      explanation: `One shape is removed each step AND each shape rotates ${deg}°. Track both the shrinking count and the rotating orientation to find the ? frame.`,
+      difficulty: 'hard',
+      shapeRequirement: 'strongly_asymmetric',
+      minShapes: 1, maxShapes: 5,
+      visibleFrames: 4,
+      primaryRule: 'count decreases by 1 each step',
+      secondaryRule: `each shape rotates ${deg}° per step`,
       baseSize: LARGE_BASE_SIZE,
+      countStart: 4,
+      countDelta: -1,
     },
 
     {
-      // 3-state fill cycle + dash toggle — two independent short-period rules
-      rules: [
-        { kind: 'fillCycle', cycle: fillCycle3 },
-        { kind: 'toggleDash' },
-      ],
-      subRuleId: 'nvr.sequence.fill_3state_dash',
-      explanation: `Fill cycles through ${fillCycle3.join(' → ')} each step. The border also alternates solid ↔ dashed independently. Four frames reveal all fill states and the full dash cycle.`,
+      rules: [],
+      subRuleId: 'nvr.sequence.fill_cycle_count',
+      explanation: `One shape is added each step AND the fill alternates ${fillCycle2.join(' → ')}. Track both the growing count and the changing fill to find the ? frame.`,
+      difficulty: 'hard',
+      shapeRequirement: 'any',
+      minShapes: 1, maxShapes: 5,
+      visibleFrames: 4,
+      primaryRule: 'count increases by 1 each step',
+      secondaryRule: `fill alternates ${fillCycle2.join(' → ')} each step`,
+      baseSize: GOOD_BASE_SIZE,
+      countStart: 1,
+    },
+
+    {
+      rules: [],
+      subRuleId: 'nvr.sequence.position_fill',
+      explanation: `The shape moves to the next corner AND the fill alternates ${fillCycle2.join(' → ')} each step. Track both position and fill to find the ? frame.`,
       difficulty: 'hard',
       shapeRequirement: 'any',
       minShapes: 1, maxShapes: 1,
       visibleFrames: 4,
-      primaryRule: `fill cycles 3 states: ${fillCycle3.join(' → ')}`,
-      secondaryRule: 'border alternates solid ↔ dashed',
-      baseSize: LARGE_BASE_SIZE,
-    },
-
-    {
-      // Rotate + 3-state fill — must track both orientation AND fill index
-      rules: [
-        { kind: 'rotate', degrees: deg },
-        { kind: 'fillCycle', cycle: fillCycle3 },
-      ],
-      subRuleId: 'nvr.sequence.rotate_fill_3state',
-      explanation: `Shape rotates ${deg}° each step AND cycles through fill states ${fillCycle3.join(' → ')}. Must track two independent progressions across four frames.`,
-      difficulty: 'hard',
-      shapeRequirement: 'strongly_asymmetric',
-      minShapes: 1, maxShapes: 1,
-      visibleFrames: 4,
-      primaryRule: `rotation ${deg}° per step`,
-      secondaryRule: `fill cycles 3 states: ${fillCycle3.join(' → ')}`,
-      baseSize: LARGE_BASE_SIZE,  // 26 — rotation must be visible alongside 3-state fill
-    },
-
-    {
-      // Position orbit + fill cycle — shape moves AND changes fill
-      rules: [],  // custom builder (position_orbit_fill)
-      subRuleId: 'nvr.sequence.position_orbit_fill',
-      explanation: `The shape moves to the next corner each step AND alternates fill ${fillCycle2.join(' → ')}. Track both position and fill to find the correct answer.`,
-      difficulty: 'hard',
-      shapeRequirement: 'any',
-      minShapes: 1, maxShapes: 1,
-      visibleFrames: 4,
-      primaryRule: 'shape orbits corner positions each step',
-      secondaryRule: `fill alternates ${fillCycle2.join(' → ')}`,
+      primaryRule: 'shape orbits the four corner positions each step',
+      secondaryRule: `fill alternates ${fillCycle2.join(' → ')} each step`,
       baseSize: GOOD_BASE_SIZE,
     },
   ];
@@ -626,7 +502,7 @@ function buildBaseFrame(
   spec: SequenceSpec,
   fillPool: FillPattern[],
 ): ShapeAttrs[] {
-  const numShapes = spec.minShapes;  // always use minShapes for standard specs
+  const numShapes = spec.minShapes;
   const shapePool = (spec.shapeRequirement === 'strongly_asymmetric')
     ? STRONGLY_ASYMMETRIC
     : ['pentagon', 'star', 'hexagon', 'diamond', 'square', 'circle'] as const;
@@ -642,10 +518,7 @@ function buildBaseFrame(
     const pos = shuffledPos[i % shuffledPos.length];
     const shape = pick(shapePool, rng);
     const fill = pick(fillPool, rng);
-    // GL standard: enforce large base size. Never below GOOD_BASE_SIZE unless spec overrides.
     const size = spec.baseSize ?? GOOD_BASE_SIZE;
-    // Only cardinal angles (0°, 90°, 180°, 270°) — diagonal starts make arrows/triangles
-    // point in ambiguous directions that are hard to track at mobile sizes.
     const rotation = Math.floor(rng() * 4) * 90;
     shapes.push({ id: i, shape, x: pos[0], y: pos[1], size, rotation, fill, dashed: false });
   }
@@ -653,11 +526,10 @@ function buildBaseFrame(
 }
 
 function fillPoolForDiff(diff: string): FillPattern[] {
-  // Always use high-contrast fills so the dominant rule is clear
   return ['none', 'solid'];
 }
 
-// ─── Distractor builder ────────────────────────────────────────────────────────
+// ─── Distractor builders ────────────────────────────────────────────────────────
 
 function buildCountDistractors(
   correctCount: number,
@@ -668,26 +540,58 @@ function buildCountDistractors(
   const positionGrid: [number, number][] = [
     [30, 35], [70, 35], [30, 65], [70, 65], [50, 50],
   ];
-  const MAX_SAFE = positionGrid.length;  // 5 — no shape can share a position slot
+  const MAX_SAFE = positionGrid.length;
 
   const buildFrame = (count: number): ShapeAttrs[] =>
     Array.from({ length: Math.max(0, count) }, (_, i) => ({
-      id: i,
-      shape: shapeType,
+      id: i, shape: shapeType,
       x: positionGrid[i % positionGrid.length][0],
       y: positionGrid[i % positionGrid.length][1],
-      size: baseSize,
-      rotation: 0,
-      fill: fillType,
-      dashed: false,
+      size: baseSize, rotation: 0, fill: fillType, dashed: false,
     }));
 
-  // Alternate over/under count so each is a plausible trap.
-  // Filter: length must be > 0 and ≤ MAX_SAFE (no shape-slot overlap).
   const offsets = [+1, -1, +2, -2, +3, -3, +4, -4];
   const candidates = offsets
     .map(o => buildFrame(correctCount + o))
     .filter(f => f.length > 0 && f.length <= MAX_SAFE);
+
+  return candidates.slice(0, 3);
+}
+
+/**
+ * Distractors for count_rotate and count_shrink_rotate:
+ * wrong count + correct rotation, correct count + wrong rotation, wrong both.
+ */
+function buildCountRotateDistractors(
+  correctCount: number,
+  correctRotation: number,
+  shapeType: string,
+  fillType: FillPattern,
+  baseSize: number,
+): ShapeAttrs[][] {
+  const positionGrid: [number, number][] = [
+    [30, 35], [70, 35], [30, 65], [70, 65], [50, 50],
+  ];
+  const MAX_SAFE = positionGrid.length;
+
+  const buildFrame = (count: number, rotation: number): ShapeAttrs[] =>
+    Array.from({ length: Math.max(1, Math.min(count, MAX_SAFE)) }, (_, i) => ({
+      id: i, shape: shapeType,
+      x: positionGrid[i % MAX_SAFE][0],
+      y: positionGrid[i % MAX_SAFE][1],
+      size: baseSize, rotation, fill: fillType, dashed: false,
+    }));
+
+  const wrongCount = correctCount === 1 ? 2 : Math.max(1, correctCount - 1);
+  const wrongCountAlt = correctCount >= 4 ? Math.max(1, correctCount - 2) : correctCount + 1;
+  const wrongRot = (correctRotation + 90) % 360;
+  const wrongRot2 = (correctRotation + 180) % 360;
+
+  const candidates: ShapeAttrs[][] = [];
+  candidates.push(buildFrame(wrongCount, correctRotation));
+  candidates.push(buildFrame(correctCount, wrongRot));
+  candidates.push(buildFrame(wrongCount, wrongRot2));
+  candidates.push(buildFrame(wrongCountAlt, wrongRot));
 
   return candidates.slice(0, 3);
 }
@@ -702,20 +606,17 @@ function buildPositionOrbitDistractors(
     if (!hasAnyDuplicateAttrOptions([correctFrame, ...pool, d])) pool.push(d);
   };
 
-  // Wrong position: use a different orbit frame
   for (const f of allOrbitFrames) {
     addIfUnique(candidates, f);
     if (candidates.length >= 3) break;
   }
 
-  // Wrong fill: same position but wrong fill
   const wrongFill = correctFrame.map(s => ({
     ...s,
     fill: s.fill === 'none' ? 'solid' as FillPattern : 'none' as FillPattern,
   }));
   addIfUnique(candidates, wrongFill);
 
-  // Wrong position + wrong fill
   if (allOrbitFrames.length >= 2) {
     const wf = allOrbitFrames[0].map(s => ({
       ...s,
@@ -723,6 +624,122 @@ function buildPositionOrbitDistractors(
     }));
     addIfUnique(candidates, wf);
   }
+
+  return candidates.slice(0, 3);
+}
+
+/**
+ * Distractors for position_rotate: wrong position (from orbit frames), wrong rotation, mixed.
+ */
+function buildPositionRotateDistractors(
+  correctFrame: ShapeAttrs[],
+  allOrbitFrames: ShapeAttrs[][],
+  rng: () => number,
+): ShapeAttrs[][] {
+  const candidates: ShapeAttrs[][] = [];
+  const addIfUnique = (d: ShapeAttrs[]) => {
+    if (!hasAnyDuplicateAttrOptions([correctFrame, ...candidates, d])) candidates.push(d);
+  };
+
+  for (const f of allOrbitFrames) {
+    addIfUnique(f);
+    if (candidates.length >= 2) break;
+  }
+
+  const correctRot = correctFrame[0]?.rotation ?? 0;
+  const wrongRot = correctFrame.map(s => ({ ...s, rotation: (correctRot + 90) % 360 }));
+  addIfUnique(wrongRot);
+
+  const wrongRot2 = correctFrame.map(s => ({ ...s, rotation: (correctRot + 180) % 360 }));
+  addIfUnique(wrongRot2);
+
+  if (allOrbitFrames.length >= 1) {
+    const mixedWrong = allOrbitFrames[0].map(s => ({ ...s, rotation: (s.rotation + 180) % 360 }));
+    addIfUnique(mixedWrong);
+  }
+
+  return candidates.slice(0, 3);
+}
+
+/**
+ * Distractors for size_grow: wrong size (±delta), correct size, etc.
+ */
+function buildSizeGrowDistractors(
+  correctSize: number,
+  shape: string,
+  fill: FillPattern,
+  rotation: number,
+  sizeDelta: number,
+): ShapeAttrs[][] {
+  const buildFrame = (size: number, rot: number): ShapeAttrs[] => [{
+    id: 0, shape, x: 50, y: 50,
+    size: Math.max(MIN_SHAPE_SIZE, size),
+    rotation: rot, fill, dashed: false,
+  }];
+
+  const candidates: ShapeAttrs[][] = [];
+  candidates.push(buildFrame(correctSize - sizeDelta, rotation));
+  candidates.push(buildFrame(correctSize + sizeDelta, rotation));
+  candidates.push(buildFrame(correctSize - 2 * sizeDelta, rotation));
+  candidates.push(buildFrame(correctSize + 2 * sizeDelta, rotation));
+
+  const addIfUnique = (d: ShapeAttrs[]) => {
+    const correct = buildFrame(correctSize, rotation);
+    if (!hasAnyDuplicateAttrOptions([correct, ...candidates, d])) candidates.push(d);
+  };
+  addIfUnique(buildFrame(correctSize, (rotation + 90) % 360));
+
+  return candidates.slice(0, 3);
+}
+
+/**
+ * Distractors for size_rotate: wrong size, wrong rotation, wrong both.
+ */
+function buildSizeRotateDistractors(
+  correctFrame: ShapeAttrs[],
+  sizeDelta: number,
+): ShapeAttrs[][] {
+  const correct = correctFrame[0];
+  const candidates: ShapeAttrs[][] = [];
+  const addIfUnique = (d: ShapeAttrs[]) => {
+    if (!hasAnyDuplicateAttrOptions([correctFrame, ...candidates, d])) candidates.push(d);
+  };
+
+  addIfUnique([{ ...correct, size: Math.max(MIN_SHAPE_SIZE, correct.size - sizeDelta) }]);
+  addIfUnique([{ ...correct, rotation: (correct.rotation + 90) % 360 }]);
+  addIfUnique([{ ...correct, size: Math.max(MIN_SHAPE_SIZE, correct.size - sizeDelta), rotation: (correct.rotation + 90) % 360 }]);
+  addIfUnique([{ ...correct, size: Math.max(MIN_SHAPE_SIZE, correct.size - 2 * sizeDelta), rotation: (correct.rotation + 180) % 360 }]);
+
+  return candidates.slice(0, 3);
+}
+
+/**
+ * Distractors for fill_cycle_count: wrong count + right fill, right count + wrong fill, wrong both.
+ */
+function buildFillCycleCountDistractors(
+  correctCount: number,
+  correctFill: FillPattern,
+  shapeType: string,
+  baseSize: number,
+): ShapeAttrs[][] {
+  const positionGrid: [number, number][] = [
+    [30, 35], [70, 35], [30, 65], [70, 65], [50, 50],
+  ];
+  const wrongFill: FillPattern = correctFill === 'none' ? 'solid' : 'none';
+
+  const buildFrame = (count: number, fill: FillPattern): ShapeAttrs[] =>
+    Array.from({ length: Math.max(1, Math.min(count, positionGrid.length)) }, (_, i) => ({
+      id: i, shape: shapeType,
+      x: positionGrid[i][0], y: positionGrid[i][1],
+      size: baseSize, rotation: 0, fill, dashed: false,
+    }));
+
+  const candidates: ShapeAttrs[][] = [];
+  const wrongCount = correctCount === 1 ? 2 : Math.max(1, correctCount - 1);
+  candidates.push(buildFrame(wrongCount, correctFill));
+  candidates.push(buildFrame(correctCount, wrongFill));
+  candidates.push(buildFrame(wrongCount, wrongFill));
+  if (correctCount < 5) candidates.push(buildFrame(correctCount + 1, correctFill));
 
   return candidates.slice(0, 3);
 }
@@ -742,7 +759,6 @@ function buildSequenceDistractors(
     if (!hasAnyDuplicateAttrOptions([correctNext, ...pool, d])) pool.push(d);
   };
 
-  // Rule-based distractors
   addIfUnique(candidates, distractorMissedSecondary(lastFrame, spec.rules));
   addIfUnique(candidates, distractorMissedPrimary(lastFrame, spec.rules));
   addIfUnique(candidates, distractorOffByOne(lastFrame, spec.rules, rng));
@@ -755,7 +771,6 @@ function buildSequenceDistractors(
     addIfUnique(candidates, distractorWrongFill(correctNext, rng));
   }
 
-  // Previous-frame distractors (universally robust)
   addIfUnique(candidates, lastFrame);
   if (visibleFrames.length >= 2) {
     addIfUnique(candidates, visibleFrames[visibleFrames.length - 2]);
@@ -765,8 +780,6 @@ function buildSequenceDistractors(
   const twoStep = applyRuleStack(applyRuleStack(lastFrame, spec.rules, 0), spec.rules, 1);
   addIfUnique(candidates, twoStep);
 
-  // Rotation/fill/size mutations — rotation first so fill-only specs get a meaningful
-  // logical-category distractor rather than a near-identical size variant
   addIfUnique(candidates, distractorWrongRotation(correctNext, rng));
   addIfUnique(candidates, distractorWrongFill(correctNext, rng));
   addIfUnique(candidates, distractorWrongSize(correctNext, rng));
@@ -820,10 +833,11 @@ function generateSequenceBatch(
       const shapePool = ['circle', 'square', 'pentagon', 'hexagon', 'diamond'] as const;
       const shapeType = pick(shapePool, rng);
       const fillType = pick(['none', 'solid'] as FillPattern[], rng);
-      const totalFrames = spec.visibleFrames + 1; // 3 visible + 1 answer
+      const totalFrames = spec.visibleFrames + 1;
       allFrames = buildCountGrowFrames(rng, spec.countStart!, totalFrames, shapeType, fillType, spec.baseSize!);
       visibleFrames = allFrames.slice(0, spec.visibleFrames);
-      correctAttrs = allFrames[spec.visibleFrames];
+      // FIX: correct answer is the frame AT questionIndex (= visibleFrames-1), not one beyond it
+      correctAttrs = allFrames[spec.visibleFrames - 1];
       distractorAttrs = buildCountDistractors(correctAttrs.length, shapeType, fillType, spec.baseSize!);
 
     } else if (spec.subRuleId === 'nvr.sequence.count_shrink') {
@@ -833,8 +847,9 @@ function generateSequenceBatch(
       const totalFrames = spec.visibleFrames + 1;
       allFrames = buildCountShrinkFrames(rng, spec.countStart!, totalFrames, shapeType, fillType, spec.baseSize!);
       visibleFrames = allFrames.slice(0, spec.visibleFrames);
-      correctAttrs = allFrames[spec.visibleFrames];
-      if (correctAttrs.length === 0) continue; // can't have 0-shape answer frame
+      // FIX: correct = the hidden frame (at questionIndex = visibleFrames-1)
+      correctAttrs = allFrames[spec.visibleFrames - 1];
+      if (correctAttrs.length === 0) continue;
       distractorAttrs = buildCountDistractors(correctAttrs.length, shapeType, fillType, spec.baseSize!);
 
     } else if (spec.subRuleId === 'nvr.sequence.count_rotate') {
@@ -842,52 +857,120 @@ function generateSequenceBatch(
       const shapeType = pick(shapePool, rng);
       const fillType: FillPattern = 'none';
       const rngDeg = buildAsymRotAngle(rng);
-      const totalFrames = spec.visibleFrames + 1; // 4 visible + 1 answer
-      // Build count-grow frames then add rotation to each shape
+      const totalFrames = spec.visibleFrames + 1;
       const countFrames = buildCountGrowFrames(rng, spec.countStart!, totalFrames, shapeType, fillType, spec.baseSize!);
       allFrames = countFrames.map((frame, f) =>
         frame.map(s => ({ ...s, rotation: (rngDeg * f) % 360 }))
       );
       visibleFrames = allFrames.slice(0, spec.visibleFrames);
-      correctAttrs = allFrames[spec.visibleFrames];
+      // FIX: correct = frame at questionIndex (visibleFrames-1)
+      correctAttrs = allFrames[spec.visibleFrames - 1];
       if (correctAttrs.length > 5) continue;
-      distractorAttrs = buildCountDistractors(correctAttrs.length, shapeType, fillType, spec.baseSize!);
+      const correctRot = correctAttrs[0]?.rotation ?? 0;
+      distractorAttrs = buildCountRotateDistractors(correctAttrs.length, correctRot, shapeType, fillType, spec.baseSize!);
 
     } else if (spec.subRuleId === 'nvr.sequence.position_orbit') {
       const shapePool = ['square', 'pentagon', 'circle', 'hexagon', 'diamond'] as const;
       const shapeType = pick(shapePool, rng);
       const fillType: FillPattern = 'none';
-      const startPos = Math.floor(rng() * 4); // random start corner
-      const totalFrames = spec.visibleFrames + 1;
-      const orbit: [number, number][] = [
-        [28, 28], [72, 28], [72, 72], [28, 72],
-      ];
-      allFrames = Array.from({ length: totalFrames }, (_, f) => {
-        const pos = orbit[(startPos + f) % 4];
-        return [{ id: 0, shape: shapeType, x: pos[0], y: pos[1], size: spec.baseSize!, rotation: 0, fill: fillType, dashed: false }];
-      });
-      visibleFrames = allFrames.slice(0, spec.visibleFrames);
-      correctAttrs = allFrames[spec.visibleFrames];
-      // Distractors: 3 wrong orbit positions
-      distractorAttrs = buildPositionOrbitDistractors(correctAttrs, allFrames.slice(0, spec.visibleFrames), rng);
-
-    } else if (spec.subRuleId === 'nvr.sequence.position_orbit_fill') {
-      const shapePool = ['square', 'pentagon', 'circle', 'hexagon', 'diamond'] as const;
-      const shapeType = pick(shapePool, rng);
-      const fillCycleOrbit = buildFillCycle2(rng);
       const startPos = Math.floor(rng() * 4);
       const totalFrames = spec.visibleFrames + 1;
-      const orbit: [number, number][] = [
-        [28, 28], [72, 28], [72, 72], [28, 72],
-      ];
-      allFrames = Array.from({ length: totalFrames }, (_, f) => {
+      allFrames = buildPositionOrbitFrames(rng, shapeType, spec.baseSize!, fillType, null, totalFrames, 0, 0);
+      // Offset start position
+      allFrames = allFrames.map((frame, f) => {
+        const orbit: [number, number][] = [[28, 28], [72, 28], [72, 72], [28, 72]];
         const pos = orbit[(startPos + f) % 4];
-        const fill = fillCycleOrbit[f % fillCycleOrbit.length];
-        return [{ id: 0, shape: shapeType, x: pos[0], y: pos[1], size: spec.baseSize!, rotation: 0, fill, dashed: false }];
+        return frame.map(s => ({ ...s, x: pos[0], y: pos[1] }));
       });
       visibleFrames = allFrames.slice(0, spec.visibleFrames);
-      correctAttrs = allFrames[spec.visibleFrames];
-      distractorAttrs = buildPositionOrbitDistractors(correctAttrs, allFrames.slice(0, spec.visibleFrames), rng);
+      // FIX: correct = frame at questionIndex (visibleFrames-1)
+      correctAttrs = allFrames[spec.visibleFrames - 1];
+      distractorAttrs = buildPositionOrbitDistractors(correctAttrs, allFrames.slice(0, spec.visibleFrames - 1), rng);
+
+    } else if (spec.subRuleId === 'nvr.sequence.size_grow') {
+      const shapePool = ['pentagon', 'square', 'hexagon', 'circle', 'diamond'] as const;
+      const shapeType = pick(shapePool, rng);
+      const fillType = pick(['none', 'solid'] as FillPattern[], rng);
+      const delta = spec.sizeDelta!;
+      const totalFrames = spec.visibleFrames + 1;
+      allFrames = buildSizeGrowFrames(shapeType, fillType, spec.baseSize!, delta, totalFrames, 0, 0);
+      visibleFrames = allFrames.slice(0, spec.visibleFrames);
+      correctAttrs = allFrames[spec.visibleFrames - 1];
+      distractorAttrs = buildSizeGrowDistractors(correctAttrs[0].size, shapeType, fillType, 0, delta);
+
+    } else if (spec.subRuleId === 'nvr.sequence.size_rotate') {
+      const shapePool = STRONGLY_ASYMMETRIC;
+      const shapeType = pick(shapePool, rng);
+      const fillType: FillPattern = 'none';
+      const delta = spec.sizeDelta!;
+      const rngDeg = buildAsymRotAngle(rng);
+      const totalFrames = spec.visibleFrames + 1;
+      allFrames = buildSizeGrowFrames(shapeType, fillType, spec.baseSize!, delta, totalFrames, 0, rngDeg);
+      visibleFrames = allFrames.slice(0, spec.visibleFrames);
+      correctAttrs = allFrames[spec.visibleFrames - 1];
+      distractorAttrs = buildSizeRotateDistractors(correctAttrs, delta);
+
+    } else if (spec.subRuleId === 'nvr.sequence.position_rotate') {
+      const shapePool = STRONGLY_ASYMMETRIC;
+      const shapeType = pick(shapePool, rng);
+      const fillType: FillPattern = 'none';
+      const startPos = Math.floor(rng() * 4);
+      const rngDeg = buildAsymRotAngle(rng);
+      const totalFrames = spec.visibleFrames + 1;
+      // Build orbit frames with rotation
+      const orbit: [number, number][] = [[28, 28], [72, 28], [72, 72], [28, 72]];
+      allFrames = Array.from({ length: totalFrames }, (_, f) => {
+        const pos = orbit[(startPos + f) % 4];
+        return [{ id: 0, shape: shapeType, x: pos[0], y: pos[1], size: spec.baseSize!, rotation: (rngDeg * f) % 360, fill: fillType, dashed: false }];
+      });
+      visibleFrames = allFrames.slice(0, spec.visibleFrames);
+      correctAttrs = allFrames[spec.visibleFrames - 1];
+      distractorAttrs = buildPositionRotateDistractors(correctAttrs, allFrames.slice(0, spec.visibleFrames - 1), rng);
+
+    } else if (spec.subRuleId === 'nvr.sequence.count_shrink_rotate') {
+      const shapePool = STRONGLY_ASYMMETRIC;
+      const shapeType = pick(shapePool, rng);
+      const fillType: FillPattern = 'none';
+      const rngDeg = buildAsymRotAngle(rng);
+      const totalFrames = spec.visibleFrames + 1;
+      const countFrames = buildCountShrinkFrames(rng, spec.countStart!, totalFrames, shapeType, fillType, spec.baseSize!);
+      allFrames = countFrames.map((frame, f) =>
+        frame.map(s => ({ ...s, rotation: (rngDeg * f) % 360 }))
+      );
+      visibleFrames = allFrames.slice(0, spec.visibleFrames);
+      correctAttrs = allFrames[spec.visibleFrames - 1];
+      if (correctAttrs.length === 0) continue;
+      const correctRot = correctAttrs[0]?.rotation ?? 0;
+      distractorAttrs = buildCountRotateDistractors(correctAttrs.length, correctRot, shapeType, fillType, spec.baseSize!);
+
+    } else if (spec.subRuleId === 'nvr.sequence.fill_cycle_count') {
+      const shapePool = ['circle', 'square', 'pentagon', 'hexagon', 'diamond'] as const;
+      const shapeType = pick(shapePool, rng);
+      const fillCycle = buildFillCycle2(rng);
+      const totalFrames = spec.visibleFrames + 1;
+      allFrames = buildFillCycleCountFrames(spec.countStart!, totalFrames, shapeType, fillCycle, spec.baseSize!);
+      visibleFrames = allFrames.slice(0, spec.visibleFrames);
+      correctAttrs = allFrames[spec.visibleFrames - 1];
+      const correctFill = correctAttrs[0]?.fill ?? 'none';
+      distractorAttrs = buildFillCycleCountDistractors(correctAttrs.length, correctFill, shapeType, spec.baseSize!);
+
+    } else if (spec.subRuleId === 'nvr.sequence.position_fill') {
+      const shapePool = ['square', 'pentagon', 'circle', 'hexagon', 'diamond'] as const;
+      const shapeType = pick(shapePool, rng);
+      // Only use high-contrast solid/none — no hatched
+      const fillCycle: FillPattern[] = pick([['none', 'solid'], ['solid', 'none']] as FillPattern[][], rng);
+      const startPos = Math.floor(rng() * 4);
+      const totalFrames = spec.visibleFrames + 1;
+      allFrames = buildPositionOrbitFrames(rng, shapeType, spec.baseSize!, fillCycle[0], fillCycle, totalFrames, 0, 0);
+      // Apply start position offset
+      const orbit: [number, number][] = [[28, 28], [72, 28], [72, 72], [28, 72]];
+      allFrames = allFrames.map((frame, f) => {
+        const pos = orbit[(startPos + f) % 4];
+        return frame.map(s => ({ ...s, x: pos[0], y: pos[1] }));
+      });
+      visibleFrames = allFrames.slice(0, spec.visibleFrames);
+      correctAttrs = allFrames[spec.visibleFrames - 1];
+      distractorAttrs = buildPositionOrbitDistractors(correctAttrs, allFrames.slice(0, spec.visibleFrames - 1), rng);
 
     } else {
       // Standard rule-based spec
@@ -895,14 +978,20 @@ function generateSequenceBatch(
       const totalFrames = spec.visibleFrames + 1;
       allFrames = buildSequence(base, spec.rules, totalFrames);
       visibleFrames = allFrames.slice(0, spec.visibleFrames);
-      correctAttrs = allFrames[spec.visibleFrames];
+      // FIX: correct = frame at questionIndex (visibleFrames-1), not one beyond
+      correctAttrs = allFrames[spec.visibleFrames - 1];
       distractorAttrs = buildSequenceDistractors(visibleFrames, correctAttrs, spec, rng);
     }
 
     // ── Validation gate 1: perceptibility (standard specs only) ───────────────
-    if (!['nvr.sequence.count_grow', 'nvr.sequence.count_shrink',
-          'nvr.sequence.count_rotate', 'nvr.sequence.position_orbit',
-          'nvr.sequence.position_orbit_fill'].includes(spec.subRuleId)) {
+    const customBuiltSpecs = [
+      'nvr.sequence.count_grow', 'nvr.sequence.count_shrink',
+      'nvr.sequence.count_rotate', 'nvr.sequence.position_orbit',
+      'nvr.sequence.size_grow', 'nvr.sequence.size_rotate',
+      'nvr.sequence.position_rotate', 'nvr.sequence.count_shrink_rotate',
+      'nvr.sequence.fill_cycle_count', 'nvr.sequence.position_fill',
+    ];
+    if (!customBuiltSpecs.includes(spec.subRuleId)) {
       if (!allFramesPerceptible(allFrames)) continue;
     }
 
@@ -913,7 +1002,7 @@ function generateSequenceBatch(
     if (!fillCycleIsUnambiguous(visibleFrames, spec.rules)) continue;
 
     // ── Validation gate 4: GL minimum shape size ──────────────────────────────
-    if (!minShapeSizeValid(allFrames)) continue;
+    if (!minShapeSizeValid(allFrames.slice(0, spec.visibleFrames))) continue;
 
     // ── Validation gate 5: dominant rule visibility ───────────────────────────
     if (!dominantRuleIsVisible(spec, allFrames)) continue;
@@ -934,10 +1023,9 @@ function generateSequenceBatch(
     const labels = ['A', 'B', 'C', 'D'];
     const stemIdx = generated % stems.length;
 
-    // ── Audit log ────────────────────────────────────────────────────────────
     if (auditLog) {
       const distractorTypes = ['missed_secondary', 'off_by_one', 'missed_primary'];
-      const allShapeSizes = allFrames.flat().map(s => s.size);
+      const allShapeSizes = allFrames.slice(0, spec.visibleFrames).flat().map(s => s.size);
       const minSize = Math.min(...allShapeSizes);
       auditLog.push({
         subRuleId: spec.subRuleId,
@@ -946,7 +1034,7 @@ function generateSequenceBatch(
         secondaryRule: spec.secondaryRule,
         stemFrameCount: spec.visibleFrames,
         mobileCheck: `min shape size: ${minSize} SVG units = ${(minSize * 0.8).toFixed(1)}px at mobile. ${minSize >= MIN_SHAPE_SIZE ? 'PASS' : 'FAIL'}`,
-        evidenceReasoning: `${spec.visibleFrames} visible frames establish the rule${spec.secondaryRule ? 's' : ''}. Minimum shape size: ${minSize} SVG units (${(minSize * 0.8).toFixed(1)}px at 80px panel). All consecutive frame pairs are perceptibly different.`,
+        evidenceReasoning: `${spec.visibleFrames} frames stored; frame at questionIndex (${spec.visibleFrames - 1}) is hidden as "?". correctAttrs = allFrames[${spec.visibleFrames - 1}]. Min size: ${minSize} SVG units.`,
         distractors: distractorSvgs.map((_, i) => ({
           label: labels[(correctIndex + i + 1) % 4],
           type: distractorTypes[i] ?? 'wrong_size',
@@ -993,10 +1081,10 @@ function generateSequenceBatch(
 
 function getDistractorReason(type: string, spec: SequenceSpec): string {
   switch (type) {
-    case 'missed_secondary': return `Applied only the primary rule (${spec.primaryRule}) but ignored the secondary rule. Correct but incomplete.`;
-    case 'off_by_one': return 'Applied the rule one step too many (overshot) or one too few (stopped early).';
-    case 'missed_primary': return `Applied only the secondary rule (${spec.secondaryRule ?? 'n/a'}) but ignored the primary. Wrong orientation or attribute.`;
-    case 'wrong_rotation': return 'Rotated the shape but by the wrong angle or direction.';
+    case 'missed_secondary': return `Applied only the primary rule (${spec.primaryRule}) but ignored the secondary rule. Correct orientation/position but wrong secondary attribute.`;
+    case 'off_by_one': return 'Applied the rule one step too many or one too few — slightly overshot or undershot the answer.';
+    case 'missed_primary': return `Applied only the secondary rule (${spec.secondaryRule ?? 'n/a'}) but ignored the primary. Wrong count, size, or position.`;
+    case 'wrong_rotation': return 'Identified the correct count/size/position but selected the wrong rotation.';
     case 'wrong_fill': return 'Got the shape/orientation correct but predicted the wrong fill state.';
     default: return 'Applied a plausible but incorrect transformation — does not match the rule progression.';
   }

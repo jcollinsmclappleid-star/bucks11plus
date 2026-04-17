@@ -12,7 +12,7 @@ import { eq, and, inArray, sql } from 'drizzle-orm';
 import { generateSequenceQuestions } from './generators/nvr/sequence';
 
 async function main() {
-  console.log('=== NVR Sequence Bank Rebuild (v3 → v4) ===\n');
+  console.log('=== NVR Sequence Bank Rebuild (v5 → v6) ===\n');
 
   // ── 1. Archive ALL existing approved NVR sequence questions ──────────────────
 
@@ -36,9 +36,9 @@ async function main() {
     console.log(`✓ Archived ${ids.length} old sequence questions.\n`);
   }
 
-  // ── 2. Generate new v4 questions ─────────────────────────────────────────────
+  // ── 2. Generate new v6 questions ─────────────────────────────────────────────
 
-  console.log('Generating v4 sequence questions...');
+  console.log('Generating v6 sequence questions...');
   const generated = generateSequenceQuestions();
 
   const byDiff: Record<string, number> = {};
@@ -86,7 +86,7 @@ async function main() {
       cognitiveLoad: q.cognitiveLoad,
       locale: q.locale || 'en-GB',
       britishSpelling: q.britishSpelling !== false,
-      version: q.version ?? 5,
+      version: q.version ?? 6,
       qualityScore: 1,
       qaStatus: 'approved',
       questionPool: 'practice',
@@ -100,7 +100,7 @@ async function main() {
     process.stdout.write(`\r  Inserted ${inserted}/${generated.length}`);
   }
 
-  console.log(`\n✓ Inserted ${inserted} new v4 sequence questions.\n`);
+  console.log(`\n✓ Inserted ${inserted} new v6 sequence questions.\n`);
 
   // ── 4. Summary ────────────────────────────────────────────────────────────────
 
