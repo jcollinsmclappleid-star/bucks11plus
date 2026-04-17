@@ -6,7 +6,7 @@
 
 import { db } from "./db";
 import { questions } from "@shared/schema";
-import { eq } from "drizzle-orm";
+import { eq, and, sql } from "drizzle-orm";
 import { rebuildNvrSequenceQuestions } from "./nvrSequenceRebuild";
 
 type AnyElement = Record<string, any>;
@@ -155,10 +155,11 @@ async function fixTransformSymmetricShapes() {
  *   W3 – promptFrame[2] unchanged (no transformation applied — obviously wrong)
  */
 async function fixTransformAnswerOptions() {
+  // Skip questions with qualityScore >= 1: those have proper diagnostic distractors already
   const tfQuestions = await db
     .select()
     .from(questions)
-    .where(eq(questions.skillId, "nvr.transform"));
+    .where(and(eq(questions.skillId, "nvr.transform"), sql`COALESCE(quality_score, 0) < 1`));
 
   let fixed = 0;
   let skipped = 0;

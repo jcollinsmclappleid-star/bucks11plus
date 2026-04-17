@@ -1,0 +1,170 @@
+You are rebuilding the entire Pattern Recognition question bank for a GL-style 11+ Non-Verbal Reasoning product.
+
+OBJECTIVE
+Rebuild all Pattern Recognition questions so they are genuinely challenging and require cognitive reasoning, not simple visual spotting. The existing bank is too easy because questions rely on one obvious visible rule such as simple rotation, fill alternation, count increase, or size increase. That is not acceptable for scored medium and hard questions.
+
+IMPORTANT
+This is not a graphic generation task first. It is a reasoning-item-generation task first.
+Every question must be built from structured logic and only then rendered visually.
+
+QUESTION DESIGN STANDARD
+Pattern Recognition items must require pupils to:
+- track multiple attributes across a sequence
+- determine what changes and what stays constant
+- identify the governing rule or interacting rules
+- ignore tempting but incorrect surface patterns
+- choose between plausible distractors
+
+DIFFICULTY REQUIREMENTS
+Easy:
+- 1 clear rule
+- 1 changing attribute
+- simple distractors
+- allowed only for onboarding/tutorial or lower-end easy practice
+
+Medium:
+- minimum 2 interacting rules
+- at least 2 changing attributes
+- plausible distractors
+- child must check more than one feature to solve
+
+Hard:
+- minimum 3 interacting rules
+- alternating, conditional, or paired logic required
+- at least 1 masking or invariant feature
+- distractors must be highly plausible
+- answer must not be obvious from one visible pattern alone
+
+BAN THESE LOW-QUALITY PATTERNS
+Do not generate scored questions that rely only on:
+- simple 90 degree rotation
+- simple fill alternation
+- simple count increase by one
+- simple size progression
+- one attribute only
+- weak distractors with obviously wrong options
+These may be used only in tutorial mode, never in core medium/hard banks.
+
+STRUCTURED ATTRIBUTE MODEL
+Each frame in a sequence must be represented as structured attributes, not as an image-first object.
+Use attributes such as:
+- shapeFamily
+- orientation
+- size
+- count
+- position
+- fillType
+- lineStyle
+- internalSymbol
+- symmetryState
+- outerShape
+- innerShape
+- relationshipType
+- presenceAbsence
+- transformationType
+
+RULE ENGINE REQUIREMENTS
+Questions must be built from a rule stack, not a single rule.
+
+Allowed rule families include:
+- rotation
+- reflection
+- translation/position shift
+- count progression
+- size progression
+- fill/shading cycle
+- alternating sequence rules
+- odd/even frame rule splits
+- dependency rules where one attribute changes only if another changes
+- repeating cycles such as A-B-A-B or A-B-C-A-B-C
+- inner/outer interaction rules
+- composite transformations such as rotate + invert fill, reflect + move, add + resize
+
+Rule stack requirements:
+- Medium = minimum 2 active rules
+- Hard = minimum 3 active rules
+- Very hard hard-items may use 4 rules if still clean and fair
+
+DISTRACTOR ENGINE
+Distractors must be generated intentionally from logical near-misses, not random incorrect images.
+
+Distractor types must include:
+- correct shape but wrong orientation
+- correct orientation but wrong fill
+- follows the visible surface pattern but not the deeper rule
+- applies one correct rule but misses the second or third
+- uses the right transformation on the wrong element
+- off-by-one sequence error
+- breaks alternating pattern
+- preserves local similarity while violating global sequence logic
+
+Rules for distractors:
+- 1 correct answer only
+- 3 wrong answers
+- all wrong answers must be plausible
+- no obviously absurd distractors
+- no duplicate distractor logic
+- no accidental second correct answer
+
+VALIDATION LAYER
+Every generated question must pass these checks before saving:
+1. Exactly one correct answer
+2. Meets difficulty minimum rule count
+3. Requires checking more than one attribute for medium/hard
+4. Distractors are plausible and logically distinct
+5. Explanation can be expressed clearly in one sentence
+6. No duplicate answer choices
+7. No rendering artefact or spacing issue gives away the answer
+8. Reject any question that can be solved by spotting one obvious visible pattern only
+
+EXPLANATION REQUIREMENT
+Each item must store a concise explanation describing the true governing logic.
+Example style:
+“The outer shape rotates 90 degrees clockwise each step, while the fill alternates hatched and blank, so the next image must be the rotated blank version.”
+If a clean explanation cannot be generated, reject the item.
+
+BANK REBUILD REQUIREMENTS
+Rebuild the full Pattern Recognition bank from scratch using the new logic architecture.
+Do not lightly mutate existing weak items.
+Archive old items and regenerate medium and hard items completely.
+
+COVERAGE REQUIREMENTS
+Ensure broad coverage across the bank:
+- rotation
+- reflection
+- position movement
+- count progression
+- size changes
+- fill cycles
+- symmetry
+- inner/outer shape interaction
+- alternating rules
+- conditional rules
+- composite rule stacks
+- repeating sequence logic
+- hidden invariants
+
+ANTI-REPETITION RULES
+- do not overuse one rule family
+- do not generate too many triangle-only or circle-only sequences
+- do not let more than a small percentage of hard items be solved mainly by rotation
+- distribute rule families across the bank
+
+OUTPUT / IMPLEMENTATION TASKS
+1. Refactor the pattern recognition generator to use structured attributes
+2. Refactor the rules engine to support multi-rule stacks
+3. Build a distractor engine based on logical near-misses
+4. Build a validation layer that rejects weak or ambiguous items
+5. Rebuild all medium and hard Pattern Recognition questions
+6. Keep only a small separate tutorial bank for genuinely simple examples
+7. Log for each item:
+   - difficulty
+   - rule stack used
+   - correct answer
+   - distractor logic types
+   - explanation
+8. Produce a sample batch of 30 regenerated questions for review, weighted toward medium and hard
+9. Flag any items that still look visually obvious or too easy
+
+SUCCESS CRITERIA
+The new Pattern Recognition bank should feel significantly harder, more GL-like, and require genuine reasoning rather than immediate visual spotting.

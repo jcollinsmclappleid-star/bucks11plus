@@ -198,6 +198,31 @@ export class DatabaseStorage implements IStorage {
     const diag = await this.getDiagnostic(diagnosticId);
     if (!diag) { console.log(`[QFS] Diagnostic not found: ${diagnosticId}`); return []; }
 
+    // Hard-coded fixed free readiness check — always returns the exact same 12 questions in order.
+    // 4 VR | 3 NVR | 3 Maths | 2 English Comprehension (passage P33).
+    // Changing this list requires also updating freePoolData.ts for consistency.
+    if (diagnosticId === 'mini-1') {
+      const FIXED_MINI_IDS = [
+        'b0cfd818-8e8e-48bb-9147-29106ae9b776', // VR codes easy
+        '014bc2f9-2ac0-4884-b157-3a1bf3ca72b5', // VR codes easy
+        'c76b70c4-33da-47e8-a7a1-bb6aaa7a2f92', // VR codes easy
+        'c8b1c95c-cb44-4cd4-8cc2-c56c01d8b685', // VR codes hard
+        'b01dcb3b-36da-4dae-aa20-7612657e4804', // NVR sequence easy
+        '027e644f-e49d-4cad-93f3-347b943baba3', // NVR sequence easy
+        '50f5f906-467d-418b-94c6-d63fb4390573', // NVR sequence easy
+        '79449b25-5f83-4afd-9e9b-ae73a9b4a5e6', // Maths arithmetic medium
+        '4b85534a-0265-4135-8f03-329d04a33e19', // Maths arithmetic medium
+        '85b3bb4b-5e3e-4c72-9e9f-67f64ace728c', // Maths arithmetic medium
+        'comp-p33-q482',                         // English Comprehension P33 medium
+        'comp-p33-q487',                         // English Comprehension P33 medium
+      ];
+      const fetched = await db.select().from(questions).where(inArray(questions.id, FIXED_MINI_IDS));
+      const byId = new Map(fetched.map(q => [q.id, q]));
+      const ordered = FIXED_MINI_IDS.map(id => byId.get(id)).filter(Boolean) as Question[];
+      console.log(`[QFS] mini-1 fixed questions returned: ${ordered.length}/12`);
+      return ordered;
+    }
+
     const isGuestSession = userId.startsWith('guest-');
 
     // Pool segregation: full/mock use the 'diagnostic' pool; mini and all guest sessions are unrestricted

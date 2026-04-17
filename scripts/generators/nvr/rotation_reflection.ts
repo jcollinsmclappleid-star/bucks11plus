@@ -1,208 +1,358 @@
 import type { GeneratedQuestion } from '../types';
 import {
-  type SvgFrame, type SvgElement, type FillPattern,
-  allShapes, simpleShapes, complexShapes, allFills,
-  difficulties, seededRandom, pick, pickOther, shuffleArray,
-  shuffleWithCorrect, makeShape, makeLine, makeDot,
-  safePositions, getDifficultyConfig, buildCompoundFrame,
-  hasAnyDuplicateOptions,
+  type ShapeAttrs, type Rule, type FillPattern,
+  STRONGLY_ASYMMETRIC, ROTATION_SAFE_SHAPES,
+  seededRandom, pick, shuffleWithCorrect,
+  buildShapeFrame,
+  applyRuleStack, frameAttrsToSvg, hasAnyDuplicateOptions,
+  distractorMissedSecondary, distractorWrongRotation,
+  distractorWrongAxis, distractorWrongFill, distractorWrongSize,
+  distractorPartialApply, hasAnyDuplicateAttrOptions,
 } from './shared';
 
-const stemTemplates = [
+const stems = [
   'Shape A is to Shape B as Shape C is to…?',
   'If Shape A becomes Shape B, what does Shape C become?',
   'Shape A transforms into Shape B. Apply the same rule to Shape C.',
   'Which option shows Shape C after the same transformation as A → B?',
 ];
 
-function applyRotation(el: SvgElement, degrees: number): SvgElement {
-  if (el.type === 'shape') return { ...el, rotation: (el.rotation + degrees) % 360 };
-  return el;
-}
-
-function reflectX(el: SvgElement): SvgElement {
-  if (el.type === 'shape') return { ...el, x: 100 - el.x, rotation: (360 - el.rotation) % 360 };
-  if (el.type === 'line') return { ...el, x1: 100 - el.x1, x2: 100 - el.x2 };
-  if (el.type === 'dot') return { ...el, x: 100 - el.x };
-  return el;
-}
-
-function reflectY(el: SvgElement): SvgElement {
-  if (el.type === 'shape') return { ...el, y: 100 - el.y, rotation: (180 - el.rotation + 360) % 360 };
-  if (el.type === 'line') return { ...el, y1: 100 - el.y1, y2: 100 - el.y2 };
-  if (el.type === 'dot') return { ...el, y: 100 - el.y };
-  return el;
-}
-
-function applyToFrame(frame: SvgFrame, fn: (el: SvgElement) => SvgElement): SvgFrame {
-  return { elements: frame.elements.map(fn) };
-}
-
-interface TransformDef {
+interface RotReflSpec {
+  rules: Rule[];
   subRuleId: string;
-  transform: (el: SvgElement) => SvgElement;
-  wrongTransforms: ((el: SvgElement) => SvgElement)[];
   explanation: string;
-  traps: string[];
-  distractorStyleId: string;
+  difficulty: 'easy' | 'medium' | 'hard';
+  shapePool: readonly string[];
+  fillPool: FillPattern[];
+  minObjects: number;
+  maxObjects: number;
 }
 
-const transformDefs: TransformDef[] = [
-  {
-    subRuleId: 'nvr.transform.rotate_90',
-    transform: (el) => applyRotation(el, 90),
-    wrongTransforms: [
-      (el) => applyRotation(el, 180),
-      (el) => applyRotation(el, 270),
-      (el) => applyRotation(el, 45),
-    ],
-    explanation: 'Each shape is turned a quarter-turn clockwise (90°).',
-    traps: ['wrong_rotation', 'reversed_direction'],
-    distractorStyleId: 'wrong_rotation',
-  },
-  {
-    subRuleId: 'nvr.transform.rotate_180',
-    transform: (el) => applyRotation(el, 180),
-    wrongTransforms: [
-      (el) => applyRotation(el, 90),
-      (el) => applyRotation(el, 270),
-      (el) => reflectX(el),
-    ],
-    explanation: 'Each shape is turned a half-turn (180°) — like turning it upside down.',
-    traps: ['wrong_rotation', 'partial_rule'],
-    distractorStyleId: 'wrong_rotation',
-  },
-  {
-    subRuleId: 'nvr.transform.reflect_x',
-    transform: reflectX,
-    wrongTransforms: [
-      reflectY,
-      (el) => applyRotation(el, 180),
-      (el) => { const r = reflectX(el); return applyRotation(r, 45); },
-    ],
-    explanation: 'Each shape is flipped left-to-right — like a mirror held at the side.',
-    traps: ['wrong_axis', 'partial_rule'],
-    distractorStyleId: 'wrong_axis',
-  },
-  {
-    subRuleId: 'nvr.transform.reflect_y',
-    transform: reflectY,
-    wrongTransforms: [
-      reflectX,
-      (el) => applyRotation(el, 180),
-      (el) => { const r = reflectY(el); return applyRotation(r, 90); },
-    ],
-    explanation: 'Each shape is flipped top-to-bottom — like a mirror held underneath.',
-    traps: ['wrong_axis', 'partial_rule'],
-    distractorStyleId: 'wrong_axis',
-  },
-];
+function buildRotReflSpecs(rng: () => number): RotReflSpec[] {
+  const deg = pick([90, 90, 180, 270] as const, rng);
+  const deg2: 90 | 180 | 270 = pick([90, 180, 270] as const, rng);
+  const fillCycle = pick([
+    ['none', 'solid'] as FillPattern[],
+    ['solid', 'hatched'] as FillPattern[],
+    ['none', 'hatched'] as FillPattern[],
+  ], rng);
+  const degLabel = (d: number) => d === 90 ? 'quarter-turn clockwise'
+    : d === 180 ? 'half-turn'
+    : 'three-quarter turn clockwise';
 
-function ensureAxisSafety(x: number, y: number, subRuleId: string): [number, number] {
-  let safeX = x;
-  let safeY = y;
-  if (subRuleId.includes('reflect_x') && Math.abs(safeX - 50) < 10) {
-    safeX = safeX <= 50 ? 38 : 62;
-  }
-  if (subRuleId.includes('reflect_y') && Math.abs(safeY - 50) < 10) {
-    safeY = safeY <= 50 ? 38 : 62;
-  }
-  return [safeX, safeY];
+  return [
+    // ─── EASY: single clear rotation or reflection ─────────────────────────────
+    {
+      rules: [{ kind: 'rotate', degrees: 90 }],
+      subRuleId: 'nvr.transform.rotate_90',
+      explanation: 'Each shape turns a quarter-turn clockwise (90°).',
+      difficulty: 'easy',
+      shapePool: STRONGLY_ASYMMETRIC,
+      fillPool: ['none', 'solid'],
+      minObjects: 1, maxObjects: 2,
+    },
+    {
+      rules: [{ kind: 'rotate', degrees: 180 }],
+      subRuleId: 'nvr.transform.rotate_180',
+      explanation: 'Each shape turns a half-turn (180°).',
+      difficulty: 'easy',
+      shapePool: STRONGLY_ASYMMETRIC,
+      fillPool: ['none', 'solid'],
+      minObjects: 1, maxObjects: 2,
+    },
+    {
+      rules: [{ kind: 'reflectX' }],
+      subRuleId: 'nvr.transform.reflect_x',
+      explanation: 'Each shape is flipped left-to-right (reflected on the vertical axis).',
+      difficulty: 'easy',
+      shapePool: STRONGLY_ASYMMETRIC,
+      fillPool: ['none', 'solid', 'hatched'],
+      minObjects: 1, maxObjects: 2,
+    },
+    {
+      rules: [{ kind: 'reflectY' }],
+      subRuleId: 'nvr.transform.reflect_y',
+      explanation: 'Each shape is flipped top-to-bottom (reflected on the horizontal axis).',
+      difficulty: 'easy',
+      shapePool: STRONGLY_ASYMMETRIC,
+      fillPool: ['none', 'solid', 'hatched'],
+      minObjects: 1, maxObjects: 2,
+    },
+    {
+      rules: [{ kind: 'rotate', degrees: 270 }],
+      subRuleId: 'nvr.transform.rotate_270',
+      explanation: 'Each shape turns three-quarter turn clockwise (270°), which is the same as a quarter-turn anticlockwise.',
+      difficulty: 'easy',
+      shapePool: STRONGLY_ASYMMETRIC,
+      fillPool: ['none', 'solid'],
+      minObjects: 1, maxObjects: 2,
+    },
+
+    // ─── MEDIUM: 2 operations ──────────────────────────────────────────────────
+    {
+      rules: [
+        { kind: 'rotate', degrees: deg },
+        { kind: 'fillCycle', cycle: fillCycle },
+      ],
+      subRuleId: 'nvr.transform.rotate_fill',
+      explanation: `Each shape turns ${degLabel(deg)} and its shading changes.`,
+      difficulty: 'medium',
+      shapePool: STRONGLY_ASYMMETRIC,
+      fillPool: fillCycle,
+      minObjects: 2, maxObjects: 3,
+    },
+    {
+      rules: [
+        { kind: 'reflectX' },
+        { kind: 'scaleSize', delta: 4 },
+      ],
+      subRuleId: 'nvr.transform.reflect_scale',
+      explanation: 'Each shape flips left-to-right and grows in size.',
+      difficulty: 'medium',
+      shapePool: STRONGLY_ASYMMETRIC,
+      fillPool: ['none', 'solid', 'hatched'],
+      minObjects: 2, maxObjects: 3,
+    },
+    {
+      rules: [
+        { kind: 'rotate', degrees: deg },
+        { kind: 'scaleSize', delta: 4 },
+      ],
+      subRuleId: 'nvr.transform.rotate_scale',
+      explanation: `Each shape turns ${degLabel(deg)} and grows in size.`,
+      difficulty: 'medium',
+      shapePool: STRONGLY_ASYMMETRIC,
+      fillPool: ['none', 'solid'],
+      minObjects: 2, maxObjects: 3,
+    },
+    {
+      rules: [
+        { kind: 'reflectX' },
+        { kind: 'fillCycle', cycle: fillCycle },
+      ],
+      subRuleId: 'nvr.transform.reflect_fill',
+      explanation: `Each shape flips left-to-right and its shading changes.`,
+      difficulty: 'medium',
+      shapePool: STRONGLY_ASYMMETRIC,
+      fillPool: fillCycle,
+      minObjects: 2, maxObjects: 3,
+    },
+    {
+      rules: [
+        { kind: 'rotate', degrees: deg },
+        { kind: 'toggleDash' },
+      ],
+      subRuleId: 'nvr.transform.rotate_dash',
+      explanation: `Each shape turns ${degLabel(deg)} and its outline switches solid/dashed.`,
+      difficulty: 'medium',
+      shapePool: STRONGLY_ASYMMETRIC,
+      fillPool: ['none', 'solid'],
+      minObjects: 2, maxObjects: 3,
+    },
+    {
+      rules: [
+        { kind: 'reflectY' },
+        { kind: 'fillCycle', cycle: fillCycle },
+      ],
+      subRuleId: 'nvr.transform.reflect_y_fill',
+      explanation: `Each shape flips top-to-bottom and its shading changes.`,
+      difficulty: 'medium',
+      shapePool: STRONGLY_ASYMMETRIC,
+      fillPool: fillCycle,
+      minObjects: 2, maxObjects: 3,
+    },
+
+    // ─── HARD: compound / conditional rules ────────────────────────────────────
+    {
+      rules: [
+        { kind: 'rotate', degrees: deg },
+        { kind: 'reflectX' },
+      ],
+      subRuleId: 'nvr.transform.rotate_reflect',
+      explanation: `Each shape turns ${degLabel(deg)} and is then also flipped left-to-right.`,
+      difficulty: 'hard',
+      shapePool: STRONGLY_ASYMMETRIC,
+      fillPool: ['none', 'solid', 'hatched'],
+      minObjects: 3, maxObjects: 4,
+    },
+    {
+      rules: [
+        { kind: 'rotate', degrees: deg },
+        { kind: 'fillCycle', cycle: fillCycle },
+        { kind: 'conditional', check: 'fill_is_solid', then: { kind: 'scaleSize', delta: 5 } },
+      ],
+      subRuleId: 'nvr.transform.rotate_fill_conditional',
+      explanation: `Each shape rotates ${degLabel(deg)} and its fill changes. Shapes that become solid also enlarge.`,
+      difficulty: 'hard',
+      shapePool: STRONGLY_ASYMMETRIC,
+      fillPool: fillCycle,
+      minObjects: 3, maxObjects: 4,
+    },
+    {
+      rules: [
+        { kind: 'reflectX' },
+        { kind: 'rotate', degrees: deg },
+        { kind: 'fillCycle', cycle: fillCycle },
+      ],
+      subRuleId: 'nvr.transform.reflect_rotate_fill',
+      explanation: `Each shape flips left-to-right, then turns ${degLabel(deg)}, and its shading also changes.`,
+      difficulty: 'hard',
+      shapePool: STRONGLY_ASYMMETRIC,
+      fillPool: fillCycle,
+      minObjects: 3, maxObjects: 4,
+    },
+    {
+      rules: [
+        { kind: 'rotate', degrees: deg },
+        { kind: 'scaleSize', delta: 4 },
+        { kind: 'toggleDash' },
+      ],
+      subRuleId: 'nvr.transform.rotate_scale_dash',
+      explanation: `Each shape rotates ${degLabel(deg)}, grows in size, and its outline toggles solid/dashed.`,
+      difficulty: 'hard',
+      shapePool: STRONGLY_ASYMMETRIC,
+      fillPool: ['none', 'solid'],
+      minObjects: 3, maxObjects: 4,
+    },
+    {
+      rules: [
+        { kind: 'reflectY' },
+        { kind: 'rotate', degrees: deg },
+        { kind: 'scaleSize', delta: 4 },
+      ],
+      subRuleId: 'nvr.transform.reflect_y_rotate_scale',
+      explanation: `Each shape flips top-to-bottom, turns ${degLabel(deg)}, and grows in size.`,
+      difficulty: 'hard',
+      shapePool: STRONGLY_ASYMMETRIC,
+      fillPool: ['none', 'solid', 'hatched'],
+      minObjects: 3, maxObjects: 4,
+    },
+  ];
 }
 
-export function generateRotationReflectionQuestions(): GeneratedQuestion[] {
-  const questions: GeneratedQuestion[] = [];
-  const perSubRule = 35;
+function buildFrameCSameShapes(frameA: ShapeAttrs[], rng: () => number, fillPool: FillPattern[]): ShapeAttrs[] {
+  const positions: [number, number][] = [
+    [75, 25], [25, 75], [75, 75], [25, 25],
+    [50, 25], [50, 75], [25, 50], [75, 50],
+  ];
+  return frameA.map((orig, i) => {
+    const pos = positions[i % positions.length];
+    return {
+      id: orig.id + 100,
+      shape: orig.shape,
+      x: pos[0],
+      y: pos[1],
+      size: 12 + Math.floor(rng() * 8),
+      rotation: Math.floor(rng() * 8) * 45,
+      fill: pick(fillPool, rng),
+      dashed: false,
+    };
+  });
+}
 
-  for (const def of transformDefs) {
-    for (let i = 0; i < perSubRule; i++) {
-      let seedOffset = 0;
-      let question: GeneratedQuestion | null = null;
+function buildDistractors(
+  frameC: ShapeAttrs[],
+  correctD: ShapeAttrs[],
+  spec: RotReflSpec,
+  rng: () => number,
+): ShapeAttrs[][] {
+  const candidates = [
+    distractorWrongRotation(correctD, rng),
+    distractorWrongAxis(correctD),
+    distractorWrongFill(correctD, rng),
+    distractorWrongSize(correctD, rng),
+    distractorPartialApply(frameC, correctD),
+    distractorMissedSecondary(frameC, spec.rules),
+  ].filter(Boolean) as ShapeAttrs[][];
 
-      while (seedOffset < 10) {
-        const rng = seededRandom(50000 + transformDefs.indexOf(def) * 10000 + i * 173 + seedOffset);
-        rng(); rng(); rng();
+  const chosen: ShapeAttrs[][] = [];
+  for (const d of candidates) {
+    if (chosen.length >= 3) break;
+    if (!hasAnyDuplicateAttrOptions([correctD, ...chosen, d])) chosen.push(d);
+  }
+  while (chosen.length < 3) chosen.push(distractorWrongSize(correctD, rng));
+  return chosen;
+}
 
-        const diffWeights: Array<typeof difficulties[number]> = ['easy', 'medium', 'medium', 'hard', 'hard', 'hard'];
-        const diff = pick(diffWeights, rng);
-        const config = getDifficultyConfig(diff);
-        const stemIdx = i % stemTemplates.length;
+function generateRotReflBatch(startSeed: number, count: number): GeneratedQuestion[] {
+  const results: GeneratedQuestion[] = [];
 
-        const frameA = buildCompoundFrame(
-          rng, config.numShapes, config.shapePool, config.fillPool,
-          false, config.addDots,
-        );
+  for (let i = 0; i < count; i++) {
+    let attempts = 0;
+    while (attempts < 6) {
+      const rng = seededRandom(startSeed + i * 211 + attempts * 43);
+      rng(); rng(); rng();
 
-        frameA.elements = frameA.elements.map(el => {
-          if (el.type === 'shape') {
-            const [sx, sy] = ensureAxisSafety(el.x, el.y, def.subRuleId);
-            return { ...el, x: sx, y: sy };
-          }
-          return el;
-        });
+      const specs = buildRotReflSpecs(rng);
+      const spec = specs[i % specs.length];
+      const numObjects = spec.minObjects + Math.floor(rng() * (spec.maxObjects - spec.minObjects + 1));
 
-        const frameB = applyToFrame(frameA, def.transform);
+      const frameA = buildShapeFrame(rng, numObjects, spec.shapePool, spec.fillPool, 0);
+      const frameB = applyRuleStack(frameA, spec.rules, 0);
 
-        const frameC = buildCompoundFrame(
-          rng, config.numShapes, config.shapePool, config.fillPool,
-          false, config.addDots,
-        );
+      const aSvg = frameAttrsToSvg(frameA);
+      const bSvg = frameAttrsToSvg(frameB);
+      if (JSON.stringify(aSvg) === JSON.stringify(bSvg)) { attempts++; continue; }
 
-        frameC.elements = frameC.elements.map(el => {
-          if (el.type === 'shape') {
-            const [sx, sy] = ensureAxisSafety(el.x, el.y, def.subRuleId);
-            return { ...el, x: sx, y: sy };
-          }
-          return el;
-        });
+      const frameC = buildFrameCSameShapes(frameA, rng, spec.fillPool);
+      const correctD = applyRuleStack(frameC, spec.rules, 0);
+      const cSvg = frameAttrsToSvg(frameC);
+      const dSvg = frameAttrsToSvg(correctD);
+      if (JSON.stringify(cSvg) === JSON.stringify(dSvg)) { attempts++; continue; }
 
-        const correctFrame = applyToFrame(frameC, def.transform);
-        const distractors = def.wrongTransforms.map(wt => applyToFrame(frameC, wt));
+      const distractorAttrs = buildDistractors(frameC, correctD, spec, rng);
+      const distractorSvgs = distractorAttrs.slice(0, 3).map(frameAttrsToSvg);
+      if (hasAnyDuplicateOptions([dSvg, ...distractorSvgs])) { attempts++; continue; }
 
-        const allOptions = [correctFrame, ...distractors];
-        if (hasAnyDuplicateOptions(allOptions)) {
-          seedOffset++;
-          continue;
-        }
+      const { options: answerOptions, correctIndex } = shuffleWithCorrect(dSvg, distractorSvgs, rng);
+      const labels = ['A', 'B', 'C', 'D'];
+      const stemIdx = i % stems.length;
 
-        const { options: answerOptions, correctIndex } = shuffleWithCorrect(correctFrame, distractors, rng);
-        const labels = ['A', 'B', 'C', 'D'];
-
-        question = {
-          section: 'Non-Verbal Reasoning',
-          type: 'rotation_reflection',
-          prompt: stemTemplates[stemIdx],
-          options: labels,
-          correctAnswer: labels[correctIndex],
-          difficulty: diff,
-          skillId: 'nvr.transform',
-          subRuleId: def.subRuleId,
-          renderType: 'svg',
-          renderConfig: {
-            kind: 'nvr.transform' as const,
-            promptFrames: [frameA, frameB, frameC],
-            answerOptions,
-          },
-          trapTypes: def.traps,
-          cognitiveLoad: diff === 'easy' ? 2 : diff === 'medium' ? 4 : 5,
-          estTimeSeconds: diff === 'easy' ? 25 : diff === 'medium' ? 40 : 55,
-          explanation: def.explanation,
-          qaStatus: 'approved',
-          locale: 'en-GB',
-          britishSpelling: true,
-          version: 3,
-          stemVariantId: `stem_rr_${stemIdx}`,
-          layoutVariantId: `compound_${config.numShapes}el`,
-          shapePaletteId: `rr_palette_${i % 6}`,
-          distractorStyleId: def.distractorStyleId,
-          densityLevel: diff === 'easy' ? 'low' : diff === 'medium' ? 'medium' : 'high',
-        };
-        break;
-      }
-
-      if (question) questions.push(question);
+      results.push({
+        section: 'Non-Verbal Reasoning',
+        type: 'rotation_reflection',
+        prompt: stems[stemIdx],
+        options: labels,
+        correctAnswer: labels[correctIndex],
+        difficulty: spec.difficulty,
+        skillId: 'nvr.transform',
+        subRuleId: spec.subRuleId,
+        renderType: 'svg',
+        renderConfig: {
+          kind: 'nvr.transform' as const,
+          promptFrames: [aSvg, bSvg, cSvg],
+          answerOptions,
+        },
+        trapTypes: ['wrong_rotation', 'wrong_axis', 'missed_secondary', 'fill_error'],
+        cognitiveLoad: spec.difficulty === 'easy' ? 2 : spec.difficulty === 'medium' ? 4 : 6,
+        estTimeSeconds: spec.difficulty === 'easy' ? 25 : spec.difficulty === 'medium' ? 40 : 55,
+        explanation: spec.explanation,
+        qaStatus: 'approved',
+        locale: 'en-GB',
+        britishSpelling: true,
+        version: 3,
+        stemVariantId: `stem_rr_${stemIdx}`,
+        layoutVariantId: `rr_${numObjects}el`,
+        densityLevel: spec.difficulty === 'easy' ? 'low' : spec.difficulty === 'medium' ? 'medium' : 'high',
+        distractorStyleId: spec.subRuleId,
+      });
+      break;
     }
   }
 
-  return questions;
+  return results;
+}
+
+export function generateRotationReflectionQuestions(): GeneratedQuestion[] {
+  const all: GeneratedQuestion[] = [
+    ...generateRotReflBatch(80000, 60),
+    ...generateRotReflBatch(90000, 60),
+    ...generateRotReflBatch(100000, 60),
+  ];
+
+  const easy = all.filter(q => q.difficulty === 'easy').slice(0, 40);
+  const medium = all.filter(q => q.difficulty === 'medium').slice(0, 70);
+  const hard = all.filter(q => q.difficulty === 'hard').slice(0, 54);
+
+  return [...easy, ...medium, ...hard];
 }

@@ -1,0 +1,367 @@
+You are rebuilding the Advanced Transformations generator for a GL-style inspired 11+ Non-Verbal Reasoning product.
+
+OBJECTIVE
+Create Advanced Transformation questions that are challenging, fair, visually clear, logically sound, and genuinely solvable by a human child under timed exam conditions.
+
+QUESTION FORMAT
+A transforms into B.
+Apply the same transformation to C.
+Choose the correct answer from 4 options.
+
+CORE DESIGN PRINCIPLE
+A valid item must satisfy all of the following:
+1. logical validity
+2. visual discriminability
+3. human deducibility
+4. unique correct answer
+5. mobile-size fairness
+
+The generator must not produce items that are only mathematically correct in theory.
+It must produce items that a bright 10–11 year old can actually observe, reason through, and solve fairly.
+
+==================================================
+PART 1 — QUALITY STANDARD
+==================================================
+
+Difficulty must come from reasoning, not clutter.
+The best items should feel:
+- clean
+- deliberate
+- deducible
+- challenging but fair
+- suitable for serious 11+ preparation
+
+Every item must allow the intended rule to be described clearly in one short sentence.
+
+Examples of good explanations:
+- “Each shape rotates 180 degrees and becomes larger.”
+- “The whole set reflects vertically and the striped shapes become hollow.”
+- “All shapes move one position clockwise, and shaded shapes rotate 90 degrees.”
+
+If the intended rule cannot be stated clearly in one short sentence, reject the item.
+
+==================================================
+PART 2 — OBJECT COUNT / LAYOUT RULES
+==================================================
+
+Object limits:
+- Easy: 2 to 3 meaningful objects
+- Medium: 3 to 4 meaningful objects
+- Hard: 4 to 5 meaningful objects maximum
+
+Never exceed 5 meaningful objects in the source panel.
+Do not add decorative noise.
+
+Layout rules:
+- spacing must be clear
+- no accidental overlap unless overlap is intentionally part of the rule
+- no clipping against panel edges
+- no crowding that makes identity tracking difficult
+- no large empty imbalance that makes one option look cleaner than others
+
+==================================================
+PART 3 — SHAPE-TRANSFORMATION COMPATIBILITY
+==================================================
+
+Before generating an item, evaluate shape-rule compatibility.
+
+A transformation may only be used if it is visibly perceivable.
+
+Ban mathematically valid but visually imperceptible transformations.
+
+Reject or avoid these combinations unless a strong asymmetric directional marker is added:
+- plain circle + any rotation
+- plain circle + reflection
+- plain square + 90 or 180 degree rotation
+- plain diamond + reflection
+- regular hexagon + rotation
+- regular symmetric polygon + reflection where symmetry hides the change
+- any balanced symmetric icon whose orientation is visually ambiguous after transformation
+
+Allowed only with a strong visible asymmetric cue such as:
+- one shaded corner
+- off-centre dot
+- one striped side
+- notch or cut-out
+- internal directional marker
+- offset line or feature that survives rendering clearly
+
+Preferred shapes for rotation/reflection logic:
+- scalene triangle
+- arrow
+- flag shape
+- irregular trapezium
+- asymmetric pentagon
+- notched polygon
+- semicircle with clear flat-edge orientation
+- asymmetric quadrilateral
+- composite directional shape
+
+Circles or symmetric dots may be used only as:
+- fixed anchors
+- control objects
+- stable references
+Never use them as primary evidence for rotation/reflection.
+
+==================================================
+PART 4 — RULE ENGINE
+==================================================
+
+Use an operator-based transformation engine.
+
+Allowed operator families:
+- rotation: 90, 180, 270 degrees
+- reflection: vertical, horizontal, diagonal only if visually fair
+- translation / position remapping
+- size increase or decrease
+- fill change: hollow, solid, striped, dotted
+- line style change only if clearly visible
+- relative position swap
+- conditional transformation by object attribute
+- set-level transformation plus object-level modifier
+
+Difficulty by rule depth:
+Easy:
+- 1 clear operator only
+
+Medium:
+- 1 main operator + 1 secondary modifier
+
+Hard:
+- 2 linked rules, or 1 main rule + 1 conditional rule
+
+Do not exceed 2 core rules unless the item remains extremely clean, fair, and explainable.
+
+Examples of strong hard rules:
+- all shapes rotate 180 degrees, and shaded shapes also enlarge
+- reflect the set vertically, then swap top and bottom positions
+- rotate all shapes 90 clockwise, but circles remain fixed anchors
+
+Do not create difficulty by using chaotic movement, too many objects, or visually weak transformations.
+
+==================================================
+PART 5 — OBJECT IDENTITY AND CONSISTENCY
+==================================================
+
+Each object in A must have a traceable transformed counterpart in B unless the rule explicitly involves rule-based addition or removal.
+
+If addition/removal exists:
+- it must be rare
+- it must be clearly rule-based
+- it must be explainable in one short sentence
+
+Do not let an object distort so much that it no longer looks like the same object.
+Do not accidentally change shape family unless the rule explicitly requires it.
+
+==================================================
+PART 6 — PERCEPTIBILITY VALIDATOR
+==================================================
+
+For every generated item, run a perceptibility check.
+
+For each transformed object, ask:
+1. Does the transformed version look observably different from the original?
+2. Is that difference still visible at mobile size?
+3. Is the difference large enough to notice under time pressure?
+4. Would a human describe the change confidently without guessing?
+5. Is the item free from reliance on tiny notches, tiny angle changes, or faint line differences?
+
+If any answer is no, reject and regenerate.
+
+==================================================
+PART 7 — AMBIGUITY VALIDATOR
+==================================================
+
+Reject any item where:
+- more than one answer could be reasonably defended
+- object mapping from A to B is unclear
+- there are multiple plausible interpretations of the rule
+- anchor dots/markers may be interpreted inconsistently
+- two options satisfy most of the intended rule
+- explanation could apply to more than one answer
+
+Every item must have exactly one uniquely defensible answer.
+
+==================================================
+PART 8 — DISTRACTOR ENGINE
+==================================================
+
+Each question must have:
+- 1 correct answer
+- 3 wrong answers
+
+Distractors must be diagnostic, not random.
+
+Allowed distractor types:
+- correct rotation, wrong size
+- correct size, wrong reflection
+- correct transformation applied to only some objects
+- correct object states but wrong relative positions
+- missed conditional rule
+- off-by-one positional remap
+- preserved anchors incorrectly
+- transformed wrong object correctly while others are wrong
+
+Distractor rules:
+- all distractors must be plausible
+- no absurd or obviously incorrect option
+- no duplicate distractor logic
+- no visual clutter used as fake difficulty
+- at least one distractor should capture the most likely human error
+
+==================================================
+PART 9 — ACCIDENTAL ANSWER-CUE PREVENTION
+==================================================
+
+Reject any item where the correct answer stands out because of:
+- cleaner layout
+- more balanced spacing
+- less clutter
+- more central grouping
+- unique fill type
+- different stroke weight
+- noticeably neater composition
+- being the only option that preserves object count
+- being the only option that preserves anchors
+
+The correct answer must win because of logic only.
+
+==================================================
+PART 10 — MOBILE / REAL-USE VALIDATION
+==================================================
+
+Assume the item will be viewed on laptop, tablet, and mobile-sized screens.
+
+Validate:
+- stroke width legibility
+- internal fill legibility
+- sufficient object spacing
+- no clipped shapes
+- no need for zooming
+- no reliance on tiny details
+- no perceptual confusion caused by screen scaling
+
+If the item is not fair at smaller sizes, reject it.
+
+==================================================
+PART 11 — EXPLANATION VALIDATOR
+==================================================
+
+Each item must store:
+- intended rule
+- object mapping summary
+- correct option
+- distractor logic types
+- one-sentence explanation
+
+Reject any item where:
+- explanation is vague
+- explanation omits a critical part of the rule
+- explanation sounds simpler than the actual item
+- explanation could fit another option
+
+==================================================
+PART 12 — DIFFICULTY CALIBRATION
+==================================================
+
+Difficulty must be based on more than rule count.
+
+Estimate difficulty using:
+- object count
+- number of active rules
+- whether a conditional rule exists
+- visual tracking load
+- distractor closeness
+- number of comparisons needed
+- perceptual clarity at real size
+
+Hard items must be hard because they require careful reasoning, not because they are messy.
+
+==================================================
+PART 13 — HUMAN-SOLVER SIMULATION
+==================================================
+
+Before accepting an item, run a human-solver simulation:
+- What is the most likely intended rule?
+- Are there any competing interpretations?
+- Could a bright pupil infer the rule from A to B?
+- Would the most plausible distractor tempt a pupil for a valid reason?
+- Does the correct answer still win clearly after careful reasoning?
+
+Reject items that fail this human-deduction test.
+
+==================================================
+PART 14 — REPETITION CONTROL
+==================================================
+
+At bank level, avoid overusing:
+- same shape family
+- same operator pairing
+- same anchor-dot layout
+- same distractor type
+- same overall composition
+- same visual pattern structure
+
+Distribute difficulty and rule families intentionally across the bank.
+
+==================================================
+PART 15 — STYLE CONSISTENCY
+==================================================
+
+Use one coherent visual language:
+- monochrome only unless explicitly required otherwise
+- consistent stroke widths
+- consistent fill styles
+- consistent shape scaling
+- consistent option panel spacing
+- crisp rendering
+- no accidental visual sharpness differences across options
+
+==================================================
+PART 16 — REJECTION RULES
+==================================================
+
+Reject any item if:
+- transformation is mathematically valid but visually imperceptible
+- too many objects are used
+- the rule cannot be stated cleanly
+- more than one answer is arguable
+- distractors are random
+- clutter creates fake difficulty
+- object identity is unclear
+- mobile rendering weakens fairness
+- the correct answer stands out for non-logical reasons
+- the item relies on tiny details
+- the item feels like visual hunting rather than reasoning
+
+==================================================
+PART 17 — IMPLEMENTATION TASK
+==================================================
+
+Please:
+1. audit the current Advanced Transformations generator
+2. identify weak templates, ambiguous templates, cluttered templates, and shape-rule incompatibilities
+3. add a shape-transformation compatibility matrix
+4. add a perceptibility validator
+5. add an ambiguity validator
+6. add accidental-answer-cue checks
+7. rebuild the distractor engine using diagnostic error types
+8. rebuild difficulty calibration using human reasoning load, not just rule count
+9. regenerate the Advanced Transformations bank
+10. keep only items that are visually fair, logically clean, and human-deducible
+11. produce a review batch of:
+   - 5 easy
+   - 10 medium
+   - 10 hard
+12. for each review item, show:
+   - rule used
+   - why the shapes are compatible with the rule
+   - why the transformation is visually fair
+   - why the correct answer is uniquely right
+   - why each distractor is plausibly wrong
+   - one-sentence explanation
+
+FINAL INSTRUCTION
+Do not optimise for abstract geometric correctness.
+Optimise for human-visible, exam-fair, logically clean, GL-style reasoning.
+The item must work in real practice conditions, on real screens, under timed conditions, for a real child.

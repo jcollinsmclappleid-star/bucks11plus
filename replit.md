@@ -9,6 +9,7 @@ A full-stack web platform for Buckinghamshire 11+ exam preparation, aligned to G
 - **Database**: PostgreSQL with Drizzle ORM
 - **Payments**: Stripe (subscription mode via checkout sessions + 7-day free trial on pack_plus), stripe-replit-sync for schema sync
 - **Question Engine**: Rule-tagged questions with skill_id/sub_rule_id, SVG rendering for NVR, chart rendering for data interpretation, anti-repeat via question_usage table
+- **NVR Generator (v3/v4)**: Rebuilt from scratch per GL expert spec. Uses `ShapeAttrs` internal model, shape-compatibility matrix (ROTATION_SAFE/STRONGLY_ASYMMETRIC), cumulative rule stacks (up to 3 rules with conditional/alternating for hard), diagnostic distractor engine (12 distractor types: wrong_rotation, wrong_axis, missed_secondary, etc). Generators: `scripts/generators/nvr/shared.ts` (foundation), `sequence.ts`, `transformation.ts`, `rotation_reflection.ts`, `classification.ts`, `symmetry_spatial.ts`. DB bank: 869 approved NVR questions (280 easy / 287 medium / 302 hard). Old medium/hard archived (qa_status='archived').
 - **Shared**: Schema definitions in `shared/schema.ts`, content types in `shared/contentTypes.ts`, validation in `shared/contentValidation.ts`
 
 ## Project Structure
@@ -115,6 +116,12 @@ content/
 - **badges**: id, name, description, icon, category (milestone/score/accuracy/streak/improvement/speed), tier (bronze/silver/gold/platinum), criteria (jsonb), sortOrder
 - **user_badges**: id, userId, badgeId, earnedAt, sessionId — tracks earned badges per user
 - **stripe.*** (managed by stripe-replit-sync)
+
+## Free Readiness Check (mini-1)
+- Hard-coded to always return the same 12 fixed questions in order (4 VR | 3 NVR | 3 Maths | 2 English Comprehension from passage P33)
+- Implemented as an early-return fast path in `server/storage.ts` `selectQuestionsForSession()` when `diagnosticId === 'mini-1'`
+- Bypasses all pool-selection logic; fetches the 12 question IDs directly
+- Changing the 12 IDs requires updating the `FIXED_MINI_IDS` array in `storage.ts`
 
 ## Guest Diagnostic Flow
 - Guest sessions stored in `test_sessions` with `guestToken` column and nullable `userId`
