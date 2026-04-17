@@ -420,7 +420,8 @@ export async function ensureFreePool() {
 
   await seedCoreComprehensionQuestions();
 
-  // Upsert the full embedded question bank (VR x25, Math x19, NVR x25)
+  // Upsert the full embedded question bank (VR x25, Math x19)
+  // NVR questions are served from the main bank (quality_score=1) — not the free pool
   // This ensures production gets the real question bank even with an empty DB
   let inserted = 0;
   for (const q of FULL_FREE_POOL_QUESTIONS) {
@@ -457,7 +458,7 @@ export async function ensureFreePool() {
     });
     inserted++;
   }
-  console.log(`  [Free Pool] Upserted ${inserted} bank questions (VR/Math/NVR)`);
+  console.log(`  [Free Pool] Upserted ${inserted} bank questions (VR/Math)`);
 
   const [{ count }] = await db
     .select({ count: sql<number>`count(*)` })

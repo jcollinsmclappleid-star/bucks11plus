@@ -207,9 +207,9 @@ export class DatabaseStorage implements IStorage {
         '014bc2f9-2ac0-4884-b157-3a1bf3ca72b5', // VR codes easy
         'c76b70c4-33da-47e8-a7a1-bb6aaa7a2f92', // VR codes easy
         'c8b1c95c-cb44-4cd4-8cc2-c56c01d8b685', // VR codes hard
-        'b01dcb3b-36da-4dae-aa20-7612657e4804', // NVR sequence easy
-        '027e644f-e49d-4cad-93f3-347b943baba3', // NVR sequence easy
-        '50f5f906-467d-418b-94c6-d63fb4390573', // NVR sequence easy
+        '13e6f533-7be8-4728-8066-bbfba10c61eb', // NVR sequence easy (v3)
+        '100ae35d-8c82-4709-b2ce-0d36c5606a76', // NVR symmetry easy (v4)
+        '0c889138-29c0-4fb7-a9cd-a950744cfc9c', // NVR transform easy (v3)
         '79449b25-5f83-4afd-9e9b-ae73a9b4a5e6', // Maths arithmetic medium
         '4b85534a-0265-4135-8f03-329d04a33e19', // Maths arithmetic medium
         '85b3bb4b-5e3e-4c72-9e9f-67f64ace728c', // Maths arithmetic medium
