@@ -338,7 +338,7 @@ function buildSequenceSpecs(rng: () => number): SequenceSpec[] {
       minShapes: 1, maxShapes: 1,
       visibleFrames: 3,
       primaryRule: `rotation ${deg}° clockwise per step`,
-      baseSize: GOOD_BASE_SIZE,  // 24 SVG units = 19.2px — clearly visible rotation
+      baseSize: LARGE_BASE_SIZE,  // 26 SVG units — larger so orientation shift is unmistakable
     },
 
     {
@@ -420,7 +420,7 @@ function buildSequenceSpecs(rng: () => number): SequenceSpec[] {
       minShapes: 1, maxShapes: 1,
       visibleFrames: 3,
       primaryRule: '180° flip each step',
-      baseSize: GOOD_BASE_SIZE,
+      baseSize: LARGE_BASE_SIZE,  // 26 SVG units — 180° flip must be unmistakable
     },
 
     // ══════════════════════════════════════════════════════════════════════════
@@ -443,7 +443,7 @@ function buildSequenceSpecs(rng: () => number): SequenceSpec[] {
       visibleFrames: 4,
       primaryRule: `rotation ${deg}° per step`,
       secondaryRule: `fill alternates ${fillCycle2.join(' → ')}`,
-      baseSize: GOOD_BASE_SIZE,  // 24 — clear rotation AND fill change
+      baseSize: LARGE_BASE_SIZE,  // 26 — rotation must be unmistakable alongside fill change
     },
 
     {
@@ -523,7 +523,7 @@ function buildSequenceSpecs(rng: () => number): SequenceSpec[] {
       visibleFrames: 4,
       primaryRule: 'count increases by 1 each step',
       secondaryRule: `each shape rotates ${deg}° per step`,
-      baseSize: GOOD_BASE_SIZE,
+      baseSize: LARGE_BASE_SIZE,  // 26 — rotation must be clear even with multiple shapes
       countStart: 1,
       countDelta: 1,
     },
@@ -549,7 +549,7 @@ function buildSequenceSpecs(rng: () => number): SequenceSpec[] {
       visibleFrames: 4,
       primaryRule: 'operations alternate: rotate 90° / reflect horizontally each step',
       secondaryRule: `fill alternates ${fillCycle2.join(' → ')}`,
-      baseSize: GOOD_BASE_SIZE,
+      baseSize: LARGE_BASE_SIZE,  // 26 — rotation/reflection must be unmistakable
     },
 
     {
@@ -600,7 +600,7 @@ function buildSequenceSpecs(rng: () => number): SequenceSpec[] {
       visibleFrames: 4,
       primaryRule: `rotation ${deg}° per step`,
       secondaryRule: `fill cycles 3 states: ${fillCycle3.join(' → ')}`,
-      baseSize: GOOD_BASE_SIZE,
+      baseSize: LARGE_BASE_SIZE,  // 26 — rotation must be visible alongside 3-state fill
     },
 
     {
@@ -644,7 +644,9 @@ function buildBaseFrame(
     const fill = pick(fillPool, rng);
     // GL standard: enforce large base size. Never below GOOD_BASE_SIZE unless spec overrides.
     const size = spec.baseSize ?? GOOD_BASE_SIZE;
-    const rotation = Math.floor(rng() * 8) * 45;
+    // Only cardinal angles (0°, 90°, 180°, 270°) — diagonal starts make arrows/triangles
+    // point in ambiguous directions that are hard to track at mobile sizes.
+    const rotation = Math.floor(rng() * 4) * 90;
     shapes.push({ id: i, shape, x: pos[0], y: pos[1], size, rotation, fill, dashed: false });
   }
   return shapes;

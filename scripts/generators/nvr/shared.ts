@@ -54,9 +54,12 @@ export const ROTATION_SAFE_SHAPES = [
   'parallelogram', 'cross', 'pentagon', 'star',
 ] as const;
 
-// Shapes where any rotation shows clearly (not just 90°)
+// Shapes where rotation is UNMISTAKABLY visible at mobile sizes (19–21px rendered).
+// Each shape has a clear pointed/curved feature that shifts dramatically at 90° increments.
+// Removed: kite, parallelogram, trapezoid — these render as thin diamond-like shapes
+// where 90° rotation is nearly imperceptible at <21px rendered size.
 export const STRONGLY_ASYMMETRIC = [
-  'arrow', 'right_triangle', 'kite', 'semicircle', 'trapezoid', 'parallelogram',
+  'arrow', 'right_triangle', 'semicircle',
 ] as const;
 
 // Shapes that should NEVER be the primary evidence for rotation/reflection
