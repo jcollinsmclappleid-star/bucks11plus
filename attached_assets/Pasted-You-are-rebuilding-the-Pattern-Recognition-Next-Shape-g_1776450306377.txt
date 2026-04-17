@@ -1,0 +1,267 @@
+You are rebuilding the Pattern Recognition / Next Shape generator for a GL-style inspired 11+ Non-Verbal Reasoning product.
+
+CRITICAL PROBLEM
+The current generator is producing pattern questions that may be mathematically distinct, but they are not cognitively fair or clearly inferable to a human child.
+
+The generator is creating:
+- tiny visual changes
+- near-identical answer options
+- weak stem evidence
+- patterns that only make sense after reading the explanation
+- questions based on micro-differences rather than real reasoning
+
+This is not acceptable.
+
+CORE PRINCIPLE
+A valid Pattern Recognition question must be:
+1. visibly clear
+2. inferable from the stem
+3. uniquely solvable
+4. fair at mobile size
+5. based on human reasoning, not tiny rendering differences
+
+The generator must optimise for human-visible logic, not abstract rule correctness.
+
+==================================================
+PART 1 — HUMAN-SOLVER STANDARD
+==================================================
+
+A child should be able to solve the question by:
+1. noticing the main changing feature
+2. confirming it across the stem frames
+3. identifying any secondary visible rule
+4. selecting the only option that fits both
+
+If the child first has to guess what feature even matters, reject the item.
+
+==================================================
+PART 2 — DOMINANT RULE REQUIREMENT
+==================================================
+
+Every pattern question must have one obvious primary feature to track.
+
+Allowed primary features:
+- count
+- position
+- orientation
+- shape family
+- large visible fill state
+- clearly visible size change
+- presence / absence of a large element
+
+The primary rule must be recognisable within 1–2 seconds by a human viewer.
+
+Do not create items where all changes are tiny, equally weak, or hard to notice.
+
+==================================================
+PART 3 — VISIBLE CHANGE THRESHOLD
+==================================================
+
+Between each pair of stem frames, at least one meaningful change must be clearly visible at first glance.
+
+Reject any item where the main change is only:
+- tiny growth
+- slight rotation
+- tiny angle change
+- faint fill change
+- micro-position drift
+- subtle line or outline difference
+- changes visible only when staring closely
+
+If the rule is not obvious from normal viewing, reject it.
+
+==================================================
+PART 4 — STEM EVIDENCE SUFFICIENCY
+==================================================
+
+The visible stem must provide enough evidence to infer the next figure uniquely.
+
+Use:
+- 3 stem frames only for simple rules or one main rule + one very obvious secondary rule
+- 4 stem frames for alternating rules, two visible cycles, or harder interactions
+
+Reject any item where the next figure depends on a rule that has not been visibly established enough times.
+
+If the explanation is smarter than the visible stem, reject the item.
+
+==================================================
+PART 5 — BAN MICRO-SHAPE QUESTIONS
+==================================================
+
+Do not build pattern questions around:
+- a single tiny shape only
+- two tiny shapes only
+- tiny curved segments
+- tiny diamonds
+- tiny marks whose orientation changes are barely visible
+- minimal objects that do not carry enough visual information
+
+Pattern questions need enough visual substance to support reasoning.
+
+Prefer larger, clearer objects and more meaningful visible changes.
+
+==================================================
+PART 6 — GOOD PATTERN TYPES
+==================================================
+
+Prefer patterns based on:
+- count progression
+- object movement around positions
+- clear 90-degree orientation changes
+- large fill alternation in a visible object
+- shape family cycling
+- outer/inner component interaction
+- two clearly separable visible rules
+- addition/removal of large visible elements
+- position + fill or orientation + count combinations
+
+Difficulty should come from reasoning across clearly visible changes, not from tiny distinctions.
+
+==================================================
+PART 7 — ANSWER OPTION SEPARATION
+==================================================
+
+The 4 answer options must be cognitively distinct, not just graphically distinct.
+
+Reject any item where the options differ only by:
+- slight angle changes
+- marginal size differences
+- tiny fill differences
+- near-identical curved shapes
+- almost imperceptible positional shifts
+
+Answer options must differ by meaningful logical categories such as:
+- different orientation state
+- different fill state
+- different count
+- different position
+- different object relationship
+- different rule phase
+
+The child should be able to compare options by logic, not by pixel-hunting.
+
+==================================================
+PART 8 — DISTRACTOR DESIGN
+==================================================
+
+Distractors must represent likely reasoning mistakes.
+
+Allowed distractor types:
+- correct primary rule, wrong secondary rule
+- correct count, wrong position
+- correct orientation, wrong fill
+- correct alternation phase, wrong size
+- off-by-one step in sequence
+- preserved wrong object while changing the right one
+- partial rule application
+
+Reject distractors that are merely tiny variants of the correct answer.
+
+At least one distractor should reflect the most likely human error.
+
+==================================================
+PART 9 — EXPLANATION HONESTY
+==================================================
+
+Each item must have a short explanation, but the explanation must reflect only what is visibly supported by the stem.
+
+Reject any item where the explanation claims:
+- “clearly visible”
+- “obvious”
+- “both changes are clear”
+if the rendered sequence does not genuinely support that claim.
+
+If the explanation makes more sense than the question image, the item is invalid.
+
+==================================================
+PART 10 — MOBILE FAIRNESS
+==================================================
+
+Assume the question will be viewed on a mobile-sized screen.
+
+Reject any item where:
+- objects are too small
+- fill differences are too faint
+- rotation is too subtle
+- visual evidence requires zooming
+- options are too similar to distinguish quickly
+- the stem frames look nearly identical
+
+==================================================
+PART 11 — IMAGE-LEVEL VALIDATION
+==================================================
+
+After symbolic generation, render the actual panels and validate the final images.
+
+For every item ask:
+1. What is the dominant visible rule?
+2. Is it obvious from the rendered stem?
+3. Is there enough evidence to infer the next frame uniquely?
+4. Are the answer options meaningfully separated?
+5. Would a human child solve this by reasoning, not by hunting for tiny differences?
+
+If any answer is no, reject and regenerate.
+
+The rendered image, not the metadata, is the source of truth.
+
+==================================================
+PART 12 — HARD QUESTION RULE
+==================================================
+
+Hard questions must still be human-solvable.
+
+Hard should mean:
+- two visible rules
+- clearer distractor traps
+- more disciplined reasoning
+
+Hard must NOT mean:
+- tinier differences
+- more ambiguity
+- smaller objects
+- weaker evidence
+- near-identical answer options
+
+==================================================
+PART 13 — REJECTION RULES
+==================================================
+
+Reject any item if:
+- the stem frames look too similar
+- the options are near-duplicates
+- the main change is too small
+- the item relies on micro-rotation or micro-growth
+- a child would need to guess what feature matters
+- the explanation depends on hidden generator logic
+- the question is mathematically valid but visually weak
+- the item would be unfair under timed 11+ conditions
+
+==================================================
+PART 14 — IMPLEMENTATION TASK
+==================================================
+
+Please:
+1. audit the current Pattern Recognition generator
+2. identify weak micro-difference templates
+3. ban tiny-shape / tiny-change question structures
+4. add a dominant-rule validator
+5. add a stem-evidence sufficiency validator
+6. add an answer-separation validator
+7. add an explanation-honesty validator
+8. regenerate the Pattern Recognition bank using only human-clear pattern structures
+9. produce a review batch of:
+   - 5 easy
+   - 10 medium
+   - 10 hard
+10. for each review item show:
+   - dominant visible rule
+   - secondary rule if any
+   - why the stem gives enough evidence
+   - why each distractor is wrong
+   - why the options are meaningfully distinct
+   - why the question is fair on mobile
+
+FINAL INSTRUCTION
+Do not generate mathematically distinct but visually trivial questions.
+Generate human-solvable pattern questions where the rule is visible, inferable, and fair.
+The child must solve by reasoning from clear evidence, not by comparing tiny differences between nearly identical shapes.

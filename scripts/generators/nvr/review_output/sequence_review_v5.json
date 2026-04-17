@@ -1,0 +1,640 @@
+[
+  {
+    "subRuleId": "nvr.sequence.fill_cycle_only",
+    "difficulty": "easy",
+    "primaryRule": "fill alternates none → solid each step",
+    "stemFrameCount": 3,
+    "mobileCheck": "min shape size: 26 SVG units = 20.8px at mobile. PASS",
+    "evidenceReasoning": "3 visible frames establish the rule. Minimum shape size: 26 SVG units (20.8px at 80px panel). All consecutive frame pairs are perceptibly different.",
+    "distractors": [
+      {
+        "label": "D",
+        "type": "missed_secondary",
+        "whyWrong": "Applied only the primary rule (fill alternates none → solid each step) but ignored the secondary rule. Correct but incomplete."
+      },
+      {
+        "label": "A",
+        "type": "off_by_one",
+        "whyWrong": "Applied the rule one step too many (overshot) or one too few (stopped early)."
+      },
+      {
+        "label": "B",
+        "type": "missed_primary",
+        "whyWrong": "Applied only the secondary rule (n/a) but ignored the primary. Wrong orientation or attribute."
+      }
+    ]
+  },
+  {
+    "subRuleId": "nvr.sequence.count_grow",
+    "difficulty": "easy",
+    "primaryRule": "count increases by 1 each step (1 → 2 → 3 → 4)",
+    "stemFrameCount": 3,
+    "mobileCheck": "min shape size: 24 SVG units = 19.2px at mobile. PASS",
+    "evidenceReasoning": "3 visible frames establish the rule. Minimum shape size: 24 SVG units (19.2px at 80px panel). All consecutive frame pairs are perceptibly different.",
+    "distractors": [
+      {
+        "label": "A",
+        "type": "missed_secondary",
+        "whyWrong": "Applied only the primary rule (count increases by 1 each step (1 → 2 → 3 → 4)) but ignored the secondary rule. Correct but incomplete."
+      },
+      {
+        "label": "B",
+        "type": "off_by_one",
+        "whyWrong": "Applied the rule one step too many (overshot) or one too few (stopped early)."
+      },
+      {
+        "label": "C",
+        "type": "missed_primary",
+        "whyWrong": "Applied only the secondary rule (n/a) but ignored the primary. Wrong orientation or attribute."
+      }
+    ]
+  },
+  {
+    "subRuleId": "nvr.sequence.count_shrink",
+    "difficulty": "easy",
+    "primaryRule": "count decreases by 1 each step (4 → 3 → 2 → 1)",
+    "stemFrameCount": 3,
+    "mobileCheck": "min shape size: 24 SVG units = 19.2px at mobile. PASS",
+    "evidenceReasoning": "3 visible frames establish the rule. Minimum shape size: 24 SVG units (19.2px at 80px panel). All consecutive frame pairs are perceptibly different.",
+    "distractors": [
+      {
+        "label": "B",
+        "type": "missed_secondary",
+        "whyWrong": "Applied only the primary rule (count decreases by 1 each step (4 → 3 → 2 → 1)) but ignored the secondary rule. Correct but incomplete."
+      },
+      {
+        "label": "C",
+        "type": "off_by_one",
+        "whyWrong": "Applied the rule one step too many (overshot) or one too few (stopped early)."
+      },
+      {
+        "label": "D",
+        "type": "missed_primary",
+        "whyWrong": "Applied only the secondary rule (n/a) but ignored the primary. Wrong orientation or attribute."
+      }
+    ]
+  },
+  {
+    "subRuleId": "nvr.sequence.dash_toggle",
+    "difficulty": "easy",
+    "primaryRule": "border alternates solid ↔ dashed each step",
+    "stemFrameCount": 3,
+    "mobileCheck": "min shape size: 26 SVG units = 20.8px at mobile. PASS",
+    "evidenceReasoning": "3 visible frames establish the rule. Minimum shape size: 26 SVG units (20.8px at 80px panel). All consecutive frame pairs are perceptibly different.",
+    "distractors": [
+      {
+        "label": "D",
+        "type": "missed_secondary",
+        "whyWrong": "Applied only the primary rule (border alternates solid ↔ dashed each step) but ignored the secondary rule. Correct but incomplete."
+      },
+      {
+        "label": "A",
+        "type": "off_by_one",
+        "whyWrong": "Applied the rule one step too many (overshot) or one too few (stopped early)."
+      },
+      {
+        "label": "B",
+        "type": "missed_primary",
+        "whyWrong": "Applied only the secondary rule (n/a) but ignored the primary. Wrong orientation or attribute."
+      }
+    ]
+  },
+  {
+    "subRuleId": "nvr.sequence.rotate_fill",
+    "difficulty": "medium",
+    "primaryRule": "rotation 90° per step",
+    "secondaryRule": "fill alternates none → solid",
+    "stemFrameCount": 4,
+    "mobileCheck": "min shape size: 24 SVG units = 19.2px at mobile. PASS",
+    "evidenceReasoning": "4 visible frames establish the rules. Minimum shape size: 24 SVG units (19.2px at 80px panel). All consecutive frame pairs are perceptibly different.",
+    "distractors": [
+      {
+        "label": "A",
+        "type": "missed_secondary",
+        "whyWrong": "Applied only the primary rule (rotation 90° per step) but ignored the secondary rule. Correct but incomplete."
+      },
+      {
+        "label": "B",
+        "type": "off_by_one",
+        "whyWrong": "Applied the rule one step too many (overshot) or one too few (stopped early)."
+      },
+      {
+        "label": "C",
+        "type": "missed_primary",
+        "whyWrong": "Applied only the secondary rule (fill alternates none → solid) but ignored the primary. Wrong orientation or attribute."
+      }
+    ]
+  },
+  {
+    "subRuleId": "nvr.sequence.rotate_dash",
+    "difficulty": "medium",
+    "primaryRule": "rotation 180° per step",
+    "secondaryRule": "border alternates solid ↔ dashed",
+    "stemFrameCount": 4,
+    "mobileCheck": "min shape size: 26 SVG units = 20.8px at mobile. PASS",
+    "evidenceReasoning": "4 visible frames establish the rules. Minimum shape size: 26 SVG units (20.8px at 80px panel). All consecutive frame pairs are perceptibly different.",
+    "distractors": [
+      {
+        "label": "A",
+        "type": "missed_secondary",
+        "whyWrong": "Applied only the primary rule (rotation 180° per step) but ignored the secondary rule. Correct but incomplete."
+      },
+      {
+        "label": "B",
+        "type": "off_by_one",
+        "whyWrong": "Applied the rule one step too many (overshot) or one too few (stopped early)."
+      },
+      {
+        "label": "C",
+        "type": "missed_primary",
+        "whyWrong": "Applied only the secondary rule (border alternates solid ↔ dashed) but ignored the primary. Wrong orientation or attribute."
+      }
+    ]
+  },
+  {
+    "subRuleId": "nvr.sequence.position_orbit",
+    "difficulty": "medium",
+    "primaryRule": "shape orbits the four corner positions each step",
+    "stemFrameCount": 4,
+    "mobileCheck": "min shape size: 24 SVG units = 19.2px at mobile. PASS",
+    "evidenceReasoning": "4 visible frames establish the rule. Minimum shape size: 24 SVG units (19.2px at 80px panel). All consecutive frame pairs are perceptibly different.",
+    "distractors": [
+      {
+        "label": "D",
+        "type": "missed_secondary",
+        "whyWrong": "Applied only the primary rule (shape orbits the four corner positions each step) but ignored the secondary rule. Correct but incomplete."
+      },
+      {
+        "label": "A",
+        "type": "off_by_one",
+        "whyWrong": "Applied the rule one step too many (overshot) or one too few (stopped early)."
+      },
+      {
+        "label": "B",
+        "type": "missed_primary",
+        "whyWrong": "Applied only the secondary rule (n/a) but ignored the primary. Wrong orientation or attribute."
+      }
+    ]
+  },
+  {
+    "subRuleId": "nvr.sequence.fill_dash",
+    "difficulty": "medium",
+    "primaryRule": "fill cycles solid → none each step",
+    "secondaryRule": "border alternates solid ↔ dashed",
+    "stemFrameCount": 4,
+    "mobileCheck": "min shape size: 26 SVG units = 20.8px at mobile. PASS",
+    "evidenceReasoning": "4 visible frames establish the rules. Minimum shape size: 26 SVG units (20.8px at 80px panel). All consecutive frame pairs are perceptibly different.",
+    "distractors": [
+      {
+        "label": "A",
+        "type": "missed_secondary",
+        "whyWrong": "Applied only the primary rule (fill cycles solid → none each step) but ignored the secondary rule. Correct but incomplete."
+      },
+      {
+        "label": "B",
+        "type": "off_by_one",
+        "whyWrong": "Applied the rule one step too many (overshot) or one too few (stopped early)."
+      },
+      {
+        "label": "C",
+        "type": "missed_primary",
+        "whyWrong": "Applied only the secondary rule (border alternates solid ↔ dashed) but ignored the primary. Wrong orientation or attribute."
+      }
+    ]
+  },
+  {
+    "subRuleId": "nvr.sequence.count_rotate",
+    "difficulty": "medium",
+    "primaryRule": "count increases by 1 each step",
+    "secondaryRule": "each shape rotates 180° per step",
+    "stemFrameCount": 4,
+    "mobileCheck": "min shape size: 24 SVG units = 19.2px at mobile. PASS",
+    "evidenceReasoning": "4 visible frames establish the rules. Minimum shape size: 24 SVG units (19.2px at 80px panel). All consecutive frame pairs are perceptibly different.",
+    "distractors": [
+      {
+        "label": "D",
+        "type": "missed_secondary",
+        "whyWrong": "Applied only the primary rule (count increases by 1 each step) but ignored the secondary rule. Correct but incomplete."
+      },
+      {
+        "label": "A",
+        "type": "off_by_one",
+        "whyWrong": "Applied the rule one step too many (overshot) or one too few (stopped early)."
+      },
+      {
+        "label": "B",
+        "type": "missed_primary",
+        "whyWrong": "Applied only the secondary rule (each shape rotates 180° per step) but ignored the primary. Wrong orientation or attribute."
+      }
+    ]
+  },
+  {
+    "subRuleId": "nvr.sequence.alternating_transform_fill",
+    "difficulty": "hard",
+    "primaryRule": "operations alternate: rotate 90° / reflect horizontally each step",
+    "secondaryRule": "fill alternates solid → none",
+    "stemFrameCount": 4,
+    "mobileCheck": "min shape size: 24 SVG units = 19.2px at mobile. PASS",
+    "evidenceReasoning": "4 visible frames establish the rules. Minimum shape size: 24 SVG units (19.2px at 80px panel). All consecutive frame pairs are perceptibly different.",
+    "distractors": [
+      {
+        "label": "A",
+        "type": "missed_secondary",
+        "whyWrong": "Applied only the primary rule (operations alternate: rotate 90° / reflect horizontally each step) but ignored the secondary rule. Correct but incomplete."
+      },
+      {
+        "label": "B",
+        "type": "off_by_one",
+        "whyWrong": "Applied the rule one step too many (overshot) or one too few (stopped early)."
+      },
+      {
+        "label": "C",
+        "type": "missed_primary",
+        "whyWrong": "Applied only the secondary rule (fill alternates solid → none) but ignored the primary. Wrong orientation or attribute."
+      }
+    ]
+  },
+  {
+    "subRuleId": "nvr.sequence.rotate_180_fill_3state",
+    "difficulty": "hard",
+    "primaryRule": "180° flip each step",
+    "secondaryRule": "fill cycles 3 states: solid → none → hatched",
+    "stemFrameCount": 4,
+    "mobileCheck": "min shape size: 26 SVG units = 20.8px at mobile. PASS",
+    "evidenceReasoning": "4 visible frames establish the rules. Minimum shape size: 26 SVG units (20.8px at 80px panel). All consecutive frame pairs are perceptibly different.",
+    "distractors": [
+      {
+        "label": "A",
+        "type": "missed_secondary",
+        "whyWrong": "Applied only the primary rule (180° flip each step) but ignored the secondary rule. Correct but incomplete."
+      },
+      {
+        "label": "B",
+        "type": "off_by_one",
+        "whyWrong": "Applied the rule one step too many (overshot) or one too few (stopped early)."
+      },
+      {
+        "label": "C",
+        "type": "missed_primary",
+        "whyWrong": "Applied only the secondary rule (fill cycles 3 states: solid → none → hatched) but ignored the primary. Wrong orientation or attribute."
+      }
+    ]
+  },
+  {
+    "subRuleId": "nvr.sequence.fill_3state_dash",
+    "difficulty": "hard",
+    "primaryRule": "fill cycles 3 states: none → hatched → solid",
+    "secondaryRule": "border alternates solid ↔ dashed",
+    "stemFrameCount": 4,
+    "mobileCheck": "min shape size: 26 SVG units = 20.8px at mobile. PASS",
+    "evidenceReasoning": "4 visible frames establish the rules. Minimum shape size: 26 SVG units (20.8px at 80px panel). All consecutive frame pairs are perceptibly different.",
+    "distractors": [
+      {
+        "label": "D",
+        "type": "missed_secondary",
+        "whyWrong": "Applied only the primary rule (fill cycles 3 states: none → hatched → solid) but ignored the secondary rule. Correct but incomplete."
+      },
+      {
+        "label": "A",
+        "type": "off_by_one",
+        "whyWrong": "Applied the rule one step too many (overshot) or one too few (stopped early)."
+      },
+      {
+        "label": "B",
+        "type": "missed_primary",
+        "whyWrong": "Applied only the secondary rule (border alternates solid ↔ dashed) but ignored the primary. Wrong orientation or attribute."
+      }
+    ]
+  },
+  {
+    "subRuleId": "nvr.sequence.rotate_fill_3state",
+    "difficulty": "hard",
+    "primaryRule": "rotation 90° per step",
+    "secondaryRule": "fill cycles 3 states: none → solid → hatched",
+    "stemFrameCount": 4,
+    "mobileCheck": "min shape size: 24 SVG units = 19.2px at mobile. PASS",
+    "evidenceReasoning": "4 visible frames establish the rules. Minimum shape size: 24 SVG units (19.2px at 80px panel). All consecutive frame pairs are perceptibly different.",
+    "distractors": [
+      {
+        "label": "A",
+        "type": "missed_secondary",
+        "whyWrong": "Applied only the primary rule (rotation 90° per step) but ignored the secondary rule. Correct but incomplete."
+      },
+      {
+        "label": "B",
+        "type": "off_by_one",
+        "whyWrong": "Applied the rule one step too many (overshot) or one too few (stopped early)."
+      },
+      {
+        "label": "C",
+        "type": "missed_primary",
+        "whyWrong": "Applied only the secondary rule (fill cycles 3 states: none → solid → hatched) but ignored the primary. Wrong orientation or attribute."
+      }
+    ]
+  },
+  {
+    "subRuleId": "nvr.sequence.position_orbit_fill",
+    "difficulty": "hard",
+    "primaryRule": "shape orbits corner positions each step",
+    "secondaryRule": "fill alternates none → solid",
+    "stemFrameCount": 4,
+    "mobileCheck": "min shape size: 24 SVG units = 19.2px at mobile. PASS",
+    "evidenceReasoning": "4 visible frames establish the rules. Minimum shape size: 24 SVG units (19.2px at 80px panel). All consecutive frame pairs are perceptibly different.",
+    "distractors": [
+      {
+        "label": "C",
+        "type": "missed_secondary",
+        "whyWrong": "Applied only the primary rule (shape orbits corner positions each step) but ignored the secondary rule. Correct but incomplete."
+      },
+      {
+        "label": "D",
+        "type": "off_by_one",
+        "whyWrong": "Applied the rule one step too many (overshot) or one too few (stopped early)."
+      },
+      {
+        "label": "A",
+        "type": "missed_primary",
+        "whyWrong": "Applied only the secondary rule (fill alternates none → solid) but ignored the primary. Wrong orientation or attribute."
+      }
+    ]
+  },
+  {
+    "subRuleId": "nvr.sequence.rotate_only",
+    "difficulty": "easy",
+    "primaryRule": "rotation 90° clockwise per step",
+    "stemFrameCount": 3,
+    "mobileCheck": "min shape size: 24 SVG units = 19.2px at mobile. PASS",
+    "evidenceReasoning": "3 visible frames establish the rule. Minimum shape size: 24 SVG units (19.2px at 80px panel). All consecutive frame pairs are perceptibly different.",
+    "distractors": [
+      {
+        "label": "A",
+        "type": "missed_secondary",
+        "whyWrong": "Applied only the primary rule (rotation 90° clockwise per step) but ignored the secondary rule. Correct but incomplete."
+      },
+      {
+        "label": "B",
+        "type": "off_by_one",
+        "whyWrong": "Applied the rule one step too many (overshot) or one too few (stopped early)."
+      },
+      {
+        "label": "C",
+        "type": "missed_primary",
+        "whyWrong": "Applied only the secondary rule (n/a) but ignored the primary. Wrong orientation or attribute."
+      }
+    ]
+  },
+  {
+    "subRuleId": "nvr.sequence.fill_cycle_only",
+    "difficulty": "easy",
+    "primaryRule": "fill alternates solid → none each step",
+    "stemFrameCount": 3,
+    "mobileCheck": "min shape size: 26 SVG units = 20.8px at mobile. PASS",
+    "evidenceReasoning": "3 visible frames establish the rule. Minimum shape size: 26 SVG units (20.8px at 80px panel). All consecutive frame pairs are perceptibly different.",
+    "distractors": [
+      {
+        "label": "A",
+        "type": "missed_secondary",
+        "whyWrong": "Applied only the primary rule (fill alternates solid → none each step) but ignored the secondary rule. Correct but incomplete."
+      },
+      {
+        "label": "B",
+        "type": "off_by_one",
+        "whyWrong": "Applied the rule one step too many (overshot) or one too few (stopped early)."
+      },
+      {
+        "label": "C",
+        "type": "missed_primary",
+        "whyWrong": "Applied only the secondary rule (n/a) but ignored the primary. Wrong orientation or attribute."
+      }
+    ]
+  },
+  {
+    "subRuleId": "nvr.sequence.count_grow",
+    "difficulty": "easy",
+    "primaryRule": "count increases by 1 each step (1 → 2 → 3 → 4)",
+    "stemFrameCount": 3,
+    "mobileCheck": "min shape size: 24 SVG units = 19.2px at mobile. PASS",
+    "evidenceReasoning": "3 visible frames establish the rule. Minimum shape size: 24 SVG units (19.2px at 80px panel). All consecutive frame pairs are perceptibly different.",
+    "distractors": [
+      {
+        "label": "A",
+        "type": "missed_secondary",
+        "whyWrong": "Applied only the primary rule (count increases by 1 each step (1 → 2 → 3 → 4)) but ignored the secondary rule. Correct but incomplete."
+      },
+      {
+        "label": "B",
+        "type": "off_by_one",
+        "whyWrong": "Applied the rule one step too many (overshot) or one too few (stopped early)."
+      },
+      {
+        "label": "C",
+        "type": "missed_primary",
+        "whyWrong": "Applied only the secondary rule (n/a) but ignored the primary. Wrong orientation or attribute."
+      }
+    ]
+  },
+  {
+    "subRuleId": "nvr.sequence.count_shrink",
+    "difficulty": "easy",
+    "primaryRule": "count decreases by 1 each step (4 → 3 → 2 → 1)",
+    "stemFrameCount": 3,
+    "mobileCheck": "min shape size: 24 SVG units = 19.2px at mobile. PASS",
+    "evidenceReasoning": "3 visible frames establish the rule. Minimum shape size: 24 SVG units (19.2px at 80px panel). All consecutive frame pairs are perceptibly different.",
+    "distractors": [
+      {
+        "label": "B",
+        "type": "missed_secondary",
+        "whyWrong": "Applied only the primary rule (count decreases by 1 each step (4 → 3 → 2 → 1)) but ignored the secondary rule. Correct but incomplete."
+      },
+      {
+        "label": "C",
+        "type": "off_by_one",
+        "whyWrong": "Applied the rule one step too many (overshot) or one too few (stopped early)."
+      },
+      {
+        "label": "D",
+        "type": "missed_primary",
+        "whyWrong": "Applied only the secondary rule (n/a) but ignored the primary. Wrong orientation or attribute."
+      }
+    ]
+  },
+  {
+    "subRuleId": "nvr.sequence.dash_toggle",
+    "difficulty": "easy",
+    "primaryRule": "border alternates solid ↔ dashed each step",
+    "stemFrameCount": 3,
+    "mobileCheck": "min shape size: 26 SVG units = 20.8px at mobile. PASS",
+    "evidenceReasoning": "3 visible frames establish the rule. Minimum shape size: 26 SVG units (20.8px at 80px panel). All consecutive frame pairs are perceptibly different.",
+    "distractors": [
+      {
+        "label": "D",
+        "type": "missed_secondary",
+        "whyWrong": "Applied only the primary rule (border alternates solid ↔ dashed each step) but ignored the secondary rule. Correct but incomplete."
+      },
+      {
+        "label": "A",
+        "type": "off_by_one",
+        "whyWrong": "Applied the rule one step too many (overshot) or one too few (stopped early)."
+      },
+      {
+        "label": "B",
+        "type": "missed_primary",
+        "whyWrong": "Applied only the secondary rule (n/a) but ignored the primary. Wrong orientation or attribute."
+      }
+    ]
+  },
+  {
+    "subRuleId": "nvr.sequence.rotate_180_only",
+    "difficulty": "easy",
+    "primaryRule": "180° flip each step",
+    "stemFrameCount": 3,
+    "mobileCheck": "min shape size: 24 SVG units = 19.2px at mobile. PASS",
+    "evidenceReasoning": "3 visible frames establish the rule. Minimum shape size: 24 SVG units (19.2px at 80px panel). All consecutive frame pairs are perceptibly different.",
+    "distractors": [
+      {
+        "label": "D",
+        "type": "missed_secondary",
+        "whyWrong": "Applied only the primary rule (180° flip each step) but ignored the secondary rule. Correct but incomplete."
+      },
+      {
+        "label": "A",
+        "type": "off_by_one",
+        "whyWrong": "Applied the rule one step too many (overshot) or one too few (stopped early)."
+      },
+      {
+        "label": "B",
+        "type": "missed_primary",
+        "whyWrong": "Applied only the secondary rule (n/a) but ignored the primary. Wrong orientation or attribute."
+      }
+    ]
+  },
+  {
+    "subRuleId": "nvr.sequence.rotate_fill",
+    "difficulty": "medium",
+    "primaryRule": "rotation 90° per step",
+    "secondaryRule": "fill alternates solid → none",
+    "stemFrameCount": 4,
+    "mobileCheck": "min shape size: 24 SVG units = 19.2px at mobile. PASS",
+    "evidenceReasoning": "4 visible frames establish the rules. Minimum shape size: 24 SVG units (19.2px at 80px panel). All consecutive frame pairs are perceptibly different.",
+    "distractors": [
+      {
+        "label": "A",
+        "type": "missed_secondary",
+        "whyWrong": "Applied only the primary rule (rotation 90° per step) but ignored the secondary rule. Correct but incomplete."
+      },
+      {
+        "label": "B",
+        "type": "off_by_one",
+        "whyWrong": "Applied the rule one step too many (overshot) or one too few (stopped early)."
+      },
+      {
+        "label": "C",
+        "type": "missed_primary",
+        "whyWrong": "Applied only the secondary rule (fill alternates solid → none) but ignored the primary. Wrong orientation or attribute."
+      }
+    ]
+  },
+  {
+    "subRuleId": "nvr.sequence.rotate_dash",
+    "difficulty": "medium",
+    "primaryRule": "rotation 90° per step",
+    "secondaryRule": "border alternates solid ↔ dashed",
+    "stemFrameCount": 4,
+    "mobileCheck": "min shape size: 26 SVG units = 20.8px at mobile. PASS",
+    "evidenceReasoning": "4 visible frames establish the rules. Minimum shape size: 26 SVG units (20.8px at 80px panel). All consecutive frame pairs are perceptibly different.",
+    "distractors": [
+      {
+        "label": "A",
+        "type": "missed_secondary",
+        "whyWrong": "Applied only the primary rule (rotation 90° per step) but ignored the secondary rule. Correct but incomplete."
+      },
+      {
+        "label": "B",
+        "type": "off_by_one",
+        "whyWrong": "Applied the rule one step too many (overshot) or one too few (stopped early)."
+      },
+      {
+        "label": "C",
+        "type": "missed_primary",
+        "whyWrong": "Applied only the secondary rule (border alternates solid ↔ dashed) but ignored the primary. Wrong orientation or attribute."
+      }
+    ]
+  },
+  {
+    "subRuleId": "nvr.sequence.position_orbit",
+    "difficulty": "medium",
+    "primaryRule": "shape orbits the four corner positions each step",
+    "stemFrameCount": 4,
+    "mobileCheck": "min shape size: 24 SVG units = 19.2px at mobile. PASS",
+    "evidenceReasoning": "4 visible frames establish the rule. Minimum shape size: 24 SVG units (19.2px at 80px panel). All consecutive frame pairs are perceptibly different.",
+    "distractors": [
+      {
+        "label": "C",
+        "type": "missed_secondary",
+        "whyWrong": "Applied only the primary rule (shape orbits the four corner positions each step) but ignored the secondary rule. Correct but incomplete."
+      },
+      {
+        "label": "D",
+        "type": "off_by_one",
+        "whyWrong": "Applied the rule one step too many (overshot) or one too few (stopped early)."
+      },
+      {
+        "label": "A",
+        "type": "missed_primary",
+        "whyWrong": "Applied only the secondary rule (n/a) but ignored the primary. Wrong orientation or attribute."
+      }
+    ]
+  },
+  {
+    "subRuleId": "nvr.sequence.fill_dash",
+    "difficulty": "medium",
+    "primaryRule": "fill cycles solid → none each step",
+    "secondaryRule": "border alternates solid ↔ dashed",
+    "stemFrameCount": 4,
+    "mobileCheck": "min shape size: 26 SVG units = 20.8px at mobile. PASS",
+    "evidenceReasoning": "4 visible frames establish the rules. Minimum shape size: 26 SVG units (20.8px at 80px panel). All consecutive frame pairs are perceptibly different.",
+    "distractors": [
+      {
+        "label": "D",
+        "type": "missed_secondary",
+        "whyWrong": "Applied only the primary rule (fill cycles solid → none each step) but ignored the secondary rule. Correct but incomplete."
+      },
+      {
+        "label": "A",
+        "type": "off_by_one",
+        "whyWrong": "Applied the rule one step too many (overshot) or one too few (stopped early)."
+      },
+      {
+        "label": "B",
+        "type": "missed_primary",
+        "whyWrong": "Applied only the secondary rule (border alternates solid ↔ dashed) but ignored the primary. Wrong orientation or attribute."
+      }
+    ]
+  },
+  {
+    "subRuleId": "nvr.sequence.count_rotate",
+    "difficulty": "medium",
+    "primaryRule": "count increases by 1 each step",
+    "secondaryRule": "each shape rotates 180° per step",
+    "stemFrameCount": 4,
+    "mobileCheck": "min shape size: 24 SVG units = 19.2px at mobile. PASS",
+    "evidenceReasoning": "4 visible frames establish the rules. Minimum shape size: 24 SVG units (19.2px at 80px panel). All consecutive frame pairs are perceptibly different.",
+    "distractors": [
+      {
+        "label": "D",
+        "type": "missed_secondary",
+        "whyWrong": "Applied only the primary rule (count increases by 1 each step) but ignored the secondary rule. Correct but incomplete."
+      },
+      {
+        "label": "A",
+        "type": "off_by_one",
+        "whyWrong": "Applied the rule one step too many (overshot) or one too few (stopped early)."
+      },
+      {
+        "label": "B",
+        "type": "missed_primary",
+        "whyWrong": "Applied only the secondary rule (each shape rotates 180° per step) but ignored the primary. Wrong orientation or attribute."
+      }
+    ]
+  }
+]

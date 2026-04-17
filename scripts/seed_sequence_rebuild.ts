@@ -86,7 +86,7 @@ async function main() {
       cognitiveLoad: q.cognitiveLoad,
       locale: q.locale || 'en-GB',
       britishSpelling: q.britishSpelling !== false,
-      version: 4,
+      version: q.version ?? 5,
       qualityScore: 1,
       qaStatus: 'approved',
       questionPool: 'practice',
