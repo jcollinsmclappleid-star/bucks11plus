@@ -7,7 +7,7 @@ import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClie
 import { sql, eq, and, desc, inArray } from "drizzle-orm";
 import { db } from "./db";
 import { computeAttemptMetrics, computeFullAnalytics, type AnswerRecord, type DrillAnswerRecord, type HistoricalMetrics } from "./metrics";
-import { sendDiagnosticCompleteEmail, sendTrialWelcomeEmail, sendAdminNotificationEmail, sendGuideDownloadAdminEmail } from "./email";
+import { sendDiagnosticCompleteEmail, sendAdminNotificationEmail, sendGuideDownloadAdminEmail } from "./email";
 import { learnArticles } from "../client/src/data/learn-articles";
 import { ensureFreePool, repairSeedQuestions } from "./seed";
 import {
@@ -271,30 +271,19 @@ export async function registerRoutes(
       }
 
       const activeSubs = subscriptions.data.filter(s => s.status !== "canceled");
-      const isOnTrial = user.trialEndsAt && new Date(user.trialEndsAt) > new Date();
 
       if (activeSubs.length === 0) {
-        // No Stripe subscription exists (e.g. trial lapsed without payment) —
-        // sync the database to free so the user is in a clean state.
+        // No Stripe subscription exists — sync to free so the user is in a clean state.
         await storage.updateUserSubscription(user.id, "free", undefined);
-        await storage.updateUserTrial(user.id, null);
         const { password: _, ...safeUser } = await storage.getUser(user.id) as any;
         return res.json({ success: true, user: safeUser, cancelledImmediately: true });
       }
 
       for (const sub of activeSubs) {
-        if (isOnTrial || sub.status === "trialing") {
-          await stripe.subscriptions.cancel(sub.id);
-        } else {
-          await stripe.subscriptions.update(sub.id, { cancel_at_period_end: true });
-        }
-      }
-      if (isOnTrial || activeSubs.some(s => s.status === "trialing")) {
-        await storage.updateUserSubscription(user.id, "free", undefined);
-        await storage.updateUserTrial(user.id, null);
+        await stripe.subscriptions.update(sub.id, { cancel_at_period_end: true });
       }
       const { password: _, ...safeUser } = await storage.getUser(user.id) as any;
-      res.json({ success: true, user: safeUser, cancelledImmediately: !!(isOnTrial || activeSubs.some(s => s.status === "trialing")) });
+      res.json({ success: true, user: safeUser, cancelledImmediately: false });
     } catch (error) {
       next(error);
     }
@@ -469,8 +458,7 @@ export async function registerRoutes(
 
       const stripe = await getUncachableStripeClient();
       const checkoutSession = await stripe.checkout.sessions.retrieve(session_id);
-      const isTrial = checkoutSession.payment_status === "no_payment_required";
-      if (checkoutSession.payment_status !== "paid" && !isTrial) {
+      if (checkoutSession.payment_status !== "paid") {
         return res.status(400).json({ message: "Payment not confirmed" });
       }
       const sessionUserId = checkoutSession.metadata?.userId;
@@ -488,7 +476,7 @@ export async function registerRoutes(
 
       const currentRank = TIER_RANK[currentUser.subscriptionTier] || 0;
       const newRank = TIER_RANK[tier] || 0;
-      if (newRank <= currentRank && !isTrial) {
+      if (newRank <= currentRank) {
         const { password: _, ...safeUser } = currentUser;
         return res.json(safeUser);
       }
@@ -516,32 +504,14 @@ export async function registerRoutes(
         await storage.updateUserStripeInfo(req.user!.id, checkoutSession.customer);
       }
 
-      if (isTrial && checkoutSession.subscription) {
-        try {
-          const subscription = await stripe.subscriptions.retrieve(checkoutSession.subscription as string);
-          if (subscription.trial_end) {
-            const trialEndDate = new Date(subscription.trial_end * 1000);
-            await storage.updateUserTrial(req.user!.id, trialEndDate);
-            await sendTrialWelcomeEmail(req.user!.id, trialEndDate);
-          }
-        } catch (err) {
-          console.error('[Checkout] Failed to store trial end date:', err);
-        }
-        sendAdminNotificationEmail("trial_start", {
-          userEmail: currentUser.email || currentUser.username || req.user!.id,
-          tier,
-          timestamp: new Date(),
-        }).catch(err => console.error('[AdminEmail] trial_start error:', err));
-      } else {
-        const paidPence = checkoutSession.amount_total || 0;
-        const paidStr = paidPence > 0 ? `£${(paidPence / 100).toFixed(2)}` : undefined;
-        sendAdminNotificationEmail("payment", {
-          userEmail: currentUser.email || currentUser.username || req.user!.id,
-          tier,
-          amount: paidStr,
-          timestamp: new Date(),
-        }).catch(err => console.error('[AdminEmail] payment error:', err));
-      }
+      const paidPence = checkoutSession.amount_total || 0;
+      const paidStr = paidPence > 0 ? `£${(paidPence / 100).toFixed(2)}` : undefined;
+      sendAdminNotificationEmail("payment", {
+        userEmail: currentUser.email || currentUser.username || req.user!.id,
+        tier,
+        amount: paidStr,
+        timestamp: new Date(),
+      }).catch(err => console.error('[AdminEmail] payment error:', err));
 
       const programmeTiers = new Set(["programme8", "programme12", "programme16", "programme16_family", "programme24_plus"]);
       if (programmeTiers.has(tier)) {

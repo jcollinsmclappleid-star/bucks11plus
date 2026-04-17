@@ -270,25 +270,6 @@ export default function Account() {
                         {currentTier === "pack_monthly" && (
                           <p className="text-xs text-muted-foreground mt-1">Renews monthly. Cancel any time before your next billing date.</p>
                         )}
-                        {user.trialEndsAt && new Date(user.trialEndsAt) > new Date() && (
-                          <div className="mt-3 p-3 bg-amber-50 rounded-lg border border-amber-200" data-testid="banner-account-trial">
-                            <p className="text-xs font-semibold text-amber-900">
-                              Free trial — {Math.ceil((new Date(user.trialEndsAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24))} days remaining
-                            </p>
-                            <p className="text-xs text-amber-700 mt-0.5">
-                              Nothing charged until {new Date(user.trialEndsAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}. Cancel before then to pay nothing.
-                            </p>
-                            <Button
-                              size="sm"
-                              className="mt-2 h-7 text-xs"
-                              onClick={() => manageBillingMutation.mutate()}
-                              disabled={manageBillingMutation.isPending}
-                              data-testid="button-convert-trial"
-                            >
-                              Convert to Paid Plan
-                            </Button>
-                          </div>
-                        )}
                       </div>
                     </div>
                   </div>
@@ -321,17 +302,11 @@ export default function Account() {
                             data-testid="button-cancel-subscription"
                           >
                             <span className="flex items-center gap-2">
-                              <span>
-                                {user.trialEndsAt && new Date(user.trialEndsAt) > new Date()
-                                  ? "Cancel free trial"
-                                  : "Cancel subscription"}
-                              </span>
+                              <span>Cancel subscription</span>
                             </span>
                           </Button>
                           <p className="text-xs text-muted-foreground px-1">
-                            {user.trialEndsAt && new Date(user.trialEndsAt) > new Date()
-                              ? "Cancel before your trial ends and you will not be charged."
-                              : "You will keep full access until the end of your current billing period. No future payments will be taken."}
+                            You will keep full access until the end of your current billing period. No future payments will be taken.
                           </p>
                         </div>
                       )}
@@ -687,9 +662,7 @@ export default function Account() {
                 <div>
                   <h2 className="font-bold text-lg text-slate-900">Subscription cancelled</h2>
                   <p className="text-sm text-muted-foreground">
-                    {cancelResult.cancelledImmediately
-                      ? "Your free trial has been cancelled. No payment has been taken."
-                      : "Your subscription will end at the current billing period. You keep full access until then."}
+                    Your subscription will end at the current billing period. You keep full access until then.
                   </p>
                 </div>
               </div>
@@ -704,26 +677,13 @@ export default function Account() {
                   <AlertTriangle className="h-5 w-5 text-amber-600" />
                 </div>
                 <div>
-                  <h2 className="font-bold text-lg text-slate-900">
-                    {user?.trialEndsAt && new Date(user.trialEndsAt) > new Date()
-                      ? "Cancel your free trial?"
-                      : "Cancel your subscription?"}
-                  </h2>
+                  <h2 className="font-bold text-lg text-slate-900">Cancel your subscription?</h2>
                   <p className="text-sm text-muted-foreground">Please confirm you want to cancel.</p>
                 </div>
               </div>
               <div className="p-4 bg-slate-50 rounded-lg border border-slate-100 text-sm text-slate-700 space-y-1">
-                {user?.trialEndsAt && new Date(user.trialEndsAt) > new Date() ? (
-                  <>
-                    <p>Your trial will be cancelled immediately.</p>
-                    <p className="text-green-700 font-medium">You will not be charged — no payment will ever be taken.</p>
-                  </>
-                ) : (
-                  <>
-                    <p>Your subscription will remain active until the end of the current billing period.</p>
-                    <p className="text-muted-foreground">No future payments will be taken after cancellation.</p>
-                  </>
-                )}
+                <p>Your subscription will remain active until the end of the current billing period.</p>
+                <p className="text-muted-foreground">No future payments will be taken after cancellation.</p>
               </div>
               <div className="flex flex-col gap-2">
                 <Button
@@ -732,11 +692,7 @@ export default function Account() {
                   disabled={cancelSubscriptionMutation.isPending}
                   data-testid="button-confirm-cancel-subscription"
                 >
-                  {cancelSubscriptionMutation.isPending
-                    ? "Cancelling…"
-                    : user?.trialEndsAt && new Date(user.trialEndsAt) > new Date()
-                      ? "Yes, cancel my trial"
-                      : "Yes, cancel my subscription"}
+                  {cancelSubscriptionMutation.isPending ? "Cancelling…" : "Yes, cancel my subscription"}
                 </Button>
                 <Button
                   variant="outline"
@@ -772,7 +728,6 @@ export default function Account() {
               <ul className="text-sm text-slate-700 space-y-1 list-disc list-inside pl-1">
                 <li>Deleting your account will permanently remove your data.</li>
                 <li>If you have an active subscription, it will be cancelled immediately — you will not be charged for any future billing period.</li>
-                <li>If you are on a free trial, no payment will ever be taken.</li>
                 <li>This action cannot be undone.</li>
               </ul>
               {hasStripeAccount && (

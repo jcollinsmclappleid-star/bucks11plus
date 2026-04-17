@@ -81,25 +81,6 @@ export default function Dashboard() {
         description="View your child's 11+ readiness forecast, pace analysis, and priority focus areas."
       />
 
-      {user?.trialEndsAt && new Date(user.trialEndsAt) > new Date() && (
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-center justify-between gap-4" data-testid="banner-trial-status">
-          <div className="flex items-center gap-3">
-            <Clock className="h-5 w-5 text-amber-600 shrink-0" />
-            <div>
-              <p className="font-semibold text-amber-900 text-sm">
-                Free trial — {Math.ceil((new Date(user.trialEndsAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24))} days remaining
-              </p>
-              <p className="text-amber-700 text-xs">
-                Subscription starts on {new Date(user.trialEndsAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}. Cancel anytime before then.
-              </p>
-            </div>
-          </div>
-          <Button variant="outline" size="sm" asChild className="shrink-0 border-amber-300 text-amber-800 hover:bg-amber-100" data-testid="button-manage-trial">
-            <Link href="/app/account">Manage</Link>
-          </Button>
-        </div>
-      )}
-
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-primary" data-testid="text-dashboard-title">
