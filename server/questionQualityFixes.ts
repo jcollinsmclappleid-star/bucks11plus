@@ -7,8 +7,6 @@
 import { db } from "./db";
 import { questions } from "@shared/schema";
 import { eq, and, sql } from "drizzle-orm";
-import { rebuildNvrSequenceQuestions } from "./nvrSequenceRebuild";
-
 type AnyElement = Record<string, any>;
 type Frame = { elements: AnyElement[] };
 
@@ -216,13 +214,10 @@ async function fixTransformAnswerOptions() {
 
 export async function applyQuestionQualityFixes() {
 
-  // ── Fix 1: NVR sequence — complete rebuild with proper patterns ────────────
-  await rebuildNvrSequenceQuestions();
-
-  // ── Fix 2a: NVR transform — replace symmetric shapes so rotation is visible ─
+  // ── Fix 1: NVR transform — replace symmetric shapes so rotation is visible ─
   await fixTransformSymmetricShapes();
 
-  // ── Fix 2b: NVR transform — distinctly different wrong options ────────────
+  // ── Fix 2: NVR transform — distinctly different wrong options ────────────
   await fixTransformAnswerOptions();
 
   // ── Fix 3: Maths two_rule — prompt had starting value 4 (correct answer 19)
