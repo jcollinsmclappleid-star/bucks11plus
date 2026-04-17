@@ -213,8 +213,8 @@ export class DatabaseStorage implements IStorage {
         '79449b25-5f83-4afd-9e9b-ae73a9b4a5e6', // Maths arithmetic medium
         '4b85534a-0265-4135-8f03-329d04a33e19', // Maths arithmetic medium
         '85b3bb4b-5e3e-4c72-9e9f-67f64ace728c', // Maths arithmetic medium
-        'comp-p33-q482',                         // English Comprehension P33 medium
-        'comp-p33-q487',                         // English Comprehension P33 medium
+        'comp-p33-q479',                         // English Comprehension P33 medium
+        'comp-p33-q481',                         // English Comprehension P33 medium
       ];
       const fetched = await db.select().from(questions).where(inArray(questions.id, FIXED_MINI_IDS));
       const byId = new Map(fetched.map(q => [q.id, q]));

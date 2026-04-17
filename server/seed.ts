@@ -664,13 +664,30 @@ async function reseedQuestionType(opts: {
     );
 
   if (stale.length === 0) {
-    console.log(`  [Reseed] ${label}: all questions up to date (v${versionThreshold})`);
-    return;
+    // Also check if there are any approved practice questions at all.
+    // If the count is 0 (e.g. a previous deploy deleted them all but the seed JSON was
+    // empty at the time), we must still seed from JSON even though stale.length === 0.
+    const countResult = await db
+      .select({ n: sql<number>`count(*)::int` })
+      .from(questions)
+      .where(
+        and(
+          eq(questions.type, type),
+          eq(questions.questionPool, "practice"),
+          eq(questions.qaStatus, "approved"),
+        ),
+      );
+    const totalCount = countResult[0]?.n ?? 0;
+    if (totalCount > 0) {
+      console.log(`  [Reseed] ${label}: all questions up to date (v${versionThreshold})`);
+      return;
+    }
+    console.log(`  [Reseed] ${label}: 0 approved practice questions found — seeding from JSON`);
+  } else {
+    const staleIds = stale.map((q) => q.id);
+    await db.delete(questions).where(inArray(questions.id, staleIds));
+    console.log(`  [Reseed] ${label}: deleted ${staleIds.length} stale questions (version < ${versionThreshold})`);
   }
-
-  const staleIds = stale.map((q) => q.id);
-  await db.delete(questions).where(inArray(questions.id, staleIds));
-  console.log(`  [Reseed] ${label}: deleted ${staleIds.length} stale questions (version < ${versionThreshold})`);
 
   if (!fs.existsSync(seedPath)) {
     console.warn(`  [Reseed] ${label}: seed file not found at ${seedPath} — skipping insert`);
@@ -678,11 +695,13 @@ async function reseedQuestionType(opts: {
   }
 
   const seedData: Array<{
+    id?: string;
     section: string; type: string; prompt: string; options: string[];
     correctAnswer: string; difficulty: string; estTimeSeconds?: number; timeExpected?: number;
     skillId: string; subRuleId: string; renderType: string; renderConfig: any;
     trapTypes?: string[]; cognitiveLoad?: number; locale?: string;
     britishSpelling?: boolean; version?: number; qaStatus?: string; explanation?: string;
+    freePool?: boolean;
   }> = JSON.parse(fs.readFileSync(seedPath, "utf-8"));
 
   const fresh = seedData.filter((q) => q.type === type);
@@ -690,31 +709,36 @@ async function reseedQuestionType(opts: {
   const batchSize = 50;
   let inserted = 0;
   for (let i = 0; i < fresh.length; i += batchSize) {
-    const batch = fresh.slice(i, i + batchSize).map((q, idx) => ({
-      section: q.section,
-      type: q.type,
-      prompt: q.prompt,
-      options: q.options,
-      correctAnswer: q.correctAnswer,
-      difficulty: q.difficulty,
-      timeExpected: q.estTimeSeconds || q.timeExpected || 45,
-      orderIndex: i + idx,
-      skillId: q.skillId,
-      subRuleId: q.subRuleId,
-      renderType: q.renderType,
-      renderConfig: q.renderConfig || {},
-      trapTypes: q.trapTypes || [],
-      cognitiveLoad: q.cognitiveLoad,
-      locale: q.locale || "en-GB",
-      britishSpelling: q.britishSpelling !== false,
-      version: q.version || 1,
-      qualityScore: 0,
-      qaStatus: q.qaStatus || "approved",
-      questionPool: "practice",
-      freePool: false,
-      explanation: q.explanation || null,
-    }));
-    await db.insert(questions).values(batch as any);
+    const batch = fresh.slice(i, i + batchSize).map((q, idx) => {
+      const row: any = {
+        section: q.section,
+        type: q.type,
+        prompt: q.prompt,
+        options: q.options,
+        correctAnswer: q.correctAnswer,
+        difficulty: q.difficulty,
+        timeExpected: q.estTimeSeconds || q.timeExpected || 45,
+        orderIndex: i + idx,
+        skillId: q.skillId,
+        subRuleId: q.subRuleId,
+        renderType: q.renderType,
+        renderConfig: q.renderConfig || {},
+        trapTypes: q.trapTypes || [],
+        cognitiveLoad: q.cognitiveLoad,
+        locale: q.locale || "en-GB",
+        britishSpelling: q.britishSpelling !== false,
+        version: q.version || 1,
+        qualityScore: 0,
+        qaStatus: q.qaStatus || "approved",
+        questionPool: "practice",
+        freePool: q.freePool ?? false,
+        explanation: q.explanation || null,
+      };
+      // Preserve the seed ID when provided so FIXED_MINI_IDS work across envs.
+      if (q.id) row.id = q.id;
+      return row;
+    });
+    await db.insert(questions).values(batch).onConflictDoNothing();
     inserted += batch.length;
   }
   console.log(`  [Reseed] ${label}: inserted ${inserted} fresh questions at v${versionThreshold}`);
@@ -726,6 +750,57 @@ export async function ensureNvrGeneratorReseeds() {
   await reseedQuestionType({ type: "symmetry",           label: "NVR symmetry",           versionThreshold: 4, seedPath });
   await reseedQuestionType({ type: "rotation_reflection", label: "NVR rotation_reflection", versionThreshold: 3, seedPath });
   await reseedQuestionType({ type: "transformation",      label: "NVR transformation",      versionThreshold: 3, seedPath });
+
+  // Unconditionally upsert the 3 FIXED_MINI NVR questions so they exist in every
+  // environment regardless of which questions were seeded via reseedQuestionType.
+  // These IDs are hardcoded in server/storage.ts FIXED_MINI_IDS.
+  const FIXED_MINI_NVR_IDS = [
+    "5bafc63a-c3c8-459c-a249-5a4c33612a08", // NVR sequence easy v6 count_grow squares
+    "100ae35d-8c82-4709-b2ce-0d36c5606a76", // NVR symmetry easy v4 mirror_completion
+    "0c889138-29c0-4fb7-a9cd-a950744cfc9c", // NVR transform easy v3 reflect_fill
+  ];
+
+  if (fs.existsSync(seedPath)) {
+    const allSeed: Array<{ id?: string; [k: string]: any }> = JSON.parse(
+      fs.readFileSync(seedPath, "utf-8")
+    );
+    const byId = new Map(allSeed.filter((q) => q.id).map((q) => [q.id!, q]));
+    let upserted = 0;
+    for (const id of FIXED_MINI_NVR_IDS) {
+      const q = byId.get(id);
+      if (!q) continue;
+      await db
+        .insert(questions)
+        .values({
+          id,
+          section: q.section,
+          type: q.type,
+          prompt: q.prompt,
+          options: q.options,
+          correctAnswer: q.correctAnswer,
+          difficulty: q.difficulty,
+          timeExpected: q.estTimeSeconds || q.timeExpected || 45,
+          orderIndex: 0,
+          skillId: q.skillId,
+          subRuleId: q.subRuleId,
+          renderType: q.renderType,
+          renderConfig: q.renderConfig || {},
+          trapTypes: q.trapTypes || [],
+          cognitiveLoad: q.cognitiveLoad,
+          locale: q.locale || "en-GB",
+          britishSpelling: q.britishSpelling !== false,
+          version: q.version || 1,
+          qualityScore: 0,
+          qaStatus: "approved",
+          questionPool: "practice",
+          freePool: q.freePool ?? false,
+          explanation: q.explanation || null,
+        } as any)
+        .onConflictDoNothing();
+      upserted++;
+    }
+    console.log(`  [Reseed] FIXED_MINI NVR questions ensured: ${upserted} checked`);
+  }
 }
 
 export async function ensureDiagnosticPool() {
