@@ -84,6 +84,11 @@ const TIER_DISPLAY_NAME: Record<string, string> = {
   programme24_plus: "Bucks Plus Edge (Legacy)",
 };
 
+const TIER_DESCRIPTION: Record<string, string> = {
+  pack_plus: "Full access to 1,500+ GL-style questions across Verbal Reasoning, Non-Verbal Reasoning, Maths & Comprehension. Includes all difficulty drills, full-length mock exams, timed readiness checks, PDF reports, parent analytics, progress tracking, and a guided preparation roadmap. Cancel any time.",
+  pack_annual: "12 months of full access to 1,500+ GL-style questions across Verbal Reasoning, Non-Verbal Reasoning, Maths & Comprehension. Includes all difficulty drills, full-length mock exams, timed readiness checks, PDF reports, parent analytics, progress tracking, and a guided preparation roadmap. Save £141 vs monthly billing.",
+};
+
 async function findStripePriceForTier(tier: string): Promise<string | null> {
   try {
     const pricesResult = await db.execute(
@@ -321,7 +326,10 @@ export async function registerRoutes(
         line_items: [{
           price_data: {
             currency: 'gbp',
-            product_data: { name: TIER_DISPLAY_NAME[tier] || tier },
+            product_data: {
+              name: TIER_DISPLAY_NAME[tier] || tier,
+              description: TIER_DESCRIPTION[tier] || undefined,
+            },
             unit_amount: unitAmount,
             recurring: { interval },
           },
@@ -393,7 +401,10 @@ export async function registerRoutes(
         line_items: [{
           price_data: {
             currency: 'gbp',
-            product_data: { name: TIER_DISPLAY_NAME[targetTier] || targetTier },
+            product_data: {
+              name: TIER_DISPLAY_NAME[targetTier] || targetTier,
+              description: TIER_DESCRIPTION[targetTier] || undefined,
+            },
             unit_amount: targetAmount,
             recurring: { interval: upgradeInterval },
           },
@@ -431,7 +442,10 @@ export async function registerRoutes(
         line_items: [{
           price_data: {
             currency: 'gbp',
-            product_data: { name: TIER_DISPLAY_NAME[tier] || tier },
+            product_data: {
+              name: TIER_DISPLAY_NAME[tier] || tier,
+              description: TIER_DESCRIPTION[tier] || undefined,
+            },
             unit_amount: unitAmount,
             recurring: { interval: guestInterval },
           },
