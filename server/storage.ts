@@ -211,7 +211,7 @@ export class DatabaseStorage implements IStorage {
         '100ae35d-8c82-4709-b2ce-0d36c5606a76', // NVR symmetry easy (v4)
         '0c889138-29c0-4fb7-a9cd-a950744cfc9c', // NVR transform easy (v3)
         '79449b25-5f83-4afd-9e9b-ae73a9b4a5e6', // Maths arithmetic medium
-        '4b85534a-0265-4135-8f03-329d04a33e19', // Maths arithmetic medium
+        'a0740abc-1234-4567-89ab-cdef00000740', // Maths percentages medium (sale price)
         '85b3bb4b-5e3e-4c72-9e9f-67f64ace728c', // Maths arithmetic medium
         'comp-p33-q479',                         // English Comprehension P33 medium
         'comp-p33-q481',                         // English Comprehension P33 medium

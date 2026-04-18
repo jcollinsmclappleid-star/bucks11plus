@@ -10,6 +10,7 @@ A full-stack web platform for Buckinghamshire 11+ exam preparation, aligned to G
 - **Payments**: Stripe (subscription mode via checkout sessions + 7-day free trial on pack_plus), stripe-replit-sync for schema sync
 - **Question Engine**: Rule-tagged questions with skill_id/sub_rule_id, SVG rendering for NVR, chart rendering for data interpretation, anti-repeat via question_usage table
 - **NVR Generator (v3/v4)**: Rebuilt from scratch per GL expert spec. Uses `ShapeAttrs` internal model, shape-compatibility matrix (ROTATION_SAFE/STRONGLY_ASYMMETRIC), cumulative rule stacks (up to 3 rules with conditional/alternating for hard), diagnostic distractor engine (12 distractor types: wrong_rotation, wrong_axis, missed_secondary, etc). Generators: `scripts/generators/nvr/shared.ts` (foundation), `sequence.ts`, `transformation.ts`, `rotation_reflection.ts`, `classification.ts`, `symmetry_spatial.ts`. DB bank: 869 approved NVR questions (280 easy / 287 medium / 302 hard). Old medium/hard archived (qa_status='archived').
+- **Maths Bank (GL-audited)**: 351 approved questions across all GL 11+ topics (50 easy / 142 medium / 159 hard). Full topic coverage: arithmetic, fractions, percentages, ratio, patterns/sequences, data/statistics (mean/median/range/two-way tables), shape & geometry (area/perimeter/volume/angles/coordinates), word problems. 34 under-levelled data questions archived and replaced; 9 non-GL topics archived; 4 free pool bugs fixed (non-integer arithmetic, wrong answers, ambiguous wording). Run `scripts/maths_bank_remediation.ts` to replay all changes idempotently.
 - **Shared**: Schema definitions in `shared/schema.ts`, content types in `shared/contentTypes.ts`, validation in `shared/contentValidation.ts`
 
 ## Project Structure
@@ -92,6 +93,7 @@ scripts/
 │   ├── vr/              # 6 VR generators (codes, sequences, vocab, etc)
 │   ├── nvr/             # 5 NVR generators (sequence, rotation, classification, etc)
 │   └── maths/           # 7 Maths generators (arithmetic, fractions, charts, etc)
+├── maths_bank_remediation.ts  # Full GL audit script: archives bad questions, approves 59 drafts, inserts 104 new
 
 content/
 └── wordbanks/           # UK vocabulary JSON files (Y4, Y5, Y6, synonyms, antonyms)
