@@ -15,7 +15,7 @@ type Tab = "profile" | "subscription";
 const UPGRADE_OPTIONS: Record<string, { tier: string; label: string; price: string; description: string }[]> = {
   // Active monthly subscribers can switch to annual to save £71
   pack_plus: [
-    { tier: "pack_annual", label: "Bucks Plus Edge — Annual", price: "£349/yr", description: "Lock in 12 months of full access — save £71 vs staying on monthly." },
+    { tier: "pack_annual", label: "Bucks Plus Edge — Annual", price: "£239/yr", description: "Lock in 12 months of full access — save £181 vs staying on monthly." },
   ],
   // All other tiers have no upgrade path on new model
   pack_annual: [],

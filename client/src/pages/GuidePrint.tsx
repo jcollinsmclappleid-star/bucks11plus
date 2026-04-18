@@ -933,8 +933,8 @@ export default function GuidePrint() {
             },
             {
               name: "Bucks Plus Edge Annual",
-              price: "£349",
-              sub: "per year · save £71 vs monthly · equiv. £29.08/mo",
+              price: "£239",
+              sub: "per year · save £181 vs monthly · equiv. £19.92/mo · 43% off",
               color: "emerald",
               accent: "#059669",
               badge: "BEST VALUE",
@@ -945,7 +945,7 @@ export default function GuidePrint() {
                 "Best value for Year 5 → test day preparation",
               ],
               url: `${BASE}/pricing`,
-              urlLabel: "Get Annual Access — £349",
+              urlLabel: "Get Annual Access — £239",
             },
           ].map(({ name, price, sub, accent, badge, features, url, urlLabel }) => (
             <div key={name} className="rounded-xl border overflow-hidden" style={{ borderColor: accent + "40" }}>

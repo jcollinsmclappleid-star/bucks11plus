@@ -755,7 +755,7 @@ export async function ensureNvrGeneratorReseeds() {
   // environment regardless of which questions were seeded via reseedQuestionType.
   // These IDs are hardcoded in server/storage.ts FIXED_MINI_IDS.
   const FIXED_MINI_NVR_IDS = [
-    "5bafc63a-c3c8-459c-a249-5a4c33612a08", // NVR sequence easy v6 count_grow squares
+    "6c7276bd-3652-40e1-8834-a98d7e18dbea", // NVR transform medium rotate_fill
     "100ae35d-8c82-4709-b2ce-0d36c5606a76", // NVR symmetry easy v4 mirror_completion
     "0c889138-29c0-4fb7-a9cd-a950744cfc9c", // NVR transform easy v3 reflect_fill
   ];

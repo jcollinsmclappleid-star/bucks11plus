@@ -398,9 +398,9 @@ export default function GuestResults() {
             <CardContent className="p-6">
               <div className="flex justify-between items-start mb-1">
                 <h3 className="text-xl font-bold text-primary font-serif">Bucks Plus Edge</h3>
-                <span className="text-2xl font-bold text-primary">£349<span className="text-sm font-medium text-slate-500">/yr</span></span>
+                <span className="text-2xl font-bold text-primary">£239<span className="text-sm font-medium text-slate-500">/yr</span></span>
               </div>
-              <p className="text-xs text-emerald-600 font-semibold mb-1">Save £71 vs monthly · equiv. £29.08/mo</p>
+              <p className="text-xs text-emerald-600 font-semibold mb-1">Save £181 vs monthly · equiv. £19.92/mo · 43% off</p>
               <p className="text-sm text-slate-600 mb-4">Everything in the monthly plan · 12 months of full access</p>
               <ul className="space-y-2 mb-6">
                 {["1,500+ GL-style questions across all four subjects", "Full 40q and 50q mock exams", "All Hard-level challenge drills", "Priority email support", "Cancel any time"].map((f, i) => (
@@ -411,7 +411,7 @@ export default function GuestResults() {
                 ))}
               </ul>
               <Button className="w-full bg-primary" asChild data-testid="button-upsell-pack-annual">
-                <Link href="/pricing?autoCheckout=pack_annual">Get Annual Access — £349</Link>
+                <Link href="/pricing?autoCheckout=pack_annual">Get Annual Access — £239</Link>
               </Button>
             </CardContent>
           </Card>

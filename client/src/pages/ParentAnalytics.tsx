@@ -857,7 +857,7 @@ export default function ParentAnalytics() {
         <div className="text-center mb-10">
           <h1 className="text-3xl font-bold text-primary font-serif mb-3" data-testid="heading-analytics-gated">Premium Parent Analytics</h1>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Included with Bucks Plus Edge — available from £35/month or £349/year.
+            Included with Bucks Plus Edge — available from £35/month or £239/year.
           </p>
         </div>
 

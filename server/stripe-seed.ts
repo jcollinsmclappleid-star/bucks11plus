@@ -12,7 +12,7 @@ const SUBSCRIPTION_PRODUCTS = [
     name: 'Bucks Plus Edge — Annual',
     description: 'Full access to all 1,500+ GL-style questions, diagnostics, drills, mock exams, PDF reports, progress tracking and premium analytics. Annual subscription.',
     tier: 'pack_annual',
-    priceInPence: 34900,
+    priceInPence: 23900,
     interval: 'year' as const,
   },
 ];

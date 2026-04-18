@@ -416,7 +416,7 @@ export default function Landing() {
             { "@type": "Question", name: "What is the Buckinghamshire 11+ Secondary Transfer Test?", acceptedAnswer: { "@type": "Answer", text: "The Buckinghamshire Secondary Transfer Test (STT) is a selective entrance exam taken by children in Year 6, typically in September. It determines eligibility for all 13 state-funded grammar schools in Buckinghamshire. The test is produced by GL Assessment and covers four domains: Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension." } },
             { "@type": "Question", name: "What does 121 mean in the Bucks 11+?", acceptedAnswer: { "@type": "Answer", text: "121 is the standardised score threshold used in Buckinghamshire to determine whether a child qualifies for grammar school." } },
             { "@type": "Question", name: "How does the free readiness check work?", acceptedAnswer: { "@type": "Answer", text: "The free readiness check is a 12-question, 8-minute timed assessment in GL-style format. No account is needed. On completion, parents receive a readiness band, a forecast standardised score toward 121, and a breakdown across the four test sections." } },
-            { "@type": "Question", name: "What is included in Bucks Plus Edge?", acceptedAnswer: { "@type": "Answer", text: "Bucks Plus Edge (£35/month or £349/year) includes 1,500+ GL-style questions across all four test domains, timed drills, full mock readiness checks, PDF reports, parent analytics, progress tracking, and a guided programme." } },
+            { "@type": "Question", name: "What is included in Bucks Plus Edge?", acceptedAnswer: { "@type": "Answer", text: "Bucks Plus Edge (£35/month or £239/year) includes 1,500+ GL-style questions across all four test domains, timed drills, full mock readiness checks, PDF reports, parent analytics, progress tracking, and a guided programme." } },
           ]
         }}
       />
@@ -793,15 +793,15 @@ export default function Landing() {
             </div>
 
             <div className="flex flex-col rounded-2xl border-2 border-primary bg-white shadow-md p-7 relative" data-testid="pricing-card-annual">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full whitespace-nowrap">Best Value — Save £71</div>
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full whitespace-nowrap">Best Value — Save £181</div>
               <p className="text-xs font-bold uppercase tracking-wider text-primary mb-1">Annual</p>
               <p className="text-sm font-bold text-primary mb-1">Bucks Plus Edge</p>
               <div className="flex items-end gap-1 mb-1">
-                <span className="text-4xl font-bold text-primary">£349</span>
+                <span className="text-4xl font-bold text-primary">£239</span>
                 <span className="text-slate-500 text-sm mb-1">/year</span>
               </div>
-              <p className="text-xs text-slate-400 mb-1">equiv. £29.08/month</p>
-              <p className="text-xs text-emerald-600 font-semibold mb-6">Save £71 vs monthly</p>
+              <p className="text-xs text-slate-400 mb-1">equiv. £19.92/month · 43% off</p>
+              <p className="text-xs text-emerald-600 font-semibold mb-6">Save £181 vs monthly</p>
               <ul className="space-y-2 text-sm text-slate-700 mb-8 flex-1">
                 {[
                   "Everything in Monthly — identical access",
@@ -916,8 +916,8 @@ export default function Landing() {
               {[
                 { q: "Is this platform built specifically for the Buckinghamshire 11+?", a: "Yes — exclusively. Every question, every readiness check, and every benchmark is built for the Buckinghamshire Secondary Transfer Test. Results are measured against the 121 qualifying threshold, covering all four GL Assessment domains, across all 13 Buckinghamshire grammar schools. This is not a generic 11+ platform repurposed for Bucks." },
                 { q: "Is Bucks 11 Plus Tests affiliated with GL Assessment or Buckinghamshire Council?", a: "No. We are fully independent — not affiliated with GL Assessment, Buckinghamshire Council, TBGS, or any individual grammar school. 'GL-style' refers to the question format we independently replicate, not an official relationship." },
-                { q: "How is the free readiness check different from the paid platform?", a: "The free readiness check gives you a readiness band, forecast score, and section breakdown with no account needed. The paid Bucks Plus Edge (£35/month or £349/year) gives access to 1,500+ questions, full-length practice papers, full GL-style mock exams, all Hard drills, parent analytics, progress tracking, and a guided programme." },
-                { q: "What is the difference between the monthly and annual plan?", a: "Both plans give identical full access to every feature. The monthly plan is £35/month and can be cancelled anytime. The annual plan is £349/year — equivalent to £29.08/month — saving £71 compared to paying monthly for 12 months." },
+                { q: "How is the free readiness check different from the paid platform?", a: "The free readiness check gives you a readiness band, forecast score, and section breakdown with no account needed. The paid Bucks Plus Edge (£35/month or £239/year) gives access to 1,500+ questions, full-length practice papers, full GL-style mock exams, all Hard drills, parent analytics, progress tracking, and a guided programme." },
+                { q: "What is the difference between the monthly and annual plan?", a: "Both plans give identical full access to every feature. The monthly plan is £35/month and can be cancelled anytime. The annual plan is £239/year — equivalent to £19.92/month, saving £181 (43% off) compared to paying monthly for 12 months." },
                 { q: "Can I cancel my subscription?", a: "Yes — monthly and annual subscriptions can be cancelled anytime from your account page. If you cancel, you retain access until the end of the current billing period." },
                 { q: "When should my child start preparing for the Bucks 11+?", a: "Most families begin structured preparation in Year 4 or early Year 5, giving children 12 to 18 months before the September test date. Starting with a readiness check helps identify specific gaps and ensures preparation time is spent where it will have the most impact." },
               ].map((item, i) => (
