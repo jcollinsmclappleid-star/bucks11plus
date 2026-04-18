@@ -73,10 +73,6 @@ async function initStripe() {
   }
 }
 
-(async () => {
-  await initStripe();
-})().catch(err => console.error('Async init failed:', err));
-
 app.post(
   '/api/stripe/webhook',
   express.raw({ type: 'application/json' }),
@@ -148,17 +144,6 @@ app.use((req, res, next) => {
 
 (async () => {
   await registerRoutes(httpServer, app);
-  await seedDatabase().catch(err => console.error("Seed error:", err));
-  await ensureNvrGeneratorReseeds().catch(err => console.error("NVR reseed error:", err));
-
-  // Run email nudge triggers every 6 hours
-  const SIX_HOURS = 6 * 60 * 60 * 1000;
-  setTimeout(() => {
-    runEmailTriggers().catch(err => console.error("Email trigger error:", err));
-    setInterval(() => {
-      runEmailTriggers().catch(err => console.error("Email trigger error:", err));
-    }, SIX_HOURS);
-  }, 5 * 60 * 1000); // first run 5 mins after startup
 
   app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
@@ -191,4 +176,19 @@ app.use((req, res, next) => {
       log(`serving on port ${port}`);
     },
   );
+
+  // Run background tasks after the server is already listening so startup
+  // latency never blocks incoming requests
+  initStripe().catch(err => console.error('Stripe init error:', err));
+  seedDatabase().catch(err => console.error("Seed error:", err));
+  ensureNvrGeneratorReseeds().catch(err => console.error("NVR reseed error:", err));
+
+  // Run email nudge triggers every 6 hours (first run 5 mins after startup)
+  const SIX_HOURS = 6 * 60 * 60 * 1000;
+  setTimeout(() => {
+    runEmailTriggers().catch(err => console.error("Email trigger error:", err));
+    setInterval(() => {
+      runEmailTriggers().catch(err => console.error("Email trigger error:", err));
+    }, SIX_HOURS);
+  }, 5 * 60 * 1000);
 })();
