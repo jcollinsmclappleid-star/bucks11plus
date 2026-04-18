@@ -89,19 +89,17 @@ export default function Navbar() {
       <div className="container mx-auto px-4 h-16 flex items-center justify-between max-w-6xl gap-2">
 
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3 group shrink-0">
-          <svg viewBox="0 0 48 48" className="w-8 h-8 shrink-0" aria-hidden="true">
-            <circle cx="24" cy="24" r="22" fill="none" stroke="currentColor" strokeWidth="2" className="text-primary/30" />
-            <circle cx="24" cy="24" r="18" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-primary/15" />
-            <line x1="24" y1="6" x2="24" y2="10" stroke="currentColor" strokeWidth="1.5" className="text-primary/30" />
-            <line x1="24" y1="38" x2="24" y2="42" stroke="currentColor" strokeWidth="1.5" className="text-primary/30" />
-            <line x1="6" y1="24" x2="10" y2="24" stroke="currentColor" strokeWidth="1.5" className="text-primary/30" />
-            <line x1="38" y1="24" x2="42" y2="24" stroke="currentColor" strokeWidth="1.5" className="text-primary/30" />
-            <circle cx="24" cy="24" r="3" fill="currentColor" className="text-primary/40" />
-          </svg>
-          <div className="flex flex-col leading-none">
-            <span className="font-serif font-bold text-lg text-primary tracking-tight">11+</span>
-            <span className="text-[9px] font-sans font-semibold uppercase tracking-[0.2em] text-primary/50 mt-0.5">Standard</span>
+        <Link href="/" className="flex items-center gap-2.5 group shrink-0" aria-label="Bucks 11 Plus Tests — Home">
+          <div className="w-11 h-11 rounded-xl overflow-hidden shrink-0 shadow-sm">
+            <img
+              src="/logo-shield.png"
+              alt="Bucks 11 Plus Tests shield logo"
+              className="w-full h-full object-cover object-center"
+            />
+          </div>
+          <div className="flex flex-col leading-none hidden sm:flex">
+            <span className="font-serif font-bold text-base text-primary tracking-tight leading-none">Bucks 11+</span>
+            <span className="text-[9px] font-sans font-semibold uppercase tracking-[0.18em] text-primary/45 mt-0.5">Tests</span>
           </div>
         </Link>
 
@@ -186,11 +184,16 @@ export default function Navbar() {
             <SheetContent side="right" className="w-72 p-0">
               <div className="flex flex-col h-full">
                 <div className="p-4 border-b border-border/40">
-                  <div className="flex flex-col leading-none">
-                    <span className="font-serif font-bold text-lg text-primary tracking-tight">Bucks 11 Plus Tests</span>
-                    {user && (
-                      <span className="text-xs text-muted-foreground mt-1">{user.childName || user.username}</span>
-                    )}
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl overflow-hidden shrink-0 shadow-sm">
+                      <img src="/logo-shield.png" alt="Bucks 11 Plus Tests" className="w-full h-full object-cover object-center" />
+                    </div>
+                    <div className="flex flex-col leading-none">
+                      <span className="font-serif font-bold text-base text-primary tracking-tight leading-none">Bucks 11+ Tests</span>
+                      {user && (
+                        <span className="text-xs text-muted-foreground mt-1">{user.childName || user.username}</span>
+                      )}
+                    </div>
                   </div>
                 </div>
 
