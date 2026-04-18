@@ -201,16 +201,17 @@ export class DatabaseStorage implements IStorage {
     // Hard-coded fixed free readiness check — always returns the exact same 12 questions in order.
     // 3 VR (codes, sequences, vocab) | 4 NVR (transform, classification, sequence, symmetry)
     // | 3 Maths (arithmetic, percentages, ratio) | 2 English Comprehension (passage P33).
+    // All NVR questions are medium difficulty (GL 11+ standard). VR codes is the lead question.
     // Changing this list requires also updating freePoolData.ts for consistency.
     if (diagnosticId === 'mini-1') {
       const FIXED_MINI_IDS = [
-        'b0cfd818-8e8e-48bb-9147-29106ae9b776', // VR codes.letter_shift easy
-        '3b367e1b-f12b-480a-96a4-940388513686', // VR sequences.alternating easy
-        'd64f47b0-e4e1-4380-b066-6556a55eed73', // VR vocab.antonym_match easy
-        '0c889138-29c0-4fb7-a9cd-a950744cfc9c', // NVR transform.reflect_x easy
-        '175aa841-d29a-4032-b14d-34c5fe721505', // NVR classification.same_shape easy
-        '8868478d-f539-40a1-a4ca-a5c901abed1d', // NVR sequence.fill_cycle_only easy
-        '100ae35d-8c82-4709-b2ce-0d36c5606a76', // NVR symmetry.mirror_completion easy
+        'b0cfd818-8e8e-48bb-9147-29106ae9b776', // VR codes.letter_shift easy (multi-letter cipher)
+        '401aa217-06c0-4dbb-b679-5243475b81d0', // VR sequences.alternating medium (A E D H G →?)
+        '4afc65a2-c46a-40c0-a931-ee506ae78146', // VR vocab.antonym_match medium (opposite of 'arrive')
+        '9e44f1d8-a8cc-4382-8703-f03660a1048a', // NVR transform.rotate_fill medium
+        '0c293c34-baa2-47bd-921c-717c2c74d785', // NVR classification.has_line medium
+        '2797c259-d141-462e-937e-a2f54e54ad01', // NVR sequence.position_orbit medium
+        '56acb8d4-f0a5-4aa2-9790-5a0cb2778492', // NVR symmetry.mirror_completion medium
         '79449b25-5f83-4afd-9e9b-ae73a9b4a5e6', // Maths arithmetic medium
         'a0740abc-1234-4567-89ab-cdef00000740', // Maths percentages medium
         'ed4177aa-e11b-469c-ada6-80458bb069d8', // Maths ratio medium
