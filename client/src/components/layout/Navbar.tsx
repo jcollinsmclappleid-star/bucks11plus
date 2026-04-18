@@ -15,14 +15,6 @@ import { Menu } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
-const practiceLinks = [
-  { href: "/free-diagnostic", label: "Free Readiness Check", desc: "Try the free Bucks 11+ diagnostic test" },
-  { href: "/11-plus-verbal-reasoning-practice", label: "Verbal Reasoning", desc: "Codes, analogies, sequences & more" },
-  { href: "/11-plus-non-verbal-reasoning-practice", label: "Non-Verbal Reasoning", desc: "Shapes, patterns and spatial problems" },
-  { href: "/11-plus-maths-practice", label: "Maths", desc: "Arithmetic, fractions, word problems" },
-  { href: "/11-plus-comprehension-practice", label: "Comprehension", desc: "Reading passages and inference questions" },
-];
-
 const resourceLinks = [
   { href: "/bucks-11-plus-parent-guide", label: "Free Parent Guide", desc: "Complete prep guide for Bucks parents" },
   { href: "/parent-hub", label: "Parent Hub", desc: "Articles, advice and revision tips" },
@@ -45,45 +37,39 @@ function DropdownItem({ href, label, desc }: { href: string; label: string; desc
   );
 }
 
+const appNavLinks = [
+  { href: "/app", label: "Dashboard", matchPrefix: false },
+  { href: "/app/diagnostic", label: "Readiness Checks", matchPrefix: true },
+  { href: "/app/practice", label: "Practice", matchPrefix: true },
+  { href: "/app/progress", label: "Progress", matchPrefix: false },
+  { href: "/app/report-archive", label: "Reports", matchPrefix: false },
+  { href: "/app/programme", label: "Programme", matchPrefix: false },
+  { href: "/app/analytics", label: "Analytics", matchPrefix: false },
+];
+
 export default function Navbar() {
   const [location] = useLocation();
   const { user, logout } = useAuth();
   const [open, setOpen] = useState(false);
 
-  const appNavLinks = [
-    { href: "/app", label: "Dashboard", matchPrefix: false },
-    { href: "/app/diagnostic", label: "Readiness Checks", matchPrefix: true },
-    { href: "/app/practice", label: "Practice", matchPrefix: true },
-    { href: "/app/progress", label: "Progress", matchPrefix: false },
-    { href: "/app/report-archive", label: "Reports", matchPrefix: false },
-    { href: "/app/programme", label: "Programme", matchPrefix: false },
-    { href: "/app/analytics", label: "Analytics", matchPrefix: false },
-  ];
-
   const mobileNavLinks = [
-    { href: "/app", label: "Dashboard", show: !!user, matchPrefix: false },
-    { href: "/app/diagnostic", label: "Readiness Checks", show: !!user, matchPrefix: true },
-    { href: "/app/practice", label: "Practice", show: !!user, matchPrefix: true },
-    { href: "/app/progress", label: "Progress", show: !!user, matchPrefix: false },
-    { href: "/app/report-archive", label: "Reports", show: !!user, matchPrefix: false },
-    { href: "/app/programme", label: "Programme", show: !!user, matchPrefix: false },
-    { href: "/app/analytics", label: "Analytics", show: !!user, matchPrefix: false },
+    { href: "/app", label: "Dashboard", show: true, matchPrefix: false },
+    { href: "/app/diagnostic", label: "Readiness Checks", show: true, matchPrefix: true },
+    { href: "/app/practice", label: "Practice", show: true, matchPrefix: true },
+    { href: "/app/progress", label: "Progress", show: true, matchPrefix: false },
+    { href: "/app/report-archive", label: "Reports", show: true, matchPrefix: false },
+    { href: "/app/programme", label: "Programme", show: true, matchPrefix: false },
+    { href: "/app/analytics", label: "Analytics", show: true, matchPrefix: false },
     { href: "/app/account", label: "Account & Subscription", show: !!user, matchPrefix: false },
     { href: "/how-it-works", label: "How It Works", show: true, matchPrefix: false },
     { href: "/bucks-11-plus-parent-guide", label: "Free Guide", show: true, matchPrefix: false },
     { href: "/pricing", label: "Pricing", show: true, matchPrefix: false },
     { href: "/contact", label: "Contact", show: true, matchPrefix: false },
-    ...(!user ? [
-      { href: "/free-diagnostic", label: "Free Readiness Check", show: true, matchPrefix: false },
-      { href: "/11-plus-verbal-reasoning-practice", label: "Verbal Reasoning Practice", show: true, matchPrefix: false },
-      { href: "/11-plus-non-verbal-reasoning-practice", label: "Non-Verbal Reasoning Practice", show: true, matchPrefix: false },
-      { href: "/11-plus-maths-practice", label: "Maths Practice", show: true, matchPrefix: false },
-      { href: "/11-plus-comprehension-practice", label: "Comprehension Practice", show: true, matchPrefix: false },
-      { href: "/parent-hub", label: "Parent Hub", show: true, matchPrefix: false },
-      { href: "/learn", label: "Learn Hub", show: true, matchPrefix: false },
-      { href: "/about", label: "About", show: true, matchPrefix: false },
-      { href: "/bucks-grammar-schools", label: "Grammar Schools", show: true, matchPrefix: false },
-    ] : []),
+    { href: "/free-diagnostic", label: "Free Readiness Check", show: !user, matchPrefix: false },
+    { href: "/parent-hub", label: "Parent Hub", show: !user, matchPrefix: false },
+    { href: "/learn", label: "Learn Hub", show: !user, matchPrefix: false },
+    { href: "/about", label: "About", show: !user, matchPrefix: false },
+    { href: "/bucks-grammar-schools", label: "Grammar Schools", show: !user, matchPrefix: false },
   ];
 
   const isActive = (href: string, matchPrefix?: boolean) => {
@@ -92,12 +78,14 @@ export default function Navbar() {
   };
 
   const triggerClass = cn(
-    "h-auto bg-transparent px-0 py-0 text-sm font-medium text-slate-600 hover:text-primary hover:bg-transparent focus:bg-transparent data-[state=open]:bg-transparent data-[state=open]:text-primary transition-colors",
+    "h-auto bg-transparent px-2 py-1 text-sm font-medium text-slate-600 hover:text-primary hover:bg-transparent focus:bg-transparent data-[state=open]:bg-transparent data-[state=open]:text-primary transition-colors",
   );
 
   return (
     <header className="border-b border-border/40 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 sticky top-0 z-50">
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between max-w-6xl">
+      <div className="container mx-auto px-4 h-16 flex items-center justify-between max-w-6xl gap-2">
+
+        {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group shrink-0">
           <svg viewBox="0 0 48 48" className="w-8 h-8 shrink-0" aria-hidden="true">
             <circle cx="24" cy="24" r="22" fill="none" stroke="currentColor" strokeWidth="2" className="text-primary/30" />
@@ -114,43 +102,23 @@ export default function Navbar() {
           </div>
         </Link>
 
-        {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-1 lg:gap-2 flex-1 justify-center">
-          {user ? (
-            /* Logged-in: flat app links */
-            <div className="flex items-center gap-4 lg:gap-6">
-              {appNavLinks.map(link => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`text-sm font-medium transition-colors ${isActive(link.href, link.matchPrefix) ? 'text-primary' : 'text-slate-600 hover:text-primary'}`}
-                  data-testid={`link-${link.label.toLowerCase().replace(/\s/g, '-')}`}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-          ) : (
-            /* Logged-out: dropdowns + flat links */
+        {/* Desktop nav — all users see app links */}
+        <nav className="hidden md:flex items-center gap-1 flex-1 justify-center">
+          <div className="flex items-center gap-3 lg:gap-5">
+            {appNavLinks.map(link => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`text-sm font-medium transition-colors whitespace-nowrap ${isActive(link.href, link.matchPrefix) ? 'text-primary' : 'text-slate-600 hover:text-primary'}`}
+                data-testid={`link-${link.label.toLowerCase().replace(/\s/g, '-')}`}
+              >
+                {link.label}
+              </Link>
+            ))}
+
+            {/* Resources dropdown */}
             <NavigationMenu>
-              <NavigationMenuList className="gap-0 lg:gap-1">
-
-                {/* Practice & Tests dropdown */}
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className={triggerClass} data-testid="nav-trigger-practice">
-                    Practice & Tests
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <div className="p-3 w-[300px]">
-                      <p className="px-3 pb-2 text-[10px] font-semibold uppercase tracking-widest text-slate-400">Tests &amp; Practice</p>
-                      {practiceLinks.map(l => (
-                        <DropdownItem key={l.href} {...l} />
-                      ))}
-                    </div>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-
-                {/* Resources dropdown */}
+              <NavigationMenuList>
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className={triggerClass} data-testid="nav-trigger-resources">
                     Resources
@@ -164,28 +132,9 @@ export default function Navbar() {
                     </div>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
-
-                {/* Flat public links */}
-                {[
-                  { href: "/how-it-works", label: "How It Works" },
-                  { href: "/pricing", label: "Pricing" },
-                  { href: "/contact", label: "Contact" },
-                ].map(link => (
-                  <NavigationMenuItem key={link.href}>
-                    <NavigationMenuLink asChild>
-                      <Link
-                        href={link.href}
-                        className={`px-3 py-2 text-sm font-medium transition-colors ${isActive(link.href) ? 'text-primary' : 'text-slate-600 hover:text-primary'}`}
-                        data-testid={`link-${link.label.toLowerCase().replace(/\s/g, '-')}`}
-                      >
-                        {link.label}
-                      </Link>
-                    </NavigationMenuLink>
-                  </NavigationMenuItem>
-                ))}
               </NavigationMenuList>
             </NavigationMenu>
-          )}
+          </div>
         </nav>
 
         {/* Desktop right-side actions */}
@@ -205,6 +154,9 @@ export default function Navbar() {
             </>
           ) : (
             <>
+              <Button size="sm" className="bg-amber-400 hover:bg-amber-300 text-amber-950 font-bold border-none shadow-sm" asChild data-testid="link-free-diagnostic-desktop">
+                <Link href="/free-diagnostic">Free Readiness Check</Link>
+              </Button>
               <Button variant="ghost" size="sm" asChild data-testid="link-signin">
                 <Link href="/sign-in">Sign In</Link>
               </Button>
@@ -215,11 +167,11 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Mobile: burger + optional CTA */}
+        {/* Mobile */}
         <div className="flex items-center gap-2 md:hidden">
           {!user && (
-            <Button size="sm" asChild className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm text-[11px] px-2.5 h-8 shrink-0 whitespace-nowrap" data-testid="link-free-diagnostic-mobile">
-              <Link href="/free-diagnostic">Free Readiness Check</Link>
+            <Button size="sm" asChild className="bg-amber-400 text-amber-950 hover:bg-amber-300 font-bold shadow-sm text-[11px] px-2.5 h-8 shrink-0" data-testid="link-free-diagnostic-mobile">
+              <Link href="/free-diagnostic">Free Check</Link>
             </Button>
           )}
           <Sheet open={open} onOpenChange={setOpen}>
@@ -280,14 +232,14 @@ export default function Navbar() {
                     </>
                   ) : (
                     <>
+                      <Button className="w-full bg-amber-400 hover:bg-amber-300 text-amber-950 font-bold" asChild>
+                        <Link href="/free-diagnostic" onClick={() => setOpen(false)}>Free Readiness Check</Link>
+                      </Button>
                       <Button className="w-full" asChild>
                         <Link href="/sign-in" onClick={() => setOpen(false)}>Sign In</Link>
                       </Button>
                       <Button className="w-full bg-primary" asChild>
                         <Link href="/pricing" onClick={() => setOpen(false)}>See Plans & Start Today</Link>
-                      </Button>
-                      <Button variant="outline" className="w-full" asChild>
-                        <Link href="/sign-up" onClick={() => setOpen(false)}>Create Account</Link>
                       </Button>
                     </>
                   )}
@@ -296,6 +248,7 @@ export default function Navbar() {
             </SheetContent>
           </Sheet>
         </div>
+
       </div>
     </header>
   );
