@@ -335,7 +335,7 @@ export default function Dashboard() {
                   </div>
                   <ul className="space-y-2 text-sm text-violet-700">
                     <li className="flex items-center gap-2"><BarChart3 className="h-4 w-4 shrink-0" /> Premium Parent Analytics dashboard</li>
-                    <li className="flex items-center gap-2"><Target className="h-4 w-4 shrink-0" /> All 17 Hard-level challenge drills</li>
+                    <li className="flex items-center gap-2"><Target className="h-4 w-4 shrink-0" /> All 20 Hard-level challenge drills</li>
                     <li className="flex items-center gap-2"><Calendar className="h-4 w-4 shrink-0" /> Test Day Simulator (full mock exams)</li>
                   </ul>
                   <Button className="w-full bg-violet-600 hover:bg-violet-700 text-white" asChild data-testid="button-upgrade-edge">

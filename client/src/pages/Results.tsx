@@ -81,7 +81,7 @@ function getUpsellMessage(tier: string, weakestSection: string, weakestScore: nu
     }
     return {
       title: "Build Confidence with the Full Platform",
-      message: `Great start! Bucks Plus Edge is the complete Readiness & Practice Hub — 1,500+ questions, all 17 Hard challenge drills, full readiness checks, and a detailed parent analytics dashboard. From £35/month, cancel any time.`,
+      message: `Great start! Bucks Plus Edge is the complete Readiness & Practice Hub — 1,500+ questions, all 20 Hard challenge drills, full readiness checks, and a detailed parent analytics dashboard. From £35/month, cancel any time.`,
       cta: "See Plans & Start Today",
       tier: "pack_plus",
       link: "/pricing",
@@ -92,7 +92,7 @@ function getUpsellMessage(tier: string, weakestSection: string, weakestScore: nu
     if (weakestScore < 60) {
       return {
         title: "Upgrade to Full Platform Access",
-        message: `${weakestSection} at ${weakestScore}% needs hard-level drilling. Bucks Plus Edge unlocks all 17 Hard challenge drills, the complete readiness suite, and an advanced parent analytics dashboard. From £35/month.`,
+        message: `${weakestSection} at ${weakestScore}% needs hard-level drilling. Bucks Plus Edge unlocks all 20 Hard challenge drills, the complete readiness suite, and an advanced parent analytics dashboard. From £35/month.`,
         cta: "See Plans & Start Today",
         tier: "pack_plus",
         link: "/pricing",
@@ -676,7 +676,7 @@ export default function Results() {
             <div className="flex-1">
               <h3 className="font-bold text-primary mb-1">Accelerate with Bucks Practice Platform Edge</h3>
               <p className="text-sm text-slate-600">
-                {weakest.name} at {weakest.score}% needs structured improvement. Edge unlocks all 17 Hard drills, premium analytics, and mock exams to close the gap faster.
+                {weakest.name} at {weakest.score}% needs structured improvement. Edge unlocks all 20 Hard drills, premium analytics, and mock exams to close the gap faster.
               </p>
             </div>
             <Button size="sm" asChild data-testid="button-upgrade-edge">

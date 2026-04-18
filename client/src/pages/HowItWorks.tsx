@@ -296,7 +296,7 @@ export default function HowItWorks() {
               { icon: Brain, label: "1,500+ GL-style questions", desc: "VR, NVR, Maths & Comprehension" },
               { icon: Target, label: "Full timed readiness checks", desc: "40-question GL-format assessments" },
               { icon: BookOpen, label: "Practice papers", desc: "Full-length 50-question papers" },
-              { icon: Hash, label: "Hard drills & challenges", desc: "17 Hard-level drill sections" },
+              { icon: Hash, label: "Hard drills & challenges", desc: "20 Hard-level drill sections" },
               { icon: BarChart3, label: "Parent analytics dashboard", desc: "Deep scoring & stamina data" },
               { icon: TrendingUp, label: "Guided weekly programme", desc: "Priority-ranked, 15-min sessions" },
               { icon: Shield, label: "Progress tracking to 121", desc: "Forecast updates after every session" },

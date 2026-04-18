@@ -199,20 +199,21 @@ export class DatabaseStorage implements IStorage {
     if (!diag) { console.log(`[QFS] Diagnostic not found: ${diagnosticId}`); return []; }
 
     // Hard-coded fixed free readiness check — always returns the exact same 12 questions in order.
-    // 4 VR | 3 NVR | 3 Maths | 2 English Comprehension (passage P33).
+    // 3 VR (codes, sequences, vocab) | 4 NVR (transform, classification, sequence, symmetry)
+    // | 3 Maths (arithmetic, percentages, ratio) | 2 English Comprehension (passage P33).
     // Changing this list requires also updating freePoolData.ts for consistency.
     if (diagnosticId === 'mini-1') {
       const FIXED_MINI_IDS = [
-        'b0cfd818-8e8e-48bb-9147-29106ae9b776', // VR codes easy
-        '014bc2f9-2ac0-4884-b157-3a1bf3ca72b5', // VR codes easy
-        'c76b70c4-33da-47e8-a7a1-bb6aaa7a2f92', // VR codes easy
-        'c8b1c95c-cb44-4cd4-8cc2-c56c01d8b685', // VR codes hard
-        '6c7276bd-3652-40e1-8834-a98d7e18dbea', // NVR transform medium — rotate_fill
-        '100ae35d-8c82-4709-b2ce-0d36c5606a76', // NVR symmetry easy (v4)
-        '0c889138-29c0-4fb7-a9cd-a950744cfc9c', // NVR transform easy (v3)
+        'b0cfd818-8e8e-48bb-9147-29106ae9b776', // VR codes.letter_shift easy
+        '3b367e1b-f12b-480a-96a4-940388513686', // VR sequences.alternating easy
+        'd64f47b0-e4e1-4380-b066-6556a55eed73', // VR vocab.antonym_match easy
+        '0c889138-29c0-4fb7-a9cd-a950744cfc9c', // NVR transform.reflect_x easy
+        '175aa841-d29a-4032-b14d-34c5fe721505', // NVR classification.same_shape easy
+        '8868478d-f539-40a1-a4ca-a5c901abed1d', // NVR sequence.fill_cycle_only easy
+        '100ae35d-8c82-4709-b2ce-0d36c5606a76', // NVR symmetry.mirror_completion easy
         '79449b25-5f83-4afd-9e9b-ae73a9b4a5e6', // Maths arithmetic medium
-        'a0740abc-1234-4567-89ab-cdef00000740', // Maths percentages medium (sale price)
-        '85b3bb4b-5e3e-4c72-9e9f-67f64ace728c', // Maths arithmetic medium
+        'a0740abc-1234-4567-89ab-cdef00000740', // Maths percentages medium
+        'ed4177aa-e11b-469c-ada6-80458bb069d8', // Maths ratio medium
         'comp-p33-q479',                         // English Comprehension P33 medium
         'comp-p33-q481',                         // English Comprehension P33 medium
       ];
@@ -706,28 +707,63 @@ export class DatabaseStorage implements IStorage {
         continue;
       }
 
-      // Non-comp: difficulty-proportional selection with backfill
+      // Non-comp: skill_id variety enforcement then difficulty-proportional fill
       const sectionTarget = perSection(section);
       const shuffled = pool.sort(() => Math.random() - 0.5);
 
-      const easyCount = Math.round(sectionTarget * diffProfile.easy);
-      const mediumCount = Math.round(sectionTarget * diffProfile.medium);
-      const hardCount = sectionTarget - easyCount - mediumCount;
-
-      const byDiff = (d: string) => shuffled.filter(q => q.difficulty === d);
-      let sectionQuestions = [
-        ...byDiff('easy').slice(0, easyCount),
-        ...byDiff('medium').slice(0, mediumCount),
-        ...byDiff('hard').slice(0, Math.max(0, hardCount)),
-      ];
-
-      if (sectionQuestions.length < sectionTarget) {
-        const usedIds = new Set(sectionQuestions.map(q => q.id));
-        const remaining = shuffled.filter(q => !usedIds.has(q.id));
-        sectionQuestions = [...sectionQuestions, ...remaining.slice(0, sectionTarget - sectionQuestions.length)];
+      // Group by skill_id so every skill category gets at least one slot
+      const bySkill = new Map<string, typeof shuffled>();
+      for (const q of shuffled) {
+        if (!bySkill.has(q.skillId)) bySkill.set(q.skillId, []);
+        bySkill.get(q.skillId)!.push(q);
       }
 
-      results.push(...sectionQuestions);
+      const selected: typeof shuffled = [];
+      const subRuleCount = new Map<string, number>();
+      const SUB_RULE_CAP = 2; // max questions sharing the same sub_rule_id per session
+
+      // Pass 1 — guarantee ≥1 question per skill_id (prefer medium → easy → hard)
+      for (const qs of bySkill.values()) {
+        if (selected.length >= sectionTarget) break;
+        const pick =
+          qs.find(q => q.difficulty === 'medium' && (subRuleCount.get(q.subRuleId) ?? 0) < SUB_RULE_CAP) ||
+          qs.find(q => q.difficulty === 'easy'   && (subRuleCount.get(q.subRuleId) ?? 0) < SUB_RULE_CAP) ||
+          qs.find(q =>                              (subRuleCount.get(q.subRuleId) ?? 0) < SUB_RULE_CAP);
+        if (pick) {
+          selected.push(pick);
+          subRuleCount.set(pick.subRuleId, (subRuleCount.get(pick.subRuleId) ?? 0) + 1);
+        }
+      }
+
+      // Pass 2 — fill remaining slots with difficulty-proportional picks, respecting sub_rule cap
+      const usedIds = new Set(selected.map(q => q.id));
+      const remaining = shuffled.filter(q => !usedIds.has(q.id));
+      const stillNeeded = sectionTarget - selected.length;
+      if (stillNeeded > 0) {
+        const easyCount  = Math.round(stillNeeded * diffProfile.easy);
+        const mediumCount = Math.round(stillNeeded * diffProfile.medium);
+        const hardCount  = stillNeeded - easyCount - mediumCount;
+        const cappedByDiff = (d: string) =>
+          remaining.filter(q => q.difficulty === d && (subRuleCount.get(q.subRuleId) ?? 0) < SUB_RULE_CAP);
+        const pass2 = [
+          ...cappedByDiff('easy').slice(0, easyCount),
+          ...cappedByDiff('medium').slice(0, mediumCount),
+          ...cappedByDiff('hard').slice(0, Math.max(0, hardCount)),
+        ];
+        for (const q of pass2) {
+          subRuleCount.set(q.subRuleId, (subRuleCount.get(q.subRuleId) ?? 0) + 1);
+        }
+        selected.push(...pass2);
+      }
+
+      // Backfill if still short (drop sub_rule cap as last resort)
+      if (selected.length < sectionTarget) {
+        const usedIds2 = new Set(selected.map(q => q.id));
+        const backfill = shuffled.filter(q => !usedIds2.has(q.id));
+        selected.push(...backfill.slice(0, sectionTarget - selected.length));
+      }
+
+      results.push(...selected);
     }
 
     // Proportional final assembly — comp first, then non-comp round-robin interleaved
@@ -897,7 +933,8 @@ export class DatabaseStorage implements IStorage {
       }
     }
 
-    // === Non-comp sections: difficulty-proportional with freshness preference ===
+    // === Non-comp sections: skill_id variety enforcement + difficulty-proportional fill ===
+    const PP_SUB_RULE_CAP = 2;
     for (const section of nonCompSections) {
       const pool = await db.select().from(questions)
         .where(and(
@@ -916,39 +953,55 @@ export class DatabaseStorage implements IStorage {
       const workingPool = fresh.length >= perNonCompSection ? fresh : pool;
       const shuffled = workingPool.sort(() => Math.random() - 0.5);
 
-      const targetEasy = Math.round(perNonCompSection * (isEarlyLearner ? 0.40 : 0.20));
-      const targetMed  = Math.round(perNonCompSection * (isEarlyLearner ? 0.60 : 0.45));
-      const targetHard = isEarlyLearner ? 0 : perNonCompSection - targetEasy - targetMed;
-
-      const byDiff = (d: string) => shuffled.filter(q => q.difficulty === d);
-      const easyPool   = byDiff('easy');
-      const medPool    = byDiff('medium');
-      const hardPool   = byDiff('hard');
-
-      // Cascade shortfalls upward: easy→medium→hard so the total always equals perNonCompSection
-      const easyPick = easyPool.slice(0, targetEasy);
-      const easyShortfall = targetEasy - easyPick.length;
-
-      const adjMed = targetMed + easyShortfall;
-      const medUsed = new Set(easyPick.map(q => q.id));
-      const medPick = medPool.filter(q => !medUsed.has(q.id)).slice(0, adjMed);
-      const medShortfall = adjMed - medPick.length;
-
-      const adjHard = Math.max(0, targetHard + medShortfall);
-      const hardUsed = new Set([...easyPick, ...medPick].map(q => q.id));
-      const hardPick = hardPool.filter(q => !hardUsed.has(q.id)).slice(0, adjHard);
-      const hardShortfall = adjHard - hardPick.length;
-
-      let pick = [...easyPick, ...medPick, ...hardPick];
-
-      // Only use random fill as a last resort if all difficulty tiers are exhausted
-      if (hardShortfall > 0) {
-        const usedIds = new Set(pick.map(q => q.id));
-        const extra = shuffled.filter(q => !usedIds.has(q.id)).slice(0, hardShortfall);
-        pick = [...pick, ...extra];
+      // Group by skill_id for variety enforcement
+      const bySkillPP = new Map<string, typeof shuffled>();
+      for (const q of shuffled) {
+        if (!bySkillPP.has(q.skillId)) bySkillPP.set(q.skillId, []);
+        bySkillPP.get(q.skillId)!.push(q);
       }
 
-      nonCompBuckets.set(section, pick.slice(0, perNonCompSection));
+      const ppSelected: typeof shuffled = [];
+      const ppSubRuleCount = new Map<string, number>();
+
+      // Pass 1 — guarantee ≥1 per skill_id (prefer medium → easy → hard)
+      for (const qs of bySkillPP.values()) {
+        if (ppSelected.length >= perNonCompSection) break;
+        const pick =
+          qs.find(q => q.difficulty === 'medium' && (ppSubRuleCount.get(q.subRuleId) ?? 0) < PP_SUB_RULE_CAP) ||
+          qs.find(q => q.difficulty === 'easy'   && (ppSubRuleCount.get(q.subRuleId) ?? 0) < PP_SUB_RULE_CAP) ||
+          qs.find(q =>                              (ppSubRuleCount.get(q.subRuleId) ?? 0) < PP_SUB_RULE_CAP);
+        if (pick) {
+          ppSelected.push(pick);
+          ppSubRuleCount.set(pick.subRuleId, (ppSubRuleCount.get(pick.subRuleId) ?? 0) + 1);
+        }
+      }
+
+      // Pass 2 — fill remaining slots with difficulty-proportional picks
+      const ppUsedIds = new Set(ppSelected.map(q => q.id));
+      const ppRemaining = shuffled.filter(q => !ppUsedIds.has(q.id));
+      const ppStillNeeded = perNonCompSection - ppSelected.length;
+
+      if (ppStillNeeded > 0) {
+        const targetEasy = Math.round(ppStillNeeded * (isEarlyLearner ? 0.40 : 0.20));
+        const targetMed  = Math.round(ppStillNeeded * (isEarlyLearner ? 0.60 : 0.45));
+        const targetHard = isEarlyLearner ? 0 : ppStillNeeded - targetEasy - targetMed;
+        const cappedPP = (d: string) =>
+          ppRemaining.filter(q => q.difficulty === d && (ppSubRuleCount.get(q.subRuleId) ?? 0) < PP_SUB_RULE_CAP);
+
+        const easyPick = cappedPP('easy').slice(0, targetEasy);
+        const medPick  = cappedPP('medium').slice(0, targetMed + Math.max(0, targetEasy - easyPick.length));
+        const hardPick = cappedPP('hard').slice(0, Math.max(0, targetHard + Math.max(0, (targetMed + targetEasy - easyPick.length - medPick.length))));
+        ppSelected.push(...easyPick, ...medPick, ...hardPick);
+      }
+
+      // Backfill (drop sub_rule cap as last resort)
+      if (ppSelected.length < perNonCompSection) {
+        const usedIds2 = new Set(ppSelected.map(q => q.id));
+        const backfill = shuffled.filter(q => !usedIds2.has(q.id));
+        ppSelected.push(...backfill.slice(0, perNonCompSection - ppSelected.length));
+      }
+
+      nonCompBuckets.set(section, ppSelected.slice(0, perNonCompSection));
     }
 
     // === Round-robin interleave non-comp buckets (VR → NVR → Math → VR → …) ===
