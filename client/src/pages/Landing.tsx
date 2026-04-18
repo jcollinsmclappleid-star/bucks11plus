@@ -855,6 +855,92 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* ── LLM-CRAWLABLE: ABOUT & FAQ ── */}
+      <section className="bg-slate-50 border-t border-slate-200" aria-label="About the platform" data-testid="section-about-faq">
+        <div className="container mx-auto max-w-4xl px-4 py-12 space-y-12">
+
+          {/* What the readiness check covers */}
+          <div>
+            <h2 className="text-xl font-bold text-primary font-serif mb-2">What the Bucks 11+ Readiness Check Covers</h2>
+            <p className="text-sm text-slate-500 leading-relaxed mb-5">
+              The Buckinghamshire Secondary Transfer Test (STT) is produced by GL Assessment and covers four assessed domains. Our readiness check replicates this structure using independently developed GL-style question families:
+            </p>
+            <div className="grid sm:grid-cols-2 gap-4">
+              {[
+                { label: "Verbal Reasoning", color: "border-l-violet-400 bg-violet-50", dot: "bg-violet-400", text: "Word relationships, alphabetical codes, missing letters, analogies, and logical deduction using language. Tests vocabulary breadth and rule-application speed." },
+                { label: "Non-Verbal & Spatial Reasoning", color: "border-l-blue-400 bg-blue-50", dot: "bg-blue-400", text: "Pattern sequences, matrices, shape analogies, spatial rotation, and reflection. Tests logical reasoning without language — a domain not covered in the primary school curriculum." },
+                { label: "Mathematics", color: "border-l-emerald-400 bg-emerald-50", dot: "bg-emerald-400", text: "Arithmetic fluency, fractions, data interpretation, multi-step word problems, and geometry. Goes beyond the Year 6 curriculum into applied reasoning under time pressure." },
+                { label: "English Comprehension", color: "border-l-amber-400 bg-amber-50", dot: "bg-amber-400", text: "Reading passages with multiple-choice questions covering literal comprehension, inference, vocabulary in context, and author technique. Two-phase timed — reading time separate from response time." },
+              ].map((s, i) => (
+                <div key={i} className={`rounded-xl border border-slate-200 border-l-4 p-5 ${s.color}`}>
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className={`w-2 h-2 rounded-full ${s.dot}`} />
+                    <h3 className="font-bold text-primary text-sm">{s.label}</h3>
+                  </div>
+                  <p className="text-xs text-slate-600 leading-relaxed">{s.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <hr className="border-slate-200" />
+
+          {/* What does 121 mean */}
+          <div>
+            <h2 className="text-xl font-bold text-primary font-serif mb-3">What Does 121 Mean in the Bucks 11+?</h2>
+            <div className="flex flex-col sm:flex-row gap-5">
+              <div className="shrink-0 flex flex-col items-center justify-center bg-primary rounded-2xl px-7 py-5 text-white text-center min-w-[110px]">
+                <span className="text-5xl font-bold font-serif leading-none">121</span>
+                <span className="text-[10px] font-semibold uppercase tracking-widest mt-2 text-white/70">Qualifying Score</span>
+              </div>
+              <div>
+                <p className="text-sm text-slate-600 leading-relaxed mb-3">
+                  121 is the standardised score qualifying threshold for the Buckinghamshire Secondary Transfer Test. It is not a raw mark or a percentage — it is a statistically standardised figure that accounts for the child's age on the day of the test and the difficulty of that year's paper.
+                </p>
+                <p className="text-sm text-slate-600 leading-relaxed">
+                  Children who achieve 121 or above are deemed to have qualified and are eligible to be considered for a place at any of the 13 Buckinghamshire grammar schools. Qualifying does not guarantee a place — oversubscription criteria at each school (typically distance-based) determine final allocation.
+                </p>
+                <Link href="/bucks-11-plus-qualifying-score" className="text-sm text-primary hover:underline font-medium inline-flex items-center gap-1 mt-2">
+                  Full explanation of the 121 qualifying score <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          <hr className="border-slate-200" />
+
+          {/* FAQ */}
+          <div>
+            <h2 className="text-xl font-bold text-primary font-serif mb-6">Frequently Asked Questions</h2>
+            <div className="space-y-0 rounded-2xl border border-slate-200 bg-white overflow-hidden divide-y divide-slate-100">
+              {[
+                { q: "Is this platform built specifically for the Buckinghamshire 11+?", a: "Yes — exclusively. Every question, every readiness check, and every benchmark is built for the Buckinghamshire Secondary Transfer Test. Results are measured against the 121 qualifying threshold, covering all four GL Assessment domains, across all 13 Buckinghamshire grammar schools. This is not a generic 11+ platform repurposed for Bucks." },
+                { q: "Is Bucks 11 Plus Tests affiliated with GL Assessment or Buckinghamshire Council?", a: "No. We are fully independent — not affiliated with GL Assessment, Buckinghamshire Council, TBGS, or any individual grammar school. 'GL-style' refers to the question format we independently replicate, not an official relationship." },
+                { q: "How is the free readiness check different from the paid platform?", a: "The free readiness check gives you a readiness band, forecast score, and section breakdown with no account needed. The paid Bucks Plus Edge (£35/month or £349/year) gives access to 1,500+ questions, full-length practice papers, full GL-style mock exams, all Hard drills, parent analytics, progress tracking, and a guided programme." },
+                { q: "What is the difference between the monthly and annual plan?", a: "Both plans give identical full access to every feature. The monthly plan is £35/month and can be cancelled anytime. The annual plan is £349/year — equivalent to £29.08/month — saving £71 compared to paying monthly for 12 months." },
+                { q: "Can I cancel my subscription?", a: "Yes — monthly and annual subscriptions can be cancelled anytime from your account page. If you cancel, you retain access until the end of the current billing period." },
+                { q: "When should my child start preparing for the Bucks 11+?", a: "Most families begin structured preparation in Year 4 or early Year 5, giving children 12 to 18 months before the September test date. Starting with a readiness check helps identify specific gaps and ensures preparation time is spent where it will have the most impact." },
+              ].map((item, i) => (
+                <div key={i} className="px-6 py-5">
+                  <p className="text-sm font-semibold text-primary mb-2 flex items-start gap-2">
+                    <span className="mt-0.5 shrink-0 w-5 h-5 rounded-full bg-primary/10 text-primary text-[10px] font-bold flex items-center justify-center">Q</span>
+                    {item.q}
+                  </p>
+                  <p className="text-sm text-slate-500 leading-relaxed pl-7">{item.a}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="text-center pt-2">
+            <p className="text-xs text-slate-400" data-testid="text-platform-disclaimer">
+              Independent readiness assessment · Not affiliated with GL Assessment or Buckinghamshire Council · Operated by Ianson Systems Limited · Registered in England
+            </p>
+          </div>
+
+        </div>
+      </section>
+
     </div>
   );
 }

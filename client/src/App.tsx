@@ -54,6 +54,7 @@ import QuestionList from "./pages/admin/QuestionList";
 import QuestionEditor from "./pages/admin/QuestionEditor";
 
 import ParentGuide from "./pages/ParentGuide";
+import WhyChoosePlatform from "./pages/WhyChoosePlatform";
 import GuidePrint from "./pages/GuidePrint";
 import SiteLinks from "./pages/SiteLinks";
 import LearnHub from "./pages/learn/LearnHub";
@@ -103,6 +104,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
             <ul className="space-y-2 text-sm">
               <li><Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
               <li><Link href="/how-it-works" className="hover:text-white transition-colors">How It Works</Link></li>
+              <li><Link href="/why-choose-bucks-11-plus-tests" className="hover:text-white transition-colors">Why Choose Us</Link></li>
               <li><Link href="/bucks-gl-alignment" className="hover:text-white transition-colors">GL-Style Alignment</Link></li>
               <li><Link href="/how-forecast-works" className="hover:text-white transition-colors">How Scoring Works</Link></li>
               <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
@@ -243,6 +245,7 @@ function Router() {
             <Route path="/parent-hub" component={ParentHub} />
             <Route path="/parent-hub/:slug" component={Article} />
             <Route path="/how-it-works" component={HowItWorks} />
+            <Route path="/why-choose-bucks-11-plus-tests" component={WhyChoosePlatform} />
             <Route path="/how-forecast-works" component={ScoringMethodology} />
             <Route path="/bucks-gl-alignment" component={GLAlignment} />
             <Route path="/about" component={About} />
