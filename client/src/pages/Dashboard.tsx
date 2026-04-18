@@ -163,7 +163,7 @@ export default function Dashboard() {
                 <div className="space-y-6 flex-1 w-full">
                   <div>
                     <div className="flex justify-between text-sm mb-2">
-                      <span className="font-medium text-primary">Gap to 121 Standard</span>
+                      <span className="font-medium text-primary">Estimated gap to 121 threshold</span>
                       <span className={`font-bold ${gap <= 0 ? 'text-green-600' : 'text-amber-600'}`}>
                         {gap <= 0 ? "Target met!" : `${gap} points`}
                       </span>

@@ -12,7 +12,7 @@ export default function Legal({ type }: { type: 'terms' | 'privacy' | 'safeguard
         },
         {
           heading: "2. Service Description",
-          body: "Bucks 11 Plus Tests is an independent digital education platform providing diagnostic assessments, practice questions, readiness forecasts and progress tracking tools designed to support preparation for the Buckinghamshire 11+ Secondary Transfer Test. The Service is intended for informational and educational purposes only. We do not guarantee any specific score, outcome or grammar school placement. Our readiness forecasts are modelled estimates based on observed performance patterns and are not official standardised scores."
+          body: "Bucks 11 Plus Tests is an independent digital education platform providing diagnostic assessments, practice questions, readiness forecasts and progress tracking tools designed to support preparation for the Buckinghamshire 11+ Secondary Transfer Test. The Service is intended for informational and educational purposes only. We do not guarantee any specific score, outcome or grammar school placement. Our readiness forecasts are indicative estimates calculated from observed performance on GL-style questions using a fixed scoring scale and are not official standardised scores. The official GL Assessment applies proprietary age-standardised scoring tables (which adjust a child's raw score according to their date of birth) that are not available to independent providers; our model does not apply this adjustment. Accordingly, our readiness estimates may differ from a child's official GL Assessment result, and should be treated as a directional preparation guide only."
         },
         {
           heading: "3. User Accounts and Responsibilities",

@@ -162,10 +162,14 @@ export default function GuestResults() {
               </div>
               <p className="text-muted-foreground text-lg">
                 {(target - currentScore) > 0 ? (
-                  <>Your child is currently showing a <strong className="text-primary">{target - currentScore} point gap</strong> to the 121 standard.</>
+                  <>Your child is currently showing an estimated <strong className="text-primary">{target - currentScore} point gap</strong> to the 121 threshold.</>
                 ) : (
-                  <>Your child is <strong className="text-green-700">meeting or exceeding</strong> the 121 standard!</>
+                  <>Your child is <strong className="text-green-700">meeting or exceeding</strong> the 121 threshold on this estimate!</>
                 )}
+              </p>
+              <p className="text-[11px] text-muted-foreground/50 text-center mt-2">
+                Indicative readiness estimate only · Not an official GL Assessment score ·{" "}
+                <Link href="/scoring-methodology" className="underline hover:text-muted-foreground/80">How scoring works</Link>
               </p>
             </div>
 

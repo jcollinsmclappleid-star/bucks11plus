@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, CheckCircle2, XCircle, Target, BarChart3, Brain, Clock, Shield, Zap, BookOpen, TrendingUp } from "lucide-react";
+import { ArrowRight, CheckCircle2, XCircle, MinusCircle, Target, BarChart3, Brain, Clock, Shield, Zap, BookOpen, TrendingUp } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 
 const whyChooseFaqSchema = {
@@ -9,10 +9,10 @@ const whyChooseFaqSchema = {
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "Why use a platform instead of practice papers for Bucks 11+ preparation?",
+      "name": "Do I need to choose between practice papers and a platform for Bucks 11+ preparation?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Practice papers can't tell you which sub-topics are costing your child the most marks, or whether errors are caused by pacing rather than knowledge gaps. An intelligent platform gives you a readiness forecast against 121, a sub-topic breakdown ranked by points available, parent analytics, and a guided programme that adapts to your child's specific weaknesses."
+        "text": "No — most families use both. Practice papers are excellent for building exam stamina and familiarity with the paper format. What they can't do is tell you which sub-topics are costing marks, why answers were wrong, or what to prioritise next. The platform provides a readiness estimate versus the 121 threshold, a sub-topic breakdown ranked by marks available, parent analytics, and a guided programme that adapts to your child's specific weaknesses. Papers and the platform are complementary tools, not alternatives."
       }
     },
     {
@@ -34,46 +34,61 @@ const whyChooseFaqSchema = {
   ]
 };
 
-const comparison = [
+type ComparisonRow = {
+  feature: string;
+  papers: string;
+  papersIcon: "positive" | "neutral" | "none";
+  platform: string;
+};
+
+const comparison: ComparisonRow[] = [
   {
-    feature: "After a test, your child gets:",
-    papers: "A mark and some marked answers",
-    platform: "Forecast score, readiness band, + top 3 gaps by points available",
+    feature: "Exam-format familiarity",
+    papers: "Excellent — paper format closely mirrors the actual STT experience",
+    papersIcon: "positive",
+    platform: "GL-style question families across all 4 domains · timed under exam conditions",
   },
   {
-    feature: "Parent visibility",
-    papers: "None — unless you mark it yourself",
-    platform: "Full analytics dashboard: accuracy, stamina, sub-topic breakdown",
+    feature: "Question volume",
+    papers: "High — many books and packs available at low cost",
+    papersIcon: "positive",
+    platform: "1,500+ questions organised by sub-topic and difficulty",
+  },
+  {
+    feature: "After a session, your child gets:",
+    papers: "A raw mark and marked answers — helpful to review",
+    papersIcon: "neutral",
+    platform: "Readiness estimate vs 121 · readiness band · top 3 gaps by marks available",
+  },
+  {
+    feature: "Parent insight",
+    papers: "Whatever you gather by marking it yourself",
+    papersIcon: "neutral",
+    platform: "Full analytics dashboard: accuracy by sub-topic, stamina, and pace analysis",
   },
   {
     feature: "Feedback per question",
-    papers: "Answer key only",
-    platform: "Instant explanation + difficulty rating + correct approach",
+    papers: "Answer key — right or wrong, with model answers",
+    papersIcon: "neutral",
+    platform: "Instant explanation + difficulty rating + correct approach for every question",
   },
   {
     feature: "Adapts to your child",
-    papers: "No — same for every child",
-    platform: "Yes — gaps drive the weekly programme",
+    papers: "Fixed questions — same paper for every child, every time",
+    papersIcon: "none",
+    platform: "Weekly programme targets your child's specific sub-topic weaknesses",
   },
   {
-    feature: "Progress tracking",
-    papers: "Manual, if at all",
-    platform: "Automatic — forecast score updates after every session",
-  },
-  {
-    feature: "Bucks-specific focus",
-    papers: "Usually generic or partially relevant",
-    platform: "Exclusively Bucks 11+ · benchmarked to 121 · all 4 GL domains",
-  },
-  {
-    feature: "Anytime, any device",
-    papers: "Physical only — printing required",
-    platform: "Any device · no printing · no waiting · instant start",
+    feature: "Bucks-specific benchmarking",
+    papers: "Varies — many papers are generic; not all benchmark to 121",
+    papersIcon: "none",
+    platform: "Exclusively Bucks · every question benchmarked to the 121 qualifying threshold",
   },
   {
     feature: "Pacing & stamina analysis",
-    papers: "Not available",
-    platform: "Yes — shows if accuracy drops in the 2nd half of the test",
+    papers: "Not available — you'd need to time each section manually",
+    papersIcon: "none",
+    platform: "Yes — shows if accuracy drops in the 2nd half of the test, and by how much",
   },
 ];
 
@@ -123,8 +138,8 @@ export default function WhyChoosePlatform() {
   return (
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
       <Seo
-        title="Why Choose a Platform Over Practice Papers for Bucks 11+? | Bucks 11 Plus Tests"
-        description="Practice papers give your child more questions. We give you answers — a readiness forecast vs 121, exact sub-topic gaps ranked by marks, parent analytics, and a guided programme. Built exclusively for the Buckinghamshire 11+."
+        title="Practice Papers vs Platform for Bucks 11+? Use Both. | Bucks 11 Plus Tests"
+        description="Practice papers build stamina. The platform shows you which sub-topics are costing marks, your readiness estimate versus 121, and exactly what to fix next. Built exclusively for the Buckinghamshire 11+."
         canonicalPath="/why-choose-bucks-11-plus-tests"
         schema={whyChooseFaqSchema}
       />
@@ -139,12 +154,12 @@ export default function WhyChoosePlatform() {
             <span className="text-white/25 text-xs">/</span>
             <span className="text-white/60 text-xs">Why Choose Us</span>
           </div>
-          <span className="inline-block text-xs font-semibold uppercase tracking-[0.2em] text-amber-400/80 mb-5">Platform vs practice papers</span>
+          <span className="inline-block text-xs font-semibold uppercase tracking-[0.2em] text-amber-400/80 mb-5">Papers + platform — used together</span>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1] font-serif mb-5">
-            Why buy practice papers when you can have so much more?
+            Papers tell you the score. We tell you exactly what to fix.
           </h1>
           <p className="text-lg md:text-xl text-white/60 max-w-2xl mx-auto leading-relaxed mb-8">
-            Practice papers give your child questions. We give you answers — exactly what to fix and how many points it's worth.
+            Practice papers are great for building exam stamina and familiarity. What they can't do is tell you which sub-topics are costing marks, why answers were wrong, or what to prioritise next. That's what the platform does.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button size="lg" className="h-12 px-8 bg-amber-400 text-amber-950 hover:bg-amber-300 font-bold border-none" asChild data-testid="button-hero-free">
@@ -163,8 +178,8 @@ export default function WhyChoosePlatform() {
         <div className="container mx-auto max-w-5xl px-4">
           <div className="text-center mb-12">
             <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">Side by side</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-3">Practice papers vs the platform</h2>
-            <p className="text-muted-foreground max-w-lg mx-auto">Papers are one tool. We're a complete preparation system. Here's the difference.</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-3">Papers and the platform — what each gives you</h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">Most families use both: papers for full-length exam simulation, and the platform to pinpoint and close the gaps between attempts.</p>
           </div>
           <div className="overflow-x-auto rounded-2xl border border-slate-200 shadow-sm bg-white">
             <table className="w-full border-collapse text-sm">
@@ -181,8 +196,10 @@ export default function WhyChoosePlatform() {
                     <td className="py-3.5 px-4 text-slate-500 font-medium text-xs leading-relaxed">{row.feature}</td>
                     <td className="py-3.5 px-4">
                       <div className="flex items-start gap-2">
-                        <XCircle className="h-4 w-4 text-slate-300 shrink-0 mt-0.5" />
-                        <span className="text-slate-500 text-sm leading-relaxed">{row.papers}</span>
+                        {row.papersIcon === "positive" && <CheckCircle2 className="h-4 w-4 text-slate-400 shrink-0 mt-0.5" />}
+                        {row.papersIcon === "neutral" && <MinusCircle className="h-4 w-4 text-slate-300 shrink-0 mt-0.5" />}
+                        {row.papersIcon === "none" && <XCircle className="h-4 w-4 text-slate-200 shrink-0 mt-0.5" />}
+                        <span className={`text-sm leading-relaxed ${row.papersIcon === "positive" ? "text-slate-700" : "text-slate-500"}`}>{row.papers}</span>
                       </div>
                     </td>
                     <td className="py-3.5 px-4">
@@ -196,6 +213,7 @@ export default function WhyChoosePlatform() {
               </tbody>
             </table>
           </div>
+          <p className="text-xs text-slate-400 text-center mt-4 italic">Practice papers and this platform are complementary tools — not alternatives. Papers build exam familiarity; the platform shows you exactly where to focus next.</p>
         </div>
       </section>
 
@@ -242,13 +260,13 @@ export default function WhyChoosePlatform() {
             <div>
               <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-4">The intelligence layer</span>
               <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4 leading-tight">
-                Papers can't tell you your child is 7 points away from 121.
+                Papers tell you what your child scored. We show you what it means.
               </h2>
               <p className="text-slate-600 leading-relaxed mb-5">
-                After every readiness check, you see a forecast score vs the qualifying threshold, the subjects costing the most marks, and the exact sub-topics to fix first — ranked by how many points each is worth.
+                After every readiness check, you see an estimated readiness score versus the 121 qualifying threshold, the subjects costing the most marks, and the exact sub-topics to prioritise first — ranked by marks available.
               </p>
               <p className="text-slate-600 leading-relaxed mb-7">
-                Practice papers tell you how many answers were right. We tell you <em>why</em> answers were wrong, which domain of the test it costs the most in, and exactly what to do about it next.
+                Practice papers tell you how many answers were right. We tell you <em>why</em> answers were wrong, which domain of the test it costs the most in, and what to work on before the next attempt.
               </p>
               <div className="space-y-3">
                 {[
