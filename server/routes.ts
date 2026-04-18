@@ -55,7 +55,7 @@ const ALL_VALID_TIERS = ["pack_plus", "pack_annual"];
 const TIER_PRICE_GBP_PENCE: Record<string, number> = {
   // Active plans — new pricing
   pack_plus: 3500,    // £35/month
-  pack_annual: 23900, // £239/year
+  pack_annual: 27900, // £279/year
   // Legacy prices (kept for reference only, not used in new checkout)
   early_learner: 4900,
   pack12: 11900,

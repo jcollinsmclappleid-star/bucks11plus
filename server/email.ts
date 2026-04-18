@@ -298,7 +298,7 @@ export async function sendUpgradeNudge(userId: string) {
       <li><strong>Full readiness checks</strong> with detailed PDF reports</li>
       <li><strong>Progress tracking</strong> to see real improvement over time</li>
     </ul>
-    <p>Bucks Plus Edge starts from <strong>£35/month</strong> (cancel any time) or <strong>£239/year</strong> — saving £181 vs monthly (43% off).</p>
+    <p>Bucks Plus Edge starts from <strong>£35/month</strong> (cancel any time) or <strong>£279/year</strong> — saving £141 vs monthly (34% off).</p>
     <div style="text-align:center;margin:24px 0;">
       <a href="${BASE_URL}/pricing" style="display:inline-block;background:#0d1f30;color:white;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold;">View Plans & Pricing</a>
     </div>
@@ -317,20 +317,20 @@ export async function sendProgrammeNudge(userId: string) {
 
   const html = wrapHtml(`
     <h2 style="color:#0d1f30;margin-bottom:8px;">Lock in 12 months for less</h2>
-    <p>${childName} has been making great progress. Switching to the annual plan locks in a full year of access and saves £181 compared to staying on monthly (43% off).</p>
+    <p>${childName} has been making great progress. Switching to the annual plan locks in a full year of access and saves £141 compared to staying on monthly (34% off).</p>
     <ul style="padding-left:20px;">
       <li><strong>12 months of full access</strong> — every feature, every question</li>
       <li><strong>Full-length practice papers (50 questions)</strong> and GL-style mock exams</li>
       <li><strong>Premium parent analytics</strong> and progress tracking across all sessions</li>
       <li><strong>PDF readiness reports</strong> and guided preparation roadmap</li>
     </ul>
-    <p><strong>£239/year</strong> — equivalent to £19.92/month. Save £181 vs monthly billing (43% off).</p>
+    <p><strong>£279/year</strong> — equivalent to £23.25/month. Save £141 vs monthly billing (34% off).</p>
     <div style="text-align:center;margin:24px 0;">
-      <a href="${BASE_URL}/pricing" style="display:inline-block;background:#0d1f30;color:white;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold;">Switch to Annual — £239/year</a>
+      <a href="${BASE_URL}/pricing" style="display:inline-block;background:#0d1f30;color:white;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold;">Switch to Annual — £279/year</a>
     </div>
   `, userId, token);
 
-  const sent = await sendEmail(user.email, `Save £181 — switch ${childName} to annual access`, html);
+  const sent = await sendEmail(user.email, `Save £141 — switch ${childName} to annual access`, html);
   await logEmailEvent(userId, "programme_nudge", sent ? "sent" : "failed");
 }
 

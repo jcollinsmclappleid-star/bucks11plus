@@ -289,7 +289,7 @@ export default function HowItWorks() {
           <div className="text-center mb-10">
             <span className="inline-block text-xs font-bold text-amber-400/60 uppercase tracking-widest mb-3">Full platform</span>
             <h2 className="text-3xl md:text-4xl font-bold text-white font-serif mb-3">Everything inside Bucks Plus Edge</h2>
-            <p className="text-white/55 max-w-lg mx-auto">All of this is included in the monthly (£35) and annual (£239) plans.</p>
+            <p className="text-white/55 max-w-lg mx-auto">All of this is included in the monthly (£35) and annual (£279) plans.</p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[

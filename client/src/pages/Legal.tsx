@@ -158,7 +158,7 @@ export default function Legal({ type }: { type: 'terms' | 'privacy' | 'safeguard
         },
         {
           heading: "Plan Changes & Upgrades",
-          body: "Current plan prices: Bucks Plus Edge Monthly £35/month; Bucks Plus Edge Annual £239/year. If you wish to change your plan, please contact support@11plustesthub.co.uk. Downgrades are not available once content from a higher-tier plan has been accessed."
+          body: "Current plan prices: Bucks Plus Edge Monthly £35/month; Bucks Plus Edge Annual £279/year. If you wish to change your plan, please contact support@11plustesthub.co.uk. Downgrades are not available once content from a higher-tier plan has been accessed."
         },
         {
           heading: "Contact",

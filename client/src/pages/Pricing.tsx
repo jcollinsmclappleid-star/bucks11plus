@@ -103,7 +103,7 @@ export default function Pricing() {
   const faqs = [
     {
       q: "What's the difference between Monthly and Annual?",
-      a: "Both plans give you identical access to everything on the platform — 1,500+ questions, full readiness checks, all 20 Hard drills, mock exam simulations, PDF reports, progress tracking, and premium analytics. Annual is simply billed once a year (£239) rather than monthly (£35/mo). Choosing Annual saves you £181 — that's 43% off — compared to 12 months of monthly billing."
+      a: "Both plans give you identical access to everything on the platform — 1,500+ questions, full readiness checks, all 20 Hard drills, mock exam simulations, PDF reports, progress tracking, and premium analytics. Annual is simply billed once a year (£279) rather than monthly (£35/mo). Choosing Annual saves you £141 — that's 34% off — compared to 12 months of monthly billing."
     },
     {
       q: "Can I cancel my monthly subscription at any time?",
@@ -131,7 +131,7 @@ export default function Pricing() {
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
       <Seo
         title="Bucks 11 Plus Preparation Plans & Pricing (2026) | Bucks 11 Plus Tests"
-        description="Free readiness check plus Bucks Plus Edge — £35/month or £239/year. Full access to 1,500+ targeted questions, readiness checks, mock exams and progress tracking for Bucks 11 Plus preparation."
+        description="Free readiness check plus Bucks Plus Edge — £35/month or £279/year. Full access to 1,500+ targeted questions, readiness checks, mock exams and progress tracking for Bucks 11 Plus preparation."
         canonicalPath="/pricing"
       />
 
@@ -147,12 +147,12 @@ export default function Pricing() {
                 {currentTier === "pack_annual" ? "Bucks Plus Edge — Annual" : "Bucks Plus Edge"} · Active
               </Badge>
               <h1 className="text-4xl md:text-5xl font-bold text-white font-serif mb-4">
-                {isTopTier ? "Your full access plan is active." : "Your plan is active. Save £181 by switching to Annual."}
+                {isTopTier ? "Your full access plan is active." : "Your plan is active. Save £141 by switching to Annual."}
               </h1>
               <p className="text-white/60 mb-7">
                 {currentTier === "pack_annual"
                   ? "12 months of full platform access — all 1,500+ questions, every drill, mock exams, readiness checks, PDF reports and premium analytics."
-                  : "You have full monthly access. Switch to Annual for £239/year and save £181 on your current billing."}
+                  : "You have full monthly access. Switch to Annual for £279/year and save £141 on your current billing."}
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Button size="lg" className="h-12 px-8 bg-amber-400 text-amber-950 hover:bg-amber-300 font-bold border-none" asChild data-testid="button-go-dashboard">
@@ -201,7 +201,7 @@ export default function Pricing() {
             </h2>
             <p className="text-muted-foreground max-w-xl mx-auto">
               {hasPaidPlan
-                ? (isTopTier ? "You have full access to the most comprehensive preparation package." : "You're on monthly. Switch to Annual and save £181.")
+                ? (isTopTier ? "You have full access to the most comprehensive preparation package." : "You're on monthly. Switch to Annual and save £141.")
                 : "Start free — no account needed. Upgrade for full access."}
             </p>
           </div>
@@ -310,7 +310,7 @@ export default function Pricing() {
                 <Card className="border-brand-amber border-2 shadow-xl relative flex flex-col overflow-hidden bg-amber-50/20" data-testid="card-tier-pack-annual">
                   <div className="absolute top-0 inset-x-0 h-1.5 bg-brand-amber" />
                   <div className="absolute top-3 right-3 bg-brand-amber text-amber-950 px-2.5 py-1 rounded-full font-bold text-[10px] uppercase tracking-wider shadow pointer-events-none">
-                    SAVE £181
+                    SAVE £141
                   </div>
                   <CardHeader className="pb-3 pt-6">
                     <p className="text-xs font-bold text-brand-amber uppercase tracking-wider mb-1">Bucks Plus Edge — Annual</p>
@@ -318,14 +318,14 @@ export default function Pricing() {
                   </CardHeader>
                   <CardContent className="flex-1">
                     <div className="mb-1">
-                      <span className="text-5xl font-bold text-primary">£239</span>
+                      <span className="text-5xl font-bold text-primary">£279</span>
                       <span className="text-muted-foreground font-medium text-sm"> / year</span>
                     </div>
-                    <p className="text-xs text-brand-amber font-semibold mb-1">That's just 65p/day</p>
+                    <p className="text-xs text-brand-amber font-semibold mb-1">That's just 76p/day</p>
                     <div className="flex flex-wrap items-center gap-2 mb-5">
-                      <p className="text-xs text-slate-500">Equiv. £19.92/mo · 43% off monthly</p>
+                      <p className="text-xs text-slate-500">Equiv. £23.25/mo · 34% off monthly</p>
                       <span className="inline-flex items-center text-[11px] font-bold text-amber-700 bg-amber-100 border border-amber-200 px-2 py-0.5 rounded-full">
-                        Save £181 vs monthly
+                        Save £141 vs monthly
                       </span>
                     </div>
                     <ul className="space-y-2.5">
@@ -357,7 +357,7 @@ export default function Pricing() {
                       disabled={loading === "pack_annual"}
                       data-testid="button-get-pack-annual"
                     >
-                      {loading === "pack_annual" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Get Annual — £239/year"}
+                      {loading === "pack_annual" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Get Annual — £279/year"}
                     </Button>
                   </CardFooter>
                 </Card>
@@ -372,7 +372,7 @@ export default function Pricing() {
                       <tr className="border-b-2 border-slate-200 bg-slate-50">
                         <th className="text-left py-3 px-4 font-semibold text-slate-600 w-[55%]">Feature</th>
                         <th className="text-center py-3 px-4 font-semibold text-slate-600">Free</th>
-                        <th className="text-center py-3 px-4 font-bold text-primary">Bucks Plus Edge<br /><span className="text-xs font-normal text-slate-400">£35/mo or £239/yr</span></th>
+                        <th className="text-center py-3 px-4 font-bold text-primary">Bucks Plus Edge<br /><span className="text-xs font-normal text-slate-400">£35/mo or £279/yr</span></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -417,13 +417,13 @@ export default function Pricing() {
           <div className="container mx-auto max-w-xl px-4 text-center">
             <div className="inline-flex items-center gap-2 bg-brand-amber/10 border border-brand-amber/30 rounded-full px-4 py-1.5 mb-4">
               <TrendingUp className="h-4 w-4 text-brand-amber" />
-              <span className="text-xs font-bold uppercase tracking-wider text-brand-amber">Save £181</span>
+              <span className="text-xs font-bold uppercase tracking-wider text-brand-amber">Save £141</span>
             </div>
-            <h3 className="text-2xl font-bold text-primary font-serif mb-3">Switch to Annual and save £181</h3>
-            <p className="text-slate-600 text-sm mb-6">You're on monthly billing at £35/month. Switch to Annual for £239/year — identical access, 12 months locked in, £181 saved (43% off).</p>
+            <h3 className="text-2xl font-bold text-primary font-serif mb-3">Switch to Annual and save £141</h3>
+            <p className="text-slate-600 text-sm mb-6">You're on monthly billing at £35/month. Switch to Annual for £279/year — identical access, 12 months locked in, £141 saved (34% off).</p>
             {availableUpgrades.includes("pack_annual") && (
               <Button className="bg-brand-amber text-amber-950 hover:bg-brand-amber/90 h-11 px-8 font-bold" onClick={() => handleUpgrade("pack_annual")} disabled={loading === "upgrade"} data-testid="button-upgrade-pack-annual">
-                {loading === "upgrade" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Switch to Annual — £239"}
+                {loading === "upgrade" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Switch to Annual — £279"}
               </Button>
             )}
           </div>
