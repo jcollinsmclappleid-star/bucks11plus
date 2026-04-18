@@ -12,13 +12,13 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   const navLinks = [
-    { href: "/app", label: "Dashboard", show: true },
-    { href: "/app/diagnostic", label: "Readiness Checks", show: true, matchPrefix: true },
-    { href: "/app/practice", label: "Practice", show: true, matchPrefix: true },
-    { href: "/app/progress", label: "Progress", show: true },
-    { href: "/app/report-archive", label: "Reports", show: true },
-    { href: "/app/programme", label: "Programme", show: true },
-    { href: "/app/analytics", label: "Analytics", show: true },
+    { href: "/app", label: "Dashboard", show: !!user },
+    { href: "/app/diagnostic", label: "Readiness Checks", show: !!user, matchPrefix: true },
+    { href: "/app/practice", label: "Practice", show: !!user, matchPrefix: true },
+    { href: "/app/progress", label: "Progress", show: !!user },
+    { href: "/app/report-archive", label: "Reports", show: !!user },
+    { href: "/app/programme", label: "Programme", show: !!user },
+    { href: "/app/analytics", label: "Analytics", show: !!user },
     { href: "/app/account", label: "Account & Subscription", show: !!user, mobileOnly: true },
     { href: "/how-it-works", label: "How It Works", show: true },
     { href: "/bucks-11-plus-parent-guide", label: "Free Guide", show: true },
