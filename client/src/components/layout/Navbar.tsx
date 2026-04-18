@@ -16,6 +16,8 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 const resourceLinks = [
+  { href: "/why-choose-bucks-11-plus-tests", label: "Why Choose Us", desc: "Platform vs practice papers — side by side" },
+  { href: "/how-it-works", label: "How It Works", desc: "How readiness forecasting and the programme work" },
   { href: "/bucks-11-plus-parent-guide", label: "Free Parent Guide", desc: "Complete prep guide for Bucks parents" },
   { href: "/parent-hub", label: "Parent Hub", desc: "Articles, advice and revision tips" },
   { href: "/learn", label: "Learn Hub", desc: "Subject guides and technique breakdowns" },
@@ -61,6 +63,7 @@ export default function Navbar() {
     { href: "/app/programme", label: "Programme", show: true, matchPrefix: false },
     { href: "/app/analytics", label: "Analytics", show: true, matchPrefix: false },
     { href: "/app/account", label: "Account & Subscription", show: !!user, matchPrefix: false },
+    { href: "/why-choose-bucks-11-plus-tests", label: "Why Choose Us", show: true, matchPrefix: false },
     { href: "/how-it-works", label: "How It Works", show: true, matchPrefix: false },
     { href: "/bucks-11-plus-parent-guide", label: "Free Guide", show: true, matchPrefix: false },
     { href: "/pricing", label: "Pricing", show: true, matchPrefix: false },
