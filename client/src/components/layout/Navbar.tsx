@@ -90,11 +90,11 @@ export default function Navbar() {
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 group shrink-0" aria-label="Bucks 11 Plus Tests — Home">
-          <div className="w-11 h-11 rounded-xl overflow-hidden shrink-0 shadow-sm">
+          <div className="w-12 h-12 rounded-xl overflow-hidden shrink-0 shadow-sm relative">
             <img
               src="/logo-shield.png"
               alt="Bucks 11 Plus Tests shield logo"
-              className="w-full h-full object-cover object-center"
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[230%]"
             />
           </div>
           <div className="flex flex-col leading-none hidden sm:flex">
@@ -105,7 +105,7 @@ export default function Navbar() {
 
         {/* Desktop nav — all users see app links */}
         <nav className="hidden md:flex items-center gap-1 flex-1 justify-center">
-          <div className="flex items-center gap-3 lg:gap-5">
+          <div className="flex items-center gap-2 lg:gap-4">
             {appNavLinks.map(link => (
               <Link
                 key={link.href}
@@ -156,13 +156,19 @@ export default function Navbar() {
           ) : (
             <>
               <Button size="sm" className="bg-amber-400 hover:bg-amber-300 text-amber-950 font-bold border-none shadow-sm" asChild data-testid="link-free-diagnostic-desktop">
-                <Link href="/free-diagnostic">Free Readiness Check</Link>
+                <Link href="/free-diagnostic">
+                  <span className="hidden lg:inline">Free Readiness Check</span>
+                  <span className="lg:hidden">Free Check</span>
+                </Link>
               </Button>
               <Button variant="ghost" size="sm" asChild data-testid="link-signin">
                 <Link href="/sign-in">Sign In</Link>
               </Button>
               <Button size="sm" className="bg-primary" asChild data-testid="link-get-started">
-                <Link href="/pricing">See Plans</Link>
+                <Link href="/pricing">
+                  <span className="hidden lg:inline">See Plans</span>
+                  <span className="lg:hidden">Plans</span>
+                </Link>
               </Button>
             </>
           )}
