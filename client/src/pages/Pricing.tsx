@@ -103,7 +103,7 @@ export default function Pricing() {
   const faqs = [
     {
       q: "What's the difference between Monthly and Annual?",
-      a: "Both plans give you identical access to everything on the platform — 1,500+ questions, full readiness checks, all 20 Hard drills, mock exam simulations, PDF reports, progress tracking, and premium analytics. Annual is simply billed once a year (£279) rather than monthly (£35/mo). Choosing Annual saves you £141 — that's 34% off — compared to 12 months of monthly billing."
+      a: "Both plans give you identical access to everything on the platform — 1,500+ questions, full readiness checks, all Hard drills, mock exam simulations, PDF reports, progress tracking, and premium analytics. Annual is simply billed once a year (£279) rather than monthly (£35/mo). Choosing Annual saves you £141 — that's 34% off — compared to 12 months of monthly billing."
     },
     {
       q: "Can I cancel my monthly subscription at any time?",
@@ -280,8 +280,8 @@ export default function Pricing() {
                         "Full-length practice papers (50 questions)",
                         "Full GL-style mock exams (40 questions)",
                         "Full timed readiness checks",
-                        "All 26 Easy & Medium drill sections",
-                        "All 20 Hard challenge drills",
+                        "All Easy & Medium drill sections",
+                        "All Hard challenge drills",
                         "PDF readiness reports & report archive",
                         "Progress tracking & impact simulator",
                         "Premium Parent Analytics dashboard",
@@ -335,8 +335,8 @@ export default function Pricing() {
                         "Full-length practice papers (50 questions)",
                         "Full GL-style mock exams (40 questions)",
                         "Full timed readiness checks",
-                        "All 26 Easy & Medium drill sections",
-                        "All 20 Hard challenge drills",
+                        "All Easy & Medium drill sections",
+                        "All Hard challenge drills",
                         "PDF readiness reports & report archive",
                         "Progress tracking & impact simulator",
                         "Premium Parent Analytics dashboard",
@@ -384,8 +384,8 @@ export default function Pricing() {
                         { feature: "Full-length practice papers (50 questions)", free: false, paid: true },
                         { feature: "Full GL-style mock exams (40 questions)", free: false, paid: true },
                         { feature: "Full timed readiness checks", free: false, paid: true },
-                        { feature: "All 26 Easy & Medium drill sections", free: false, paid: true },
-                        { feature: "All 20 Hard challenge drills", free: false, paid: true },
+                        { feature: "All Easy & Medium drill sections", free: false, paid: true },
+                        { feature: "All Hard challenge drills", free: false, paid: true },
                         { feature: "PDF reports & report archive", free: false, paid: true },
                         { feature: "Impact simulator & progress tracking", free: false, paid: true },
                         { feature: "Milestone readiness checks with auto-tracking", free: false, paid: true },

@@ -10,6 +10,13 @@ import { useAuth } from "../lib/auth";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState } from "react";
 
+const SUBJECT_SUBLABELS: Record<string, string> = {
+  "Verbal Reasoning": "Word puzzles & letter patterns",
+  "Non-Verbal Reasoning": "Shape & pattern puzzles",
+  "Mathematics": "Number problems",
+  "English Comprehension": "Reading & comprehension",
+};
+
 const TIER_RANK: Record<string, number> = {
   free: 0,
   pack12: 1, pack12_family: 1, pack_monthly: 1,
@@ -156,15 +163,20 @@ export default function Practice() {
             const showHardUpgradeBanner = hasPaidAccess() && !isFullPlatform();
             return (
             <section key={idx}>
-              <h2 className="text-xl font-bold text-primary mb-4 flex items-center gap-2">
-                <BookOpen className="h-5 w-5 text-brand-primary" /> {category}
-              </h2>
+              <div className="mb-4">
+                <h2 className="text-xl font-bold text-primary flex items-center gap-2">
+                  <BookOpen className="h-5 w-5 text-brand-primary" /> {category}
+                </h2>
+                {SUBJECT_SUBLABELS[category] && (
+                  <p className="text-sm text-muted-foreground mt-0.5 ml-7">{SUBJECT_SUBLABELS[category]}</p>
+                )}
+              </div>
               {hasHardDrills && showHardUpgradeBanner && (
                 <div className="flex items-center gap-3 rounded-lg border border-violet-200 bg-gradient-to-r from-violet-50 to-indigo-50 p-4 mb-4" data-testid="banner-hard-upgrade">
                   <Zap className="h-5 w-5 text-violet-600 shrink-0" />
                   <div className="flex-1">
-                    <p className="font-medium text-violet-900 text-sm">Unlock all 20 Hard challenge drills with Platform Edge</p>
-                    <p className="text-violet-600 text-xs mt-0.5">Upgrade to Bucks Plus Edge to unlock all 20 Hard drills — from £35/month.</p>
+                    <p className="font-medium text-violet-900 text-sm">Unlock all Hard challenge drills with Platform Edge</p>
+                    <p className="text-violet-600 text-xs mt-0.5">Upgrade to Bucks Plus Edge to unlock all Hard drills — from £35/month.</p>
                   </div>
                   <Button size="sm" className="bg-violet-600 hover:bg-violet-700 text-white shrink-0" asChild data-testid="button-upgrade-hard">
                     <Link href="/pricing">See Plans <ArrowRight className="ml-1 h-3.5 w-3.5" /></Link>
