@@ -1090,22 +1090,295 @@ function getDistractorReason(type: string, spec: SequenceSpec): string {
   }
 }
 
+// ─── Deterministic enumeration helpers (v7) ────────────────────────────────────
+// Replaces the seeded-random batch generator with explicit parameter enumeration.
+// Every (shape × rotation × size × countStart × visibleFrames) combination is
+// generated exactly once, giving guaranteed uniqueness and zero duplicates.
+
+function enumSeed(...parts: (string | number)[]): number {
+  let h = 7919;
+  for (const p of parts) {
+    const s = String(p);
+    for (let i = 0; i < s.length; i++) {
+      h = (Math.imul(31, h) + s.charCodeAt(i)) | 0;
+    }
+    h = h ^ (h >>> 16);
+  }
+  return Math.abs(h) || 1;
+}
+
+function makeEnumQuestion(
+  subRuleId: string,
+  difficulty: 'medium' | 'hard',
+  visibleFrames: ShapeAttrs[][],
+  correctAttrs: ShapeAttrs[],
+  distractorAttrs: ShapeAttrs[][],
+  explanation: string,
+  paramKey: string,
+): GeneratedQuestion | null {
+  if (distractorAttrs.length < 3) return null;
+  if (!answersAreMeaningfullyDistinct(correctAttrs, distractorAttrs.slice(0, 3))) return null;
+  const correctSvg = frameAttrsToSvg(correctAttrs);
+  const distractorSvgs = distractorAttrs.slice(0, 3).map(frameAttrsToSvg);
+  if (hasAnyDuplicateOptions([correctSvg, ...distractorSvgs])) return null;
+  const rng = seededRandom(enumSeed(paramKey));
+  const { options: answerOptions, correctIndex } = shuffleWithCorrect(correctSvg, distractorSvgs, rng);
+  const labels = ['A', 'B', 'C', 'D'];
+  const vf = visibleFrames.length;
+  const stemIdx = enumSeed(paramKey, 'stem') % stems.length;
+  return {
+    section: 'Non-Verbal Reasoning', type: 'sequence',
+    prompt: stems[stemIdx],
+    options: labels, correctAnswer: labels[correctIndex],
+    difficulty, skillId: 'nvr.sequence', subRuleId,
+    renderType: 'svg',
+    renderConfig: {
+      kind: 'nvr.sequence' as const,
+      frames: visibleFrames.map(frameAttrsToSvg),
+      questionIndex: vf - 1,
+      answerOptions,
+    },
+    trapTypes: ['missed_secondary', 'off_by_one', 'wrong_rotation', 'missed_primary'],
+    cognitiveLoad: difficulty === 'medium' ? 4 : 6,
+    estTimeSeconds: difficulty === 'medium' ? 40 : 55,
+    explanation, qaStatus: 'approved', locale: 'en-GB', britishSpelling: true,
+    version: 7,
+    stemVariantId: `stem_seq_${stemIdx}`,
+    layoutVariantId: `seq_enum_v7_${paramKey}`,
+    densityLevel: difficulty === 'medium' ? 'medium' : 'high',
+    distractorStyleId: subRuleId,
+  };
+}
+
+const NOOP_RNG = () => 0.5;
+const ORBIT_POSITIONS: [number, number][] = [[28, 28], [72, 28], [72, 72], [28, 72]];
+const ENUM_SIMPLE_SHAPES = ['circle', 'square', 'pentagon', 'hexagon', 'diamond'] as const;
+
+// ── medium: count grows + each shape rotates ──────────────────────────────────
+
+function enumerateCountRotate(): GeneratedQuestion[] {
+  const results: GeneratedQuestion[] = [];
+  for (const shape of STRONGLY_ASYMMETRIC) {
+    for (const deg of [90, 180] as const) {
+      for (const vf of [3, 4] as const) {
+        const maxCS = vf === 4 ? 2 : 3;
+        for (let cs = 1; cs <= maxCS; cs++) {
+          const allF = buildCountGrowFrames(NOOP_RNG, cs, vf + 1, shape, 'none', LARGE_BASE_SIZE)
+            .map((fr, f) => fr.map(s => ({ ...s, rotation: (deg * f) % 360 })));
+          const correct = allF[vf - 1];
+          if (correct.length > 5) continue;
+          const correctRot = correct[0]?.rotation ?? 0;
+          const dist = buildCountRotateDistractors(correct.length, correctRot, shape, 'none', LARGE_BASE_SIZE);
+          const key = `count_rotate_${shape}_${deg}_cs${cs}_f${vf}`;
+          const q = makeEnumQuestion('nvr.sequence.count_rotate', 'medium', allF.slice(0, vf), correct, dist,
+            `One shape is added each step AND each shape rotates ${deg}°. Track both the growing count and rotating orientation to find the ? frame.`, key);
+          if (q) results.push(q);
+        }
+      }
+    }
+  }
+  return results;
+}
+
+// ── medium: single shape grows in size ────────────────────────────────────────
+
+function enumerateSizeGrow(): GeneratedQuestion[] {
+  const results: GeneratedQuestion[] = [];
+  for (const shape of ENUM_SIMPLE_SHAPES) {
+    for (const fill of ['none', 'solid'] as FillPattern[]) {
+      for (const delta of [8, 10]) {
+        for (const baseSize of [20, 24]) {
+          for (const vf of [3, 4] as const) {
+            const allF = buildSizeGrowFrames(shape, fill, baseSize, delta, vf + 1, 0, 0);
+            const visible = allF.slice(0, vf);
+            if (!minShapeSizeValid(visible)) continue;
+            const correct = allF[vf - 1];
+            const dist = buildSizeGrowDistractors(correct[0].size, shape, fill, 0, delta);
+            const key = `size_grow_${shape}_${fill}_d${delta}_b${baseSize}_f${vf}`;
+            const q = makeEnumQuestion('nvr.sequence.size_grow', 'medium', visible, correct, dist,
+              `The shape grows larger by the same amount each step. Compare the sizes across the visible frames, then find the ? frame with the next size in the sequence.`, key);
+            if (q) results.push(q);
+          }
+        }
+      }
+    }
+  }
+  return results;
+}
+
+// ── medium: single shape orbits 4 corner positions ────────────────────────────
+
+function enumeratePositionOrbit(): GeneratedQuestion[] {
+  const results: GeneratedQuestion[] = [];
+  for (const shape of ENUM_SIMPLE_SHAPES) {
+    for (let startPos = 0; startPos < 4; startPos++) {
+      for (const vf of [3, 4] as const) {
+        const allF = Array.from({ length: vf + 1 }, (_, f) => {
+          const pos = ORBIT_POSITIONS[(startPos + f) % 4];
+          return [{ id: 0, shape, x: pos[0], y: pos[1], size: GOOD_BASE_SIZE, rotation: 0, fill: 'none' as FillPattern, dashed: false }];
+        });
+        const visible = allF.slice(0, vf);
+        const correct = allF[vf - 1];
+        const dist = buildPositionOrbitDistractors(correct, allF.slice(0, vf - 1), NOOP_RNG);
+        const key = `position_orbit_${shape}_sp${startPos}_f${vf}`;
+        const q = makeEnumQuestion('nvr.sequence.position_orbit', 'medium', visible, correct, dist,
+          'The shape moves to the next corner position each step: top-left → top-right → bottom-right → bottom-left. Track the position to find the ? frame.', key);
+        if (q) results.push(q);
+      }
+    }
+  }
+  return results;
+}
+
+// ── hard: shape grows + rotates simultaneously ────────────────────────────────
+
+function enumerateSizeRotate(): GeneratedQuestion[] {
+  const results: GeneratedQuestion[] = [];
+  for (const shape of STRONGLY_ASYMMETRIC) {
+    for (const deg of [90, 180] as const) {
+      for (const delta of [8, 10]) {
+        for (const baseSize of [20, 24]) {
+          for (const vf of [3, 4] as const) {
+            const allF = buildSizeGrowFrames(shape, 'none', baseSize, delta, vf + 1, 0, deg);
+            const visible = allF.slice(0, vf);
+            if (!minShapeSizeValid(visible)) continue;
+            const correct = allF[vf - 1];
+            const dist = buildSizeRotateDistractors(correct, delta);
+            const key = `size_rotate_${shape}_${deg}_d${delta}_b${baseSize}_f${vf}`;
+            const q = makeEnumQuestion('nvr.sequence.size_rotate', 'hard', visible, correct, dist,
+              `The shape grows larger AND rotates ${deg}° each step. Track both the increasing size and the rotating orientation across the visible frames to find the ? frame.`, key);
+            if (q) results.push(q);
+          }
+        }
+      }
+    }
+  }
+  return results;
+}
+
+// ── hard: shape orbits corners + rotates ──────────────────────────────────────
+
+function enumeratePositionRotate(): GeneratedQuestion[] {
+  const results: GeneratedQuestion[] = [];
+  for (const shape of STRONGLY_ASYMMETRIC) {
+    for (const deg of [90, 180] as const) {
+      for (let startPos = 0; startPos < 4; startPos++) {
+        for (const vf of [3, 4] as const) {
+          const allF = Array.from({ length: vf + 1 }, (_, f) => {
+            const pos = ORBIT_POSITIONS[(startPos + f) % 4];
+            return [{ id: 0, shape, x: pos[0], y: pos[1], size: GOOD_BASE_SIZE, rotation: (deg * f) % 360, fill: 'none' as FillPattern, dashed: false }];
+          });
+          const visible = allF.slice(0, vf);
+          const correct = allF[vf - 1];
+          const dist = buildPositionRotateDistractors(correct, allF.slice(0, vf - 1), NOOP_RNG);
+          const key = `position_rotate_${shape}_${deg}_sp${startPos}_f${vf}`;
+          const q = makeEnumQuestion('nvr.sequence.position_rotate', 'hard', visible, correct, dist,
+            `The shape moves to the next corner AND rotates ${deg}° each step. Track both position and orientation across the visible frames to find the ? frame.`, key);
+          if (q) results.push(q);
+        }
+      }
+    }
+  }
+  return results;
+}
+
+// ── hard: count shrinks + each shape rotates ──────────────────────────────────
+
+function enumerateCountShrinkRotate(): GeneratedQuestion[] {
+  const results: GeneratedQuestion[] = [];
+  for (const shape of STRONGLY_ASYMMETRIC) {
+    for (const deg of [90, 180] as const) {
+      for (const vf of [3, 4] as const) {
+        const minCS = vf === 4 ? 4 : 3;
+        const maxCS = vf === 4 ? 6 : 5;
+        for (let cs = minCS; cs <= maxCS; cs++) {
+          const allF = buildCountShrinkFrames(NOOP_RNG, cs, vf + 1, shape, 'none', LARGE_BASE_SIZE)
+            .map((fr, f) => fr.map(s => ({ ...s, rotation: (deg * f) % 360 })));
+          const correct = allF[vf - 1];
+          if (!correct || correct.length === 0) continue;
+          const correctRot = correct[0]?.rotation ?? 0;
+          const dist = buildCountRotateDistractors(correct.length, correctRot, shape, 'none', LARGE_BASE_SIZE);
+          const key = `count_shrink_rotate_${shape}_${deg}_cs${cs}_f${vf}`;
+          const q = makeEnumQuestion('nvr.sequence.count_shrink_rotate', 'hard', allF.slice(0, vf), correct, dist,
+            `One shape is removed each step AND each shape rotates ${deg}°. Track both the shrinking count and rotating orientation to find the ? frame.`, key);
+          if (q) results.push(q);
+        }
+      }
+    }
+  }
+  return results;
+}
+
+// ── hard: count grows + fill alternates ───────────────────────────────────────
+
+function enumerateFillCycleCount(): GeneratedQuestion[] {
+  const results: GeneratedQuestion[] = [];
+  const cycles: FillPattern[][] = [['none', 'solid'], ['solid', 'none']];
+  for (const shape of ENUM_SIMPLE_SHAPES) {
+    for (const cycle of cycles) {
+      for (const vf of [3, 4] as const) {
+        const maxCS = vf === 4 ? 2 : 3;
+        for (let cs = 1; cs <= maxCS; cs++) {
+          const allF = buildFillCycleCountFrames(cs, vf + 1, shape, cycle, GOOD_BASE_SIZE);
+          const visible = allF.slice(0, vf);
+          const correct = allF[vf - 1];
+          if (!correct || correct.length === 0) continue;
+          const correctFill = correct[0]?.fill ?? 'none';
+          const dist = buildFillCycleCountDistractors(correct.length, correctFill, shape, GOOD_BASE_SIZE);
+          const key = `fill_cycle_count_${shape}_${cycle[0]}_cs${cs}_f${vf}`;
+          const q = makeEnumQuestion('nvr.sequence.fill_cycle_count', 'hard', visible, correct, dist,
+            `One shape is added each step AND the fill alternates ${cycle.join(' → ')}. Track both the growing count and changing fill to find the ? frame.`, key);
+          if (q) results.push(q);
+        }
+      }
+    }
+  }
+  return results;
+}
+
+// ── hard: shape orbits corners + fill alternates ──────────────────────────────
+
+function enumeratePositionFill(): GeneratedQuestion[] {
+  const results: GeneratedQuestion[] = [];
+  const cycles: FillPattern[][] = [['none', 'solid'], ['solid', 'none']];
+  for (const shape of ENUM_SIMPLE_SHAPES) {
+    for (const cycle of cycles) {
+      for (let startPos = 0; startPos < 4; startPos++) {
+        for (const vf of [3, 4] as const) {
+          const allF = Array.from({ length: vf + 1 }, (_, f) => {
+            const pos = ORBIT_POSITIONS[(startPos + f) % 4];
+            return [{ id: 0, shape, x: pos[0], y: pos[1], size: GOOD_BASE_SIZE, rotation: 0, fill: cycle[f % cycle.length] as FillPattern, dashed: false }];
+          });
+          const visible = allF.slice(0, vf);
+          const correct = allF[vf - 1];
+          const dist = buildPositionOrbitDistractors(correct, allF.slice(0, vf - 1), NOOP_RNG);
+          const key = `position_fill_${shape}_${cycle[0]}_sp${startPos}_f${vf}`;
+          const q = makeEnumQuestion('nvr.sequence.position_fill', 'hard', visible, correct, dist,
+            `The shape moves to the next corner AND the fill alternates ${cycle.join(' → ')} each step. Track both position and fill to find the ? frame.`, key);
+          if (q) results.push(q);
+        }
+      }
+    }
+  }
+  return results;
+}
+
 // ─── Public exports ────────────────────────────────────────────────────────────
 
 export function generateSequenceQuestions(): GeneratedQuestion[] {
-  const all: GeneratedQuestion[] = [
-    ...generateSequenceBatch(20000, 150),
-    ...generateSequenceBatch(25000, 150),
-    ...generateSequenceBatch(30000, 150),
-    ...generateSequenceBatch(35000, 150),
-    ...generateSequenceBatch(40000, 150),
+  const medium: GeneratedQuestion[] = [
+    ...enumerateCountRotate(),
+    ...enumerateSizeGrow(),
+    ...enumeratePositionOrbit(),
   ];
-
-  const easy   = all.filter(q => q.difficulty === 'easy').slice(0, 20);
-  const medium = all.filter(q => q.difficulty === 'medium').slice(0, 30);
-  const hard   = all.filter(q => q.difficulty === 'hard').slice(0, 50);
-
-  return [...easy, ...medium, ...hard];
+  const hard: GeneratedQuestion[] = [
+    ...enumerateSizeRotate(),
+    ...enumeratePositionRotate(),
+    ...enumerateCountShrinkRotate(),
+    ...enumerateFillCycleCount(),
+    ...enumeratePositionFill(),
+  ];
+  return [...medium, ...hard];
 }
 
 export function generateSequenceReviewSet(): {

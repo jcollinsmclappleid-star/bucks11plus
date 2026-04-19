@@ -1,7 +1,7 @@
 import { Link, useParams } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, Download, BarChart2, Target, SlidersHorizontal, Sparkles, Clock, Loader2, CheckCircle2, TrendingUp, FileText, XCircle, ChevronDown, ChevronUp, Lightbulb, Crown, Zap } from "lucide-react";
+import { ArrowRight, Download, BarChart2, Target, SlidersHorizontal, Sparkles, Clock, Loader2, CheckCircle2, TrendingUp, FileText, XCircle, ChevronDown, ChevronUp, Lightbulb, Crown, Zap, Star, ThumbsUp } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState } from "react";
@@ -262,6 +262,47 @@ export default function Results() {
           </div>
         </div>
       )}
+
+      {sectionScores.length > 0 && (() => {
+        const totalCorrect = sectionScores.reduce((acc, s) => acc + (s.correct ?? 0), 0);
+        const totalQs = sectionScores.reduce((acc, s) => acc + (s.total ?? 0), 0);
+        const strongest = [...sectionScores].sort((a, b) => b.score - a.score)[0];
+        const needsWork = [...sectionScores].sort((a, b) => a.score - b.score)[0];
+        const pct = totalQs > 0 ? Math.round((totalCorrect / totalQs) * 100) : 0;
+        const encouragement = pct >= 85 ? "Fantastic work — you're really getting it!" :
+          pct >= 70 ? "Great effort! You're making strong progress." :
+          pct >= 55 ? "Good work! Keep practising and you'll keep improving." :
+          "Every practice makes you better — don't give up!";
+        return (
+          <div className="bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200 rounded-xl p-5 flex flex-col sm:flex-row sm:items-center gap-4" data-testid="banner-child-summary">
+            <div className="flex items-center gap-3 shrink-0">
+              <div className="bg-amber-100 rounded-full p-2">
+                <Star className="h-6 w-6 text-amber-500 fill-amber-400" />
+              </div>
+              <div>
+                <p className="text-lg font-bold text-amber-900" data-testid="text-summary-score">
+                  {totalCorrect} out of {totalQs} correct
+                </p>
+                <p className="text-sm text-amber-700 italic" data-testid="text-summary-encouragement">{encouragement}</p>
+              </div>
+            </div>
+            <div className="sm:ml-auto flex flex-col sm:flex-row gap-3 text-sm">
+              {strongest && (
+                <div className="flex items-center gap-1.5 bg-green-50 border border-green-200 rounded-lg px-3 py-1.5" data-testid="text-summary-strongest">
+                  <ThumbsUp className="h-3.5 w-3.5 text-green-600 shrink-0" />
+                  <span className="text-green-800"><strong>Best:</strong> {strongest.name}</span>
+                </div>
+              )}
+              {needsWork && needsWork.name !== strongest?.name && (
+                <div className="flex items-center gap-1.5 bg-blue-50 border border-blue-200 rounded-lg px-3 py-1.5" data-testid="text-summary-needs-work">
+                  <TrendingUp className="h-3.5 w-3.5 text-blue-600 shrink-0" />
+                  <span className="text-blue-800"><strong>Focus on:</strong> {needsWork.name}</span>
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      })()}
 
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-border/60 pb-6">
         <div>

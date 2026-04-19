@@ -8,11 +8,16 @@ import { Skeleton } from "@/components/ui/skeleton";
 import type { Diagnostic, Question, TestSession } from "@shared/schema";
 import type { RenderConfig } from "@shared/contentTypes";
 import VisualPrompt from "../components/render/VisualPrompt";
-import { BookOpen, ChevronRight } from "lucide-react";
+import { BookOpen, ChevronRight, AlertTriangle, SkipForward } from "lucide-react";
 import { useAuth } from "../lib/auth";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel,
+  AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
+  AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const LABELS = ["A", "B", "C", "D", "E", "F"];
-const COMP_ANSWER_SECONDS = 45;
+const COMP_ANSWER_SECONDS = 60;
 
 export default function TestRunner() {
   const { id } = useParams<{ id: string }>();
@@ -32,6 +37,9 @@ export default function TestRunner() {
   const [pendingSelectedOpt, setPendingSelectedOpt] = useState<string | null>(null);
   const [animKey, setAnimKey] = useState(0);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [showExitConfirm, setShowExitConfirm] = useState(false);
+  const [showFiveMinWarning, setShowFiveMinWarning] = useState(false);
+  const fiveMinWarnedRef = useRef(false);
   // Guard against double-submit (last-question click + timer race, or timer firing twice)
   const submitCalledRef = useRef(false);
 
@@ -243,6 +251,11 @@ export default function TestRunner() {
           if (prev <= 1 && prev > 0) {
             handleFinishRef.current();
           }
+          if (prev === 300 && !fiveMinWarnedRef.current) {
+            fiveMinWarnedRef.current = true;
+            setShowFiveMinWarning(true);
+            setTimeout(() => setShowFiveMinWarning(false), 6000);
+          }
           return prev > 0 ? prev - 1 : 0;
         });
       }
@@ -379,15 +392,53 @@ export default function TestRunner() {
           )}
         </div>
 
-        <Button variant="ghost" size="sm" onClick={() => setLocation(isGuest ? "/" : "/app/diagnostic")} data-testid="button-exit">
+        <Button variant="ghost" size="sm" onClick={() => setShowExitConfirm(true)} data-testid="button-exit">
           Exit
         </Button>
       </header>
 
+      <AlertDialog open={showExitConfirm} onOpenChange={setShowExitConfirm}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Leave the test?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Your progress will be lost and you will need to start again. Are you sure you want to exit?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel data-testid="button-exit-cancel">Stay in test</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => setLocation(isGuest ? "/" : "/app/diagnostic")}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              data-testid="button-exit-confirm"
+            >
+              Yes, exit
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {showFiveMinWarning && (
+        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-top-2 duration-300">
+          <div className="flex items-center gap-2 bg-amber-50 border border-amber-300 text-amber-800 font-semibold text-sm px-5 py-2.5 rounded-full shadow-lg">
+            <AlertTriangle className="h-4 w-4 shrink-0" />
+            5 minutes remaining!
+          </div>
+        </div>
+      )}
+
       <main className="flex-1 max-w-3xl mx-auto w-full p-4 md:p-8 flex flex-col">
         <div className="mb-8 space-y-3">
           <div className="flex justify-between items-center text-sm font-medium text-muted-foreground">
-            <span className="section-badge" data-testid="text-section">{question.section}</span>
+            <div className="flex flex-col gap-0.5">
+              <span className="section-badge" data-testid="text-section">{question.section}</span>
+              <span className="text-xs text-muted-foreground/70 pl-0.5" data-testid="text-section-hint">
+                {question.section === "Verbal Reasoning" ? "Word puzzles & letter patterns" :
+                 question.section === "Non-Verbal Reasoning" ? "Shape & pattern puzzles" :
+                 question.section === "Mathematics" ? "Number problems" :
+                 question.section === "English Comprehension" ? "Reading & comprehension" : ""}
+              </span>
+            </div>
             <span data-testid="text-progress">Question {currentQuestionNumber} of {totalQuestions}</span>
           </div>
           <div className="progress-premium">
@@ -441,7 +492,7 @@ export default function TestRunner() {
           /* ===== QUESTION / ANSWERING PHASE ===== */
           <div className="premium-card p-8 flex-1 flex flex-col question-fade-in" key={animKey}>
             {isCompQuestion && passageText && (
-              <div className="mb-6 p-5 bg-slate-50 border border-slate-200 rounded-lg max-h-72 overflow-y-auto" data-testid="comprehension-passage">
+              <div className="mb-6 p-5 bg-slate-50 border border-slate-200 rounded-lg max-h-96 overflow-y-auto" data-testid="comprehension-passage">
                 <div className="flex items-center justify-between gap-2 mb-3">
                   <span className="text-xs font-bold uppercase tracking-wider text-primary/70">{passageTitle}</span>
                   {compAnswerTimeLeft > 0 && (
@@ -470,7 +521,7 @@ export default function TestRunner() {
                   selectedAnswer={svgSelectedIndex}
                   onSelectAnswer={(idx) => {
                     setSvgSelectedIndex(idx);
-                    setTimeout(() => handleNext(LABELS[idx]), 300);
+                    setTimeout(() => handleNext(LABELS[idx]), 600);
                   }}
                 />
               </div>
@@ -484,7 +535,7 @@ export default function TestRunner() {
                     onClick={() => {
                       if (pendingSelectedOpt !== null) return;
                       setPendingSelectedOpt(opt);
-                      setTimeout(() => handleNext(opt), 300);
+                      setTimeout(() => handleNext(opt), 600);
                     }}
                     disabled={submitMutation.isPending || pendingSelectedOpt !== null}
                     data-testid={`button-option-${i}`}
@@ -506,12 +557,23 @@ export default function TestRunner() {
           </div>
         )}
 
-        <div className="mt-6 flex justify-center items-center">
+        <div className="mt-6 flex items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground/70 italic">
             {isCompQuestion && compReadingActive
               ? "Read the passage thoroughly before answering"
               : "Select an option to move to the next question"}
           </p>
+          {!isCompQuestion && !compReadingActive && pendingSelectedOpt === null && (
+            <button
+              onClick={() => handleNext("__skipped__")}
+              disabled={submitMutation.isPending}
+              data-testid="button-skip-question"
+              className="flex items-center gap-1.5 text-sm text-muted-foreground/60 hover:text-muted-foreground transition-colors shrink-0"
+            >
+              <SkipForward className="h-3.5 w-3.5" />
+              Skip question
+            </button>
+          )}
         </div>
       </main>
     </div>

@@ -9,7 +9,12 @@ import type { Question } from "@shared/schema";
 import type { RenderConfig } from "@shared/contentTypes";
 import VisualPrompt from "../components/render/VisualPrompt";
 import { useAuth } from "../lib/auth";
-import { CheckCircle, XCircle, Timer, BookOpen } from "lucide-react";
+import { CheckCircle, XCircle, Timer, BookOpen, RefreshCw, Star } from "lucide-react";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel,
+  AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
+  AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const LABELS = ["A", "B", "C", "D", "E", "F"];
 
@@ -42,6 +47,7 @@ export default function DrillRunner() {
   const [results, setResults] = useState<Array<{ questionId: string; isCorrect: boolean; timeTaken: number }>>([]);
   const [finished, setFinished] = useState(false);
   const [animKey, setAnimKey] = useState(0);
+  const [showExitConfirm, setShowExitConfirm] = useState(false);
   const sessionKey = useRef(Date.now());
 
   const [timedAnswers, setTimedAnswers] = useState<Array<{ questionId: string; selectedAnswer: string; timeTaken: number }>>([]);
@@ -239,6 +245,12 @@ export default function DrillRunner() {
               <h1 className="text-2xl font-bold text-primary font-serif" data-testid="text-drill-complete">Timed Drill Complete!</h1>
               <div className="text-5xl font-bold text-primary" data-testid="text-drill-score">{pct}%</div>
               <p className="text-muted-foreground" data-testid="text-drill-summary">{timedCorrect} out of {timedTotal} correct</p>
+              <p className="text-base font-medium text-primary/80 italic" data-testid="text-drill-encouragement">
+                {pct >= 90 ? "Outstanding work! You really know your stuff." :
+                 pct >= 70 ? "Well done! You're making great progress." :
+                 pct >= 50 ? "Good effort! Keep practising and you'll keep improving." :
+                 "Don't give up — every question you practise makes you stronger!"}
+              </p>
               <div className="progress-premium max-w-xs mx-auto">
                 <Progress value={pct} className="h-3" />
               </div>
@@ -281,7 +293,10 @@ export default function DrillRunner() {
               })}
             </div>
 
-            <div className="flex gap-3 justify-center pt-4">
+            <div className="flex flex-wrap gap-3 justify-center pt-4">
+              <Button variant="outline" onClick={() => window.location.reload()} data-testid="button-try-again">
+                <RefreshCw className="h-4 w-4 mr-2" /> Try Again
+              </Button>
               <Button onClick={() => setLocation("/app/practice")} data-testid="button-back-practice">Back to Practice</Button>
               <Button variant="outline" onClick={() => setLocation("/app")} data-testid="button-back-dashboard">Dashboard</Button>
             </div>
@@ -297,13 +312,26 @@ export default function DrillRunner() {
     return (
       <div className="min-h-screen exam-paper-bg flex flex-col items-center justify-center p-8">
         <div className="drill-complete-card max-w-md w-full text-center space-y-6">
-          <h1 className="text-2xl font-bold text-primary font-serif" data-testid="text-drill-complete">Drill Complete!</h1>
+          <div className="flex items-center justify-center gap-2">
+            <Star className="h-6 w-6 text-amber-400 fill-amber-400" />
+            <h1 className="text-2xl font-bold text-primary font-serif" data-testid="text-drill-complete">Drill Complete!</h1>
+            <Star className="h-6 w-6 text-amber-400 fill-amber-400" />
+          </div>
           <div className="text-5xl font-bold text-primary" data-testid="text-drill-score">{pct}%</div>
           <p className="text-muted-foreground" data-testid="text-drill-summary">{correct} out of {total} correct</p>
+          <p className="text-base font-medium text-primary/80 italic" data-testid="text-drill-encouragement">
+            {pct >= 90 ? "Outstanding work! You really know your stuff." :
+             pct >= 70 ? "Well done! You're making great progress." :
+             pct >= 50 ? "Good effort! Keep practising and you'll keep improving." :
+             "Don't give up — every question you practise makes you stronger!"}
+          </p>
           <div className="progress-premium">
             <Progress value={pct} className="h-3" />
           </div>
-          <div className="flex gap-3 justify-center">
+          <div className="flex flex-wrap gap-3 justify-center">
+            <Button variant="outline" onClick={() => window.location.reload()} data-testid="button-try-again">
+              <RefreshCw className="h-4 w-4 mr-2" /> Try Again
+            </Button>
             <Button onClick={() => setLocation("/app/practice")} data-testid="button-back-practice">Back to Practice</Button>
             <Button variant="outline" onClick={() => setLocation("/app")} data-testid="button-back-dashboard">Dashboard</Button>
           </div>
@@ -370,16 +398,45 @@ export default function DrillRunner() {
               {timeString}
             </div>
           )}
-          <Button variant="ghost" size="sm" onClick={() => setLocation("/app/practice")} data-testid="button-exit-drill">
+          <Button variant="ghost" size="sm" onClick={() => setShowExitConfirm(true)} data-testid="button-exit-drill">
             Exit
           </Button>
         </div>
       </header>
 
+      <AlertDialog open={showExitConfirm} onOpenChange={setShowExitConfirm}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Leave the drill?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Your current drill progress will not be saved. Are you sure you want to exit?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel data-testid="button-exit-drill-cancel">Keep going</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => setLocation("/app/practice")}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              data-testid="button-exit-drill-confirm"
+            >
+              Yes, exit
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <main className="flex-1 max-w-3xl mx-auto w-full p-4 md:p-8 flex flex-col">
         <div className="mb-8 space-y-3">
           <div className="flex justify-between items-center text-sm font-medium text-muted-foreground">
-            <span className="section-badge" data-testid="text-drill-section">{question.section}</span>
+            <div className="flex flex-col gap-0.5">
+              <span className="section-badge" data-testid="text-drill-section">{question.section}</span>
+              <span className="text-xs text-muted-foreground/70 pl-0.5" data-testid="text-drill-section-hint">
+                {question.section === "Verbal Reasoning" ? "Word puzzles & letter patterns" :
+                 question.section === "Non-Verbal Reasoning" ? "Shape & pattern puzzles" :
+                 question.section === "Mathematics" ? "Number problems" :
+                 question.section === "English Comprehension" ? "Reading & comprehension" : ""}
+              </span>
+            </div>
             <span data-testid="text-drill-progress">Question {currentQuestionNumber} of {totalQuestions}</span>
           </div>
           <div className="progress-premium">
@@ -404,7 +461,7 @@ export default function DrillRunner() {
                   </span>
                 )}
               </div>
-              <div className="max-h-64 overflow-y-auto p-5 bg-slate-50" data-testid="comprehension-passage-text-drill">
+              <div className="max-h-96 overflow-y-auto p-5 bg-slate-50" data-testid="comprehension-passage-text-drill">
                 <p className="text-base leading-relaxed text-slate-700 font-serif italic whitespace-pre-line">
                   {passageText}
                 </p>
