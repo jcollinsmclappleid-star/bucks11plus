@@ -961,6 +961,81 @@ export async function ensureDiagnosticPool() {
   _diagnosticPoolSeeded = true;
 }
 
+async function syncPracticeSections() {
+  await db.execute(sql`
+    UPDATE practice_sections SET title = 'Different Sequences', difficulty = 'Easy', required_tier = 'pack_monthly'
+    WHERE title = 'Complex Sequences' AND category = 'Non-Verbal Reasoning'
+  `);
+  await db.execute(sql`
+    UPDATE practice_sections SET title = 'Fractions & Percentages'
+    WHERE title = 'Fractions & Decimals' AND category = 'Mathematics'
+  `);
+
+  const DEFINITIVE: Array<{ title: string; category: string; icon: string; difficulty: string; questionCount: number; requiredTier: string; skillId: string }> = [
+    { title: "Fact Retrieval", category: "English Comprehension", icon: "FileText", difficulty: "Easy", questionCount: 15, requiredTier: "pack_monthly", skillId: "comp.fact_retrieval" },
+    { title: "Vocabulary in Context", category: "English Comprehension", icon: "BookOpen", difficulty: "Medium", questionCount: 12, requiredTier: "pack_monthly", skillId: "comp.vocabulary" },
+    { title: "Inference & Deduction", category: "English Comprehension", icon: "Lightbulb", difficulty: "Medium", questionCount: 12, requiredTier: "pack12", skillId: "comp.inference" },
+    { title: "Detail Retrieval", category: "English Comprehension", icon: "Search", difficulty: "Medium", questionCount: 12, requiredTier: "pack12", skillId: "comp.detail" },
+    { title: "Mood & Tone", category: "English Comprehension", icon: "Palette", difficulty: "Hard", questionCount: 10, requiredTier: "pack12", skillId: "comp.mood" },
+    { title: "Advanced Comprehension", category: "English Comprehension", icon: "GraduationCap", difficulty: "Hard", questionCount: 10, requiredTier: "programme16", skillId: "comp.main_idea" },
+    { title: "Starter Arithmetic", category: "Mathematics", icon: "Calculator", difficulty: "Easy", questionCount: 10, requiredTier: "pack_monthly", skillId: "maths.arithmetic" },
+    { title: "Starter Fractions", category: "Mathematics", icon: "Percent", difficulty: "Easy", questionCount: 8, requiredTier: "pack_monthly", skillId: "maths.fractions" },
+    { title: "Starter Number Patterns", category: "Mathematics", icon: "Brain", difficulty: "Easy", questionCount: 6, requiredTier: "pack_monthly", skillId: "maths.patterns" },
+    { title: "Starter Percentages", category: "Mathematics", icon: "TrendingUp", difficulty: "Easy", questionCount: 6, requiredTier: "pack_monthly", skillId: "maths.percentages" },
+    { title: "Starter Ratio", category: "Mathematics", icon: "Brain", difficulty: "Easy", questionCount: 4, requiredTier: "pack_monthly", skillId: "maths.ratio" },
+    { title: "Starter Shape & Geometry", category: "Mathematics", icon: "Shapes", difficulty: "Easy", questionCount: 10, requiredTier: "pack_monthly", skillId: "maths.shape" },
+    { title: "Starter Data & Averages", category: "Mathematics", icon: "TrendingUp", difficulty: "Easy", questionCount: 6, requiredTier: "pack_monthly", skillId: "maths.data" },
+    { title: "Data Interpretation", category: "Mathematics", icon: "BarChart3", difficulty: "Easy", questionCount: 10, requiredTier: "pack_monthly", skillId: "maths.data" },
+    { title: "Arithmetic & Number", category: "Mathematics", icon: "Calculator", difficulty: "Medium", questionCount: 15, requiredTier: "pack_monthly", skillId: "maths.arithmetic" },
+    { title: "Number Patterns", category: "Mathematics", icon: "TrendingUp", difficulty: "Medium", questionCount: 12, requiredTier: "pack_monthly", skillId: "maths.patterns" },
+    { title: "Shape & Geometry", category: "Mathematics", icon: "Shapes", difficulty: "Medium", questionCount: 15, requiredTier: "pack_monthly", skillId: "maths.shape" },
+    { title: "Fractions & Percentages", category: "Mathematics", icon: "Percent", difficulty: "Medium", questionCount: 10, requiredTier: "pack12", skillId: "maths.fractions" },
+    { title: "Percentages", category: "Mathematics", icon: "BadgePercent", difficulty: "Medium", questionCount: 10, requiredTier: "pack12", skillId: "maths.percentages" },
+    { title: "Ratio & Proportion", category: "Mathematics", icon: "Scale", difficulty: "Medium", questionCount: 10, requiredTier: "pack12", skillId: "maths.ratio" },
+    { title: "Multi-step Word Problems", category: "Mathematics", icon: "Brain", difficulty: "Medium", questionCount: 12, requiredTier: "pack12", skillId: "maths.word_problems" },
+    { title: "Advanced Data Interpretation", category: "Mathematics", icon: "BarChart3", difficulty: "Medium", questionCount: 10, requiredTier: "pack12", skillId: "maths.data" },
+    { title: "Advanced Arithmetic", category: "Mathematics", icon: "Calculator", difficulty: "Hard", questionCount: 12, requiredTier: "pack12", skillId: "maths.arithmetic" },
+    { title: "Advanced Shape & Geometry", category: "Mathematics", icon: "Shapes", difficulty: "Hard", questionCount: 15, requiredTier: "pack12", skillId: "maths.shape" },
+    { title: "Advanced Fractions", category: "Mathematics", icon: "Percent", difficulty: "Hard", questionCount: 10, requiredTier: "programme16", skillId: "maths.fractions" },
+    { title: "Advanced Number Patterns", category: "Mathematics", icon: "TrendingUp", difficulty: "Hard", questionCount: 10, requiredTier: "programme16", skillId: "maths.patterns" },
+    { title: "Advanced Percentages", category: "Mathematics", icon: "BadgePercent", difficulty: "Hard", questionCount: 10, requiredTier: "programme16", skillId: "maths.percentages" },
+    { title: "Advanced Ratio & Proportion", category: "Mathematics", icon: "Scale", difficulty: "Hard", questionCount: 10, requiredTier: "programme16", skillId: "maths.ratio" },
+    { title: "Mirror Images", category: "Non-Verbal Reasoning", icon: "FlipHorizontal", difficulty: "Easy", questionCount: 10, requiredTier: "pack_monthly", skillId: "nvr.transform" },
+    { title: "Odd One Out", category: "Non-Verbal Reasoning", icon: "CircleDot", difficulty: "Easy", questionCount: 12, requiredTier: "pack_monthly", skillId: "nvr.classification" },
+    { title: "Different Sequences", category: "Non-Verbal Reasoning", icon: "Waypoints", difficulty: "Easy", questionCount: 12, requiredTier: "pack_monthly", skillId: "nvr.sequence" },
+    { title: "Pattern Recognition", category: "Non-Verbal Reasoning", icon: "Grid3x3", difficulty: "Easy", questionCount: 15, requiredTier: "pack_monthly", skillId: "nvr.sequence" },
+    { title: "Symmetry & Spatial", category: "Non-Verbal Reasoning", icon: "Maximize2", difficulty: "Medium", questionCount: 12, requiredTier: "pack12", skillId: "nvr.symmetry" },
+    { title: "Classification Challenge", category: "Non-Verbal Reasoning", icon: "Shapes", difficulty: "Medium", questionCount: 12, requiredTier: "pack12", skillId: "nvr.classification" },
+    { title: "Advanced Transformations", category: "Non-Verbal Reasoning", icon: "Layers", difficulty: "Hard", questionCount: 12, requiredTier: "pack12", skillId: "nvr.transform" },
+    { title: "Advanced Symmetry", category: "Non-Verbal Reasoning", icon: "Maximize2", difficulty: "Hard", questionCount: 12, requiredTier: "programme16", skillId: "nvr.symmetry" },
+    { title: "Word Analogies", category: "Verbal Reasoning", icon: "BookOpen", difficulty: "Medium", questionCount: 15, requiredTier: "pack_monthly", skillId: "vr.vocab" },
+    { title: "Logical Deduction", category: "Verbal Reasoning", icon: "GitBranch", difficulty: "Medium", questionCount: 15, requiredTier: "pack_monthly", skillId: "vr.verbal_logic" },
+    { title: "Hidden Words", category: "Verbal Reasoning", icon: "Search", difficulty: "Medium", questionCount: 10, requiredTier: "pack12", skillId: "vr.word_structure" },
+    { title: "Word Classification", category: "Verbal Reasoning", icon: "List", difficulty: "Medium", questionCount: 10, requiredTier: "pack12", skillId: "vr.word_sequences" },
+    { title: "Letter Sequences", category: "Verbal Reasoning", icon: "Type", difficulty: "Hard", questionCount: 12, requiredTier: "pack12", skillId: "vr.sequences" },
+    { title: "Code Breaking", category: "Verbal Reasoning", icon: "Lock", difficulty: "Hard", questionCount: 12, requiredTier: "pack12", skillId: "vr.codes" },
+    { title: "Advanced Word Analogies", category: "Verbal Reasoning", icon: "BookOpen", difficulty: "Hard", questionCount: 12, requiredTier: "programme16", skillId: "vr.vocab" },
+    { title: "Advanced Hidden Words", category: "Verbal Reasoning", icon: "Search", difficulty: "Hard", questionCount: 12, requiredTier: "programme16", skillId: "vr.word_structure" },
+    { title: "Advanced Logical Deduction", category: "Verbal Reasoning", icon: "GitBranch", difficulty: "Hard", questionCount: 12, requiredTier: "programme16", skillId: "vr.verbal_logic" },
+    { title: "Advanced Word Classification", category: "Verbal Reasoning", icon: "List", difficulty: "Hard", questionCount: 10, requiredTier: "programme16", skillId: "vr.word_sequences" },
+  ];
+
+  const existing = await db.select().from(practiceSections);
+  const byKey = new Map(existing.map(s => [`${s.category}:${s.title}`, s]));
+
+  for (const section of DEFINITIVE) {
+    const found = byKey.get(`${section.category}:${section.title}`);
+    if (found) {
+      await db.update(practiceSections)
+        .set({ difficulty: section.difficulty, questionCount: section.questionCount, requiredTier: section.requiredTier, skillId: section.skillId, icon: section.icon })
+        .where(eq(practiceSections.id, found.id));
+    } else {
+      await db.insert(practiceSections).values(section);
+    }
+  }
+  console.log("✓ Practice sections synced");
+}
+
 export async function seedDatabase() {
   // Always ensure admin user exists with full programme24_plus access
   const existingAdmin = await db.query.users.findFirst({
@@ -988,6 +1063,7 @@ export async function seedDatabase() {
     await ensurePracticePaperDiagnostics();
     await syncDiagnosticTimings();
     await ensureComprehensionSection();
+    await syncPracticeSections();
     await repairSeedQuestions();
     await ensureFreePool();
     await ensureQuestionBank();
@@ -1207,45 +1283,7 @@ export async function seedDatabase() {
     },
   ]);
 
-  await db.insert(practiceSections).values([
-    { title: "Word Analogies", category: "Verbal Reasoning", icon: "BookOpen", difficulty: "Medium", questionCount: 15, requiredTier: "pack_monthly", skillId: "vr.vocab" },
-    { title: "Advanced Word Analogies", category: "Verbal Reasoning", icon: "BookOpen", difficulty: "Hard", questionCount: 12, requiredTier: "programme16", skillId: "vr.vocab" },
-    { title: "Letter Sequences", category: "Verbal Reasoning", icon: "Type", difficulty: "Hard", questionCount: 12, requiredTier: "pack12", skillId: "vr.sequences" },
-    { title: "Hidden Words", category: "Verbal Reasoning", icon: "Search", difficulty: "Medium", questionCount: 10, requiredTier: "pack12", skillId: "vr.word_structure" },
-    { title: "Advanced Hidden Words", category: "Verbal Reasoning", icon: "Search", difficulty: "Hard", questionCount: 12, requiredTier: "programme16", skillId: "vr.word_structure" },
-    { title: "Code Breaking", category: "Verbal Reasoning", icon: "Lock", difficulty: "Hard", questionCount: 12, requiredTier: "pack12", skillId: "vr.codes" },
-    { title: "Logical Deduction", category: "Verbal Reasoning", icon: "GitBranch", difficulty: "Medium", questionCount: 15, requiredTier: "pack_monthly", skillId: "vr.verbal_logic" },
-    { title: "Advanced Logical Deduction", category: "Verbal Reasoning", icon: "GitBranch", difficulty: "Hard", questionCount: 12, requiredTier: "programme16", skillId: "vr.verbal_logic" },
-    { title: "Word Classification", category: "Verbal Reasoning", icon: "List", difficulty: "Medium", questionCount: 10, requiredTier: "pack12", skillId: "vr.word_sequences" },
-    { title: "Advanced Word Classification", category: "Verbal Reasoning", icon: "List", difficulty: "Hard", questionCount: 10, requiredTier: "programme16", skillId: "vr.word_sequences" },
-    { title: "Pattern Recognition", category: "Non-Verbal Reasoning", icon: "Grid3x3", difficulty: "Medium", questionCount: 15, requiredTier: "pack_monthly", skillId: "nvr.sequence" },
-    { title: "Mirror Images", category: "Non-Verbal Reasoning", icon: "FlipHorizontal", difficulty: "Easy", questionCount: 10, requiredTier: "pack_monthly", skillId: "nvr.transform" },
-    { title: "Odd One Out", category: "Non-Verbal Reasoning", icon: "CircleDot", difficulty: "Medium", questionCount: 12, requiredTier: "pack_monthly", skillId: "nvr.classification" },
-    { title: "Symmetry & Spatial", category: "Non-Verbal Reasoning", icon: "Maximize2", difficulty: "Medium", questionCount: 12, requiredTier: "pack12", skillId: "nvr.symmetry" },
-    { title: "Advanced Symmetry", category: "Non-Verbal Reasoning", icon: "Maximize2", difficulty: "Hard", questionCount: 12, requiredTier: "programme16", skillId: "nvr.symmetry" },
-    { title: "Advanced Transformations", category: "Non-Verbal Reasoning", icon: "Layers", difficulty: "Hard", questionCount: 12, requiredTier: "pack12", skillId: "nvr.transform" },
-    { title: "Complex Sequences", category: "Non-Verbal Reasoning", icon: "Waypoints", difficulty: "Hard", questionCount: 12, requiredTier: "programme16", skillId: "nvr.sequence" },
-    { title: "Classification Challenge", category: "Non-Verbal Reasoning", icon: "Shapes", difficulty: "Hard", questionCount: 12, requiredTier: "pack12", skillId: "nvr.classification" },
-    { title: "Arithmetic & Number", category: "Mathematics", icon: "Calculator", difficulty: "Medium", questionCount: 15, requiredTier: "pack_monthly", skillId: "maths.arithmetic" },
-    { title: "Advanced Arithmetic", category: "Mathematics", icon: "Calculator", difficulty: "Hard", questionCount: 12, requiredTier: "pack12", skillId: "maths.arithmetic" },
-    { title: "Multi-step Word Problems", category: "Mathematics", icon: "Brain", difficulty: "Hard", questionCount: 12, requiredTier: "pack12", skillId: "maths.word_problems" },
-    { title: "Fractions & Decimals", category: "Mathematics", icon: "Percent", difficulty: "Medium", questionCount: 10, requiredTier: "pack12", skillId: "maths.fractions" },
-    { title: "Advanced Fractions", category: "Mathematics", icon: "Percent", difficulty: "Hard", questionCount: 10, requiredTier: "programme16", skillId: "maths.fractions" },
-    { title: "Data Interpretation", category: "Mathematics", icon: "BarChart3", difficulty: "Medium", questionCount: 10, requiredTier: "pack12", skillId: "maths.data" },
-    { title: "Advanced Data Interpretation", category: "Mathematics", icon: "BarChart3", difficulty: "Hard", questionCount: 10, requiredTier: "programme16", skillId: "maths.data" },
-    { title: "Number Patterns", category: "Mathematics", icon: "TrendingUp", difficulty: "Medium", questionCount: 12, requiredTier: "pack_monthly", skillId: "maths.patterns" },
-    { title: "Advanced Number Patterns", category: "Mathematics", icon: "TrendingUp", difficulty: "Hard", questionCount: 10, requiredTier: "programme16", skillId: "maths.patterns" },
-    { title: "Percentages", category: "Mathematics", icon: "BadgePercent", difficulty: "Medium", questionCount: 10, requiredTier: "pack12", skillId: "maths.percentages" },
-    { title: "Advanced Percentages", category: "Mathematics", icon: "BadgePercent", difficulty: "Hard", questionCount: 10, requiredTier: "programme16", skillId: "maths.percentages" },
-    { title: "Ratio & Proportion", category: "Mathematics", icon: "Scale", difficulty: "Medium", questionCount: 10, requiredTier: "pack12", skillId: "maths.ratio" },
-    { title: "Advanced Ratio & Proportion", category: "Mathematics", icon: "Scale", difficulty: "Hard", questionCount: 10, requiredTier: "programme16", skillId: "maths.ratio" },
-    { title: "Fact Retrieval", category: "English Comprehension", icon: "FileText", difficulty: "Easy", questionCount: 15, requiredTier: "pack_monthly", skillId: "comp.fact_retrieval" },
-    { title: "Vocabulary in Context", category: "English Comprehension", icon: "BookOpen", difficulty: "Medium", questionCount: 12, requiredTier: "pack_monthly", skillId: "comp.vocabulary" },
-    { title: "Inference & Deduction", category: "English Comprehension", icon: "Lightbulb", difficulty: "Medium", questionCount: 12, requiredTier: "pack12", skillId: "comp.inference" },
-    { title: "Mood & Tone", category: "English Comprehension", icon: "Palette", difficulty: "Hard", questionCount: 10, requiredTier: "pack12", skillId: "comp.mood" },
-    { title: "Detail Retrieval", category: "English Comprehension", icon: "Search", difficulty: "Medium", questionCount: 12, requiredTier: "pack12", skillId: "comp.detail" },
-    { title: "Advanced Comprehension", category: "English Comprehension", icon: "GraduationCap", difficulty: "Hard", questionCount: 10, requiredTier: "programme16", skillId: "comp.main_idea" },
-  ]);
+  await syncPracticeSections();
 
   console.log("Seed data inserted successfully.");
   await repairSeedQuestions();
