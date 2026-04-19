@@ -458,18 +458,20 @@ export default function Pricing() {
       </section>
 
       {/* ── WHY PARENTS CHOOSE US ── */}
-      <section className="py-14 md:py-18 bg-slate-50 border-b border-border/30" data-testid="section-why-parents">
-        <div className="container mx-auto max-w-4xl px-4">
-          <div className="text-center mb-10">
+      <section className="py-14 md:py-18 bg-white border-b border-border/30" data-testid="section-why-parents">
+        <div className="container mx-auto max-w-3xl px-4">
+          <div className="text-center mb-8">
             <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">Why parents choose us</span>
-            <h2 className="text-2xl font-bold text-primary font-serif">Built with Year 6 Senior Leadership Insight</h2>
+            <h2 className="text-2xl font-bold text-primary font-serif">Built with Senior Leadership Insight</h2>
           </div>
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm px-8 py-8 md:px-12 md:py-10 max-w-3xl mx-auto" data-testid="why-parents-card">
-            <div className="flex flex-col gap-5 text-slate-600 leading-relaxed">
-              <p>Developed with input from senior leadership within a UK primary school, this platform is grounded in the realities of Year 6 and preparation for selective education.</p>
-              <p>The approach is informed by the structure and demands of the Buckinghamshire Secondary Transfer Test — where marks are typically lost, how timing affects performance, and what reaching the 121 standard requires in practice.</p>
-              <p>Rather than generic practice, the focus is on identifying gaps early and directing effort where it will make the greatest difference.</p>
-              <p>Built specifically for Bucks 11+ preparation, it gives parents a clearer view of readiness — and what to do next.</p>
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 px-8 py-8 md:px-12 md:py-10" data-testid="why-parents-card">
+            <div className="flex flex-col gap-4 text-slate-600 leading-relaxed text-[15px] mb-8">
+              <p>Developed with input from senior leadership within Primary Education, the platform is grounded in the realities of Year 6 and preparation for selective education.</p>
+              <p>The approach is informed by the structure and demands of the Buckinghamshire Secondary Transfer Test — focusing on where marks are lost, how timing affects performance, and what reaching the 121 standard requires in practice.</p>
+            </div>
+            <div className="border-t border-slate-200 pt-6 flex items-end justify-between gap-4">
+              <p className="text-xs text-slate-400 max-w-xs">Built specifically for Bucks 11+ — giving parents clarity on readiness and what to do next.</p>
+              <p className="text-2xl md:text-3xl text-primary font-serif italic" style={{ fontFamily: "'Georgia', 'Times New Roman', serif", letterSpacing: '-0.5px' }}>Bucks11PlusTest</p>
             </div>
           </div>
         </div>

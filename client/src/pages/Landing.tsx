@@ -502,13 +502,7 @@ export default function Landing() {
                 </Button>
               </div>
               <div className="flex flex-wrap items-center gap-5" data-testid="trust-signal-hero">
-                <div className="flex items-center gap-2 text-white/45 text-xs">
-                  <div className="flex gap-0.5">
-                    {[...Array(5)].map((_, i) => <Star key={i} className="h-3 w-3 fill-amber-400 text-amber-400" />)}
-                  </div>
-                  <span>Trusted by Bucks families</span>
-                </div>
-                <div className="flex items-center gap-1.5 text-white/35 text-xs">
+                <div className="flex items-center gap-1.5 text-white/40 text-xs">
                   <Shield className="h-3.5 w-3.5" />
                   <span>Secure payments · Cancel anytime</span>
                 </div>
@@ -796,26 +790,20 @@ export default function Landing() {
       </section>
 
       {/* ── SECTION 6: WHY PARENTS CHOOSE US ── */}
-      <section className="py-14 md:py-16 bg-slate-50 border-b border-border/30" data-testid="section-why-parents">
-        <div className="container mx-auto max-w-4xl px-4">
-          <div className="text-center mb-10">
+      <section className="py-14 md:py-16 bg-white border-b border-border/30" data-testid="section-why-parents">
+        <div className="container mx-auto max-w-3xl px-4">
+          <div className="text-center mb-8">
             <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-2">Why parents choose us</span>
-            <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif">Built with Year 6 Senior Leadership Insight</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif">Built with Senior Leadership Insight</h2>
           </div>
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm px-8 py-8 md:px-12 md:py-10 max-w-3xl mx-auto" data-testid="why-parents-card">
-            <div className="flex flex-col gap-5 text-slate-600 leading-relaxed">
-              <p>
-                Developed with input from senior leadership within a UK primary school, this platform is grounded in the realities of Year 6 and preparation for selective education.
-              </p>
-              <p>
-                The approach is informed by the structure and demands of the Buckinghamshire Secondary Transfer Test — where marks are typically lost, how timing affects performance, and what reaching the 121 standard requires in practice.
-              </p>
-              <p>
-                Rather than generic practice, the focus is on identifying gaps early and directing effort where it will make the greatest difference.
-              </p>
-              <p>
-                Built specifically for Bucks 11+ preparation, it gives parents a clearer view of readiness — and what to do next.
-              </p>
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 px-8 py-8 md:px-12 md:py-10" data-testid="why-parents-card">
+            <div className="flex flex-col gap-4 text-slate-600 leading-relaxed text-[15px] mb-8">
+              <p>Developed with input from senior leadership within Primary Education, the platform is grounded in the realities of Year 6 and preparation for selective education.</p>
+              <p>The approach is informed by the structure and demands of the Buckinghamshire Secondary Transfer Test — focusing on where marks are lost, how timing affects performance, and what reaching the 121 standard requires in practice.</p>
+            </div>
+            <div className="border-t border-slate-200 pt-6 flex items-end justify-between gap-4">
+              <p className="text-xs text-slate-400 max-w-xs">Built specifically for Bucks 11+ — giving parents clarity on readiness and what to do next.</p>
+              <p className="text-2xl md:text-3xl text-primary font-serif italic" style={{ fontFamily: "'Georgia', 'Times New Roman', serif", letterSpacing: '-0.5px' }}>Bucks11PlusTest</p>
             </div>
           </div>
         </div>
