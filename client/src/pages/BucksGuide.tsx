@@ -5,6 +5,7 @@ import { Breadcrumbs, breadcrumbSchema } from "../components/shared/Breadcrumbs"
 import { GuideConversionBlock } from "../components/shared/GuideConversionBlock";
 import { SubscribeCTA } from "../components/shared/SubscribeCTA";
 import { Disclaimer } from "../components/shared/Disclaimer";
+import { ChildExperienceCTA } from "../components/shared/ChildExperienceCTA";
 import { learnArticles, LEARN_CATEGORIES, getArticlesByCategory } from "../data/learn-articles";
 
 const CATEGORY_ICONS: Record<string, string> = {
@@ -233,6 +234,8 @@ export default function BucksGuide() {
           Download our free 22-page Buckinghamshire 11+ Parent Guide (PDF) &rarr;
         </Link>
       </div>
+
+      <ChildExperienceCTA />
 
       <GuideConversionBlock />
 

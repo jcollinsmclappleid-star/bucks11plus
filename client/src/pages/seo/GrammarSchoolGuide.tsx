@@ -3,6 +3,7 @@ import { Seo } from "@/components/shared/Seo";
 import { ContentCTA } from "@/components/shared/ContentCTA";
 import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
+import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { getSchoolBySlug, grammarSchools } from "@/data/grammar-schools";
 import { ExternalLink, Users, MapPin, GraduationCap } from "lucide-react";
@@ -208,6 +209,7 @@ export default function GrammarSchoolGuide({ schoolSlug }: { schoolSlug: string 
           </div>
         )}
 
+        <ChildExperienceCTA />
         <ContentCTA />
         <Disclaimer />
       </div>

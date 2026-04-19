@@ -4,6 +4,7 @@ import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
 import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
+import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
 
 const breadcrumbItems = [
   { label: "Resources", href: "/buckinghamshire-11-plus-guide" },
@@ -143,6 +144,7 @@ export default function SecondaryTransfer() {
         see our <Link href="/buckinghamshire-11-plus-guide" className="text-primary hover:underline">Complete Buckinghamshire 11+ Guide</Link>.
       </p>
 
+      <ChildExperienceCTA />
       <ContentCTA />
       <Disclaimer />
     </div>

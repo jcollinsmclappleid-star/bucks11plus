@@ -3,6 +3,7 @@ import { getArticleBySlug, getArticlesByCategory, learnArticles } from "@/data/l
 import { Seo } from "@/components/shared/Seo";
 import NotFound from "@/pages/not-found";
 import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
+import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
 
 export default function LearnArticle() {
   const { slug } = useParams<{ slug: string }>();
@@ -82,6 +83,8 @@ export default function LearnArticle() {
           data-testid="article-content"
           dangerouslySetInnerHTML={{ __html: styledContent(article.content) }}
         />
+
+        <ChildExperienceCTA />
 
         <div className="mt-10 pt-8 border-t border-border flex flex-col sm:flex-row justify-between gap-4">
           {prevArticle ? (

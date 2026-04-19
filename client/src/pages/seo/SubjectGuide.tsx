@@ -3,6 +3,7 @@ import { Seo } from "@/components/shared/Seo";
 import { ContentCTA } from "@/components/shared/ContentCTA";
 import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
+import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import NotFound from "@/pages/not-found";
 
@@ -332,6 +333,7 @@ export default function SubjectGuide({ subject }: { subject: Subject }) {
           </div>
         </div>
 
+        <ChildExperienceCTA />
         <ContentCTA />
         <Disclaimer />
       </div>

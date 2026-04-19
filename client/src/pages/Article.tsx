@@ -2,6 +2,7 @@ import { useParams, Link } from "wouter";
 import { ArrowLeft } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 import { SubscribeCTA } from "../components/shared/SubscribeCTA";
+import { ChildExperienceCTA } from "../components/shared/ChildExperienceCTA";
 import { useQuery } from "@tanstack/react-query";
 import { type Article } from "@shared/schema";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -75,6 +76,8 @@ export default function Article() {
         dangerouslySetInnerHTML={{ __html: article.content }} 
         data-testid="text-article-content"
       />
+
+      <ChildExperienceCTA />
       
       <div className="mt-16 pt-8 border-t border-border/50">
         <div className="bg-primary text-primary-foreground p-8 rounded-2xl text-center">

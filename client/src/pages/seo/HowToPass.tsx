@@ -3,6 +3,7 @@ import { Breadcrumbs, breadcrumbSchema } from "../../components/shared/Breadcrum
 import { ContentCTA } from "../../components/shared/ContentCTA";
 import { SubscribeCTA } from "../../components/shared/SubscribeCTA";
 import { Disclaimer } from "../../components/shared/Disclaimer";
+import { ChildExperienceCTA } from "../../components/shared/ChildExperienceCTA";
 import { Link } from "wouter";
 
 const breadcrumbItems = [
@@ -134,6 +135,7 @@ export default function HowToPass() {
         This is the approach used by Bucks 11 Plus Tests. Our <Link href="/free-diagnostic" className="text-primary hover:underline">free 8-minute readiness check</Link> measures both accuracy and pacing across all four domains, providing a realistic readiness forecast against the 121 benchmark. From there, the platform prescribes the exact micro-drills needed to close remaining gaps.
       </p>
 
+      <ChildExperienceCTA />
       <ContentCTA />
 
       <div className="not-prose my-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">

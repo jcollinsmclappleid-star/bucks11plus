@@ -3,6 +3,7 @@ import { Breadcrumbs, breadcrumbSchema } from "../../components/shared/Breadcrum
 import { ContentCTA } from "../../components/shared/ContentCTA";
 import { SubscribeCTA } from "../../components/shared/SubscribeCTA";
 import { Disclaimer } from "../../components/shared/Disclaimer";
+import { ChildExperienceCTA } from "../../components/shared/ChildExperienceCTA";
 import { Link } from "wouter";
 
 const breadcrumbItems = [
@@ -119,6 +120,7 @@ export default function CommonMistakes() {
         Bucks 11 Plus Tests was designed to solve this problem. Our readiness check measures what matters — accuracy <em>and</em> speed — and translates it into a clear readiness forecast. From there, targeted micro-drills close the specific gaps that stand between your child and the qualifying standard.
       </p>
 
+      <ChildExperienceCTA />
       <ContentCTA />
 
       <div className="not-prose my-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">

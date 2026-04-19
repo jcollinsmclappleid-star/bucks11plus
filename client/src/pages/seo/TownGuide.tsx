@@ -3,6 +3,7 @@ import { Seo } from "../../components/shared/Seo";
 import { ContentCTA } from "../../components/shared/ContentCTA";
 import { SubscribeCTA } from "../../components/shared/SubscribeCTA";
 import { Disclaimer } from "../../components/shared/Disclaimer";
+import { ChildExperienceCTA } from "../../components/shared/ChildExperienceCTA";
 import { Breadcrumbs, breadcrumbSchema } from "../../components/shared/Breadcrumbs";
 import { getTownBySlug } from "../../data/towns";
 import { ExternalLink } from "lucide-react";
@@ -122,6 +123,7 @@ export default function TownGuide({ townSlug }: { townSlug: string }) {
         </div>
       ))}
 
+      <ChildExperienceCTA />
       <ContentCTA />
       <Disclaimer />
     </div>
