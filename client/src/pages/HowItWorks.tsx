@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, Target, Zap, TrendingUp, ChevronDown, BarChart3, Clock, Layers, Shield, BookOpen, ArrowRight, CheckCircle2, Brain, Hash } from "lucide-react";
+import { Search, Target, Zap, TrendingUp, ChevronDown, BarChart3, Clock, Layers, Shield, BookOpen, ArrowRight, CheckCircle2, Brain, Hash, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { Seo } from "../components/shared/Seo";
@@ -207,6 +207,71 @@ export default function HowItWorks() {
                 )}
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── CHILD EXPERIENCE ── */}
+      <section className="py-14 md:py-18 bg-amber-50/60 border-b border-amber-100" data-testid="section-child-experience">
+        <div className="container mx-auto max-w-5xl px-4">
+          <div className="text-center mb-10">
+            <span className="inline-block text-xs font-bold text-amber-700/60 uppercase tracking-widest mb-3">For your child</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-3">What your child actually experiences</h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">The platform is designed for 10-year-olds as much as for their parents. Preparation should feel achievable — not intimidating.</p>
+          </div>
+          <div className="grid lg:grid-cols-2 gap-8 items-start">
+            <div className="space-y-4">
+              <h3 className="text-sm font-bold text-primary uppercase tracking-wide">Four subjects — in language that makes sense</h3>
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  { icon: Brain, label: "Verbal Reasoning", sub: "Word puzzles & letter patterns", bg: "bg-violet-100 text-violet-700", border: "border-violet-200" },
+                  { icon: Layers, label: "Non-Verbal Reasoning", sub: "Shape & pattern puzzles", bg: "bg-blue-100 text-blue-700", border: "border-blue-200" },
+                  { icon: Hash, label: "Mathematics", sub: "Number problems", bg: "bg-emerald-100 text-emerald-700", border: "border-emerald-200" },
+                  { icon: BookOpen, label: "English Comprehension", sub: "Reading & comprehension", bg: "bg-amber-100 text-amber-700", border: "border-amber-200" },
+                ].map((s, i) => (
+                  <div key={i} className={`flex items-start gap-2.5 p-3 rounded-xl border bg-white ${s.border}`}>
+                    <div className={`p-1.5 rounded-lg shrink-0 ${s.bg}`}><s.icon className="h-4 w-4" /></div>
+                    <div>
+                      <p className="text-[11px] font-bold text-primary leading-tight">{s.label}</p>
+                      <p className="text-[10px] text-slate-400 mt-0.5">{s.sub}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="space-y-4">
+              <h3 className="text-sm font-bold text-primary uppercase tracking-wide">After every drill, your child sees</h3>
+              <div className="space-y-3">
+                {[
+                  {
+                    icon: Star,
+                    iconBg: "bg-amber-100 text-amber-700",
+                    title: "Encouragement, not just a score",
+                    desc: "Messages adjust to their result — from 'Outstanding work!' to 'Don't give up — every practice makes you stronger!' — so every session ends on a positive note.",
+                  },
+                  {
+                    icon: Zap,
+                    iconBg: "bg-violet-100 text-violet-700",
+                    title: "Try Again in one tap",
+                    desc: "Stuck on a drill? One button re-starts it with fresh questions. Repetition builds confidence — not frustration.",
+                  },
+                  {
+                    icon: Shield,
+                    iconBg: "bg-emerald-100 text-emerald-700",
+                    title: "Exit confirmation — no accidental losses",
+                    desc: "If they accidentally tap Exit mid-drill, a confirmation step protects their progress and keeps them from losing their session.",
+                  },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-start gap-3 p-4 bg-white rounded-xl border border-slate-200 shadow-sm">
+                    <div className={`p-2 rounded-lg shrink-0 ${item.iconBg}`}><item.icon className="h-4 w-4" /></div>
+                    <div>
+                      <p className="text-sm font-bold text-primary mb-0.5">{item.title}</p>
+                      <p className="text-xs text-slate-500 leading-relaxed">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>

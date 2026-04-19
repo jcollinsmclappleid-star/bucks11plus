@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, CheckCircle2, XCircle, MinusCircle, Target, BarChart3, Brain, Clock, Shield, Zap, BookOpen, TrendingUp } from "lucide-react";
+import { ArrowRight, CheckCircle2, XCircle, MinusCircle, Target, BarChart3, Brain, Clock, Shield, Zap, BookOpen, TrendingUp, Star } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 
 const whyChooseFaqSchema = {
@@ -42,6 +42,12 @@ type ComparisonRow = {
 };
 
 const comparison: ComparisonRow[] = [
+  {
+    feature: "What your child experiences",
+    papers: "A score — useful to review, but not designed to encourage a 10-year-old",
+    papersIcon: "neutral",
+    platform: "Friendly subject names ('Shape puzzles', 'Word puzzles'), warm encouragement by score band, and a Try Again button — built for children's confidence",
+  },
   {
     feature: "Exam-format familiarity",
     papers: "Excellent — paper format closely mirrors the actual STT experience",
@@ -214,6 +220,19 @@ export default function WhyChoosePlatform() {
             </table>
           </div>
           <p className="text-xs text-slate-400 text-center mt-4 italic">Practice papers and this platform are complementary tools — not alternatives. Papers build exam familiarity; the platform shows you exactly where to focus next.</p>
+
+          <div className="mt-8 rounded-2xl bg-amber-50 border border-amber-200 p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4" data-testid="callout-child-experience">
+            <div className="p-3 bg-amber-100 rounded-xl shrink-0">
+              <Star className="h-6 w-6 text-amber-600 fill-amber-400" />
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-bold text-amber-900 mb-1">Designed for 10-year-olds, not just their parents.</p>
+              <p className="text-sm text-amber-700 leading-relaxed">Your child sees subject names in language they understand — 'Shape puzzles', 'Word puzzles' — receives warm encouragement after every drill, and can jump straight back in. Preparation that builds confidence, not anxiety.</p>
+            </div>
+            <Button asChild size="sm" className="bg-amber-500 hover:bg-amber-400 text-white border-none shrink-0" data-testid="button-child-callout-cta">
+              <Link href="/free-diagnostic">Try it free</Link>
+            </Button>
+          </div>
         </div>
       </section>
 

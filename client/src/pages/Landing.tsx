@@ -398,6 +398,37 @@ function ProgrammePanel() {
   );
 }
 
+function ChildExperiencePanel() {
+  return (
+    <div className="w-full max-w-sm mx-auto" data-testid="showcase-child-experience">
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-md overflow-hidden">
+        <div className="bg-gradient-to-r from-amber-50 to-yellow-50 px-6 pt-6 pb-4 text-center border-b border-amber-100">
+          <div className="flex items-center justify-center gap-2 mb-3">
+            <Star className="h-5 w-5 text-amber-400 fill-amber-400" />
+            <span className="text-lg font-bold text-primary font-serif">Drill Complete!</span>
+            <Star className="h-5 w-5 text-amber-400 fill-amber-400" />
+          </div>
+          <div className="inline-flex flex-col items-center gap-0.5 mb-3">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-violet-700 bg-violet-100 px-2.5 py-0.5 rounded-full">Non-Verbal Reasoning</span>
+            <span className="text-[10px] text-slate-400 mt-0.5">Shape & pattern puzzles</span>
+          </div>
+          <div className="text-5xl font-bold text-primary mb-1">78%</div>
+          <p className="text-[11px] text-slate-500 mb-3">14 out of 18 correct</p>
+          <div className="h-2.5 bg-slate-200 rounded-full overflow-hidden mb-3 mx-4">
+            <div className="h-full bg-amber-400 rounded-full" style={{ width: "78%" }} />
+          </div>
+          <p className="text-sm font-medium text-primary/80 italic">Well done! You're making great progress.</p>
+        </div>
+        <div className="flex gap-2 p-4">
+          <div className="flex-1 py-2 px-3 bg-slate-100 rounded-lg text-center text-xs font-semibold text-slate-500 cursor-default select-none">Try Again</div>
+          <div className="flex-1 py-2 px-3 bg-primary rounded-lg text-center text-xs font-semibold text-white cursor-default select-none">Back to Practice</div>
+        </div>
+      </div>
+      <p className="text-[10px] text-slate-400 italic text-center mt-3">Illustrative example of what your child sees</p>
+    </div>
+  );
+}
+
 /* ─── MAIN LANDING PAGE ─── */
 
 export default function Landing() {
@@ -550,6 +581,54 @@ export default function Landing() {
                 </div>
               </div>
               <ProgrammePanel />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── SECTION 2B: CHILD EXPERIENCE ── */}
+      <section className="py-16 md:py-20 bg-amber-50/50 border-b border-amber-100/80" data-testid="section-child-experience">
+        <div className="container mx-auto max-w-6xl px-4">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <div>
+              <span className="inline-block text-xs font-bold text-amber-700/60 uppercase tracking-widest mb-4">For your child</span>
+              <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4 leading-tight">
+                Preparation that feels like progress, not pressure.
+              </h2>
+              <p className="text-slate-600 leading-relaxed mb-6">
+                Your child sees friendly subject names they can relate to, receives warm encouragement after every drill, and can jump straight back in with a single tap — building confidence session by session.
+              </p>
+              <div className="grid grid-cols-2 gap-3 mb-6">
+                {[
+                  { icon: <Brain className="h-4 w-4" />, label: "Verbal Reasoning", sub: "Word puzzles & letter patterns", bg: "bg-violet-100 text-violet-700", border: "border-violet-200" },
+                  { icon: <Layers className="h-4 w-4" />, label: "Non-Verbal Reasoning", sub: "Shape & pattern puzzles", bg: "bg-blue-100 text-blue-700", border: "border-blue-200" },
+                  { icon: <Hash className="h-4 w-4" />, label: "Mathematics", sub: "Number problems", bg: "bg-emerald-100 text-emerald-700", border: "border-emerald-200" },
+                  { icon: <BookOpen className="h-4 w-4" />, label: "English Comprehension", sub: "Reading & comprehension", bg: "bg-amber-100 text-amber-700", border: "border-amber-200" },
+                ].map((s, i) => (
+                  <div key={i} className={`flex items-start gap-2.5 p-3 rounded-xl border bg-white ${s.border}`} data-testid={`child-section-chip-${i}`}>
+                    <div className={`p-1.5 rounded-lg shrink-0 ${s.bg}`}>{s.icon}</div>
+                    <div>
+                      <p className="text-[11px] font-bold text-primary leading-tight">{s.label}</p>
+                      <p className="text-[10px] text-slate-400 mt-0.5">{s.sub}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="space-y-2.5">
+                {[
+                  "Encouragement after every drill — not just a score",
+                  "Try Again in one tap — builds resilience, not fear",
+                  "Section names in language a 10-year-old understands",
+                ].map((pt, i) => (
+                  <div key={i} className="flex items-center gap-2.5">
+                    <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                    <p className="text-sm text-slate-700">{pt}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="flex justify-center">
+              <ChildExperiencePanel />
             </div>
           </div>
         </div>

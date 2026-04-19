@@ -27,7 +27,7 @@ const subjectData: Record<Subject, SubjectContent> = {
     title: "Bucks 11+ Verbal Reasoning: Question Types, Strategy & Practice",
     metaTitle: "Bucks 11+ Verbal Reasoning Practice – Secondary Transfer Test Guide | Bucks 11 Plus Tests",
     metaDescription: "Complete guide to verbal reasoning in the Buckinghamshire 11+ Secondary Transfer Test. Question types, preparation strategies, and how to improve VR scores before the real test.",
-    intro: "Verbal reasoning is one of the four core domains of the Buckinghamshire Secondary Transfer Test. It tests a child's ability to understand and use language logically — including word relationships, codes, sequences, and linguistic problem-solving. Strong verbal reasoning is closely tied to reading ability and vocabulary breadth.",
+    intro: "Verbal reasoning (word puzzles & letter patterns) is one of the four core domains of the Buckinghamshire Secondary Transfer Test. It tests a child's ability to understand and use language logically — including word relationships, codes, sequences, and linguistic problem-solving. Strong verbal reasoning is closely tied to reading ability and vocabulary breadth.",
     questionTypes: [
       { type: "Word relationships", description: "Identify synonyms, antonyms, and related words from a set of options" },
       { type: "Letter codes", description: "Decode patterns where letters represent numbers or other letters, and apply the rule to find a missing value" },
@@ -73,7 +73,7 @@ const subjectData: Record<Subject, SubjectContent> = {
     title: "Bucks 11+ Non-Verbal Reasoning & Spatial: Guide & Practice",
     metaTitle: "Bucks 11+ Non-Verbal Reasoning Practice – Secondary Transfer Test Guide | Bucks 11 Plus Tests",
     metaDescription: "Complete guide to non-verbal and spatial reasoning in the Buckinghamshire 11+ Secondary Transfer Test. Question types, preparation strategies, and how to improve NVR scores.",
-    intro: "Non-verbal reasoning (NVR) and spatial reasoning are combined into a single domain in the Buckinghamshire Secondary Transfer Test. They test a child's ability to work with shapes, patterns, sequences, and spatial relationships — without using words or numbers. NVR is the domain most commonly unfamiliar to children before test preparation begins.",
+    intro: "Non-verbal reasoning (shape & pattern puzzles) and spatial reasoning are combined into a single domain in the Buckinghamshire Secondary Transfer Test. They test a child's ability to work with shapes, patterns, sequences, and spatial relationships — without using words or numbers. NVR is the domain most commonly unfamiliar to children before test preparation begins.",
     questionTypes: [
       { type: "Matrices", description: "Find the missing piece in a 3×3 or 2×2 grid of shapes where each row and column follows a rule" },
       { type: "Sequences", description: "Identify the rule governing a sequence of shapes and choose the next in the series" },
@@ -120,7 +120,7 @@ const subjectData: Record<Subject, SubjectContent> = {
     title: "Bucks 11+ Maths: Question Types, Strategy & Practice",
     metaTitle: "Bucks 11+ Maths Practice – Secondary Transfer Test Maths Guide | Bucks 11 Plus Tests",
     metaDescription: "Complete guide to mathematical reasoning in the Buckinghamshire 11+ Secondary Transfer Test. Topics covered, common question types, and how to prepare for the maths section.",
-    intro: "Mathematical reasoning is one of the four core domains of the Buckinghamshire Secondary Transfer Test. The maths questions in the Bucks 11+ go beyond the Year 5 curriculum — they require fluency, multi-step thinking, and the ability to apply mathematical concepts in unfamiliar contexts under timed conditions.",
+    intro: "Mathematical reasoning (number problems) is one of the four core domains of the Buckinghamshire Secondary Transfer Test. The maths questions in the Bucks 11+ go beyond the Year 5 curriculum — they require fluency, multi-step thinking, and the ability to apply mathematical concepts in unfamiliar contexts under timed conditions.",
     questionTypes: [
       { type: "Number operations", description: "Addition, subtraction, multiplication, and division with whole numbers, decimals, and fractions" },
       { type: "Fractions, decimals, percentages", description: "Converting between forms, calculating with FDP, and applying them in context" },
@@ -167,7 +167,7 @@ const subjectData: Record<Subject, SubjectContent> = {
     title: "Bucks 11+ English Comprehension: Question Types, Strategy & Practice",
     metaTitle: "Bucks 11+ English Comprehension Practice – Secondary Transfer Test Guide | Bucks 11 Plus Tests",
     metaDescription: "Complete guide to English comprehension in the Buckinghamshire 11+ Secondary Transfer Test. Question types, reading strategies, and how to improve comprehension scores before test day.",
-    intro: "English comprehension is one of the four core domains of the Buckinghamshire Secondary Transfer Test. It tests a child's ability to read a passage carefully and accurately — and to answer questions that probe literal understanding, inference, vocabulary in context, and language use. It is the domain most directly built by strong reading habits.",
+    intro: "English comprehension (reading & understanding) is one of the four core domains of the Buckinghamshire Secondary Transfer Test. It tests a child's ability to read a passage carefully and accurately — and to answer questions that probe literal understanding, inference, vocabulary in context, and language use. It is the domain most directly built by strong reading habits.",
     questionTypes: [
       { type: "Literal retrieval", description: "Find information directly stated in the passage" },
       { type: "Inference", description: "Deduce meaning implied by the text but not directly stated" },
