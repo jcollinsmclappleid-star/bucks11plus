@@ -457,24 +457,20 @@ export default function Pricing() {
         </div>
       </section>
 
-      {/* ── TESTIMONIALS ── */}
-      <section className="py-14 md:py-18 bg-slate-50 border-b border-border/30" data-testid="section-testimonials">
+      {/* ── WHY PARENTS CHOOSE US ── */}
+      <section className="py-14 md:py-18 bg-slate-50 border-b border-border/30" data-testid="section-why-parents">
         <div className="container mx-auto max-w-4xl px-4">
           <div className="text-center mb-10">
-            <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">From Bucks families</span>
-            <h2 className="text-2xl font-bold text-primary font-serif">What parents say</h2>
+            <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">Why parents choose us</span>
+            <h2 className="text-2xl font-bold text-primary font-serif">Built with Year 6 Senior Leadership Insight</h2>
           </div>
-          <div className="grid sm:grid-cols-3 gap-5">
-            {[
-              { quote: "The readiness forecast was a game changer. We finally understood where the points were coming from and what to focus on — instead of just doing more and more papers.", name: "Parent, Aylesbury" },
-              { quote: "My daughter was always strong but we didn't know she had a pacing issue until the check flagged it. Two weeks later, that gap was gone.", name: "Parent, High Wycombe" },
-              { quote: "Worth every penny. The analytics dashboard shows exactly what she's improved and what still needs work. It's like having a tutor who works 24/7.", name: "Parent, Marlow" },
-            ].map((t, i) => (
-              <div key={i} className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm" data-testid={`testimonial-${i}`}>
-                <p className="text-sm text-slate-600 italic leading-relaxed mb-4">"{t.quote}"</p>
-                <p className="text-xs font-semibold text-slate-400">{t.name}</p>
-              </div>
-            ))}
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm px-8 py-8 md:px-12 md:py-10 max-w-3xl mx-auto" data-testid="why-parents-card">
+            <div className="flex flex-col gap-5 text-slate-600 leading-relaxed">
+              <p>Developed with input from senior leadership within a UK primary school, this platform is grounded in the realities of Year 6 and preparation for selective education.</p>
+              <p>The approach is informed by the structure and demands of the Buckinghamshire Secondary Transfer Test — where marks are typically lost, how timing affects performance, and what reaching the 121 standard requires in practice.</p>
+              <p>Rather than generic practice, the focus is on identifying gaps early and directing effort where it will make the greatest difference.</p>
+              <p>Built specifically for Bucks 11+ preparation, it gives parents a clearer view of readiness — and what to do next.</p>
+            </div>
           </div>
         </div>
       </section>

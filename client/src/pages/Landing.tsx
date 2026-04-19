@@ -795,30 +795,28 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── SECTION 6: TESTIMONIALS ── */}
-      <section className="py-14 md:py-16 bg-slate-50 border-b border-border/30" data-testid="section-testimonials">
-        <div className="container mx-auto max-w-5xl px-4">
-          <div className="text-center mb-8">
-            <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-2">What parents say</span>
-            <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif">Families preparing with confidence</h2>
+      {/* ── SECTION 6: WHY PARENTS CHOOSE US ── */}
+      <section className="py-14 md:py-16 bg-slate-50 border-b border-border/30" data-testid="section-why-parents">
+        <div className="container mx-auto max-w-4xl px-4">
+          <div className="text-center mb-10">
+            <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-2">Why parents choose us</span>
+            <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif">Built with Year 6 Senior Leadership Insight</h2>
           </div>
-          <div className="grid md:grid-cols-3 gap-5">
-            {[
-              { quote: "The readiness check showed us exactly where she was losing marks — we dropped the generic practice and focused on NVR sequences. Her scores improved noticeably within three weeks.", name: "Sarah M.", detail: "Parent of Year 5 child, targeting Beaconsfield High" },
-              { quote: "Instead of more questions to wade through, it told us precisely what to fix and in what order. The parent analytics dashboard is incredibly clear.", name: "James T.", detail: "Parent of Year 6 child, targeting Royal Latin" },
-              { quote: "Starting with the free readiness check was the best thing we did. It showed my son was much stronger in Maths than we thought, and that Verbal Reasoning was the real gap.", name: "Priya K.", detail: "Parent of Year 5 child, targeting Dr Challoner's" },
-            ].map((t, i) => (
-              <div key={i} className="bg-white rounded-2xl border border-slate-200 p-6 flex flex-col gap-3 shadow-sm" data-testid={`testimonial-${i}`}>
-                <div className="flex gap-0.5">
-                  {[...Array(5)].map((_, s) => <Star key={s} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />)}
-                </div>
-                <p className="text-sm text-slate-600 leading-relaxed flex-1">"{t.quote}"</p>
-                <div>
-                  <p className="text-sm font-bold text-primary">{t.name}</p>
-                  <p className="text-xs text-slate-400">{t.detail}</p>
-                </div>
-              </div>
-            ))}
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm px-8 py-8 md:px-12 md:py-10 max-w-3xl mx-auto" data-testid="why-parents-card">
+            <div className="flex flex-col gap-5 text-slate-600 leading-relaxed">
+              <p>
+                Developed with input from senior leadership within a UK primary school, this platform is grounded in the realities of Year 6 and preparation for selective education.
+              </p>
+              <p>
+                The approach is informed by the structure and demands of the Buckinghamshire Secondary Transfer Test — where marks are typically lost, how timing affects performance, and what reaching the 121 standard requires in practice.
+              </p>
+              <p>
+                Rather than generic practice, the focus is on identifying gaps early and directing effort where it will make the greatest difference.
+              </p>
+              <p>
+                Built specifically for Bucks 11+ preparation, it gives parents a clearer view of readiness — and what to do next.
+              </p>
+            </div>
           </div>
         </div>
       </section>
