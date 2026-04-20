@@ -720,9 +720,12 @@ export default function Landing() {
                   </div>
                 ))}
               </div>
-              <div className="pt-2">
-                <Button asChild className="bg-primary" data-testid="button-analytics-cta">
-                  <Link href="/pricing">See Full Analytics Dashboard <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              <div className="pt-2 flex flex-col sm:flex-row gap-3">
+                <Button asChild className="bg-primary" data-testid="button-analytics-practice">
+                  <Link href="/app/practice">See Practice Tests <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                </Button>
+                <Button asChild variant="outline" data-testid="button-analytics-readiness">
+                  <Link href="/app/diagnostic">See Readiness Tests <ArrowRight className="ml-2 h-4 w-4" /></Link>
                 </Button>
               </div>
             </div>
@@ -897,6 +900,14 @@ export default function Landing() {
           <div className="flex items-center justify-center gap-2 mt-4" data-testid="company-trust">
             <Shield className="h-3.5 w-3.5 text-slate-300" />
             <p className="text-center text-xs text-slate-400">Registered in England · Operated by Ianson Systems Limited</p>
+          </div>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-8" data-testid="pricing-explore-ctas">
+            <Button asChild className="bg-primary min-w-[200px]" data-testid="button-pricing-practice">
+              <Link href="/app/practice">See Practice Tests <ArrowRight className="ml-2 h-4 w-4" /></Link>
+            </Button>
+            <Button asChild variant="outline" className="min-w-[200px]" data-testid="button-pricing-readiness">
+              <Link href="/app/diagnostic">See Readiness Tests <ArrowRight className="ml-2 h-4 w-4" /></Link>
+            </Button>
           </div>
         </div>
       </section>
