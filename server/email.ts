@@ -218,6 +218,54 @@ export async function sendGuideDownloadAdminEmail(
   }
 }
 
+export async function sendSubscriptionCancelledAdminEmail(
+  email: string,
+  tier: string,
+): Promise<void> {
+  const subject = `[Bucks 11 Plus Tests] Subscription Cancelled — ${email}`;
+  const planLabel: Record<string, string> = {
+    pack_plus: "Bucks Plus Edge (Monthly, £35/mo)",
+    pack_annual: "Bucks Plus Edge (Annual, £279/yr)",
+    pack_monthly: "Bucks Plus Edge (Monthly)",
+    pack12: "Pack 12 (legacy)",
+    programme8: "Programme 8 (legacy)",
+    programme12: "Programme 12 (legacy)",
+    programme16: "Programme 16 (legacy)",
+    programme16_family: "Programme 16 Family (legacy)",
+    programme24_plus: "Programme 24+ (legacy)",
+  };
+  const html = `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.6;color:#1a1a2e;max-width:600px;margin:0 auto;padding:20px;">
+  <strong style="font-size:16px;color:#0d1f30;">Bucks 11 Plus Tests — Subscription Cancelled</strong>
+  <hr style="border:none;border-top:1px solid #e5e7eb;margin:16px 0;">
+  <p><strong>Email:</strong> ${email}</p>
+  <p><strong>Plan:</strong> ${planLabel[tier] || tier}</p>
+  <p><strong>Cancelled at:</strong> ${new Date().toUTCString()}</p>
+  <p style="color:#64748b;font-size:14px;">Access will remain active until the end of the current billing period. No further charges will be made.</p>
+  <hr style="border:none;border-top:1px solid #e5e7eb;margin:16px 0;">
+  <p style="font-size:11px;color:#9ca3af;">Ianson Systems Limited · Bucks 11 Plus Tests</p>
+</body>
+</html>`;
+
+  try {
+    if (!RESEND_API_KEY) {
+      console.log(`[CancelEmail] Skipping (no RESEND_API_KEY): ${subject}`);
+      return;
+    }
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
+      body: JSON.stringify({ from: RESEND_FROM_EMAIL, to: ["support@11plustesthub.co.uk"], subject, html }),
+    });
+    if (!res.ok) console.error(`[CancelEmail] Send failed: ${res.status}`);
+    else console.log(`[CancelEmail] Admin notification sent for ${email}`);
+  } catch (err) {
+    console.error("[CancelEmail] Error:", err);
+  }
+}
+
 export async function sendGuestResultsEmail(
   email: string,
   sessionId: string,

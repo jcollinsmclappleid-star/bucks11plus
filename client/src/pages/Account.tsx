@@ -274,42 +274,42 @@ export default function Account() {
                     </div>
                   </div>
 
-                  {hasStripeAccount && (
+                  {hasPaidAccess() && (
                     <div className="space-y-3 pt-1">
                       <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Billing</p>
-                      <Button
-                        variant="outline"
-                        className="w-full justify-between h-12"
-                        onClick={() => manageBillingMutation.mutate()}
-                        disabled={manageBillingMutation.isPending}
-                        data-testid="button-manage-billing"
-                      >
-                        <span className="flex items-center gap-2">
-                          <ExternalLink className="h-4 w-4 text-muted-foreground" />
-                          <span>Manage billing & payment method</span>
-                        </span>
-                        {manageBillingMutation.isPending && (
-                          <span className="text-xs text-muted-foreground">Opening…</span>
-                        )}
-                      </Button>
-
-                      {(currentTier === "pack_monthly" || currentTier === "pack_plus" || currentTier === "pack_annual") && (
-                        <div className="pt-1 space-y-2">
-                          <Button
-                            variant="outline"
-                            className="w-full justify-between h-12 border-red-200 text-red-700 hover:bg-red-50 hover:border-red-300"
-                            onClick={() => { setCancelResult(null); setShowCancelModal(true); }}
-                            data-testid="button-cancel-subscription"
-                          >
-                            <span className="flex items-center gap-2">
-                              <span>Cancel subscription</span>
-                            </span>
-                          </Button>
-                          <p className="text-xs text-muted-foreground px-1">
-                            You will keep full access until the end of your current billing period. No future payments will be taken.
-                          </p>
-                        </div>
+                      {hasStripeAccount && (
+                        <Button
+                          variant="outline"
+                          className="w-full justify-between h-12"
+                          onClick={() => manageBillingMutation.mutate()}
+                          disabled={manageBillingMutation.isPending}
+                          data-testid="button-manage-billing"
+                        >
+                          <span className="flex items-center gap-2">
+                            <ExternalLink className="h-4 w-4 text-muted-foreground" />
+                            <span>Manage billing & payment method</span>
+                          </span>
+                          {manageBillingMutation.isPending && (
+                            <span className="text-xs text-muted-foreground">Opening…</span>
+                          )}
+                        </Button>
                       )}
+
+                      <div className="pt-1 space-y-2">
+                        <Button
+                          variant="outline"
+                          className="w-full justify-between h-12 border-red-200 text-red-700 hover:bg-red-50 hover:border-red-300"
+                          onClick={() => { setCancelResult(null); setShowCancelModal(true); }}
+                          data-testid="button-cancel-subscription"
+                        >
+                          <span className="flex items-center gap-2">
+                            <span>Cancel subscription</span>
+                          </span>
+                        </Button>
+                        <p className="text-xs text-muted-foreground px-1">
+                          You will keep full access until the end of your current billing period. No future payments will be taken.
+                        </p>
+                      </div>
                     </div>
                   )}
 

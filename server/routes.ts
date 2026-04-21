@@ -7,7 +7,7 @@ import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClie
 import { sql, eq, and, desc, inArray } from "drizzle-orm";
 import { db } from "./db";
 import { computeAttemptMetrics, computeFullAnalytics, type AnswerRecord, type DrillAnswerRecord, type HistoricalMetrics } from "./metrics";
-import { sendDiagnosticCompleteEmail, sendAdminNotificationEmail, sendGuideDownloadAdminEmail, sendGuideDownloadUserEmail } from "./email";
+import { sendDiagnosticCompleteEmail, sendAdminNotificationEmail, sendGuideDownloadAdminEmail, sendGuideDownloadUserEmail, sendSubscriptionCancelledAdminEmail } from "./email";
 import { learnArticles } from "../client/src/data/learn-articles";
 import { ensureFreePool, repairSeedQuestions } from "./seed";
 import {
@@ -244,41 +244,42 @@ export async function registerRoutes(
   app.post("/api/stripe/cancel-subscription", requireAuth, async (req, res, next) => {
     try {
       const user = req.user!;
-      if (!user.stripeCustomerId) {
-        return res.status(400).json({ message: "No billing account found." });
-      }
       const stripe = await getUncachableStripeClient();
-      let subscriptions = await stripe.subscriptions.list({
-        customer: user.stripeCustomerId,
-        limit: 10,
-      });
+      const userEmail = (user.email || user.username || "").toLowerCase().trim();
 
-      // Fallback: guest checkout may have created a different Stripe customer.
-      // Search by the user's email to find the real subscription.
-      if (subscriptions.data.length === 0) {
-        const userEmail = user.email || user.username || "";
-        if (userEmail.includes("@")) {
-          const customers = await stripe.customers.search({
-            query: `email:"${userEmail}"`,
-            limit: 5,
-          });
-          for (const cust of customers.data) {
-            if (cust.id === user.stripeCustomerId) continue;
-            const custSubs = await stripe.subscriptions.list({ customer: cust.id, limit: 10 });
-            if (custSubs.data.length > 0) {
-              subscriptions = custSubs;
-              // Update stored customer ID so future lookups work
-              await storage.updateUserStripeInfo(user.id, cust.id);
-              break;
-            }
+      // Start with whatever stripeCustomerId we have (may be null)
+      let subscriptions: Awaited<ReturnType<typeof stripe.subscriptions.list>> = { data: [] } as any;
+
+      if (user.stripeCustomerId) {
+        subscriptions = await stripe.subscriptions.list({
+          customer: user.stripeCustomerId,
+          limit: 10,
+        });
+      }
+
+      // Fallback: search Stripe by email — covers users provisioned without a stored
+      // customer ID and guest checkouts that created a separate customer record.
+      if (subscriptions.data.length === 0 && userEmail.includes("@")) {
+        const customers = await stripe.customers.search({
+          query: `email:"${userEmail}"`,
+          limit: 5,
+        });
+        for (const cust of customers.data) {
+          if (cust.id === user.stripeCustomerId) continue;
+          const custSubs = await stripe.subscriptions.list({ customer: cust.id, limit: 10 });
+          if (custSubs.data.length > 0) {
+            subscriptions = custSubs;
+            // Persist the found customer ID so future lookups skip this search
+            await storage.updateUserStripeInfo(user.id, cust.id);
+            break;
           }
         }
       }
 
-      const activeSubs = subscriptions.data.filter(s => s.status !== "canceled");
+      const activeSubs = subscriptions.data.filter((s: any) => s.status !== "canceled");
 
       if (activeSubs.length === 0) {
-        // No Stripe subscription exists — sync to free so the user is in a clean state.
+        // No active Stripe subscription — downgrade locally so the user is in a clean state.
         await storage.updateUserSubscription(user.id, "free", undefined);
         const { password: _, ...safeUser } = await storage.getUser(user.id) as any;
         return res.json({ success: true, user: safeUser, cancelledImmediately: true });
@@ -287,6 +288,10 @@ export async function registerRoutes(
       for (const sub of activeSubs) {
         await stripe.subscriptions.update(sub.id, { cancel_at_period_end: true });
       }
+
+      // Notify admin of cancellation
+      sendSubscriptionCancelledAdminEmail(userEmail, user.subscriptionTier || "unknown").catch(() => {});
+
       const { password: _, ...safeUser } = await storage.getUser(user.id) as any;
       res.json({ success: true, user: safeUser, cancelledImmediately: false });
     } catch (error) {
