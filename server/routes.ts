@@ -952,6 +952,62 @@ export async function registerRoutes(
     }
   });
 
+  app.get("/api/test-sessions/:id/pdf", requireAuth, async (req, res, next) => {
+    try {
+      const user = req.user!;
+      const PAID_TIERS = new Set(["pack12","pack12_family","pack_monthly","pack_plus","pack_annual","programme8","programme12","programme16","programme16_family","programme24_plus","early_learner"]);
+      if (!user.isAdmin && !PAID_TIERS.has(user.subscriptionTier || "")) {
+        return res.status(403).json({ message: "PDF reports require a paid subscription." });
+      }
+      const session = await storage.getTestSession(req.params.id);
+      if (!session) return res.status(404).json({ message: "Session not found" });
+      if (session.userId !== user.id && !user.isAdmin) {
+        return res.status(403).json({ message: "Access denied" });
+      }
+      if (!session.completedAt) return res.status(400).json({ message: "Session not yet completed" });
+
+      const puppeteer = await import("puppeteer");
+      const port = process.env.PORT || "5000";
+      const url = `http://localhost:${port}/app/results/${req.params.id}`;
+      const rawCookieHeader = req.headers.cookie || "";
+
+      const browser = await puppeteer.default.launch({
+        headless: true,
+        args: ["--no-sandbox","--disable-setuid-sandbox","--disable-dev-shm-usage","--disable-gpu","--no-first-run","--no-zygote","--single-process"],
+      });
+      try {
+        const page = await browser.newPage();
+        if (rawCookieHeader) {
+          const cookiePairs = rawCookieHeader.split(";").map(c => c.trim()).filter(Boolean);
+          for (const pair of cookiePairs) {
+            const eqIdx = pair.indexOf("=");
+            if (eqIdx < 0) continue;
+            const name = pair.slice(0, eqIdx).trim();
+            const value = pair.slice(eqIdx + 1).trim();
+            await page.setCookie({ name, value, domain: "localhost", path: "/" });
+          }
+        }
+        await page.goto(url, { waitUntil: "networkidle0", timeout: 30000 });
+        await page.emulateMediaType("print");
+        const pdfBuffer = await page.pdf({
+          format: "A4",
+          printBackground: true,
+          margin: { top: "16mm", bottom: "16mm", left: "14mm", right: "14mm" },
+        });
+        const buffer = Buffer.from(pdfBuffer);
+        const dateStr = new Date(session.completedAt).toISOString().split("T")[0];
+        res.setHeader("Content-Type", "application/pdf");
+        res.setHeader("Content-Disposition", `attachment; filename="bucks-11plus-report-${dateStr}.pdf"`);
+        res.setHeader("Content-Length", buffer.length);
+        res.send(buffer);
+      } finally {
+        await browser.close();
+      }
+    } catch (error) {
+      next(error);
+    }
+  });
+
   app.get("/api/test-sessions/:id/review", requireAuth, async (req, res, next) => {
     try {
       const session = await storage.getTestSession(req.params.id);

@@ -218,6 +218,50 @@ export async function sendGuideDownloadAdminEmail(
   }
 }
 
+export async function sendPurchaseNotificationEmail(
+  email: string,
+  tier: string,
+  amountPence?: number,
+): Promise<void> {
+  const planLabel: Record<string, string> = {
+    pack_plus: "Bucks Plus Edge Monthly (£35/mo)",
+    pack_annual: "Bucks Plus Edge Annual (£279/yr)",
+    pack_monthly: "Bucks Plus Edge Monthly",
+  };
+  const subject = `[Bucks 11 Plus Tests] New Purchase — ${email}`;
+  const amountStr = amountPence != null ? `£${(amountPence / 100).toFixed(2)}` : null;
+  const html = `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.6;color:#1a1a2e;max-width:600px;margin:0 auto;padding:20px;">
+  <strong style="font-size:16px;color:#0d1f30;">Bucks 11 Plus Tests — New Purchase</strong>
+  <hr style="border:none;border-top:1px solid #e5e7eb;margin:16px 0;">
+  <p><strong>Customer email:</strong> ${email}</p>
+  <p><strong>Plan:</strong> ${planLabel[tier] || tier}</p>
+  ${amountStr ? `<p><strong>Amount:</strong> ${amountStr}</p>` : ""}
+  <p><strong>Time:</strong> ${new Date().toUTCString()}</p>
+  <hr style="border:none;border-top:1px solid #e5e7eb;margin:16px 0;">
+  <p style="font-size:11px;color:#9ca3af;">Ianson Systems Limited · Bucks 11 Plus Tests</p>
+</body>
+</html>`;
+
+  try {
+    if (!RESEND_API_KEY) {
+      console.log(`[PurchaseEmail] Skipping (no RESEND_API_KEY): ${subject}`);
+      return;
+    }
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
+      body: JSON.stringify({ from: RESEND_FROM_EMAIL, to: ["support@11plustesthub.co.uk"], subject, html }),
+    });
+    if (!res.ok) console.error(`[PurchaseEmail] Send failed: ${res.status}`);
+    else console.log(`[PurchaseEmail] Admin notification sent for ${email}`);
+  } catch (err) {
+    console.error("[PurchaseEmail] Error:", err);
+  }
+}
+
 export async function sendSubscriptionCancelledAdminEmail(
   email: string,
   tier: string,

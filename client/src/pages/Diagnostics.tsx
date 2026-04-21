@@ -2,10 +2,10 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Lock, Clock, FileText, Loader2, Zap, BookOpen, GraduationCap } from "lucide-react";
+import { Lock, Clock, FileText, Loader2, Zap, BookOpen, GraduationCap, PlayCircle, Timer, MessageSquare, ArrowRight } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Diagnostic, TestSession, Question } from "@shared/schema";
+import { Diagnostic, TestSession, Question, PracticeSection } from "@shared/schema";
 import { useAuth } from "@/lib/auth";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useState } from "react";
@@ -62,10 +62,18 @@ const PRACTICE_PAPERS = [
   },
 ];
 
+const SUBJECT_SUBLABELS: Record<string, string> = {
+  "Verbal Reasoning": "Word puzzles & letter patterns",
+  "Non-Verbal Reasoning": "Shape & pattern puzzles",
+  "Mathematics": "Number problems",
+  "English Comprehension": "Reading & comprehension",
+};
+
 export default function Diagnostics() {
-  const { user, hasPaidAccess } = useAuth();
+  const { user, hasPaidAccess, isFullPlatform } = useAuth();
   const [, setLocation] = useLocation();
   const [startingPaper, setStartingPaper] = useState<string | null>(null);
+  const [timedMode, setTimedMode] = useState(false);
 
   const { data: diagnostics, isLoading: loadingDiags } = useQuery<Diagnostic[]>({
     queryKey: ["/api/diagnostics"],
@@ -74,6 +82,10 @@ export default function Diagnostics() {
   const { data: sessions, isLoading: loadingSessions } = useQuery<TestSession[]>({
     queryKey: ["/api/test-sessions"],
     enabled: !!user,
+  });
+
+  const { data: practiceSections } = useQuery<PracticeSection[]>({
+    queryKey: ["/api/practice-sections"],
   });
 
   const startPaperMutation = useMutation({
@@ -120,7 +132,7 @@ export default function Diagnostics() {
 
   return (
     <div className="container mx-auto max-w-5xl px-4 py-8 space-y-10">
-      <Seo title="Readiness Checks | Bucks 11 Plus Tests" description="Available mock exams, readiness checks, and unlimited practice papers." />
+      <Seo title="Readiness Checks | Bucks 11 Plus Tests" description="Fixed readiness checks, unlimited practice papers, and the full targeted drill library — everything you need for Bucks 11+ preparation." />
       
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-border/60 pb-6">
         <div>
@@ -257,6 +269,141 @@ export default function Diagnostics() {
               );
             })}
           </div>
+        </div>
+      </section>
+
+      {/* Practice Bank */}
+      <section>
+        <div className="border-t border-border/60 pt-8">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+            <div>
+              <h2 className="text-xl font-bold text-primary font-serif mb-1" data-testid="text-section-practice-bank">Practice Bank</h2>
+              <p className="text-sm text-muted-foreground">Targeted drills grouped by subject — work on the areas where your child needs it most.</p>
+            </div>
+            <div className="flex items-center gap-3 shrink-0">
+              <div className="flex rounded-lg border border-border overflow-hidden" data-testid="toggle-drill-mode-diagnostics">
+                <button
+                  onClick={() => setTimedMode(false)}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium transition-colors ${!timedMode ? "bg-primary text-primary-foreground" : "bg-background text-muted-foreground hover:bg-muted"}`}
+                  data-testid="button-diagnostics-mode-untimed"
+                >
+                  <MessageSquare className="h-3.5 w-3.5" />
+                  Untimed
+                </button>
+                <button
+                  onClick={() => setTimedMode(true)}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium transition-colors ${timedMode ? "bg-primary text-primary-foreground" : "bg-background text-muted-foreground hover:bg-muted"}`}
+                  data-testid="button-diagnostics-mode-timed"
+                >
+                  <Timer className="h-3.5 w-3.5" />
+                  Timed
+                </button>
+              </div>
+              {!hasPaidAccess() && (
+                <Button className="gap-2 bg-primary" asChild size="sm" data-testid="button-unlock-drills">
+                  <Link href="/pricing"><Lock className="h-3.5 w-3.5" /> See Plans</Link>
+                </Button>
+              )}
+            </div>
+          </div>
+
+          {timedMode && (
+            <div className="flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 p-4 mb-6">
+              <Timer className="h-5 w-5 text-amber-600 mt-0.5 shrink-0" />
+              <div>
+                <p className="font-medium text-amber-900 text-sm">Exam Conditions Mode</p>
+                <p className="text-amber-700 text-xs mt-0.5">Countdown timer · No per-question feedback · All answers scored at the end</p>
+              </div>
+            </div>
+          )}
+
+          {!practiceSections ? (
+            <div className="space-y-10">
+              {Array(3).fill(0).map((_, idx) => (
+                <div key={idx}>
+                  <div className="h-6 bg-slate-100 rounded w-40 mb-4 animate-pulse" />
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {Array(3).fill(0).map((_, i) => (
+                      <div key={i} className="h-44 bg-slate-100 rounded-xl animate-pulse" />
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="space-y-10">
+              {Array.from(new Set(practiceSections.map(s => s.category))).map((category, idx) => {
+                const categorySections = practiceSections.filter(s => s.category === category);
+                const hasHardDrills = categorySections.some(s => s.difficulty === "Hard");
+                const showHardUpgradeBanner = hasPaidAccess() && !isFullPlatform();
+                return (
+                  <div key={idx}>
+                    <div className="mb-4">
+                      <h3 className="text-lg font-bold text-primary flex items-center gap-2">
+                        <BookOpen className="h-5 w-5 text-primary/70" /> {category}
+                      </h3>
+                      {SUBJECT_SUBLABELS[category] && (
+                        <p className="text-sm text-muted-foreground mt-0.5 ml-7">{SUBJECT_SUBLABELS[category]}</p>
+                      )}
+                    </div>
+                    {hasHardDrills && showHardUpgradeBanner && (
+                      <div className="flex items-center gap-3 rounded-lg border border-violet-200 bg-gradient-to-r from-violet-50 to-indigo-50 p-4 mb-4" data-testid={`banner-hard-upgrade-${category}`}>
+                        <Zap className="h-5 w-5 text-violet-600 shrink-0" />
+                        <div className="flex-1">
+                          <p className="font-medium text-violet-900 text-sm">Unlock all Hard challenge drills with Platform Edge</p>
+                          <p className="text-violet-600 text-xs mt-0.5">Upgrade to Bucks Plus Edge — from £35/month.</p>
+                        </div>
+                        <Button size="sm" className="bg-violet-600 hover:bg-violet-700 text-white shrink-0" asChild data-testid={`button-upgrade-hard-${category}`}>
+                          <Link href="/pricing">See Plans <ArrowRight className="ml-1 h-3.5 w-3.5" /></Link>
+                        </Button>
+                      </div>
+                    )}
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {categorySections.map((drill) => {
+                        const requiredRank = TIER_RANK[drill.requiredTier] || 0;
+                        const isLocked = requiredRank > userRank;
+                        return (
+                          <Card key={drill.id} className={`relative overflow-hidden ${isLocked ? "bg-slate-50/50" : "hover:border-primary/50 transition-colors"}`} data-testid={`card-drill-${drill.id}`}>
+                            {isLocked && (
+                              <div className="absolute inset-0 bg-background/40 backdrop-blur-[1px] z-10 flex items-center justify-center">
+                                <Lock className="h-8 w-8 text-slate-400" />
+                              </div>
+                            )}
+                            <CardHeader className="pb-2">
+                              <div className="flex justify-between items-start mb-2">
+                                <Badge
+                                  variant="secondary"
+                                  className={drill.difficulty === "Hard" ? "bg-red-100 text-red-800" : drill.difficulty === "Medium" ? "bg-amber-100 text-amber-800" : "bg-green-100 text-green-800"}
+                                  data-testid={`badge-drill-difficulty-${drill.id}`}
+                                >
+                                  {drill.difficulty}
+                                </Badge>
+                                <span className="text-xs font-medium text-muted-foreground">{drill.questionCount} Qs</span>
+                              </div>
+                              <CardTitle className="text-base leading-tight" data-testid={`text-drill-title-${drill.id}`}>{drill.title}</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              {isLocked ? (
+                                <Button className="w-full mt-4 bg-primary text-white" asChild data-testid={`button-drill-see-plans-${drill.id}`}>
+                                  <Link href="/pricing">See Plans</Link>
+                                </Button>
+                              ) : (
+                                <Button variant="default" className="w-full mt-4 bg-primary" asChild data-testid={`button-start-drill-${drill.id}`}>
+                                  <Link href={`/app/drill/${drill.id}${timedMode ? "?mode=timed" : ""}`}>
+                                    <PlayCircle className="mr-2 h-4 w-4" /> {timedMode ? "Start Timed Drill" : "Start Drill"}
+                                  </Link>
+                                </Button>
+                              )}
+                            </CardContent>
+                          </Card>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </section>
     </div>

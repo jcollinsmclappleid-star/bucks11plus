@@ -10,6 +10,44 @@ import { useAuth } from "../lib/auth";
 import { useQuery } from "@tanstack/react-query";
 import { getQueryFn } from "../lib/queryClient";
 
+function PdfDownloadButton({ sessionId, completedAt }: { sessionId: string; completedAt?: string }) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleDownload = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(`/api/test-sessions/${sessionId}/pdf`, { credentials: "include" });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.message || "PDF generation failed");
+      }
+      const blob = await res.blob();
+      const dateStr = completedAt ? new Date(completedAt).toISOString().split("T")[0] : new Date().toISOString().split("T")[0];
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `bucks-11plus-report-${dateStr}.pdf`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    } catch (e: any) {
+      setError(e.message || "Download failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="flex flex-col items-end gap-1">
+      <Button variant="outline" className="gap-2" onClick={handleDownload} disabled={loading} data-testid="button-download-pdf">
+        {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+        {loading ? "Generating…" : "PDF Report"}
+      </Button>
+      {error && <p className="text-xs text-red-600">{error}</p>}
+    </div>
+  );
+}
+
 type TestSession = {
   id: string;
   diagnosticId: string;
@@ -313,9 +351,7 @@ export default function Results() {
         </div>
         <div className="flex gap-3">
           {hasPaidAccess() && (
-            <Button variant="outline" className="gap-2" data-testid="button-download-pdf">
-              <Download className="h-4 w-4" /> PDF Report
-            </Button>
+            <PdfDownloadButton sessionId={session.id} completedAt={session.completedAt?.toString()} />
           )}
           <Button asChild>
             <Link href="/app" data-testid="button-go-dashboard">Go to Dashboard</Link>

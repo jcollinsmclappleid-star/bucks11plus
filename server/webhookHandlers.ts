@@ -5,7 +5,7 @@ import { users } from '@shared/schema';
 import { eq } from 'drizzle-orm';
 import { scrypt, randomBytes } from 'crypto';
 import { promisify } from 'util';
-import { sendAccountSetupEmail } from './email';
+import { sendAccountSetupEmail, sendPurchaseNotificationEmail } from './email';
 
 const scryptAsync = promisify(scrypt);
 
@@ -122,6 +122,8 @@ export class WebhookHandlers {
     }
 
     // Look up existing user
+    const amountPence: number | undefined = typeof session.amount_total === 'number' ? session.amount_total : undefined;
+
     const existing = await storage.getUserByUsername(customerEmail);
     if (existing) {
       if (customerId && !existing.stripeCustomerId) {
@@ -129,6 +131,7 @@ export class WebhookHandlers {
       }
       await storage.updateUserSubscription(existing.id, tier, undefined);
       console.log(`[Webhook] Upgraded existing user ${customerEmail} → ${tier}`);
+      sendPurchaseNotificationEmail(customerEmail, tier, amountPence).catch(() => {});
       return;
     }
 
@@ -155,5 +158,6 @@ export class WebhookHandlers {
     } catch (e: any) {
       console.warn('[Webhook] Setup email failed (non-fatal):', e.message);
     }
+    sendPurchaseNotificationEmail(customerEmail, tier, amountPence).catch(() => {});
   }
 }
