@@ -211,6 +211,30 @@ export async function sendGuestResultsEmail(
   return sendEmail(email, "Your 11+ Readiness Check Results — save this link", html);
 }
 
+export async function sendAccountSetupEmail(email: string, resetToken: string): Promise<boolean> {
+  const setupUrl = `${BASE_URL}/reset-password?token=${resetToken}`;
+  const html = `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.6;color:#1a1a2e;max-width:600px;margin:0 auto;padding:20px;">
+  <div style="text-align:center;margin-bottom:24px;">
+    <strong style="font-size:18px;color:#0d1f30;">Bucks 11 Plus Tests</strong>
+  </div>
+  <h2 style="color:#0d1f30;margin-bottom:8px;">Your account is ready — set your password</h2>
+  <p>Thank you for subscribing to <strong>Bucks Plus Edge</strong>. Your account has been created and your full access is active.</p>
+  <p>Click below to set your password and get started:</p>
+  <div style="text-align:center;margin:24px 0;">
+    <a href="${setupUrl}" style="display:inline-block;background:#0d1f30;color:white;padding:14px 28px;border-radius:6px;text-decoration:none;font-weight:bold;">Set Password &amp; Start Preparing</a>
+  </div>
+  <p style="font-size:13px;color:#64748b;">This link expires in 72 hours. Once you've set your password you can log in at <a href="${BASE_URL}/sign-in" style="color:#0d1f30;">${BASE_URL}/sign-in</a> any time.</p>
+  <p style="font-size:13px;color:#64748b;">If you have any questions, reply to this email or use the chat on the site.</p>
+  <hr style="border:none;border-top:1px solid #e5e7eb;margin:32px 0 16px;">
+  <p style="font-size:11px;color:#9ca3af;text-align:center;">Bucks 11 Plus Tests · Buckinghamshire 11+ Preparation · Operated by Ianson Systems Limited</p>
+</body>
+</html>`;
+  return sendEmail(email, "Your Bucks Plus Edge account is ready — set your password", html);
+}
+
 export async function sendPasswordResetEmail(email: string, resetToken: string): Promise<boolean> {
   const resetUrl = `${BASE_URL}/reset-password?token=${resetToken}`;
 

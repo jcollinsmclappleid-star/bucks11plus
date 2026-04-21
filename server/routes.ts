@@ -452,6 +452,7 @@ export async function registerRoutes(
           quantity: 1,
         }],
         mode: 'subscription',
+        customer_creation: 'always',
         success_url: `${protocol}://${host}/checkout-success?tier=${tier}&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${protocol}://${host}/pricing`,
         metadata: { tier },

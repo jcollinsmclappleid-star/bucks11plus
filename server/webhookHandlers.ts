@@ -1,5 +1,13 @@
-import { getStripeSync } from './stripeClient';
+import { getStripeSync, getUncachableStripeClient } from './stripeClient';
 import { storage } from './storage';
+import { db } from './db';
+import { users } from '@shared/schema';
+import { eq } from 'drizzle-orm';
+import { scrypt, randomBytes } from 'crypto';
+import { promisify } from 'util';
+import { sendAccountSetupEmail } from './email';
+
+const scryptAsync = promisify(scrypt);
 
 const PAID_TIERS = ['pack_monthly', 'pack_plus', 'pack_annual'] as const;
 
@@ -90,8 +98,62 @@ export class WebhookHandlers {
         break;
       }
 
+      // New subscription created via checkout — upgrade or create user account
+      case 'checkout.session.completed': {
+        await WebhookHandlers.handleCheckoutCompleted(obj);
+        break;
+      }
+
       default:
         break;
+    }
+  }
+
+  private static async handleCheckoutCompleted(session: any): Promise<void> {
+    const tier = session.metadata?.tier;
+    if (!tier || !['pack_plus', 'pack_annual', 'pack_monthly'].includes(tier)) return;
+
+    const customerEmail = (session.customer_details?.email || session.customer_email || '').toLowerCase().trim();
+    const customerId = typeof session.customer === 'string' ? session.customer : session.customer?.id;
+
+    if (!customerEmail) {
+      console.log('[Webhook] checkout.session.completed — no customer email, cannot provision');
+      return;
+    }
+
+    // Look up existing user
+    const existing = await storage.getUserByUsername(customerEmail);
+    if (existing) {
+      if (customerId && !existing.stripeCustomerId) {
+        await storage.updateUserStripeInfo(existing.id, customerId);
+      }
+      await storage.updateUserSubscription(existing.id, tier, undefined);
+      console.log(`[Webhook] Upgraded existing user ${customerEmail} → ${tier}`);
+      return;
+    }
+
+    // Auto-create account for new customer
+    const salt = randomBytes(16).toString('hex');
+    const buf = (await scryptAsync(randomBytes(16).toString('hex'), salt, 64)) as Buffer;
+    const hashedPassword = `${buf.toString('hex')}.${salt}`;
+    const resetToken = randomBytes(32).toString('hex');
+    const resetExpires = new Date(Date.now() + 72 * 60 * 60 * 1000);
+
+    const newUser = await storage.createUser({ username: customerEmail, password: hashedPassword });
+    await db.update(users)
+      .set({
+        subscriptionTier: tier,
+        stripeCustomerId: customerId || null,
+        passwordResetToken: resetToken,
+        passwordResetExpires: resetExpires,
+      })
+      .where(eq(users.id, newUser.id));
+
+    try {
+      await sendAccountSetupEmail(customerEmail, resetToken);
+      console.log(`[Webhook] Auto-created account for ${customerEmail} (${tier}) — setup email sent`);
+    } catch (e: any) {
+      console.warn('[Webhook] Setup email failed (non-fatal):', e.message);
     }
   }
 }

@@ -1069,6 +1069,7 @@ export async function seedDatabase() {
     await ensureQuestionBank();
     await ensureDiagnosticPool();
     await applyQuestionQualityFixes();
+    await provisionMissedCustomer();
     return;
   }
 
@@ -1291,4 +1292,33 @@ export async function seedDatabase() {
   await ensureQuestionBank();
   await ensureDiagnosticPool();
   await applyQuestionQualityFixes();
+  await provisionMissedCustomer();
+}
+
+async function provisionMissedCustomer() {
+  const email = "saurabh.jha@hotmail.co.uk";
+  const existing = await db.select().from(users).where(eq(users.username, email)).limit(1);
+  if (existing.length > 0) {
+    // If account exists but tier is wrong, fix it silently
+    if (existing[0].subscriptionTier !== "pack_plus") {
+      await db.update(users).set({ subscriptionTier: "pack_plus" }).where(eq(users.username, email));
+      console.log(`  [Provision] Fixed tier for ${email} → pack_plus`);
+    }
+    return;
+  }
+
+  const salt = randomBytes(16).toString("hex");
+  const buf = (await scryptAsync(randomBytes(16).toString("hex"), salt, 64)) as Buffer;
+  const hashedPassword = `${buf.toString("hex")}.${salt}`;
+  const resetToken = randomBytes(32).toString("hex");
+  const resetExpires = new Date(Date.now() + 72 * 60 * 60 * 1000);
+
+  await db.insert(users).values({ username: email, password: hashedPassword });
+  await db.update(users)
+    .set({ subscriptionTier: "pack_plus", passwordResetToken: resetToken, passwordResetExpires: resetExpires })
+    .where(eq(users.username, email));
+
+  const { sendAccountSetupEmail } = await import("./email");
+  await sendAccountSetupEmail(email, resetToken);
+  console.log(`  [Provision] Account created for ${email} (pack_plus) — setup email sent`);
 }
