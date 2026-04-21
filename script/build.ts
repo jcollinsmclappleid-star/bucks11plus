@@ -1,6 +1,7 @@
 import { build as esbuild } from "esbuild";
 import { build as viteBuild } from "vite";
 import { rm, readFile } from "fs/promises";
+import { execSync } from "child_process";
 
 // server deps to bundle to reduce openat(2) syscalls
 // which helps cold start times
@@ -34,6 +35,13 @@ const allowlist = [
 
 async function buildAll() {
   await rm("dist", { recursive: true, force: true });
+
+  console.log("installing puppeteer chrome...");
+  try {
+    execSync("npx puppeteer browsers install chrome", { stdio: "inherit" });
+  } catch (err) {
+    console.warn("Chrome install failed (non-fatal):", err);
+  }
 
   console.log("building client...");
   await viteBuild();

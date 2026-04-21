@@ -131,6 +131,56 @@ export async function sendAdminNotificationEmail(
   }
 }
 
+export async function sendGuideDownloadUserEmail(
+  name: string,
+  email: string,
+): Promise<void> {
+  const BASE_URL = getBaseUrl();
+  const downloadUrl = `${BASE_URL}/api/guide/pdf`;
+  const onlineUrl = `${BASE_URL}/parent-guide`;
+  const diagnosticUrl = `${BASE_URL}/free-diagnostic`;
+  const subject = `Your Free Bucks 11 Plus Parent Guide`;
+  const firstName = name.split(" ")[0] || name;
+  const html = `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.6;color:#1a1a2e;max-width:600px;margin:0 auto;padding:20px;">
+  <div style="text-align:center;margin-bottom:24px;">
+    <strong style="font-size:20px;color:#0d1f30;">Bucks 11 Plus Tests</strong>
+  </div>
+  <h2 style="font-size:22px;color:#0d1f30;margin-bottom:8px;">Hi ${firstName}, your guide is ready</h2>
+  <p style="color:#475569;">Thank you for downloading the free Bucks 11 Plus Parent Guide. It covers everything you need to understand the 121 qualifying score, the four exam papers, and how to assess your child's readiness.</p>
+  <div style="text-align:center;margin:28px 0;">
+    <a href="${downloadUrl}" style="display:inline-block;background:#0d1f30;color:#ffffff;text-decoration:none;font-weight:700;font-size:15px;padding:14px 32px;border-radius:8px;">Download Your Guide (PDF)</a>
+  </div>
+  <p style="color:#64748b;font-size:14px;text-align:center;">Having trouble? <a href="${onlineUrl}" style="color:#0d1f30;">View the guide online instead</a></p>
+  <hr style="border:none;border-top:1px solid #e5e7eb;margin:28px 0;">
+  <p style="color:#475569;font-size:14px;"><strong style="color:#0d1f30;">Next step:</strong> Find out exactly where your child stands with a free GL-style readiness check — 12 questions across Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension. Takes under 10 minutes.</p>
+  <div style="text-align:center;margin:20px 0;">
+    <a href="${diagnosticUrl}" style="display:inline-block;background:#f59e0b;color:#1c1917;text-decoration:none;font-weight:700;font-size:14px;padding:12px 28px;border-radius:8px;">Take the Free Readiness Check</a>
+  </div>
+  <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0;">
+  <p style="font-size:11px;color:#9ca3af;text-align:center;">Ianson Systems Limited · Bucks 11 Plus Tests · <a href="${BASE_URL}" style="color:#9ca3af;">${BASE_URL.replace("https://","")}</a></p>
+</body>
+</html>`;
+
+  try {
+    if (!RESEND_API_KEY) {
+      console.log(`[GuideEmail] Skipping user email (no RESEND_API_KEY): ${email}`);
+      return;
+    }
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
+      body: JSON.stringify({ from: RESEND_FROM_EMAIL, to: [email], subject, html }),
+    });
+    if (!res.ok) console.error(`[GuideEmail] User email send failed: ${res.status}`);
+    else console.log(`[GuideEmail] Guide download email sent to ${email}`);
+  } catch (err) {
+    console.error("[GuideEmail] User email error:", err);
+  }
+}
+
 export async function sendGuideDownloadAdminEmail(
   name: string,
   email: string,

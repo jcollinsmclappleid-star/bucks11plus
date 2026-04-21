@@ -38,6 +38,7 @@ export default function ParentGuide() {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [downloading, setDownloading] = useState(false);
+  const [downloadFailed, setDownloadFailed] = useState(false);
   const [leadId, setLeadId] = useState<number | null>(null);
   const [error, setError] = useState("");
   const formRef = useRef<HTMLDivElement>(null);
@@ -70,6 +71,8 @@ export default function ParentGuide() {
         link.download = "bucks-11-plus-parent-guide.pdf";
         link.click();
         URL.revokeObjectURL(url);
+      } catch {
+        setDownloadFailed(true);
       } finally {
         setDownloading(false);
       }
@@ -386,7 +389,7 @@ export default function ParentGuide() {
                 Download Your Free Guide
               </h2>
               <p className="text-sm text-muted-foreground mt-2">
-                Enter your details below and we'll send you the guide immediately.
+                Enter your details and we'll download the guide instantly and email you a copy.
               </p>
             </div>
 
@@ -400,8 +403,17 @@ export default function ParentGuide() {
                   )}
                 </div>
                 <p className="font-semibold text-primary">
-                  {downloading ? "Generating your guide — this takes a few seconds…" : "Your guide is downloading."}
+                  {downloading
+                    ? "Generating your guide — this takes a few seconds…"
+                    : downloadFailed
+                    ? "We've emailed the guide to you."
+                    : "Your guide is downloading."}
                 </p>
+                {downloadFailed && (
+                  <p className="text-sm text-muted-foreground">
+                    Check your inbox — we've sent the guide to the email address you provided. It should arrive within a couple of minutes.
+                  </p>
+                )}
                 <p className="text-sm text-muted-foreground">
                   Want to see where your child stands right now?
                 </p>
