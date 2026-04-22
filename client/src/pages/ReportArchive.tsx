@@ -174,7 +174,7 @@ export default function ReportArchive() {
                     <Button variant="ghost" size="sm" asChild data-testid={`button-view-results-${report.id}`}>
                       <Link href={`/app/results/${report.id}`}>View Results</Link>
                     </Button>
-                    <PdfDownloadButton sessionId={report.id} completedAt={report.completedAt?.toISOString()} />
+                    <PdfDownloadButton sessionId={report.id} completedAt={report.completedAt ? String(report.completedAt) : undefined} />
                   </div>
                 </CardContent>
               </Card>

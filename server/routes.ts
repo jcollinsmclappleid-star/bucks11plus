@@ -8,6 +8,7 @@ import { sql, eq, and, desc, inArray } from "drizzle-orm";
 import { db } from "./db";
 import { computeAttemptMetrics, computeFullAnalytics, type AnswerRecord, type DrillAnswerRecord, type HistoricalMetrics } from "./metrics";
 import { sendDiagnosticCompleteEmail, sendAdminNotificationEmail, sendGuideDownloadAdminEmail, sendGuideDownloadUserEmail, sendSubscriptionCancelledAdminEmail } from "./email";
+import { ensureChromium } from "./chromium";
 import { learnArticles } from "../client/src/data/learn-articles";
 import { ensureFreePool, repairSeedQuestions } from "./seed";
 import {
@@ -966,6 +967,7 @@ export async function registerRoutes(
       }
       if (!session.completedAt) return res.status(400).json({ message: "Session not yet completed" });
 
+      await ensureChromium();
       const puppeteer = await import("puppeteer");
       const port = process.env.PORT || "5000";
       const url = `http://localhost:${port}/app/results/${req.params.id}`;
@@ -1940,6 +1942,7 @@ export async function registerRoutes(
         return res.send(pdfCache.buffer);
       }
 
+      await ensureChromium();
       const puppeteer = await import("puppeteer");
       const port = process.env.PORT || "5000";
       const url = `http://localhost:${port}/guide-print`;

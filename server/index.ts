@@ -8,6 +8,7 @@ import { runMigrations } from "stripe-replit-sync";
 import { getStripeSync } from "./stripeClient";
 import { WebhookHandlers } from "./webhookHandlers";
 import { runEmailTriggers } from "./email";
+import { ensureChromium } from "./chromium";
 
 const app = express();
 const httpServer = createServer(app);
@@ -179,6 +180,7 @@ app.use((req, res, next) => {
 
   // Run background tasks after the server is already listening so startup
   // latency never blocks incoming requests
+  ensureChromium(); // fire and forget — PDF endpoints await this promise before launching Puppeteer
   initStripe().catch(err => console.error('Stripe init error:', err));
   seedDatabase().catch(err => console.error("Seed error:", err));
   ensureNvrGeneratorReseeds().catch(err => console.error("NVR reseed error:", err));
