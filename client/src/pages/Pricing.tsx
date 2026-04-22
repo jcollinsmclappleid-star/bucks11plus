@@ -440,7 +440,7 @@ export default function Pricing() {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
-              { icon: Target, color: "bg-amber-100 text-amber-700", title: "1,500+ GL-style questions", desc: "Every question designed for VR, NVR, Maths & Comprehension. Aligned to the GL Assessment reasoning format — not generic." },
+              { icon: Target, color: "bg-amber-100 text-amber-700", title: "1,500+ GL-style questions", desc: "Every question designed for VR, NVR, Maths & Comprehension across all four GL Assessment domains — not generic." },
               { icon: BarChart3, color: "bg-violet-100 text-violet-700", title: "Parent analytics dashboard", desc: "Accuracy, stamina, sub-skill breakdowns and forecast score — all visible in one place. Know exactly where to focus." },
               { icon: Brain, color: "bg-blue-100 text-blue-700", title: "Guided weekly programme", desc: "The platform tells your child what to work on next. Priority-ranked 15-minute sessions based on their specific gaps." },
               { icon: Clock, color: "bg-emerald-100 text-emerald-700", title: "Tracks progress to 121", desc: "Forecast score updates after every session. Watch the gap close with evidence, not guesswork." },

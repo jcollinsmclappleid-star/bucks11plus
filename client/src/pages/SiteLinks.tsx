@@ -18,12 +18,12 @@ const sections: LinkSection[] = [
   {
     heading: "Main Pages",
     links: [
-      { title: "Home", description: "Bucks 11 Plus Tests — Buckinghamshire 11+ exam preparation aligned to the GL-style Secondary Transfer Test.", href: "/" },
+      { title: "Home", description: "Bucks 11 Plus Tests — Buckinghamshire 11+ exam preparation covering all four GL Assessment domains of the Secondary Transfer Test.", href: "/" },
       { title: "Why Choose Us Over Practice Papers", description: "Platform vs practice papers — a direct comparison showing how intelligent diagnostics, parent analytics and a guided programme go beyond generic prep.", href: "/why-choose-bucks-11-plus-tests" },
       { title: "Pricing & Plans", description: "Compare all subscription tiers from the free readiness check through to the full Bucks Plus Edge annual plan.", href: "/pricing" },
-      { title: "How It Works", description: "Understand how the platform forecasts your child's readiness using GL-aligned readiness checks and scoring.", href: "/how-it-works" },
+      { title: "How It Works", description: "Understand how the platform forecasts your child's readiness using readiness checks across all four GL Assessment domains.", href: "/how-it-works" },
       { title: "Free Baseline Readiness Check", description: "Take a free 8-minute assessment to see where your child stands — no account needed.", href: "/free-diagnostic" },
-      { title: "GL-Style Alignment", description: "Learn how our questions and scoring mirror the real Buckinghamshire Secondary Transfer Test format.", href: "/bucks-gl-alignment" },
+      { title: "GL Assessment Domains", description: "Learn how our independently developed questions cover the four GL Assessment domains of the Buckinghamshire Secondary Transfer Test.", href: "/bucks-gl-alignment" },
     ],
   },
   {

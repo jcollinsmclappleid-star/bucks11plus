@@ -167,7 +167,7 @@ export default function About() {
           11+ Standard collects practice performance data — question-level responses, timing, readiness scores, and progress across sessions — for the sole purpose of generating the readiness forecasts, analytics, and guided practice that parents and children use on the platform. This data is never sold, never shared with third parties, and is not passed to schools, local authorities, or GL Assessment under any circumstances.
         </p>
         <p>
-          We are not affiliated with GL Assessment, Buckinghamshire Council, or any grammar school. The "GL-style" label refers to the question format we use, which replicates the structure of the real test — it does not imply any formal relationship with GL Assessment Ltd.
+          We are not affiliated with GL Assessment, Buckinghamshire Council, or any grammar school. The "GL-style" label refers to the question format we use — our independently developed questions cover the four GL Assessment domains of the Buckinghamshire Secondary Transfer Test. It does not imply any formal relationship with GL Assessment Ltd.
         </p>
       </div>
 

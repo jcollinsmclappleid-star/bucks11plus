@@ -939,7 +939,7 @@ export default function Landing() {
           <div>
             <h2 className="text-xl font-bold text-primary font-serif mb-2">What the Bucks 11+ Readiness Check Covers</h2>
             <p className="text-sm text-slate-500 leading-relaxed mb-5">
-              The Buckinghamshire Secondary Transfer Test (STT) is produced by GL Assessment and covers four assessed domains. Our readiness check replicates this structure using independently developed GL-style question families:
+              The Buckinghamshire Secondary Transfer Test (STT) is produced by GL Assessment and covers four assessed domains. Our readiness check covers all four GL Assessment domains using independently developed questions:
             </p>
             <div className="grid sm:grid-cols-2 gap-4">
               {[

@@ -7,7 +7,7 @@ import { Breadcrumbs, breadcrumbSchema } from "../components/shared/Breadcrumbs"
 const faqItems = [
   {
     question: "Is Bucks 11 Plus Tests officially affiliated with GL Assessment?",
-    answer: "No. Bucks 11 Plus Tests is fully independent. We are not affiliated with, endorsed by, or connected to GL Assessment Ltd. The term 'GL-style' refers to the question formats and reasoning families that GL Assessment uses in the Buckinghamshire Secondary Transfer Test — we independently replicate this structure to give children authentic practice conditions.",
+    answer: "No. Bucks 11 Plus Tests is fully independent. We are not affiliated with, endorsed by, or connected to GL Assessment Ltd. The term 'GL-style' refers to the question formats and reasoning families used in the Buckinghamshire Secondary Transfer Test — our independently developed questions cover those same four GL Assessment domains to help children practise the reasoning types featured in the test.",
   },
   {
     question: "What is verbal reasoning in the Bucks 11+?",
@@ -29,15 +29,15 @@ const faqItems = [
 
 const breadcrumbItems = [
   { label: "Resources", href: "/buckinghamshire-11-plus-guide" },
-  { label: "GL-Style Alignment" },
+  { label: "GL Assessment Domains" },
 ];
 
 export default function GLAlignment() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
       <Seo
-        title="Bucks 11 Plus Subjects Explained – How Our Readiness Check Matches the Real Test | Bucks 11 Plus Tests"
-        description="Understand how the Bucks 11 Plus tests verbal reasoning, non-verbal reasoning, maths and English comprehension. See how our independently developed assessments align to the real test format and where children lose marks."
+        title="Bucks 11 Plus Subjects Explained – The Four GL Assessment Domains | Bucks 11 Plus Tests"
+        description="Understand how the Bucks 11 Plus tests verbal reasoning, non-verbal reasoning, maths and English comprehension. See how our independently developed assessments cover the four GL Assessment domains and where children lose marks."
         canonicalPath="/bucks-gl-alignment"
         schema={[
           breadcrumbSchema(breadcrumbItems),
@@ -56,17 +56,17 @@ export default function GLAlignment() {
       <Breadcrumbs items={breadcrumbItems} />
 
       <h1 className="text-4xl md:text-5xl font-bold text-primary font-serif tracking-tight">
-        How Our Readiness Check Aligns to the Bucks 11+ Test Format
+        The Four GL Assessment Domains in Our Readiness Check
       </h1>
       <p className="text-xl text-muted-foreground lead">
-        The Buckinghamshire Secondary Transfer Test uses a GL Assessment format covering four domains. Our independently developed readiness checks replicate this structure — the same question families, the same pacing demands, the same four areas of assessment.
+        The Buckinghamshire Secondary Transfer Test is administered by GL Assessment and covers four domains. Our independently developed readiness checks cover all four of those GL Assessment domains — Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension.
       </p>
 
       <div className="not-prose bg-amber-50 border border-amber-200 rounded-xl p-5 my-8">
         <p className="text-sm text-amber-900 font-medium mb-1">At a glance</p>
         <ul className="text-sm text-amber-800 space-y-1 list-none m-0 p-0">
           <li>✓ Four domains: Verbal Reasoning, Non-Verbal Reasoning, Mathematics, English Comprehension</li>
-          <li>✓ GL-style question families replicated independently — not official GL Assessment materials</li>
+          <li>✓ Questions covering all four GL Assessment domains — independently developed, not official GL Assessment materials</li>
           <li>✓ Timed conditions modelled at question level — accuracy and pace both assessed</li>
           <li>✓ Difficulty-weighted questions across Easy, Medium, and Hard bands</li>
           <li>✓ 1,500+ questions in the bank covering all section types</li>
@@ -75,12 +75,12 @@ export default function GLAlignment() {
 
       <hr className="my-8" />
 
-      <h2 className="text-primary font-serif">Why Domain Alignment Matters</h2>
+      <h2 className="text-primary font-serif">Why Domain Coverage Matters</h2>
       <p>
         The Buckinghamshire Secondary Transfer Test is not a general knowledge or curriculum assessment. It is a highly specific standardised test with particular reasoning families, question formats, and time expectations that differ meaningfully from school tests, SATs, and most commercial practice materials.
       </p>
       <p>
-        A child who is strong academically but unfamiliar with GL-style non-verbal reasoning question formats, or who has never practiced the pacing demands of a strictly timed multi-section paper, may underperform significantly relative to their actual ability. Domain-by-domain alignment to the real test format means that practice on this platform replicates what children will encounter — not a general approximation of it.
+        A child who is strong academically but unfamiliar with GL-style non-verbal reasoning question formats, or who has never practised the pacing demands of a strictly timed multi-section paper, may underperform significantly relative to their actual ability. Covering all four GL Assessment domains means practice is targeted to the specific areas children will be assessed on — not a generic 11+ approach.
       </p>
 
       <h2 className="text-primary font-serif">Verbal Reasoning</h2>

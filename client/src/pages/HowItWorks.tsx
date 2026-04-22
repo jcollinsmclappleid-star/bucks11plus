@@ -53,7 +53,7 @@ const howItWorksFaqSchema = {
       "name": "Is this preparation suitable for all Buckinghamshire grammar schools?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. All 13 Buckinghamshire grammar schools use the same GL Assessment Secondary Transfer Test. Our readiness check and practice content is aligned to the GL-style reasoning formats used across all schools in the county."
+        "text": "Yes. All 13 Buckinghamshire grammar schools use the same GL Assessment Secondary Transfer Test. Our readiness check and practice content covers the four GL Assessment domains used across all schools in the county."
       }
     }
   ]

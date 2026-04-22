@@ -106,7 +106,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
               <li><Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
               <li><Link href="/how-it-works" className="hover:text-white transition-colors">How It Works</Link></li>
               <li><Link href="/why-choose-bucks-11-plus-tests" className="hover:text-white transition-colors">Why Choose Us</Link></li>
-              <li><Link href="/bucks-gl-alignment" className="hover:text-white transition-colors">GL-Style Alignment</Link></li>
+              <li><Link href="/bucks-gl-alignment" className="hover:text-white transition-colors">GL Assessment Domains</Link></li>
               <li><Link href="/how-forecast-works" className="hover:text-white transition-colors">How Scoring Works</Link></li>
               <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
               <li><Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
