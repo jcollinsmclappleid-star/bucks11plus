@@ -26,6 +26,7 @@ import ResetPassword from "./pages/ResetPassword";
 import Diagnostics from "./pages/Diagnostics";
 import DiagnosticStart from "./pages/DiagnosticStart";
 import Results from "./pages/Results";
+import ResultsReport from "./pages/ResultsReport";
 import Progress from "./pages/Progress";
 import Account from "./pages/Account";
 import ReportArchive from "./pages/ReportArchive";
@@ -336,6 +337,9 @@ function Router() {
             </Route>
             <Route path="/app/diagnostic/:id/start">
               <DiagnosticStart />
+            </Route>
+            <Route path="/app/results/:id/report">
+              <AuthGate><ResultsReport /></AuthGate>
             </Route>
             <Route path="/app/results/:id">
               <AuthGate><Results /></AuthGate>

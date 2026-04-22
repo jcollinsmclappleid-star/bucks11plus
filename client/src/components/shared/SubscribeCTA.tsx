@@ -23,7 +23,7 @@ export function SubscribeCTA() {
           The Complete Bucks 11+ Preparation Platform
         </h3>
         <p className="text-white/75 text-sm leading-relaxed mb-5 max-w-2xl">
-          Everything your child needs to close the gap to 121 — intelligent readiness checks, structured drills, detailed parent analytics, and mock exam simulations, all benchmarked to the Buckinghamshire qualifying standard.
+          Everything your child needs to prepare for the Buckinghamshire 11+ — intelligent readiness checks, structured drills, detailed parent analytics, and mock exam simulations, all benchmarked against the 121 qualifying standard.
         </p>
         <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-1.5 mb-6">
           {benefits.map((b, i) => (

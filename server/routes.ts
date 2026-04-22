@@ -970,7 +970,7 @@ export async function registerRoutes(
       await ensureChromium();
       const puppeteer = await import("puppeteer");
       const port = process.env.PORT || "5000";
-      const url = `http://localhost:${port}/app/results/${req.params.id}`;
+      const url = `http://localhost:${port}/app/results/${req.params.id}/report`;
       const rawCookieHeader = req.headers.cookie || "";
 
       const browser = await puppeteer.default.launch({
@@ -1912,8 +1912,8 @@ export async function registerRoutes(
       }
       const lead = await storage.createGuideLead(parsed.data);
       res.json({ id: lead.id, success: true });
-      sendGuideDownloadUserEmail(parsed.data.name, parsed.data.email).catch(() => {});
-      sendGuideDownloadAdminEmail(parsed.data.name, parsed.data.email, new Date()).catch(() => {});
+      sendGuideDownloadUserEmail(parsed.data.name, parsed.data.email).catch(err => console.error('[GuideEmail] User email failed:', err));
+      sendGuideDownloadAdminEmail(parsed.data.name, parsed.data.email, new Date()).catch(err => console.error('[GuideEmail] Admin email failed:', err));
     } catch (error) {
       next(error);
     }

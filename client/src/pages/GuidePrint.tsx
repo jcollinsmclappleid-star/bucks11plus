@@ -877,7 +877,7 @@ export default function GuidePrint() {
         </p>
         <div className="grid grid-cols-2 gap-3 text-sm">
           {[
-            { icon: "🎯", title: "Free 8-Minute Readiness Check", desc: "Assess all four subjects, get a predicted score against 121, and receive specific improvement priorities. No account needed." },
+            { icon: "🎯", title: "Free 8-Minute Readiness Check", desc: "Assess all four subjects, get a readiness estimate against the 121 benchmark, and receive specific improvement priorities. No account needed." },
             { icon: "📚", title: "1,500+ Practice Questions", desc: "GL-style questions across Verbal Reasoning, NVR, Mathematics, and English Comprehension — mapped to the Bucks test format." },
             { icon: "⏱️", title: "Readiness Checks", desc: "Full 40-question timed readiness checks with audio-style pacing, benchmarked against the 121 qualifying standard." },
             { icon: "📊", title: "Parent Analytics Dashboard", desc: "Track your child's progress over time, see exactly which topics are improving, and get recommended next-practice steps." },

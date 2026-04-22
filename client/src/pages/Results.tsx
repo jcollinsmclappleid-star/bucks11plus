@@ -138,7 +138,7 @@ function getUpsellMessage(tier: string, weakestSection: string, weakestScore: nu
     }
     return {
       title: "Go Deeper with the Full Platform",
-      message: `Your child is making progress. Bucks Plus Edge is the complete Readiness & Practice Hub — all Hard drills, full-length mock exams, and detailed gap analysis to push their score to qualifying level. From £35/month.`,
+      message: `Your child is making progress. Bucks Plus Edge is the complete Readiness & Practice Hub — all Hard drills, full-length mock exams, and detailed gap analysis to work towards the qualifying benchmark. From £35/month.`,
       cta: "See Plans & Start Today",
       tier: "pack_plus",
       link: "/pricing",
@@ -753,7 +753,7 @@ export default function Results() {
             <div className="flex-1">
               <h3 className="font-bold text-primary mb-1">Accelerate with Bucks Practice Platform Edge</h3>
               <p className="text-sm text-slate-600">
-                {weakest.name} at {weakest.score}% needs structured improvement. Edge unlocks all 20 Hard drills, premium analytics, and mock exams to close the gap faster.
+                {weakest.name} at {weakest.score}% needs structured improvement. Edge unlocks all 20 Hard drills, premium analytics, and mock exams to work towards the 121 benchmark.
               </p>
             </div>
             <Button size="sm" asChild data-testid="button-upgrade-edge">

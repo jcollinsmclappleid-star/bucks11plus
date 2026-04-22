@@ -248,9 +248,9 @@ export default function WhyChoosePlatform() {
           </div>
           <div className="grid sm:grid-cols-3 gap-5 mb-8">
             {[
-              { icon: BookOpen, color: "bg-violet-100 text-violet-700", title: "13 grammar schools", desc: "All 13 Buckinghamshire grammar schools use the same GL Assessment Secondary Transfer Test. Our content is aligned to exactly that format." },
-              { icon: Target, color: "bg-amber-100 text-amber-700", title: "The 121 threshold", desc: "Every readiness check, every forecast, every benchmark is measured against 121 — the qualifying score for Bucks grammar school entry." },
-              { icon: Brain, color: "bg-blue-100 text-blue-700", title: "GL Assessment format", desc: "VR, NVR, Maths, and Comprehension — all four GL Assessment domains, with question families that replicate the STT format independently." },
+              { icon: BookOpen, color: "bg-violet-100 text-violet-700", title: "13 grammar schools", desc: "All 13 Buckinghamshire grammar schools use the same GL Assessment Secondary Transfer Test. Our content is designed in line with that format." },
+              { icon: Target, color: "bg-amber-100 text-amber-700", title: "The 121 benchmark", desc: "Every readiness check, every forecast, every result is measured against 121 — used here as a preparation benchmark, not a guarantee of the official result." },
+              { icon: Brain, color: "bg-blue-100 text-blue-700", title: "GL Assessment format", desc: "VR, NVR, Maths, and Comprehension — all four GL Assessment domains, with question families designed in the style of the STT format." },
             ].map((item, i) => (
               <div key={i} className="flex flex-col gap-3 p-6 bg-white rounded-2xl border border-slate-200 shadow-sm" data-testid={`bucks-point-${i}`}>
                 <div className={`p-2.5 rounded-xl w-fit ${item.color}`}>
@@ -263,7 +263,7 @@ export default function WhyChoosePlatform() {
           </div>
           <div className="rounded-2xl bg-primary/5 border border-primary/15 p-6 text-center">
             <p className="text-primary font-semibold italic leading-relaxed max-w-2xl mx-auto">
-              "Every question, every benchmark, every priority is aligned to what actually qualifies your child for a Bucks grammar school place."
+              "Designed exclusively for Buckinghamshire — every question, every benchmark, every practice category calibrated to the same format and scoring standard used in the Secondary Transfer Test."
             </p>
           </div>
         </div>

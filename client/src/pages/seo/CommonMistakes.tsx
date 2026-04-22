@@ -117,7 +117,7 @@ export default function CommonMistakes() {
         Every mistake above stems from the same root cause: <strong>preparing without data</strong>. When you know exactly where your child stands — which domains are strong, which are weak, where pacing is the problem, and how they compare to the 121 benchmark — preparation becomes focused, efficient, and far less stressful.
       </p>
       <p>
-        Bucks 11 Plus Tests was designed to solve this problem. Our readiness check measures what matters — accuracy <em>and</em> speed — and translates it into a clear readiness forecast. From there, targeted micro-drills close the specific gaps that stand between your child and the qualifying standard.
+        Bucks 11 Plus Tests was designed to solve this problem. Our readiness check measures what matters — accuracy <em>and</em> speed — and translates it into a clear readiness forecast. From there, targeted micro-drills help address the specific areas where your child needs the most practice.
       </p>
 
       <ChildExperienceCTA />

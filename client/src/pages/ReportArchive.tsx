@@ -98,7 +98,7 @@ export default function ReportArchive() {
             Report Archive
           </h1>
           <p className="text-muted-foreground mt-2">
-            Download comprehensive PDF readiness reports from completed sessions.
+            Download PDF readiness reports from completed sessions.
           </p>
         </div>
         <Button asChild variant="outline" data-testid="link-back-to-diagnostics">

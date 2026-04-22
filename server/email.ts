@@ -164,6 +164,7 @@ export async function sendGuideDownloadUserEmail(
 </body>
 </html>`;
 
+  console.log(`[GuideEmail] Attempting user email to ${email}`);
   try {
     if (!RESEND_API_KEY) {
       console.log(`[GuideEmail] Skipping user email (no RESEND_API_KEY): ${email}`);
@@ -174,8 +175,12 @@ export async function sendGuideDownloadUserEmail(
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
       body: JSON.stringify({ from: RESEND_FROM_EMAIL, to: [email], subject, html }),
     });
-    if (!res.ok) console.error(`[GuideEmail] User email send failed: ${res.status}`);
-    else console.log(`[GuideEmail] Guide download email sent to ${email}`);
+    if (!res.ok) {
+      const body = await res.text().catch(() => "");
+      console.error(`[GuideEmail] User email send failed: ${res.status} — ${body}`);
+    } else {
+      console.log(`[GuideEmail] Guide download email sent to ${email}`);
+    }
   } catch (err) {
     console.error("[GuideEmail] User email error:", err);
   }
