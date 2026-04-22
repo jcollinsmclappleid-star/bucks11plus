@@ -1912,8 +1912,8 @@ export async function registerRoutes(
       }
       const lead = await storage.createGuideLead(parsed.data);
       res.json({ id: lead.id, success: true });
-      sendGuideDownloadUserEmail(parsed.data.name, parsed.data.email).catch(err => console.error('[GuideEmail] User email failed:', err));
-      sendGuideDownloadAdminEmail(parsed.data.name, parsed.data.email, new Date()).catch(err => console.error('[GuideEmail] Admin email failed:', err));
+      sendGuideDownloadUserEmail(parsed.data.parentName, parsed.data.email).catch(err => console.error('[GuideEmail] User email failed:', err));
+      sendGuideDownloadAdminEmail(parsed.data.parentName, parsed.data.email, new Date()).catch(err => console.error('[GuideEmail] Admin email failed:', err));
     } catch (error) {
       next(error);
     }
