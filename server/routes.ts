@@ -286,15 +286,26 @@ export async function registerRoutes(
         return res.json({ success: true, user: safeUser, cancelledImmediately: true });
       }
 
+      let latestPeriodEnd: Date | undefined;
       for (const sub of activeSubs) {
-        await stripe.subscriptions.update(sub.id, { cancel_at_period_end: true });
+        const updated = await stripe.subscriptions.update(sub.id, { cancel_at_period_end: true });
+        // Store the period end so the access guard in requireAuth can expire access
+        // even if the customer.subscription.deleted webhook is missed.
+        if (updated.current_period_end) {
+          const periodEnd = new Date(updated.current_period_end * 1000);
+          if (!latestPeriodEnd || periodEnd > latestPeriodEnd) latestPeriodEnd = periodEnd;
+        }
+      }
+
+      if (latestPeriodEnd) {
+        await storage.updateUserSubscription(user.id, user.subscriptionTier || "free", latestPeriodEnd);
       }
 
       // Notify admin of cancellation
       sendSubscriptionCancelledAdminEmail(userEmail, user.subscriptionTier || "unknown").catch(() => {});
 
       const { password: _, ...safeUser } = await storage.getUser(user.id) as any;
-      res.json({ success: true, user: safeUser, cancelledImmediately: false });
+      res.json({ success: true, user: safeUser, cancelledImmediately: false, accessUntil: latestPeriodEnd?.toISOString() });
     } catch (error) {
       next(error);
     }

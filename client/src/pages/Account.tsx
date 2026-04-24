@@ -50,7 +50,7 @@ export default function Account() {
   const [examDate, setExamDate] = useState("");
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
   const [showCancelModal, setShowCancelModal] = useState(false);
-  const [cancelResult, setCancelResult] = useState<{ cancelledImmediately: boolean } | null>(null);
+  const [cancelResult, setCancelResult] = useState<{ cancelledImmediately: boolean; accessUntil?: string } | null>(null);
 
   const { data: profiles = [] } = useQuery<any[]>({
     queryKey: ["/api/child-profiles"],
@@ -145,7 +145,7 @@ export default function Account() {
       return res.json();
     },
     onSuccess: (data) => {
-      setCancelResult({ cancelledImmediately: data.cancelledImmediately });
+      setCancelResult({ cancelledImmediately: data.cancelledImmediately, accessUntil: data.accessUntil });
       queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
     },
     onError: () => {
@@ -257,19 +257,21 @@ export default function Account() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-3 mb-1 flex-wrap">
                           <span className="font-bold text-primary text-lg" data-testid="text-tier-name">{tierLabel()}</span>
-                          <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200">Active</Badge>
+                          {user.subscriptionExpiresAt
+                          ? <Badge variant="secondary" className="bg-amber-100 text-amber-800 border-amber-200">Cancellation scheduled</Badge>
+                          : <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200">Active</Badge>
+                        }
                         </div>
                         <p className="text-sm text-muted-foreground">
                           {tierDescriptions[currentTier] || "Limited access."}
                         </p>
-                        {user.subscriptionExpiresAt && (
-                          <p className="text-xs text-muted-foreground mt-1">
-                            Access expires: {new Date(user.subscriptionExpiresAt).toLocaleDateString()}
+                        {user.subscriptionExpiresAt ? (
+                          <p className="text-xs text-amber-700 font-medium mt-1">
+                            Full access until {new Date(user.subscriptionExpiresAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })} — no further payments will be taken.
                           </p>
-                        )}
-                        {currentTier === "pack_monthly" && (
+                        ) : currentTier === "pack_monthly" ? (
                           <p className="text-xs text-muted-foreground mt-1">Renews monthly. Cancel any time before your next billing date.</p>
-                        )}
+                        ) : null}
                       </div>
                     </div>
                   </div>
@@ -662,7 +664,10 @@ export default function Account() {
                 <div>
                   <h2 className="font-bold text-lg text-slate-900">Subscription cancelled</h2>
                   <p className="text-sm text-muted-foreground">
-                    Your subscription will end at the current billing period. You keep full access until then.
+                    {cancelResult?.accessUntil
+                      ? `You keep full access until ${new Date(cancelResult.accessUntil).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}. No further payments will be taken.`
+                      : "Your subscription will end at the current billing period. You keep full access until then."
+                    }
                   </p>
                 </div>
               </div>
