@@ -270,3 +270,12 @@ content/
 - Nurture hook: enqueues 2-step sequence inside `POST /api/guest/email-results` (existing handler)
 - Pricing CRO: 3-card trust strip (cancel anytime, 3-day money-back, "less than one tutor hour" annual frame) — placed after plan cards, before comparison table
 - FreeDiagnosticStart CRO: 3-column trust signal block (forecast vs 121, top 3 priorities, no account/no card) above start button
+
+## Calculator + Customer-Journey Test Harness
+- Single-shot test runner: `scripts/test-calculators-and-journey.ts` (run via `npx tsx`) — 61 assertions, currently 61/61 passing
+- Surfaces covered:
+  - Public ScoreCalculator (`estimateStandardisedScore`) — boundary, age-cap, fuzz 5 000 inputs
+  - Forecast score (POST `/api/guest/submit`) — GL weights, banding, oracle parity check (server output === recomputed)
+  - RS analytics (`computeWAI/PDI/CR/SI/RS`) — banding matrix, 1 000-attempt stress test
+  - End-to-end customer journey (real HTTP + DB) — start → submit → fetch results → email → nurture enqueue → lead-magnet → unsubscribe, with replay-protection + token-auth checks and try/finally cleanup
+- Security regression guard: `GET /api/guest/results/:id` and `/api/guest/review/:id` previously had `if (token && session.guestToken !== token)` which let missing-token requests through; fixed to `if (!token || ...)` and the harness now asserts the no-token path returns 403

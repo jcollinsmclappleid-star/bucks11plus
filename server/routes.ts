@@ -830,7 +830,7 @@ export async function registerRoutes(
       const session = await storage.getTestSession(req.params.id);
       if (!session) return res.status(404).json({ message: "Session not found" });
       if (session.userId) return res.status(403).json({ message: "Not a guest session" });
-      if (token && session.guestToken !== token) return res.status(403).json({ message: "Invalid token" });
+      if (!token || session.guestToken !== token) return res.status(403).json({ message: "Invalid token" });
 
       res.json(session);
     } catch (error) {
@@ -844,7 +844,7 @@ export async function registerRoutes(
       const session = await storage.getTestSession(req.params.id);
       if (!session) return res.status(404).json({ message: "Session not found" });
       if (session.userId) return res.status(403).json({ message: "Not a guest session" });
-      if (token && session.guestToken !== token) return res.status(403).json({ message: "Invalid token" });
+      if (!token || session.guestToken !== token) return res.status(403).json({ message: "Invalid token" });
       if (!session.completedAt) return res.status(400).json({ message: "Session not yet completed" });
 
       const answers = await storage.getSessionAnswers(session.id);
