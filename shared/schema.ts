@@ -26,6 +26,9 @@ export const users = pgTable("users", {
   passwordResetExpires: timestamp("password_reset_expires"),
   targetSchool: text("target_school"),
   trialEndsAt: timestamp("trial_ends_at"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  lastLoginAt: timestamp("last_login_at"),
+  retentionWarningSentAt: timestamp("retention_warning_sent_at"),
 });
 
 export const diagnostics = pgTable("diagnostics", {

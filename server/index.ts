@@ -9,6 +9,7 @@ import { getStripeSync } from "./stripeClient";
 import { WebhookHandlers } from "./webhookHandlers";
 import { runEmailTriggers } from "./email";
 import { ensureChromium } from "./chromium";
+import { runRetentionSweep } from "./retention";
 
 const app = express();
 const httpServer = createServer(app);
@@ -117,6 +118,48 @@ export function log(message: string, source = "express") {
   console.log(`${formattedTime} [${source}] ${message}`);
 }
 
+// Field names whose values we never want to surface in application logs.
+// Stripping these protects PII and credentials even when a route happens to
+// echo the user record back in a response.
+const SENSITIVE_LOG_KEYS = new Set([
+  "password",
+  "email",
+  "username",
+  "childName",
+  "child_name",
+  "name",
+  "stripeCustomerId",
+  "stripe_customer_id",
+  "passwordResetToken",
+  "password_reset_token",
+  "passwordResetExpires",
+  "password_reset_expires",
+  "token",
+  "secret",
+  "authorization",
+  "cookie",
+  "metadata",
+  "rawBody",
+]);
+
+function redactForLog(value: unknown, depth = 0): unknown {
+  if (depth > 4) return "[Truncated]";
+  if (value === null || typeof value !== "object") return value;
+  if (Array.isArray(value)) {
+    if (value.length > 20) return `[Array(${value.length})]`;
+    return value.map((v) => redactForLog(v, depth + 1));
+  }
+  const out: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
+    if (SENSITIVE_LOG_KEYS.has(k)) {
+      out[k] = "[REDACTED]";
+    } else {
+      out[k] = redactForLog(v, depth + 1);
+    }
+  }
+  return out;
+}
+
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
@@ -133,7 +176,14 @@ app.use((req, res, next) => {
     if (path.startsWith("/api")) {
       let logLine = `${req.method} ${path} ${res.statusCode} in ${duration}ms`;
       if (capturedJsonResponse) {
-        logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
+        try {
+          const safeBody = redactForLog(capturedJsonResponse);
+          let serialised = JSON.stringify(safeBody);
+          if (serialised.length > 500) serialised = serialised.slice(0, 497) + "...";
+          logLine += ` :: ${serialised}`;
+        } catch {
+          // Body was un-serialisable — drop it from the log rather than leak it
+        }
       }
 
       log(logLine);
@@ -193,4 +243,14 @@ app.use((req, res, next) => {
       runEmailTriggers().catch(err => console.error("Email trigger error:", err));
     }, SIX_HOURS);
   }, 5 * 60 * 1000);
+
+  // GDPR retention sweep: delete dormant accounts and prune old email logs.
+  // First run 10 minutes after boot so it never blocks startup; then weekly.
+  const ONE_WEEK = 7 * 24 * 60 * 60 * 1000;
+  setTimeout(() => {
+    runRetentionSweep().catch(err => console.error("Retention sweep error:", err));
+    setInterval(() => {
+      runRetentionSweep().catch(err => console.error("Retention sweep error:", err));
+    }, ONE_WEEK);
+  }, 10 * 60 * 1000);
 })();

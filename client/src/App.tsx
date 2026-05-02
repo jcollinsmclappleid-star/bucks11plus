@@ -7,6 +7,7 @@ import NotFound from "@/pages/not-found";
 import React, { useEffect } from "react";
 
 import { AuthProvider } from "./lib/auth";
+import { CookieConsent } from "./components/shared/CookieConsent";
 import Navbar from "./components/layout/Navbar";
 import AdminTierSwitcher from "./components/layout/AdminTierSwitcher";
 import LockedOverlay from "./components/shared/LockedOverlay";
@@ -457,6 +458,7 @@ function App() {
           <TooltipProvider>
             <Router />
             <Toaster />
+            <CookieConsent />
           </TooltipProvider>
         </AuthProvider>
       </QueryClientProvider>

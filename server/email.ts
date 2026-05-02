@@ -3,6 +3,35 @@ import { users, emailEvents } from "@shared/schema";
 import { eq, and, isNull, lt, sql } from "drizzle-orm";
 import { storage } from "./storage";
 
+/**
+ * Mask an email address for log output. Keeps just enough information to
+ * debug deliverability (first char of local part, full domain) while not
+ * exposing the address itself in plaintext logs (GDPR Art. 5(1)(f)).
+ *
+ *   "alice@example.com"      -> "a***@example.com"
+ *   "bob@bucks11plus.co.uk"  -> "b***@bucks11plus.co.uk"
+ */
+export function maskEmail(value: string | null | undefined): string {
+  if (!value) return "<none>";
+  const at = value.indexOf("@");
+  if (at <= 0) return "<redacted>";
+  const local = value.slice(0, at);
+  const domain = value.slice(at + 1);
+  const head = local.slice(0, 1);
+  return `${head}***@${domain}`;
+}
+
+/**
+ * Mask every email address found inside an arbitrary string. Used to
+ * sanitize third-party response bodies (e.g. Resend error payloads) that
+ * may echo recipient addresses back to us.
+ */
+const EMAIL_RX = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g;
+export function redactEmailsInText(value: string | null | undefined): string {
+  if (!value) return "";
+  return value.replace(EMAIL_RX, (m) => maskEmail(m));
+}
+
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const RESEND_FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "Bucks 11 Plus Tests <noreply@bucks11plustest.co.uk>";
 const EMAIL_SECRET = process.env.EMAIL_SECRET || "11plus-email-secret";
@@ -28,7 +57,7 @@ function unsubscribeUrl(userId: string, token: string): string {
 
 async function sendEmail(to: string, subject: string, html: string): Promise<boolean> {
   if (!RESEND_API_KEY) {
-    console.log(`[Email] Skipping send (no RESEND_API_KEY): ${subject} → ${to}`);
+    console.log(`[Email] Skipping send (no RESEND_API_KEY): ${subject} → ${maskEmail(to)}`);
     return false;
   }
 
@@ -49,7 +78,7 @@ async function sendEmail(to: string, subject: string, html: string): Promise<boo
 
     if (!res.ok) {
       const err = await res.text();
-      console.error(`[Email] Resend error: ${res.status} ${err}`);
+      console.error(`[Email] Resend error: ${res.status} ${redactEmailsInText(err)}`);
       return false;
     }
 
@@ -96,7 +125,7 @@ export async function sendAdminNotificationEmail(
   data: { userEmail: string; tier: string; amount?: string; timestamp: Date },
 ): Promise<void> {
   const adminEmail = "admin@bucks11plus.co.uk";
-  const subject = `New Payment — ${data.userEmail}`;
+  const subject = `New Payment — ${maskEmail(data.userEmail)}`;
 
   const html = `<!DOCTYPE html>
 <html>
@@ -164,10 +193,10 @@ export async function sendGuideDownloadUserEmail(
 </body>
 </html>`;
 
-  console.log(`[GuideEmail] Attempting user email to ${email}`);
+  console.log(`[GuideEmail] Attempting user email to ${maskEmail(email)}`);
   try {
     if (!RESEND_API_KEY) {
-      console.log(`[GuideEmail] Skipping user email (no RESEND_API_KEY): ${email}`);
+      console.log(`[GuideEmail] Skipping user email (no RESEND_API_KEY): ${maskEmail(email)}`);
       return;
     }
     const res = await fetch("https://api.resend.com/emails", {
@@ -177,9 +206,9 @@ export async function sendGuideDownloadUserEmail(
     });
     if (!res.ok) {
       const body = await res.text().catch(() => "");
-      console.error(`[GuideEmail] User email send failed: ${res.status} — ${body}`);
+      console.error(`[GuideEmail] User email send failed: ${res.status} — ${redactEmailsInText(body)}`);
     } else {
-      console.log(`[GuideEmail] Guide download email sent to ${email}`);
+      console.log(`[GuideEmail] Guide download email sent to ${maskEmail(email)}`);
     }
   } catch (err) {
     console.error("[GuideEmail] User email error:", err);
@@ -217,7 +246,7 @@ export async function sendGuideDownloadAdminEmail(
       body: JSON.stringify({ from: RESEND_FROM_EMAIL, to: ["support@11plustesthub.co.uk"], subject, html }),
     });
     if (!res.ok) console.error(`[GuideEmail] Send failed: ${res.status}`);
-    else console.log(`[GuideEmail] Admin notification sent for ${email}`);
+    else console.log(`[GuideEmail] Admin notification sent for ${maskEmail(email)}`);
   } catch (err) {
     console.error("[GuideEmail] Error:", err);
   }
@@ -233,7 +262,7 @@ export async function sendPurchaseNotificationEmail(
     pack_annual: "Bucks Plus Edge Annual (£279/yr)",
     pack_monthly: "Bucks Plus Edge Monthly",
   };
-  const subject = `[Bucks 11 Plus Tests] New Purchase — ${email}`;
+  const subject = `[Bucks 11 Plus Tests] New Purchase — ${maskEmail(email)}`;
   const amountStr = amountPence != null ? `£${(amountPence / 100).toFixed(2)}` : null;
   const html = `<!DOCTYPE html>
 <html>
@@ -261,7 +290,7 @@ export async function sendPurchaseNotificationEmail(
       body: JSON.stringify({ from: RESEND_FROM_EMAIL, to: ["support@11plustesthub.co.uk"], subject, html }),
     });
     if (!res.ok) console.error(`[PurchaseEmail] Send failed: ${res.status}`);
-    else console.log(`[PurchaseEmail] Admin notification sent for ${email}`);
+    else console.log(`[PurchaseEmail] Admin notification sent for ${maskEmail(email)}`);
   } catch (err) {
     console.error("[PurchaseEmail] Error:", err);
   }
@@ -271,7 +300,7 @@ export async function sendSubscriptionCancelledAdminEmail(
   email: string,
   tier: string,
 ): Promise<void> {
-  const subject = `[Bucks 11 Plus Tests] Subscription Cancelled — ${email}`;
+  const subject = `[Bucks 11 Plus Tests] Subscription Cancelled — ${maskEmail(email)}`;
   const planLabel: Record<string, string> = {
     pack_plus: "Bucks Plus Edge (Monthly, £35/mo)",
     pack_annual: "Bucks Plus Edge (Annual, £279/yr)",
@@ -309,7 +338,7 @@ export async function sendSubscriptionCancelledAdminEmail(
       body: JSON.stringify({ from: RESEND_FROM_EMAIL, to: ["support@11plustesthub.co.uk"], subject, html }),
     });
     if (!res.ok) console.error(`[CancelEmail] Send failed: ${res.status}`);
-    else console.log(`[CancelEmail] Admin notification sent for ${email}`);
+    else console.log(`[CancelEmail] Admin notification sent for ${maskEmail(email)}`);
   } catch (err) {
     console.error("[CancelEmail] Error:", err);
   }

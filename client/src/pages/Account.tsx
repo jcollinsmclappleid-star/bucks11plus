@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CreditCard, User, Users, Calendar, Mail, ExternalLink, ArrowRight, TrendingUp, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { CreditCard, User, Users, Calendar, Mail, ExternalLink, ArrowRight, TrendingUp, AlertTriangle, CheckCircle2, Download } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "../lib/auth";
@@ -151,6 +151,31 @@ export default function Account() {
     onError: () => {
       toast({ title: "Could not cancel subscription", description: "Please try again or contact support.", variant: "destructive" });
       setShowCancelModal(false);
+    },
+  });
+
+  const dataExportMutation = useMutation({
+    mutationFn: async () => {
+      const res = await fetch("/api/user/export", { credentials: "include" });
+      if (!res.ok) throw new Error("Export failed");
+      const blob = await res.blob();
+      const cd = res.headers.get("content-disposition") || "";
+      const match = /filename="?([^";]+)"?/i.exec(cd);
+      const filename = match?.[1] || `bucks11plus-data-export-${new Date().toISOString().slice(0, 10)}.json`;
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    },
+    onSuccess: () => {
+      toast({ title: "Download started", description: "Your data export is downloading." });
+    },
+    onError: () => {
+      toast({ title: "Could not download your data", description: "Please try again or contact support.", variant: "destructive" });
     },
   });
 
@@ -615,6 +640,36 @@ export default function Account() {
                       />
                       <div className="w-11 h-6 bg-gray-200 peer-focus:ring-2 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                     </label>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-border/60 shadow-sm">
+                <CardHeader>
+                  <div className="flex items-center gap-2">
+                    <Download className="h-5 w-5 text-primary" />
+                    <CardTitle>Your Data</CardTitle>
+                  </div>
+                  <CardDescription>Download a copy of everything we hold about your account (UK GDPR right to portability).</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-100">
+                    <div className="flex-1 min-w-0 mr-4">
+                      <p className="font-medium text-primary">Download my data</p>
+                      <p className="text-sm text-muted-foreground mt-0.5">
+                        Receive your account, child profiles, test sessions, answers and email history as a single JSON file.
+                      </p>
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="shrink-0"
+                      onClick={() => dataExportMutation.mutate()}
+                      disabled={dataExportMutation.isPending}
+                      data-testid="button-export-data"
+                    >
+                      {dataExportMutation.isPending ? "Preparing…" : "Download"}
+                    </Button>
                   </div>
                 </CardContent>
               </Card>

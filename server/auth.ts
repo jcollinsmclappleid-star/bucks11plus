@@ -128,6 +128,10 @@ export function setupAuth(app: Express) {
       const hashedPassword = await hashPassword(password);
       const user = await storage.createUser({ username, password: hashedPassword });
 
+      // Stamp last-login on creation so the retention sweep starts the clock from sign-up
+      db.update(users).set({ lastLoginAt: new Date() }).where(eq(users.id, user.id))
+        .catch((e) => console.error("[Auth] Failed to stamp lastLoginAt on register:", e));
+
       req.login(user, (err) => {
         if (err) return next(err);
         const { password: _, ...safeUser } = user;
@@ -144,6 +148,10 @@ export function setupAuth(app: Express) {
       if (!user) {
         return res.status(401).json({ message: info?.message || "Login failed" });
       }
+      // Stamp last-login asynchronously so the retention sweep has a fresh signal
+      db.update(users).set({ lastLoginAt: new Date() }).where(eq(users.id, user.id))
+        .catch((e) => console.error("[Auth] Failed to stamp lastLoginAt on login:", e));
+
       req.login(user, (err) => {
         if (err) return next(err);
         const { password: _, ...safeUser } = user;

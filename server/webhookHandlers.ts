@@ -5,7 +5,7 @@ import { users } from '@shared/schema';
 import { eq } from 'drizzle-orm';
 import { scrypt, randomBytes } from 'crypto';
 import { promisify } from 'util';
-import { sendAccountSetupEmail, sendPurchaseNotificationEmail } from './email';
+import { sendAccountSetupEmail, sendPurchaseNotificationEmail, maskEmail } from './email';
 
 const scryptAsync = promisify(scrypt);
 
@@ -130,7 +130,7 @@ export class WebhookHandlers {
         await storage.updateUserStripeInfo(existing.id, customerId);
       }
       await storage.updateUserSubscription(existing.id, tier, undefined);
-      console.log(`[Webhook] Upgraded existing user ${customerEmail} → ${tier}`);
+      console.log(`[Webhook] Upgraded existing user ${maskEmail(customerEmail)} → ${tier}`);
       sendPurchaseNotificationEmail(customerEmail, tier, amountPence).catch(() => {});
       return;
     }
@@ -154,7 +154,7 @@ export class WebhookHandlers {
 
     try {
       await sendAccountSetupEmail(customerEmail, resetToken);
-      console.log(`[Webhook] Auto-created account for ${customerEmail} (${tier}) — setup email sent`);
+      console.log(`[Webhook] Auto-created account for ${maskEmail(customerEmail)} (${tier}) — setup email sent`);
     } catch (e: any) {
       console.warn('[Webhook] Setup email failed (non-fatal):', e.message);
     }

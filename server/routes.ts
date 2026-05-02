@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, requireAuth } from "./auth";
-import { onboardingSchema, insertGuideLeadSchema, testSessions, testAnswers, questions, users } from "@shared/schema";
+import { onboardingSchema, insertGuideLeadSchema, testSessions, testAnswers, questions, users, childProfiles, emailEvents, programmeEnrolments, testDayConfig, programmeMilestones, weeklyPlans, programmeTasks, userBadges, questionUsage } from "@shared/schema";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
 import { sql, eq, and, desc, inArray } from "drizzle-orm";
 import { db } from "./db";
@@ -136,6 +136,81 @@ export async function registerRoutes(
       const { password: _, ...safeUser } = user;
       res.json(safeUser);
     } catch (error) {
+      next(error);
+    }
+  });
+
+  // GDPR Article 20 — Right to data portability.
+  // Returns the user's full record plus all linked child profiles, test sessions,
+  // test answers, programme enrolments and email events as a single JSON blob.
+  // Sensitive credentials (password hash, password-reset token) are stripped.
+  app.get("/api/user/export", requireAuth, async (req, res, next) => {
+    const userId = req.user!.id;
+    try {
+      const [userRow] = await db.select().from(users).where(eq(users.id, userId));
+      if (!userRow) return res.status(404).json({ message: "User not found" });
+
+      const {
+        password: _pw,
+        passwordResetToken: _prt,
+        passwordResetExpires: _pre,
+        ...safeUser
+      } = userRow;
+
+      const [
+        profiles,
+        sessions,
+        enrolments,
+        examConfig,
+        emails,
+        milestones,
+        plans,
+        tasks,
+        badgesEarned,
+        usage,
+      ] = await Promise.all([
+        db.select().from(childProfiles).where(eq(childProfiles.userId, userId)),
+        db.select().from(testSessions).where(eq(testSessions.userId, userId)),
+        db.select().from(programmeEnrolments).where(eq(programmeEnrolments.userId, userId)),
+        db.select().from(testDayConfig).where(eq(testDayConfig.userId, userId)),
+        db.select().from(emailEvents).where(eq(emailEvents.userId, userId)),
+        db.select().from(programmeMilestones).where(eq(programmeMilestones.userId, userId)),
+        db.select().from(weeklyPlans).where(eq(weeklyPlans.userId, userId)),
+        db.select().from(programmeTasks).where(eq(programmeTasks.userId, userId)),
+        db.select().from(userBadges).where(eq(userBadges.userId, userId)),
+        db.select().from(questionUsage).where(eq(questionUsage.userId, userId)),
+      ]);
+
+      const sessionIds = sessions.map((s) => s.id);
+      const answers = sessionIds.length > 0
+        ? await db.select().from(testAnswers).where(inArray(testAnswers.sessionId, sessionIds))
+        : [];
+
+      const payload = {
+        exportedAt: new Date().toISOString(),
+        notice:
+          "This file contains all personal data Bucks 11 Plus Tests holds about your account. " +
+          "It does not include payment records, which are held by Stripe and available via your Stripe receipts.",
+        user: safeUser,
+        childProfiles: profiles,
+        testSessions: sessions,
+        testAnswers: answers,
+        programmeEnrolments: enrolments,
+        programmeMilestones: milestones,
+        weeklyPlans: plans,
+        programmeTasks: tasks,
+        userBadges: badgesEarned,
+        questionUsage: usage,
+        examDateConfig: examConfig,
+        emailEvents: emails,
+      };
+
+      const filename = `bucks11plus-data-export-${new Date().toISOString().slice(0, 10)}.json`;
+      res.setHeader("Content-Type", "application/json; charset=utf-8");
+      res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+      res.status(200).send(JSON.stringify(payload, null, 2));
+    } catch (error) {
+      console.error(`[DataExport] Failed for userId=${userId}`, error);
       next(error);
     }
   });

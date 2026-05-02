@@ -8,6 +8,7 @@ import * as path from "path";
 import type { NvrSequenceConfig, NvrTransformConfig, NvrClassificationConfig } from "@shared/contentTypes";
 import { FULL_FREE_POOL_QUESTIONS } from "./freePoolData";
 import { applyQuestionQualityFixes } from "./questionQualityFixes";
+import { maskEmail } from "./email";
 
 const scryptAsync = promisify(scrypt);
 
@@ -1302,7 +1303,7 @@ async function provisionMissedCustomer() {
     // If account exists but tier is wrong, fix it silently
     if (existing[0].subscriptionTier !== "pack_plus") {
       await db.update(users).set({ subscriptionTier: "pack_plus" }).where(eq(users.username, email));
-      console.log(`  [Provision] Fixed tier for ${email} → pack_plus`);
+      console.log(`  [Provision] Fixed tier for ${maskEmail(email)} → pack_plus`);
     }
     return;
   }
@@ -1320,5 +1321,5 @@ async function provisionMissedCustomer() {
 
   const { sendAccountSetupEmail } = await import("./email");
   await sendAccountSetupEmail(email, resetToken);
-  console.log(`  [Provision] Account created for ${email} (pack_plus) — setup email sent`);
+  console.log(`  [Provision] Account created for ${maskEmail(email)} (pack_plus) — setup email sent`);
 }
