@@ -7,7 +7,6 @@ type User = {
   id: string;
   username: string;
   email: string | null;
-  childName: string | null;
   childYear: string | null;
   practiceHours: string | null;
   difficultyAreas: string[] | null;

@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../../lib/auth";
 import { useState } from "react";
 import { apiRequest } from "../../lib/queryClient";
+import { setChildName, useChildName, useDisplayName } from "../../lib/childNames";
 
 export default function ChildSwitcher() {
   const { user } = useAuth();
@@ -22,7 +23,7 @@ export default function ChildSwitcher() {
       return res.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/user"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
       queryClient.invalidateQueries({ queryKey: ["/api/child-profiles"] });
       queryClient.invalidateQueries({ queryKey: ["/api/test-sessions"] });
       setOpen(false);
@@ -32,23 +33,26 @@ export default function ChildSwitcher() {
   const addMutation = useMutation({
     mutationFn: async () => {
       const res = await apiRequest("POST", "/api/child-profiles", {
-        childName: newName,
         childYear: newYear,
       });
-      return res.json();
+      const profile = await res.json();
+      // Save the name on this device only — never sent to the server.
+      if (profile?.id && newName.trim()) {
+        setChildName(profile.id, newName.trim());
+      }
+      return profile;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/child-profiles"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/user"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
       setShowAdd(false);
       setNewName("");
     },
   });
 
-  if (!user || profiles.length === 0) return null;
+  const displayName = useDisplayName(user?.activeChildProfileId, user?.id, user?.username || "");
 
-  const activeProfile = profiles.find((p: any) => p.id === user.activeChildProfileId);
-  const displayName = activeProfile?.childName || user.childName || user.username;
+  if (!user || profiles.length === 0) return null;
 
   const isFamilyTier = user.subscriptionTier?.includes("family");
   if (!isFamilyTier && profiles.length <= 1) return null;
@@ -71,28 +75,14 @@ export default function ChildSwitcher() {
 
       {open && (
         <div className="absolute top-full right-0 mt-2 w-64 bg-card rounded-lg border shadow-lg z-50 p-2" data-testid="child-switcher-dropdown">
-          {profiles.map((p: any) => (
-            <button
+          {profiles.map((p: any, idx: number) => (
+            <ChildSwitcherRow
               key={p.id}
-              onClick={() => activateMutation.mutate(p.id)}
-              className={`w-full text-left px-3 py-2 rounded-md text-sm flex items-center gap-3 ${
-                p.id === user.activeChildProfileId
-                  ? "bg-primary/10 font-semibold text-primary"
-                  : "hover:bg-muted"
-              }`}
-              data-testid={`button-child-profile-${p.id}`}
-            >
-              <span className="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold text-primary">
-                {p.childName.charAt(0).toUpperCase()}
-              </span>
-              <div>
-                <p>{p.childName}</p>
-                <p className="text-xs text-muted-foreground">{p.childYear}</p>
-              </div>
-              {p.id === user.activeChildProfileId && (
-                <span className="ml-auto text-emerald-500">✓</span>
-              )}
-            </button>
+              profile={p}
+              idx={idx}
+              isActive={p.id === user.activeChildProfileId}
+              onSelect={() => activateMutation.mutate(p.id)}
+            />
           ))}
 
           {profiles.length < 3 && isFamilyTier && (
@@ -101,7 +91,7 @@ export default function ChildSwitcher() {
                 <div className="border-t mt-2 pt-2 space-y-2">
                   <input
                     type="text"
-                    placeholder="Child's name"
+                    placeholder="Child's name (optional, this device only)"
                     value={newName}
                     onChange={(e) => setNewName(e.target.value)}
                     className="w-full px-3 py-1.5 rounded-md border text-sm"
@@ -120,7 +110,7 @@ export default function ChildSwitcher() {
                   <div className="flex gap-2">
                     <button
                       onClick={() => addMutation.mutate()}
-                      disabled={!newName.trim() || addMutation.isPending}
+                      disabled={addMutation.isPending}
                       className="flex-1 bg-primary text-primary-foreground text-sm py-1.5 rounded-md disabled:opacity-50"
                       data-testid="button-confirm-add-child"
                     >
@@ -149,5 +139,39 @@ export default function ChildSwitcher() {
         </div>
       )}
     </div>
+  );
+}
+
+function ChildSwitcherRow({
+  profile,
+  idx,
+  isActive,
+  onSelect,
+}: {
+  profile: any;
+  idx: number;
+  isActive: boolean;
+  onSelect: () => void;
+}) {
+  const stored = useChildName(profile.id);
+  const localName = stored || `Child ${idx + 1}`;
+  const initial = (localName.charAt(0) || "C").toUpperCase();
+  return (
+    <button
+      onClick={onSelect}
+      className={`w-full text-left px-3 py-2 rounded-md text-sm flex items-center gap-3 ${
+        isActive ? "bg-primary/10 font-semibold text-primary" : "hover:bg-muted"
+      }`}
+      data-testid={`button-child-profile-${profile.id}`}
+    >
+      <span className="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold text-primary">
+        {initial}
+      </span>
+      <div>
+        <p>{localName}</p>
+        <p className="text-xs text-muted-foreground">{profile.childYear}</p>
+      </div>
+      {isActive && <span className="ml-auto text-emerald-500">✓</span>}
+    </button>
   );
 }

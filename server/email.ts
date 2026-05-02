@@ -520,7 +520,9 @@ export async function sendDiagnosticCompleteEmail(userId: string, sessionData: a
   if (!user || !user.email || !user.emailConsent || user.emailUnsubscribedAt) return;
 
   const token = await generateUnsubscribeToken(userId);
-  const childName = user.childName || "your child";
+  // Child first name is no longer stored server-side; emails refer to the
+  // child generically to honour data minimisation.
+  const childName = "your child";
   const forecast = sessionData.forecastScore || 0;
   const band = sessionData.band || "Not assessed";
 
@@ -547,7 +549,7 @@ export async function sendNoDrillNudge(userId: string) {
   if (!user || !user.email || !user.emailConsent || user.emailUnsubscribedAt) return;
 
   const token = await generateUnsubscribeToken(userId);
-  const childName = user.childName || "your child";
+  const childName = "your child";
 
   const html = wrapHtml(`
     <h2 style="color:#0d1f30;margin-bottom:8px;">Time to Start Practising</h2>
@@ -567,7 +569,7 @@ export async function sendUpgradeNudge(userId: string) {
   if (!user || !user.email || !user.emailConsent || user.emailUnsubscribedAt) return;
 
   const token = await generateUnsubscribeToken(userId);
-  const childName = user.childName || "your child";
+  const childName = "your child";
 
   const html = wrapHtml(`
     <h2 style="color:#0d1f30;margin-bottom:8px;">Ready for More?</h2>
@@ -593,7 +595,7 @@ export async function sendProgrammeNudge(userId: string) {
   if (!user || !user.email || !user.emailConsent || user.emailUnsubscribedAt) return;
 
   const token = await generateUnsubscribeToken(userId);
-  const childName = user.childName || "your child";
+  const childName = "your child";
 
   const html = wrapHtml(`
     <h2 style="color:#0d1f30;margin-bottom:8px;">Lock in 12 months for less</h2>

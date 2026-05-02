@@ -2087,13 +2087,12 @@ export async function registerRoutes(
       if (existing.length >= 3) {
         return res.status(400).json({ message: "Maximum 3 child profiles allowed" });
       }
-      const { childName, childYear, practiceHours, difficultyAreas } = req.body;
-      if (!childName || !childYear) {
-        return res.status(400).json({ message: "Child name and year are required" });
+      const { childYear, practiceHours, difficultyAreas } = req.body;
+      if (!childYear) {
+        return res.status(400).json({ message: "Child year is required" });
       }
       const profile = await storage.createChildProfile({
         userId: req.user!.id,
-        childName,
         childYear,
         practiceHours: practiceHours || null,
         difficultyAreas: difficultyAreas || null,
@@ -2112,7 +2111,20 @@ export async function registerRoutes(
       if (!profile || profile.userId !== req.user!.id) {
         return res.status(404).json({ message: "Profile not found" });
       }
-      const updated = await storage.updateChildProfile(req.params.id, req.body);
+      // Strict allow-list to avoid mass-assignment. childName / targetSchool
+      // were removed from the database in May 2026 (data minimisation) — any
+      // legacy client still sending them is silently ignored.
+      const childProfileUpdateSchema = z.object({
+        childYear: z.string().min(1).optional(),
+        practiceHours: z.string().nullable().optional(),
+        difficultyAreas: z.array(z.string()).nullable().optional(),
+        stage: z.enum(["exploring", "developing", "ready"]).optional(),
+      });
+      const parsed = childProfileUpdateSchema.safeParse(req.body);
+      if (!parsed.success) {
+        return res.status(400).json({ message: "Invalid update payload" });
+      }
+      const updated = await storage.updateChildProfile(req.params.id, parsed.data);
       res.json(updated);
     } catch (error) { next(error); }
   });

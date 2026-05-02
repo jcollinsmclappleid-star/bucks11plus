@@ -102,8 +102,8 @@ content/
 ```
 
 ## Database Schema
-- **users**: id, username, password, email, childName, childYear, practiceHours, difficultyAreas[], subscriptionTier (free|early_learner|pack12|pack12_family|programme16|programme16_family), subscriptionExpiresAt, stripeCustomerId, onboardingCompleted, isAdmin, activeChildProfileId, emailConsent, emailVerified, emailUnsubscribedAt, lastEmailSentAt
-- **child_profiles**: id, userId, childName, childYear, practiceHours, difficultyAreas, stage (exploring|developing|ready), createdAt
+- **users**: id, username, password, email, childYear, practiceHours, difficultyAreas[], subscriptionTier (free|early_learner|pack12|pack12_family|programme16|programme16_family), subscriptionExpiresAt, stripeCustomerId, onboardingCompleted, isAdmin, activeChildProfileId, emailConsent, emailVerified, emailUnsubscribedAt, lastEmailSentAt. **Note (2 May 2026)**: `child_name` and `target_school` columns dropped per data-minimisation review — child first name now lives in browser localStorage only (`client/src/lib/childNames.ts`), target school no longer collected.
+- **child_profiles**: id, userId, childYear, practiceHours, difficultyAreas, stage (exploring|developing|ready), createdAt. (Same May 2026 minimisation: `child_name` + `target_school` removed; first name keyed by `profileId` in browser localStorage only.)
 - **email_events**: id, userId, eventType, emailType, sentAt, metadata (jsonb)
 - **test_day_config**: id, userId, examDate, createdAt
 - **questions**: id, diagnosticId, section, type, prompt, options[], correctAnswer, difficulty, timeExpected, orderIndex, skillId, subRuleId, renderType (text|svg|chart), renderConfig (jsonb), trapTypes[], cognitiveLoad, locale, britishSpelling, version, qualityScore, qaStatus (draft|review|approved|rejected), estTimeSeconds, explanation, notes

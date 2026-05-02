@@ -138,11 +138,9 @@ export class DatabaseStorage implements IStorage {
   async updateUserOnboarding(userId: string, data: OnboardingData): Promise<User> {
     const [user] = await db.update(users)
       .set({
-        childName: data.childName,
         childYear: data.childYear,
         practiceHours: data.practiceHours,
         difficultyAreas: data.difficultyAreas,
-        targetSchool: data.targetSchool || null,
         onboardingCompleted: true,
       })
       .where(eq(users.id, userId))

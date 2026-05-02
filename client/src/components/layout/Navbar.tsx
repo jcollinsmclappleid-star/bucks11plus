@@ -10,6 +10,7 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import { useAuth } from "../../lib/auth";
+import { useDisplayName } from "../../lib/childNames";
 import ChildSwitcher from "./ChildSwitcher";
 import { Menu } from "lucide-react";
 import { useState } from "react";
@@ -52,6 +53,7 @@ const appNavLinks = [
 export default function Navbar() {
   const [location] = useLocation();
   const { user, logout } = useAuth();
+  const navChildName = useDisplayName(user?.activeChildProfileId, user?.id, "");
   const [open, setOpen] = useState(false);
 
   const mobileNavLinks = [
@@ -150,7 +152,7 @@ export default function Navbar() {
             <>
               <ChildSwitcher />
               <Link href="/app/account" className="text-sm font-medium text-slate-600 hover:text-primary transition-colors" data-testid="link-account">
-                {user.childName || user.username}
+                {navChildName || user.username}
               </Link>
               {user.isAdmin && (
                 <Link href="/admin/questions" className="text-sm font-medium text-amber-600 hover:text-amber-800 transition-colors" data-testid="link-admin">Admin</Link>
@@ -206,7 +208,7 @@ export default function Navbar() {
                     <div className="flex flex-col leading-none">
                       <span className="font-serif font-bold text-base text-primary tracking-tight leading-none">Bucks 11+ Tests</span>
                       {user && (
-                        <span className="text-xs text-muted-foreground mt-1">{user.childName || user.username}</span>
+                        <span className="text-xs text-muted-foreground mt-1">{navChildName || user.username}</span>
                       )}
                     </div>
                   </div>

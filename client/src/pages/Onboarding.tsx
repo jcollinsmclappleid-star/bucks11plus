@@ -5,28 +5,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useAuth } from "@/lib/auth";
 import { useToast } from "@/hooks/use-toast";
-
-const BUCKS_GRAMMAR_SCHOOLS = [
-  "Aylesbury Grammar School",
-  "Aylesbury High School",
-  "Beaconsfield High School",
-  "Burnham Grammar School",
-  "Chesham Grammar School",
-  "Dr Challoner's Grammar School",
-  "Dr Challoner's High School",
-  "John Hampden Grammar School",
-  "Royal Grammar School (High Wycombe)",
-  "Royal Latin School",
-  "Sir Henry Floyd Grammar School",
-  "Sir William Borlase's Grammar School",
-  "Wycombe High School",
-  "Not sure yet",
-  "Other",
-];
+import { setLegacyChildName } from "@/lib/childNames";
 
 export default function Onboarding() {
   const [, setLocation] = useLocation();
@@ -38,14 +20,13 @@ export default function Onboarding() {
   const { toast } = useToast();
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const totalSteps = 5;
+  const totalSteps = 4;
 
   const [formData, setFormData] = useState({
     childName: "",
     childYear: "",
     practiceHours: "",
     difficultyAreas: [] as string[],
-    targetSchool: "",
   });
 
   const isEarlyYear = formData.childYear === "Year 4" || formData.childYear === "Year 5";
@@ -54,18 +35,19 @@ export default function Onboarding() {
     if (step < totalSteps) {
       setStep(prev => prev + 1);
     } else {
-      if (!formData.childName) {
-        toast({
-          variant: "destructive",
-          title: "Required",
-          description: "Please enter your child's name",
-        });
-        return;
-      }
-
       setIsSubmitting(true);
       try {
-        await apiRequest("PUT", "/api/user/onboarding", formData);
+        // Send only non-identifying fields to the server. The child's first name
+        // is saved to this device's localStorage instead, so it never reaches
+        // our database.
+        await apiRequest("PUT", "/api/user/onboarding", {
+          childYear: formData.childYear,
+          practiceHours: formData.practiceHours,
+          difficultyAreas: formData.difficultyAreas,
+        });
+        if (user?.id && formData.childName.trim()) {
+          setLegacyChildName(user.id, formData.childName.trim());
+        }
         await queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
         const sessionIdParam = searchParams.get("session_id");
         if (redirectParam === "checkout" && tierParam && sessionIdParam) {
@@ -134,43 +116,6 @@ export default function Onboarding() {
 
             {step === 2 && (
               <div className="space-y-6 text-center animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <h2 className="text-2xl font-bold text-primary font-serif">Which school are you targeting?</h2>
-                <p className="text-sm text-muted-foreground -mt-2">This helps us tailor guidance to your area</p>
-                <Select value={formData.targetSchool} onValueChange={(val) => updateData("targetSchool", val)}>
-                  <SelectTrigger className="h-14 text-base" data-testid="select-target-school">
-                    <SelectValue placeholder="Select a grammar school" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {BUCKS_GRAMMAR_SCHOOLS.map(school => (
-                      <SelectItem key={school} value={school} data-testid={`option-school-${school.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}>
-                        {school}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <div className="flex gap-3">
-                  <Button
-                    variant="ghost"
-                    className="flex-1 h-12"
-                    onClick={() => setStep(1)}
-                    data-testid="button-back-step2"
-                  >
-                    Back
-                  </Button>
-                  <Button
-                    className="flex-1 h-12"
-                    onClick={() => setStep(3)}
-                    disabled={!formData.targetSchool}
-                    data-testid="button-next-step2"
-                  >
-                    Next
-                  </Button>
-                </div>
-              </div>
-            )}
-
-            {step === 3 && (
-              <div className="space-y-6 text-center animate-in fade-in slide-in-from-bottom-4 duration-500">
                 <h2 className="text-2xl font-bold text-primary font-serif">Weekly practice hours?</h2>
                 <div className="space-y-3">
                   {["0 - 1 hours", "1 - 3 hours", "3+ hours"].map(opt => (
@@ -180,7 +125,7 @@ export default function Onboarding() {
                       className="w-full h-14 text-lg"
                       onClick={() => {
                         updateData("practiceHours", opt);
-                        setStep(4);
+                        setStep(3);
                       }}
                       data-testid={`button-practice-${opt.replace(/ /g, "-").toLowerCase()}`}
                     >
@@ -191,7 +136,7 @@ export default function Onboarding() {
               </div>
             )}
 
-            {step === 4 && (
+            {step === 3 && (
               <div className="space-y-6 text-center animate-in fade-in slide-in-from-bottom-4 duration-500">
                 <h2 className="text-2xl font-bold text-primary font-serif">Which area feels hardest right now?</h2>
                 <div className="space-y-3">
@@ -202,7 +147,7 @@ export default function Onboarding() {
                       className="w-full h-14 text-lg"
                       onClick={() => {
                         updateData("difficultyAreas", [opt]);
-                        setStep(5);
+                        setStep(4);
                       }}
                       data-testid={`button-area-${opt.replace(/ /g, "-").toLowerCase()}`}
                     >
@@ -213,7 +158,7 @@ export default function Onboarding() {
               </div>
             )}
 
-            {step === 5 && (
+            {step === 4 && (
               <div className="space-y-6 text-center animate-in fade-in slide-in-from-bottom-4 duration-500">
                 <div className="w-16 h-16 mx-auto bg-brand-green/10 rounded-full flex items-center justify-center mb-6">
                   <svg className="w-8 h-8 text-brand-green" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -221,12 +166,14 @@ export default function Onboarding() {
                   </svg>
                 </div>
                 <h2 className="text-2xl font-bold text-primary font-serif">Almost there!</h2>
-                <p className="text-muted-foreground">Please enter your child's name to personalise their dashboard.</p>
+                <p className="text-muted-foreground">
+                  Optionally enter your child's first name to personalise the dashboard. This stays only on this device — we never store it on our servers.
+                </p>
                 <div className="space-y-2 text-left">
-                  <Label htmlFor="childName">Child's Name</Label>
+                  <Label htmlFor="childName">Child's first name (optional)</Label>
                   <Input
                     id="childName"
-                    placeholder="Enter name"
+                    placeholder="Leave blank to skip"
                     value={formData.childName}
                     onChange={(e) => updateData("childName", e.target.value)}
                     className="h-12"
@@ -236,7 +183,7 @@ export default function Onboarding() {
                 <Button
                   className="w-full h-14 text-lg bg-primary text-primary-foreground mt-4"
                   onClick={handleNext}
-                  disabled={isSubmitting || !formData.childName}
+                  disabled={isSubmitting}
                   data-testid="button-complete-onboarding"
                 >
                   {isSubmitting ? "Saving..." : "Go to Dashboard"}

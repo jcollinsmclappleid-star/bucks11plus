@@ -1,6 +1,7 @@
 import { useAuth } from "../lib/auth";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
+import { useDisplayName } from "../lib/childNames";
 
 function StageTimeline({ stage }: { stage: string }) {
   const stages = [
@@ -53,8 +54,8 @@ export default function EarlyDashboard() {
     enabled: !!user,
   });
 
-  const activeProfile = profiles?.find((p: any) => p.id === user?.activeChildProfileId);
-  const childName = activeProfile?.childName || user?.childName || "your child";
+  const activeProfile = (profiles as any[] | undefined)?.find((p: any) => p.id === user?.activeChildProfileId);
+  const childName = useDisplayName(user?.activeChildProfileId, user?.id, "your child");
   const stage = activeProfile?.stage || "exploring";
 
   const completedSessions = Array.isArray(sessions) ? sessions.filter((s: any) => s.completedAt) : [];

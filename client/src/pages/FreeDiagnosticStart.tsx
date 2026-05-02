@@ -7,30 +7,11 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import type { Diagnostic } from "@shared/schema";
 
-const BUCKS_GRAMMAR_SCHOOLS = [
-  "Aylesbury Grammar School",
-  "Aylesbury High School",
-  "Beaconsfield High School",
-  "Burnham Grammar School",
-  "Chesham Grammar School",
-  "Dr Challoner's Grammar School",
-  "Dr Challoner's High School",
-  "John Hampden Grammar School",
-  "Royal Grammar School (High Wycombe)",
-  "Royal Latin School",
-  "Sir Henry Floyd Grammar School",
-  "Sir William Borlase's Grammar School",
-  "Wycombe High School",
-  "Not sure yet",
-  "Other",
-];
-
 const FREE_DIAGNOSTIC_ID = "mini-1";
 
 export default function FreeDiagnosticStart() {
   const [, setLocation] = useLocation();
   const [starting, setStarting] = useState(false);
-  const [targetSchool, setTargetSchool] = useState("");
 
   const { data: diagnostic, isLoading } = useQuery<Diagnostic>({
     queryKey: [`/api/diagnostics/${FREE_DIAGNOSTIC_ID}`],
@@ -57,7 +38,6 @@ export default function FreeDiagnosticStart() {
       sessionStorage.setItem("guestQuestions", JSON.stringify(data.questions));
       sessionStorage.setItem("guestDiagnosticDuration", String(diagnostic?.duration || 12));
       sessionStorage.setItem("guestDiagnosticTitle", diagnostic?.title || "Free Baseline Diagnostic");
-      if (targetSchool) sessionStorage.setItem("guestTargetSchool", targetSchool);
       setLocation(`/app/test/${data.session.id}?guest=true`);
     },
     onError: () => {
@@ -140,21 +120,6 @@ export default function FreeDiagnosticStart() {
                 Do not help them with the answers. The forecast needs an honest baseline.
               </li>
             </ul>
-          </div>
-
-          <div className="space-y-3">
-            <label className="block font-bold text-primary text-sm">Which grammar school are you targeting?</label>
-            <select
-              value={targetSchool}
-              onChange={(e) => setTargetSchool(e.target.value)}
-              className="w-full px-3 py-3 rounded-md border border-slate-200 text-sm bg-white"
-              data-testid="select-diagnostic-target-school"
-            >
-              <option value="">Select a school (optional)</option>
-              {BUCKS_GRAMMAR_SCHOOLS.map(s => (
-                <option key={s} value={s}>{s}</option>
-              ))}
-            </select>
           </div>
 
           <div className="pt-6 border-t border-border/50 text-center">

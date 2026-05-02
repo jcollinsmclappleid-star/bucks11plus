@@ -8,7 +8,10 @@ export const users = pgTable("users", {
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
   email: text("email"),
-  childName: text("child_name"),
+  // Note: child first name is intentionally NOT stored server-side. It lives
+  // only in the parent's browser localStorage (see client/src/lib/childNames).
+  // Year group is kept because it is used to scope question difficulty and is
+  // not personally identifying on its own.
   childYear: text("child_year"),
   practiceHours: text("practice_hours"),
   difficultyAreas: text("difficulty_areas").array(),
@@ -24,7 +27,8 @@ export const users = pgTable("users", {
   lastEmailSentAt: timestamp("last_email_sent_at"),
   passwordResetToken: text("password_reset_token"),
   passwordResetExpires: timestamp("password_reset_expires"),
-  targetSchool: text("target_school"),
+  // Note: targetSchool was removed in May 2026 as it was collected but never
+  // used for forecasting, scoring, or any other server-side operation.
   trialEndsAt: timestamp("trial_ends_at"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   lastLoginAt: timestamp("last_login_at"),
@@ -232,11 +236,12 @@ export const guideLeads = pgTable("guide_leads", {
 export const childProfiles = pgTable("child_profiles", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: varchar("user_id").notNull(),
-  childName: text("child_name").notNull(),
+  // Note: child first name is stored only in the parent's browser localStorage,
+  // keyed by this profile's id. See client/src/lib/childNames.
   childYear: text("child_year").notNull(),
   practiceHours: text("practice_hours"),
   difficultyAreas: text("difficulty_areas").array(),
-  targetSchool: text("target_school"),
+  // Note: targetSchool was removed in May 2026 (collected but never used).
   stage: text("stage").notNull().default("exploring"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
@@ -268,11 +273,9 @@ export const insertUserSchema = createInsertSchema(users).pick({
 });
 
 export const onboardingSchema = z.object({
-  childName: z.string().min(1),
   childYear: z.string().min(1),
   practiceHours: z.string().min(1),
   difficultyAreas: z.array(z.string()),
-  targetSchool: z.string().optional(),
 });
 
 export const insertDiagnosticSchema = createInsertSchema(diagnostics);

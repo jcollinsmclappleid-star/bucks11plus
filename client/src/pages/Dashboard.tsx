@@ -7,6 +7,7 @@ import { Seo } from "../components/shared/Seo";
 import { useAuth } from "../lib/auth";
 import { useQuery } from "@tanstack/react-query";
 import { getQueryFn } from "../lib/queryClient";
+import { useDisplayName } from "../lib/childNames";
 import { CountdownWidget } from "./TestDaySimulator";
 import { useEffect } from "react";
 
@@ -32,6 +33,7 @@ type ProgressData = {
 
 export default function Dashboard() {
   const { user, hasPaidAccess, isProgramme, isFullPlatform, isEarlyLearner, tierLabel } = useAuth();
+  const dashChildName = useDisplayName(user?.activeChildProfileId, user?.id, "");
   const [, navigate] = useLocation();
   const target = 121;
 
@@ -84,7 +86,7 @@ export default function Dashboard() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-primary" data-testid="text-dashboard-title">
-            {user?.childName ? `${user.childName}'s Readiness Forecast` : "Readiness Forecast"}
+            {dashChildName ? `${dashChildName}'s Readiness Forecast` : "Readiness Forecast"}
           </h1>
           {hasData ? (
             <div className="mt-1">

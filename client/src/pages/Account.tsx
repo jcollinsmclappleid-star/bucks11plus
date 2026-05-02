@@ -9,6 +9,7 @@ import { useAuth } from "../lib/auth";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "../lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { getChildName, setChildName, removeChildName, getLegacyChildName, setLegacyChildName, useChildNamesVersion } from "../lib/childNames";
 
 type Tab = "profile" | "subscription";
 
@@ -46,8 +47,14 @@ export default function Account() {
   const [deleteStep, setDeleteStep] = useState<"retention" | "confirm">("retention");
   const [deleteConfirmText, setDeleteConfirmText] = useState("");
   const [deleteStripeError, setDeleteStripeError] = useState(false);
-  const [newChildSchool, setNewChildSchool] = useState("");
   const [examDate, setExamDate] = useState("");
+  const [editingLegacyName, setEditingLegacyName] = useState(false);
+  const [legacyNameDraft, setLegacyNameDraft] = useState("");
+  // Subscribe to localStorage child-name changes so this view re-renders
+  // whenever any tab updates a name. The helper functions also notify
+  // synchronously, so same-tab edits flush immediately.
+  useChildNamesVersion();
+  const refreshNames = () => {};
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [cancelResult, setCancelResult] = useState<{ cancelledImmediately: boolean; accessUntil?: string } | null>(null);
@@ -65,18 +72,20 @@ export default function Account() {
   const addChildMutation = useMutation({
     mutationFn: async () => {
       const res = await apiRequest("POST", "/api/child-profiles", {
-        childName: newChildName,
         childYear: newChildYear,
-        targetSchool: newChildSchool || undefined,
       });
-      return res.json();
+      const profile = await res.json();
+      // Save the child's first name on this device only — never sent to the server.
+      if (profile?.id && newChildName.trim()) {
+        setChildName(profile.id, newChildName.trim());
+      }
+      return profile;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/child-profiles"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/user"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
       setAddingChild(false);
       setNewChildName("");
-      setNewChildSchool("");
       toast({ title: "Child profile added" });
     },
   });
@@ -96,10 +105,11 @@ export default function Account() {
   const deleteChildMutation = useMutation({
     mutationFn: async (id: string) => {
       await apiRequest("DELETE", `/api/child-profiles/${id}`);
+      removeChildName(id);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/child-profiles"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/user"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
       toast({ title: "Profile removed" });
     },
   });
@@ -403,8 +413,45 @@ export default function Account() {
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1">
-                      <label className="text-xs font-medium text-muted-foreground">Child Name</label>
-                      <div className="font-medium text-primary">{user.childName || 'Not set'}</div>
+                      <label className="text-xs font-medium text-muted-foreground">Child Nickname (this device only)</label>
+                      {editingLegacyName ? (
+                        <div className="flex gap-2 items-center">
+                          <input
+                            type="text"
+                            value={legacyNameDraft}
+                            onChange={(e) => setLegacyNameDraft(e.target.value)}
+                            placeholder="e.g. Alex"
+                            className="flex-1 px-2 py-1 rounded-md border text-sm"
+                            data-testid="input-legacy-child-name"
+                            autoFocus
+                          />
+                          <Button
+                            size="sm"
+                            onClick={() => {
+                              if (user?.id) setLegacyChildName(user.id, legacyNameDraft);
+                              setEditingLegacyName(false);
+                              toast({ title: "Saved on this device" });
+                            }}
+                            data-testid="button-save-legacy-child-name"
+                          >Save</Button>
+                          <Button size="sm" variant="ghost" onClick={() => setEditingLegacyName(false)}>Cancel</Button>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-primary" data-testid="text-legacy-child-name">
+                            {getLegacyChildName(user?.id) || 'Not set'}
+                          </span>
+                          <button
+                            type="button"
+                            className="text-xs text-primary underline underline-offset-2 hover:opacity-80"
+                            onClick={() => {
+                              setLegacyNameDraft(getLegacyChildName(user?.id) || "");
+                              setEditingLegacyName(true);
+                            }}
+                            data-testid="button-edit-legacy-child-name"
+                          >Edit</button>
+                        </div>
+                      )}
                     </div>
                     <div className="space-y-1">
                       <label className="text-xs font-medium text-muted-foreground">Year Group</label>
@@ -469,7 +516,10 @@ export default function Account() {
                             <div className="flex gap-2">
                               <Button
                                 size="sm"
-                                onClick={() => updateChildMutation.mutate({ id: profile.id, data: { childName: editName, childYear: editYear } })}
+                                onClick={() => {
+                                  setChildName(profile.id, editName);
+                                  updateChildMutation.mutate({ id: profile.id, data: { childYear: editYear } });
+                                }}
                                 data-testid="button-save-edit-child"
                               >
                                 Save
@@ -481,7 +531,7 @@ export default function Account() {
                           <>
                             <div>
                               <div className="flex items-center gap-2">
-                                <span className="font-bold text-primary">{profile.childName}</span>
+                                <span className="font-bold text-primary">{getChildName(profile.id) || "Child"}</span>
                                 {profile.id === user.activeChildProfileId && (
                                   <Badge variant="secondary" className="text-xs">Active</Badge>
                                 )}
@@ -494,7 +544,7 @@ export default function Account() {
                                 variant="outline"
                                 onClick={() => {
                                   setEditingProfile(profile.id);
-                                  setEditName(profile.childName);
+                                  setEditName(getChildName(profile.id) || "");
                                   setEditYear(profile.childYear);
                                 }}
                                 data-testid={`button-edit-child-${profile.id}`}
@@ -525,7 +575,7 @@ export default function Account() {
                         <div className="p-4 bg-slate-50 rounded-lg border border-slate-100 space-y-3">
                           <input
                             type="text"
-                            placeholder="Child's name"
+                            placeholder="Child's first name (saved on this device only)"
                             value={newChildName}
                             onChange={(e) => setNewChildName(e.target.value)}
                             className="w-full px-3 py-2 rounded-md border text-sm"
@@ -541,22 +591,14 @@ export default function Account() {
                             <option>Year 5</option>
                             <option>Year 6</option>
                           </select>
-                          <select
-                            value={newChildSchool}
-                            onChange={(e) => setNewChildSchool(e.target.value)}
-                            className="w-full px-3 py-2 rounded-md border text-sm"
-                            data-testid="select-account-new-child-school"
-                          >
-                            <option value="">Target school (optional)</option>
-                            {["Aylesbury Grammar School","Aylesbury High School","Beaconsfield High School","Burnham Grammar School","Chesham Grammar School","Dr Challoner's Grammar School","Dr Challoner's High School","John Hampden Grammar School","Royal Grammar School (High Wycombe)","Royal Latin School","Sir Henry Floyd Grammar School","Sir William Borlase's Grammar School","Wycombe High School","Not sure yet","Other"].map(s => (
-                              <option key={s} value={s}>{s}</option>
-                            ))}
-                          </select>
+                          <p className="text-xs text-muted-foreground">
+                            The nickname stays in your browser — we never send it to our servers.
+                          </p>
                           <div className="flex gap-2">
                             <Button
                               size="sm"
                               onClick={() => addChildMutation.mutate()}
-                              disabled={!newChildName.trim() || addChildMutation.isPending}
+                              disabled={addChildMutation.isPending}
                               data-testid="button-confirm-account-add-child"
                             >
                               Add Child

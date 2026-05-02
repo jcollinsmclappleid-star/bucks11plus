@@ -20,19 +20,19 @@ Bucks 11 Plus Tests is a website that helps parents in Buckinghamshire prepare t
 ### Who uses it?
 
 - **Parents and guardians** — the account holder. Must be 18 or over.
-- **Children** — only ever via their parent's account; we do not provide accounts directly to children. The parent enters the child's first name, year group and (optionally) age, and the child completes practice tests inside the parent's account.
+- **Children** — only ever via their parent's account; we do not provide accounts directly to children. The parent enters the child's year group, and the child completes practice tests inside the parent's account. The child's first name is optional and, if supplied, is stored only in the parent's browser (localStorage) — it is never transmitted to or stored on our servers.
 
 ### What personal data do we collect?
 
 Only what we need:
 
 - The parent's email address (used as the username) and a hashed password.
-- The child's first name, year group, and age (optional).
+- The child's year group (Year 4/5/6) — used to scope question difficulty.
 - The child's answers to practice questions and their resulting scores.
 - Email send/open/click logs so we don't pester the same family twice.
 - Payment records — held by **Stripe**, not by us. We never see card numbers.
 
-We do not collect addresses, surnames, photos, school names, location data, contact details for children, or any data we could sell or use for advertising.
+We do not collect addresses, surnames, photos, target school names, location data, contact details for children, or the child's first name on our servers, and we hold no data we could sell or use for advertising. The child's first name is optional and, if entered, lives only in the parent's browser (localStorage); it is never sent to or stored on our servers. (We previously collected child first name and target school in the database; both columns were dropped on 2 May 2026 as part of a data-minimisation review — neither was used for forecasting or scoring.)
 
 ### Why is a DPIA needed?
 
@@ -96,7 +96,8 @@ No prior consultation under Article 36 is required because the residual risk is 
 | Password (hash) | Parent input → scrypt hashed | Postgres `users.password` | As above |
 | `email_verified` flag | System-set on email link click | Postgres `users.email_verified` | As above |
 | Marketing email consent + unsubscribe timestamp | Parent input | Postgres `users.email_consent`, `email_unsubscribed_at` | As above |
-| Child first name, year group, age | Parent input | Postgres `child_profiles` | Until account / child profile deletion |
+| Child year group | Parent input | Postgres `users.child_year` / `child_profiles.child_year` | Until account / child profile deletion |
+| Child first name (optional) | Parent input | Browser **localStorage only** (`b11p_child_names_v1`), keyed by anonymous profile ID. **Never transmitted to or stored on our servers.** | Until parent clears browser storage or deletes the profile |
 | Test session metadata (start/end, mode) | System | Postgres `test_sessions` | As above |
 | Test answers and per-item correctness | Child input via parent's account | Postgres `test_answers` | As above |
 | Forecast scores, readiness band | Computed | Postgres `test_sessions.forecast_score` etc | As above |
