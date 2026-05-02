@@ -434,8 +434,23 @@ function ChildExperiencePanel() {
 export default function Landing() {
   const { user } = useAuth();
 
+  // Countdown to next Bucks 11+ test (Sept of relevant academic year)
+  const today = new Date();
+  const year = today.getMonth() >= 8 ? today.getFullYear() + 1 : today.getFullYear();
+  const testDate = new Date(year, 8, 12); // approx 2nd Saturday of September
+  const weeksToTest = Math.max(1, Math.ceil((testDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24 * 7)));
+
   return (
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
+      {/* ── URGENCY BANNER ── */}
+      <div className="bg-amber-400 text-amber-950 border-b border-amber-500/40" data-testid="banner-countdown">
+        <div className="container mx-auto max-w-6xl px-4 py-2 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-3 text-center text-xs sm:text-sm font-semibold">
+          <span>Next Bucks 11+ test: September {year}</span>
+          <span className="hidden sm:inline opacity-50">·</span>
+          <span><span className="font-bold">{weeksToTest} weeks</span> of focused preparation left</span>
+        </div>
+      </div>
+
       <Seo
         title="Bucks 11 Plus Practice Tests — Free GL Readiness Check Benchmarked to 121 | Bucks 11 Plus Tests"
         description="Know exactly where your child stands for the Buckinghamshire 11+. Take a free 8-minute GL-style readiness check and see their forecast score against the 121 qualifying threshold — with the 3 priorities to fix next."
@@ -485,11 +500,11 @@ export default function Landing() {
               <div>
                 <span className="inline-block text-xs font-semibold uppercase tracking-[0.2em] text-amber-400/80 mb-4">Built for the Buckinghamshire 11+</span>
                 <h1 className="text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-bold text-white tracking-tight leading-[1.1] font-serif">
-                  Know exactly where your child stands — and what to fix next.
+                  Get your child to <span className="text-amber-300">121</span> — without the guesswork.
                 </h1>
               </div>
               <p className="text-base md:text-lg text-white/65 leading-relaxed" data-testid="text-hero-sub">
-                Our intelligent diagnostics don't just give you questions — they identify the precise gaps costing marks, rank your child's highest-impact focus areas, and track real progress toward the <span className="text-amber-300 font-semibold">121 qualifying score</span>. With 2,500+ GL-style questions to close every gap.
+                Bucks-specific diagnostics that pinpoint the exact gaps costing marks, rank your child's highest-impact focus areas, and track real progress toward the <span className="text-amber-300 font-semibold">121 qualifying score</span>. With 2,500+ GL-style questions to close every gap.
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
                 <Button size="lg" className="h-12 px-8 text-base bg-amber-400 text-amber-950 hover:bg-amber-300 font-bold shadow-lg shadow-amber-400/20 border-none" asChild data-testid="button-hero-primary">
@@ -501,18 +516,22 @@ export default function Landing() {
                   <Link href="/pricing">See Plans</Link>
                 </Button>
               </div>
-              <div className="flex flex-wrap items-center gap-5" data-testid="trust-signal-hero">
-                <div className="flex items-center gap-1.5 text-white/40 text-xs">
-                  <Shield className="h-3.5 w-3.5" />
-                  <span>Secure payments · Cancel anytime</span>
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-2" data-testid="trust-signal-hero">
+                <div className="flex items-center gap-1.5 text-white/55 text-xs font-medium">
+                  <Shield className="h-3.5 w-3.5 text-emerald-400" />
+                  <span>Money-back guarantee</span>
                 </div>
-                <div className="text-white/30 text-xs">No account needed for the free check</div>
+                <div className="flex items-center gap-1.5 text-white/55 text-xs font-medium">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
+                  <span>Cancel anytime</span>
+                </div>
+                <div className="text-white/40 text-xs">No account needed for the free check</div>
               </div>
             </div>
 
-            {/* Right: Forecast mockup */}
-            <div className="hidden lg:block">
-              <div className="relative">
+            {/* Right: Forecast mockup — visible on all sizes */}
+            <div className="block">
+              <div className="relative max-w-md mx-auto lg:max-w-none">
                 <div className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-amber-400/10 to-transparent blur-2xl" />
                 <div className="relative">
                   <ForecastPanel />
@@ -812,6 +831,33 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* ── SECTION 6B: PRE-PRICING FAQ (objection handling) ── */}
+      <section className="py-12 md:py-14 bg-slate-50 border-b border-border/30" data-testid="section-prepricing-faq">
+        <div className="container mx-auto max-w-3xl px-4">
+          <div className="text-center mb-8">
+            <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-2">Before you decide</span>
+            <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif">Common questions, answered</h2>
+          </div>
+          <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden divide-y divide-slate-100">
+            {[
+              { q: "Will this actually work for my child?", a: "The free 8-minute readiness check shows you, before you pay anything, whether our diagnostic accurately identifies your child's gaps and produces a realistic forecast score against the 121 threshold. If the free check doesn't give you useful insight, the paid programme isn't for you — and you'll have spent nothing." },
+              { q: "What if I subscribe and change my mind?", a: "You can cancel any subscription at any time from your account, and we offer a money-back guarantee on new subscriptions if the platform isn't right for you. See pricing terms below for full details." },
+              { q: "How is this different from a private tutor?", a: "A private tutor in Buckinghamshire typically charges £40–£60 per hour. Our annual plan works out at £23.25 per month — less than half the cost of a single tutoring session — and gives unlimited access to 2,500+ GL-style questions, full mock exams, and parent analytics that a tutor can't provide." },
+              { q: "Is it really specific to the Bucks 11+?", a: "Yes — every question, every readiness check, and every benchmark is built for the Buckinghamshire Secondary Transfer Test. Results are measured against the 121 qualifying threshold, covering all four GL Assessment domains. This is not a generic 11+ platform." },
+              { q: "Will my child enjoy using it?", a: "Sessions are short, friendly, and end with encouragement — not just a score. Your child can jump back in with one tap, and section names are written in language a 10-year-old understands. The free check is a good way to see how they respond before committing." },
+            ].map((item, i) => (
+              <details key={i} className="group" data-testid={`faq-prepricing-${i}`}>
+                <summary className="flex items-center justify-between gap-3 px-5 py-4 cursor-pointer hover:bg-slate-50 transition-colors list-none [&::-webkit-details-marker]:hidden" data-testid={`faq-prepricing-toggle-${i}`}>
+                  <span className="text-sm md:text-[15px] font-semibold text-primary text-left">{item.q}</span>
+                  <ChevronUp className="h-4 w-4 text-slate-400 shrink-0 transition-transform group-open:rotate-0 rotate-180" />
+                </summary>
+                <div className="px-5 pb-4 text-sm text-slate-600 leading-relaxed">{item.a}</div>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── SECTION 7: PRICING ── */}
       <section id="pricing" className="py-16 md:py-20 bg-white border-b border-border/30" data-testid="section-pricing">
         <div className="container mx-auto max-w-5xl px-4">
@@ -841,7 +887,7 @@ export default function Landing() {
                 <span className="text-4xl font-bold text-primary">£35</span>
                 <span className="text-slate-500 text-sm mb-1">/month</span>
               </div>
-              <p className="text-xs text-slate-400 mb-6">Cancel anytime</p>
+              <p className="text-xs text-slate-400 mb-6">Cancel anytime · Money-back guarantee</p>
               <ul className="space-y-2 text-sm text-slate-700 mb-8 flex-1">
                 {[
                   "2,500+ GL-style practice questions",
@@ -868,8 +914,9 @@ export default function Landing() {
                 <span className="text-4xl font-bold text-primary">£279</span>
                 <span className="text-slate-500 text-sm mb-1">/year</span>
               </div>
-              <p className="text-xs text-slate-400 mb-1">equiv. £23.25/month · 34% off</p>
-              <p className="text-xs text-emerald-600 font-semibold mb-6">Save £141 vs monthly</p>
+              <p className="text-xs text-slate-400 mb-1">equiv. £23.25/month · less than 1 hour of tutoring</p>
+              <p className="text-xs text-emerald-600 font-semibold mb-1">Save £141 vs monthly</p>
+              <p className="text-xs text-slate-400 mb-6">Cancel anytime · Money-back guarantee</p>
               <ul className="space-y-2 text-sm text-slate-700 mb-8 flex-1">
                 {[
                   "Everything in Monthly — identical access",
@@ -889,7 +936,7 @@ export default function Landing() {
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
-            <p className="text-center text-xs text-slate-400">All prices include VAT. Subscriptions renew automatically and can be cancelled anytime. <Link href="/pricing" className="text-primary hover:underline">See full pricing details →</Link></p>
+            <p className="text-center text-xs text-slate-400">All prices include VAT. Subscriptions renew automatically and can be cancelled anytime. Money-back guarantee available within 3 days of purchase — see <Link href="/pricing" className="text-primary hover:underline">full pricing terms</Link>.</p>
             <div className="flex items-center gap-2 shrink-0 border border-slate-200 rounded-lg px-3 py-1.5 bg-white shadow-sm" data-testid="badge-stripe">
               <svg width="40" height="16" viewBox="0 0 60 25" fill="none" aria-label="Stripe" role="img">
                 <path d="M5.45 9.77c0-.92.76-1.28 2.01-1.28 1.8 0 4.06.54 5.86 1.5V4.82A15.6 15.6 0 0 0 7.46 4C3.17 4 .25 6.18.25 9.99c0 5.92 8.16 4.98 8.16 7.54 0 1.09-.95 1.44-2.26 1.44-1.96 0-4.47-.8-6.45-1.9v5.24A16.4 16.4 0 0 0 6.15 24c4.4 0 7.44-2.17 7.44-6.03C13.6 11.5 5.45 12.6 5.45 9.77zm16.3-8.33L17 2.56l-.04 16.78H22V1.44h-.25zM28.6 6.1l-.33 1.52h-3.14v16.1h5.06V12.4c1.2-1.56 3.23-1.27 3.86-1.05V6.43c-.65-.24-3.02-.68-5.45.67zm9.7-2.27a2.9 2.9 0 1 0 0-5.8 2.9 2.9 0 0 0 0 5.8zm-2.53 20h5.06V7.62h-5.06v16.1zm14.27-8.5c0-3.28 1.52-4.66 3.97-4.66 2.33 0 3.5 1.3 3.5 4.66v8.5H62.6V14.8C62.6 8.72 59.45 7 56.18 7c-2.55 0-4.42 1.12-5.51 2.97l-.23-2.35H45.5v16.1h5.06V15.33z" fill="#635BFF"/>
@@ -916,7 +963,11 @@ export default function Landing() {
       <section className="py-14 bg-primary border-t border-border/30" data-testid="section-final-cta">
         <div className="container mx-auto max-w-3xl px-4 text-center">
           <h2 className="text-2xl md:text-3xl font-bold text-white font-serif mb-3">Start your free readiness check</h2>
-          <p className="text-white/60 text-base mb-8 max-w-md mx-auto">No account needed. 8 minutes. See exactly where your child stands — and the 3 things to fix first.</p>
+          <p className="text-white/60 text-base mb-3 max-w-md mx-auto">No account needed. 8 minutes. See exactly where your child stands — and the 3 things to fix first.</p>
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 mb-8 text-xs text-white/50">
+            <span className="inline-flex items-center gap-1.5"><Shield className="h-3.5 w-3.5 text-emerald-400" />Money-back guarantee</span>
+            <span className="inline-flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />Cancel anytime</span>
+          </div>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button size="lg" className="h-12 px-8 font-bold bg-amber-400 text-amber-950 hover:bg-amber-300 border-none" asChild data-testid="button-cta-final">
               <Link href="/free-diagnostic"><ArrowRight className="mr-2 h-5 w-5" />Start Free Readiness Check</Link>
