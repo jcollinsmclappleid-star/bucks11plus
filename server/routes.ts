@@ -7,7 +7,8 @@ import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClie
 import { sql, eq, and, desc, inArray } from "drizzle-orm";
 import { db } from "./db";
 import { computeAttemptMetrics, computeFullAnalytics, type AnswerRecord, type DrillAnswerRecord, type HistoricalMetrics } from "./metrics";
-import { sendDiagnosticCompleteEmail, sendAdminNotificationEmail, sendGuideDownloadAdminEmail, sendGuideDownloadUserEmail, sendSubscriptionCancelledAdminEmail } from "./email";
+import { sendDiagnosticCompleteEmail, sendAdminNotificationEmail, sendGuideDownloadAdminEmail, sendGuideDownloadUserEmail, sendSubscriptionCancelledAdminEmail, sendEmailVerificationEmail, generateEmailVerifyToken } from "./email";
+import { timingSafeEqual } from "crypto";
 import { ensureChromium } from "./chromium";
 import { learnArticles } from "../client/src/data/learn-articles";
 import { ensureFreePool, repairSeedQuestions } from "./seed";
@@ -2229,6 +2230,60 @@ export async function registerRoutes(
       }
       await handleUnsubscribe(token, userId, res);
     } catch (error) { next(error); }
+  });
+
+  // -----------------------------------------------------------------------
+  // Email verification (soft-block) — clicking the link in the verification
+  // email flips email_verified=true. Token is HMAC(EMAIL_SECRET, userId+":verify")
+  // so no per-user state is needed; replay is harmless because the only effect
+  // is to set the flag we already want set. Resend is throttled per-user.
+  // -----------------------------------------------------------------------
+  const verifyResendThrottle = new Map<string, number>();
+  const VERIFY_RESEND_COOLDOWN_MS = 5 * 60 * 1000;
+
+  app.get("/api/email/verify", async (req, res) => {
+    const userId = String(req.query.userId || "");
+    const token = String(req.query.token || "");
+    if (!userId || !token) {
+      return res.redirect("/app/account?verified=0&reason=missing");
+    }
+    try {
+      const expected = await generateEmailVerifyToken(userId);
+      const a = Buffer.from(token, "utf8");
+      const b = Buffer.from(expected, "utf8");
+      if (a.length !== b.length || !timingSafeEqual(a, b)) {
+        return res.redirect("/app/account?verified=0&reason=invalid");
+      }
+      await db.update(users).set({ emailVerified: true }).where(eq(users.id, userId));
+      return res.redirect("/app/account?verified=1");
+    } catch (err) {
+      console.error("[EmailVerify] Failed:", err);
+      return res.redirect("/app/account?verified=0&reason=error");
+    }
+  });
+
+  app.post("/api/email/verify/resend", requireAuth, async (req, res) => {
+    const user = req.user!;
+    if (user.emailVerified) {
+      return res.json({ message: "Email already verified." });
+    }
+    const target = user.email || user.username;
+    if (!target || !target.includes("@")) {
+      return res.status(400).json({ message: "No email address on file. Please add one in Account Settings." });
+    }
+    const last = verifyResendThrottle.get(user.id) ?? 0;
+    const elapsed = Date.now() - last;
+    if (elapsed < VERIFY_RESEND_COOLDOWN_MS) {
+      const waitS = Math.ceil((VERIFY_RESEND_COOLDOWN_MS - elapsed) / 1000);
+      return res.status(429).json({
+        message: `Please wait ${Math.ceil(waitS / 60)} minute${waitS > 60 ? "s" : ""} before requesting another verification email.`,
+      });
+    }
+    verifyResendThrottle.set(user.id, Date.now());
+    sendEmailVerificationEmail(user.id, target).catch((e) =>
+      console.error("[EmailVerify] Resend failed:", e),
+    );
+    return res.json({ message: "Verification email sent. Check your inbox (and spam folder)." });
   });
 
   app.put("/api/user/email-consent", requireAuth, async (req, res, next) => {

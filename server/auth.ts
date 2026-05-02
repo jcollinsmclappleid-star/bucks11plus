@@ -12,7 +12,41 @@ import { db } from "./db";
 import { users } from "@shared/schema";
 import { eq, and, gt } from "drizzle-orm";
 import type { User } from "@shared/schema";
-import { sendPasswordResetEmail } from "./email";
+import { sendPasswordResetEmail, sendEmailVerificationEmail } from "./email";
+
+// Per-account login throttle. The IP-based authLimiter blocks brute force
+// from a single source; this in-memory map prevents distributed brute force
+// from grinding away at one specific account by rotating IPs. Lockout is only
+// applied to USERNAMES THAT ACTUALLY EXIST so an attacker cannot DoS arbitrary
+// accounts by spamming wrong-password attempts at made-up usernames.
+const failedLogins = new Map<string, { fails: number; lockedUntil: number }>();
+const MAX_LOGIN_FAILS = 5;
+const LOGIN_LOCK_MS = 15 * 60 * 1000;
+
+function loginLockRemaining(username: string): number {
+  const entry = failedLogins.get(username);
+  if (!entry) return 0;
+  const remaining = entry.lockedUntil - Date.now();
+  if (remaining <= 0) {
+    failedLogins.delete(username);
+    return 0;
+  }
+  return remaining;
+}
+
+function recordFailedLogin(username: string) {
+  const entry = failedLogins.get(username) ?? { fails: 0, lockedUntil: 0 };
+  entry.fails += 1;
+  if (entry.fails >= MAX_LOGIN_FAILS) {
+    entry.lockedUntil = Date.now() + LOGIN_LOCK_MS;
+    entry.fails = 0;
+  }
+  failedLogins.set(username, entry);
+}
+
+function clearFailedLogins(username: string) {
+  failedLogins.delete(username);
+}
 
 // Rate limiter for auth endpoints — 10 attempts per 15 minutes per IP
 const authLimiter = rateLimit({
@@ -82,14 +116,25 @@ export function setupAuth(app: Express) {
   passport.use(
     new LocalStrategy(async (username, password, done) => {
       try {
+        const lockedRemainingMs = loginLockRemaining(username);
+        if (lockedRemainingMs > 0) {
+          const minutes = Math.max(1, Math.ceil(lockedRemainingMs / 60000));
+          return done(null, false, {
+            message: `Account temporarily locked due to too many failed sign-in attempts. Please try again in ${minutes} minute${minutes === 1 ? "" : "s"}, or reset your password.`,
+          });
+        }
         const user = await storage.getUserByUsername(username);
         if (!user) {
+          // Do NOT increment failure counter for non-existent usernames —
+          // otherwise an attacker could lock arbitrary accounts they don't own.
           return done(null, false, { message: "Invalid username or password" });
         }
         const isMatch = await comparePasswords(password, user.password);
         if (!isMatch) {
+          recordFailedLogin(username);
           return done(null, false, { message: "Invalid username or password" });
         }
+        clearFailedLogins(username);
         return done(null, user);
       } catch (err) {
         return done(err);
@@ -132,6 +177,11 @@ export function setupAuth(app: Express) {
       db.update(users).set({ lastLoginAt: new Date() }).where(eq(users.id, user.id))
         .catch((e) => console.error("[Auth] Failed to stamp lastLoginAt on register:", e));
 
+      // Send email verification (fire-and-forget, never block signup on email delivery)
+      sendEmailVerificationEmail(user.id, username).catch((e) =>
+        console.error("[Auth] Failed to send verification email:", e),
+      );
+
       req.login(user, (err) => {
         if (err) return next(err);
         const { password: _, ...safeUser } = user;
@@ -148,8 +198,11 @@ export function setupAuth(app: Express) {
       if (!user) {
         return res.status(401).json({ message: info?.message || "Login failed" });
       }
-      // Stamp last-login asynchronously so the retention sweep has a fresh signal
-      db.update(users).set({ lastLoginAt: new Date() }).where(eq(users.id, user.id))
+      // Stamp last-login asynchronously so the retention sweep has a fresh signal,
+      // and clear any retention-warning stamp so the next dormancy cycle starts fresh.
+      db.update(users)
+        .set({ lastLoginAt: new Date(), retentionWarningSentAt: null })
+        .where(eq(users.id, user.id))
         .catch((e) => console.error("[Auth] Failed to stamp lastLoginAt on login:", e));
 
       req.login(user, (err) => {

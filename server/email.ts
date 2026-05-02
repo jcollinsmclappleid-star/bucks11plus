@@ -34,7 +34,24 @@ export function redactEmailsInText(value: string | null | undefined): string {
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const RESEND_FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "Bucks 11 Plus Tests <noreply@bucks11plustest.co.uk>";
-const EMAIL_SECRET = process.env.EMAIL_SECRET || "11plus-email-secret";
+// EMAIL_SECRET protects HMAC-derived tokens for unsubscribe links and email
+// verification. In production we refuse to boot without it so tokens are never
+// predictable. In dev we fall back to a fixed string so local testing works.
+const EMAIL_SECRET = (() => {
+  const v = process.env.EMAIL_SECRET;
+  if (v && v.length >= 16) return v;
+  if (process.env.NODE_ENV === "production") {
+    throw new Error(
+      "EMAIL_SECRET environment variable must be set (>=16 chars) in production. " +
+      "It is used to derive HMAC tokens for unsubscribe and email-verification links.",
+    );
+  }
+  console.warn(
+    "[Email] EMAIL_SECRET not set — using insecure development fallback. " +
+    "This is fine for local development but MUST be set as a Replit secret before deploying.",
+  );
+  return "dev-only-email-secret-do-not-use-in-prod";
+})();
 
 function getBaseUrl(): string {
   if (process.env.BASE_URL) return process.env.BASE_URL;
@@ -409,6 +426,69 @@ export async function sendAccountSetupEmail(email: string, resetToken: string): 
 </body>
 </html>`;
   return sendEmail(email, "Your Bucks Plus Edge account is ready — set your password", html);
+}
+
+// ---------------------------------------------------------------------------
+// Email verification (soft-block) — verifies the address belongs to the user
+// who registered. Token is HMAC-derived from EMAIL_SECRET + userId so we don't
+// need to persist it. Same pattern as the unsubscribe link.
+// ---------------------------------------------------------------------------
+export async function generateEmailVerifyToken(userId: string): Promise<string> {
+  const crypto = await import("crypto");
+  return crypto.createHmac("sha256", EMAIL_SECRET).update(`${userId}:verify`).digest("hex");
+}
+
+export async function sendEmailVerificationEmail(userId: string, email: string): Promise<boolean> {
+  const token = await generateEmailVerifyToken(userId);
+  const verifyUrl = `${BASE_URL}/api/email/verify?userId=${encodeURIComponent(userId)}&token=${token}`;
+  const html = `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.6;color:#1a1a2e;max-width:600px;margin:0 auto;padding:20px;">
+  <div style="text-align:center;margin-bottom:24px;">
+    <strong style="font-size:18px;color:#0d1f30;">Bucks 11 Plus Tests</strong>
+  </div>
+  <h2 style="color:#0d1f30;margin-bottom:8px;">Confirm your email address</h2>
+  <p>Welcome to Bucks 11 Plus Tests! Please confirm this is your email so we can keep your account secure and make sure password-reset links can reach you if you ever need them.</p>
+  <div style="text-align:center;margin:24px 0;">
+    <a href="${verifyUrl}" style="display:inline-block;background:#0d1f30;color:white;padding:14px 28px;border-radius:6px;text-decoration:none;font-weight:bold;">Verify my email</a>
+  </div>
+  <p style="font-size:13px;color:#64748b;">You can keep using your account in the meantime — verifying just removes the reminder banner and protects you from anyone signing up with your address by mistake.</p>
+  <p style="font-size:13px;color:#64748b;">If you didn't create an account, you can safely ignore this email.</p>
+  <hr style="border:none;border-top:1px solid #e5e7eb;margin:32px 0 16px;">
+  <p style="font-size:11px;color:#9ca3af;text-align:center;">Bucks 11 Plus Tests · Buckinghamshire 11+ Preparation · Operated by Ianson Systems Limited</p>
+</body>
+</html>`;
+  return sendEmail(email, "Confirm your Bucks 11 Plus Tests email address", html);
+}
+
+// ---------------------------------------------------------------------------
+// Retention warning — sent 30 days before automated deletion of dormant
+// accounts. Always sent regardless of marketing-email preference because it
+// is a transactional notice about the contract / account state.
+// ---------------------------------------------------------------------------
+export async function sendRetentionWarningEmail(email: string, lastLoginAt: Date): Promise<boolean> {
+  const signInUrl = `${BASE_URL}/sign-in`;
+  const lastLoginStr = lastLoginAt.toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" });
+  const html = `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.6;color:#1a1a2e;max-width:600px;margin:0 auto;padding:20px;">
+  <div style="text-align:center;margin-bottom:24px;">
+    <strong style="font-size:18px;color:#0d1f30;">Bucks 11 Plus Tests</strong>
+  </div>
+  <h2 style="color:#0d1f30;margin-bottom:8px;">Your account will be deleted in 30 days</h2>
+  <p>You haven't signed in to Bucks 11 Plus Tests since <strong>${lastLoginStr}</strong>. As described in our Privacy Policy, we automatically delete dormant accounts after 24 months of inactivity to keep our data footprint to the minimum we need.</p>
+  <p><strong>If you'd like to keep your account, just sign in once in the next 30 days.</strong> That preserves everything we hold for you — child profiles, test sessions, answers and email history — and resets the dormancy clock.</p>
+  <div style="text-align:center;margin:24px 0;">
+    <a href="${signInUrl}" style="display:inline-block;background:#0d1f30;color:white;padding:14px 28px;border-radius:6px;text-decoration:none;font-weight:bold;">Sign in to keep my account</a>
+  </div>
+  <p style="font-size:13px;color:#64748b;">No action needed if you're done with us — your data will be permanently removed automatically. This is a one-off transactional notice and is sent regardless of your marketing-email preferences.</p>
+  <hr style="border:none;border-top:1px solid #e5e7eb;margin:32px 0 16px;">
+  <p style="font-size:11px;color:#9ca3af;text-align:center;">Bucks 11 Plus Tests · Buckinghamshire 11+ Preparation · Operated by Ianson Systems Limited</p>
+</body>
+</html>`;
+  return sendEmail(email, "Action needed: your Bucks 11 Plus Tests account will be deleted in 30 days", html);
 }
 
 export async function sendPasswordResetEmail(email: string, resetToken: string): Promise<boolean> {

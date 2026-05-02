@@ -8,6 +8,7 @@ import React, { useEffect } from "react";
 
 import { AuthProvider } from "./lib/auth";
 import { CookieConsent } from "./components/shared/CookieConsent";
+import { EmailVerificationBanner } from "./components/shared/EmailVerificationBanner";
 import Navbar from "./components/layout/Navbar";
 import AdminTierSwitcher from "./components/layout/AdminTierSwitcher";
 import LockedOverlay from "./components/shared/LockedOverlay";
@@ -97,6 +98,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-background font-sans flex flex-col">
       <ScrollToTop />
       <Navbar />
+      <EmailVerificationBanner />
       <main className="flex-1">
         {children}
       </main>

@@ -18,6 +18,7 @@ type User = {
   isAdmin: boolean;
   activeChildProfileId: string | null;
   emailConsent: boolean;
+  emailVerified: boolean;
 };
 
 type AuthContextType = {
