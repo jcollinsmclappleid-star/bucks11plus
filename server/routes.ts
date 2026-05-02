@@ -11,6 +11,7 @@ import { sendDiagnosticCompleteEmail, sendAdminNotificationEmail, sendGuideDownl
 import { timingSafeEqual } from "crypto";
 import { ensureChromium } from "./chromium";
 import { learnArticles } from "../client/src/data/learn-articles";
+import { QUESTION_TYPES } from "../client/src/data/question-types";
 import { ensureFreePool, repairSeedQuestions } from "./seed";
 import {
   getTownHtml, getGrammarSchoolHtml, getSubjectGuideHtml,
@@ -2521,9 +2522,9 @@ Disallow: /reset-password
     res.send(html);
   });
 
-  app.get("/glossary/:slug", (req, res) => {
+  app.get("/glossary/:slug", (req, res, next) => {
     const html = getGlossaryTermHtml(req.params.slug);
-    if (!html) { res.status(404).send("Not found"); return; }
+    if (!html) { next(); return; } // fall through to SPA for client-only slugs
     res.setHeader("Content-Type", "text/html; charset=utf-8");
     res.setHeader("Cache-Control", "public, max-age=3600");
     res.send(html);
@@ -2610,9 +2611,15 @@ Disallow: /reset-password
       { path: "/when-do-bucks-11-plus-results-come-out", priority: "0.8", changefreq: "monthly" },
       { path: "/bucks-11-plus-sample-questions", priority: "0.9", changefreq: "monthly" },
       { path: "/bucks-11-plus-score-calculator", priority: "0.9", changefreq: "monthly" },
-      { path: "/11-plus-tutors-buckinghamshire", priority: "0.9", changefreq: "monthly" },
+      { path: "/bucks-11-plus-self-study-vs-tutor", priority: "0.8", changefreq: "monthly" },
       { path: "/bucks-11-plus-appeals", priority: "0.8", changefreq: "monthly" },
       { path: "/bucks-11-plus-registration-guide", priority: "0.8", changefreq: "monthly" },
+      ...QUESTION_TYPES.map(q => ({ path: q.pathSegment, priority: "0.8", changefreq: "monthly" as const })),
+      { path: "/bucks-11-plus-practice-papers-free", priority: "0.9", changefreq: "monthly" },
+      { path: "/bucks-11-plus-year-5-summer-plan", priority: "0.8", changefreq: "monthly" },
+      { path: "/bucks-11-plus-year-6-revision-timetable", priority: "0.8", changefreq: "monthly" },
+      { path: "/bucks-grammar-school-rankings", priority: "0.8", changefreq: "monthly" },
+      { path: "/independent-vs-grammar-buckinghamshire", priority: "0.8", changefreq: "monthly" },
       { path: "/bucks-11-plus-familiarisation-test", priority: "0.9", changefreq: "monthly" },
       { path: "/bucks-11-plus-vs-cem-vs-kent", priority: "0.8", changefreq: "monthly" },
       { path: "/bucks-11-plus-vocabulary-list", priority: "0.9", changefreq: "monthly" },

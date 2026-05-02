@@ -80,6 +80,24 @@ import MockTest from "./pages/seo/MockTest";
 import TuitionCost from "./pages/seo/TuitionCost";
 import FAQHub from "./pages/seo/FAQHub";
 import SchoolClusterGuide from "./pages/seo/SchoolClusterGuide";
+import Glossary from "./pages/seo/Glossary";
+import GlossaryTerm from "./pages/seo/GlossaryTerm";
+import PastPapers from "./pages/seo/PastPapers";
+import SampleQuestions from "./pages/seo/SampleQuestions";
+import TestDate from "./pages/seo/TestDate";
+import WhenResults from "./pages/seo/WhenResults";
+import ResultsExplained from "./pages/seo/ResultsExplained";
+import Appeals from "./pages/seo/Appeals";
+import ScoreCalculator from "./pages/seo/ScoreCalculator";
+import QuestionTypeGuide from "./pages/seo/QuestionTypeGuide";
+import PracticePapersFree from "./pages/seo/PracticePapersFree";
+import Year5SummerPlan from "./pages/seo/Year5SummerPlan";
+import Year6Revision from "./pages/seo/Year6Revision";
+import SchoolRankings from "./pages/seo/SchoolRankings";
+import IndependentVsGrammar from "./pages/seo/IndependentVsGrammar";
+import SelfStudyVsTutor from "./pages/seo/SelfStudyVsTutor";
+import { QUESTION_TYPES } from "./data/question-types";
+import { GLOSSARY_TERMS } from "./data/glossary";
 import { towns } from "./data/towns";
 import { grammarSchools } from "./data/grammar-schools";
 import { useAuth } from "./lib/auth";
@@ -327,6 +345,41 @@ function Router() {
             <Route path="/chiltern-grammar-schools">
               <SchoolClusterGuide clusterSlug="chiltern-grammar-schools" />
             </Route>
+
+            {/* New SEO pages — Tier 1 (sitemap-promised) */}
+            <Route path="/glossary" component={Glossary} />
+            {GLOSSARY_TERMS.map((t) => (
+              <Route key={t.slug} path={`/glossary/${t.slug}`}>
+                <GlossaryTerm slug={t.slug} />
+              </Route>
+            ))}
+            <Route path="/bucks-11-plus-past-papers" component={PastPapers} />
+            <Route path="/bucks-11-plus-sample-questions" component={SampleQuestions} />
+            <Route path="/bucks-11-plus-test-date-2026">
+              <TestDate year={2026} />
+            </Route>
+            <Route path="/bucks-11-plus-test-date-2025">
+              <TestDate year={2025} />
+            </Route>
+            <Route path="/when-do-bucks-11-plus-results-come-out" component={WhenResults} />
+            <Route path="/bucks-11-plus-results" component={ResultsExplained} />
+            <Route path="/bucks-11-plus-appeals" component={Appeals} />
+            {/* /bucks-11-plus-registration-guide is server-rendered by getRegistrationDetailedHtml — no client route needed */}
+            <Route path="/bucks-11-plus-score-calculator" component={ScoreCalculator} />
+
+            {/* Tier 2 — new high-traffic pages */}
+            {QUESTION_TYPES.map((q) => (
+              <Route key={q.slug} path={q.pathSegment}>
+                <QuestionTypeGuide slug={q.slug} />
+              </Route>
+            ))}
+            <Route path="/bucks-11-plus-practice-papers-free" component={PracticePapersFree} />
+            <Route path="/bucks-11-plus-year-5-summer-plan" component={Year5SummerPlan} />
+            <Route path="/bucks-11-plus-year-6-revision-timetable" component={Year6Revision} />
+            <Route path="/bucks-grammar-school-rankings" component={SchoolRankings} />
+            <Route path="/independent-vs-grammar-buckinghamshire" component={IndependentVsGrammar} />
+            <Route path="/bucks-11-plus-self-study-vs-tutor" component={SelfStudyVsTutor} />
+
             <Route path="/checkout-success" component={CheckoutSuccess} />
             <Route path="/account-deleted" component={AccountDeleted} />
 
