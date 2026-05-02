@@ -233,6 +233,28 @@ export const guideLeads = pgTable("guide_leads", {
   clickedDiagnostic: boolean("clicked_diagnostic").notNull().default(false),
 });
 
+export const practicePaperLeads = pgTable("practice_paper_leads", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  email: text("email").notNull(),
+  source: text("source"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  downloadedAt: timestamp("downloaded_at"),
+  unsubscribed: boolean("unsubscribed").notNull().default(false),
+});
+
+export const nurtureSequences = pgTable("nurture_sequences", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  email: text("email").notNull(),
+  sessionId: varchar("session_id"),
+  sequenceType: text("sequence_type").notNull(),
+  currentStep: integer("current_step").notNull().default(0),
+  nextSendAt: timestamp("next_send_at").notNull(),
+  completedAt: timestamp("completed_at"),
+  unsubscribed: boolean("unsubscribed").notNull().default(false),
+  metadata: jsonb("metadata"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
 export const childProfiles = pgTable("child_profiles", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: varchar("user_id").notNull(),

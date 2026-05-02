@@ -122,6 +122,23 @@ export default function FreeDiagnosticStart() {
             </ul>
           </div>
 
+          <div className="rounded-xl border border-slate-200 bg-slate-50 p-4" data-testid="diagnostic-trust-row">
+            <div className="grid sm:grid-cols-3 gap-3 text-center">
+              <div>
+                <div className="text-xs font-bold uppercase tracking-wider text-primary mb-0.5">Forecast vs 121</div>
+                <div className="text-[11px] text-slate-500">Age-adjusted score against the Bucks qualifying threshold</div>
+              </div>
+              <div className="sm:border-x border-slate-200 sm:px-3">
+                <div className="text-xs font-bold uppercase tracking-wider text-primary mb-0.5">Top 3 priorities</div>
+                <div className="text-[11px] text-slate-500">The reasoning sub-skills that will move the score most</div>
+              </div>
+              <div>
+                <div className="text-xs font-bold uppercase tracking-wider text-primary mb-0.5">No account · No card</div>
+                <div className="text-[11px] text-slate-500">Results stay yours — email them to yourself if you'd like</div>
+              </div>
+            </div>
+          </div>
+
           <div className="pt-6 border-t border-border/50 text-center">
             {startGuestSession.isError && (
               <div className="mb-4 flex items-start gap-2 p-3 rounded-md bg-red-50 border border-red-200 text-left" data-testid="error-start-diagnostic">

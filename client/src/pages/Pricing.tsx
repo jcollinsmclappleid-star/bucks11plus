@@ -363,6 +363,31 @@ export default function Pricing() {
                 </Card>
               </div>
 
+              {/* Trust strip — money-back, cancel anytime, tutor frame */}
+              <div className="mt-8 grid sm:grid-cols-3 gap-3" data-testid="pricing-trust-strip">
+                <div className="rounded-xl border border-slate-200 bg-white p-4 flex items-start gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-brand-green shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-bold text-primary text-sm">Cancel any time</p>
+                    <p className="text-xs text-slate-500">No lock-in. Cancel from your billing portal in two clicks.</p>
+                  </div>
+                </div>
+                <div className="rounded-xl border border-slate-200 bg-white p-4 flex items-start gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-brand-green shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-bold text-primary text-sm">3-day money-back</p>
+                    <p className="text-xs text-slate-500">Not what you expected? Email us within 3 days of your first purchase for a full refund.</p>
+                  </div>
+                </div>
+                <div className="rounded-xl border border-slate-200 bg-white p-4 flex items-start gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-brand-green shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-bold text-primary text-sm">Less than one tutor hour</p>
+                    <p className="text-xs text-slate-500">A year of full access (£279) costs less than 8 hours of in-person 11+ tutoring.</p>
+                  </div>
+                </div>
+              </div>
+
               {/* Comparison table */}
               <div className="mt-10" data-testid="comparison-table">
                 <h3 className="text-lg font-bold text-primary font-serif text-center mb-5">What's included in full access</h3>

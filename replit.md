@@ -260,3 +260,13 @@ content/
 - Static dashboard preview components: `DashboardPreviewForecast` (gauge + skill bars) and `DashboardPreviewPace` (pace cards + heatmap)
 - Print-optimised page at `client/src/pages/GuidePrint.tsx` (internal, not routed)
 - Cross-linked from BucksGuide pillar page and footer Resources column
+
+## Free Practice Paper Lead Magnet + Post-Diagnostic Nurture
+- Tables: `practice_paper_leads` (id, email, source, downloadedAt, unsubscribed) and `nurture_sequences` (id, email, sessionId, sequenceType, currentStep, nextSendAt, completedAt, unsubscribed, metadata)
+- Print page: `client/src/pages/PracticePaperPrint.tsx` (route `/practice-paper-print`) — A4 cover + instructions + 12 GL-style questions (3 each: VR, Maths, NVR with SVG shapes, English Comprehension on SD04 passage) + answer key + what-next CTA
+- Reusable form: `client/src/components/shared/LeadMagnetBlock.tsx` (default + compact variants) — embedded on 10 high-intent SEO pages (HowToPass, CommonMistakes, QualifyingScore, Timeline, Registration, SecondaryTransfer, PastPapers, PracticePapersFree, MockTest, SampleQuestions, FAQHub) just before each ContentCTA
+- Server module: `server/leadMagnet.ts` — HMAC-signed download tokens (using `EMAIL_SECRET`), Resend send, puppeteer PDF generation hitting `/practice-paper-print` with 60-min in-memory cache, post-diagnostic nurture queue (day 2 + day 5), background processor running every 5 min via `setInterval`
+- API endpoints: `POST /api/leads/practice-paper`, `GET /api/leads/practice-paper/pdf?id&token`, `GET /api/leads/practice-paper/unsubscribe?email&token`
+- Nurture hook: enqueues 2-step sequence inside `POST /api/guest/email-results` (existing handler)
+- Pricing CRO: 3-card trust strip (cancel anytime, 3-day money-back, "less than one tutor hour" annual frame) — placed after plan cards, before comparison table
+- FreeDiagnosticStart CRO: 3-column trust signal block (forecast vs 121, top 3 priorities, no account/no card) above start button

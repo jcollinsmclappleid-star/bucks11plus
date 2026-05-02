@@ -59,6 +59,7 @@ import QuestionEditor from "./pages/admin/QuestionEditor";
 import ParentGuide from "./pages/ParentGuide";
 import WhyChoosePlatform from "./pages/WhyChoosePlatform";
 import GuidePrint from "./pages/GuidePrint";
+import PracticePaperPrint from "./pages/PracticePaperPrint";
 import SiteLinks from "./pages/SiteLinks";
 import LearnHub from "./pages/learn/LearnHub";
 import LearnArticle from "./pages/learn/LearnArticle";
@@ -282,6 +283,7 @@ function Router() {
             <Route path="/buckinghamshire-11-plus-guide" component={BucksGuide} />
             <Route path="/bucks-11-plus-parent-guide" component={ParentGuide} />
             <Route path="/guide-print" component={GuidePrint} />
+            <Route path="/practice-paper-print" component={PracticePaperPrint} />
             <Route path="/sign-in" component={SignIn} />
             <Route path="/sign-up" component={SignUp} />
             <Route path="/forgot-password" component={ForgotPassword} />

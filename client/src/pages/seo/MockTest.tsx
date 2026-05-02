@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
+import { LeadMagnetBlock } from "@/components/shared/LeadMagnetBlock";
 import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
@@ -152,6 +153,7 @@ export default function MockTest() {
       </p>
 
       <ChildExperienceCTA />
+      <LeadMagnetBlock source="seo:mock-test" />
       <ContentCTA />
 
       <div className="not-prose my-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">

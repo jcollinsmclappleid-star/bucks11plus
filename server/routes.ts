@@ -904,6 +904,14 @@ export async function registerRoutes(
         session.band ?? "Not assessed",
       );
 
+      // Schedule the 2-step post-diagnostic nurture (day 2 + day 5)
+      try {
+        const { enqueueDiagnosticNurture } = await import("./leadMagnet");
+        await enqueueDiagnosticNurture(email, sessionId, session.forecastScore, session.band);
+      } catch (err) {
+        console.error("[Nurture] enqueue failed:", err);
+      }
+
       res.json({ ok: true });
     } catch (error) {
       next(error);
@@ -2069,6 +2077,73 @@ export async function registerRoutes(
     } catch (error) {
       next(error);
     }
+  });
+
+  // ── Free Practice Paper lead magnet ────────────────────────────────────
+  app.post("/api/leads/practice-paper", async (req, res, next) => {
+    try {
+      const { email, source } = req.body as { email?: string; source?: string };
+      if (!email) return res.status(400).json({ message: "Email required" });
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) return res.status(400).json({ message: "Invalid email address" });
+
+      const { recordPracticePaperLead, sendPracticePaperEmail } = await import("./leadMagnet");
+      const { id } = await recordPracticePaperLead(email, source ?? null);
+      sendPracticePaperEmail(email, id).catch((err) =>
+        console.error("[LeadMagnet] send error:", err),
+      );
+      res.json({ ok: true });
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  app.get("/api/leads/practice-paper/pdf", async (req, res, next) => {
+    try {
+      const { id, token } = req.query as { id?: string; token?: string };
+      const leadId = Number(id);
+      if (!Number.isFinite(leadId) || !token) return res.status(400).send("Invalid link");
+
+      const { practicePaperLeads } = await import("@shared/schema");
+      const [lead] = await db
+        .select()
+        .from(practicePaperLeads)
+        .where(eq(practicePaperLeads.id, leadId))
+        .limit(1);
+      if (!lead) return res.status(404).send("Not found");
+
+      const { verifyPaperToken, getCachedPracticePaperPdf, markPracticePaperDownloaded } =
+        await import("./leadMagnet");
+      if (!verifyPaperToken(leadId, lead.email, token)) return res.status(403).send("Invalid token");
+
+      const buffer = await getCachedPracticePaperPdf();
+      markPracticePaperDownloaded(leadId).catch(() => {});
+
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader(
+        "Content-Disposition",
+        'attachment; filename="bucks-11-plus-free-practice-paper.pdf"',
+      );
+      res.setHeader("Content-Length", buffer.length);
+      res.send(buffer);
+    } catch (err) {
+      next(err);
+    }
+  });
+
+  app.get("/api/leads/practice-paper/unsubscribe", async (req, res) => {
+    const { email, token } = req.query as { email?: string; token?: string };
+    if (!email || !token) return res.status(400).send("Invalid link");
+    const { verifyNurtureUnsubToken, unsubscribeFromNurture } = await import("./leadMagnet");
+    if (!verifyNurtureUnsubToken(email, token)) return res.status(403).send("Invalid token");
+    await unsubscribeFromNurture(email);
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    res.send(`<!doctype html><html><head><meta charset="utf-8"><title>Unsubscribed</title></head>
+<body style="font-family:system-ui;max-width:480px;margin:80px auto;padding:24px;text-align:center;color:#0d1f30;">
+<h1 style="font-family:Georgia,serif;">You're unsubscribed</h1>
+<p style="color:#475569;">You won't receive any more 11+ tips from us. You can still browse the site any time.</p>
+<p><a href="https://bucks11plustest.co.uk" style="color:#0d1f30;">Back to Bucks 11 Plus Tests</a></p>
+</body></html>`);
   });
 
   app.get("/api/child-profiles", requireAuth, async (req, res, next) => {

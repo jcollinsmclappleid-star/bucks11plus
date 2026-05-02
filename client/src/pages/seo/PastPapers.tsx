@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
+import { LeadMagnetBlock } from "@/components/shared/LeadMagnetBlock";
 import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
@@ -153,6 +154,7 @@ export default function PastPapers() {
       </div>
 
       <ChildExperienceCTA />
+      <LeadMagnetBlock source="seo:past-papers" />
       <ContentCTA />
       <Disclaimer />
     </div>
