@@ -70,6 +70,14 @@ import SecondaryTransfer from "./pages/seo/SecondaryTransfer";
 import TownGuide from "./pages/seo/TownGuide";
 import YearGroupGuide from "./pages/seo/YearGroupGuide";
 import SubjectGuide from "./pages/seo/SubjectGuide";
+import FamiliarisationTest from "./pages/seo/FamiliarisationTest";
+import ExamsCompared from "./pages/seo/ExamsCompared";
+import VocabularyList from "./pages/seo/VocabularyList";
+import TestDayChecklist from "./pages/seo/TestDayChecklist";
+import MockTest from "./pages/seo/MockTest";
+import TuitionCost from "./pages/seo/TuitionCost";
+import FAQHub from "./pages/seo/FAQHub";
+import SchoolClusterGuide from "./pages/seo/SchoolClusterGuide";
 import { towns } from "./data/towns";
 import { grammarSchools } from "./data/grammar-schools";
 import { useAuth } from "./lib/auth";
@@ -299,6 +307,22 @@ function Router() {
             </Route>
             <Route path="/11-plus-comprehension-practice">
               <SubjectGuide subject="comprehension" />
+            </Route>
+            <Route path="/bucks-11-plus-familiarisation-test" component={FamiliarisationTest} />
+            <Route path="/bucks-11-plus-vs-cem-vs-kent" component={ExamsCompared} />
+            <Route path="/bucks-11-plus-vocabulary-list" component={VocabularyList} />
+            <Route path="/bucks-11-plus-test-day-checklist" component={TestDayChecklist} />
+            <Route path="/bucks-11-plus-mock-test" component={MockTest} />
+            <Route path="/bucks-11-plus-tuition-cost" component={TuitionCost} />
+            <Route path="/bucks-11-plus-faqs" component={FAQHub} />
+            <Route path="/south-bucks-grammar-schools">
+              <SchoolClusterGuide clusterSlug="south-bucks-grammar-schools" />
+            </Route>
+            <Route path="/aylesbury-vale-grammar-schools">
+              <SchoolClusterGuide clusterSlug="aylesbury-vale-grammar-schools" />
+            </Route>
+            <Route path="/chiltern-grammar-schools">
+              <SchoolClusterGuide clusterSlug="chiltern-grammar-schools" />
             </Route>
             <Route path="/checkout-success" component={CheckoutSuccess} />
             <Route path="/account-deleted" component={AccountDeleted} />

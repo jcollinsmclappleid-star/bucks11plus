@@ -2471,6 +2471,16 @@ Disallow: /reset-password
       { path: "/11-plus-tutors-buckinghamshire", priority: "0.9", changefreq: "monthly" },
       { path: "/bucks-11-plus-appeals", priority: "0.8", changefreq: "monthly" },
       { path: "/bucks-11-plus-registration-guide", priority: "0.8", changefreq: "monthly" },
+      { path: "/bucks-11-plus-familiarisation-test", priority: "0.9", changefreq: "monthly" },
+      { path: "/bucks-11-plus-vs-cem-vs-kent", priority: "0.8", changefreq: "monthly" },
+      { path: "/bucks-11-plus-vocabulary-list", priority: "0.9", changefreq: "monthly" },
+      { path: "/bucks-11-plus-test-day-checklist", priority: "0.8", changefreq: "monthly" },
+      { path: "/bucks-11-plus-mock-test", priority: "0.9", changefreq: "monthly" },
+      { path: "/bucks-11-plus-tuition-cost", priority: "0.8", changefreq: "monthly" },
+      { path: "/bucks-11-plus-faqs", priority: "0.8", changefreq: "monthly" },
+      { path: "/south-bucks-grammar-schools", priority: "0.8", changefreq: "monthly" },
+      { path: "/aylesbury-vale-grammar-schools", priority: "0.8", changefreq: "monthly" },
+      { path: "/chiltern-grammar-schools", priority: "0.8", changefreq: "monthly" },
     ];
 
     const staticContentLastmod = "2025-09-01";
