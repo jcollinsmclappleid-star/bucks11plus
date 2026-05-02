@@ -7,6 +7,7 @@
 import { db } from "./db";
 import { questions } from "@shared/schema";
 import { eq, and, sql } from "drizzle-orm";
+import { seedRepurposedComprehension } from "../scripts/comprehension/repurposed/seed";
 type AnyElement = Record<string, any>;
 type Frame = { elements: AnyElement[] };
 
@@ -346,5 +347,20 @@ export async function applyQuestionQualityFixes() {
   const dupeCount = (dupeArchive as any).rowCount ?? (dupeArchive as any).rows?.length ?? 0;
   if (dupeCount > 0) {
     console.log(`  [Quality] Archived ${dupeCount} true-duplicate extras in Maths/VR (kept one copy per group)`);
+  }
+
+  // ── Fix 12: Seed/refresh hand-authored repurposed comprehension bank ─────
+  // 320 GL-quality, Year 5/6 age-appropriate questions across 40 lowercase
+  // passages (8 per passage: 2 easy + 4 medium + 2 hard, balanced across
+  // fact_retrieval / vocabulary_in_context / inference / text_structure /
+  // authorial_intent). Replaces the templated AI-generated questions that
+  // were archived in Fix 10. The seeder is idempotent — it upserts by stable
+  // id 'repurposed-{passageId}-{NN}' so repeated runs leave the bank
+  // unchanged after the first successful seed.
+  try {
+    await seedRepurposedComprehension({ silent: true });
+    console.log(`  [Quality] Refreshed hand-authored repurposed comprehension bank (320 questions)`);
+  } catch (err) {
+    console.error(`  [Quality] Failed to seed repurposed comprehension bank:`, err);
   }
 }

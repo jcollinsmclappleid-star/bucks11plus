@@ -1,19 +1,40 @@
-import * as fs from "fs";
-import * as path from "path";
-import { fileURLToPath } from "url";
 import { db } from "../../../server/db";
 import { questions } from "../../../shared/schema";
-import { and, eq, sql } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { REPURPOSED_QUESTIONS, type AuthoredQuestion } from "./questions";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// Static JSON import keeps this module bundler-safe in both ESM and CJS
+// (server/index.ts is bundled to CJS via esbuild, so import.meta.url is empty).
+import PASSAGES_JSON from "./passages.json";
 
 interface Passage {
   passage_id: string;
   theme: string;
   title: string;
   text: string;
+}
+
+// Deterministic FNV-1a 32-bit hash of the question id — used to pick a
+// uniform-looking target position [0..3] for the correct answer so that
+// the A/B/C/D distribution across 320 questions is balanced and free of
+// per-type or per-index bias, without touching the source authored data.
+function hashToPosition(id: string): number {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < id.length; i++) {
+    h ^= id.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return (h >>> 0) % 4;
+}
+
+// Returns a new options array in which the correct answer sits at targetPos.
+// Achieved by swapping the correct answer's current index with targetPos —
+// preserves the other distractors' order otherwise.
+function placeCorrectAt(options: string[], correct: string, targetPos: number): string[] {
+  const result = options.slice();
+  const currentPos = result.indexOf(correct);
+  if (currentPos === -1 || currentPos === targetPos) return result;
+  [result[currentPos], result[targetPos]] = [result[targetPos], result[currentPos]];
+  return result;
 }
 
 const SKILL_MAP: Record<AuthoredQuestion["type"], string> = {
@@ -51,13 +72,11 @@ function questionIdFor(passageId: string, idx: number): string {
 
 export async function seedRepurposedComprehension(opts: { silent?: boolean } = {}) {
   const log = opts.silent ? () => {} : console.log.bind(console);
-  const passagesPath = path.resolve(__dirname, "passages.json");
-  if (!fs.existsSync(passagesPath)) {
-    log("[Repurposed] passages.json missing, skipping.");
-    return { inserted: 0, skipped: 0 };
+  const passages: Passage[] = PASSAGES_JSON as Passage[];
+  if (!passages || passages.length === 0) {
+    log("[Repurposed] No passages bundled, skipping.");
+    return { inserted: 0, updated: 0 };
   }
-
-  const passages: Passage[] = JSON.parse(fs.readFileSync(passagesPath, "utf-8"));
   const passageMap = new Map(passages.map((p) => [p.passage_id, p]));
 
   // Group authored questions by passage
@@ -96,6 +115,12 @@ export async function seedRepurposedComprehension(opts: { silent?: boolean } = {
         throw new Error(`[Repurposed] ${id}: duplicate options`);
       }
 
+      // Deterministically rebalance correct-answer position by hashing the
+      // stable id. Without this, authored prompts skewed heavily toward
+      // option B; the hash yields ~uniform A/B/C/D across the 320 questions.
+      const targetPos = hashToPosition(id);
+      const balancedOptions = placeCorrectAt(q.options, q.correct, targetPos);
+
       const renderConfig = {
         kind: "comprehension.passage" as const,
         passageId: passage.passage_id,
@@ -112,7 +137,7 @@ export async function seedRepurposedComprehension(opts: { silent?: boolean } = {
         section: "English Comprehension",
         type: q.type,
         prompt: q.prompt,
-        options: q.options,
+        options: balancedOptions,
         correctAnswer: q.correct,
         difficulty: q.difficulty,
         timeExpected: TIME_MAP[q.difficulty],
@@ -164,11 +189,9 @@ export async function seedRepurposedComprehension(opts: { silent?: boolean } = {
   return { inserted, updated: skipped };
 }
 
-// CLI entrypoint
-const isDirectRun =
-  import.meta.url === `file://${process.argv[1]}` ||
-  process.argv[1]?.endsWith("seed.ts");
-if (isDirectRun) {
+// CLI entrypoint — only fires when invoked directly via `tsx scripts/.../seed.ts`.
+// Uses argv-based detection so the module stays CJS-safe (no import.meta.url).
+if (process.argv[1]?.endsWith("seed.ts") || process.argv[1]?.endsWith("seed.js")) {
   seedRepurposedComprehension()
     .then(({ inserted, updated }) => {
       console.log(`\nDone. inserted=${inserted} updated=${updated}`);
