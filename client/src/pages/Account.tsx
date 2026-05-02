@@ -198,8 +198,8 @@ export default function Account() {
   const tierDescriptions: Record<string, string> = {
     free: "Limited to free readiness check and basic results.",
     // Active plans
-    pack_plus: "Bucks Plus Edge — full access billed monthly. Cancel any time. Includes all 1,500+ questions, every drill, mock exams, readiness checks, PDF reports and premium analytics.",
-    pack_annual: "Bucks Plus Edge — Annual. 12 months of full access in one payment. Includes all 1,500+ questions, every drill, mock exams, readiness checks, PDF reports and premium analytics.",
+    pack_plus: "Bucks Plus Edge — full access billed monthly. Cancel any time. Includes all 2,500+ questions, every drill, mock exams, readiness checks, PDF reports and premium analytics.",
+    pack_annual: "Bucks Plus Edge — Annual. 12 months of full access in one payment. Includes all 2,500+ questions, every drill, mock exams, readiness checks, PDF reports and premium analytics.",
     // Legacy plans — all mapped to full access
     early_learner: "Bucks Plus Edge (legacy plan) — full platform access.",
     pack12: "Bucks Plus Edge (legacy plan) — full platform access.",

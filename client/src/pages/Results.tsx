@@ -111,7 +111,7 @@ function getUpsellMessage(tier: string, weakestSection: string, weakestScore: nu
     if (overallScore < 110) {
       return {
         title: "Unlock the Full Readiness & Practice Hub",
-        message: `${weakestSection} at ${weakestScore}% needs focused attention. Bucks Plus Edge gives your child 1,500+ GL-style questions, full readiness checks, all Hard drills, and a detailed analytics dashboard — from £35/month.`,
+        message: `${weakestSection} at ${weakestScore}% needs focused attention. Bucks Plus Edge gives your child 2,500+ GL-style questions, full readiness checks, all Hard drills, and a detailed analytics dashboard — from £35/month.`,
         cta: "See Plans & Start Today",
         tier: "pack_plus",
         link: "/pricing",
@@ -119,7 +119,7 @@ function getUpsellMessage(tier: string, weakestSection: string, weakestScore: nu
     }
     return {
       title: "Build Confidence with the Full Platform",
-      message: `Great start! Bucks Plus Edge is the complete Readiness & Practice Hub — 1,500+ questions, all 20 Hard challenge drills, full readiness checks, and a detailed parent analytics dashboard. From £35/month, cancel any time.`,
+      message: `Great start! Bucks Plus Edge is the complete Readiness & Practice Hub — 2,500+ questions, all 20 Hard challenge drills, full readiness checks, and a detailed parent analytics dashboard. From £35/month, cancel any time.`,
       cta: "See Plans & Start Today",
       tier: "pack_plus",
       link: "/pricing",

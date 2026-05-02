@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { CheckCircle2, ArrowRight, Zap } from "lucide-react";
 
 const benefits = [
-  "1,500+ GL-style questions across all four test subjects",
+  "2,500+ GL-style questions across all four test subjects",
   "Full 40q and 50q timed mock exams",
   "All Hard-level drills benchmarked to the 121 standard",
   "Parent analytics dashboard — track progress by topic",

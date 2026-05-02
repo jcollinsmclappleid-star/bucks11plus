@@ -6,7 +6,7 @@
 
 - Delivers a free 12-question GL-style mini diagnostic that benchmarks a child's readiness across Verbal Reasoning, Non-Verbal Reasoning, Mathematics and English Comprehension — no account required, results in under 10 minutes
 - Produces a standardised readiness forecast modelled against the 121 threshold used for Buckinghamshire grammar school selection, showing whether the child is On Track, Within Reach, or has a Clear Improvement Opportunity
-- Provides a full Practice Platform with 1,500+ questions, timed drills by section and difficulty, full-length 40-question timed diagnostic papers, and a parent analytics dashboard
+- Provides a full Practice Platform with 2,500+ questions, timed drills by section and difficulty, full-length 40-question timed diagnostic papers, and a parent analytics dashboard
 - Gives parents session-by-session progress tracking, accuracy and pacing data, and a forecast score toward 121 — framed as "is preparation actually working?" not just raw percentages
 - Covers all five subject areas tested in the Bucks 11+: Verbal Reasoning, Non-Verbal Reasoning, Mathematics, English Comprehension, and Spatial Reasoning
 - Free tier: full 12-question diagnostic with readiness band and score forecast, no account needed. Paid tiers: Bucks Practice Platform (£24.99/mo), Bucks Practice Platform Edge (£59.99/mo or £495/yr), Bucks Young Scholar Programme (£349 one-time)
@@ -24,7 +24,7 @@ A private tutor costs £30–£60 per hour and typically provides feedback witho
 ## Pricing
 
 - Free: 12-question GL-style mini diagnostic, readiness band, score forecast toward 121, no account needed
-- Bucks Practice Platform — £24.99/month: 1,500+ questions, timed drills (Easy & Medium), full diagnostics, parent analytics, PDF reports (limited Hard drill access)
+- Bucks Practice Platform — £24.99/month: 2,500+ questions, timed drills (Easy & Medium), full diagnostics, parent analytics, PDF reports (limited Hard drill access)
 - Bucks Practice Platform Edge — £59.99/month or £495/year: everything above plus all Hard drills, mock exams, analytics, guided roadmap, milestone diagnostics, and weekly plans. Monthly and annual options have identical access.
 - Bucks Young Scholar Programme — £349 one-time: identical full access to Platform Edge for 6 months as a one-off payment (no subscription)
 

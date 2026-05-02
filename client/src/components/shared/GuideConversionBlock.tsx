@@ -131,7 +131,7 @@ export function GuideConversionBlock() {
             shows exactly where the gaps are and targets practice precisely.
           </p>
           <p className="text-white/70 text-sm leading-relaxed mb-7 max-w-2xl">
-            Get full access to the Bucks 11+ Readiness & Practice Hub: 1,500+ GL-style questions,
+            Get full access to the Bucks 11+ Readiness & Practice Hub: 2,500+ GL-style questions,
             full timed readiness checks benchmarked to the 121 standard, all 20 Hard drills, mock exam
             simulations, and a detailed parent analytics dashboard.
           </p>

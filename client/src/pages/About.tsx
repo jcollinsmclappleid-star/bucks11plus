@@ -3,7 +3,7 @@ import { Link } from "wouter";
 import { Building2, Mail, ShieldCheck, Brain, Layers, Hash, BookOpen, Target, Clock, BarChart3, Users, CheckCircle2, TrendingUp } from "lucide-react";
 
 const stats = [
-  { value: "1,500+", label: "Practice questions" },
+  { value: "2,500+", label: "Practice questions" },
   { value: "4", label: "Test domains covered" },
   { value: "121", label: "The qualifying benchmark" },
   { value: "Free", label: "Readiness check — no account needed" },

@@ -878,7 +878,7 @@ export default function GuidePrint() {
         <div className="grid grid-cols-2 gap-3 text-sm">
           {[
             { icon: "🎯", title: "Free 8-Minute Readiness Check", desc: "Assess all four subjects, get a readiness estimate against the 121 benchmark, and receive specific improvement priorities. No account needed." },
-            { icon: "📚", title: "1,500+ Practice Questions", desc: "GL-style questions across Verbal Reasoning, NVR, Mathematics, and English Comprehension — mapped to the Bucks test format." },
+            { icon: "📚", title: "2,500+ Practice Questions", desc: "GL-style questions across Verbal Reasoning, NVR, Mathematics, and English Comprehension — mapped to the Bucks test format." },
             { icon: "⏱️", title: "Readiness Checks", desc: "Full 40-question timed readiness checks with audio-style pacing, benchmarked against the 121 qualifying standard." },
             { icon: "📊", title: "Parent Analytics Dashboard", desc: "Track your child's progress over time, see exactly which topics are improving, and get recommended next-practice steps." },
           ].map(({ icon, title, desc }) => (
@@ -921,7 +921,7 @@ export default function GuidePrint() {
               color: "blue",
               accent: "#0d1f30",
               features: [
-                "1,500+ GL-style practice questions",
+                "2,500+ GL-style practice questions",
                 "All four subject areas: VR, NVR, Maths, English",
                 "Full 40q and 50q mock readiness checks",
                 "All Hard-level challenge drills",
@@ -1076,7 +1076,7 @@ export default function GuidePrint() {
             </div>
             <div className="grid grid-cols-3 gap-3 text-center mb-8">
               {[
-                { val: "1,500+", label: "Practice Questions" },
+                { val: "2,500+", label: "Practice Questions" },
                 { val: "121", label: "The Target Score" },
                 { val: "8 min", label: "Free Readiness Check" },
               ].map(({ val, label }) => (

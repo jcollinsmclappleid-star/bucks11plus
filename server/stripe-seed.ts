@@ -3,14 +3,14 @@ import { getUncachableStripeClient } from './stripeClient';
 const SUBSCRIPTION_PRODUCTS = [
   {
     name: 'Bucks Plus Edge',
-    description: 'Full access to all 1,500+ GL-style questions, diagnostics, drills, mock exams, PDF reports, progress tracking and premium analytics. Monthly subscription.',
+    description: 'Full access to all 2,500+ GL-style questions, diagnostics, drills, mock exams, PDF reports, progress tracking and premium analytics. Monthly subscription.',
     tier: 'pack_plus',
     priceInPence: 3500,
     interval: 'month' as const,
   },
   {
     name: 'Bucks Plus Edge — Annual',
-    description: 'Full access to all 1,500+ GL-style questions, diagnostics, drills, mock exams, PDF reports, progress tracking and premium analytics. Annual subscription.',
+    description: 'Full access to all 2,500+ GL-style questions, diagnostics, drills, mock exams, PDF reports, progress tracking and premium analytics. Annual subscription.',
     tier: 'pack_annual',
     priceInPence: 27900,
     interval: 'year' as const,

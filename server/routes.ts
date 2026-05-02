@@ -86,8 +86,8 @@ const TIER_DISPLAY_NAME: Record<string, string> = {
 };
 
 const TIER_DESCRIPTION: Record<string, string> = {
-  pack_plus: "Full access to 1,500+ GL-style questions across Verbal Reasoning, Non-Verbal Reasoning, Maths & Comprehension. Includes all difficulty drills, full-length mock exams, timed readiness checks, PDF reports, parent analytics, progress tracking, and a guided preparation roadmap. Cancel any time.",
-  pack_annual: "12 months of full access to 1,500+ GL-style questions across Verbal Reasoning, Non-Verbal Reasoning, Maths & Comprehension. Includes all difficulty drills, full-length mock exams, timed readiness checks, PDF reports, parent analytics, progress tracking, and a guided preparation roadmap. Save £141 vs monthly billing.",
+  pack_plus: "Full access to 2,500+ GL-style questions across Verbal Reasoning, Non-Verbal Reasoning, Maths & Comprehension. Includes all difficulty drills, full-length mock exams, timed readiness checks, PDF reports, parent analytics, progress tracking, and a guided preparation roadmap. Cancel any time.",
+  pack_annual: "12 months of full access to 2,500+ GL-style questions across Verbal Reasoning, Non-Verbal Reasoning, Maths & Comprehension. Includes all difficulty drills, full-length mock exams, timed readiness checks, PDF reports, parent analytics, progress tracking, and a guided preparation roadmap. Save £141 vs monthly billing.",
 };
 
 async function findStripePriceForTier(tier: string): Promise<string | null> {

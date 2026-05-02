@@ -240,8 +240,16 @@ export async function applyQuestionQualityFixes() {
     .where(eq(questions.id, "9f6b2d28-36b2-4fe6-b523-34b4c4a619af"));
 
   // ── Fix 5: VR anagram ambiguity ───────────────────────────────────────────
+  // Prompt: "Rearrange the letters REINS to make a word."
+  // Earlier attempt set options to {DOG,FOG,HOG,LOG} which made the question unanswerable
+  // (the correct answer SIREN wasn't in the options). Fix: SIREN is the anagram, the
+  // distractors share some letters but not all (ROBIN/RIVER/REIGN each use a letter
+  // that REINS doesn't have).
   await db.update(questions)
-    .set({ options: ["DOG", "FOG", "HOG", "LOG"] })
+    .set({
+      options: ["SIREN", "ROBIN", "RIVER", "REIGN"],
+      explanation: "REINS rearranged makes SIREN. ROBIN uses O and B (not in REINS); RIVER uses V (not in REINS); REIGN uses G (not in REINS).",
+    })
     .where(eq(questions.id, "d096d6cc-abf7-43ef-8561-975a9b80c19b"));
 
   await db.update(questions)
@@ -303,4 +311,40 @@ export async function applyQuestionQualityFixes() {
     .where(eq(questions.id, "619a2b0d-1b1b-452a-94a5-78dfc50c863e"));
 
   console.log(`  [Quality] Maths + VR misc question fixes applied (digit_puzzle, pyramid, seating, sentence_completion)`);
+
+  // ── Fix 10: Retire the lowercase 'comprehension' bank ─────────────────────
+  // The lowercase bank was templated/AI-generated with generic prompts and
+  // non-passage-specific options (e.g. "What does the passage imply about X?"
+  // with options like "The evidence in the passage supports this conclusion").
+  // Children could pattern-match without reading the passage — not GL-realistic.
+  // The proper-cased 'English Comprehension' bank (~600 questions) is editorial
+  // and remains the only comprehension content served. Idempotent.
+  const archivedLowercase = await db.update(questions)
+    .set({ qaStatus: "archived" })
+    .where(and(eq(questions.section, "comprehension"), eq(questions.qaStatus, "approved")))
+    .returning({ id: questions.id });
+  if (archivedLowercase.length > 0) {
+    console.log(`  [Quality] Archived ${archivedLowercase.length} lowercase 'comprehension' bank questions (templated/non-passage-specific)`);
+  }
+
+  // ── Fix 11: Archive true-duplicate extras in Mathematics + Verbal Reasoning
+  // Keep one copy of each (lowest id), archive the rest. Idempotent — once the
+  // extras are archived they no longer match the qa_status='approved' filter.
+  const dupeArchive = await db.execute(sql`
+    WITH ranked AS (
+      SELECT id, ROW_NUMBER() OVER (
+        PARTITION BY section, prompt, options, correct_answer ORDER BY id
+      ) AS rn
+      FROM questions
+      WHERE qa_status='approved' AND section IN ('Mathematics','Verbal Reasoning')
+    )
+    UPDATE questions
+    SET qa_status='archived'
+    WHERE id IN (SELECT id FROM ranked WHERE rn > 1)
+    RETURNING id
+  `);
+  const dupeCount = (dupeArchive as any).rowCount ?? (dupeArchive as any).rows?.length ?? 0;
+  if (dupeCount > 0) {
+    console.log(`  [Quality] Archived ${dupeCount} true-duplicate extras in Maths/VR (kept one copy per group)`);
+  }
 }

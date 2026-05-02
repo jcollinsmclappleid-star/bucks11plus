@@ -58,7 +58,7 @@ const comparison: ComparisonRow[] = [
     feature: "Question volume",
     papers: "High — many books and packs available at low cost",
     papersIcon: "positive",
-    platform: "1,500+ questions organised by sub-topic and difficulty",
+    platform: "2,500+ questions organised by sub-topic and difficulty",
   },
   {
     feature: "After a session, your child gets:",

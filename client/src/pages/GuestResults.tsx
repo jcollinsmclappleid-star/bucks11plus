@@ -350,7 +350,7 @@ export default function GuestResults() {
                 </h3>
                 <p className="text-slate-600 mb-4 leading-relaxed">
                   {weakestSection.score < 50
-                    ? `At ${weakestSection.score}%, ${weakestSection.name} is the primary area holding the forecast back. Our 1,500+ question bank includes hundreds of targeted ${weakestSection.name} drills designed to build confidence and close this gap.`
+                    ? `At ${weakestSection.score}%, ${weakestSection.name} is the primary area holding the forecast back. Our 2,500+ question bank includes hundreds of targeted ${weakestSection.name} drills designed to build confidence and close this gap.`
                     : weakestSection.score < 70
                     ? `${weakestSection.name} at ${weakestSection.score}% is the biggest lever for improvement. Focused practice with our adaptive question bank could shift this into the "On Track" zone within weeks.`
                     : `${weakestSection.name} is close at ${weakestSection.score}%. A few targeted sessions could push this past 80%, potentially raising the overall forecast above the 121 standard.`
@@ -382,7 +382,7 @@ export default function GuestResults() {
               <p className="text-xs text-slate-400 mb-3">Cancel any time · no lock-in</p>
               <p className="text-sm text-slate-600 mb-4">Full platform access — every feature, monthly flexibility</p>
               <ul className="space-y-2 mb-6">
-                {["1,500+ GL-style questions across all four subjects", "Full 40q and 50q mock exams", "All Hard-level challenge drills", "PDF readiness reports after every session", "Parent analytics dashboard"].map((f, i) => (
+                {["2,500+ GL-style questions across all four subjects", "Full 40q and 50q mock exams", "All Hard-level challenge drills", "PDF readiness reports after every session", "Parent analytics dashboard"].map((f, i) => (
                   <li key={i} className="flex items-center gap-2 text-sm text-slate-700">
                     <BarChart3 className="h-4 w-4 text-primary shrink-0" />
                     {f}
@@ -407,7 +407,7 @@ export default function GuestResults() {
               <p className="text-xs text-emerald-600 font-semibold mb-1">Save £141 vs monthly · equiv. £23.25/mo · 34% off</p>
               <p className="text-sm text-slate-600 mb-4">Everything in the monthly plan · 12 months of full access</p>
               <ul className="space-y-2 mb-6">
-                {["1,500+ GL-style questions across all four subjects", "Full 40q and 50q mock exams", "All Hard-level challenge drills", "Priority email support", "Cancel any time"].map((f, i) => (
+                {["2,500+ GL-style questions across all four subjects", "Full 40q and 50q mock exams", "All Hard-level challenge drills", "Priority email support", "Cancel any time"].map((f, i) => (
                   <li key={i} className="flex items-center gap-2 text-sm text-slate-700">
                     <TrendingUp className="h-4 w-4 text-primary shrink-0" />
                     {f}

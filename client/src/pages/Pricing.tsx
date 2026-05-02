@@ -103,7 +103,7 @@ export default function Pricing() {
   const faqs = [
     {
       q: "What's the difference between Monthly and Annual?",
-      a: "Both plans give you identical access to everything on the platform — 1,500+ questions, full readiness checks, all Hard drills, mock exam simulations, PDF reports, progress tracking, and premium analytics. Annual is simply billed once a year (£279) rather than monthly (£35/mo). Choosing Annual saves you £141 — that's 34% off — compared to 12 months of monthly billing."
+      a: "Both plans give you identical access to everything on the platform — 2,500+ questions, full readiness checks, all Hard drills, mock exam simulations, PDF reports, progress tracking, and premium analytics. Annual is simply billed once a year (£279) rather than monthly (£35/mo). Choosing Annual saves you £141 — that's 34% off — compared to 12 months of monthly billing."
     },
     {
       q: "Can I cancel my monthly subscription at any time?",
@@ -131,7 +131,7 @@ export default function Pricing() {
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
       <Seo
         title="Bucks 11 Plus Preparation Plans & Pricing (2026) | Bucks 11 Plus Tests"
-        description="Free readiness check plus Bucks Plus Edge — £35/month or £279/year. Full access to 1,500+ targeted questions, readiness checks, mock exams and progress tracking for Bucks 11 Plus preparation."
+        description="Free readiness check plus Bucks Plus Edge — £35/month or £279/year. Full access to 2,500+ targeted questions, readiness checks, mock exams and progress tracking for Bucks 11 Plus preparation."
         canonicalPath="/pricing"
       />
 
@@ -151,7 +151,7 @@ export default function Pricing() {
               </h1>
               <p className="text-white/60 mb-7">
                 {currentTier === "pack_annual"
-                  ? "12 months of full platform access — all 1,500+ questions, every drill, mock exams, readiness checks, PDF reports and premium analytics."
+                  ? "12 months of full platform access — all 2,500+ questions, every drill, mock exams, readiness checks, PDF reports and premium analytics."
                   : "You have full monthly access. Switch to Annual for £279/year and save £141 on your current billing."}
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -171,7 +171,7 @@ export default function Pricing() {
                 Full Bucks 11+ preparation.<br className="hidden sm:block" /> Intelligent. Targeted. Proven.
               </h1>
               <p className="text-lg text-white/60 max-w-2xl mx-auto mb-7 leading-relaxed">
-                Know exactly what to fix. 1,500+ GL-style questions. Parent analytics. Guided programme. Benchmarked to 121.
+                Know exactly what to fix. 2,500+ GL-style questions. Parent analytics. Guided programme. Benchmarked to 121.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Button size="lg" className="h-12 px-8 bg-amber-400 text-amber-950 hover:bg-amber-300 font-bold border-none" asChild data-testid="button-view-plans">
@@ -223,8 +223,8 @@ export default function Pricing() {
                     </div>
                     <p className="text-sm text-slate-600">
                       {currentTier === "pack_annual"
-                        ? "12 months full access — all 1,500+ questions, every drill, mock exams, readiness checks, PDF reports and premium analytics."
-                        : "Monthly full access — all 1,500+ questions, every drill, mock exams, readiness checks, PDF reports and premium analytics."}
+                        ? "12 months full access — all 2,500+ questions, every drill, mock exams, readiness checks, PDF reports and premium analytics."
+                        : "Monthly full access — all 2,500+ questions, every drill, mock exams, readiness checks, PDF reports and premium analytics."}
                     </p>
                   </div>
                   <Button size="sm" asChild className="shrink-0">
@@ -276,7 +276,7 @@ export default function Pricing() {
                     <p className="text-xs text-slate-500 mb-5">Cancel any time · No lock-in</p>
                     <ul className="space-y-2.5">
                       {[
-                        "1,500+ GL-style questions (VR, NVR, Maths, Comprehension)",
+                        "2,500+ GL-style questions (VR, NVR, Maths, Comprehension)",
                         "Full-length practice papers (50 questions)",
                         "Full GL-style mock exams (40 questions)",
                         "Full timed readiness checks",
@@ -331,7 +331,7 @@ export default function Pricing() {
                     <ul className="space-y-2.5">
                       {[
                         "Everything in Monthly — identical full access",
-                        "1,500+ GL-style questions (VR, NVR, Maths, Comprehension)",
+                        "2,500+ GL-style questions (VR, NVR, Maths, Comprehension)",
                         "Full-length practice papers (50 questions)",
                         "Full GL-style mock exams (40 questions)",
                         "Full timed readiness checks",
@@ -380,7 +380,7 @@ export default function Pricing() {
                         { feature: "Quick readiness check (12 questions)", free: true, paid: true },
                         { feature: "Readiness forecast vs 121 benchmark", free: true, paid: true },
                         { feature: "Top focus area revealed", free: true, paid: true },
-                        { feature: "1,500+ VR, NVR, Maths & Comprehension questions", free: false, paid: true },
+                        { feature: "2,500+ VR, NVR, Maths & Comprehension questions", free: false, paid: true },
                         { feature: "Full-length practice papers (50 questions)", free: false, paid: true },
                         { feature: "Full GL-style mock exams (40 questions)", free: false, paid: true },
                         { feature: "Full timed readiness checks", free: false, paid: true },
@@ -440,7 +440,7 @@ export default function Pricing() {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
-              { icon: Target, color: "bg-amber-100 text-amber-700", title: "1,500+ GL-style questions", desc: "Every question designed for VR, NVR, Maths & Comprehension across all four GL Assessment domains — not generic." },
+              { icon: Target, color: "bg-amber-100 text-amber-700", title: "2,500+ GL-style questions", desc: "Every question designed for VR, NVR, Maths & Comprehension across all four GL Assessment domains — not generic." },
               { icon: BarChart3, color: "bg-violet-100 text-violet-700", title: "Parent analytics dashboard", desc: "Accuracy, stamina, sub-skill breakdowns and forecast score — all visible in one place. Know exactly where to focus." },
               { icon: Brain, color: "bg-blue-100 text-blue-700", title: "Guided weekly programme", desc: "The platform tells your child what to work on next. Priority-ranked 15-minute sessions based on their specific gaps." },
               { icon: Clock, color: "bg-emerald-100 text-emerald-700", title: "Tracks progress to 121", desc: "Forecast score updates after every session. Watch the gap close with evidence, not guesswork." },

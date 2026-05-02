@@ -464,7 +464,7 @@ export async function sendUpgradeNudge(userId: string) {
     <h2 style="color:#0d1f30;margin-bottom:8px;">Ready for More?</h2>
     <p>You've had a chance to explore Bucks 11 Plus Tests with the free readiness check. Here's what unlocking full access gives ${childName}:</p>
     <ul style="padding-left:20px;">
-      <li><strong>1,500+ targeted practice questions</strong> across VR, NVR, Maths & Comprehension</li>
+      <li><strong>2,500+ targeted practice questions</strong> across VR, NVR, Maths & Comprehension</li>
       <li><strong>Full-length practice papers (50 questions)</strong> and full GL-style mock exams</li>
       <li><strong>Full readiness checks</strong> with detailed PDF reports</li>
       <li><strong>Progress tracking</strong> to see real improvement over time</li>

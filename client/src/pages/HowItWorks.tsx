@@ -175,7 +175,7 @@ export default function HowItWorks() {
                 numColor: "text-emerald-500",
                 iconBg: "bg-emerald-100 text-emerald-700",
                 points: [
-                  "1,500+ GL-style questions across all 4 domains",
+                  "2,500+ GL-style questions across all 4 domains",
                   "Weekly programme prioritises highest-impact tasks first",
                   "15-minute targeted drills, not hours of generic papers",
                   "Progress tracked — forecast score updates after each session",
@@ -358,7 +358,7 @@ export default function HowItWorks() {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
-              { icon: Brain, label: "1,500+ GL-style questions", desc: "VR, NVR, Maths & Comprehension" },
+              { icon: Brain, label: "2,500+ GL-style questions", desc: "VR, NVR, Maths & Comprehension" },
               { icon: Target, label: "Full timed readiness checks", desc: "40-question GL-format assessments" },
               { icon: BookOpen, label: "Practice papers", desc: "Full-length 50-question papers" },
               { icon: Hash, label: "Hard drills & challenges", desc: "20 Hard-level drill sections" },
