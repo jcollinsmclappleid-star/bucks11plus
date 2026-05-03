@@ -220,7 +220,7 @@ function ssrFooter(): string {
         <li><a href="/bucks-grammar-schools">Grammar Schools</a></li>
         <li><a href="/bucks-11-plus-sample-questions">Sample Questions</a></li>
         <li><a href="/bucks-11-plus-past-papers">Practice Papers</a></li>
-        <li><a href="/bucks-11-plus-score-calculator">Scoring Explained</a></li>
+        <li><a href="/bucks-11-plus-how-scoring-works">Scoring Explained</a></li>
         <li><a href="/11-plus-tutors-buckinghamshire">Tutors Guide</a></li>
         <li><a href="/learn">Learning Hub</a></li>
         <li><a href="/glossary">11+ Glossary</a></li>

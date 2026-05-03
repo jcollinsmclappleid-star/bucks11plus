@@ -78,7 +78,7 @@ export function getTownHtml(slug: string): string | null {
       <div class="ssr-related-grid">
         <a class="ssr-card" href="/bucks-11-plus-test-date-2026"><div class="ssr-card-label">Key dates</div><div class="ssr-card-title">2026 Test Date →</div></a>
         <a class="ssr-card" href="/bucks-11-plus-past-papers"><div class="ssr-card-label">Materials</div><div class="ssr-card-title">Practice Papers Guide →</div></a>
-        <a class="ssr-card" href="/bucks-11-plus-score-calculator"><div class="ssr-card-label">Scoring</div><div class="ssr-card-title">How Scoring Works →</div></a>
+        <a class="ssr-card" href="/bucks-11-plus-how-scoring-works"><div class="ssr-card-label">Scoring</div><div class="ssr-card-title">How Scoring Works →</div></a>
         <a class="ssr-card" href="/bucks-11-plus-sample-questions"><div class="ssr-card-label">Examples</div><div class="ssr-card-title">Sample Questions →</div></a>
         <a class="ssr-card" href="/11-plus-tutors-buckinghamshire"><div class="ssr-card-label">Tutoring</div><div class="ssr-card-title">Finding a Tutor →</div></a>
       </div>
@@ -199,7 +199,7 @@ export function getGrammarSchoolHtml(slug: string): string | null {
       <h2>Essential Resources for Applicants</h2>
       <div class="ssr-related-grid">
         <a class="ssr-card" href="/bucks-11-plus-test-date-2026"><div class="ssr-card-label">Key dates</div><div class="ssr-card-title">2026 Test Date →</div></a>
-        <a class="ssr-card" href="/bucks-11-plus-score-calculator"><div class="ssr-card-label">Scoring</div><div class="ssr-card-title">How Scoring Works →</div></a>
+        <a class="ssr-card" href="/bucks-11-plus-how-scoring-works"><div class="ssr-card-label">Scoring</div><div class="ssr-card-title">How Scoring Works →</div></a>
         <a class="ssr-card" href="/bucks-11-plus-past-papers"><div class="ssr-card-label">Materials</div><div class="ssr-card-title">Practice Papers Guide →</div></a>
         <a class="ssr-card" href="/bucks-11-plus-sample-questions"><div class="ssr-card-label">Examples</div><div class="ssr-card-title">Sample Questions →</div></a>
       </div>

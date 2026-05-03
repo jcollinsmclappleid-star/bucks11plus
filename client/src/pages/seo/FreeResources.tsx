@@ -11,6 +11,23 @@ interface Resource {
   href: string;
   type: "Guide" | "Practice" | "Checklist" | "Reference" | "Plan";
   internal: boolean;
+  ssrOnly?: boolean;
+}
+
+function ResourceCard({ r }: { r: Resource }) {
+  const className = "block rounded-lg border border-slate-200 bg-white p-4 hover:border-primary hover:shadow-sm transition-all";
+  const testId = `link-resource-${r.href.replace(/\//g, '-')}`;
+  const inner = (
+    <>
+      <div className="text-xs text-slate-500">{r.type}</div>
+      <div className="font-semibold text-primary font-serif mb-1">{r.title}</div>
+      <div className="text-sm text-slate-600">{r.description}</div>
+    </>
+  );
+  if (r.ssrOnly) {
+    return <a href={r.href} className={className} data-testid={testId}>{inner}</a>;
+  }
+  return <Link href={r.href} className={className} data-testid={testId}>{inner}</Link>;
 }
 
 const RESOURCES: Resource[] = [
@@ -24,7 +41,7 @@ const RESOURCES: Resource[] = [
   { title: "30-Day Final Push Plan", description: "A focused four-week plan for families with one month to go before the test.", href: "/11-plus-30-days-to-go", type: "Plan", internal: true },
   { title: "Bucks 11+ Glossary", description: "Plain-English explanations of every term in the Bucks 11+ admissions process.", href: "/glossary", type: "Reference", internal: true },
   { title: "Familiarisation Test", description: "Free familiarisation guide showing the question format and timing of every section.", href: "/bucks-11-plus-familiarisation-test", type: "Practice", internal: true },
-  { title: "Score Calculator", description: "Convert raw scores to standardised scores with the age-adjustment formula used by GL.", href: "/bucks-11-plus-score-calculator", type: "Reference", internal: true },
+  { title: "How Scoring Works", description: "Plain-English explanation of how the Bucks 11+ raw score becomes a standardised score, and what 121 actually means.", href: "/bucks-11-plus-how-scoring-works", type: "Reference", internal: true, ssrOnly: true },
   { title: "Test Date 2026", description: "Confirmed Bucks 11+ test dates for 2026 and what families need to do before each.", href: "/bucks-11-plus-test-date-2026", type: "Reference", internal: true },
 ];
 
@@ -72,46 +89,22 @@ export default function FreeResources() {
 
       <h2 className="text-primary font-serif">Free Practice Material</h2>
       <div className="not-prose grid sm:grid-cols-2 gap-3 my-6">
-        {byType("Practice").map((r) => (
-          <Link key={r.href} href={r.href} className="block rounded-lg border border-slate-200 bg-white p-4 hover:border-primary hover:shadow-sm transition-all" data-testid={`link-resource-${r.href.replace(/\//g, '-')}`}>
-            <div className="text-xs text-slate-500">{r.type}</div>
-            <div className="font-semibold text-primary font-serif mb-1">{r.title}</div>
-            <div className="text-sm text-slate-600">{r.description}</div>
-          </Link>
-        ))}
+        {byType("Practice").map((r) => <ResourceCard key={r.href} r={r} />)}
       </div>
 
       <h2 className="text-primary font-serif">Revision Plans</h2>
       <div className="not-prose grid sm:grid-cols-2 gap-3 my-6">
-        {byType("Plan").map((r) => (
-          <Link key={r.href} href={r.href} className="block rounded-lg border border-slate-200 bg-white p-4 hover:border-primary hover:shadow-sm transition-all" data-testid={`link-resource-${r.href.replace(/\//g, '-')}`}>
-            <div className="text-xs text-slate-500">{r.type}</div>
-            <div className="font-semibold text-primary font-serif mb-1">{r.title}</div>
-            <div className="text-sm text-slate-600">{r.description}</div>
-          </Link>
-        ))}
+        {byType("Plan").map((r) => <ResourceCard key={r.href} r={r} />)}
       </div>
 
       <h2 className="text-primary font-serif">Reference Guides</h2>
       <div className="not-prose grid sm:grid-cols-2 gap-3 my-6">
-        {byType("Reference").map((r) => (
-          <Link key={r.href} href={r.href} className="block rounded-lg border border-slate-200 bg-white p-4 hover:border-primary hover:shadow-sm transition-all" data-testid={`link-resource-${r.href.replace(/\//g, '-')}`}>
-            <div className="text-xs text-slate-500">{r.type}</div>
-            <div className="font-semibold text-primary font-serif mb-1">{r.title}</div>
-            <div className="text-sm text-slate-600">{r.description}</div>
-          </Link>
-        ))}
+        {byType("Reference").map((r) => <ResourceCard key={r.href} r={r} />)}
       </div>
 
       <h2 className="text-primary font-serif">Test Day Checklist</h2>
       <div className="not-prose grid sm:grid-cols-2 gap-3 my-6">
-        {byType("Checklist").map((r) => (
-          <Link key={r.href} href={r.href} className="block rounded-lg border border-slate-200 bg-white p-4 hover:border-primary hover:shadow-sm transition-all" data-testid={`link-resource-${r.href.replace(/\//g, '-')}`}>
-            <div className="text-xs text-slate-500">{r.type}</div>
-            <div className="font-semibold text-primary font-serif mb-1">{r.title}</div>
-            <div className="text-sm text-slate-600">{r.description}</div>
-          </Link>
-        ))}
+        {byType("Checklist").map((r) => <ResourceCard key={r.href} r={r} />)}
       </div>
 
       <h2 className="text-primary font-serif">How to Get the Most From These Resources</h2>

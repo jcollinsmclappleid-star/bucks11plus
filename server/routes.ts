@@ -2566,6 +2566,11 @@ Disallow: /reset-password
     });
   }
 
+  // ─── 301 redirects for retired pages ──────────────────────────────────────
+  app.get("/bucks-11-plus-score-calculator", (_req, res) => {
+    res.redirect(301, "/bucks-11-plus-qualifying-score");
+  });
+
   // ─── SSR high-volume pages ────────────────────────────────────────────────
   const highVolumeRoutes: Array<[string, () => string]> = [
     ["/bucks-11-plus-test-date-2026", getTestDate2026Html],
@@ -2575,7 +2580,6 @@ Disallow: /reset-password
     ["/bucks-11-plus-results", getResultsGuideHtml],
     ["/when-do-bucks-11-plus-results-come-out", getResultsGuideHtml],
     ["/bucks-11-plus-sample-questions", getSampleQuestionsHtml],
-    ["/bucks-11-plus-score-calculator", getScoreGuideHtml],
     ["/bucks-11-plus-how-scoring-works", getScoreGuideHtml],
     ["/11-plus-tutors-buckinghamshire", getTutorsGuideHtml],
     ["/11-plus-tutors-high-wycombe", getTutorsGuideHtml],
@@ -2689,7 +2693,7 @@ Disallow: /reset-password
       { path: "/bucks-11-plus-results", priority: "0.9", changefreq: "monthly" },
       { path: "/when-do-bucks-11-plus-results-come-out", priority: "0.8", changefreq: "monthly" },
       { path: "/bucks-11-plus-sample-questions", priority: "0.9", changefreq: "monthly" },
-      { path: "/bucks-11-plus-score-calculator", priority: "0.9", changefreq: "monthly" },
+      { path: "/bucks-11-plus-how-scoring-works", priority: "0.8", changefreq: "monthly" },
       { path: "/bucks-11-plus-self-study-vs-tutor", priority: "0.8", changefreq: "monthly" },
       { path: "/bucks-11-plus-appeals", priority: "0.8", changefreq: "monthly" },
       { path: "/bucks-11-plus-registration-guide", priority: "0.8", changefreq: "monthly" },

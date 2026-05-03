@@ -89,7 +89,6 @@ import TestDate from "./pages/seo/TestDate";
 import WhenResults from "./pages/seo/WhenResults";
 import ResultsExplained from "./pages/seo/ResultsExplained";
 import Appeals from "./pages/seo/Appeals";
-import ScoreCalculator from "./pages/seo/ScoreCalculator";
 import QuestionTypeGuide from "./pages/seo/QuestionTypeGuide";
 import PracticePapersFree from "./pages/seo/PracticePapersFree";
 import Year5SummerPlan from "./pages/seo/Year5SummerPlan";
@@ -397,8 +396,6 @@ function Router() {
             <Route path="/bucks-11-plus-results" component={ResultsExplained} />
             <Route path="/bucks-11-plus-appeals" component={Appeals} />
             {/* /bucks-11-plus-registration-guide is server-rendered by getRegistrationDetailedHtml — no client route needed */}
-            <Route path="/bucks-11-plus-score-calculator" component={ScoreCalculator} />
-
             {/* Tier 2 — new high-traffic pages */}
             {QUESTION_TYPES.map((q) => (
               <Route key={q.slug} path={q.pathSegment}>

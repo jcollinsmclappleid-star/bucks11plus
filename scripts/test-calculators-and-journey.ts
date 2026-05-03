@@ -1,14 +1,15 @@
 /**
- * Comprehensive test harness for the three calculator surfaces + end-to-end
+ * Comprehensive test harness for the scoring surfaces + end-to-end
  * customer journey on bucks11plustest.co.uk.
  *
- *   1. Public score calculator  (/bucks-11-plus-score-calculator)
- *      → estimateStandardisedScore(vrPct, nvrPct, mathsPct, compPct, ageMonths)
+ *   (The public score calculator at /bucks-11-plus-score-calculator was
+ *   retired — the URL now 301s to /bucks-11-plus-qualifying-score. Its
+ *   formula tests have been removed from this harness.)
  *
- *   2. Forecast / Diagnostic score  (POST /api/guest/submit/:id)
+ *   1. Forecast / Diagnostic score  (POST /api/guest/submit/:id)
  *      → forecastScore = round(69 + weightedPct * 72), GL section weights
  *
- *   3. Readiness Score (RS) analytics  (server/metrics.ts → computeRS, WAI, PDI, CR, SI)
+ *   2. Readiness Score (RS) analytics  (server/metrics.ts → computeRS, WAI, PDI, CR, SI)
  *
  * Plus an end-to-end customer journey:
  *   start guest diagnostic → submit answers → fetch results
@@ -48,67 +49,23 @@ function section(title: string) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 1.  Public score calculator — port of estimateStandardisedScore
+// (Removed — public score calculator was retired; URL now 301s.)
+// Verify the redirect is in place.
 // ─────────────────────────────────────────────────────────────────────────────
-function estimateStandardisedScore(i: { vrPct: number; nvrPct: number; mathsPct: number; compPct: number; ageMonths: number }): number {
-  const avg = (i.vrPct + i.nvrPct + i.mathsPct + i.compPct) / 4;
-  const base = 100 + (avg - 50) * 0.7;
-  const ageAdj = Math.max(-4, Math.min(4, (132 - i.ageMonths) * 0.6));
-  return Math.round(base + ageAdj);
-}
-
-function testPublicScoreCalculator() {
-  section("1. Public ScoreCalculator (/bucks-11-plus-score-calculator)");
-
-  // Boundary cases — average age (132m)
-  const allWrong = estimateStandardisedScore({ vrPct: 0, nvrPct: 0, mathsPct: 0, compPct: 0, ageMonths: 132 });
-  const allRight = estimateStandardisedScore({ vrPct: 100, nvrPct: 100, mathsPct: 100, compPct: 100, ageMonths: 132 });
-  const cohortAvg = estimateStandardisedScore({ vrPct: 50, nvrPct: 50, mathsPct: 50, compPct: 50, ageMonths: 132 });
-  const qualifying = estimateStandardisedScore({ vrPct: 80, nvrPct: 80, mathsPct: 80, compPct: 80, ageMonths: 132 });
-  check("0% across the board → ~65 SAS (floor for avg-aged child)", allWrong === 65, `got ${allWrong}`);
-  check("100% across the board → ~135 SAS (top end)", allRight === 135, `got ${allRight}`);
-  check("50% across the board → ~100 SAS (cohort mean)", cohortAvg === 100, `got ${cohortAvg}`);
-  check("80% across the board → ≥121 (qualifying)", qualifying >= 121, `got ${qualifying}`);
-
-  // Age adjustment — same raw score, different ages
-  const youngest = estimateStandardisedScore({ vrPct: 75, nvrPct: 75, mathsPct: 75, compPct: 75, ageMonths: 125 });
-  const oldest = estimateStandardisedScore({ vrPct: 75, nvrPct: 75, mathsPct: 75, compPct: 75, ageMonths: 144 });
-  const middle = estimateStandardisedScore({ vrPct: 75, nvrPct: 75, mathsPct: 75, compPct: 75, ageMonths: 132 });
-  check("Younger child gets HIGHER SAS than older child for same raw %", youngest > oldest, `young=${youngest} old=${oldest}`);
-  check("Age adjustment capped at ±4 (very old child clamped)", middle - oldest <= 5, `delta=${middle - oldest}`);
-  check("Age adjustment capped at ±4 (very young child clamped)", youngest - middle <= 5, `delta=${youngest - middle}`);
-
-  // Asymmetric inputs — one strong, one weak
-  const onlyVR = estimateStandardisedScore({ vrPct: 100, nvrPct: 0, mathsPct: 0, compPct: 0, ageMonths: 132 });
-  const onlyMaths = estimateStandardisedScore({ vrPct: 0, nvrPct: 0, mathsPct: 100, compPct: 0, ageMonths: 132 });
-  check("Public calc is symmetric across sections (no GL weighting)", onlyVR === onlyMaths, `vr=${onlyVR} maths=${onlyMaths}`);
-
-  // Stress: 5 000 random fuzz inputs — assert every result is in a sensible range
-  let fuzzMin = Infinity, fuzzMax = -Infinity, fuzzNaN = 0;
-  for (let i = 0; i < 5000; i++) {
-    const s = estimateStandardisedScore({
-      vrPct: Math.random() * 100,
-      nvrPct: Math.random() * 100,
-      mathsPct: Math.random() * 100,
-      compPct: Math.random() * 100,
-      ageMonths: 120 + Math.random() * 24, // 10y 0m – 12y 0m
-    });
-    if (Number.isNaN(s)) fuzzNaN++;
-    if (s < fuzzMin) fuzzMin = s;
-    if (s > fuzzMax) fuzzMax = s;
+async function testCalculatorRedirect() {
+  section("0. Retired ScoreCalculator URL redirects to qualifying-score");
+  try {
+    const res = await fetch(`${BASE}/bucks-11-plus-score-calculator`, { redirect: "manual" });
+    check("GET /bucks-11-plus-score-calculator returns 301", res.status === 301, `got ${res.status}`);
+    const loc = res.headers.get("location") || "";
+    check("Redirect Location is /bucks-11-plus-qualifying-score", loc.endsWith("/bucks-11-plus-qualifying-score"), `got ${loc}`);
+  } catch (err) {
+    check("Redirect fetch did not throw", false, String(err));
   }
-  check("Fuzz 5 000 inputs: zero NaN results", fuzzNaN === 0, `${fuzzNaN} NaN`);
-  check("Fuzz 5 000 inputs: range stays inside [60, 140]", fuzzMin >= 60 && fuzzMax <= 140, `min=${fuzzMin} max=${fuzzMax}`);
-
-  // Hostile / out-of-range inputs (UI sliders are clamped, but defend the formula anyway)
-  const negative = estimateStandardisedScore({ vrPct: -50, nvrPct: 0, mathsPct: 0, compPct: 0, ageMonths: 132 });
-  const overflow = estimateStandardisedScore({ vrPct: 200, nvrPct: 100, mathsPct: 100, compPct: 100, ageMonths: 132 });
-  check("Negative input does not throw (returns finite number)", Number.isFinite(negative));
-  check(">100 input does not throw (returns finite number)", Number.isFinite(overflow));
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 2.  Forecast score (server-side GL-weighted formula)
+// 1.  Forecast score (server-side GL-weighted formula)
 // ─────────────────────────────────────────────────────────────────────────────
 function computeForecastScore(sectionAcc: Record<string, number>): { forecastScore: number; band: string } {
   const W: Record<string, number> = { "Verbal Reasoning": 0.35, "Mathematics": 0.25, "Non-Verbal Reasoning": 0.25, "English Comprehension": 0.15 };
@@ -398,8 +355,8 @@ async function testCustomerJourney() {
 // Run
 // ─────────────────────────────────────────────────────────────────────────────
 (async () => {
-  console.log("Bucks 11 Plus — calculator + journey test harness\n");
-  testPublicScoreCalculator();
+  console.log("Bucks 11 Plus — scoring + journey test harness\n");
+  await testCalculatorRedirect();
   testForecastFormula();
   testRSAnalytics();
   await testCustomerJourney();
