@@ -400,6 +400,240 @@ function ProgrammePanel() {
   );
 }
 
+/* ─── 8 sample questions for the carousel (2 Maths · 2 VR · 2 NVR · 2 Comp) ─── */
+type SampleQ = {
+  subject: "Maths" | "Verbal Reasoning" | "Non-Verbal Reasoning" | "Comprehension";
+  type: string;
+  passage?: string;
+  question: string;
+  options: { letter: string; text: React.ReactNode; correct?: boolean }[];
+  explanation: string;
+  visual?: React.ReactNode;
+};
+
+const SUBJECT_STYLE: Record<SampleQ["subject"], { dot: string; pill: string; ring: string }> = {
+  "Maths": { dot: "bg-emerald-500", pill: "bg-emerald-100 text-emerald-700 border-emerald-200", ring: "ring-emerald-400/30" },
+  "Verbal Reasoning": { dot: "bg-violet-500", pill: "bg-violet-100 text-violet-700 border-violet-200", ring: "ring-violet-400/30" },
+  "Non-Verbal Reasoning": { dot: "bg-blue-500", pill: "bg-blue-100 text-blue-700 border-blue-200", ring: "ring-blue-400/30" },
+  "Comprehension": { dot: "bg-amber-500", pill: "bg-amber-100 text-amber-700 border-amber-200", ring: "ring-amber-400/30" },
+};
+
+function CornerSquare({ corner }: { corner: "tl" | "tr" | "bl" | "br" }) {
+  const paths: Record<string, string> = {
+    tl: "M 4 4 L 18 4 L 4 18 Z",
+    tr: "M 28 4 L 42 4 L 42 18 Z",
+    bl: "M 4 28 L 18 42 L 4 42 Z",
+    br: "M 42 28 L 42 42 L 28 42 Z",
+  };
+  return (
+    <svg viewBox="0 0 46 46" className="w-10 h-10">
+      <rect x="3" y="3" width="40" height="40" rx="3" fill="white" stroke="#475569" strokeWidth="1.5" />
+      <path d={paths[corner]} fill="#0f172a" />
+    </svg>
+  );
+}
+
+function ArrowGlyph({ dir }: { dir: "up" | "right" | "down" | "left" }) {
+  const rot: Record<string, number> = { up: 0, right: 90, down: 180, left: 270 };
+  return (
+    <svg viewBox="0 0 46 46" className="w-9 h-9">
+      <rect x="3" y="3" width="40" height="40" rx="3" fill="white" stroke="#475569" strokeWidth="1.5" />
+      <g transform={`rotate(${rot[dir]} 23 23)`}>
+        <path d="M 23 12 L 23 34 M 23 12 L 16 19 M 23 12 L 30 19" stroke="#0f172a" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      </g>
+    </svg>
+  );
+}
+
+const SAMPLE_QUESTIONS: SampleQ[] = [
+  {
+    subject: "Maths", type: "Percentages",
+    question: "A jacket costs £80. In a sale, the price is reduced by 15%. What is the sale price?",
+    options: [
+      { letter: "A", text: "£65" },
+      { letter: "B", text: "£68", correct: true },
+      { letter: "C", text: "£70" },
+      { letter: "D", text: "£72" },
+      { letter: "E", text: "£75" },
+    ],
+    explanation: "10% of £80 = £8, so 5% = £4. 15% = £12. £80 − £12 = £68.",
+  },
+  {
+    subject: "Maths", type: "Ratio & Proportion",
+    question: "A recipe uses flour and sugar in the ratio 5 : 2. If 350g of flour is used, how much sugar is needed?",
+    options: [
+      { letter: "A", text: "100g" },
+      { letter: "B", text: "120g" },
+      { letter: "C", text: "140g", correct: true },
+      { letter: "D", text: "150g" },
+      { letter: "E", text: "175g" },
+    ],
+    explanation: "5 parts of flour = 350g, so 1 part = 70g. Sugar is 2 parts: 2 × 70g = 140g.",
+  },
+  {
+    subject: "Verbal Reasoning", type: "Synonyms — closest meaning",
+    question: "Which word is closest in meaning to ABUNDANT?",
+    options: [
+      { letter: "A", text: "Plentiful", correct: true },
+      { letter: "B", text: "Scarce" },
+      { letter: "C", text: "Costly" },
+      { letter: "D", text: "Hidden" },
+      { letter: "E", text: "Empty" },
+    ],
+    explanation: "Abundant means existing in large quantities. Plentiful is its closest match. Scarce and Empty are antonyms.",
+  },
+  {
+    subject: "Verbal Reasoning", type: "Letter Sequence",
+    question: "What two letters come next in this sequence?  BD,  FH,  JL,  NP,  ?",
+    options: [
+      { letter: "A", text: "RT", correct: true },
+      { letter: "B", text: "QS" },
+      { letter: "C", text: "ST" },
+      { letter: "D", text: "OQ" },
+      { letter: "E", text: "PR" },
+    ],
+    explanation: "Each pair skips one letter inside it (B_D, F_H). Each new pair jumps 4 letters (B→F→J→N→R), giving R then T.",
+  },
+  {
+    subject: "Non-Verbal Reasoning", type: "Odd One Out",
+    question: "Which shape is the odd one out?",
+    visual: (
+      <div className="flex items-center justify-around gap-1 py-2 px-3 bg-slate-50 rounded-lg border border-slate-100">
+        {(["tr","tr","bl","tr","tr"] as const).map((c, i) => (
+          <div key={i} className="flex flex-col items-center gap-1">
+            <CornerSquare corner={c} />
+            <span className="text-[9px] font-bold text-slate-500">{["A","B","C","D","E"][i]}</span>
+          </div>
+        ))}
+      </div>
+    ),
+    options: [
+      { letter: "A", text: "Top-right corner" },
+      { letter: "B", text: "Top-right corner" },
+      { letter: "C", text: "Bottom-left corner", correct: true },
+      { letter: "D", text: "Top-right corner" },
+      { letter: "E", text: "Top-right corner" },
+    ],
+    explanation: "Shapes A, B, D and E all have the dark triangle in the top-right corner. C has it in the bottom-left — the odd one out.",
+  },
+  {
+    subject: "Non-Verbal Reasoning", type: "Rotation Sequence",
+    question: "Which shape comes next in the sequence?",
+    visual: (
+      <div className="flex items-center gap-1.5 py-2 px-3 bg-slate-50 rounded-lg border border-slate-100">
+        {(["up","right","down","left","up","right","down"] as const).map((d, i) => (
+          <div key={i} className="flex flex-col items-center"><ArrowGlyph dir={d} /></div>
+        ))}
+        <div className="flex flex-col items-center justify-center w-9 h-9 rounded border-2 border-dashed border-slate-300 text-slate-400 text-sm font-bold">?</div>
+      </div>
+    ),
+    options: [
+      { letter: "A", text: "Arrow pointing up" },
+      { letter: "B", text: "Arrow pointing right" },
+      { letter: "C", text: "Arrow pointing down" },
+      { letter: "D", text: "Arrow pointing left", correct: true },
+      { letter: "E", text: "Arrow pointing up-right" },
+    ],
+    explanation: "The arrow rotates 90° clockwise each step (up → right → down → left → repeat). After down comes left.",
+  },
+  {
+    subject: "Comprehension", type: "Inference",
+    passage: "Marcus glanced once at the trophy on the shelf, then quickly looked away, his cheeks flushing red. He cleared his throat and changed the subject the moment his sister walked in.",
+    question: "Which word best describes how Marcus feels about the trophy?",
+    options: [
+      { letter: "A", text: "Proud" },
+      { letter: "B", text: "Embarrassed", correct: true },
+      { letter: "C", text: "Excited" },
+      { letter: "D", text: "Surprised" },
+      { letter: "E", text: "Bored" },
+    ],
+    explanation: "Blushing cheeks, looking away and changing the subject when his sister appears all suggest Marcus feels embarrassed — not proud — about the trophy.",
+  },
+  {
+    subject: "Comprehension", type: "Vocabulary in Context",
+    passage: "The ancient bridge had stood for over four hundred years, its weathered stones bearing testimony to countless storms and the steady passage of carts, horses and feet across its span.",
+    question: "What does the word 'testimony' mean in this passage?",
+    options: [
+      { letter: "A", text: "A formal speech" },
+      { letter: "B", text: "Evidence or proof", correct: true },
+      { letter: "C", text: "A loud noise" },
+      { letter: "D", text: "A weakness" },
+      { letter: "E", text: "A decoration" },
+    ],
+    explanation: "Here 'testimony' means evidence — the worn stones act as proof that the bridge has endured centuries of storms and traffic.",
+  },
+];
+
+function MockQuestionsCarousel() {
+  return (
+    <div className="mb-12 md:mb-14" data-testid="mock-questions-carousel">
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-5">
+        <div>
+          <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-amber-400 uppercase tracking-widest mb-2">
+            <Brain className="h-3 w-3" /> Try the actual questions
+          </span>
+          <h3 className="text-white font-bold font-serif text-xl md:text-2xl leading-tight">Eight real GL-style questions — answers shown.</h3>
+          <p className="text-white/50 text-xs md:text-sm mt-1.5">Two from each domain: Maths, Verbal Reasoning, Non-Verbal Reasoning, Comprehension. Scroll horizontally to flip through.</p>
+        </div>
+        <div className="hidden sm:flex items-center gap-2 text-[10px] font-bold text-white/40 uppercase tracking-widest shrink-0">
+          <span>Swipe</span>
+          <ArrowRight className="h-3 w-3" />
+        </div>
+      </div>
+
+      <div className="relative -mx-4 sm:mx-0">
+        <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory px-4 sm:px-0 pb-4" tabIndex={0} role="region" aria-label="Sample questions, scroll horizontally" style={{ scrollbarWidth: "thin" }}>
+          {SAMPLE_QUESTIONS.map((q, i) => {
+            const style = SUBJECT_STYLE[q.subject];
+            return (
+              <article key={i} className={`snap-start shrink-0 w-[300px] sm:w-[320px] bg-white rounded-2xl shadow-xl ring-1 ring-black/5 overflow-hidden flex flex-col`} data-testid={`sample-question-${i}`}>
+                {/* card header */}
+                <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${style.dot}`} />
+                    <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${style.pill} truncate`}>{q.subject}</span>
+                  </div>
+                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider shrink-0">Q{i + 1}/8</span>
+                </div>
+
+                {/* card body */}
+                <div className="p-4 flex-1 flex flex-col">
+                  <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">{q.type}</p>
+                  {q.passage && (
+                    <p className="text-[11px] italic text-slate-600 bg-amber-50/60 border-l-2 border-amber-300 pl-2.5 py-1.5 mb-2.5 leading-relaxed">{q.passage}</p>
+                  )}
+                  <p className="text-[13px] font-semibold text-slate-800 mb-2.5 leading-snug">{q.question}</p>
+                  {q.visual && <div className="mb-3">{q.visual}</div>}
+                  <div className="space-y-1.5 mb-3">
+                    {q.options.map((o) => (
+                      <div key={o.letter} className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg border text-[11px] ${o.correct ? "border-emerald-300 bg-emerald-50 text-emerald-800" : "border-slate-200 bg-white text-slate-700"}`}>
+                        <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold shrink-0 ${o.correct ? "bg-emerald-500 text-white" : "bg-slate-100 text-slate-500"}`}>{o.letter}</span>
+                        <span className="flex-1">{o.text}</span>
+                        {o.correct && <CheckCircle2 className="h-3 w-3 text-emerald-500 shrink-0" />}
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-auto pt-2.5 border-t border-slate-100">
+                    <p className="text-[10px] text-slate-500 leading-snug"><span className="font-bold text-emerald-700">Why:</span> {q.explanation}</p>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+        {/* dot indicator */}
+        <div className="flex justify-center gap-1.5 mt-3">
+          {SAMPLE_QUESTIONS.map((_, i) => (
+            <div key={i} className="w-1.5 h-1.5 rounded-full bg-white/15" />
+          ))}
+        </div>
+      </div>
+
+      <p className="text-[10px] text-white/30 text-center mt-3 italic">Real sample questions used inside the platform — your child sees a deeper, adaptive bank of 2,500+ questions like these.</p>
+    </div>
+  );
+}
+
 function DashboardShowcasePanel() {
   return (
     <div className="relative mx-auto" style={{ maxWidth: 380 }} data-testid="showcase-dashboard">
@@ -856,12 +1090,15 @@ export default function Landing() {
               <Sparkles className="h-3.5 w-3.5" /> Inside the platform
             </span>
             <h2 className="text-3xl md:text-4xl font-bold text-white font-serif mb-3 leading-tight">
-              The dashboard parents pay £35/month for — <span className="text-amber-300">previewed in full.</span>
+              A glimpse inside — <span className="text-amber-300">the questions, the dashboard, the data.</span>
             </h2>
             <p className="text-white/60 max-w-2xl mx-auto">
-              Most 11+ platforms hide what's inside until you've paid. Here's the actual parent dashboard, with real GL-style questions, live forecast tracking, and the skill heatmap that shows you exactly where to focus next.
+              Most 11+ platforms hide what's inside until you sign up. Below is a small slice — eight real GL-style questions across all four domains, plus a preview of the parent dashboard your child's progress feeds into.
             </p>
           </div>
+
+          {/* Sample questions carousel — the actual test aspect */}
+          <MockQuestionsCarousel />
 
           <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* Left: annotated callouts */}
