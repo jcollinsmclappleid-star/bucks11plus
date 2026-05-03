@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link } from "wouter";
 import { loadGtag, readStoredConsent, storeConsent } from "../../lib/analytics";
+import { X } from "lucide-react";
 
 export function CookieConsent() {
   const [decision, setDecision] = useState<"accepted" | "rejected" | null>(null);
   const [mounted, setMounted] = useState(false);
-  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     const stored = readStoredConsent();
@@ -34,47 +34,21 @@ export function CookieConsent() {
       role="dialog"
       aria-live="polite"
       aria-label="Cookie consent"
-      className="fixed bottom-3 left-3 right-3 sm:left-auto sm:right-4 sm:bottom-4 z-[100] sm:max-w-sm bg-white border border-slate-200 rounded-xl shadow-2xl"
+      className="fixed bottom-0 left-0 right-0 z-[100] bg-slate-900/95 backdrop-blur-sm border-t border-white/10"
       data-testid="banner-cookie-consent"
     >
-      <div className="px-4 py-3 sm:px-5 sm:py-4">
-        <p className="text-[13px] text-slate-700 leading-snug mb-2">
+      <div className="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center gap-x-6 gap-y-2">
+        <p className="text-[12px] text-white/70 leading-snug flex-1 min-w-[200px]">
           We use cookies to keep you signed in and, with your permission, to measure site usage.{" "}
-          <Link href="/privacy" className="underline text-primary hover:text-primary/80" data-testid="link-cookie-privacy">
-            Privacy
+          <Link href="/privacy" className="underline text-white/50 hover:text-white/80" data-testid="link-cookie-privacy">
+            Privacy policy
           </Link>
-          .
         </p>
-        <button
-          type="button"
-          onClick={() => setExpanded(!expanded)}
-          className="text-[11px] text-slate-500 underline hover:text-slate-700 mb-2"
-          data-testid="button-cookie-info-toggle"
-          aria-expanded={expanded}
-        >
-          {expanded ? "Hide details" : "What are cookies?"}
-        </button>
-        {expanded && (
-          <div className="text-[11px] text-slate-600 leading-relaxed bg-slate-50 rounded-md p-2.5 mb-3 space-y-1.5" data-testid="cookie-info-panel">
-            <p>
-              Cookies are small text files stored by your browser. We use two kinds:
-            </p>
-            <p>
-              <strong className="text-slate-700">Essential cookies</strong> keep you signed in and remember your session. These are required for the site to work and run regardless of your choice.
-            </p>
-            <p>
-              <strong className="text-slate-700">Analytics &amp; advertising cookies</strong> (Google Analytics, Google Ads) help us measure which pages help families and improve the service. These only run if you click <em>Accept</em>. Choosing <em>Reject</em> blocks them entirely — no tracking script is loaded.
-            </p>
-            <p>
-              We never use cookies to profile children or to target advertising at children.
-            </p>
-          </div>
-        )}
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           <button
             type="button"
             onClick={reject}
-            className="flex-1 px-3 py-1.5 rounded-md border border-slate-300 text-slate-700 text-xs font-medium hover:bg-slate-50 transition-colors"
+            className="px-3 py-1.5 rounded-md border border-white/20 text-white/60 text-[11px] font-medium hover:bg-white/10 transition-colors"
             data-testid="button-cookie-reject"
           >
             Reject
@@ -82,10 +56,19 @@ export function CookieConsent() {
           <button
             type="button"
             onClick={accept}
-            className="flex-1 px-3 py-1.5 rounded-md bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 transition-colors"
+            className="px-4 py-1.5 rounded-md bg-amber-400 text-amber-950 text-[11px] font-bold hover:bg-amber-300 transition-colors"
             data-testid="button-cookie-accept"
           >
             Accept
+          </button>
+          <button
+            type="button"
+            onClick={reject}
+            aria-label="Dismiss"
+            className="p-1 text-white/30 hover:text-white/60 transition-colors ml-1"
+            data-testid="button-cookie-dismiss"
+          >
+            <X className="h-3.5 w-3.5" />
           </button>
         </div>
       </div>
