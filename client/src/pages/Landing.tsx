@@ -1137,24 +1137,11 @@ export default function Landing() {
         <div className="container mx-auto max-w-6xl px-4">
           <div className="text-center mb-12">
             <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">The Platform</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif">Focused preparation for the Buckinghamshire 11+</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-3">Everything you need to reach 121</h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">From GL-style practice questions to intelligent analytics and a guided programme — all designed specifically for the Buckinghamshire 11+.</p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
-
-            {/* Card 1: Practice Questions */}
-            <div className="flex flex-col gap-3" data-testid="triptych-practice">
-              <div className="flex items-center gap-2 mb-1">
-                <div className="w-7 h-7 rounded-lg bg-violet-100 flex items-center justify-center">
-                  <Brain className="h-4 w-4 text-violet-600" />
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-primary">GL-Style Practice</p>
-                  <p className="text-[11px] text-slate-500">2,500+ questions across all 4 domains</p>
-                </div>
-              </div>
-              <PracticeQuestionPanel />
-            </div>
+          <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
 
             {/* Card 2: Subject Breakdown */}
             <div className="flex flex-col gap-3" data-testid="triptych-breakdown">
