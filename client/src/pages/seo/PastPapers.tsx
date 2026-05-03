@@ -22,8 +22,8 @@ const faqItems = [
     answer: "A past paper is a previously-used real exam paper, released by the awarding body after the test. A practice paper is a new paper written in the same style and at the same difficulty level, designed to mimic the real test. For the Bucks 11+, only practice papers are legally available — but well-written practice papers from established publishers and platforms are functionally equivalent for preparation purposes.",
   },
   {
-    question: "Are CGP, Bond and Schofield & Sims practice papers any good?",
-    answer: "All three publishers produce competent practice material. CGP papers tend to be slightly easier than the real test; Bond papers are well-graded across difficulty levels and widely used; Schofield & Sims are concise and exam-style. None replicate the on-screen, interactive format of modern GL papers — which is why timed online practice on the actual question types matters in the final months.",
+    question: "Are print 11+ practice papers any good?",
+    answer: "Established print 11+ workbooks and practice paper packs can build helpful familiarity with question styles, but quality varies and none of them replicate the on-screen, interactive format of the modern GL Assessment test. Print packs are best used for early-stage skill-building; timed on-screen practice on the actual question types is what matters most in the final months before the test.",
   },
   {
     question: "What does the Familiarisation Test cover?",
@@ -85,7 +85,7 @@ export default function PastPapers() {
 
       <h2 className="text-primary font-serif">Best Alternatives — Practice Papers</h2>
       <p>
-        Because no real past papers exist, preparation relies on <strong>practice papers</strong>: new papers written in the same GL style at equivalent difficulty. The most widely used sources are:
+        Because no real past papers exist, preparation relies on <strong>practice papers</strong>: new papers written in the same GL style at equivalent difficulty. The two broad categories are:
       </p>
       <div className="not-prose overflow-x-auto my-6">
         <table className="w-full text-sm border border-slate-200 rounded-lg" data-testid="table-practice-papers">
@@ -98,29 +98,19 @@ export default function PastPapers() {
           </thead>
           <tbody>
             <tr className="border-b border-slate-100">
-              <td className="p-3 font-medium">Bond 11+</td>
-              <td className="p-3">Well-graded across difficulty levels; covers all four domains; large volume of material.</td>
-              <td className="p-3">Print-only; doesn't replicate the on-screen test interface.</td>
+              <td className="p-3 font-medium">Print GL-style practice papers</td>
+              <td className="p-3">Widely available from established education publishers; useful for early-stage skill-building and offline timed sittings.</td>
+              <td className="p-3">Print-only — does not replicate the on-screen test interface; quality and difficulty vary between titles.</td>
             </tr>
             <tr className="border-b border-slate-100">
-              <td className="p-3 font-medium">CGP 11+ GL</td>
-              <td className="p-3">Clear layout; good for early-stage preparation in Year 4–5.</td>
-              <td className="p-3">Generally a touch easier than the real test — over-reliance can produce false confidence.</td>
-            </tr>
-            <tr className="border-b border-slate-100">
-              <td className="p-3 font-medium">Schofield &amp; Sims</td>
-              <td className="p-3">Concise, exam-style; good final-weeks revision.</td>
-              <td className="p-3">Less coverage than Bond; print-only.</td>
-            </tr>
-            <tr className="border-b border-slate-100">
-              <td className="p-3 font-medium">GL Assessment Practice Tests</td>
+              <td className="p-3 font-medium">GL Assessment familiarisation papers</td>
               <td className="p-3">Written by the same publisher as the real test — closest in style and difficulty.</td>
               <td className="p-3">Limited number of papers available; sold individually.</td>
             </tr>
             <tr>
-              <td className="p-3 font-medium">Online platforms (e.g. ours)</td>
-              <td className="p-3">Replicates the on-screen format, automatic timing, instant marking, score forecast.</td>
-              <td className="p-3">Quality varies by platform — look for one aligned to GL question types specifically.</td>
+              <td className="p-3 font-medium">On-screen practice (such as our platform)</td>
+              <td className="p-3">Replicates the on-screen format, automatic timing, instant marking, indicative readiness score against 121.</td>
+              <td className="p-3">Look for material specifically aligned to GL Assessment question types.</td>
             </tr>
           </tbody>
         </table>
@@ -131,7 +121,7 @@ export default function PastPapers() {
         <li><strong>Don't start too early.</strong> Full timed papers are most useful in the final 8–12 weeks. Earlier than that, focus on individual question types and skill-building.</li>
         <li><strong>Always time them.</strong> An untimed paper teaches the wrong habit — pacing is half the test.</li>
         <li><strong>Review every error.</strong> A paper completed and not reviewed produces no learning. The post-paper conversation is where the improvement happens.</li>
-        <li><strong>Mix sources.</strong> Different publishers test slightly different sub-skills. A child who only ever does Bond papers may struggle with the question variety in the real test.</li>
+        <li><strong>Mix sources.</strong> Different practice paper sets test slightly different sub-skills. A child who only ever does one publisher's papers may struggle with the question variety in the real test.</li>
         <li><strong>Limit volume.</strong> Two or three full timed papers per week in the final month is plenty — children burn out, and repetition with no review beats the purpose.</li>
       </ol>
 
@@ -156,6 +146,18 @@ export default function PastPapers() {
       <ChildExperienceCTA />
       <LeadMagnetBlock source="seo:past-papers" />
       <ContentCTA heading="Past papers tell you yesterday — this tells you today" subhead="An 8-minute timed check shows your child's current standing against the 121 standard, not their score on a paper from years ago." ctaLabel="Take a current readiness check" />
+
+      <div className="not-prose my-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">
+        <h3 className="text-lg font-semibold text-primary font-serif mb-3">Related Practice Material</h3>
+        <ul className="space-y-2 text-sm text-muted-foreground">
+          <li><Link href="/gl-assessment-past-papers" className="text-primary hover:underline">GL Assessment past papers — what's actually available</Link></li>
+          <li><Link href="/gl-assessment-question-types" className="text-primary hover:underline">Every GL Assessment question type explained</Link></li>
+          <li><Link href="/11-plus-mock-test-online-free" className="text-primary hover:underline">Free online 11+ mock test</Link></li>
+          <li><Link href="/bucks-11-plus-practice-papers-free" className="text-primary hover:underline">Free practice papers</Link></li>
+          <li><Link href="/free-11-plus-resources" className="text-primary hover:underline">Complete free 11+ resources library</Link></li>
+        </ul>
+      </div>
+
       <Disclaimer />
     </div>
   );

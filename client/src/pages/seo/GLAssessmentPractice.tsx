@@ -70,7 +70,7 @@ export default function GLAssessmentPractice() {
 
       <h2 className="text-primary font-serif">Where to Get GL-Style Practice</h2>
       <p>
-        GL Assessment publishes a small number of official "familiarisation" papers each year through its public-facing site. These are useful for showing children the format but are too few to use as a sustained practice resource. Most families supplement with publisher practice books (CGP, Bond and Schofield & Sims publish GL-style sets) and online practice platforms that mirror the GL format.
+        GL Assessment publishes a small number of official "familiarisation" papers each year through its public-facing site. These are useful for showing children the format but are too few to use as a sustained practice resource. Most families supplement with print 11+ workbooks from established education publishers and online practice platforms that mirror the on-screen GL format.
       </p>
       <p>
         The most important thing is that practice papers match the GL format specifically. CEM-style practice — used for the Kent and Birmingham 11+ — has different question types and pacing, and using CEM material to prepare for the Bucks test can mislead a child about what to expect.

@@ -115,7 +115,7 @@ export default function Pricing() {
       a: "No. Bucks 11 Plus Tests is an independent readiness assessment service. Our readiness checks are aligned to GL-style reasoning families used in the Buckinghamshire Secondary Transfer Test, but we are not affiliated with GL Assessment or Buckinghamshire Council."
     },
     {
-      q: "How is this different from Bond books or generic workbooks?",
+      q: "How is this different from generic 11+ workbooks?",
       a: "Workbooks give every child the same content. We diagnose your child's specific gaps, then focus practice only on the areas that will move their score the most. Every minute of preparation is targeted, not generic."
     },
     {

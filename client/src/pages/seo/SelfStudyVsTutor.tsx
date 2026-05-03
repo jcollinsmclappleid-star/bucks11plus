@@ -32,7 +32,7 @@ export default function SelfStudyVsTutor() {
 
       <h2 className="text-primary font-serif">The Three Real Options</h2>
       <ol>
-        <li><strong>Parent-led self-study</strong> with print workbooks (Bond, CGP) — typical cost £80–£200 over a year.</li>
+        <li><strong>Parent-led self-study</strong> with print 11+ workbooks — typical cost £80–£200 over a year.</li>
         <li><strong>Online preparation platform</strong> (like ours) — typical cost £20–£200 depending on plan and duration.</li>
         <li><strong>Private one-to-one tutor</strong> — typical cost £35–£70/hour × 30–80 sessions = £1,000–£5,500 over a year.</li>
       </ol>
@@ -71,7 +71,7 @@ export default function SelfStudyVsTutor() {
         <li>Budget is genuinely the main constraint.</li>
       </ul>
       <p>
-        Many families succeed with self-study alone. The CGP and Bond workbooks are well-designed, and the official Familiarisation Test is free. The main risk of pure self-study is missing on-screen format practice — the real test has been on-screen since 2013, and children who only practise on paper often lose 5–10 standardised points to interface unfamiliarity.
+        Many families succeed with self-study alone. Established print 11+ workbooks are well-designed, and the official Familiarisation Test is free. The main risk of pure self-study is missing on-screen format practice — the real test has been on-screen since 2013, and children who only practise on paper often lose 5–10 standardised points to interface unfamiliarity.
       </p>
 
       <h2 className="text-primary font-serif">When an Online Platform Makes Sense</h2>

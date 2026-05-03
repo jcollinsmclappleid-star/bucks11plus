@@ -291,3 +291,9 @@ content/
 - Marketing mockups (Landing ForecastPanel, DashboardPreview) carry the "Illustrative preview" footnote
 - Standard terminology: "Indicative Readiness" (never "Forecast"/"Est. Score"/"estimated score" beside the number); "121 preparation benchmark" / "121 benchmark" (never "121 Target" / "qualifying standard")
 - Audit reference: `compliance/121-references-audit.md`
+
+## Editorial Policy — No Competitor Brands
+- Site copy must not name any competing 11+ product (book publishers, tutoring brands, other prep platforms)
+- Removed brands: CGP, Bond / Bond 11+ / Bond Assessment Papers, Schofield & Sims, Hodder Education, RSL
+- Allowed (not competitors): GL Assessment (the exam board), CEM (different exam board, contextual), Buckinghamshire Council
+- When discussing print/online alternatives, use neutral category language: "established UK education publishers", "print 11+ workbooks", "GL Assessment-format practice paper packs", "on-screen practice (such as our platform)"

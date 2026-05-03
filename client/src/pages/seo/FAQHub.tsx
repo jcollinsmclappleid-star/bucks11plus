@@ -152,6 +152,10 @@ export default function FAQHub() {
           <li><Link href="/bucks-11-plus-qualifying-score" className="text-primary hover:underline">The 121 Qualifying Score Explained</Link></li>
           <li><Link href="/bucks-11-plus-timeline" className="text-primary hover:underline">Full Admissions Timeline</Link></li>
           <li><Link href="/bucks-grammar-schools" className="text-primary hover:underline">All 13 Bucks Grammar Schools</Link></li>
+          <li><Link href="/free-11-plus-resources" className="text-primary hover:underline">Complete Free 11+ Resources Library</Link></li>
+          <li><Link href="/gl-assessment-question-types" className="text-primary hover:underline">Every GL Assessment Question Type</Link></li>
+          <li><Link href="/11-plus-30-days-to-go" className="text-primary hover:underline">30 Days to Go — Final-Month Plan</Link></li>
+          <li><Link href="/11-plus-score-royal-grammar-school-high-wycombe" className="text-primary hover:underline">School-Specific Score Targets (e.g. RGS High Wycombe)</Link></li>
         </ul>
       </div>
 

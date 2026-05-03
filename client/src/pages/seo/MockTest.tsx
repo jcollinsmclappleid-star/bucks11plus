@@ -157,12 +157,24 @@ export default function MockTest() {
       <ContentCTA heading="A real-format mock in 8 minutes" subhead="A free GL-style readiness check with timed sections and a per-section breakdown — like a mini mock exam." ctaLabel="Take the readiness check" />
 
       <div className="not-prose my-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">
+        <h3 className="text-lg font-semibold text-primary font-serif mb-3">Mock Test Variants</h3>
+        <ul className="space-y-2 text-sm text-muted-foreground">
+          <li><Link href="/11-plus-mock-test-online-free" className="text-primary hover:underline">Free online 11+ mock test (GL-style)</Link></li>
+          <li><Link href="/11-plus-mock-test-40-questions" className="text-primary hover:underline">40-question 11+ mock test</Link></li>
+          <li><Link href="/11-plus-mock-test-50-questions" className="text-primary hover:underline">50-question 11+ mock test</Link></li>
+          <li><Link href="/11-plus-mock-test-with-timer" className="text-primary hover:underline">Timed 11+ mock test</Link></li>
+          <li><Link href="/11-plus-mock-exam-at-home" className="text-primary hover:underline">11+ mock exam at home — full setup guide</Link></li>
+        </ul>
+      </div>
+
+      <div className="not-prose my-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">
         <h3 className="text-lg font-semibold text-primary font-serif mb-3">Further Reading</h3>
         <ul className="space-y-2 text-sm text-muted-foreground">
           <li><Link href="/bucks-11-plus-familiarisation-test" className="text-primary hover:underline">The Familiarisation Test (and How It Differs)</Link></li>
           <li><a href="/bucks-11-plus-past-papers" className="text-primary hover:underline">Bucks 11+ Past Papers</a></li>
           <li><a href="/bucks-11-plus-sample-questions" className="text-primary hover:underline">Sample Questions</a></li>
-          <li><Link href="/learn/bucks-11-plus-mock-tests-why-they-matter" className="text-primary hover:underline">Why Mock Tests Matter</Link></li>
+          <li><Link href="/11-plus-30-days-to-go" className="text-primary hover:underline">30 Days to Go: Final-Month Mock Schedule</Link></li>
+          <li><Link href="/free-11-plus-resources" className="text-primary hover:underline">Complete Free 11+ Resources Library</Link></li>
         </ul>
       </div>
 

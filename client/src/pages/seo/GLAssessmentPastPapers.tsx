@@ -47,16 +47,19 @@ export default function GLAssessmentPastPapers() {
         <li><strong>GL Assessment publisher catalogue:</strong> GL itself sells official practice papers (under titles like "11+ Practice Papers — GL Assessment Style") through its Granada Learning division. These are written by GL and use the same question construction methodology, though they are not the live test papers.</li>
       </ul>
 
-      <h2 className="text-primary font-serif">High-Quality Third-Party GL-Style Papers</h2>
+      <h2 className="text-primary font-serif">Other GL-Style Practice Material</h2>
       <p>
-        The major UK education publishers all produce GL-style 11+ papers. The following are widely used and considered closest to the live GL format:
+        Beyond GL Assessment's own catalogue, established UK education publishers produce GL-style 11+ workbooks and practice paper packs. When choosing material, look for the following characteristics rather than specific brand names:
       </p>
       <ul>
-        <li><strong>CGP 11+ Practice Test Papers — GL:</strong> Multi-section papers with strict timings; widely regarded as the closest match in style and difficulty.</li>
-        <li><strong>Bond 11+ Assessment Papers (10 Minute Tests, Standard, and Up to Speed series):</strong> Useful for daily short-burst practice rather than full mocks.</li>
-        <li><strong>Schofield & Sims:</strong> Strong on Verbal Reasoning and Comprehension, with progressive difficulty.</li>
-        <li><strong>RSL 11+ Comprehension:</strong> The strongest comprehension-focused practice on the market for GL-style preparation.</li>
+        <li><strong>Multi-section timed papers</strong> with strict timings that mirror the real test — useful for full-length mock practice in the final months.</li>
+        <li><strong>Short-burst question packs</strong> (e.g. 10-minute tests) — useful for daily skill drills rather than full mocks.</li>
+        <li><strong>Subject-focused workbooks</strong> with progressive difficulty across Verbal Reasoning, Non-Verbal Reasoning, Maths and English Comprehension.</li>
+        <li><strong>Comprehension-specific practice</strong> with longer passages and inference-style questions, since comprehension is the section where most marks are lost.</li>
       </ul>
+      <p>
+        Always verify any pack is explicitly labelled <strong>GL Assessment format</strong> (not CEM, which is used in other regions and tests different question styles).
+      </p>
 
       <h2 className="text-primary font-serif">How to Use Past-Style Papers Effectively</h2>
       <ol>

@@ -62,9 +62,9 @@ export default function PracticePapersFree() {
         Beyond the diagnostic, we make a rotating set of free practice questions available to all signed-up users — 50 questions spanning all four domains, refreshed periodically. Sign up takes less than a minute and there's no payment requirement to access them.
       </p>
 
-      <h2 className="text-primary font-serif">4. CGP &amp; Bond Free Samples</h2>
+      <h2 className="text-primary font-serif">4. Publisher Free Samples</h2>
       <p>
-        Both major print publishers offer free sample chapters from their 11+ workbooks online. They're useful for getting a feel for the question style before committing to a paid book. Search for "CGP 11+ free sample" or "Bond 11+ free sample" — make sure you select GL-style material rather than CEM (Bucks uses GL).
+        Most established 11+ print publishers offer free sample chapters from their workbooks online. They're useful for getting a feel for the question style before committing to a paid book. Search for "11+ GL free sample" — make sure any sample you download is explicitly labelled GL-style material rather than CEM (Bucks uses GL).
       </p>
 
       <h2 className="text-primary font-serif">5. School Websites &amp; PTA Resources</h2>
@@ -83,7 +83,7 @@ export default function PracticePapersFree() {
       <p>For families on a tight budget, the following sequence using only free resources is genuinely useful:</p>
       <ol>
         <li><strong>Spring of Year 5:</strong> Take our free diagnostic to establish a baseline.</li>
-        <li><strong>Year 5 throughout:</strong> Build vocabulary through wide reading; daily mental arithmetic; CGP/Bond free samples to introduce question types.</li>
+        <li><strong>Year 5 throughout:</strong> Build vocabulary through wide reading; daily mental arithmetic; publisher free samples to introduce question types.</li>
         <li><strong>Summer holiday before Year 6:</strong> Sit the official Familiarisation Test under timed conditions; use our free practice bank to drill specific weak areas.</li>
         <li><strong>August / early September:</strong> Re-take the diagnostic to refresh the indicative readiness score and adjust focus in the final two weeks.</li>
       </ol>
@@ -94,6 +94,18 @@ export default function PracticePapersFree() {
       <ChildExperienceCTA />
       <LeadMagnetBlock source="seo:practice-papers-free" />
       <ContentCTA heading="Free practice paper above. Free readiness score below." subhead="An 8-minute check turns practice into a measurable indicative readiness score against 121." ctaLabel="Get the readiness score" />
+
+      <div className="not-prose my-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">
+        <h3 className="text-lg font-semibold text-primary font-serif mb-3">More Free 11+ Resources</h3>
+        <ul className="space-y-2 text-sm text-muted-foreground">
+          <li><Link href="/free-11-plus-resources" className="text-primary hover:underline">Complete free 11+ resources library</Link></li>
+          <li><Link href="/11-plus-mock-test-online-free" className="text-primary hover:underline">Free online 11+ mock test</Link></li>
+          <li><Link href="/gl-assessment-question-types" className="text-primary hover:underline">Every GL Assessment question type</Link></li>
+          <li><Link href="/11-plus-synonyms-list" className="text-primary hover:underline">11+ synonyms list</Link></li>
+          <li><Link href="/11-plus-tricky-words" className="text-primary hover:underline">11+ tricky vocabulary list</Link></li>
+        </ul>
+      </div>
+
       <Disclaimer />
     </div>
   );

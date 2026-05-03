@@ -335,6 +335,45 @@ export default function SubjectGuide({ subject }: { subject: Subject }) {
 
         <ChildExperienceCTA />
         <ContentCTA heading="Find out which subject is the biggest lever" subhead="An 8-minute check ranks all four sections so you know exactly where to focus first." ctaLabel="See the priorities" />
+
+        <div className="not-prose my-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">
+          <h3 className="text-lg font-semibold text-primary font-serif mb-3">Drill Deeper</h3>
+          <ul className="space-y-2 text-sm text-muted-foreground">
+            {subject === "maths" && (
+              <>
+                <li><Link href="/11-plus-maths-fractions-practice" className="text-primary hover:underline">11+ Maths: fractions</Link></li>
+                <li><Link href="/11-plus-maths-percentages-practice" className="text-primary hover:underline">11+ Maths: percentages</Link></li>
+                <li><Link href="/11-plus-maths-word-problems-practice" className="text-primary hover:underline">11+ Maths: word problems</Link></li>
+                <li><Link href="/11-plus-mental-maths-practice" className="text-primary hover:underline">11+ Mental maths</Link></li>
+              </>
+            )}
+            {subject === "verbal-reasoning" && (
+              <>
+                <li><Link href="/11-plus-synonyms-list" className="text-primary hover:underline">11+ synonyms list</Link></li>
+                <li><Link href="/11-plus-antonyms-list" className="text-primary hover:underline">11+ antonyms list</Link></li>
+                <li><Link href="/11-plus-prefixes-suffixes" className="text-primary hover:underline">11+ prefixes & suffixes</Link></li>
+                <li><Link href="/11-plus-tricky-words" className="text-primary hover:underline">11+ tricky vocabulary list</Link></li>
+              </>
+            )}
+            {subject === "comprehension" && (
+              <>
+                <li><Link href="/11-plus-tricky-words" className="text-primary hover:underline">11+ tricky vocabulary list</Link></li>
+                <li><Link href="/11-plus-homophones" className="text-primary hover:underline">11+ homophones list</Link></li>
+                <li><Link href="/11-plus-synonyms-list" className="text-primary hover:underline">11+ synonyms list</Link></li>
+                <li><Link href="/gl-assessment-question-types" className="text-primary hover:underline">Every GL Assessment question type</Link></li>
+              </>
+            )}
+            {subject === "non-verbal-reasoning" && (
+              <>
+                <li><Link href="/gl-assessment-question-types" className="text-primary hover:underline">Every GL Assessment question type</Link></li>
+                <li><Link href="/11-plus-mock-test-online-free" className="text-primary hover:underline">Free GL-style mock test</Link></li>
+              </>
+            )}
+            <li><Link href="/free-11-plus-resources" className="text-primary hover:underline">Complete Free 11+ Resources Library</Link></li>
+            <li><Link href="/11-plus-mock-test-online-free" className="text-primary hover:underline">Free online 11+ mock test</Link></li>
+          </ul>
+        </div>
+
         <Disclaimer />
       </div>
     </div>
