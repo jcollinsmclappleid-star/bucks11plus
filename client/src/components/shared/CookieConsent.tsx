@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { loadGtag, readStoredConsent, storeConsent } from "../../lib/analytics";
 import { X } from "lucide-react";
 
 export function CookieConsent() {
+  const [location] = useLocation();
   const [decision, setDecision] = useState<"accepted" | "rejected" | null>(null);
   const [mounted, setMounted] = useState(false);
 
@@ -17,6 +18,7 @@ export function CookieConsent() {
   }, []);
 
   if (!mounted || decision !== null) return null;
+  if (location === "/practice-paper-print") return null;
 
   const accept = () => {
     storeConsent("accepted");
