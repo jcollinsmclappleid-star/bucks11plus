@@ -587,7 +587,7 @@ const SAMPLE_QUESTIONS: SampleQ[] = [
   },
 ];
 
-function InteractiveQuestionCard({ q, index, total }: { q: SampleQ; index: number; total: number }) {
+function InteractiveQuestionCard({ q, index, total, highlight }: { q: SampleQ; index: number; total: number; highlight?: boolean }) {
   const [selected, setSelected] = useState<string | null>(null);
   const style = SUBJECT_STYLE[q.subject];
   const correctLetter = q.options.find((o) => o.correct)?.letter;
@@ -595,8 +595,16 @@ function InteractiveQuestionCard({ q, index, total }: { q: SampleQ; index: numbe
   const isRight = selected === correctLetter;
 
   return (
-    <article className="snap-start shrink-0 w-[300px] sm:w-[320px] bg-white rounded-2xl shadow-xl ring-1 ring-black/5 overflow-hidden flex flex-col" data-testid={`sample-question-${index}`}>
-      {/* header */}
+    <article
+      className={`relative snap-start shrink-0 w-[300px] sm:w-[330px] bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col transition-all ${highlight && !isAnswered ? "ring-2 ring-amber-400 shadow-amber-200/60" : "ring-1 ring-black/5"}`}
+      data-testid={`sample-question-${index}`}
+    >
+      {highlight && !isAnswered && (
+        <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 z-10 bg-amber-400 text-amber-950 text-[9px] font-extrabold px-2.5 py-1 rounded-full shadow-md uppercase tracking-wider whitespace-nowrap">
+          ← Start here
+        </div>
+      )}
+
       <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
         <div className="flex items-center gap-2 min-w-0">
           <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${style.dot}`} />
@@ -605,7 +613,6 @@ function InteractiveQuestionCard({ q, index, total }: { q: SampleQ; index: numbe
         <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider shrink-0">Q{index + 1}/{total}</span>
       </div>
 
-      {/* body */}
       <div className="p-4 flex-1 flex flex-col">
         <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">{q.type}</p>
         {q.passage && (
@@ -614,11 +621,17 @@ function InteractiveQuestionCard({ q, index, total }: { q: SampleQ; index: numbe
         <p className="text-[13px] font-semibold text-slate-800 mb-2.5 leading-snug">{q.question}</p>
         {q.visual && <div className="mb-3">{q.visual}</div>}
 
+        {!isAnswered && (
+          <div className="flex items-center justify-center gap-1.5 mb-2 text-[10px] font-bold text-amber-700 bg-amber-50 border border-amber-200 rounded-lg py-1.5 px-2 uppercase tracking-wider">
+            <span aria-hidden>👇</span> Tap your answer
+          </div>
+        )}
+
         <div className="space-y-1.5 mb-3">
           {q.options.map((o) => {
             const isSelected = selected === o.letter;
             const isCorrect = o.letter === correctLetter;
-            let cls = "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50";
+            let cls = "border-slate-200 bg-white text-slate-700 hover:border-amber-400 hover:bg-amber-50/60 hover:shadow-sm";
             let badgeCls = "bg-slate-100 text-slate-500";
             let icon: React.ReactNode = null;
             if (isAnswered) {
@@ -643,9 +656,9 @@ function InteractiveQuestionCard({ q, index, total }: { q: SampleQ; index: numbe
                 aria-label={`Option ${o.letter}`}
                 aria-pressed={isSelected}
                 data-testid={`option-${index}-${o.letter}`}
-                className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg border text-[11px] text-left transition-colors ${cls} ${isAnswered ? "cursor-default" : "cursor-pointer"}`}
+                className={`w-full flex items-center gap-2 px-2.5 py-2 rounded-lg border text-[11px] text-left transition-all ${cls} ${isAnswered ? "cursor-default" : "cursor-pointer"}`}
               >
-                <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold shrink-0 ${badgeCls}`}>{o.letter}</span>
+                <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 ${badgeCls}`}>{o.letter}</span>
                 <span className="flex-1">{o.text}</span>
                 {icon}
               </button>
@@ -653,28 +666,24 @@ function InteractiveQuestionCard({ q, index, total }: { q: SampleQ; index: numbe
           })}
         </div>
 
-        <div className="mt-auto pt-2.5 border-t border-slate-100">
-          {!isAnswered ? (
-            <p className="text-[10px] text-slate-400 leading-snug italic">Tap an answer to check it.</p>
-          ) : (
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between gap-2">
-                <p className={`text-[10px] font-bold uppercase tracking-wider ${isRight ? "text-emerald-600" : "text-rose-600"}`}>
-                  {isRight ? "Correct" : `Not quite — answer is ${correctLetter}`}
-                </p>
-                <button
-                  type="button"
-                  onClick={() => setSelected(null)}
-                  className="inline-flex items-center gap-1 text-[9px] font-bold text-slate-400 hover:text-slate-600 uppercase tracking-wider"
-                  data-testid={`reset-${index}`}
-                >
-                  <RotateCcw className="h-2.5 w-2.5" /> Try again
-                </button>
-              </div>
-              <p className="text-[10px] text-slate-500 leading-snug"><span className="font-bold text-emerald-700">Why:</span> {q.explanation}</p>
+        {isAnswered && (
+          <div className="mt-auto pt-2.5 border-t border-slate-100 space-y-1.5">
+            <div className="flex items-center justify-between gap-2">
+              <p className={`text-[10px] font-bold uppercase tracking-wider ${isRight ? "text-emerald-600" : "text-rose-600"}`}>
+                {isRight ? "✓ Correct" : `✗ Not quite — answer is ${correctLetter}`}
+              </p>
+              <button
+                type="button"
+                onClick={() => setSelected(null)}
+                className="inline-flex items-center gap-1 text-[9px] font-bold text-slate-400 hover:text-slate-600 uppercase tracking-wider"
+                data-testid={`reset-${index}`}
+              >
+                <RotateCcw className="h-2.5 w-2.5" /> Try again
+              </button>
             </div>
-          )}
-        </div>
+            <p className="text-[10px] text-slate-500 leading-snug"><span className="font-bold text-emerald-700">Why:</span> {q.explanation}</p>
+          </div>
+        )}
       </div>
     </article>
   );
@@ -683,35 +692,40 @@ function InteractiveQuestionCard({ q, index, total }: { q: SampleQ; index: numbe
 function MockQuestionsCarousel() {
   const total = SAMPLE_QUESTIONS.length;
   return (
-    <div className="mb-12 md:mb-14" data-testid="mock-questions-carousel">
-      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-5">
-        <div>
-          <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-amber-400 uppercase tracking-widest mb-2">
-            <Brain className="h-3 w-3" /> Try the actual questions
-          </span>
-          <h3 className="text-white font-bold font-serif text-xl md:text-2xl leading-tight">Nine real GL-style questions — tap to try them.</h3>
-          <p className="text-white/50 text-xs md:text-sm mt-1.5">Coded words, Maths, Verbal &amp; Non-Verbal Reasoning, Comprehension. Pick an answer and we'll mark it instantly.</p>
-        </div>
-        <div className="hidden sm:flex items-center gap-2 text-[10px] font-bold text-white/40 uppercase tracking-widest shrink-0">
-          <span>Swipe</span>
-          <ArrowRight className="h-3 w-3" />
-        </div>
+    <div data-testid="mock-questions-carousel">
+      <div className="text-center mb-6 md:mb-8">
+        <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-amber-700 bg-amber-100 border border-amber-200 px-3 py-1 rounded-full uppercase tracking-widest mb-3">
+          <Brain className="h-3 w-3" /> Try a real 11+ question — right now
+        </span>
+        <h2 className="text-2xl md:text-4xl font-bold text-primary font-serif mb-2 leading-tight">
+          Don't take our word for it. <span className="text-amber-600">Try the questions yourself.</span>
+        </h2>
+        <p className="text-slate-600 max-w-2xl mx-auto text-sm md:text-base">
+          Nine real GL-style questions across all four 11+ domains — coded words, Maths, Verbal &amp; Non-Verbal Reasoning, and Comprehension. Pick an answer and we'll mark it instantly, with a clear explanation.
+        </p>
       </div>
 
       <div className="relative -mx-4 sm:mx-0">
-        <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory px-4 sm:px-0 pb-4" tabIndex={0} role="region" aria-label="Sample questions, scroll horizontally" style={{ scrollbarWidth: "thin" }}>
+        <div
+          className="flex gap-4 overflow-x-auto snap-x snap-mandatory px-4 sm:px-2 pb-6 pt-3"
+          tabIndex={0}
+          role="region"
+          aria-label="Sample questions, scroll horizontally"
+          style={{ scrollbarWidth: "thin" }}
+        >
           {SAMPLE_QUESTIONS.map((q, i) => (
-            <InteractiveQuestionCard key={i} q={q} index={i} total={total} />
+            <InteractiveQuestionCard key={i} q={q} index={i} total={total} highlight={i === 0} />
           ))}
         </div>
-        <div className="flex justify-center gap-1.5 mt-3">
-          {SAMPLE_QUESTIONS.map((_, i) => (
-            <div key={i} className="w-1.5 h-1.5 rounded-full bg-white/15" />
-          ))}
+        <div className="flex items-center justify-center gap-2 mt-2">
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Scroll for more</span>
+          <ArrowRight className="h-3 w-3 text-slate-400" />
         </div>
       </div>
 
-      <p className="text-[10px] text-white/30 text-center mt-3 italic">Real sample questions used inside the platform — your child sees a deeper, adaptive bank of 2,500+ questions like these.</p>
+      <p className="text-[11px] text-slate-500 text-center mt-4 italic max-w-xl mx-auto">
+        Real sample questions used inside the platform. Your child practises against an adaptive bank of 2,500+ questions like these — with instant marking, working-out and skill tracking.
+      </p>
     </div>
   );
 }
@@ -1107,6 +1121,17 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* ── SECTION 1B: TRY A REAL QUESTION (interactive carousel under hero) ── */}
+      <section
+        className="relative py-14 md:py-20 border-b border-amber-100/80 overflow-hidden"
+        style={{ background: "linear-gradient(180deg, #fffbeb 0%, #ffffff 70%)" }}
+        data-testid="section-try-questions"
+      >
+        <div className="container mx-auto max-w-6xl px-4">
+          <MockQuestionsCarousel />
+        </div>
+      </section>
+
       {/* ── SECTION 2: PLATFORM VISUAL TRIPTYCH ── */}
       <section className="py-16 md:py-20 bg-white border-b border-border/30" id="see-product" data-testid="section-triptych">
         <div className="container mx-auto max-w-6xl px-4">
@@ -1172,15 +1197,12 @@ export default function Landing() {
               <Sparkles className="h-3.5 w-3.5" /> Inside the platform
             </span>
             <h2 className="text-3xl md:text-4xl font-bold text-white font-serif mb-3 leading-tight">
-              A glimpse inside — <span className="text-amber-300">the questions, the dashboard, the data.</span>
+              A glimpse inside — <span className="text-amber-300">the parent dashboard.</span>
             </h2>
             <p className="text-white/60 max-w-2xl mx-auto">
-              Most 11+ platforms hide what's inside until you sign up. Below is a small slice — eight real GL-style questions across all four domains, plus a preview of the parent dashboard your child's progress feeds into.
+              You've tried the questions. Here's where the data goes: a live forecast of your child's likely test score, a skill heatmap pinpointing exact gaps, and a priority-ranked plan showing what to work on next.
             </p>
           </div>
-
-          {/* Sample questions carousel — the actual test aspect */}
-          <MockQuestionsCarousel />
 
           <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* Left: annotated callouts */}
