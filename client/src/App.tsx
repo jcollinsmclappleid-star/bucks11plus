@@ -200,8 +200,22 @@ function MainLayout({ children }: { children: React.ReactNode }) {
             Independent educational resource. Not affiliated with The Buckinghamshire Grammar Schools, GL Assessment, or any individual grammar school.
           </p>
           <p className="text-xs text-primary-foreground/40 text-center" data-testid="text-footer-statutory">
-            Registered office: 71-75 Shelton Street, Covent Garden, London, WC2H 9JQ &nbsp;·&nbsp; Company no. 17084981 &nbsp;·&nbsp; ICO registration: ZC127831 &nbsp;·&nbsp; <a href="mailto:support@bucks11plustest.co.uk" className="underline hover:text-white">support@bucks11plustest.co.uk</a>
+            Registered office: 71-75 Shelton Street, Covent Garden, London, WC2H 9JQ &nbsp;·&nbsp; Company no. 17084981 &nbsp;·&nbsp; <a href="mailto:support@bucks11plustest.co.uk" className="underline hover:text-white">support@bucks11plustest.co.uk</a>
           </p>
+          <div className="flex justify-center pt-1">
+            <a
+              href="https://ico.org.uk/ESDWebPages/Entry/ZC127831"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-primary-foreground/20 bg-primary-foreground/5 hover:bg-primary-foreground/10 transition-colors"
+              data-testid="badge-ico-registered"
+              aria-label="Registered with the UK Information Commissioner's Office, registration ZC127831"
+            >
+              <svg className="h-3 w-3 text-emerald-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
+              <span className="text-[10px] font-semibold text-primary-foreground/70 tracking-wide uppercase">ICO Registered</span>
+              <span className="text-[10px] text-primary-foreground/50 font-mono">ZC127831</span>
+            </a>
+          </div>
           <p className="text-xs text-primary-foreground/25 text-center">
             © {new Date().getFullYear()} Ianson Systems Limited. Registered in England &amp; Wales. &nbsp;·&nbsp; <button type="button" onClick={() => { try { localStorage.removeItem('b11p-cookie-consent-v1'); } catch {} window.location.reload(); }} className="underline hover:text-white" data-testid="button-manage-cookies">Manage cookie preferences</button>
           </p>

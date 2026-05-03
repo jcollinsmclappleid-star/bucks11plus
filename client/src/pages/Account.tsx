@@ -690,16 +690,18 @@ export default function Account() {
                 <CardHeader>
                   <div className="flex items-center gap-2">
                     <Download className="h-5 w-5 text-primary" />
-                    <CardTitle>Your Data</CardTitle>
+                    <CardTitle>Manage Your Data</CardTitle>
                   </div>
-                  <CardDescription>Download a copy of everything we hold about your account (UK GDPR right to portability).</CardDescription>
+                  <CardDescription>
+                    Self-serve options to exercise your UK GDPR rights. The fastest route to download or delete your data — no email or wait time required.
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-100">
                     <div className="flex-1 min-w-0 mr-4">
                       <p className="font-medium text-primary">Download my data</p>
                       <p className="text-sm text-muted-foreground mt-0.5">
-                        Receive your account, child profiles, test sessions, answers and email history as a single JSON file.
+                        Right to portability (UK GDPR Art. 20). Receive your account, child profiles, test sessions, answers and email history as a single JSON file — instantly.
                       </p>
                     </div>
                     <Button
@@ -713,6 +715,11 @@ export default function Account() {
                       {dataExportMutation.isPending ? "Preparing…" : "Download"}
                     </Button>
                   </div>
+                  <p className="text-xs text-muted-foreground mt-3 leading-relaxed">
+                    Need rectification, restriction, objection, or have a question we can't self-serve? Email{" "}
+                    <a href="mailto:support@bucks11plustest.co.uk" className="underline text-primary hover:text-primary/80">support@bucks11plustest.co.uk</a>
+                    {" "}— we respond within 30 days.
+                  </p>
                 </CardContent>
               </Card>
 

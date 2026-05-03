@@ -5,6 +5,7 @@ import { loadGtag, readStoredConsent, storeConsent } from "../../lib/analytics";
 export function CookieConsent() {
   const [decision, setDecision] = useState<"accepted" | "rejected" | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     const stored = readStoredConsent();
@@ -37,13 +38,38 @@ export function CookieConsent() {
       data-testid="banner-cookie-consent"
     >
       <div className="px-4 py-3 sm:px-5 sm:py-4">
-        <p className="text-[13px] text-slate-700 leading-snug mb-3">
+        <p className="text-[13px] text-slate-700 leading-snug mb-2">
           We use cookies to keep you signed in and, with your permission, to measure site usage.{" "}
-          <Link href="/legal/privacy" className="underline text-primary hover:text-primary/80" data-testid="link-cookie-privacy">
+          <Link href="/privacy" className="underline text-primary hover:text-primary/80" data-testid="link-cookie-privacy">
             Privacy
           </Link>
           .
         </p>
+        <button
+          type="button"
+          onClick={() => setExpanded(!expanded)}
+          className="text-[11px] text-slate-500 underline hover:text-slate-700 mb-2"
+          data-testid="button-cookie-info-toggle"
+          aria-expanded={expanded}
+        >
+          {expanded ? "Hide details" : "What are cookies?"}
+        </button>
+        {expanded && (
+          <div className="text-[11px] text-slate-600 leading-relaxed bg-slate-50 rounded-md p-2.5 mb-3 space-y-1.5" data-testid="cookie-info-panel">
+            <p>
+              Cookies are small text files stored by your browser. We use two kinds:
+            </p>
+            <p>
+              <strong className="text-slate-700">Essential cookies</strong> keep you signed in and remember your session. These are required for the site to work and run regardless of your choice.
+            </p>
+            <p>
+              <strong className="text-slate-700">Analytics &amp; advertising cookies</strong> (Google Analytics, Google Ads) help us measure which pages help families and improve the service. These only run if you click <em>Accept</em>. Choosing <em>Reject</em> blocks them entirely — no tracking script is loaded.
+            </p>
+            <p>
+              We never use cookies to profile children or to target advertising at children.
+            </p>
+          </div>
+        )}
         <div className="flex gap-2">
           <button
             type="button"

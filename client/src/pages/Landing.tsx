@@ -534,6 +534,9 @@ export default function Landing() {
                 </div>
                 <div className="text-white/40 text-xs">No account needed for the free check</div>
               </div>
+              <p className="text-xs text-emerald-300/80 font-medium pt-1" data-testid="text-no-child-advertising">
+                We never use your child's data for advertising or behavioural profiling.
+              </p>
             </div>
 
             {/* Right: Forecast mockup — visible on all sizes */}

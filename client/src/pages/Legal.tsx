@@ -98,7 +98,7 @@ export default function Legal({ type }: { type: 'terms' | 'privacy' | 'safeguard
         },
         {
           heading: "9. Your Rights Under UK GDPR",
-          body: "Under UK data protection law, you have the following rights: Right of access — to request a copy of the personal data we hold about you. Right to rectification — to request correction of inaccurate or incomplete data. Right to erasure — to request deletion of your personal data, subject to legal retention requirements. Right to restrict processing — to request that we limit how we use your data. Right to data portability — to receive your data in a structured, commonly used format. You can self-serve this at any time using the 'Download my data' button in your Account Settings, which gives you a JSON export of your account, child profiles, test sessions, answers and email history. Right to object — to object to processing based on legitimate interests. Right to withdraw consent — where processing is based on consent (cookies, marketing emails), you may withdraw it at any time without affecting the lawfulness of processing carried out before withdrawal. To exercise any of these rights, please contact us at support@bucks11plustest.co.uk. We will respond within 30 days."
+          body: "Under UK data protection law, you have the following rights: Right of access — to request a copy of the personal data we hold about you. Right to rectification — to request correction of inaccurate or incomplete data. Right to erasure — to request deletion of your personal data, subject to legal retention requirements. Right to restrict processing — to request that we limit how we use your data. Right to data portability — to receive your data in a structured, commonly used format. Right to object — to object to processing based on legitimate interests. Right to withdraw consent — where processing is based on consent (cookies, marketing emails), you may withdraw it at any time without affecting the lawfulness of processing carried out before withdrawal. How to exercise these rights: For data portability and erasure, the fastest route is the self-serve buttons in your Account Settings — 'Download my data' gives you an immediate JSON export of your account, child profiles, test sessions, answers and email history, and 'Delete account' immediately removes all of your data from our live systems. For any other right, or if you cannot access your account, please email us at support@bucks11plustest.co.uk and we will respond within 30 days."
         },
         {
           heading: "10. Data Security",
@@ -197,7 +197,9 @@ export default function Legal({ type }: { type: 'terms' | 'privacy' | 'safeguard
         description={`Read our ${current.title.toLowerCase()} to understand our policies and commitments.`} 
       />
       <h1 className="text-4xl md:text-5xl font-bold text-primary font-serif tracking-tight" data-testid="text-legal-title">{current.title}</h1>
-      <p className="text-sm text-muted-foreground mt-2">{current.date}</p>
+      <p className="text-sm text-muted-foreground mt-2" data-testid="text-legal-dates">
+        {current.date} &nbsp;·&nbsp; Last reviewed: May 2026
+      </p>
       <hr className="my-8" />
       {current.sections.map((section, i) => (
         <div key={i} className="mb-8">
