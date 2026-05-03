@@ -225,7 +225,7 @@ export default function BucksGuide() {
         Common mistakes include starting too late, relying exclusively on paper-based practice without timed conditions, and ignoring weaker domains in favour of subjects the child already enjoys. A structured approach, ideally informed by a <Link href="/free-diagnostic" className="text-primary font-medium">readiness check</Link>, produces significantly better outcomes than unstructured practice alone.
       </p>
       <p>
-        Our platform provides a free 8-minute readiness check that measures both accuracy and pacing across all four domains, generating an indicative readiness score against the 121 qualifying standard and identifying the specific question types where your child needs the most improvement.
+        Our platform provides a free 8-minute readiness check that measures both accuracy and pacing across all four domains, generating an indicative readiness score against our 121 readiness benchmark and identifying the specific question types where your child needs the most improvement. Our readiness benchmark is an independent practice indicator — it is not an official GL Assessment score or a guarantee of performance on the actual Secondary Transfer Test.
       </p>
 
       <div className="not-prose my-8 rounded-xl border border-slate-200 bg-white p-6">

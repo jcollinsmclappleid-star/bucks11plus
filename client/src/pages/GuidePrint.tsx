@@ -285,7 +285,7 @@ export default function GuidePrint() {
         </p>
         <h3 className="text-base font-serif font-bold text-[#0d1f30] mb-2">What Our Platform Provides</h3>
         <p className="text-sm leading-relaxed mb-2">
-          The free 8-minute readiness check generates an indicative readiness score benchmarked against the 121 qualifying standard. It identifies your child's current standing across all four subjects and highlights the specific question types with the highest impact on that score.
+          The free 8-minute readiness check generates an indicative readiness score benchmarked against our 121 readiness benchmark. It identifies your child's current standing across all four subjects and highlights the specific question types with the highest impact on that score. Our readiness benchmark is an independent practice indicator — not an official GL Assessment score.
         </p>
         <CTALink href={`${BASE}/free-diagnostic`} label="Take the Free 8-Minute Readiness Check" sub={`${BASE}/free-diagnostic`} />
       </div>
@@ -471,7 +471,7 @@ export default function GuidePrint() {
         <InfoBox color="blue">
           <h4 className="text-sm font-bold text-blue-900 mb-2">The Readiness-Led Approach</h4>
           <p className="text-xs text-blue-800 leading-relaxed">
-            A readiness-led approach — one that measures specific skills, identifies gaps, tracks progress over time, and generates actionable priorities — provides the clarity that generic practice cannot. The Bucks 11 Plus Tests platform is built on this principle: every readiness check produces an indicative readiness score against the 121 qualifying standard, subject breakdowns, and a specific recommended focus order.
+            A readiness-led approach — one that measures specific skills, identifies gaps, tracks progress over time, and generates actionable priorities — provides the clarity that generic practice cannot. The Bucks 11 Plus Tests platform is built on this principle: every readiness check produces an indicative readiness score against our 121 readiness benchmark, subject breakdowns, and a specific recommended focus order.
           </p>
         </InfoBox>
         <h3 className="text-base font-serif font-bold text-[#0d1f30] mt-5 mb-2">Common Preparation Mistakes</h3>
@@ -526,7 +526,7 @@ export default function GuidePrint() {
         </p>
         <h3 className="text-base font-serif font-bold text-[#0d1f30] mb-2">Using a Readiness Platform</h3>
         <p className="text-sm leading-relaxed mb-2">
-          A structured digital platform — rather than books or papers alone — enables real-time measurement of progress, adapts question difficulty, and generates specific improvement recommendations. The Bucks 11 Plus Tests platform provides a free 8-minute readiness check and a full subscription practice service benchmarked against the 121 qualifying standard.
+          A structured digital platform — rather than books or papers alone — enables real-time measurement of progress, adapts question difficulty, and generates specific improvement recommendations. The Bucks 11 Plus Tests platform provides a free 8-minute readiness check and a full subscription practice service benchmarked against our 121 readiness benchmark.
         </p>
         <div className="grid grid-cols-2 gap-3 mt-3">
           <CTALink href={`${BASE}/free-diagnostic`} label="Start Free Readiness Check" sub="No account needed · 8 minutes" />
@@ -879,7 +879,7 @@ export default function GuidePrint() {
           {[
             { icon: "🎯", title: "Free 8-Minute Readiness Check", desc: "Assess all four subjects, get a readiness estimate against the 121 benchmark, and receive specific improvement priorities. No account needed." },
             { icon: "📚", title: "2,500+ Practice Questions", desc: "GL-style questions across Verbal Reasoning, NVR, Mathematics, and English Comprehension — mapped to the Bucks test format." },
-            { icon: "⏱️", title: "Readiness Checks", desc: "Full 40-question timed readiness checks with audio-style pacing, benchmarked against the 121 qualifying standard." },
+            { icon: "⏱️", title: "Readiness Checks", desc: "Full 40-question timed readiness checks with audio-style pacing, benchmarked against our 121 readiness benchmark." },
             { icon: "📊", title: "Parent Analytics Dashboard", desc: "Track your child's progress over time, see exactly which topics are improving, and get recommended next-practice steps." },
           ].map(({ icon, title, desc }) => (
             <div key={title} className="rounded-xl border border-slate-200 p-4">
@@ -907,7 +907,7 @@ export default function GuidePrint() {
               accent: "#64748b",
               features: [
                 "8-minute GL-style readiness check",
-                "Indicative readiness score against the 121 standard",
+                "Indicative readiness score against our 121 readiness benchmark",
                 "Subject breakdown across all 4 areas",
                 "Recommended improvement priorities",
               ],
