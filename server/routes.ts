@@ -12,6 +12,10 @@ import { timingSafeEqual } from "crypto";
 import { ensureChromium } from "./chromium";
 import { learnArticles } from "../client/src/data/learn-articles";
 import { QUESTION_TYPES } from "../client/src/data/question-types";
+import { MATHS_TOPICS } from "../client/src/data/maths-topics";
+import { MOCK_VARIANTS } from "../client/src/data/mock-variants";
+import { VOCAB_CLUSTERS } from "../client/src/data/vocab-clusters";
+import { URGENCY_PLANS } from "../client/src/data/urgency-plans";
 import { ensureFreePool, repairSeedQuestions } from "./seed";
 import {
   getTownHtml, getGrammarSchoolHtml, getSubjectGuideHtml,
@@ -2690,6 +2694,15 @@ Disallow: /reset-password
       { path: "/bucks-11-plus-appeals", priority: "0.8", changefreq: "monthly" },
       { path: "/bucks-11-plus-registration-guide", priority: "0.8", changefreq: "monthly" },
       ...QUESTION_TYPES.map(q => ({ path: q.pathSegment, priority: "0.8", changefreq: "monthly" as const })),
+      ...MATHS_TOPICS.map(t => ({ path: t.pathSegment, priority: "0.8", changefreq: "monthly" as const })),
+      ...MOCK_VARIANTS.map(m => ({ path: m.pathSegment, priority: "0.8", changefreq: "monthly" as const })),
+      ...VOCAB_CLUSTERS.map(v => ({ path: v.pathSegment, priority: "0.7", changefreq: "monthly" as const })),
+      ...URGENCY_PLANS.map(p => ({ path: p.pathSegment, priority: "0.8", changefreq: "monthly" as const })),
+      ...ssrGrammarSchools.map(s => ({ path: `/11-plus-score-${s.slug}`, priority: "0.8", changefreq: "monthly" as const })),
+      { path: "/gl-assessment-11-plus-practice", priority: "0.9", changefreq: "monthly" as const },
+      { path: "/gl-assessment-past-papers", priority: "0.9", changefreq: "monthly" as const },
+      { path: "/gl-assessment-question-types", priority: "0.9", changefreq: "monthly" as const },
+      { path: "/free-11-plus-resources", priority: "0.9", changefreq: "monthly" as const },
       { path: "/bucks-11-plus-practice-papers-free", priority: "0.9", changefreq: "monthly" },
       { path: "/bucks-11-plus-year-5-summer-plan", priority: "0.8", changefreq: "monthly" },
       { path: "/bucks-11-plus-year-6-revision-timetable", priority: "0.8", changefreq: "monthly" },

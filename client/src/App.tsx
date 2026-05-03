@@ -97,10 +97,23 @@ import Year6Revision from "./pages/seo/Year6Revision";
 import SchoolRankings from "./pages/seo/SchoolRankings";
 import IndependentVsGrammar from "./pages/seo/IndependentVsGrammar";
 import SelfStudyVsTutor from "./pages/seo/SelfStudyVsTutor";
+import MathsTopic from "./pages/seo/MathsTopic";
+import MockVariant from "./pages/seo/MockVariant";
+import VocabCluster from "./pages/seo/VocabCluster";
+import UrgencyPlan from "./pages/seo/UrgencyPlan";
+import SchoolScore from "./pages/seo/SchoolScore";
+import GLAssessmentPractice from "./pages/seo/GLAssessmentPractice";
+import GLAssessmentPastPapers from "./pages/seo/GLAssessmentPastPapers";
+import GLAssessmentQuestionTypes from "./pages/seo/GLAssessmentQuestionTypes";
+import FreeResources from "./pages/seo/FreeResources";
 import { QUESTION_TYPES } from "./data/question-types";
 import { GLOSSARY_TERMS } from "./data/glossary";
 import { towns } from "./data/towns";
 import { grammarSchools } from "./data/grammar-schools";
+import { MATHS_TOPICS } from "./data/maths-topics";
+import { MOCK_VARIANTS } from "./data/mock-variants";
+import { VOCAB_CLUSTERS } from "./data/vocab-clusters";
+import { URGENCY_PLANS } from "./data/urgency-plans";
 import { useAuth } from "./lib/auth";
 import ChatWidget from "./components/shared/ChatWidget";
 
@@ -381,6 +394,49 @@ function Router() {
             <Route path="/bucks-grammar-school-rankings" component={SchoolRankings} />
             <Route path="/independent-vs-grammar-buckinghamshire" component={IndependentVsGrammar} />
             <Route path="/bucks-11-plus-self-study-vs-tutor" component={SelfStudyVsTutor} />
+
+            {/* Tier 1 — Maths topic pages */}
+            {MATHS_TOPICS.map((t) => (
+              <Route key={t.slug} path={t.pathSegment}>
+                <MathsTopic slug={t.slug} />
+              </Route>
+            ))}
+
+            {/* Tier 2 — Mock test variants */}
+            {MOCK_VARIANTS.map((m) => (
+              <Route key={m.slug} path={m.pathSegment}>
+                <MockVariant slug={m.slug} />
+              </Route>
+            ))}
+
+            {/* Tier 4 — Vocabulary clusters */}
+            {VOCAB_CLUSTERS.map((v) => (
+              <Route key={v.slug} path={v.pathSegment}>
+                <VocabCluster slug={v.slug} />
+              </Route>
+            ))}
+
+            {/* Tier 3 — Urgency / time-pressed plans */}
+            {URGENCY_PLANS.map((p) => (
+              <Route key={p.slug} path={p.pathSegment}>
+                <UrgencyPlan slug={p.slug} />
+              </Route>
+            ))}
+
+            {/* Tier 3 — Per-school score pages */}
+            {grammarSchools.map((s) => (
+              <Route key={`score-${s.slug}`} path={`/11-plus-score-${s.slug}`}>
+                <SchoolScore schoolSlug={s.slug} />
+              </Route>
+            ))}
+
+            {/* GL Assessment direct-match pages */}
+            <Route path="/gl-assessment-11-plus-practice" component={GLAssessmentPractice} />
+            <Route path="/gl-assessment-past-papers" component={GLAssessmentPastPapers} />
+            <Route path="/gl-assessment-question-types" component={GLAssessmentQuestionTypes} />
+
+            {/* Free Resources hub */}
+            <Route path="/free-11-plus-resources" component={FreeResources} />
 
             <Route path="/checkout-success" component={CheckoutSuccess} />
             <Route path="/account-deleted" component={AccountDeleted} />

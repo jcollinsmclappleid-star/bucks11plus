@@ -241,7 +241,8 @@ content/
 
 ## SEO Infrastructure
 - `robots.txt` at `/robots.txt` allowing all crawlers, pointing to sitemap
-- `GET /sitemap.xml` server route — **121 URLs** (all public pages, towns, grammar schools, glossary, high-volume pages)
+- `GET /sitemap.xml` server route — all public pages, towns, grammar schools, glossary, high-volume pages, plus the May 2026 tests/practice/mocks/papers cluster (~58 new pages)
+- **May 2026 SEO cluster expansion** (`client/src/pages/seo/`): 5 new data-driven templates (`MathsTopic`, `MockVariant`, `VocabCluster`, `UrgencyPlan`, `SchoolScore`) backed by data files in `client/src/data/` (`maths-topics.ts`, `mock-variants.ts`, `vocab-clusters.ts`, `urgency-plans.ts` — `SchoolScore` reuses canonical `grammar-schools.ts`). 4 new individual rich pages (`GLAssessmentPractice`, `GLAssessmentPastPapers`, `GLAssessmentQuestionTypes`, `FreeResources`). 15 new entries appended to `QUESTION_TYPES` (auto-route via existing `QuestionTypeGuide` template). All pages: GL-aligned content, distinct/non-boilerplate, `Seo` + `Breadcrumbs` + `ContentCTA` + `Disclaimer` + `ChildExperienceCTA` pattern, indicative readiness language, no competitor comparisons, no social-proof claims, British spelling, all funnel to `/free-diagnostic`. Routes registered in `client/src/App.tsx`, sitemap entries appended in `server/routes.ts`, llms.txt updated.
 - `Seo` component supports `canonicalPath` and `schema` (JSON-LD) props (SPA pages)
 - **Full SSR architecture** — Googlebot receives pre-rendered HTML for all content pages:
   - `server/ssrShared.ts` — `ssrShell()`, breadcrumbs, footer, CTA box, FAQ section, disclaimer
