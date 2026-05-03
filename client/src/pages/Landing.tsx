@@ -1000,107 +1000,38 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── SECTION 3: INTELLIGENCE STRIP ── */}
-      <section className="py-14 md:py-18 bg-gradient-to-br from-slate-900 to-slate-800 border-b border-border/30" data-testid="section-intelligence">
-        <div className="container mx-auto max-w-5xl px-4">
-          <div className="text-center mb-10">
-            <span className="inline-block text-xs font-bold text-amber-400/60 uppercase tracking-widest mb-3">Why we're different</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-white font-serif mb-3">Not just practice. Intelligent preparation.</h2>
-            <p className="text-white/55 max-w-xl mx-auto">Generic practice books give your child more questions. We give you the answers that matter — <em>exactly</em> what to fix, in what order, and how much it's worth.</p>
+      {/* ── SECTION 4: ANALYTICS — ANSWERS PARENTS NEED ── */}
+      <section className="py-14 md:py-18 bg-slate-50 border-b border-border/30" data-testid="section-analytics">
+        <div className="container mx-auto max-w-3xl px-4">
+          <div className="text-center mb-8">
+            <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">Parent Analytics</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-3">Answers parents actually need</h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              Stop guessing. The parent dashboard tells you your child's readiness score, stamina patterns, and exactly which three areas will gain the most points next.
+            </p>
           </div>
-
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-3 gap-3 mb-8">
             {[
-              {
-                icon: <Target className="h-6 w-6" />,
-                iconBg: "bg-amber-400/20 text-amber-300",
-                title: "Readiness Diagnostics",
-                desc: "Our readiness checks produce an indicative readiness score against the 121 qualifying standard and pinpoint the exact question types holding your child back — right down to sub-topic level.",
-                stat: "Forecast score",
-                statSub: "vs 121 threshold",
-              },
-              {
-                icon: <Zap className="h-6 w-6" />,
-                iconBg: "bg-violet-400/20 text-violet-300",
-                title: "Targeted Practice",
-                desc: "2,500+ GL-style questions served in difficulty-adaptive drills, full papers, and mock exams — with every session feeding back into your child's readiness forecast.",
-                stat: "2,500+ questions",
-                statSub: "GL-style, 4 domains",
-              },
-              {
-                icon: <BarChart3 className="h-6 w-6" />,
-                iconBg: "bg-emerald-400/20 text-emerald-300",
-                title: "Parent Analytics & Progress",
-                desc: "Deep analytics show stamina, timing patterns, score reliability, and where the most points are available. Weekly check-ins update your child's indicative readiness score against the 121 qualifying standard.",
-                stat: "Gap closed",
-                statSub: "test by test",
-              },
-            ].map((item, i) => (
-              <div key={i} className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/5 p-6" data-testid={`intelligence-pillar-${i}`}>
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${item.iconBg}`}>
-                  {item.icon}
-                </div>
+              { icon: <Award className="h-4 w-4 text-amber-600" />, bg: "bg-amber-50 border-amber-200", title: "Readiness score", desc: "Indicative readiness score benchmarked against the 121 qualifying standard" },
+              { icon: <Zap className="h-4 w-4 text-violet-600" />, bg: "bg-violet-50 border-violet-200", title: "Stamina analysis", desc: "Accuracy in the first vs second half — key for exam-day performance" },
+              { icon: <Target className="h-4 w-4 text-red-600" />, bg: "bg-red-50 border-red-200", title: "Priority focus areas", desc: "Ranked list of highest-impact gaps with estimated point gains" },
+            ].map((feat, i) => (
+              <div key={i} className={`flex items-start gap-3 p-3.5 rounded-xl border ${feat.bg}`} data-testid={`analytics-feature-${i}`}>
+                <div className="p-1.5 bg-white rounded-lg shadow-sm shrink-0">{feat.icon}</div>
                 <div>
-                  <h3 className="text-lg font-bold text-white font-serif mb-2">{item.title}</h3>
-                  <p className="text-sm text-white/55 leading-relaxed">{item.desc}</p>
-                </div>
-                <div className="mt-auto pt-3 border-t border-white/10">
-                  <div className="text-sm font-bold text-amber-300">{item.stat}</div>
-                  <div className="text-xs text-white/40">{item.statSub}</div>
+                  <p className="text-sm font-bold text-primary">{feat.title}</p>
+                  <p className="text-xs text-slate-500 mt-0.5">{feat.desc}</p>
                 </div>
               </div>
             ))}
           </div>
-
-          <div className="mt-10 text-center">
-            <Button size="lg" className="h-12 px-8 bg-amber-400 text-amber-950 hover:bg-amber-300 font-bold border-none shadow-lg" asChild data-testid="button-intelligence-cta">
-              <Link href="/free-diagnostic">
-                Start Free Readiness Check <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Button asChild className="bg-primary" data-testid="button-analytics-practice">
+              <Link href="/app/practice">See Practice Tests <ArrowRight className="ml-2 h-4 w-4" /></Link>
             </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* ── SECTION 4: ANALYTICS DEEP DIVE ── */}
-      <section className="py-16 md:py-20 bg-slate-50 border-b border-border/30" data-testid="section-analytics">
-        <div className="container mx-auto max-w-5xl px-4">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="order-2 lg:order-1">
-              <AnalyticsPanel />
-            </div>
-            <div className="order-1 lg:order-2 flex flex-col gap-5">
-              <div>
-                <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">Parent Analytics</span>
-                <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4">Answers parents actually need</h2>
-                <p className="text-muted-foreground leading-relaxed mb-4">
-                  Stop guessing. Our parent analytics dashboard tells you your child's readiness score, timing performance, stamina patterns, and exactly which three areas will gain the most points if addressed next.
-                </p>
-              </div>
-              <div className="space-y-3">
-                {[
-                  { icon: <Award className="h-4 w-4 text-amber-600" />, bg: "bg-amber-50 border-amber-200", title: "Readiness score", desc: "Indicative readiness score benchmarked against the 121 qualifying standard" },
-                  { icon: <Zap className="h-4 w-4 text-violet-600" />, bg: "bg-violet-50 border-violet-200", title: "Stamina analysis", desc: "Accuracy in the first vs second half — key for exam-day performance" },
-                  { icon: <Target className="h-4 w-4 text-red-600" />, bg: "bg-red-50 border-red-200", title: "Priority focus areas", desc: "Ranked list of highest-impact gaps with estimated point gains" },
-                ].map((feat, i) => (
-                  <div key={i} className={`flex items-start gap-3 p-3 rounded-xl border ${feat.bg}`} data-testid={`analytics-feature-${i}`}>
-                    <div className="p-1.5 bg-white rounded-lg shadow-sm shrink-0">{feat.icon}</div>
-                    <div>
-                      <p className="text-sm font-bold text-primary">{feat.title}</p>
-                      <p className="text-xs text-slate-500 mt-0.5">{feat.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="pt-2 flex flex-col sm:flex-row gap-3">
-                <Button asChild className="bg-primary" data-testid="button-analytics-practice">
-                  <Link href="/app/practice">See Practice Tests <ArrowRight className="ml-2 h-4 w-4" /></Link>
-                </Button>
-                <Button asChild variant="outline" data-testid="button-analytics-readiness">
-                  <Link href="/app/diagnostic">See Readiness Tests <ArrowRight className="ml-2 h-4 w-4" /></Link>
-                </Button>
-              </div>
-            </div>
+            <Button asChild variant="outline" data-testid="button-analytics-readiness">
+              <Link href="/app/diagnostic">See Readiness Tests <ArrowRight className="ml-2 h-4 w-4" /></Link>
+            </Button>
           </div>
         </div>
       </section>
