@@ -695,13 +695,13 @@ function MockQuestionsCarousel() {
     <div data-testid="mock-questions-carousel">
       <div className="text-center mb-6 md:mb-8">
         <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-amber-700 bg-amber-100 border border-amber-200 px-3 py-1 rounded-full uppercase tracking-widest mb-3">
-          <Brain className="h-3 w-3" /> Try a real 11+ question — right now
+          <Brain className="h-3 w-3" /> See how your child handles these 11+ questions
         </span>
         <h2 className="text-2xl md:text-4xl font-bold text-primary font-serif mb-2 leading-tight">
           Don't take our word for it. <span className="text-amber-600">Try the questions yourself.</span>
         </h2>
         <p className="text-slate-600 max-w-2xl mx-auto text-sm md:text-base">
-          Nine real GL-style questions across all four 11+ domains — coded words, Maths, Verbal &amp; Non-Verbal Reasoning, and Comprehension. Pick an answer and we'll mark it instantly, with a clear explanation.
+          Nine GL-style questions across all four 11+ domains — coded words, Maths, Verbal &amp; Non-Verbal Reasoning, and Comprehension. Pick an answer and we'll mark it instantly, with a clear explanation.
         </p>
       </div>
 
