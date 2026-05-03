@@ -260,7 +260,7 @@ export async function sendGuideDownloadAdminEmail(
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
-      body: JSON.stringify({ from: RESEND_FROM_EMAIL, to: ["support@11plustesthub.co.uk"], subject, html }),
+      body: JSON.stringify({ from: RESEND_FROM_EMAIL, to: ["support@bucks11plustest.co.uk"], subject, html }),
     });
     if (!res.ok) console.error(`[GuideEmail] Send failed: ${res.status}`);
     else console.log(`[GuideEmail] Admin notification sent for ${maskEmail(email)}`);
@@ -304,7 +304,7 @@ export async function sendPurchaseNotificationEmail(
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
-      body: JSON.stringify({ from: RESEND_FROM_EMAIL, to: ["support@11plustesthub.co.uk"], subject, html }),
+      body: JSON.stringify({ from: RESEND_FROM_EMAIL, to: ["support@bucks11plustest.co.uk"], subject, html }),
     });
     if (!res.ok) console.error(`[PurchaseEmail] Send failed: ${res.status}`);
     else console.log(`[PurchaseEmail] Admin notification sent for ${maskEmail(email)}`);
@@ -352,7 +352,7 @@ export async function sendSubscriptionCancelledAdminEmail(
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
-      body: JSON.stringify({ from: RESEND_FROM_EMAIL, to: ["support@11plustesthub.co.uk"], subject, html }),
+      body: JSON.stringify({ from: RESEND_FROM_EMAIL, to: ["support@bucks11plustest.co.uk"], subject, html }),
     });
     if (!res.ok) console.error(`[CancelEmail] Send failed: ${res.status}`);
     else console.log(`[CancelEmail] Admin notification sent for ${maskEmail(email)}`);

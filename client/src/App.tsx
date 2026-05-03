@@ -193,14 +193,17 @@ function MainLayout({ children }: { children: React.ReactNode }) {
           </div>
         </div>
         <div className="container mx-auto max-w-6xl px-4 mt-8 pt-6 border-t border-primary-foreground/10 space-y-1.5">
-          <p className="text-xs text-primary-foreground/50 text-center">
+          <p className="text-xs text-primary-foreground/50 text-center" data-testid="text-footer-operator">
             Bucks 11 Plus Tests is operated by <strong className="text-primary-foreground/60">Ianson Systems Limited</strong>, a UK-based company developing educational tools and diagnostic assessment platforms to support 11+ preparation.
           </p>
           <p className="text-xs text-primary-foreground/40 text-center" data-testid="text-footer-disclaimer">
             Independent educational resource. Not affiliated with The Buckinghamshire Grammar Schools, GL Assessment, or any individual grammar school.
           </p>
+          <p className="text-xs text-primary-foreground/40 text-center" data-testid="text-footer-statutory">
+            Registered office: 71-75 Shelton Street, Covent Garden, London, WC2H 9JQ &nbsp;·&nbsp; ICO registration: ZC127831 &nbsp;·&nbsp; <a href="mailto:support@bucks11plustest.co.uk" className="underline hover:text-white">support@bucks11plustest.co.uk</a>
+          </p>
           <p className="text-xs text-primary-foreground/25 text-center">
-            © {new Date().getFullYear()} Ianson Systems Limited. Registered in England &amp; Wales.
+            © {new Date().getFullYear()} Ianson Systems Limited. Registered in England &amp; Wales. &nbsp;·&nbsp; <button type="button" onClick={() => { try { localStorage.removeItem('b11p-cookie-consent-v1'); } catch {} window.location.reload(); }} className="underline hover:text-white" data-testid="button-manage-cookies">Manage cookie preferences</button>
           </p>
         </div>
       </footer>
