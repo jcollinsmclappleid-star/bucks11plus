@@ -20,12 +20,17 @@ export default function SignUp() {
   const { register } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [parentConfirmed, setParentConfirmed] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    if (!parentConfirmed) {
+      setError("Please confirm you are the parent or legal guardian, aged 18 or over.");
+      return;
+    }
     setIsLoading(true);
 
     try {
@@ -108,10 +113,24 @@ export default function SignUp() {
               />
               <p className="text-xs text-muted-foreground">Min 8 characters, including at least one letter and one number.</p>
             </div>
+            <label className="flex items-start gap-2 text-xs text-slate-600 leading-snug cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={parentConfirmed}
+                onChange={(e) => setParentConfirmed(e.target.checked)}
+                className="mt-0.5 h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary"
+                data-testid="checkbox-parent-confirmation"
+              />
+              <span>
+                I confirm I am the parent or legal guardian of the child whose data I will enter, and I am aged 18 or over. I have read the{" "}
+                <Link href="/privacy" className="underline text-primary hover:text-primary/80">Privacy Policy</Link> and{" "}
+                <Link href="/terms" className="underline text-primary hover:text-primary/80">Terms of Service</Link>.
+              </span>
+            </label>
             <Button
               type="submit"
               className="w-full h-12 text-lg bg-primary"
-              disabled={isLoading}
+              disabled={isLoading || !parentConfirmed}
               data-testid="button-signup"
             >
               {isLoading ? "Creating Account..." : showCheckoutNote ? "Create Account & Continue" : "Create Account"}

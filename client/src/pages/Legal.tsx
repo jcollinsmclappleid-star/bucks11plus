@@ -120,11 +120,31 @@ export default function Legal({ type }: { type: 'terms' | 'privacy' | 'safeguard
     },
     safeguarding: {
       title: "Safeguarding Policy",
-      date: "Last Updated: October 2023",
+      date: "Last Updated: May 2026",
       sections: [
         {
-          heading: "",
-          body: "Bucks 11 Plus Tests is committed to the safety and wellbeing of all children using our platform. Our platform is designed for parent-led administration, and we do not facilitate direct communication between children and other users on the platform."
+          heading: "Our Approach",
+          body: "Ianson Systems Limited, trading as Bucks 11 Plus Tests, is committed to the safety and wellbeing of every child whose data is entered onto our platform. The Service is designed for parent or legal guardian administration on behalf of a child preparing for the Buckinghamshire Secondary Transfer Test. Accounts are held by the parent or guardian, never by the child directly, and are only created where a parent has confirmed they are aged 18 or over and hold parental responsibility for that child."
+        },
+        {
+          heading: "No Child–Child or Child–Adult Contact",
+          body: "Our platform deliberately does not include any feature that puts a child in contact with another user. There are no chat channels, forums, comments, direct messages, profiles visible to other families, or live tutor sessions. The only inputs a child makes are answers to multiple-choice diagnostic and practice questions; no free-text content from a child is published to or shared with anyone outside the household account."
+        },
+        {
+          heading: "Content Standards",
+          body: "All practice content, comprehension passages and sample questions are reviewed before publication to ensure they are age-appropriate (typical end-of-Year-5 reading age) and free from violent, sexual, frightening or otherwise distressing material. We do not use third-party advertising on the platform — children using the Service will not be exposed to ads of any kind."
+        },
+        {
+          heading: "Data Minimisation for Children",
+          body: "We collect only the minimum data needed to deliver an indicative readiness assessment: the child's year group (Year 4, 5 or 6) and their answers to questions. The child's first name, if entered, is held only on the parent's own device (browser local storage) and is never transmitted to or stored on our servers. We do not use any child's data for marketing, advertising or behavioural profiling. Full detail is in our Privacy Policy."
+        },
+        {
+          heading: "Raising a Concern",
+          body: "If you have a safeguarding concern relating to anything you encounter on the platform — content you believe is inappropriate, a suspected technical issue affecting a child's session, or anything else — please email us at safeguarding@bucks11plustest.co.uk or support@bucks11plustest.co.uk. We aim to acknowledge safeguarding emails within one working day. If you believe a child is at immediate risk of harm, contact the NSPCC on 0808 800 5000 or, in an emergency, the police on 999."
+        },
+        {
+          heading: "Policy Review",
+          body: "This policy is reviewed at least annually and whenever there is a material change to the Service. The named safeguarding contact is the Director of Ianson Systems Limited."
         }
       ]
     },
