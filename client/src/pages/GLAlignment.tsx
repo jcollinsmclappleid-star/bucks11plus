@@ -173,7 +173,11 @@ export default function GLAlignment() {
         </div>
       ))}
 
-      <ContentCTA />
+      <ContentCTA
+        heading="See your child's strength across all four GL domains"
+        subhead="An 8-minute readiness check gives a per-domain breakdown — VR, NVR, Maths and Comprehension — plus an indicative readiness score against 121."
+        ctaLabel="Check the four domains"
+      />
       <Disclaimer />
     </div>
   );

@@ -103,7 +103,7 @@ export default function SelfStudyVsTutor() {
       </p>
 
       <ChildExperienceCTA />
-      <ContentCTA />
+      <ContentCTA heading="Self-studying or tutoring? Get a baseline first." subhead="An 8-minute readiness check tells you if you're on track — whichever route you've chosen." ctaLabel="Get the baseline" />
       <Disclaimer />
     </div>
   );

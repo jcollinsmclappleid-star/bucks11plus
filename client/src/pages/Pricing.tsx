@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/componen
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle, Loader2, ArrowRight, Target, TrendingUp, BarChart3, Shield, ChevronDown, Sparkles, Lock, Brain, Clock } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
+import { TestCountdownBadge } from "../components/shared/TestCountdownBadge";
 import { useAuth } from "../lib/auth";
 import { useState, useEffect, useRef } from "react";
 import { apiRequest } from "../lib/queryClient";
@@ -167,6 +168,9 @@ export default function Pricing() {
           ) : (
             <>
               <span className="inline-block text-xs font-semibold uppercase tracking-[0.2em] text-amber-400/80 mb-5">Built for the Buckinghamshire 11+</span>
+              <div className="mb-4">
+                <TestCountdownBadge variant="dark" />
+              </div>
               <h1 className="text-4xl md:text-5xl font-bold text-white font-serif mb-4">
                 Full Bucks 11+ preparation.<br className="hidden sm:block" /> Intelligent. Targeted. Proven.
               </h1>
@@ -295,7 +299,7 @@ export default function Pricing() {
                       ))}
                     </ul>
                   </CardContent>
-                  <CardFooter>
+                  <CardFooter className="flex-col items-stretch gap-2">
                     <Button
                       className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-12 font-bold text-base"
                       onClick={() => handleCheckout("pack_plus")}
@@ -304,6 +308,7 @@ export default function Pricing() {
                     >
                       {loading === "pack_plus" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Get Bucks Plus Edge — £35/mo"}
                     </Button>
+                    <p className="text-[11px] text-slate-500 text-center">Cancel any time · No lock-in</p>
                   </CardFooter>
                 </Card>
 
@@ -350,7 +355,7 @@ export default function Pricing() {
                       ))}
                     </ul>
                   </CardContent>
-                  <CardFooter>
+                  <CardFooter className="flex-col items-stretch gap-2">
                     <Button
                       className="w-full bg-brand-amber text-amber-950 hover:bg-brand-amber/90 h-12 font-bold text-base shadow-md"
                       onClick={() => handleCheckout("pack_annual")}
@@ -359,6 +364,7 @@ export default function Pricing() {
                     >
                       {loading === "pack_annual" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Get Annual — £279/year"}
                     </Button>
+                    <p className="text-[11px] text-slate-500 text-center">Cancel any time · No lock-in</p>
                   </CardFooter>
                 </Card>
               </div>

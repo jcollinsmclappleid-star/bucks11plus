@@ -209,7 +209,7 @@ export default function SchoolClusterGuide({ clusterSlug }: { clusterSlug: Clust
       </ul>
 
       <ChildExperienceCTA />
-      <ContentCTA />
+      <ContentCTA heading="Aiming for this cluster?" subhead="Get an indicative readiness score against 121 plus the gaps you need to close." ctaLabel="Check readiness" />
 
       <div className="not-prose my-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">
         <h3 className="text-lg font-semibold text-primary font-serif mb-3">Further Reading</h3>

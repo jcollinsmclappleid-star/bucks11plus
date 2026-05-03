@@ -103,7 +103,7 @@ export default function GrammarSchools() {
       </p>
 
       <ChildExperienceCTA />
-      <ContentCTA />
+      <ContentCTA heading="Which Bucks grammar is your target?" subhead="An 8-minute readiness check shows your child's current standing against the 121 qualifying score." ctaLabel="Take the readiness check" />
       <Disclaimer />
     </div>
   );

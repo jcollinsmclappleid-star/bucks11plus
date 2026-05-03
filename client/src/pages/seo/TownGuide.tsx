@@ -124,7 +124,7 @@ export default function TownGuide({ townSlug }: { townSlug: string }) {
       ))}
 
       <ChildExperienceCTA />
-      <ContentCTA />
+      <ContentCTA heading="Compete for grammar in your area" subhead="An 8-minute readiness check gives an indicative score against the 121 grammar threshold." ctaLabel="See the score" />
       <Disclaimer />
     </div>
   );

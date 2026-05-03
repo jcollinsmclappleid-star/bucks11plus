@@ -135,7 +135,7 @@ export default function WhenResults() {
         ))}
       </div>
 
-      <ContentCTA />
+      <ContentCTA heading="Don't wait for the official letter" subhead="An 8-minute check gives an indicative readiness score against 121 — months before the real result arrives." ctaLabel="Get an indicative result" />
       <Disclaimer />
     </div>
   );

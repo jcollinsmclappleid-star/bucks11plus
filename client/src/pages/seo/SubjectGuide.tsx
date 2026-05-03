@@ -334,7 +334,7 @@ export default function SubjectGuide({ subject }: { subject: Subject }) {
         </div>
 
         <ChildExperienceCTA />
-        <ContentCTA />
+        <ContentCTA heading="Find out which subject is the biggest lever" subhead="An 8-minute check ranks all four sections so you know exactly where to focus first." ctaLabel="See the priorities" />
         <Disclaimer />
       </div>
     </div>

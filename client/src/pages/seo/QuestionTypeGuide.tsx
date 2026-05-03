@@ -97,7 +97,7 @@ export default function QuestionTypeGuide({ slug }: { slug: string }) {
       </div>
 
       <ChildExperienceCTA />
-      <ContentCTA />
+      <ContentCTA heading="See which question types are costing marks" subhead="An 8-minute check breaks down performance by question type — not just an overall score." ctaLabel="Find the weak question types" />
       <Disclaimer />
     </div>
   );

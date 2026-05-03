@@ -134,7 +134,7 @@ export default function ResultsExplained() {
       </div>
 
       <ChildExperienceCTA />
-      <ContentCTA />
+      <ContentCTA heading="What would your child's result look like today?" subhead="An 8-minute check gives an indicative readiness score against 121 — see what to expect before the real letter arrives." ctaLabel="Get an indicative score" />
       <Disclaimer />
     </div>
   );

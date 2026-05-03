@@ -155,7 +155,7 @@ export default function PastPapers() {
 
       <ChildExperienceCTA />
       <LeadMagnetBlock source="seo:past-papers" />
-      <ContentCTA />
+      <ContentCTA heading="Past papers tell you yesterday — this tells you today" subhead="An 8-minute timed check shows your child's current standing against the 121 standard, not their score on a paper from years ago." ctaLabel="Take a current readiness check" />
       <Disclaimer />
     </div>
   );

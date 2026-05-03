@@ -130,7 +130,7 @@ export default function Timeline() {
 
       <ChildExperienceCTA />
       <LeadMagnetBlock source="seo:timeline" />
-      <ContentCTA />
+      <ContentCTA heading="Where on the timeline are they actually ready?" subhead="An 8-minute check gives a clear readiness baseline so you can plan the months ahead." ctaLabel="Get the baseline" />
       <Disclaimer />
     </div>
   );

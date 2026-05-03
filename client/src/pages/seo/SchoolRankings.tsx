@@ -116,7 +116,7 @@ export default function SchoolRankings() {
         ))}
       </div>
 
-      <ContentCTA />
+      <ContentCTA heading="Want to know if your child can compete?" subhead="An 8-minute check gives an indicative readiness score against the 121 grammar threshold." ctaLabel="Check the score" />
       <Disclaimer />
     </div>
   );

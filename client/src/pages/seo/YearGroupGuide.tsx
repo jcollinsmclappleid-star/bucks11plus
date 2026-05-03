@@ -307,7 +307,7 @@ export default function YearGroupGuide({ year }: { year: 4 | 5 | 6 }) {
         </div>
 
         <ChildExperienceCTA />
-        <ContentCTA />
+        <ContentCTA heading="Right for this year group?" subhead="An 8-minute check tells you where your child stands today — and what to focus on next." ctaLabel="Take the check" />
         <Disclaimer />
       </div>
     </div>

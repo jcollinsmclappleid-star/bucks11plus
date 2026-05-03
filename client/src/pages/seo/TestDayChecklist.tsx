@@ -188,7 +188,7 @@ export default function TestDayChecklist() {
       </div>
 
       <ChildExperienceCTA />
-      <ContentCTA />
+      <ContentCTA heading="Test-day-ready? Get the actual answer" subhead="An 8-minute check gives an indicative readiness score against 121 so you walk in knowing where they stand." ctaLabel="Check readiness" />
 
       <div className="not-prose my-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">
         <h3 className="text-lg font-semibold text-primary font-serif mb-3">Further Reading</h3>

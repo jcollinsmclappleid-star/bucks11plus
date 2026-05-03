@@ -154,7 +154,7 @@ export default function MockTest() {
 
       <ChildExperienceCTA />
       <LeadMagnetBlock source="seo:mock-test" />
-      <ContentCTA />
+      <ContentCTA heading="A real-format mock in 8 minutes" subhead="A free GL-style readiness check with timed sections and a per-section breakdown — like a mini mock exam." ctaLabel="Take the readiness check" />
 
       <div className="not-prose my-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">
         <h3 className="text-lg font-semibold text-primary font-serif mb-3">Further Reading</h3>

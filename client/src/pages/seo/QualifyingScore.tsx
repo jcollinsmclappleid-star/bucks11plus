@@ -170,7 +170,7 @@ export default function QualifyingScore() {
 
       <ChildExperienceCTA />
       <LeadMagnetBlock source="seo:qualifying-score" />
-      <ContentCTA />
+      <ContentCTA heading="Where is your child against 121?" subhead="Take a free 8-minute check to see your child's indicative readiness score against the 121 qualifying standard." ctaLabel="See the score" />
       <Disclaimer />
     </div>
   );

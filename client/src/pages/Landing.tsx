@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle2, Target, Clock, BarChart3, Zap, Shield, Award, Star, ChevronUp, TrendingUp, Brain, Layers, Hash, BookOpen, Trophy } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 import { useAuth } from "../lib/auth";
+import { TestCountdownBadge } from "../components/shared/TestCountdownBadge";
 
 /* ─── PANEL COMPONENTS (used as platform visual mockups) ─── */
 
@@ -502,6 +503,9 @@ export default function Landing() {
                 <h1 className="text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-bold text-white tracking-tight leading-[1.1] font-serif">
                   Get your child to <span className="text-amber-300">121</span> — without the guesswork.
                 </h1>
+                <div className="mt-4">
+                  <TestCountdownBadge variant="dark" />
+                </div>
               </div>
               <p className="text-base md:text-lg text-white/65 leading-relaxed" data-testid="text-hero-sub">
                 Bucks-specific diagnostics that pinpoint the exact gaps costing marks, rank your child's highest-impact focus areas, and give an <span className="text-amber-300 font-semibold">indicative readiness score against the 121 qualifying standard</span>. With 2,500+ GL-style questions to close every gap.
@@ -516,6 +520,9 @@ export default function Landing() {
                   <Link href="/pricing">See Plans</Link>
                 </Button>
               </div>
+              <p className="text-xs text-white/50 -mt-2" data-testid="text-hero-cta-subtext">
+                No account needed for the free check · Paid plans cancel any time · No lock-in
+              </p>
               <div className="flex flex-wrap items-center gap-x-5 gap-y-2" data-testid="trust-signal-hero">
                 <div className="flex items-center gap-1.5 text-white/55 text-xs font-medium">
                   <Shield className="h-3.5 w-3.5 text-emerald-400" />

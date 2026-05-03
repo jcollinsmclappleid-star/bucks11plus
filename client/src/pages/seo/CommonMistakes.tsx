@@ -123,7 +123,7 @@ export default function CommonMistakes() {
 
       <ChildExperienceCTA />
       <LeadMagnetBlock source="seo:common-mistakes" />
-      <ContentCTA />
+      <ContentCTA heading="Find out which mistakes your child is actually making" subhead="An 8-minute check shows you the question types they're getting wrong — not generic advice." ctaLabel="See your child's specific gaps" />
 
       <div className="not-prose my-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">
         <h3 className="text-lg font-semibold text-primary font-serif mb-3">Further Reading</h3>

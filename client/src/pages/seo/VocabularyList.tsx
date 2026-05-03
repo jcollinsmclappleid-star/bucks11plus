@@ -181,7 +181,7 @@ export default function VocabularyList() {
       </p>
 
       <ChildExperienceCTA />
-      <ContentCTA />
+      <ContentCTA heading="Words memorised. Now test them." subhead="An 8-minute check shows whether vocabulary is actually paying off in real GL-style verbal reasoning." ctaLabel="Take the check" />
 
       <div className="not-prose my-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">
         <h3 className="text-lg font-semibold text-primary font-serif mb-3">Further Reading</h3>

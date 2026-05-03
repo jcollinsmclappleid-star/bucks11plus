@@ -144,7 +144,7 @@ export default function ExamsCompared() {
       </p>
 
       <ChildExperienceCTA />
-      <ContentCTA />
+      <ContentCTA heading="Take a Bucks-specific check" subhead="Other 11+ regions test differently. Get an 8-minute check designed for the Bucks Secondary Transfer Test." ctaLabel="Start the Bucks readiness check" />
 
       <div className="not-prose my-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">
         <h3 className="text-lg font-semibold text-primary font-serif mb-3">Further Reading</h3>

@@ -75,7 +75,7 @@ export default function GlossaryTerm({ slug }: { slug: string }) {
         </div>
       </div>
 
-      <ContentCTA />
+      <ContentCTA heading="Apply this in a real check" subhead="An 8-minute readiness check shows whether your child has actually mastered concepts like this — not just defined them." ctaLabel="See where they stand" />
       <Disclaimer />
     </div>
   );

@@ -3,6 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, BarChart2, Sparkles, Clock, Loader2, Lock, TrendingUp, BarChart3, Zap, CheckCircle2, XCircle, ChevronDown, ChevronUp, Mail, Send } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
+import { TestCountdownBadge } from "../components/shared/TestCountdownBadge";
+import { StickyResultsBar } from "../components/shared/StickyResultsBar";
+import { getWeeksToTest } from "@/lib/testDate";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
@@ -116,8 +119,9 @@ export default function GuestResults() {
   }
 
   return (
-    <div className="container mx-auto max-w-5xl px-4 py-8 space-y-8">
+    <div className="container mx-auto max-w-5xl px-4 py-8 pb-24 space-y-8">
       <Seo title="Your Readiness Results | Bucks 11 Plus Tests" description="View your child's readiness forecast and section breakdown." />
+      <StickyResultsBar sessionId={id || ""} />
 
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-border/60 pb-6">
         <div>
@@ -125,6 +129,9 @@ export default function GuestResults() {
           <p className="text-muted-foreground mt-2">
             Free Baseline Readiness Check completed just now
           </p>
+        </div>
+        <div>
+          <TestCountdownBadge variant="amber" />
         </div>
       </div>
 
@@ -332,35 +339,61 @@ export default function GuestResults() {
         </Card>
       )}
 
-      {weakestSection && (
-        <Card className="border-amber-200 bg-gradient-to-br from-amber-50 to-white shadow-md" data-testid="card-personalised-upsell-guest">
-          <CardContent className="p-8">
-            <div className="flex items-start gap-4">
-              <div className="h-12 w-12 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
-                <Zap className="h-6 w-6 text-amber-600" />
+      {weakestSection && (() => {
+        const weeks = getWeeksToTest();
+        const expectedLift = weakestSection.score < 50 ? "8–12" : weakestSection.score < 70 ? "5–9" : "3–6";
+        const topThree = [...sectionScores].sort((a, b) => a.score - b.score).slice(0, 3);
+        return (
+          <Card className="border-amber-200 bg-gradient-to-br from-amber-50 to-white shadow-md" data-testid="card-personalised-upsell-guest">
+            <CardContent className="p-8">
+              <div className="flex items-start gap-4">
+                <div className="h-12 w-12 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
+                  <Zap className="h-6 w-6 text-amber-600" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-bold text-primary text-xl font-serif mb-2">
+                    {weakestSection.score < 50
+                      ? `${weakestSection.name} needs immediate attention`
+                      : weakestSection.score < 70
+                      ? `Closing the gap in ${weakestSection.name} will have the biggest impact`
+                      : `Fine-tuning ${weakestSection.name} could push the score above 121`
+                    }
+                  </h3>
+                  <p className="text-slate-600 mb-5 leading-relaxed">
+                    {weakestSection.score < 50
+                      ? `At ${weakestSection.score}%, ${weakestSection.name} is the primary area holding the indicative readiness score back. The platform includes hundreds of targeted ${weakestSection.name} drills designed to build confidence and close this gap.`
+                      : weakestSection.score < 70
+                      ? `${weakestSection.name} at ${weakestSection.score}% is the biggest lever for improvement. Focused practice with the adaptive question bank could shift this into the "On Track" zone within weeks.`
+                      : `${weakestSection.name} is close at ${weakestSection.score}%. A few targeted sessions could push this past 80%, potentially raising the overall indicative readiness score above the 121 qualifying standard.`
+                    }
+                  </p>
+
+                  <div className="rounded-xl border border-amber-200 bg-white/70 p-5 space-y-3" data-testid="block-what-would-change">
+                    <div className="flex items-center gap-2">
+                      <TrendingUp className="h-4 w-4 text-amber-700" />
+                      <p className="text-xs font-bold uppercase tracking-widest text-amber-700">What would change</p>
+                    </div>
+                    <p className="text-sm text-slate-700 leading-relaxed">
+                      With consistent weekly practice, drilling these {topThree.length} priority area{topThree.length === 1 ? "" : "s"} can lift the indicative readiness score by roughly <strong className="text-primary">{expectedLift} points</strong>{weeks > 0 ? <> before the September test day — about <strong className="text-primary">{weeks} {weeks === 1 ? "week" : "weeks"} from now</strong></> : null}.
+                    </p>
+                    <ol className="space-y-1.5 text-sm text-slate-700 pl-1">
+                      {topThree.map((s, i) => (
+                        <li key={i} className="flex items-center gap-2" data-testid={`priority-area-${i}`}>
+                          <span className="inline-flex items-center justify-center h-5 w-5 rounded-full bg-amber-100 text-amber-800 text-[11px] font-bold shrink-0">{i + 1}</span>
+                          <span><strong>{s.name}</strong> — currently {s.score}%</span>
+                        </li>
+                      ))}
+                    </ol>
+                    <p className="text-[11px] text-slate-500 italic pt-1">
+                      Estimated lift based on typical platform usage. Not a guarantee — actual change depends on consistent weekly practice.
+                    </p>
+                  </div>
+                </div>
               </div>
-              <div className="flex-1">
-                <h3 className="font-bold text-primary text-xl font-serif mb-2">
-                  {weakestSection.score < 50
-                    ? `${weakestSection.name} needs immediate attention`
-                    : weakestSection.score < 70
-                    ? `Closing the gap in ${weakestSection.name} will have the biggest impact`
-                    : `Fine-tuning ${weakestSection.name} could push the score above 121`
-                  }
-                </h3>
-                <p className="text-slate-600 mb-4 leading-relaxed">
-                  {weakestSection.score < 50
-                    ? `At ${weakestSection.score}%, ${weakestSection.name} is the primary area holding the forecast back. Our 2,500+ question bank includes hundreds of targeted ${weakestSection.name} drills designed to build confidence and close this gap.`
-                    : weakestSection.score < 70
-                    ? `${weakestSection.name} at ${weakestSection.score}% is the biggest lever for improvement. Focused practice with our adaptive question bank could shift this into the "On Track" zone within weeks.`
-                    : `${weakestSection.name} is close at ${weakestSection.score}%. A few targeted sessions could push this past 80%, potentially raising the overall forecast above the 121 standard.`
-                  }
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
+            </CardContent>
+          </Card>
+        );
+      })()}
 
       <div className="bg-gradient-to-br from-primary/[0.03] to-primary/[0.08] border border-primary/15 rounded-2xl p-8 md:p-12">
         <div className="text-center mb-8">
@@ -379,6 +412,7 @@ export default function GuestResults() {
                 <h3 className="text-xl font-bold text-primary font-serif">Bucks Plus Edge</h3>
                 <span className="text-2xl font-bold text-primary">£35<span className="text-sm font-medium text-slate-500">/mo</span></span>
               </div>
+              <p className="text-xs text-emerald-700 font-semibold mb-1">Less than one hour with a private 11+ tutor</p>
               <p className="text-xs text-slate-400 mb-3">Cancel any time · no lock-in</p>
               <p className="text-sm text-slate-600 mb-4">Full platform access — every feature, monthly flexibility</p>
               <ul className="space-y-2 mb-6">
@@ -392,6 +426,7 @@ export default function GuestResults() {
               <Button className="w-full" asChild data-testid="button-upsell-pack-monthly">
                 <Link href="/pricing?autoCheckout=pack_plus">Start Monthly — £35/mo</Link>
               </Button>
+              <p className="text-[11px] text-slate-500 text-center mt-2">Cancel any time · No lock-in</p>
             </CardContent>
           </Card>
 
@@ -417,6 +452,7 @@ export default function GuestResults() {
               <Button className="w-full bg-primary" asChild data-testid="button-upsell-pack-annual">
                 <Link href="/pricing?autoCheckout=pack_annual">Get Annual Access — £279</Link>
               </Button>
+              <p className="text-[11px] text-slate-500 text-center mt-2">Equiv. £23.25/mo · Cancel any time</p>
             </CardContent>
           </Card>
         </div>

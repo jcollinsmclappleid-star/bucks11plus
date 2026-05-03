@@ -62,7 +62,7 @@ export default function Glossary() {
         ))}
       </div>
 
-      <ContentCTA />
+      <ContentCTA heading="Beyond definitions — see what matters" subhead="Take a free 8-minute readiness check to find which concepts your child has actually mastered." ctaLabel="Start the readiness check" />
       <Disclaimer />
     </div>
   );

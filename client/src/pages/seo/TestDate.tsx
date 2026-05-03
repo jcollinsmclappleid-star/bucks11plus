@@ -141,7 +141,7 @@ export default function TestDate({ year }: { year: 2025 | 2026 }) {
       </ul>
 
       <ChildExperienceCTA />
-      <ContentCTA />
+      <ContentCTA heading="Test day is approaching" subhead="An 8-minute readiness check tells you exactly where your child stands against 121 — with weeks still on the clock." ctaLabel="Take the check now" />
       <Disclaimer />
     </div>
   );

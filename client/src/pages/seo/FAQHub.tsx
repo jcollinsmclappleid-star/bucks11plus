@@ -143,7 +143,7 @@ export default function FAQHub() {
 
       <ChildExperienceCTA />
       <LeadMagnetBlock source="seo:faq-hub" />
-      <ContentCTA />
+      <ContentCTA heading="Got questions? Get answers — and a number." subhead="An 8-minute check answers the only question that really matters: where does my child currently stand against 121?" ctaLabel="Take the readiness check" />
 
       <div className="not-prose my-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">
         <h3 className="text-lg font-semibold text-primary font-serif mb-3">Further Reading</h3>

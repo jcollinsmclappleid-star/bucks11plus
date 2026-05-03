@@ -143,7 +143,7 @@ export default function FamiliarisationTest() {
       </p>
 
       <ChildExperienceCTA />
-      <ContentCTA />
+      <ContentCTA heading="Familiarisation in real exam format" subhead="An 8-minute timed check uses the same Bucks STT structure — section format, pace, GL-style questions." ctaLabel="Try the format now" />
 
       <div className="not-prose my-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">
         <h3 className="text-lg font-semibold text-primary font-serif mb-3">Further Reading</h3>

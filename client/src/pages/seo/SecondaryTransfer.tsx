@@ -147,7 +147,7 @@ export default function SecondaryTransfer() {
 
       <ChildExperienceCTA />
       <LeadMagnetBlock source="seo:secondary-transfer" />
-      <ContentCTA />
+      <ContentCTA heading="Take a Bucks STT-format readiness check" subhead="Free 8-minute check using the Bucks Secondary Transfer Test format — VR, NVR, Maths and Comprehension." ctaLabel="Start the check" />
       <Disclaimer />
     </div>
   );

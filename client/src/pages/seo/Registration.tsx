@@ -149,7 +149,7 @@ export default function Registration() {
 
       <ChildExperienceCTA />
       <LeadMagnetBlock source="seo:registration" />
-      <ContentCTA />
+      <ContentCTA heading="Registered? Now find out if they're ready." subhead="An 8-minute check gives a clear picture of where your child stands against 121." ctaLabel="Check readiness" />
 
       <div className="not-prose my-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">
         <h3 className="text-lg font-semibold text-primary font-serif mb-3">Further Reading</h3>

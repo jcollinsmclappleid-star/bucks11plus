@@ -94,7 +94,7 @@ export default function IndependentVsGrammar() {
         For more on what to do if your child does not qualify, see our <Link href="/learn/my-child-did-not-pass-the-bucks-11-plus" className="text-primary hover:underline">guide to next steps</Link>.
       </p>
 
-      <ContentCTA />
+      <ContentCTA heading="Going for grammar? Find out if your child's ready" subhead="An 8-minute check gives an indicative readiness score against the 121 grammar threshold." ctaLabel="Check grammar readiness" />
       <Disclaimer />
     </div>
   );

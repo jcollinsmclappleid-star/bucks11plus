@@ -174,7 +174,7 @@ export default function ScoreCalculator() {
       </ol>
 
       <ChildExperienceCTA />
-      <ContentCTA />
+      <ContentCTA heading="Stop estimating. Get an actual readiness score." subhead="An 8-minute timed check gives an indicative readiness score against 121 — based on real performance, not assumptions." ctaLabel="Take the check" />
       <Disclaimer />
     </div>
   );

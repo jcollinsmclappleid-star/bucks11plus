@@ -101,7 +101,7 @@ export default function Year6Revision() {
       </ul>
 
       <ChildExperienceCTA />
-      <ContentCTA />
+      <ContentCTA heading="Revising? Make sure it's the right things" subhead="An 8-minute check identifies which sections to focus revision on first." ctaLabel="Find the focus" />
       <Disclaimer />
     </div>
   );

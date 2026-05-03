@@ -96,7 +96,7 @@ export default function Year5SummerPlan() {
       </p>
 
       <ChildExperienceCTA />
-      <ContentCTA />
+      <ContentCTA heading="Start the summer with a clear baseline" subhead="An 8-minute check shows exactly which sections need the summer's focus." ctaLabel="Get the baseline" />
       <Disclaimer />
     </div>
   );

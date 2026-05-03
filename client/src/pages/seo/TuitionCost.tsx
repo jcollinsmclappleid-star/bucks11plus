@@ -162,7 +162,7 @@ export default function TuitionCost() {
       </p>
 
       <ChildExperienceCTA />
-      <ContentCTA />
+      <ContentCTA heading="Before paying for tutoring, get a baseline" subhead="An 8-minute readiness check tells you exactly which sections need help — so any tutoring (or none) targets the right thing." ctaLabel="Get the baseline" />
 
       <div className="not-prose my-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">
         <h3 className="text-lg font-semibold text-primary font-serif mb-3">Further Reading</h3>

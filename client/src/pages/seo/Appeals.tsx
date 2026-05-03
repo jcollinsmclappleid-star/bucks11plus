@@ -152,7 +152,7 @@ export default function Appeals() {
         <li><Link href="/learn/year-9-grammar-school-entry-buckinghamshire" className="text-primary hover:underline">Year 9 grammar entry routes</Link></li>
       </ul>
 
-      <ContentCTA />
+      <ContentCTA heading="Worried about an appeal? Build a stronger case." subhead="An indicative readiness score with a per-section breakdown gives you concrete evidence of where your child stands — useful before the appeal window opens." ctaLabel="Get the readiness check" />
       <Disclaimer />
     </div>
   );

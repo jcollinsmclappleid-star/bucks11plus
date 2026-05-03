@@ -93,7 +93,7 @@ export default function PracticePapersFree() {
 
       <ChildExperienceCTA />
       <LeadMagnetBlock source="seo:practice-papers-free" />
-      <ContentCTA />
+      <ContentCTA heading="Free practice paper above. Free readiness score below." subhead="An 8-minute check turns practice into a measurable indicative readiness score against 121." ctaLabel="Get the readiness score" />
       <Disclaimer />
     </div>
   );
