@@ -600,8 +600,8 @@ function InteractiveQuestionCard({ q, index, total, highlight }: { q: SampleQ; i
       data-testid={`sample-question-${index}`}
     >
       {highlight && !isAnswered && (
-        <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 z-10 bg-amber-400 text-amber-950 text-[9px] font-extrabold px-2.5 py-1 rounded-full shadow-md uppercase tracking-wider whitespace-nowrap">
-          ← Start here
+        <div className="bg-amber-400 text-amber-950 text-[9px] font-extrabold py-1.5 text-center uppercase tracking-widest w-full">
+          ← Start here — tap an answer
         </div>
       )}
 
