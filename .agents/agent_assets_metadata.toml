@@ -6,3 +6,9 @@ id = "2Ze23ls4hTCfWjqUKxunP"
 uri = "file://client/public/sitemap.xml"
 type = "unspecified"
 title = "sitemap.xml — ready for Google Search Console"
+
+[[outputs]]
+id = "kAhH3lIITaNu8oSxUwvaP"
+uri = "file://tmp_practice_paper.pdf"
+type = "pdf"
+title = "Bucks 11+ Free Practice Paper"
