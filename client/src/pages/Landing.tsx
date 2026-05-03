@@ -433,14 +433,21 @@ function CornerSquare({ corner }: { corner: "tl" | "tr" | "bl" | "br" }) {
   );
 }
 
-function ArrowGlyph({ dir }: { dir: "up" | "right" | "down" | "left" }) {
-  const rot: Record<string, number> = { up: 0, right: 90, down: 180, left: 270 };
+function ShapeBox({ corner, kind, filled, size = "md" }: { corner: "tl" | "tr" | "bl" | "br"; kind: "triangle" | "circle" | "diamond"; filled: boolean; size?: "sm" | "md" }) {
+  const cx = corner.includes("r") ? 35 : 11;
+  const cy = corner.startsWith("b") ? 35 : 11;
+  const fill = filled ? "#0f172a" : "white";
+  const stroke = "#0f172a";
+  const sw = filled ? 0 : 1.6;
+  let shape: React.ReactNode = null;
+  if (kind === "triangle") shape = <polygon points={`${cx},${cy - 5} ${cx - 5},${cy + 4} ${cx + 5},${cy + 4}`} fill={fill} stroke={stroke} strokeWidth={sw} />;
+  else if (kind === "circle") shape = <circle cx={cx} cy={cy} r={5} fill={fill} stroke={stroke} strokeWidth={sw} />;
+  else if (kind === "diamond") shape = <polygon points={`${cx},${cy - 5} ${cx + 5},${cy} ${cx},${cy + 5} ${cx - 5},${cy}`} fill={fill} stroke={stroke} strokeWidth={sw} />;
+  const cls = size === "sm" ? "w-9 h-9" : "w-11 h-11";
   return (
-    <svg viewBox="0 0 46 46" className="w-9 h-9">
+    <svg viewBox="0 0 46 46" className={cls}>
       <rect x="3" y="3" width="40" height="40" rx="3" fill="white" stroke="#475569" strokeWidth="1.5" />
-      <g transform={`rotate(${rot[dir]} 23 23)`}>
-        <path d="M 23 12 L 23 34 M 23 12 L 16 19 M 23 12 L 30 19" stroke="#0f172a" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-      </g>
+      {shape}
     </svg>
   );
 }
@@ -517,24 +524,27 @@ const SAMPLE_QUESTIONS: SampleQ[] = [
     explanation: "Shapes A, B, D and E all have the dark triangle in the top-right corner. C has it in the bottom-left — the odd one out.",
   },
   {
-    subject: "Non-Verbal Reasoning", type: "Rotation Sequence",
-    question: "Which shape comes next in the sequence?",
+    subject: "Non-Verbal Reasoning", type: "Shape Analogy",
+    question: "The first two shapes go together in a certain way. Find the shape that goes with the third in the same way.",
     visual: (
-      <div className="flex items-center gap-1.5 py-2 px-3 bg-slate-50 rounded-lg border border-slate-100">
-        {(["up","right","down","left","up","right","down"] as const).map((d, i) => (
-          <div key={i} className="flex flex-col items-center"><ArrowGlyph dir={d} /></div>
-        ))}
-        <div className="flex flex-col items-center justify-center w-9 h-9 rounded border-2 border-dashed border-slate-300 text-slate-400 text-sm font-bold">?</div>
+      <div className="flex items-center justify-center gap-1 py-3 px-2 bg-slate-50 rounded-lg border border-slate-100">
+        <ShapeBox corner="tl" kind="triangle" filled={true} size="sm" />
+        <span className="text-slate-400 text-xs">→</span>
+        <ShapeBox corner="br" kind="triangle" filled={false} size="sm" />
+        <span className="text-slate-300 text-sm font-bold mx-1">::</span>
+        <ShapeBox corner="tr" kind="diamond" filled={true} size="sm" />
+        <span className="text-slate-400 text-xs">→</span>
+        <div className="w-9 h-9 rounded border-2 border-dashed border-slate-300 flex items-center justify-center text-slate-400 font-bold text-xs">?</div>
       </div>
     ),
     options: [
-      { letter: "A", text: "Arrow pointing up" },
-      { letter: "B", text: "Arrow pointing right" },
-      { letter: "C", text: "Arrow pointing down" },
-      { letter: "D", text: "Arrow pointing left", correct: true },
-      { letter: "E", text: "Arrow pointing up-right" },
+      { letter: "A", text: <ShapeBox corner="bl" kind="diamond" filled={false} size="sm" />, correct: true },
+      { letter: "B", text: <ShapeBox corner="bl" kind="diamond" filled={true} size="sm" /> },
+      { letter: "C", text: <ShapeBox corner="tl" kind="diamond" filled={false} size="sm" /> },
+      { letter: "D", text: <ShapeBox corner="bl" kind="triangle" filled={false} size="sm" /> },
+      { letter: "E", text: <ShapeBox corner="br" kind="diamond" filled={false} size="sm" /> },
     ],
-    explanation: "The arrow rotates 90° clockwise each step (up → right → down → left → repeat). After down comes left.",
+    explanation: "Two transformations happen at once: the small shape moves to the diagonally opposite corner AND its fill flips (filled ↔ outline). So a filled diamond in the top-right becomes an outline diamond in the bottom-left.",
   },
   {
     subject: "Comprehension", type: "Inference",
