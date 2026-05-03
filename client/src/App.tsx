@@ -200,7 +200,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
             Independent educational resource. Not affiliated with The Buckinghamshire Grammar Schools, GL Assessment, or any individual grammar school.
           </p>
           <p className="text-xs text-primary-foreground/40 text-center" data-testid="text-footer-statutory">
-            Registered office: 71-75 Shelton Street, Covent Garden, London, WC2H 9JQ &nbsp;·&nbsp; ICO registration: ZC127831 &nbsp;·&nbsp; <a href="mailto:support@bucks11plustest.co.uk" className="underline hover:text-white">support@bucks11plustest.co.uk</a>
+            Registered office: 71-75 Shelton Street, Covent Garden, London, WC2H 9JQ &nbsp;·&nbsp; Company no. 17084981 &nbsp;·&nbsp; ICO registration: ZC127831 &nbsp;·&nbsp; <a href="mailto:support@bucks11plustest.co.uk" className="underline hover:text-white">support@bucks11plustest.co.uk</a>
           </p>
           <p className="text-xs text-primary-foreground/25 text-center">
             © {new Date().getFullYear()} Ianson Systems Limited. Registered in England &amp; Wales. &nbsp;·&nbsp; <button type="button" onClick={() => { try { localStorage.removeItem('b11p-cookie-consent-v1'); } catch {} window.location.reload(); }} className="underline hover:text-white" data-testid="button-manage-cookies">Manage cookie preferences</button>

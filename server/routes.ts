@@ -436,12 +436,6 @@ export async function registerRoutes(
         mode: 'subscription',
         success_url: `${protocol}://${host}/app/checkout-success?tier=${tier}&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${protocol}://${host}/pricing`,
-        consent_collection: { terms_of_service: 'required' },
-        custom_text: {
-          terms_of_service_acceptance: {
-            message: "I agree to the Terms of Service and Refund Policy. I want immediate access to digital content and I understand this waives my 14-day right to cancel under the Consumer Contracts Regulations 2013 once any content is accessed.",
-          },
-        },
         metadata: {
           userId: user.id,
           tier: tier,
@@ -517,12 +511,6 @@ export async function registerRoutes(
         mode: 'subscription',
         success_url: `${protocol}://${host}/app/checkout-success?tier=${targetTier}&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${protocol}://${host}/pricing`,
-        consent_collection: { terms_of_service: 'required' },
-        custom_text: {
-          terms_of_service_acceptance: {
-            message: "I agree to the Terms of Service and Refund Policy. I want immediate access to digital content and I understand this waives my 14-day right to cancel under the Consumer Contracts Regulations 2013 once any content is accessed.",
-          },
-        },
         metadata: { userId: user.id, tier: targetTier, upgradeFrom: currentTier },
       });
 
@@ -564,12 +552,6 @@ export async function registerRoutes(
         mode: 'subscription',
         success_url: `${protocol}://${host}/checkout-success?tier=${tier}&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${protocol}://${host}/pricing`,
-        consent_collection: { terms_of_service: 'required' },
-        custom_text: {
-          terms_of_service_acceptance: {
-            message: "I agree to the Terms of Service and Refund Policy. I want immediate access to digital content and I understand this waives my 14-day right to cancel under the Consumer Contracts Regulations 2013 once any content is accessed.",
-          },
-        },
         metadata: { tier },
       });
 
