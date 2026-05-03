@@ -4,6 +4,7 @@ import { useAuth } from "../lib/auth";
 import { Link } from "wouter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { IndicativeScoreCaveat } from "../components/shared/IndicativeScoreCaveat";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer,
@@ -201,6 +202,7 @@ function SummaryTab({ data }: { data: AnalyticsData }) {
 
   return (
     <div className="space-y-6">
+      <IndicativeScoreCaveat variant="inline" />
       <Card className={`border-l-4 ${attempt.band === 'Green' ? 'border-l-emerald-500' : attempt.band === 'Amber' ? 'border-l-amber-500' : 'border-l-red-500'} ${BAND_BG[attempt.band]}`} data-testid="card-executive-summary">
         <CardContent className="pt-5 pb-4 flex items-start gap-3">
           <div className="mt-0.5 shrink-0">{BAND_ICONS[attempt.band]}</div>

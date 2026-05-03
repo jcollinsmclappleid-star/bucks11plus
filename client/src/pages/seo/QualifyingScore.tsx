@@ -125,7 +125,7 @@ export default function QualifyingScore() {
       </ul>
       <p>
         Our <Link href="/free-diagnostic" className="text-primary hover:underline">free readiness check</Link> measures your child's
-        current performance against the 121 benchmark, providing a forecast score and identifying specific areas for improvement.
+        current performance against the 121 preparation benchmark, providing an <strong>indicative readiness score</strong> (not the official GL standardised score) and identifying specific areas for improvement.
       </p>
 
       <h2 className="text-primary font-serif">Understanding Your Child's Score</h2>
@@ -168,9 +168,17 @@ export default function QualifyingScore() {
         our <Link href="/buckinghamshire-11-plus-guide" className="text-primary hover:underline">Complete Buckinghamshire 11+ Guide</Link>.
       </p>
 
+      <h2 className="text-primary font-serif">How Our Readiness Check Relates to 121</h2>
+      <p>
+        Our free readiness check produces an <strong>Indicative Readiness Score</strong> calibrated against the 121 qualifying threshold using GL-style question types and difficulty weightings. It is <strong>not</strong> an official GL Assessment standardised score, and achieving 121 on our check does not indicate that a child will achieve the same result on the official Secondary Transfer Test. GL Assessment uses proprietary age-standardised scoring tables that are not available to independent providers.
+      </p>
+      <p>
+        We treat 121 as a <em>preparation benchmark</em>: a target to calibrate readiness against, not a prediction of GL's official number. Read the full methodology on our <Link href="/scoring-methodology" className="text-primary hover:underline">scoring methodology page</Link>.
+      </p>
+
       <ChildExperienceCTA />
       <LeadMagnetBlock source="seo:qualifying-score" />
-      <ContentCTA heading="Where is your child against 121?" subhead="Take a free 8-minute check to see your child's indicative readiness score against the 121 qualifying standard." ctaLabel="See the score" />
+      <ContentCTA heading="Where is your child against 121?" subhead="Take a free 8-minute check to see your child's indicative readiness score against the 121 qualifying benchmark — not the official GL Assessment score." ctaLabel="See the indicative readiness score" />
       <Disclaimer />
     </div>
   );

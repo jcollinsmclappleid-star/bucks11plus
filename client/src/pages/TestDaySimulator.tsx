@@ -3,6 +3,7 @@ import { useAuth } from "../lib/auth";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation } from "wouter";
 import { Loader2 } from "lucide-react";
+import { IndicativeScoreCaveat } from "../components/shared/IndicativeScoreCaveat";
 
 type Phase = "intro" | "paper1" | "break" | "paper2" | "results";
 
@@ -286,14 +287,16 @@ export default function TestDaySimulator() {
         <p className="text-center text-muted-foreground">Here's how the test day went.</p>
 
         <div className={`rounded-xl border-2 p-6 text-center space-y-2 ${bandBg}`}>
-          <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Estimated Forecast</p>
+          <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Indicative Readiness</p>
           <div className={`text-6xl font-bold ${bandColor}`} data-testid="text-forecast-score">{forecastScore}</div>
-          <p className="text-xs text-muted-foreground">out of 141 · Qualifying: 121</p>
+          <p className="text-xs text-muted-foreground">out of 141 · 121 preparation benchmark</p>
           <p className={`text-sm font-bold ${bandColor}`}>{band}</p>
           {forecastScore < 121 && (
-            <p className="text-sm text-muted-foreground mt-2">{121 - forecastScore} points from the qualifying standard</p>
+            <p className="text-sm text-muted-foreground mt-2">{121 - forecastScore} points from the 121 preparation benchmark</p>
           )}
         </div>
+
+        <IndicativeScoreCaveat variant="inline" />
 
         <div className="grid md:grid-cols-2 gap-6">
           <div className="rounded-xl border bg-card p-6 space-y-3">

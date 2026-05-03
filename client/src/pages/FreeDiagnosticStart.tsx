@@ -66,7 +66,7 @@ export default function FreeDiagnosticStart() {
     <div className="container mx-auto max-w-3xl px-4 py-16">
       <Seo
         title="Free Baseline Readiness Check | Bucks 11 Plus Tests"
-        description="Take a free 8-minute readiness check to see where your child stands against the Bucks 121 benchmark. No account needed."
+        description="Take a free 8-minute readiness check to get an indicative readiness signal calibrated to the Bucks 121 qualifying benchmark. Not the official GL Assessment standardised score. No account needed."
       />
 
       <Card className="border-border/60 shadow-lg overflow-hidden" data-testid="card-free-diagnostic-start">
@@ -117,7 +117,7 @@ export default function FreeDiagnosticStart() {
               </li>
               <li className="flex gap-3 text-slate-700">
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-sm font-medium text-slate-600">3</span>
-                Do not help them with the answers. The forecast needs an honest baseline.
+                Do not help them with the answers. The indicative readiness check needs an honest baseline.
               </li>
             </ul>
           </div>
@@ -125,8 +125,8 @@ export default function FreeDiagnosticStart() {
           <div className="rounded-xl border border-slate-200 bg-slate-50 p-4" data-testid="diagnostic-trust-row">
             <div className="grid sm:grid-cols-3 gap-3 text-center">
               <div>
-                <div className="text-xs font-bold uppercase tracking-wider text-primary mb-0.5">Forecast vs 121</div>
-                <div className="text-[11px] text-slate-500">Age-adjusted score against the Bucks qualifying threshold</div>
+                <div className="text-xs font-bold uppercase tracking-wider text-primary mb-0.5">Indicative Readiness vs 121</div>
+                <div className="text-[11px] text-slate-500">Directional readiness signal — not the official GL standardised score</div>
               </div>
               <div className="sm:border-x border-slate-200 sm:px-3">
                 <div className="text-xs font-bold uppercase tracking-wider text-primary mb-0.5">Top 3 priorities</div>

@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Progress } from "@/components/ui/progress";
 import { ArrowRight, AlertCircle, BookOpen, Clock, Lock, Target, Loader2, FileText, TrendingUp, Trophy, BarChart3, Map, Zap, Crown, Calendar } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
+import { IndicativeScoreCaveat } from "../components/shared/IndicativeScoreCaveat";
 import { useAuth } from "../lib/auth";
 import { useQuery } from "@tanstack/react-query";
 import { getQueryFn } from "../lib/queryClient";
@@ -158,7 +159,7 @@ export default function Dashboard() {
                   </svg>
                   <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
                     <span className="text-4xl font-bold text-primary" data-testid="text-forecast-score">{currentScore}</span>
-                    <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider mt-1">Est. Score</span>
+                    <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mt-1 text-center px-2">Indicative<br/>Readiness</span>
                   </div>
                 </div>
 
@@ -172,6 +173,7 @@ export default function Dashboard() {
                     </div>
                     <Progress value={Math.min((currentScore/121)*100, 100)} className="h-3 [&>div]:bg-amber-400" />
                   </div>
+                  <IndicativeScoreCaveat variant="inline" className="mt-3" />
 
                   {sectionScores.length > 0 && (
                     <div className="bg-slate-50 p-4 rounded-lg border border-slate-100">

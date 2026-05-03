@@ -283,3 +283,11 @@ content/
   - RS analytics (`computeWAI/PDI/CR/SI/RS`) — banding matrix, 1 000-attempt stress test
   - End-to-end customer journey (real HTTP + DB) — start → submit → fetch results → email → nurture enqueue → lead-magnet → unsubscribe, with replay-protection + token-auth checks and try/finally cleanup
 - Security regression guard: `GET /api/guest/results/:id` and `/api/guest/review/:id` previously had `if (token && session.guestToken !== token)` which let missing-token requests through; fixed to `if (!token || ...)` and the harness now asserts the no-token path returns 403
+
+## 121 Compliance — IndicativeScoreCaveat
+- Shared component `client/src/components/shared/IndicativeScoreCaveat.tsx` (inline + block variants, links `/scoring-methodology`) used on every surface where our internally-calculated readiness number is shown next to the GL Assessment 121 standardised score
+- Surfaces with inline caveat adjacent to the number: Results, GuestResults, Dashboard, Progress, ParentAnalytics SummaryTab, Programme (Forecast/Gap row), TestDaySimulator results
+- Surfaces with block caveat: HowItWorks (above readiness-bands legend), seo/QualifyingScore (methodology section before CTAs)
+- Marketing mockups (Landing ForecastPanel, DashboardPreview) carry the "Illustrative preview" footnote
+- Standard terminology: "Indicative Readiness" (never "Forecast"/"Est. Score"/"estimated score" beside the number); "121 preparation benchmark" / "121 benchmark" (never "121 Target" / "qualifying standard")
+- Audit reference: `compliance/121-references-audit.md`

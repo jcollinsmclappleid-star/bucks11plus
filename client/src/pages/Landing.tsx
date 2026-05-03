@@ -21,12 +21,12 @@ function ForecastPanel() {
           <div className="flex items-end gap-4">
             <div>
               <div className="text-6xl font-bold leading-none">114</div>
-              <div className="text-xs text-white/50 mt-1">estimated score</div>
+              <div className="text-xs text-white/50 mt-1">indicative readiness</div>
             </div>
             <div className="flex-1 pb-1">
               <div className="flex justify-between text-[10px] text-white/40 mb-1">
                 <span>Current</span>
-                <span className="text-amber-300 font-bold">121 Target</span>
+                <span className="text-amber-300 font-bold">121 benchmark</span>
               </div>
               <div className="h-3 w-full bg-white/10 rounded-full overflow-hidden">
                 <div className="h-full bg-amber-400 rounded-full" style={{ width: `${(114/130)*100}%` }} />
@@ -61,9 +61,10 @@ function ForecastPanel() {
         </div>
         <div>
           <p className="text-xs font-bold text-amber-800">Priority: Non-Verbal Reasoning</p>
-          <p className="text-[10px] text-amber-600 mt-0.5">Closing this gap could add 4–5 points to forecast</p>
+          <p className="text-[10px] text-amber-600 mt-0.5">Closing this gap could lift indicative readiness by 4–5 points</p>
         </div>
       </div>
+      <p className="text-[9px] text-muted-foreground/70 italic text-center">Illustrative preview · Indicative readiness, not the official GL Assessment standardised score</p>
     </div>
   );
 }

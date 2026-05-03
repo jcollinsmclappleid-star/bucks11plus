@@ -52,7 +52,7 @@ function ReadinessGauge() {
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
             <span className="text-4xl font-bold text-primary" data-testid="preview-score">{score}</span>
-            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1">Est. Score</span>
+            <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest mt-1 text-center px-2">Indicative<br/>Readiness</span>
           </div>
         </div>
 
@@ -62,7 +62,7 @@ function ReadinessGauge() {
           </div>
           <div>
             <div className="flex justify-between text-sm mb-1.5">
-              <span className="font-medium text-primary">Gap to 121 Standard</span>
+              <span className="font-medium text-primary">Gap to 121 benchmark</span>
               <span className="font-bold text-amber-600">{gap} points</span>
             </div>
             <div className="h-3 w-full rounded-full overflow-hidden bg-slate-100">
@@ -71,7 +71,10 @@ function ReadinessGauge() {
           </div>
           <div className="bg-slate-50 p-3 rounded-lg border border-slate-100">
             <p className="text-xs text-muted-foreground">
-              <strong className="text-primary">Highest Impact:</strong> Verbal Reasoning at 62% is the primary area for improvement. Targeted practice here will have the highest impact on your overall score.
+              <strong className="text-primary">Highest Impact:</strong> Verbal Reasoning at 62% is the primary area for improvement. Targeted practice here will have the highest impact on the indicative readiness score.
+            </p>
+            <p className="text-[10px] text-muted-foreground/70 italic mt-2">
+              Illustrative preview · Indicative readiness, not an official GL Assessment score
             </p>
           </div>
         </div>

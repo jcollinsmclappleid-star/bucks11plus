@@ -6,6 +6,7 @@ import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState } from "react";
 import { Seo } from "../components/shared/Seo";
+import { IndicativeScoreCaveat } from "../components/shared/IndicativeScoreCaveat";
 import { useAuth } from "../lib/auth";
 import { useQuery } from "@tanstack/react-query";
 import { getQueryFn } from "../lib/queryClient";
@@ -380,7 +381,7 @@ export default function Results() {
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
                 <span className="text-6xl font-bold text-primary" data-testid="text-result-score">{currentScore}</span>
-                <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1">Forecast</span>
+                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1 text-center px-2">Indicative<br/>Readiness</span>
               </div>
             </div>
 
@@ -394,15 +395,12 @@ export default function Results() {
               </div>
               <p className="text-muted-foreground text-lg">
                 {gap > 0 ? (
-                  <>Your child is currently showing an estimated <strong className="text-primary">{gap} point gap</strong> to the 121 threshold.</>
+                  <>Your child is currently showing an indicative <strong className="text-primary">{gap} point gap</strong> to the 121 preparation benchmark.</>
                 ) : (
-                  <>Your child is <strong className="text-green-700">meeting or exceeding</strong> the 121 threshold on this estimate!</>
+                  <>Your child is <strong className="text-green-700">meeting or exceeding</strong> the 121 preparation benchmark on this indicative readiness check.</>
                 )}
               </p>
-              <p className="text-[11px] text-muted-foreground/50 text-center mt-2">
-                Indicative readiness estimate only · Not an official GL Assessment score ·{" "}
-                <Link href="/scoring-methodology" className="underline hover:text-muted-foreground/80">How scoring works</Link>
-              </p>
+              <IndicativeScoreCaveat variant="inline" className="mt-3 max-w-md mx-auto justify-center text-left" />
             </div>
 
             <div className="w-full bg-white p-6 rounded-2xl border border-border shadow-sm text-left mt-4 relative overflow-hidden">

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "wouter";
 import { Seo } from "../components/shared/Seo";
+import { IndicativeScoreCaveat } from "../components/shared/IndicativeScoreCaveat";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "../lib/auth";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -73,6 +74,8 @@ export default function Progress() {
   return (
     <div className="container mx-auto max-w-5xl px-4 py-8 space-y-8">
       <Seo title="Progress & Plan | Bucks 11 Plus Tests" description="Track your child's 11+ readiness progress over time." />
+
+      <IndicativeScoreCaveat variant="inline" />
 
       <div className="rounded-2xl bg-gradient-to-br from-slate-900 to-slate-700 text-white p-6 md:p-8 shadow-lg relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">

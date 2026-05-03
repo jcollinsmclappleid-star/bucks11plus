@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, BarChart2, Sparkles, Clock, Loader2, Lock, TrendingUp, BarChart3, Zap, CheckCircle2, XCircle, ChevronDown, ChevronUp, Mail, Send } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
+import { IndicativeScoreCaveat } from "../components/shared/IndicativeScoreCaveat";
 import { TestCountdownBadge } from "../components/shared/TestCountdownBadge";
 import { StickyResultsBar } from "../components/shared/StickyResultsBar";
 import { getWeeksToTest } from "@/lib/testDate";
@@ -155,7 +156,7 @@ export default function GuestResults() {
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
                 <span className="text-6xl font-bold text-primary" data-testid="text-guest-score">{currentScore}</span>
-                <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1">Forecast</span>
+                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1 text-center px-2">Indicative<br/>Readiness</span>
               </div>
             </div>
 
@@ -169,15 +170,12 @@ export default function GuestResults() {
               </div>
               <p className="text-muted-foreground text-lg">
                 {(target - currentScore) > 0 ? (
-                  <>Your child is currently showing an estimated <strong className="text-primary">{target - currentScore} point gap</strong> to the 121 threshold.</>
+                  <>Your child is currently showing an indicative <strong className="text-primary">{target - currentScore} point gap</strong> to the 121 preparation benchmark.</>
                 ) : (
-                  <>Your child is <strong className="text-green-700">meeting or exceeding</strong> the 121 threshold on this estimate!</>
+                  <>Your child is <strong className="text-green-700">meeting or exceeding</strong> the 121 preparation benchmark on this indicative readiness check.</>
                 )}
               </p>
-              <p className="text-[11px] text-muted-foreground/50 text-center mt-2">
-                Indicative readiness estimate only · Not an official GL Assessment score ·{" "}
-                <Link href="/scoring-methodology" className="underline hover:text-muted-foreground/80">How scoring works</Link>
-              </p>
+              <IndicativeScoreCaveat variant="inline" className="mt-3 max-w-md mx-auto justify-center text-left" />
             </div>
 
           </CardContent>
@@ -364,7 +362,7 @@ export default function GuestResults() {
                       ? `At ${weakestSection.score}%, ${weakestSection.name} is the primary area holding the indicative readiness score back. The platform includes hundreds of targeted ${weakestSection.name} drills designed to build confidence and close this gap.`
                       : weakestSection.score < 70
                       ? `${weakestSection.name} at ${weakestSection.score}% is the biggest lever for improvement. Focused practice with the adaptive question bank could shift this into the "On Track" zone within weeks.`
-                      : `${weakestSection.name} is close at ${weakestSection.score}%. A few targeted sessions could push this past 80%, potentially raising the overall indicative readiness score above the 121 qualifying standard.`
+                      : `${weakestSection.name} is close at ${weakestSection.score}%. A few targeted sessions could push this past 80%, potentially lifting the indicative readiness score past the 121 preparation benchmark we calibrate to.`
                     }
                   </p>
 

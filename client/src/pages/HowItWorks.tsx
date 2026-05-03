@@ -3,6 +3,7 @@ import { Search, Target, Zap, TrendingUp, ChevronDown, BarChart3, Clock, Layers,
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { Seo } from "../components/shared/Seo";
+import { IndicativeScoreCaveat } from "../components/shared/IndicativeScoreCaveat";
 
 const howItWorksFaqSchema = {
   "@context": "https://schema.org",
@@ -323,6 +324,8 @@ export default function HowItWorks() {
               </div>
             ))}
           </div>
+
+          <IndicativeScoreCaveat variant="block" className="mb-4" />
 
           {/* Readiness band legend */}
           <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">

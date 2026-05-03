@@ -6,6 +6,7 @@ import { useAuth } from "../lib/auth";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { getQueryFn, apiRequest, queryClient } from "../lib/queryClient";
 import { Seo } from "../components/shared/Seo";
+import { IndicativeScoreCaveat } from "../components/shared/IndicativeScoreCaveat";
 import {
   CheckCircle2, Circle, Clock, Target, TrendingUp, Activity,
   ArrowRight, Calendar, PlayCircle, Loader2, ChevronDown, ChevronUp, ListChecks
@@ -248,7 +249,7 @@ export default function Programme() {
                 <Target className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <p className="text-xs text-muted-foreground uppercase font-medium">Current Forecast</p>
+                <p className="text-xs text-muted-foreground uppercase font-medium">Indicative Readiness</p>
                 <p className="text-2xl font-bold text-primary" data-testid="text-programme-forecast">{forecast}</p>
               </div>
             </CardContent>
@@ -259,15 +260,17 @@ export default function Programme() {
                 <TrendingUp className={`h-6 w-6 ${gap <= 0 ? 'text-green-600' : 'text-amber-600'}`} />
               </div>
               <div>
-                <p className="text-xs text-muted-foreground uppercase font-medium">Gap to 121</p>
+                <p className="text-xs text-muted-foreground uppercase font-medium">Gap to 121 benchmark</p>
                 <p className={`text-2xl font-bold ${gap <= 0 ? 'text-green-600' : 'text-amber-600'}`}>
-                  {gap <= 0 ? "Target met" : `${gap} pts`}
+                  {gap <= 0 ? "Benchmark met" : `${gap} pts`}
                 </p>
               </div>
             </CardContent>
           </Card>
         </div>
       )}
+
+      {forecast > 0 && <IndicativeScoreCaveat variant="inline" />}
 
       <Card className="border-border/60 shadow-sm overflow-hidden">
         <CardHeader className="bg-slate-50/50 border-b border-border/50">
