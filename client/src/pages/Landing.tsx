@@ -504,7 +504,7 @@ export default function Landing() {
                 </h1>
               </div>
               <p className="text-base md:text-lg text-white/65 leading-relaxed" data-testid="text-hero-sub">
-                Bucks-specific diagnostics that pinpoint the exact gaps costing marks, rank your child's highest-impact focus areas, and track real progress toward the <span className="text-amber-300 font-semibold">121 qualifying score</span>. With 2,500+ GL-style questions to close every gap.
+                Bucks-specific diagnostics that pinpoint the exact gaps costing marks, rank your child's highest-impact focus areas, and produce a forecast modelled on the <span className="text-amber-300 font-semibold">121 qualifying standard</span>. With 2,500+ GL-style questions to close every gap.
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
                 <Button size="lg" className="h-12 px-8 text-base bg-amber-400 text-amber-950 hover:bg-amber-300 font-bold shadow-lg shadow-amber-400/20 border-none" asChild data-testid="button-hero-primary">
