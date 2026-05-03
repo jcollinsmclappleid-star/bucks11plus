@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, CheckCircle2, Target, Clock, BarChart3, Zap, Shield, Award, Star, ChevronUp, TrendingUp, Brain, Layers, Hash, BookOpen, Trophy } from "lucide-react";
+import { ArrowRight, CheckCircle2, Target, Clock, BarChart3, Zap, Shield, Award, Star, ChevronUp, TrendingUp, Brain, Layers, Hash, BookOpen, Trophy, Flame, Calendar, Sparkles, PlayCircle, GraduationCap } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 import { useAuth } from "../lib/auth";
 import { TestCountdownBadge } from "../components/shared/TestCountdownBadge";
@@ -400,6 +400,243 @@ function ProgrammePanel() {
   );
 }
 
+function DashboardShowcasePanel() {
+  return (
+    <div className="relative mx-auto" style={{ maxWidth: 380 }} data-testid="showcase-dashboard">
+      {/* Device frame */}
+      <div className="relative rounded-[2.25rem] bg-slate-900 p-2.5 shadow-2xl ring-1 ring-black/10">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-5 bg-slate-900 rounded-b-2xl z-10" />
+        <div className="rounded-[1.75rem] bg-slate-50 overflow-hidden border border-slate-200" style={{ height: 720 }}>
+          {/* App chrome */}
+          <div className="bg-white px-4 py-3 border-b border-slate-200 flex items-center justify-between sticky top-0 z-10">
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center text-white font-bold text-[11px]">11+</div>
+              <div>
+                <div className="text-[11px] font-bold text-primary leading-none">Bucks 11+ Test Hub</div>
+                <div className="text-[9px] text-slate-400 mt-0.5">app.bucks11plustest.co.uk</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              <span className="text-[9px] text-slate-400">Live preview</span>
+            </div>
+          </div>
+
+          {/* Scrollable dashboard body */}
+          <div tabIndex={0} role="region" aria-label="Dashboard preview, scrollable" className="overflow-y-auto h-[calc(720px-49px)] px-4 py-4 space-y-4 bg-gradient-to-b from-slate-50 to-white focus:outline-none focus:ring-2 focus:ring-amber-300/50">
+            {/* Welcome strip */}
+            <div className="bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-100 rounded-2xl p-3.5">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-[10px] font-bold text-amber-700">Welcome back, Sophie</span>
+                <span className="ml-auto text-[9px] text-amber-600/70">Year 5 · 142 days to test</span>
+              </div>
+              <p className="text-[10px] text-amber-800/70">Last session 2 hours ago</p>
+            </div>
+
+            {/* Top KPI tiles */}
+            <div className="grid grid-cols-2 gap-2.5">
+              <div className="rounded-2xl bg-white border border-slate-200 p-3 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Forecast Score</span>
+                  <BarChart3 className="h-3 w-3 text-slate-300" />
+                </div>
+                <div className="text-2xl font-bold text-primary mt-1">114</div>
+                <div className="flex items-center gap-1 text-[9px] font-bold text-emerald-600 mt-0.5">
+                  <TrendingUp className="h-2.5 w-2.5" /> +3 this week
+                </div>
+              </div>
+              <div className="rounded-2xl bg-white border border-slate-200 p-3 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Readiness</span>
+                  <Award className="h-3 w-3 text-amber-400" />
+                </div>
+                <div className="text-base font-bold text-amber-600 mt-1 leading-tight">Nearly There</div>
+                <div className="text-[9px] text-slate-500 mt-0.5">7 pts to qualifying</div>
+              </div>
+              <div className="rounded-2xl bg-white border border-slate-200 p-3 shadow-sm">
+                <div className="text-2xl font-bold text-primary">86</div>
+                <div className="text-[9px] text-slate-500 mt-0.5">questions answered</div>
+              </div>
+              <div className="rounded-2xl bg-white border border-slate-200 p-3 shadow-sm">
+                <div className="flex items-center gap-1.5">
+                  <Flame className="h-4 w-4 text-orange-500" />
+                  <div className="text-2xl font-bold text-primary">17</div>
+                </div>
+                <div className="text-[9px] text-slate-500 mt-0.5">days in a row</div>
+              </div>
+            </div>
+
+            {/* Sample question card */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+              <div className="px-3.5 pt-3 pb-2 border-b border-slate-100">
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Today's practice · Sample question</span>
+                  <span className="flex items-center gap-1 text-[9px] font-bold text-amber-600">
+                    <Clock className="h-2.5 w-2.5" /> 1:42
+                  </span>
+                </div>
+                <div className="flex gap-1.5">
+                  <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-violet-100 text-violet-700 border border-violet-200">Verbal Reasoning</span>
+                  <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-slate-50 text-slate-400 border border-slate-200">Non-Verbal</span>
+                  <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-slate-50 text-slate-400 border border-slate-200">Maths</span>
+                </div>
+              </div>
+              <div className="p-3.5">
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1">Odd one out</p>
+                <p className="text-xs font-semibold text-slate-800 mb-2.5">Which word is the odd one out?</p>
+                <div className="space-y-1.5">
+                  {[
+                    { l: "A", w: "Joyful" },
+                    { l: "B", w: "Cheerful" },
+                    { l: "C", w: "Melancholy", correct: true },
+                    { l: "D", w: "Elated" },
+                    { l: "E", w: "Jubilant" },
+                  ].map((o) => (
+                    <div key={o.l} className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg border text-[11px] ${o.correct ? "border-emerald-300 bg-emerald-50 text-emerald-800" : "border-slate-200 bg-white text-slate-700"}`}>
+                      <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold shrink-0 ${o.correct ? "bg-emerald-500 text-white" : "bg-slate-100 text-slate-500"}`}>{o.l}</span>
+                      {o.w}
+                      {o.correct && <CheckCircle2 className="h-3 w-3 text-emerald-500 ml-auto" />}
+                    </div>
+                  ))}
+                </div>
+                <div className="flex items-center justify-between mt-3 pt-2.5 border-t border-slate-100">
+                  <span className="text-[9px] text-slate-400">Question 14 of 25 · 18 correct so far</span>
+                  <span className="text-[9px] font-bold text-primary">Try other tabs ↑</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Today's session */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-3.5">
+              <div className="flex items-center gap-1.5 mb-2.5">
+                <PlayCircle className="h-3.5 w-3.5 text-primary" />
+                <span className="text-[10px] font-bold text-primary">Today's Session</span>
+              </div>
+              <div className="grid grid-cols-3 gap-2 mb-2.5">
+                <div className="text-center">
+                  <div className="text-lg font-bold text-primary">25</div>
+                  <div className="text-[9px] text-slate-400 uppercase tracking-wider">Done</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-lg font-bold text-emerald-600">76%</div>
+                  <div className="text-[9px] text-slate-400 uppercase tracking-wider">Accuracy</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-lg font-bold text-violet-600">18m</div>
+                  <div className="text-[9px] text-slate-400 uppercase tracking-wider">Time</div>
+                </div>
+              </div>
+              <div className="space-y-1.5">
+                <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-emerald-50 border border-emerald-100">
+                  <Trophy className="h-3 w-3 text-emerald-600 shrink-0" />
+                  <span className="text-[10px] font-semibold text-emerald-800"><span className="font-bold">Win:</span> Maths arithmetic 92%</span>
+                </div>
+                <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-red-50 border border-red-100">
+                  <Target className="h-3 w-3 text-red-600 shrink-0" />
+                  <span className="text-[10px] font-semibold text-red-800"><span className="font-bold">Gap:</span> NVR rotations 48%</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Next up this week */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+              <div className="flex items-center justify-between px-3.5 py-2.5 bg-primary/5 border-b border-slate-100">
+                <span className="text-[10px] font-bold text-primary">Next up this week</span>
+                <span className="text-[9px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">2/5 done</span>
+              </div>
+              <div className="divide-y divide-slate-50">
+                {[
+                  { tag: "NVR", tagBg: "bg-blue-100 text-blue-700", topic: "Rotation drills", time: "15m", flag: true },
+                  { tag: "Maths", tagBg: "bg-emerald-100 text-emerald-700", topic: "Ratio problems", time: "12m" },
+                  { tag: "English", tagBg: "bg-amber-100 text-amber-700", topic: "Inference reading", time: "18m" },
+                ].map((t, i) => (
+                  <div key={i} className="flex items-center gap-2.5 px-3.5 py-2.5">
+                    <div className="w-3.5 h-3.5 rounded-full border-2 border-slate-300 shrink-0" />
+                    <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${t.tagBg}`}>{t.tag}</span>
+                    <span className="text-[11px] font-medium text-slate-700 flex-1">{t.topic}</span>
+                    <span className="text-[10px] text-slate-400">{t.time}</span>
+                    {t.flag && <span className="text-[9px] font-bold text-red-600">!</span>}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Forecast over time */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-3.5">
+              <div className="flex items-center justify-between mb-2">
+                <div>
+                  <div className="flex items-center gap-1.5">
+                    <TrendingUp className="h-3.5 w-3.5 text-emerald-600" />
+                    <span className="text-[10px] font-bold text-primary">Forecast over time</span>
+                  </div>
+                  <span className="text-[9px] text-slate-400">Last 8 weekly sessions</span>
+                </div>
+                <div className="text-right">
+                  <div className="text-[10px] font-bold text-emerald-600">+22</div>
+                  <div className="text-[9px] text-slate-400 uppercase tracking-wider">Pts gained</div>
+                </div>
+              </div>
+              <svg viewBox="0 0 240 70" className="w-full h-16">
+                <defs>
+                  <linearGradient id="dashAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#10b981" stopOpacity="0.25" />
+                    <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+                <line x1="0" y1="14" x2="240" y2="14" stroke="#f59e0b" strokeWidth="0.7" strokeDasharray="3 3" opacity="0.5" />
+                <text x="222" y="11" fontSize="6" fill="#f59e0b" fontWeight="bold">121</text>
+                <path d="M 8 60 L 38 56 L 68 50 L 98 46 L 128 40 L 158 34 L 188 28 L 220 22 L 220 70 L 8 70 Z" fill="url(#dashAreaGrad)" />
+                <path d="M 8 60 L 38 56 L 68 50 L 98 46 L 128 40 L 158 34 L 188 28 L 220 22" fill="none" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                {[[8,60],[38,56],[68,50],[98,46],[128,40],[158,34],[188,28],[220,22]].map(([x,y],i)=>(<circle key={i} cx={x} cy={y} r={i===7?3:2.2} fill={i===7?"#10b981":"#94a3b8"} stroke={i===7?"white":"none"} strokeWidth="1.2" />))}
+                <text x="200" y="20" fontSize="6.5" fill="#10b981" fontWeight="bold">114</text>
+              </svg>
+            </div>
+
+            {/* Skill mastery heatmap */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-3.5">
+              <div className="flex items-center gap-1.5 mb-1">
+                <Sparkles className="h-3.5 w-3.5 text-primary" />
+                <span className="text-[10px] font-bold text-primary">Skill mastery</span>
+              </div>
+              <p className="text-[9px] text-slate-400 mb-2.5">All 32 sub-skills tracked</p>
+              {[
+                { row: "VR",      cells: ["e","e","a","e","e","a","a","e"] },
+                { row: "NVR",     cells: ["a","a","a","a","r","a","r","a"] },
+                { row: "Maths",   cells: ["e","e","a","e","e","e","e","e"] },
+                { row: "English", cells: ["e","a","e","a","a","a","e","a"] },
+              ].map((r, i) => (
+                <div key={i} className="flex items-center gap-1.5 mb-1">
+                  <span className="text-[9px] font-bold text-slate-500 w-10 shrink-0">{r.row}</span>
+                  <div className="flex gap-1 flex-1">
+                    {r.cells.map((c, j) => (
+                      <div key={j} className={`h-4 flex-1 rounded ${c === "e" ? "bg-emerald-400" : c === "a" ? "bg-amber-400" : "bg-red-400"}`} />
+                    ))}
+                  </div>
+                </div>
+              ))}
+              <div className="flex items-center gap-2 mt-2 pt-2 border-t border-slate-100">
+                <span className="text-[8px] text-slate-400">Mastery:</span>
+                <div className="flex items-center gap-1"><div className="w-2 h-2 rounded bg-red-400" /><span className="text-[8px] text-slate-500">&lt;50</span></div>
+                <div className="flex items-center gap-1"><div className="w-2 h-2 rounded bg-amber-400" /><span className="text-[8px] text-slate-500">50-69</span></div>
+                <div className="flex items-center gap-1"><div className="w-2 h-2 rounded bg-amber-300" /><span className="text-[8px] text-slate-500">70-79</span></div>
+                <div className="flex items-center gap-1"><div className="w-2 h-2 rounded bg-emerald-400" /><span className="text-[8px] text-slate-500">80+</span></div>
+              </div>
+            </div>
+
+            <div className="text-center pt-1 pb-2">
+              <span className="text-[8px] text-slate-300 italic">Illustrative dashboard preview</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Floating glow accents */}
+      <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-amber-200/40 blur-3xl -z-10" />
+      <div className="absolute -bottom-8 -left-8 w-32 h-32 rounded-full bg-emerald-200/40 blur-3xl -z-10" />
+    </div>
+  );
+}
+
 function ChildExperiencePanel() {
   return (
     <div className="w-full max-w-sm mx-auto" data-testid="showcase-child-experience">
@@ -605,6 +842,111 @@ export default function Landing() {
                 </div>
               </div>
               <ProgrammePanel />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── SECTION 2A: INSIDE THE PLATFORM (DASHBOARD SHOWCASE) ── */}
+      <section className="relative py-16 md:py-24 overflow-hidden border-b border-border/30" style={{ background: "linear-gradient(135deg, #0d1f30 0%, #1a3550 100%)" }} data-testid="section-dashboard-showcase">
+        <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)", backgroundSize: "24px 24px" }} />
+        <div className="container mx-auto max-w-6xl px-4 relative">
+          <div className="text-center mb-12 md:mb-14">
+            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-400 uppercase tracking-widest mb-3">
+              <Sparkles className="h-3.5 w-3.5" /> Inside the platform
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold text-white font-serif mb-3 leading-tight">
+              The dashboard parents pay £35/month for — <span className="text-amber-300">previewed in full.</span>
+            </h2>
+            <p className="text-white/60 max-w-2xl mx-auto">
+              Most 11+ platforms hide what's inside until you've paid. Here's the actual parent dashboard, with real GL-style questions, live forecast tracking, and the skill heatmap that shows you exactly where to focus next.
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* Left: annotated callouts */}
+            <div className="lg:col-span-7 order-2 lg:order-1 space-y-4">
+              {[
+                {
+                  num: "01",
+                  icon: <Calendar className="h-4 w-4" />,
+                  iconBg: "bg-amber-400/20 text-amber-300 border-amber-400/30",
+                  title: "Personalised welcome — tracked from day one",
+                  desc: "Every child gets a named workspace showing days to test, last session, current streak, and questions answered. We track 17-day streaks because consistency, not cramming, lifts scores.",
+                  pill: "Year 5 · 142 days to test",
+                },
+                {
+                  num: "02",
+                  icon: <Brain className="h-4 w-4" />,
+                  iconBg: "bg-violet-400/20 text-violet-300 border-violet-400/30",
+                  title: "2,500+ GL-style questions across all 4 domains",
+                  desc: "VR, NVR, Maths and Comprehension — every question editorially reviewed to match the GL Assessment style your child will sit. Worked solutions, difficulty progression, and instant feedback on every answer.",
+                  pill: "24 question types · 4 domains",
+                },
+                {
+                  num: "03",
+                  icon: <BarChart3 className="h-4 w-4" />,
+                  iconBg: "bg-emerald-400/20 text-emerald-300 border-emerald-400/30",
+                  title: "Wins and gaps surfaced after every session",
+                  desc: "We don't just show a score. After each session you see the strongest sub-skill (\"Maths arithmetic 92%\") and the weakest (\"NVR rotations 48%\") — so the next session targets the right gap automatically.",
+                  pill: "Adaptive · gap-targeted",
+                },
+                {
+                  num: "04",
+                  icon: <PlayCircle className="h-4 w-4" />,
+                  iconBg: "bg-blue-400/20 text-blue-300 border-blue-400/30",
+                  title: "A weekly programme that thinks for you",
+                  desc: "No more guessing what to do tonight. Each week we generate 5 short, prioritised drills — 10–18 minutes each — sequenced to close the gaps that will lift the forecast score the most.",
+                  pill: "5 drills · ~60 mins/week",
+                },
+                {
+                  num: "05",
+                  icon: <TrendingUp className="h-4 w-4" />,
+                  iconBg: "bg-amber-400/20 text-amber-300 border-amber-400/30",
+                  title: "Forecast trajectory — vs the 121 qualifying line",
+                  desc: "Watch your child's indicative readiness score tracked week by week against the 121 Buckinghamshire qualifying threshold. The chart above is illustrative — actual gains vary by starting point and consistency.",
+                  pill: "+22 pts · 8 weeks",
+                },
+                {
+                  num: "06",
+                  icon: <GraduationCap className="h-4 w-4" />,
+                  iconBg: "bg-rose-400/20 text-rose-300 border-rose-400/30",
+                  title: "Skill mastery heatmap — all 32 sub-skills, one screen",
+                  desc: "Most platforms hide this level of detail. A live colour grid across all 32 sub-skills (rotation, ratio, inference, synonyms…) so you can see at a glance where your child is strong, developing, or stuck.",
+                  pill: "32 sub-skills · live tracking",
+                },
+              ].map((f, i) => (
+                <div key={i} className="group relative flex gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-4 md:p-5 hover:bg-white/[0.07] hover:border-white/20 transition-all" data-testid={`dashboard-feature-${i}`}>
+                  <div className="flex flex-col items-center gap-2 shrink-0">
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center border ${f.iconBg}`}>{f.icon}</div>
+                    <span className="text-[10px] font-bold text-white/30 tracking-widest">{f.num}</span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-2 mb-1.5">
+                      <h3 className="text-sm md:text-base font-bold text-white font-serif">{f.title}</h3>
+                      <span className="text-[10px] font-bold text-white/60 bg-white/5 border border-white/10 px-2 py-0.5 rounded-full">{f.pill}</span>
+                    </div>
+                    <p className="text-xs md:text-sm text-white/55 leading-relaxed">{f.desc}</p>
+                  </div>
+                </div>
+              ))}
+
+              <div className="flex flex-col sm:flex-row gap-3 pt-3">
+                <Button size="lg" className="h-12 px-7 bg-amber-400 text-amber-950 hover:bg-amber-300 font-bold border-none shadow-lg" asChild data-testid="button-dashboard-cta-diagnostic">
+                  <Link href="/free-diagnostic">
+                    See your child's forecast — free <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button size="lg" variant="outline" className="h-12 px-7 border-white/20 text-white hover:bg-white/10 hover:text-white" asChild data-testid="button-dashboard-cta-pricing">
+                  <Link href="/pricing">View pricing</Link>
+                </Button>
+              </div>
+            </div>
+
+            {/* Right: device mockup */}
+            <div className="lg:col-span-5 order-1 lg:order-2">
+              <DashboardShowcasePanel />
+              <p className="text-[10px] text-white/30 italic text-center mt-4 max-w-xs mx-auto">Scroll the preview above to see all six dashboard sections — Welcome, Today's Practice, Today's Session, Next Up, Forecast, and Skill Mastery.</p>
             </div>
           </div>
         </div>
