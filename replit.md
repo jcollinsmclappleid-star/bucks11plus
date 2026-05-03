@@ -3,6 +3,9 @@
 ## Overview
 A full-stack web platform for Buckinghamshire 11+ exam preparation, aligned to GL-style reasoning families used in Bucks. Features timed diagnostics, a proprietary readiness forecast against the 121 benchmark, targeted practice drills with anti-repeat question selection, an admin QA system, SVG-rendered NVR questions, chart-based data interpretation, a Parent Hub content engine for SEO, and a 4-tier monetization model: Free diagnostic | Bucks Practice Platform £24.99/mo (pack_monthly, limited Hard drills/no analytics) | Bucks Practice Platform Edge £59.99/mo or £495/yr (pack_plus / pack_annual, full platform) | Bucks Young Scholar Programme £349 one-time (programme24_plus, full platform + structured coaching).
 
+## Marketing Wording Canon (May 2026)
+Source of truth = `client/src/pages/Legal.tsx` line 15 ("indicative estimates... not official standardised scores"). Never describe **our** product output as a "standardised score", "forecast standardised score", or claim to "track real progress / close the gap to 121" in measured terms. Approved phrasing for our output: **"indicative readiness score against the 121 qualifying standard"**. Factual descriptions of how the actual GL Assessment / Bucks system works (e.g. "the qualifying threshold is a standardised score of 121") remain accurate and should be kept. Site-wide sweep applied across Landing, HowItWorks, ParentAnalytics, Progress, Dashboard, GuidePrint, leadMagnet email, ssrHighVolume, llms.txt, and 8 SEO pages (FAQHub, ScoreCalculator, FamiliarisationTest, MockTest, PastPapers, PracticePapersFree, SecondaryTransfer, SelfStudyVsTutor, TuitionCost, CommonMistakes, About).
+
 ## Architecture
 - **Frontend**: React 19 + Vite + TailwindCSS v4 + Shadcn/UI + wouter routing + TanStack Query
 - **Backend**: Express 5 + TypeScript + Passport.js (local strategy) + express-session (pg-backed)

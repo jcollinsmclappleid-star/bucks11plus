@@ -114,7 +114,7 @@ export async function sendPracticePaperEmail(
 
     <hr style="border:none;border-top:1px solid #e5e7eb;margin:28px 0;">
 
-    <p style="color:#475569;font-size:14px;"><strong style="color:#0d1f30;">Want a precise readiness forecast?</strong> The free 12-question Readiness Check is timed, marked instantly, and returns a forecast score against the Buckinghamshire 121 qualifying threshold.</p>
+    <p style="color:#475569;font-size:14px;"><strong style="color:#0d1f30;">Want a precise readiness forecast?</strong> The free 12-question Readiness Check is timed, marked instantly, and returns an indicative readiness score against the Buckinghamshire 121 qualifying standard.</p>
     <div style="text-align:center;margin:18px 0;">
       <a href="${diagnosticUrl}" style="display:inline-block;background:#f59e0b;color:#1c1917;text-decoration:none;font-weight:700;font-size:14px;padding:12px 28px;border-radius:8px;">Take the Free Readiness Check</a>
     </div>
@@ -212,7 +212,7 @@ function nurtureDay5Html(ctx: NurtureEmailContext): string {
 <body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.6;color:#1a1a2e;max-width:600px;margin:0 auto;padding:20px;background:#f8fafc;">
 <div style="background:#fff;border-radius:12px;padding:32px;border:1px solid #e2e8f0;">
   <div style="text-align:center;margin-bottom:24px;"><strong style="font-size:18px;color:#0d1f30;">Bucks 11 Plus Tests</strong></div>
-  <h2 style="font-size:22px;color:#0d1f30;margin-bottom:8px;font-family:Georgia,serif;">Closing the gap to 121 — what targeted practice looks like</h2>
+  <h2 style="font-size:22px;color:#0d1f30;margin-bottom:8px;font-family:Georgia,serif;">Lifting the readiness score — what targeted practice looks like</h2>
   <p style="color:#475569;">When parents ask us how Bucks Plus Edge differs from a workbook, the honest answer is this: a workbook gives every child the same content, regardless of where the gaps are. We don't.</p>
 
   <p style="color:#475569;font-size:14px;">After your child's Readiness Check, the platform highlights the specific reasoning sub-types they got wrong, then drills those — not the ones they already do well. That's the difference between practising for an hour and practising the right hour.</p>
@@ -297,7 +297,7 @@ export async function processNurtureQueue(): Promise<{ processed: number; sent: 
       subject = "Your child's three biggest 11+ priorities";
       html = nurtureDay2Html(ctx);
     } else if (row.currentStep === 2) {
-      subject = "Closing the gap to 121 — what targeted practice looks like";
+      subject = "Lifting the readiness score — what targeted practice looks like";
       html = nurtureDay5Html(ctx);
     } else {
       await db.update(nurtureSequences).set({ completedAt: new Date() }).where(eq(nurtureSequences.id, row.id));

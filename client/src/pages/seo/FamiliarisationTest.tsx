@@ -131,12 +131,12 @@ export default function FamiliarisationTest() {
         Because the familiarisation test produces no standardised score, parents have no objective way of knowing whether their child is on track. This is the main reason many families combine the official familiarisation paper with a properly benchmarked diagnostic.
       </p>
       <p>
-        A diagnostic measures both accuracy and pace, breaks performance down by subject and sub-topic, and produces a forecast score against the 121 threshold. It tells you what to fix, in what order, and how much each gap is worth — turning the familiarisation paper from a navigation rehearsal into a measurable starting point for preparation.
+        A diagnostic measures both accuracy and pace, breaks performance down by subject and sub-topic, and produces an indicative readiness score against the 121 qualifying standard. It tells you what to fix, in what order, and how much each gap is worth — turning the familiarisation paper from a navigation rehearsal into a measurable starting point for preparation.
       </p>
 
       <h2 className="text-primary font-serif">Going Beyond the Familiarisation Test</h2>
       <p>
-        Our <Link href="/free-diagnostic" className="text-primary hover:underline">free 8-minute readiness check</Link> is designed to be used alongside the official familiarisation test. It provides what TBGS does not: a forecast score against 121, a breakdown of strengths and weaknesses across all four GL Assessment domains, and the three highest-impact priorities to fix next.
+        Our <Link href="/free-diagnostic" className="text-primary hover:underline">free 8-minute readiness check</Link> is designed to be used alongside the official familiarisation test. It provides what TBGS does not: an indicative readiness score against the 121 qualifying standard, a breakdown of strengths and weaknesses across all four GL Assessment domains, and the three highest-impact priorities to fix next.
       </p>
       <p>
         For a deeper look at the test itself, see our <Link href="/buckinghamshire-secondary-transfer-test" className="text-primary hover:underline">Secondary Transfer Test overview</Link> and <a href="/bucks-11-plus-sample-questions" className="text-primary hover:underline">sample questions guide</a>.

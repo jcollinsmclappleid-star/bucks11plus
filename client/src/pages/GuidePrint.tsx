@@ -285,7 +285,7 @@ export default function GuidePrint() {
         </p>
         <h3 className="text-base font-serif font-bold text-[#0d1f30] mb-2">What Our Platform Provides</h3>
         <p className="text-sm leading-relaxed mb-2">
-          The free 8-minute readiness check generates a predicted standardised score benchmarked against 121. It identifies your child's current standing across all four subjects and highlights the specific question types with the highest impact on the overall score.
+          The free 8-minute readiness check generates an indicative readiness score benchmarked against the 121 qualifying standard. It identifies your child's current standing across all four subjects and highlights the specific question types with the highest impact on that score.
         </p>
         <CTALink href={`${BASE}/free-diagnostic`} label="Take the Free 8-Minute Readiness Check" sub={`${BASE}/free-diagnostic`} />
       </div>
@@ -471,7 +471,7 @@ export default function GuidePrint() {
         <InfoBox color="blue">
           <h4 className="text-sm font-bold text-blue-900 mb-2">The Readiness-Led Approach</h4>
           <p className="text-xs text-blue-800 leading-relaxed">
-            A readiness-led approach — one that measures specific skills, identifies gaps, tracks progress over time, and generates actionable priorities — provides the clarity that generic practice cannot. The Bucks 11 Plus Tests platform is built on this principle: every readiness check produces a predicted standardised score, subject breakdowns, and a specific recommended focus order.
+            A readiness-led approach — one that measures specific skills, identifies gaps, tracks progress over time, and generates actionable priorities — provides the clarity that generic practice cannot. The Bucks 11 Plus Tests platform is built on this principle: every readiness check produces an indicative readiness score against the 121 qualifying standard, subject breakdowns, and a specific recommended focus order.
           </p>
         </InfoBox>
         <h3 className="text-base font-serif font-bold text-[#0d1f30] mt-5 mb-2">Common Preparation Mistakes</h3>
@@ -907,7 +907,7 @@ export default function GuidePrint() {
               accent: "#64748b",
               features: [
                 "8-minute GL-style readiness check",
-                "Predicted standardised score against 121",
+                "Indicative readiness score against the 121 standard",
                 "Subject breakdown across all 4 areas",
                 "Recommended improvement priorities",
               ],

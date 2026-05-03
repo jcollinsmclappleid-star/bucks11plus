@@ -57,7 +57,7 @@ export default function SelfStudyVsTutor() {
             <tr className="border-b border-slate-100"><td className="p-3 font-semibold">Format alignment</td><td className="p-3">Print only</td><td className="p-3">On-screen (matches real test)</td><td className="p-3">Varies by tutor</td></tr>
             <tr className="border-b border-slate-100"><td className="p-3 font-semibold">Personalisation</td><td className="p-3">Manual (parent identifies gaps)</td><td className="p-3">Automated gap analysis</td><td className="p-3">Strong (one-to-one)</td></tr>
             <tr className="border-b border-slate-100"><td className="p-3 font-semibold">Pacing &amp; timing practice</td><td className="p-3">Manual stopwatch</td><td className="p-3">Built-in countdown</td><td className="p-3">Tutor-guided</td></tr>
-            <tr className="border-b border-slate-100"><td className="p-3 font-semibold">Score forecasting</td><td className="p-3">None</td><td className="p-3">Standardised score estimate</td><td className="p-3">Tutor's judgement</td></tr>
+            <tr className="border-b border-slate-100"><td className="p-3 font-semibold">Score forecasting</td><td className="p-3">None</td><td className="p-3">Indicative readiness score</td><td className="p-3">Tutor's judgement</td></tr>
             <tr><td className="p-3 font-semibold">Best for</td><td className="p-3">Confident parents with time</td><td className="p-3">Most families</td><td className="p-3">Children with specific gaps or anxiety</td></tr>
           </tbody>
         </table>
@@ -79,7 +79,7 @@ export default function SelfStudyVsTutor() {
         <li>You want format-matched practice (on-screen, timed, mouse-based).</li>
         <li>You'd benefit from automatic gap analysis after each session — knowing exactly which question types to focus on next.</li>
         <li>Parent time is limited but you want substantial structure for the child.</li>
-        <li>You want a forecast standardised score to track progress against the 121 threshold.</li>
+        <li>You want an indicative readiness score to gauge progress against the 121 qualifying standard.</li>
         <li>You're using self-study workbooks alongside but want to add timed on-screen mocks.</li>
       </ul>
       <p>

@@ -108,7 +108,7 @@ export default function TuitionCost() {
         Our Bucks Plus Edge plan is £35 per month or £279 per year — roughly the cost of two to three hours of private tutoring, but for a year of access. For that price your child gets:
       </p>
       <ul>
-        <li>Full-length GL-style mock exams across all four domains, with standardised forecast scoring against the 121 threshold</li>
+        <li>Full-length GL-style mock exams across all four domains, with an indicative readiness score against the 121 qualifying standard</li>
         <li>A diagnostic engine that identifies the highest-impact gaps and ranks them by score impact</li>
         <li>Targeted micro-drills focused on those specific gaps, not generic practice</li>
         <li>Pacing analysis that flags timing problems separately from accuracy problems</li>

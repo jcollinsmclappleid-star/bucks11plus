@@ -102,7 +102,7 @@ export default function CommonMistakes() {
         Without understanding standardisation, parents either develop false confidence or unnecessary anxiety — neither of which serves the child.
       </p>
       <p>
-        <strong>What to do instead:</strong> Learn how standardised scoring works. Understand that raw scores on practice papers are indicative but not directly comparable to the 121 benchmark. Use assessment tools that provide standardised forecasts rather than simple percentage scores. Read our detailed <Link href="/bucks-11-plus-qualifying-score" className="text-primary hover:underline">qualifying score explanation</Link> for a full breakdown.
+        <strong>What to do instead:</strong> Learn how standardised scoring works. Understand that raw scores on practice papers are indicative but not directly comparable to the 121 qualifying standard. Use assessment tools that provide an indicative readiness score against 121 rather than simple percentage scores. Read our detailed <Link href="/bucks-11-plus-qualifying-score" className="text-primary hover:underline">qualifying score explanation</Link> for a full breakdown.
       </p>
 
       <h2 className="text-primary font-serif">Mistake 5: Treating All Sections Equally</h2>

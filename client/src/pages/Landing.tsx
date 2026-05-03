@@ -257,14 +257,14 @@ function ProgressPanel() {
       <div className="bg-white border border-slate-200 rounded-xl p-3 shadow-sm">
         <div className="flex items-center gap-2 mb-2">
           <div className="p-1 bg-emerald-100 rounded-md text-emerald-700"><ChevronUp className="h-3.5 w-3.5" /></div>
-          <div className="text-xs font-bold text-primary">Closing the Gap to 121</div>
+          <div className="text-xs font-bold text-primary">Indicative readiness vs 121</div>
         </div>
         <div className="flex items-center gap-3 text-sm">
-          <span className="px-2.5 py-1 rounded-lg bg-red-100 text-red-700 font-bold text-xs">16 pts gap</span>
+          <span className="px-2.5 py-1 rounded-lg bg-red-100 text-red-700 font-bold text-xs">16 pts below</span>
           <ArrowRight className="h-3.5 w-3.5 text-slate-400" />
-          <span className="px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-700 font-bold text-xs">4 pts gap</span>
+          <span className="px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-700 font-bold text-xs">4 pts below</span>
         </div>
-        <p className="text-[10px] text-muted-foreground mt-2">Gap narrowing by ~3 points per readiness check — on track for 121 within 6 weeks</p>
+        <p className="text-[10px] text-muted-foreground mt-2">Indicative readiness score lifting by ~3 points per check — illustrative dashboard preview</p>
       </div>
     </div>
   );
@@ -390,8 +390,8 @@ function ProgrammePanel() {
           <TrendingUp className="h-4 w-4" />
         </div>
         <div>
-          <p className="text-xs font-bold text-primary">On track for 121</p>
-          <p className="text-[10px] text-slate-500 mt-0.5">Completing this week's plan adds est. +3 forecast points</p>
+          <p className="text-xs font-bold text-primary">Readiness trending up</p>
+          <p className="text-[10px] text-slate-500 mt-0.5">Completing this week's plan adds an est. +3 to the indicative readiness score</p>
         </div>
       </div>
     </div>
@@ -453,7 +453,7 @@ export default function Landing() {
 
       <Seo
         title="Bucks 11 Plus Practice Tests — Free GL Readiness Check Benchmarked to 121 | Bucks 11 Plus Tests"
-        description="Know exactly where your child stands for the Buckinghamshire 11+. Take a free 8-minute GL-style readiness check and see their forecast score against the 121 qualifying threshold — with the 3 priorities to fix next."
+        description="Know exactly where your child stands for the Buckinghamshire 11+. Take a free 8-minute GL-style readiness check and see an indicative readiness score against the 121 qualifying standard — with the 3 priorities to fix next."
         canonicalPath="/"
         schema={{
           "@context": "https://schema.org",
@@ -461,7 +461,7 @@ export default function Landing() {
           mainEntity: [
             { "@type": "Question", name: "What is the Buckinghamshire 11+ Secondary Transfer Test?", acceptedAnswer: { "@type": "Answer", text: "The Buckinghamshire Secondary Transfer Test (STT) is a selective entrance exam taken by children in Year 6, typically in September. It determines eligibility for all 13 state-funded grammar schools in Buckinghamshire. The test is produced by GL Assessment and covers four domains: Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension." } },
             { "@type": "Question", name: "What does 121 mean in the Bucks 11+?", acceptedAnswer: { "@type": "Answer", text: "121 is the standardised score threshold used in Buckinghamshire to determine whether a child qualifies for grammar school." } },
-            { "@type": "Question", name: "How does the free readiness check work?", acceptedAnswer: { "@type": "Answer", text: "The free readiness check is a 12-question, 8-minute timed assessment in GL-style format. No account is needed. On completion, parents receive a readiness band, a forecast standardised score toward 121, and a breakdown across the four test sections." } },
+            { "@type": "Question", name: "How does the free readiness check work?", acceptedAnswer: { "@type": "Answer", text: "The free readiness check is a 12-question, 8-minute timed assessment in GL-style format. No account is needed. On completion, parents receive a readiness band, an indicative readiness score against the 121 qualifying standard, and a breakdown across the four test sections." } },
             { "@type": "Question", name: "What is included in Bucks Plus Edge?", acceptedAnswer: { "@type": "Answer", text: "Bucks Plus Edge (£35/month or £279/year) includes 2,500+ GL-style questions across all four test domains, timed drills, full mock readiness checks, PDF reports, parent analytics, progress tracking, and a guided programme." } },
           ]
         }}
@@ -504,7 +504,7 @@ export default function Landing() {
                 </h1>
               </div>
               <p className="text-base md:text-lg text-white/65 leading-relaxed" data-testid="text-hero-sub">
-                Bucks-specific diagnostics that pinpoint the exact gaps costing marks, rank your child's highest-impact focus areas, and produce a forecast modelled on the <span className="text-amber-300 font-semibold">121 qualifying standard</span>. With 2,500+ GL-style questions to close every gap.
+                Bucks-specific diagnostics that pinpoint the exact gaps costing marks, rank your child's highest-impact focus areas, and give an <span className="text-amber-300 font-semibold">indicative readiness score against the 121 qualifying standard</span>. With 2,500+ GL-style questions to close every gap.
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
                 <Button size="lg" className="h-12 px-8 text-base bg-amber-400 text-amber-950 hover:bg-amber-300 font-bold shadow-lg shadow-amber-400/20 border-none" asChild data-testid="button-hero-primary">
@@ -662,7 +662,7 @@ export default function Landing() {
                 icon: <Target className="h-6 w-6" />,
                 iconBg: "bg-amber-400/20 text-amber-300",
                 title: "Readiness Diagnostics",
-                desc: "Our readiness checks produce a forecast score toward 121 and pinpoint the exact question types holding your child back — right down to sub-topic level.",
+                desc: "Our readiness checks produce an indicative readiness score against the 121 qualifying standard and pinpoint the exact question types holding your child back — right down to sub-topic level.",
                 stat: "Forecast score",
                 statSub: "vs 121 threshold",
               },
@@ -678,7 +678,7 @@ export default function Landing() {
                 icon: <BarChart3 className="h-6 w-6" />,
                 iconBg: "bg-emerald-400/20 text-emerald-300",
                 title: "Parent Analytics & Progress",
-                desc: "Deep analytics show stamina, timing patterns, score reliability, and where the most points are available. Weekly progress tracks the gap to 121 closing in real time.",
+                desc: "Deep analytics show stamina, timing patterns, score reliability, and where the most points are available. Weekly check-ins update your child's indicative readiness score against the 121 qualifying standard.",
                 stat: "Gap closed",
                 statSub: "test by test",
               },
@@ -726,7 +726,7 @@ export default function Landing() {
               </div>
               <div className="space-y-3">
                 {[
-                  { icon: <Award className="h-4 w-4 text-amber-600" />, bg: "bg-amber-50 border-amber-200", title: "Readiness score", desc: "Forecast standardised score benchmarked to the 121 qualifying threshold" },
+                  { icon: <Award className="h-4 w-4 text-amber-600" />, bg: "bg-amber-50 border-amber-200", title: "Readiness score", desc: "Indicative readiness score benchmarked against the 121 qualifying standard" },
                   { icon: <Zap className="h-4 w-4 text-violet-600" />, bg: "bg-violet-50 border-violet-200", title: "Stamina analysis", desc: "Accuracy in the first vs second half — key for exam-day performance" },
                   { icon: <Target className="h-4 w-4 text-red-600" />, bg: "bg-red-50 border-red-200", title: "Priority focus areas", desc: "Ranked list of highest-impact gaps with estimated point gains" },
                 ].map((feat, i) => (
@@ -758,7 +758,7 @@ export default function Landing() {
           <div className="text-center mb-10">
             <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">Simple to start</span>
             <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-3">How it works</h2>
-            <p className="text-muted-foreground max-w-lg mx-auto">From your first readiness check to closing the gap to 121 — here's the path.</p>
+            <p className="text-muted-foreground max-w-lg mx-auto">From your first readiness check to lifting your child's indicative readiness score toward the 121 standard — here's the path.</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 mb-10">
@@ -782,7 +782,7 @@ export default function Landing() {
               {
                 step: "03",
                 title: "Follow the guided programme",
-                desc: "Your weekly programme prioritises the highest-impact tasks first. Every session updates your forecast. Track the gap to 121 closing.",
+                desc: "Your weekly programme prioritises the highest-impact tasks first. Every session updates your indicative readiness score against the 121 qualifying standard.",
                 cta: { href: "/pricing", label: "Start programme" },
                 accent: "border-emerald-200 bg-emerald-50",
                 numColor: "text-emerald-600",
@@ -840,7 +840,7 @@ export default function Landing() {
           </div>
           <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden divide-y divide-slate-100">
             {[
-              { q: "Will this actually work for my child?", a: "The free 8-minute readiness check shows you, before you pay anything, whether our diagnostic accurately identifies your child's gaps and produces a realistic forecast score against the 121 threshold. If the free check doesn't give you useful insight, the paid programme isn't for you — and you'll have spent nothing." },
+              { q: "Will this actually work for my child?", a: "The free 8-minute readiness check shows you, before you pay anything, whether our diagnostic accurately identifies your child's gaps and produces a realistic indicative readiness score against the 121 qualifying standard. If the free check doesn't give you useful insight, the paid programme isn't for you — and you'll have spent nothing." },
               { q: "What if I subscribe and change my mind?", a: "You can cancel any subscription at any time from your account, and we offer a money-back guarantee on new subscriptions if the platform isn't right for you. See pricing terms below for full details." },
               { q: "How is this different from a private tutor?", a: "A private tutor in Buckinghamshire typically charges £40–£60 per hour. Our annual plan works out at £23.25 per month — less than half the cost of a single tutoring session — and gives unlimited access to 2,500+ GL-style questions, full mock exams, and parent analytics that a tutor can't provide." },
               { q: "Is it really specific to the Bucks 11+?", a: "Yes — every question, every readiness check, and every benchmark is built for the Buckinghamshire Secondary Transfer Test. Results are measured against the 121 qualifying threshold, covering all four GL Assessment domains. This is not a generic 11+ platform." },

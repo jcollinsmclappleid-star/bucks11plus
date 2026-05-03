@@ -28,7 +28,7 @@ export default function About() {
     <div>
       <Seo
         title="About Bucks 11 Plus Tests | Readiness-Led 11+ Preparation Platform"
-        description="11+ Standard is an independent Buckinghamshire 11+ preparation platform — operated by Ianson Systems Limited — helping parents understand their child's readiness and close the gap to 121."
+        description="11+ Standard is an independent Buckinghamshire 11+ preparation platform — operated by Ianson Systems Limited — helping parents understand their child's readiness against the 121 qualifying standard."
         canonicalPath="/about"
       />
 

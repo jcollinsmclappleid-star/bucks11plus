@@ -381,7 +381,7 @@ export default function PracticePaperPrint() {
         <div className="rounded-xl border-2 border-[#0d1f30] p-5 bg-slate-50">
           <p className="text-xs font-bold uppercase tracking-widest text-[#0d1f30]/60 mb-2">Want a precise readiness forecast?</p>
           <p className="text-sm text-slate-700 mb-3">
-            Our free 12-question Readiness Check is timed, marked instantly, and returns a forecast score against the Buckinghamshire 121 qualifying threshold — plus your child's three weakest reasoning sub-skills.
+            Our free 12-question Readiness Check is timed, marked instantly, and returns an indicative readiness score against the Buckinghamshire 121 qualifying standard — plus your child's three weakest reasoning sub-skills.
           </p>
           <a
             href="https://bucks11plustest.co.uk/free-diagnostic"
@@ -479,7 +479,7 @@ export default function PracticePaperPrint() {
         <div className="rounded-xl border-2 border-[#0d1f30] p-6 bg-slate-50 text-center">
           <h3 className="text-xl font-serif font-bold text-[#0d1f30] mb-2">See exactly where your child stands</h3>
           <p className="text-sm text-slate-600 mb-4 max-w-md mx-auto">
-            The free Readiness Check gives a forecast score against the 121 Bucks qualifying threshold and identifies the three skills that will move that score the most.
+            The free Readiness Check gives an indicative readiness score against the 121 Bucks qualifying standard and identifies the three skills that will move that score the most.
           </p>
           <a
             href="https://bucks11plustest.co.uk/free-diagnostic"

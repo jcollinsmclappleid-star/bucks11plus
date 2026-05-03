@@ -67,7 +67,7 @@ export default function ScoreCalculator() {
     <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
       <Seo
         title="Bucks 11 Plus Score Calculator – Estimate a Standardised Score"
-        description="Free Bucks 11+ standardised score calculator. Enter section accuracy and your child's age to see an indicative standardised score against the 121 qualifying threshold."
+        description="Free Bucks 11+ score calculator. Enter section accuracy and your child's age to see an indicative score against the 121 qualifying standard. An estimator only — the official GL Assessment scoring is proprietary."
         canonicalPath="/bucks-11-plus-score-calculator"
         schema={[breadcrumbSchema(breadcrumbItems)]}
       />

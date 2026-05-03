@@ -273,7 +273,7 @@ export default function Progress() {
                 <div className={`p-1.5 rounded-lg ${gv?.improving ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
                   {gv?.improving ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                 </div>
-                Closing the Gap to 121
+                Indicative Readiness vs 121
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -296,7 +296,7 @@ export default function Progress() {
                   </p>
                 </div>
               ) : (
-                <p className="text-sm text-muted-foreground py-2">Complete 2 or more tests to see how quickly the gap to 121 is closing.</p>
+                <p className="text-sm text-muted-foreground py-2">Complete 2 or more tests to see how quickly the indicative readiness score is moving toward the 121 standard.</p>
               )}
             </CardContent>
           </Card>
@@ -358,7 +358,7 @@ export default function Progress() {
               </div>
               <h3 className="text-3xl font-bold text-primary mb-3 font-serif">Unlock Your Personalized Plan</h3>
               <p className="text-lg text-slate-600 max-w-lg mb-8 leading-relaxed">
-                Paid users receive a structured, week-by-week schedule targeting their exact weaknesses to efficiently close the gap to 121.
+                Paid users receive a structured, week-by-week schedule targeting their exact weaknesses to lift the indicative readiness score toward the 121 standard as efficiently as possible.
               </p>
               <Button size="lg" className="bg-primary shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all text-lg h-14 px-8" asChild data-testid="button-upgrade-plan">
                 <Link href="/pricing">Upgrade to View Plan <ArrowRight className="ml-2 h-5 w-5" /></Link>

@@ -140,7 +140,7 @@ export default function PastPapers() {
         Print papers don't replicate the actual test conditions, which since 2013 have been on-screen with mouse-based answering and a fixed countdown. Children who only practise on paper may lose 5–10 standardised points on test day simply from interface unfamiliarity.
       </p>
       <p>
-        Our <Link href="/free-diagnostic" className="text-primary hover:underline">free 8-minute diagnostic</Link> uses the same on-screen format as the real test and provides a forecast standardised score — a more accurate snapshot of test-day readiness than any print paper can provide.
+        Our <Link href="/free-diagnostic" className="text-primary hover:underline">free 8-minute diagnostic</Link> uses the same on-screen format as the real test and provides an indicative readiness score against the 121 qualifying standard — a more useful snapshot of test-day readiness than any print paper can provide.
       </p>
 
       <h2 className="text-primary font-serif" id="faq">Frequently Asked Questions</h2>

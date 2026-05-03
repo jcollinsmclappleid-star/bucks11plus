@@ -85,7 +85,7 @@ export default function PracticePapersFree() {
         <li><strong>Spring of Year 5:</strong> Take our free diagnostic to establish a baseline.</li>
         <li><strong>Year 5 throughout:</strong> Build vocabulary through wide reading; daily mental arithmetic; CGP/Bond free samples to introduce question types.</li>
         <li><strong>Summer holiday before Year 6:</strong> Sit the official Familiarisation Test under timed conditions; use our free practice bank to drill specific weak areas.</li>
-        <li><strong>August / early September:</strong> Re-take the diagnostic to forecast standardised score and adjust focus in the final two weeks.</li>
+        <li><strong>August / early September:</strong> Re-take the diagnostic to refresh the indicative readiness score and adjust focus in the final two weeks.</li>
       </ol>
       <p>
         Families that progress beyond this typically invest in either one or two paid practice papers from established publishers (£10–£20 per book) or a structured online platform. Our paid plans start at £19 — see <Link href="/pricing" className="text-primary hover:underline">pricing</Link> for what's included.

@@ -146,7 +146,7 @@ export default function HowItWorks() {
                   "12 GL-style questions, 8 minutes",
                   "No account needed — completely free",
                   "Covers all 4 test domains",
-                  "Receive a forecast score vs the 121 threshold",
+                  "Receive an indicative readiness score against the 121 qualifying standard",
                   "Get your 3 highest-impact priority gaps",
                 ],
                 cta: { href: "/free-diagnostic", label: "Start free now →" },
@@ -291,7 +291,7 @@ export default function HowItWorks() {
                 icon: Target,
                 iconBg: "bg-amber-100 text-amber-700",
                 title: "Readiness forecast score",
-                desc: "A modelled score benchmarked toward the 121 qualifying threshold — showing how close your child is and how many points remain.",
+                desc: "An indicative readiness score benchmarked against the 121 qualifying standard — showing how close your child is and how many points remain.",
               },
               {
                 icon: BarChart3,
@@ -331,9 +331,9 @@ export default function HowItWorks() {
             </div>
             <div className="divide-y divide-slate-50">
               {[
-                { band: "Secure", color: "bg-emerald-500", textColor: "text-emerald-700", bg: "bg-emerald-50", desc: "Performance consistently meets projected qualifying thresholds across accuracy, pacing and sub-skill balance. Your child is on track for 121 under current conditions." },
-                { band: "Borderline", color: "bg-amber-500", textColor: "text-amber-700", bg: "bg-amber-50", desc: "Performance is close to qualifying thresholds but shows identifiable risk factors such as pacing instability or concentrated weaknesses. Targeted practice in the priority areas will close the gap." },
-                { band: "Development Required", color: "bg-red-500", textColor: "text-red-700", bg: "bg-red-50", desc: "A measurable gap exists relative to projected qualifying thresholds. Structured, focused preparation is needed — the programme will prioritise the highest-impact areas first." },
+                { band: "Secure", color: "bg-emerald-500", textColor: "text-emerald-700", bg: "bg-emerald-50", desc: "Performance consistently meets projected qualifying thresholds across accuracy, pacing and sub-skill balance. The indicative readiness score sits at or above the 121 qualifying standard under current conditions." },
+                { band: "Borderline", color: "bg-amber-500", textColor: "text-amber-700", bg: "bg-amber-50", desc: "Performance is close to qualifying thresholds but shows identifiable risk factors such as pacing instability or concentrated weaknesses. Targeted practice in the priority areas will lift the indicative readiness score." },
+                { band: "Development Required", color: "bg-red-500", textColor: "text-red-700", bg: "bg-red-50", desc: "The indicative readiness score sits noticeably below projected qualifying thresholds. Structured, focused preparation is needed — the programme will prioritise the highest-impact areas first." },
               ].map((b, i) => (
                 <div key={i} className={`flex items-start gap-4 px-5 py-4 ${b.bg}`} data-testid={`band-${i}`}>
                   <div className={`w-3 h-3 rounded-full ${b.color} shrink-0 mt-1`} />
@@ -364,7 +364,7 @@ export default function HowItWorks() {
               { icon: Hash, label: "Hard drills & challenges", desc: "20 Hard-level drill sections" },
               { icon: BarChart3, label: "Parent analytics dashboard", desc: "Deep scoring & stamina data" },
               { icon: TrendingUp, label: "Guided weekly programme", desc: "Priority-ranked, 15-min sessions" },
-              { icon: Shield, label: "Progress tracking to 121", desc: "Forecast updates after every session" },
+              { icon: Shield, label: "Readiness progress tracking", desc: "Indicative readiness score updates after every session" },
               { icon: Clock, label: "PDF readiness reports", desc: "Shareable with tutors" },
               { icon: Layers, label: "Mock GL-style exams", desc: "Full 40-question timed simulations" },
             ].map((item, i) => (
@@ -401,7 +401,7 @@ export default function HowItWorks() {
               { icon: Clock, title: "Pace adjustment", content: "The Bucks 11+ is time-constrained. Benchmark pacing: ~35 seconds per VR/NVR question, ~45 seconds per Maths question. Mean response time is compared and a pace ratio moderates the forecast. Deterioration in later sections signals fatigue risk." },
               { icon: Layers, title: "Sub-skill stability", content: "Qualifying performance requires balanced competency across domains. Significant imbalance between VR, NVR and Maths reduces the stability weighting. Repeated weaknesses within a single sub-rule cluster are treated as higher risk than isolated errors." },
               { icon: TrendingUp, title: "Consistency & trend", content: "A single result is not treated as definitive. As your child takes more checks, the model tracks trend direction (improving / stable / declining), volatility across attempts, and pacing consistency. Stable improvement increases forecast confidence." },
-              { icon: Shield, title: "Composite readiness index", content: "All factors combine into a weighted composite index — Accuracy, Pace, Sub-skill Stability, and Consistency — that maps to a readiness band and a modelled score toward 121. This is designed to reflect practical exam performance, not theoretical maximum." },
+              { icon: Shield, title: "Composite readiness index", content: "All factors combine into a weighted composite index — Accuracy, Pace, Sub-skill Stability, and Consistency — that maps to a readiness band and an indicative readiness score against the 121 qualifying standard. This is designed to reflect practical exam performance, not the theoretical maximum, and is not a substitute for the official GL standardised score." },
             ].map((item, i) => (
               <AccordionItem key={i} title={item.title} icon={item.icon} index={i + 1}>
                 <p>{item.content}</p>
