@@ -1137,8 +1137,7 @@ export default function Landing() {
         <div className="container mx-auto max-w-6xl px-4">
           <div className="text-center mb-12">
             <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">The Platform</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-3">Everything you need to reach 121</h2>
-            <p className="text-muted-foreground max-w-xl mx-auto">From GL-style practice questions to intelligent analytics and a guided programme — all designed specifically for the Buckinghamshire 11+.</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif">Focused preparation for the Buckinghamshire 11+</h2>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
