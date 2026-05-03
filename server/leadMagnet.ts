@@ -114,7 +114,7 @@ export async function sendPracticePaperEmail(
 
     <hr style="border:none;border-top:1px solid #e5e7eb;margin:28px 0;">
 
-    <p style="color:#475569;font-size:14px;"><strong style="color:#0d1f30;">Want a precise readiness forecast?</strong> The free 12-question Readiness Check is timed, marked instantly, and returns an indicative readiness score against the Buckinghamshire 121 qualifying standard.</p>
+    <p style="color:#475569;font-size:14px;"><strong style="color:#0d1f30;">Want a precise readiness forecast?</strong> The free 12-question Readiness Check is timed, marked instantly, and returns an indicative readiness score against our 121 readiness benchmark.</p>
     <div style="text-align:center;margin:18px 0;">
       <a href="${diagnosticUrl}" style="display:inline-block;background:#f59e0b;color:#1c1917;text-decoration:none;font-weight:700;font-size:14px;padding:12px 28px;border-radius:8px;">Take the Free Readiness Check</a>
     </div>

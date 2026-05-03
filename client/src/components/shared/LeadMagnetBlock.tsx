@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useMutation } from "@tanstack/react-query";
-import { Download, CheckCircle2, Loader2, FileText } from "lucide-react";
+import { Download, CheckCircle2, Loader2, FileText, ArrowDownToLine } from "lucide-react";
 
 type Props = {
   source?: string;
@@ -149,6 +149,18 @@ export function LeadMagnetBlock({ source = "seo", variant = "default" }: Props) 
           {error && <p className="text-sm text-red-600 mt-2" data-testid="text-lead-magnet-error">{error}</p>}
           <p className="text-[11px] text-slate-500 mt-3">
             We'll email you the practice paper plus occasional Bucks 11+ tips. Unsubscribe in one click.
+          </p>
+          <p className="text-[11px] text-slate-400 mt-1.5">
+            Prefer not to share your email?{" "}
+            <a
+              href="/api/practice-paper/download"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline text-slate-500 hover:text-slate-700 inline-flex items-center gap-0.5"
+              data-testid="link-lead-magnet-direct-download"
+            >
+              <ArrowDownToLine className="h-3 w-3" /> Download directly
+            </a>
           </p>
         </>
       )}

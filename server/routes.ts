@@ -2135,6 +2135,19 @@ export async function registerRoutes(
     }
   });
 
+  app.get("/api/practice-paper/download", async (req, res, next) => {
+    try {
+      const { getCachedPracticePaperPdf } = await import("./leadMagnet");
+      const buffer = await getCachedPracticePaperPdf();
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader("Content-Disposition", 'attachment; filename="bucks-11-plus-free-practice-paper.pdf"');
+      res.setHeader("Content-Length", buffer.length);
+      res.send(buffer);
+    } catch (err) {
+      next(err);
+    }
+  });
+
   app.get("/api/leads/practice-paper/unsubscribe", async (req, res) => {
     const { email, token } = req.query as { email?: string; token?: string };
     if (!email || !token) return res.status(400).send("Invalid link");
