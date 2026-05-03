@@ -31,7 +31,7 @@ function ResourceCard({ r }: { r: Resource }) {
 }
 
 const RESOURCES: Resource[] = [
-  { title: "Free 8-Minute Diagnostic", description: "A 12-question GL-style mini paper across all four 11+ sections, with an indicative readiness band against the 121 qualifying standard. No account needed.", href: "/free-diagnostic", type: "Practice", internal: true },
+  { title: "Free 8-Minute Diagnostic", description: "A 12-question GL-style mini paper across all four 11+ sections, with an indicative readiness band against our 121 readiness benchmark. No account needed.", href: "/free-diagnostic", type: "Practice", internal: true },
   { title: "Free Practice Papers", description: "A library of free GL-style practice papers and where to find them, with guidance on how to use them effectively.", href: "/bucks-11-plus-practice-papers-free", type: "Practice", internal: true },
   { title: "Free Sample Questions", description: "A walk-through of sample questions from every section of the Bucks 11+ paper, with worked answers.", href: "/bucks-11-plus-sample-questions", type: "Practice", internal: true },
   { title: "Bucks 11+ Vocabulary List", description: "Working vocabulary list for the Bucks 11+ Verbal Reasoning paper, with the most-tested words and pairs.", href: "/bucks-11-plus-vocabulary-list", type: "Reference", internal: true },
@@ -79,7 +79,7 @@ export default function FreeResources() {
 
       <h2 className="text-primary font-serif">Start Here: Free Diagnostic</h2>
       <p>
-        If you only do one thing on this page, take the free 8-minute diagnostic first. It's a 12-question GL-style mini paper covering all four sections, with an indicative readiness band against the 121 qualifying standard. The result tells you which of the resources below to read in detail — so you don't waste time on the wrong topics.
+        If you only do one thing on this page, take the free 8-minute diagnostic first. It's a 12-question GL-style mini paper covering all four sections, with an indicative readiness band against our 121 readiness benchmark. The result tells you which of the resources below to read in detail — so you don't waste time on the wrong topics.
       </p>
       <div className="not-prose my-6">
         <Link href="/free-diagnostic" className="inline-block rounded-xl bg-primary text-white px-6 py-3 font-semibold no-underline hover:opacity-95" data-testid="link-start-diagnostic">

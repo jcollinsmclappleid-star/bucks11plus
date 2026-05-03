@@ -1022,7 +1022,7 @@ export default function Landing() {
 
       <Seo
         title="Bucks 11 Plus Practice Tests — Free GL Readiness Check Benchmarked to 121 | Bucks 11 Plus Tests"
-        description="Know exactly where your child stands for the Buckinghamshire 11+. Take a free 8-minute GL-style readiness check and see an indicative readiness score against the 121 qualifying standard — with the 3 priorities to fix next."
+        description="Know exactly where your child stands for the Buckinghamshire 11+. Take a free 8-minute GL-style readiness check and see an indicative readiness score against our 121 readiness benchmark — with the 3 priorities to fix next."
         canonicalPath="/"
         schema={{
           "@context": "https://schema.org",
@@ -1030,7 +1030,7 @@ export default function Landing() {
           mainEntity: [
             { "@type": "Question", name: "What is the Buckinghamshire 11+ Secondary Transfer Test?", acceptedAnswer: { "@type": "Answer", text: "The Buckinghamshire Secondary Transfer Test (STT) is a selective entrance exam taken by children in Year 6, typically in September. It determines eligibility for all 13 state-funded grammar schools in Buckinghamshire. The test is produced by GL Assessment and covers four domains: Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension." } },
             { "@type": "Question", name: "What does 121 mean in the Bucks 11+?", acceptedAnswer: { "@type": "Answer", text: "121 is the standardised score threshold used in Buckinghamshire to determine whether a child qualifies for grammar school." } },
-            { "@type": "Question", name: "How does the free readiness check work?", acceptedAnswer: { "@type": "Answer", text: "The free readiness check is a 12-question, 8-minute timed assessment in GL-style format. No account is needed. On completion, parents receive a readiness band, an indicative readiness score against the 121 qualifying standard, and a breakdown across the four test sections." } },
+            { "@type": "Question", name: "How does the free readiness check work?", acceptedAnswer: { "@type": "Answer", text: "The free readiness check is a 12-question, 8-minute timed assessment in GL-style format. No account is needed. On completion, parents receive a readiness band, an indicative readiness score against our 121 readiness benchmark, and a breakdown across the four test sections." } },
             { "@type": "Question", name: "What is included in Bucks Plus Edge?", acceptedAnswer: { "@type": "Answer", text: "Bucks Plus Edge (£35/month or £279/year) includes 2,500+ GL-style questions across all four test domains, timed drills, full mock readiness checks, PDF reports, parent analytics, progress tracking, and a guided programme." } },
           ]
         }}
@@ -1076,7 +1076,7 @@ export default function Landing() {
                 </div>
               </div>
               <p className="text-base md:text-lg text-white/65 leading-relaxed" data-testid="text-hero-sub">
-                Bucks-specific diagnostics that pinpoint the exact gaps costing marks, rank your child's highest-impact focus areas, and give an <span className="text-amber-300 font-semibold">indicative readiness score against the 121 qualifying standard</span>. With 2,500+ GL-style questions to close every gap.
+                Bucks-specific 11+ diagnostics that show exactly where marks are being lost. Pinpoint gaps, prioritise the highest-impact focus areas, and <span className="text-amber-300 font-semibold">compare your child's practice result with our indicative 121 readiness benchmark</span>. Includes 2,500+ GL-style questions for targeted practice.
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
                 <Button size="lg" className="h-12 px-8 text-base bg-amber-400 text-amber-950 hover:bg-amber-300 font-bold shadow-lg shadow-amber-400/20 border-none" asChild data-testid="button-hero-primary">
@@ -1090,6 +1090,9 @@ export default function Landing() {
               </div>
               <p className="text-xs text-white/50 -mt-2" data-testid="text-hero-cta-subtext">
                 No account needed for the free check · Paid plans cancel any time · No lock-in
+              </p>
+              <p className="text-[11px] text-white/35 leading-snug -mt-1" data-testid="text-hero-disclaimer">
+                Our readiness benchmark is an independent practice indicator. It is not an official Buckinghamshire Secondary Transfer Test score or a guarantee of performance.
               </p>
               <div className="flex flex-wrap items-center gap-x-5 gap-y-2" data-testid="trust-signal-hero">
                 <div className="flex items-center gap-1.5 text-white/55 text-xs font-medium">
@@ -1185,7 +1188,7 @@ export default function Landing() {
               A glimpse inside — <span className="text-amber-300">the parent dashboard.</span>
             </h2>
             <p className="text-white/60 max-w-2xl mx-auto">
-              You've tried the questions. Here's where the data goes: a live forecast of your child's likely test score, a skill heatmap pinpointing exact gaps, and a priority-ranked plan showing what to work on next.
+              You've tried the questions. Here's where the data goes: compare your child's practice result with our indicative 121 readiness benchmark, a skill heatmap pinpointing exact gaps, and a priority-ranked plan showing what to work on next.
             </p>
           </div>
 
@@ -1229,8 +1232,8 @@ export default function Landing() {
                   num: "05",
                   icon: <TrendingUp className="h-4 w-4" />,
                   iconBg: "bg-amber-400/20 text-amber-300 border-amber-400/30",
-                  title: "Forecast trajectory — vs the 121 qualifying line",
-                  desc: "Watch your child's indicative readiness score tracked week by week against the 121 Buckinghamshire qualifying threshold. The chart above is illustrative — actual gains vary by starting point and consistency.",
+                  title: "Forecast trajectory — vs the 121 indicative readiness benchmark",
+                  desc: "Watch your child's indicative readiness score tracked week by week against the 121 indicative readiness benchmark. The chart above is illustrative — actual gains vary by starting point and consistency.",
                   pill: "+22 pts · 8 weeks",
                 },
                 {
@@ -1338,7 +1341,7 @@ export default function Landing() {
           </div>
           <div className="grid sm:grid-cols-3 gap-3 mb-8">
             {[
-              { icon: <Award className="h-4 w-4 text-amber-600" />, bg: "bg-amber-50 border-amber-200", title: "Readiness score", desc: "Indicative readiness score benchmarked against the 121 qualifying standard" },
+              { icon: <Award className="h-4 w-4 text-amber-600" />, bg: "bg-amber-50 border-amber-200", title: "Readiness score", desc: "Indicative readiness score benchmarked against our 121 indicative readiness benchmark" },
               { icon: <Zap className="h-4 w-4 text-violet-600" />, bg: "bg-violet-50 border-violet-200", title: "Stamina analysis", desc: "Accuracy in the first vs second half — key for exam-day performance" },
               { icon: <Target className="h-4 w-4 text-red-600" />, bg: "bg-red-50 border-red-200", title: "Priority focus areas", desc: "Ranked list of highest-impact gaps with estimated point gains" },
             ].map((feat, i) => (
@@ -1368,7 +1371,7 @@ export default function Landing() {
           <div className="text-center mb-10">
             <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">Simple to start</span>
             <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-3">How it works</h2>
-            <p className="text-muted-foreground max-w-lg mx-auto">From your first readiness check to lifting your child's indicative readiness score toward the 121 standard — here's the path.</p>
+            <p className="text-muted-foreground max-w-lg mx-auto">From your first readiness check to lifting your child's indicative readiness score toward the 121 indicative readiness benchmark — here's the path.</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 mb-10">
@@ -1392,7 +1395,7 @@ export default function Landing() {
               {
                 step: "03",
                 title: "Follow the guided programme",
-                desc: "Your weekly programme prioritises the highest-impact tasks first. Every session updates your indicative readiness score against the 121 qualifying standard.",
+                desc: "Your weekly programme prioritises the highest-impact tasks first. Every session updates your indicative readiness score against the 121 indicative readiness benchmark.",
                 cta: { href: "/pricing", label: "Start programme" },
                 accent: "border-emerald-200 bg-emerald-50",
                 numColor: "text-emerald-600",
@@ -1426,15 +1429,14 @@ export default function Landing() {
         <div className="container mx-auto max-w-3xl px-4">
           <div className="text-center mb-8">
             <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-2">Why parents choose us</span>
-            <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif">Built with Senior Leadership Insight</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif">Smarter 11+ preparation, without the guesswork</h2>
           </div>
           <div className="rounded-2xl border border-slate-200 bg-slate-50 px-8 py-8 md:px-12 md:py-10" data-testid="why-parents-card">
             <div className="flex flex-col gap-4 text-slate-600 leading-relaxed text-[15px] mb-8">
-              <p>Developed with input from senior leadership within Primary Education, the platform is grounded in the realities of Year 6 and preparation for selective education.</p>
-              <p>The approach is informed by the structure and demands of the Buckinghamshire Secondary Transfer Test — focusing on where marks are lost, how timing affects performance, and what reaching the 121 standard requires in practice.</p>
+              <p className="font-semibold text-slate-700">Informed by primary education experience</p>
+              <p>Built around Year 6 learning, timed practice and Buckinghamshire-style preparation, the platform helps families identify gaps and focus on the areas that matter most.</p>
             </div>
             <div className="border-t border-slate-200 pt-6 flex items-end justify-between gap-4">
-              <p className="text-xs text-slate-400 max-w-xs">Built specifically for Bucks 11+ — giving parents clarity on readiness and what to do next.</p>
               <p className="text-2xl md:text-3xl text-primary font-serif italic" style={{ fontFamily: "'Georgia', 'Times New Roman', serif", letterSpacing: '-0.5px' }}>Bucks11PlusTest</p>
             </div>
           </div>
@@ -1450,10 +1452,9 @@ export default function Landing() {
           </div>
           <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden divide-y divide-slate-100">
             {[
-              { q: "Will this actually work for my child?", a: "The free 8-minute readiness check shows you, before you pay anything, whether our diagnostic accurately identifies your child's gaps and produces a realistic indicative readiness score against the 121 qualifying standard. If the free check doesn't give you useful insight, the paid programme isn't for you — and you'll have spent nothing." },
+              { q: "Will this actually work for my child?", a: "The free 8-minute readiness check shows you, before you pay anything, whether our diagnostic accurately identifies your child's gaps and produces a realistic indicative readiness score against the 121 readiness benchmark. If the free check doesn't give you useful insight, the paid programme isn't for you — and you'll have spent nothing." },
               { q: "What if I subscribe and change my mind?", a: "You can cancel any subscription at any time from your account, and we offer a money-back guarantee on new subscriptions if the platform isn't right for you. See pricing terms below for full details." },
               { q: "How is this different from a private tutor?", a: "A private tutor in Buckinghamshire typically charges £40–£60 per hour. Our annual plan works out at £23.25 per month — less than half the cost of a single tutoring session — and gives unlimited access to 2,500+ GL-style questions, full mock exams, and parent analytics that a tutor can't provide." },
-              { q: "Is it really specific to the Bucks 11+?", a: "Yes — every question, every readiness check, and every benchmark is built for the Buckinghamshire Secondary Transfer Test. Results are measured against the 121 qualifying threshold, covering all four GL Assessment domains. This is not a generic 11+ platform." },
               { q: "Will my child enjoy using it?", a: "Sessions are short, friendly, and end with encouragement — not just a score. Your child can jump back in with one tap, and section names are written in language a 10-year-old understands. The free check is a good way to see how they respond before committing." },
             ].map((item, i) => (
               <details key={i} className="group" data-testid={`faq-prepricing-${i}`}>
@@ -1651,7 +1652,7 @@ export default function Landing() {
             <h2 className="text-xl font-bold text-primary font-serif mb-6">Frequently Asked Questions</h2>
             <div className="space-y-0 rounded-2xl border border-slate-200 bg-white overflow-hidden divide-y divide-slate-100">
               {[
-                { q: "Is this platform built specifically for the Buckinghamshire 11+?", a: "Yes — exclusively. Every question, every readiness check, and every benchmark is built for the Buckinghamshire Secondary Transfer Test. Results are measured against the 121 qualifying threshold, covering all four GL Assessment domains, across all 13 Buckinghamshire grammar schools. This is not a generic 11+ platform repurposed for Bucks." },
+                { q: "Is this platform built specifically for the Buckinghamshire 11+?", a: "Yes — exclusively. Every question, every readiness check, and every benchmark is built for the Buckinghamshire Secondary Transfer Test. Performance is measured against our indicative 121 readiness benchmark, across all four GL Assessment domains, covering all 13 Buckinghamshire grammar schools. This is not a generic 11+ platform repurposed for Bucks." },
                 { q: "Is Bucks 11 Plus Tests affiliated with GL Assessment or Buckinghamshire Council?", a: "No. We are fully independent — not affiliated with GL Assessment, Buckinghamshire Council, TBGS, or any individual grammar school. 'GL-style' refers to the question format we independently replicate, not an official relationship." },
                 { q: "How is the free readiness check different from the paid platform?", a: "The free readiness check gives you a readiness band, forecast score, and section breakdown with no account needed. The paid Bucks Plus Edge (£35/month or £279/year) gives access to 2,500+ questions, full-length practice papers, full GL-style mock exams, all Hard drills, parent analytics, progress tracking, and a guided programme." },
                 { q: "What is the difference between the monthly and annual plan?", a: "Both plans give identical full access to every feature. The monthly plan is £35/month and can be cancelled anytime. The annual plan is £279/year — equivalent to £23.25/month, saving £141 (34% off) compared to paying monthly for 12 months." },

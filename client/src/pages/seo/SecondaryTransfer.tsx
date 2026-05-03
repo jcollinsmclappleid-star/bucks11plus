@@ -137,7 +137,7 @@ export default function SecondaryTransfer() {
       <p>
         Our <Link href="/free-diagnostic" className="text-primary hover:underline">free readiness check</Link> measures
         your child's readiness across all four domains — Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension —
-        in just 8 minutes. It provides an indicative readiness score against the 121 qualifying standard and identifies the specific
+        in just 8 minutes. It provides an indicative readiness score against our 121 readiness benchmark and identifies the specific
         areas where improvement is needed.
       </p>
       <p>

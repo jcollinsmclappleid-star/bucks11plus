@@ -12,7 +12,7 @@ export default function ScoringMethodology() {
       color: "bg-green-100 border-green-200 text-green-800",
       barColor: "bg-green-500",
       barWidth: "100%",
-      description: "Your child's performance puts them in a strong position to meet the Buckinghamshire grammar school qualifying threshold.",
+      description: "Your child's performance puts them in a strong position to meet our 121 indicative readiness benchmark.",
     },
     {
       label: "Within Reach",
@@ -60,7 +60,10 @@ export default function ScoringMethodology() {
           <div>
             <p className="font-semibold text-blue-900 mb-1">Independent benchmark, not an official GL Assessment</p>
             <p className="text-sm text-blue-800 leading-relaxed">
-              Our scoring model is calibrated against the Buckinghamshire 11+ qualifying threshold of 121 using GL-style question types and difficulty weightings. It is designed to give parents a directional readiness signal — not a prediction of your child's official GL Assessment score. GL Assessment uses proprietary age-standardised scoring tables not available to independent providers.
+              Our 121 readiness benchmark is designed to help parents understand how their child is performing within our practice tests against an indicative 121 readiness level.
+            </p>
+            <p className="text-sm text-blue-800 leading-relaxed mt-2">
+              It is not an official Buckinghamshire Secondary Transfer Test 121 score, not a GL Assessment score, and not a prediction or guarantee of your child's final result. Official outcomes are calculated using GL Assessment's own age-standardised scoring process, which independent practice providers cannot replicate.
             </p>
           </div>
         </CardContent>

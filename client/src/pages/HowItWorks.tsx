@@ -14,7 +14,7 @@ const howItWorksFaqSchema = {
       "name": "How does the Bucks 11 Plus Tests readiness check work?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "The readiness check is a timed GL-style assessment covering Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension. It benchmarks your child's accuracy, pacing and readiness against the 121 qualifying standard for Buckinghamshire grammar schools."
+        "text": "The readiness check is a timed GL-style assessment covering Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension. It benchmarks your child's accuracy, pacing and readiness against our 121 indicative readiness benchmark for Buckinghamshire grammar school preparation."
       }
     },
     {
@@ -38,7 +38,7 @@ const howItWorksFaqSchema = {
       "name": "What are the readiness bands?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "There are three readiness bands: Secure (Green) — performance consistently meets projected qualifying thresholds; Borderline (Amber) — close to qualifying thresholds but with identifiable risk factors; Development Required (Red) — a measurable gap exists relative to qualifying thresholds."
+        "text": "There are three readiness bands: Secure (Green) — performance consistently meets our indicative readiness benchmark; Borderline (Amber) — close to the indicative readiness benchmark but with identifiable risk factors; Development Required (Red) — a measurable gap exists relative to the indicative readiness benchmark."
       }
     },
     {
@@ -147,7 +147,7 @@ export default function HowItWorks() {
                   "12 GL-style questions, 8 minutes",
                   "No account needed — completely free",
                   "Covers all 4 test domains",
-                  "Receive an indicative readiness score against the 121 qualifying standard",
+                  "Receive an indicative readiness score against the 121 readiness benchmark",
                   "Get your 3 highest-impact priority gaps",
                 ],
                 cta: { href: "/free-diagnostic", label: "Start free now →" },
@@ -292,13 +292,13 @@ export default function HowItWorks() {
                 icon: Target,
                 iconBg: "bg-amber-100 text-amber-700",
                 title: "Readiness forecast score",
-                desc: "An indicative readiness score benchmarked against the 121 qualifying standard — showing how close your child is and how many points remain.",
+                desc: "An indicative readiness score benchmarked against the 121 indicative readiness benchmark — showing how close your child is and how many points remain.",
               },
               {
                 icon: BarChart3,
                 iconBg: "bg-violet-100 text-violet-700",
                 title: "Readiness band (Green / Amber / Red)",
-                desc: "An at-a-glance status: On Track (Green), Borderline (Amber), or Development Required (Red) — relative to projected qualifying performance.",
+                desc: "An at-a-glance status: On Track (Green), Borderline (Amber), or Development Required (Red) — relative to projected indicative readiness benchmark.",
               },
               {
                 icon: Zap,
@@ -334,9 +334,9 @@ export default function HowItWorks() {
             </div>
             <div className="divide-y divide-slate-50">
               {[
-                { band: "Secure", color: "bg-emerald-500", textColor: "text-emerald-700", bg: "bg-emerald-50", desc: "Performance consistently meets projected qualifying thresholds across accuracy, pacing and sub-skill balance. The indicative readiness score sits at or above the 121 qualifying standard under current conditions." },
-                { band: "Borderline", color: "bg-amber-500", textColor: "text-amber-700", bg: "bg-amber-50", desc: "Performance is close to qualifying thresholds but shows identifiable risk factors such as pacing instability or concentrated weaknesses. Targeted practice in the priority areas will lift the indicative readiness score." },
-                { band: "Development Required", color: "bg-red-500", textColor: "text-red-700", bg: "bg-red-50", desc: "The indicative readiness score sits noticeably below projected qualifying thresholds. Structured, focused preparation is needed — the programme will prioritise the highest-impact areas first." },
+                { band: "Secure", color: "bg-emerald-500", textColor: "text-emerald-700", bg: "bg-emerald-50", desc: "Performance consistently meets our indicative readiness benchmark across accuracy, pacing and sub-skill balance. The indicative readiness score sits at or above the 121 indicative readiness benchmark under current conditions." },
+                { band: "Borderline", color: "bg-amber-500", textColor: "text-amber-700", bg: "bg-amber-50", desc: "Performance is close to the indicative readiness benchmark but shows identifiable risk factors such as pacing instability or concentrated weaknesses. Targeted practice in the priority areas will lift the indicative readiness score." },
+                { band: "Development Required", color: "bg-red-500", textColor: "text-red-700", bg: "bg-red-50", desc: "The indicative readiness score sits noticeably below the indicative readiness benchmark. Structured, focused preparation is needed — the programme will prioritise the highest-impact areas first." },
               ].map((b, i) => (
                 <div key={i} className={`flex items-start gap-4 px-5 py-4 ${b.bg}`} data-testid={`band-${i}`}>
                   <div className={`w-3 h-3 rounded-full ${b.color} shrink-0 mt-1`} />
@@ -402,9 +402,9 @@ export default function HowItWorks() {
             {[
               { icon: BarChart3, title: "Accuracy modelling", content: "Accuracy is assessed across 18 structured skill areas. Performance is weighted by difficulty level and cognitive load — harder questions contribute more. Concentrated weaknesses in specific sub-rules (e.g. 'spatial rotation') are flagged as higher risk than dispersed errors." },
               { icon: Clock, title: "Pace adjustment", content: "The Bucks 11+ is time-constrained. Benchmark pacing: ~35 seconds per VR/NVR question, ~45 seconds per Maths question. Mean response time is compared and a pace ratio moderates the forecast. Deterioration in later sections signals fatigue risk." },
-              { icon: Layers, title: "Sub-skill stability", content: "Qualifying performance requires balanced competency across domains. Significant imbalance between VR, NVR and Maths reduces the stability weighting. Repeated weaknesses within a single sub-rule cluster are treated as higher risk than isolated errors." },
+              { icon: Layers, title: "Sub-skill stability", content: "Meeting our readiness benchmark requires balanced competency across domains. Significant imbalance between VR, NVR and Maths reduces the stability weighting. Repeated weaknesses within a single sub-rule cluster are treated as higher risk than isolated errors." },
               { icon: TrendingUp, title: "Consistency & trend", content: "A single result is not treated as definitive. As your child takes more checks, the model tracks trend direction (improving / stable / declining), volatility across attempts, and pacing consistency. Stable improvement increases forecast confidence." },
-              { icon: Shield, title: "Composite readiness index", content: "All factors combine into a weighted composite index — Accuracy, Pace, Sub-skill Stability, and Consistency — that maps to a readiness band and an indicative readiness score against the 121 qualifying standard. This is designed to reflect practical exam performance, not the theoretical maximum, and is not a substitute for the official GL standardised score." },
+              { icon: Shield, title: "Composite readiness index", content: "All factors combine into a weighted composite index — Accuracy, Pace, Sub-skill Stability, and Consistency — that maps to a readiness band and an indicative readiness score against the 121 indicative readiness benchmark. This is designed to reflect practical exam performance, not the theoretical maximum, and is not a substitute for the official GL standardised score." },
             ].map((item, i) => (
               <AccordionItem key={i} title={item.title} icon={item.icon} index={i + 1}>
                 <p>{item.content}</p>

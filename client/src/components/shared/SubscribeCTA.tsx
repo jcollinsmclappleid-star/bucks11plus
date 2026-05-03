@@ -5,7 +5,7 @@ import { CheckCircle2, ArrowRight, Zap } from "lucide-react";
 const benefits = [
   "2,500+ GL-style questions across all four test subjects",
   "Full 40q and 50q timed mock exams",
-  "All Hard-level drills benchmarked to the 121 standard",
+  "All Hard-level drills benchmarked to the 121 readiness benchmark",
   "Parent analytics dashboard — track progress by topic",
   "PDF readiness reports after every session",
   "Works on phone, tablet or laptop — practice anywhere",
@@ -23,7 +23,7 @@ export function SubscribeCTA() {
           The Complete Bucks 11+ Preparation Platform
         </h3>
         <p className="text-white/75 text-sm leading-relaxed mb-5 max-w-2xl">
-          Everything your child needs to prepare for the Buckinghamshire 11+ — intelligent readiness checks, structured drills, detailed parent analytics, and mock exam simulations, all benchmarked against the 121 qualifying standard.
+          Everything your child needs to prepare for the Buckinghamshire 11+ — intelligent readiness checks, structured drills, detailed parent analytics, and mock exam simulations, all benchmarked against our 121 readiness benchmark.
         </p>
         <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-1.5 mb-6">
           {benefits.map((b, i) => (

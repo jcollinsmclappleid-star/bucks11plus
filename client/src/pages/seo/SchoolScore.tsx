@@ -96,7 +96,7 @@ export default function SchoolScore({ schoolSlug }: { schoolSlug: string }) {
       <ChildExperienceCTA />
       <ContentCTA
         heading={`See where your child stands against the 121 ${school.shortName} threshold`}
-        subhead="Our free 8-minute GL-style diagnostic gives you an indicative readiness band against the qualifying standard — no account needed."
+        subhead="Our free 8-minute GL-style diagnostic gives you an indicative readiness band against our 121 readiness benchmark — no account needed."
         ctaLabel="Take the free diagnostic"
       />
 

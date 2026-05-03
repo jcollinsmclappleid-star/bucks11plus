@@ -30,7 +30,7 @@ export const MOCK_VARIANTS: MockVariant[] = [
       "Start the timer with the child. Resist the urge to talk through the first question.",
       "When the time ends, end the test — even if questions are unfinished. Pacing data matters.",
     ],
-    whatGoodLooksLike: "On a 12-question diagnostic, 9 or more correct (75%+) is consistent with a child currently on track for the 121 qualifying standard. 7–8 correct is 'within reach with consistent practice'. Below 7 indicates a clear improvement opportunity. Pacing matters too: a child who finishes well within time but scores low has a knowledge gap; a child who runs out of time has a fluency gap. The two are addressed differently.",
+    whatGoodLooksLike: "On a 12-question diagnostic, 9 or more correct (75%+) is consistent with a child currently on track for our 121 readiness benchmark. 7–8 correct is 'within reach with consistent practice'. Below 7 indicates a clear improvement opportunity. Pacing matters too: a child who finishes well within time but scores low has a knowledge gap; a child who runs out of time has a fluency gap. The two are addressed differently.",
     whatToDoAfter: [
       "Look at the breakdown by section, not just the overall score. A child who is strong in three sections and weak in one needs targeted practice on the weak section, not more generic drilling.",
       "Note any question type the child consistently misses — that's the priority area for the next two weeks.",

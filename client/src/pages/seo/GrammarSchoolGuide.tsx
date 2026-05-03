@@ -210,7 +210,7 @@ export default function GrammarSchoolGuide({ schoolSlug }: { schoolSlug: string 
         )}
 
         <ChildExperienceCTA />
-        <ContentCTA heading="Targeting this grammar school?" subhead="Get an indicative readiness score against the 121 qualifying standard — and a breakdown of which sections need work." ctaLabel="Check readiness now" />
+        <ContentCTA heading="Targeting this grammar school?" subhead="Get an indicative readiness score against our 121 readiness benchmark — and a breakdown of which sections need work." ctaLabel="Check readiness now" />
         <Disclaimer />
       </div>
     </div>

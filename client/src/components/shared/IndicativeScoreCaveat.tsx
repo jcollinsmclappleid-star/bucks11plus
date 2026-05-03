@@ -17,7 +17,10 @@ export function IndicativeScoreCaveat({ variant = "inline", className = "" }: Pr
         <div className="text-sm text-blue-900 leading-relaxed">
           <p className="font-semibold mb-1">Independent benchmark, not an official GL Assessment</p>
           <p>
-            Our scoring model is calibrated against the Buckinghamshire 11+ qualifying threshold of 121 using GL-style question types and difficulty weightings. It is designed to give parents a directional readiness signal — not a prediction of your child's official GL Assessment score. GL Assessment uses proprietary age-standardised scoring tables not available to independent providers.{" "}
+            Our 121 readiness benchmark is designed to help parents understand how their child is performing within our practice tests against an indicative 121 readiness level.
+          </p>
+          <p className="mt-1.5">
+            It is not an official Buckinghamshire Secondary Transfer Test 121 score, not a GL Assessment score, and not a prediction or guarantee of your child's final result. Official outcomes are calculated using GL Assessment's own age-standardised scoring process, which independent practice providers cannot replicate.{" "}
             <Link href="/scoring-methodology" className="underline font-medium" data-testid="link-scoring-methodology-block">
               Read the full methodology
             </Link>
