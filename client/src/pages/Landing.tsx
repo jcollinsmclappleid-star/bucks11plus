@@ -1,6 +1,7 @@
+import { useState } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, CheckCircle2, Target, Clock, BarChart3, Zap, Shield, Award, Star, ChevronUp, TrendingUp, Brain, Layers, Hash, BookOpen, Trophy, Flame, Calendar, Sparkles, PlayCircle, GraduationCap } from "lucide-react";
+import { ArrowRight, CheckCircle2, Target, Clock, BarChart3, Zap, Shield, Award, Star, ChevronUp, TrendingUp, Brain, Layers, Hash, BookOpen, Trophy, Flame, Calendar, Sparkles, PlayCircle, GraduationCap, X, RotateCcw } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 import { useAuth } from "../lib/auth";
 import { TestCountdownBadge } from "../components/shared/TestCountdownBadge";
@@ -454,6 +455,18 @@ function ShapeBox({ corner, kind, filled, size = "md" }: { corner: "tl" | "tr" |
 
 const SAMPLE_QUESTIONS: SampleQ[] = [
   {
+    subject: "Verbal Reasoning", type: "Coded Words — letter codes",
+    question: "If the word LION is written in code as MJPO, what would the word TIGER be written as in the same code?",
+    options: [
+      { letter: "A", text: "UJHFS", correct: true },
+      { letter: "B", text: "SHFDQ" },
+      { letter: "C", text: "UKIGT" },
+      { letter: "D", text: "VJHGT" },
+      { letter: "E", text: "UIGFR" },
+    ],
+    explanation: "Each letter shifts forward by 1 in the alphabet: L→M, I→J, O→P, N→O. Apply the same rule to TIGER: T→U, I→J, G→H, E→F, R→S — giving UJHFS.",
+  },
+  {
     subject: "Maths", type: "Percentages",
     question: "A jacket costs £80. In a sale, the price is reduced by 15%. What is the sale price?",
     options: [
@@ -574,7 +587,101 @@ const SAMPLE_QUESTIONS: SampleQ[] = [
   },
 ];
 
+function InteractiveQuestionCard({ q, index, total }: { q: SampleQ; index: number; total: number }) {
+  const [selected, setSelected] = useState<string | null>(null);
+  const style = SUBJECT_STYLE[q.subject];
+  const correctLetter = q.options.find((o) => o.correct)?.letter;
+  const isAnswered = selected !== null;
+  const isRight = selected === correctLetter;
+
+  return (
+    <article className="snap-start shrink-0 w-[300px] sm:w-[320px] bg-white rounded-2xl shadow-xl ring-1 ring-black/5 overflow-hidden flex flex-col" data-testid={`sample-question-${index}`}>
+      {/* header */}
+      <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+        <div className="flex items-center gap-2 min-w-0">
+          <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${style.dot}`} />
+          <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${style.pill} truncate`}>{q.subject}</span>
+        </div>
+        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider shrink-0">Q{index + 1}/{total}</span>
+      </div>
+
+      {/* body */}
+      <div className="p-4 flex-1 flex flex-col">
+        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">{q.type}</p>
+        {q.passage && (
+          <p className="text-[11px] italic text-slate-600 bg-amber-50/60 border-l-2 border-amber-300 pl-2.5 py-1.5 mb-2.5 leading-relaxed">{q.passage}</p>
+        )}
+        <p className="text-[13px] font-semibold text-slate-800 mb-2.5 leading-snug">{q.question}</p>
+        {q.visual && <div className="mb-3">{q.visual}</div>}
+
+        <div className="space-y-1.5 mb-3">
+          {q.options.map((o) => {
+            const isSelected = selected === o.letter;
+            const isCorrect = o.letter === correctLetter;
+            let cls = "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50";
+            let badgeCls = "bg-slate-100 text-slate-500";
+            let icon: React.ReactNode = null;
+            if (isAnswered) {
+              if (isCorrect) {
+                cls = "border-emerald-300 bg-emerald-50 text-emerald-800";
+                badgeCls = "bg-emerald-500 text-white";
+                icon = <CheckCircle2 className="h-3 w-3 text-emerald-500 shrink-0" />;
+              } else if (isSelected) {
+                cls = "border-rose-300 bg-rose-50 text-rose-800";
+                badgeCls = "bg-rose-500 text-white";
+                icon = <X className="h-3 w-3 text-rose-500 shrink-0" />;
+              } else {
+                cls = "border-slate-200 bg-white text-slate-400";
+              }
+            }
+            return (
+              <button
+                key={o.letter}
+                type="button"
+                onClick={() => !isAnswered && setSelected(o.letter)}
+                disabled={isAnswered}
+                aria-label={`Option ${o.letter}`}
+                aria-pressed={isSelected}
+                data-testid={`option-${index}-${o.letter}`}
+                className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg border text-[11px] text-left transition-colors ${cls} ${isAnswered ? "cursor-default" : "cursor-pointer"}`}
+              >
+                <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold shrink-0 ${badgeCls}`}>{o.letter}</span>
+                <span className="flex-1">{o.text}</span>
+                {icon}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="mt-auto pt-2.5 border-t border-slate-100">
+          {!isAnswered ? (
+            <p className="text-[10px] text-slate-400 leading-snug italic">Tap an answer to check it.</p>
+          ) : (
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between gap-2">
+                <p className={`text-[10px] font-bold uppercase tracking-wider ${isRight ? "text-emerald-600" : "text-rose-600"}`}>
+                  {isRight ? "Correct" : `Not quite — answer is ${correctLetter}`}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setSelected(null)}
+                  className="inline-flex items-center gap-1 text-[9px] font-bold text-slate-400 hover:text-slate-600 uppercase tracking-wider"
+                  data-testid={`reset-${index}`}
+                >
+                  <RotateCcw className="h-2.5 w-2.5" /> Try again
+                </button>
+              </div>
+              <p className="text-[10px] text-slate-500 leading-snug"><span className="font-bold text-emerald-700">Why:</span> {q.explanation}</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </article>
+  );
+}
+
 function MockQuestionsCarousel() {
+  const total = SAMPLE_QUESTIONS.length;
   return (
     <div className="mb-12 md:mb-14" data-testid="mock-questions-carousel">
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-5">
@@ -582,8 +689,8 @@ function MockQuestionsCarousel() {
           <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-amber-400 uppercase tracking-widest mb-2">
             <Brain className="h-3 w-3" /> Try the actual questions
           </span>
-          <h3 className="text-white font-bold font-serif text-xl md:text-2xl leading-tight">Eight real GL-style questions — answers shown.</h3>
-          <p className="text-white/50 text-xs md:text-sm mt-1.5">Two from each domain: Maths, Verbal Reasoning, Non-Verbal Reasoning, Comprehension. Scroll horizontally to flip through.</p>
+          <h3 className="text-white font-bold font-serif text-xl md:text-2xl leading-tight">Nine real GL-style questions — tap to try them.</h3>
+          <p className="text-white/50 text-xs md:text-sm mt-1.5">Coded words, Maths, Verbal &amp; Non-Verbal Reasoning, Comprehension. Pick an answer and we'll mark it instantly.</p>
         </div>
         <div className="hidden sm:flex items-center gap-2 text-[10px] font-bold text-white/40 uppercase tracking-widest shrink-0">
           <span>Swipe</span>
@@ -593,45 +700,10 @@ function MockQuestionsCarousel() {
 
       <div className="relative -mx-4 sm:mx-0">
         <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory px-4 sm:px-0 pb-4" tabIndex={0} role="region" aria-label="Sample questions, scroll horizontally" style={{ scrollbarWidth: "thin" }}>
-          {SAMPLE_QUESTIONS.map((q, i) => {
-            const style = SUBJECT_STYLE[q.subject];
-            return (
-              <article key={i} className={`snap-start shrink-0 w-[300px] sm:w-[320px] bg-white rounded-2xl shadow-xl ring-1 ring-black/5 overflow-hidden flex flex-col`} data-testid={`sample-question-${i}`}>
-                {/* card header */}
-                <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${style.dot}`} />
-                    <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${style.pill} truncate`}>{q.subject}</span>
-                  </div>
-                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider shrink-0">Q{i + 1}/8</span>
-                </div>
-
-                {/* card body */}
-                <div className="p-4 flex-1 flex flex-col">
-                  <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">{q.type}</p>
-                  {q.passage && (
-                    <p className="text-[11px] italic text-slate-600 bg-amber-50/60 border-l-2 border-amber-300 pl-2.5 py-1.5 mb-2.5 leading-relaxed">{q.passage}</p>
-                  )}
-                  <p className="text-[13px] font-semibold text-slate-800 mb-2.5 leading-snug">{q.question}</p>
-                  {q.visual && <div className="mb-3">{q.visual}</div>}
-                  <div className="space-y-1.5 mb-3">
-                    {q.options.map((o) => (
-                      <div key={o.letter} className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg border text-[11px] ${o.correct ? "border-emerald-300 bg-emerald-50 text-emerald-800" : "border-slate-200 bg-white text-slate-700"}`}>
-                        <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold shrink-0 ${o.correct ? "bg-emerald-500 text-white" : "bg-slate-100 text-slate-500"}`}>{o.letter}</span>
-                        <span className="flex-1">{o.text}</span>
-                        {o.correct && <CheckCircle2 className="h-3 w-3 text-emerald-500 shrink-0" />}
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-auto pt-2.5 border-t border-slate-100">
-                    <p className="text-[10px] text-slate-500 leading-snug"><span className="font-bold text-emerald-700">Why:</span> {q.explanation}</p>
-                  </div>
-                </div>
-              </article>
-            );
-          })}
+          {SAMPLE_QUESTIONS.map((q, i) => (
+            <InteractiveQuestionCard key={i} q={q} index={i} total={total} />
+          ))}
         </div>
-        {/* dot indicator */}
         <div className="flex justify-center gap-1.5 mt-3">
           {SAMPLE_QUESTIONS.map((_, i) => (
             <div key={i} className="w-1.5 h-1.5 rounded-full bg-white/15" />
