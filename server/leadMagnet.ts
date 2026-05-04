@@ -110,7 +110,7 @@ export async function sendPracticePaperEmail(
       <a href="${downloadUrl}" style="display:inline-block;background:#0d1f30;color:#ffffff;text-decoration:none;font-weight:700;font-size:15px;padding:14px 32px;border-radius:8px;">Download Practice Paper (PDF)</a>
     </div>
 
-    <p style="color:#475569;font-size:14px;"><strong style="color:#0d1f30;">How to use it:</strong> sit your child in a quiet room with rough paper. Aim for 20 minutes (around 100 seconds per question — close to real GL pace). Mark together using the answer key — the explanations are where the learning happens.</p>
+    <p style="color:#475569;font-size:14px;"><strong style="color:#0d1f30;">How to use it:</strong> sit your child in a quiet room with rough paper. Aim for 20 minutes (around 100 seconds per question — close to test-day pace). Mark together using the answer key — the explanations are where the learning happens.</p>
 
     <hr style="border:none;border-top:1px solid #e5e7eb;margin:28px 0;">
 

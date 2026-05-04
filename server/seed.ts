@@ -213,7 +213,7 @@ async function syncDiagnosticTimings() {
     "mini-1": { duration: 8, subtitle: "Quick 8-minute assessment across core GL-style reasoning" },
     "full-a": { duration: 30, subtitle: "Complete 30-minute assessment mirroring GL exam pacing" },
     "full-b": { duration: 30 },
-    "mock-1": { duration: 35, subtitle: "Exam-day simulation under real GL pacing" },
+    "mock-1": { duration: 35, subtitle: "Exam-day simulation under timed exam conditions" },
     "practice-quick": { duration: 15 },
     "practice-full": { duration: 30 },
     "practice-mock": { duration: 35 },
@@ -1110,7 +1110,7 @@ export async function seedDatabase() {
     {
       id: "mock-1",
       title: "Mock Exam 1",
-      subtitle: "Exam-day simulation under real GL pacing",
+      subtitle: "Exam-day simulation under timed exam conditions",
       type: "mock",
       duration: 35,
       questionCount: 50,

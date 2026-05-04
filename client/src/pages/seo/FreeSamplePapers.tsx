@@ -39,7 +39,7 @@ const digitalAdvantages = [
     icon: <Zap className="h-5 w-5" />,
     colour: "bg-red-100 text-red-700",
     title: "Stamina analysis",
-    desc: "The real GL paper is timed and long. We compare accuracy in the first half versus the second half of every session — because many children don't realise their accuracy drops under sustained time pressure.",
+    desc: "The Bucks 11+ is timed and long. We compare accuracy in the first half versus the second half of every session — because many children don't realise their accuracy drops under sustained time pressure.",
   },
 ];
 

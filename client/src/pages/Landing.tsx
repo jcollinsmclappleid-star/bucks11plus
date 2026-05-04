@@ -1214,7 +1214,7 @@ export default function Landing() {
                 { dot: "bg-amber-400",   label: "Free · Readiness Diagnostics", title: "Start with a real picture, not a guess" },
                 { dot: "bg-violet-500",  label: "Subject Breakdown",             title: 'Not \u201cNVR needs work\u201d \u2014 exactly which skills' },
                 { dot: "bg-blue-500",    label: "Adaptive Practice",             title: "The right questions, at the right difficulty" },
-                { dot: "bg-red-500",     label: "Pace & Stamina Tracking",       title: "The real GL paper is timed. We track every second." },
+                { dot: "bg-red-500",     label: "Pace & Stamina Tracking",       title: "The Bucks 11+ is timed. We track every second." },
                 { dot: "bg-emerald-500", label: "Guided Weekly Programme",       title: 'No more \u201cwhat should we practise tonight?\u201d' },
                 { dot: "bg-amber-600",   label: "Progress Over Time",            title: "See if preparation is working — week by week" },
               ].map((tab, i) => (
@@ -1247,7 +1247,7 @@ export default function Landing() {
                 {
                   badge: "Free · Readiness Diagnostics", badgeColor: "text-amber-700 bg-amber-100 border-amber-200",
                   title: "Start with a real picture, not a guess",
-                  body: "Take a 12-question timed check across all four sections — the same format as the real GL paper. We return an indicative readiness score against our 121 benchmark, plus your child's three weakest areas. No account needed, no payment required.",
+                  body: "Take a 12-question timed check across all four domains — Verbal Reasoning, Non-Verbal Reasoning, Maths and English Comprehension. We return an indicative readiness score against our 121 benchmark, plus your child's three weakest areas. No account needed, no payment required.",
                   meta: "8 minutes · instant results · no account needed",
                 },
                 {
@@ -1264,7 +1264,7 @@ export default function Landing() {
                 },
                 {
                   badge: "Pace & Stamina Tracking", badgeColor: "text-red-700 bg-red-100 border-red-200",
-                  title: "The real GL paper is timed. We track every second.",
+                  title: "The Bucks 11+ is timed. We track every second.",
                   body: "Most children don't realise their accuracy drops in the second half of a timed test. We measure how long each answer takes and whether stamina holds under pressure. That's an insight no static practice paper can give you — and it's often the difference between borderline and clear.",
                   meta: "Per-question timing · accuracy vs pace · stamina analysis",
                 },
@@ -1318,11 +1318,11 @@ export default function Landing() {
                 Find out where your child really stands — in 8 minutes
               </h2>
               <p className="text-slate-600 leading-relaxed mb-6">
-                12 timed questions across all four sections. The same format as the real GL paper. Instant section-by-section breakdown and indicative readiness score against our 121 benchmark.
+                12 timed GL-style questions across all four domains — Verbal Reasoning, Non-Verbal Reasoning, Maths and English Comprehension. Instant section-by-section breakdown and indicative readiness score against our 121 benchmark.
               </p>
               <div className="flex flex-col gap-2.5 mb-7">
                 {[
-                  "Timed like the real GL paper",
+                  "Every question individually timed",
                   "Instant section breakdown",
                   "Indicative readiness score",
                 ].map((pt, i) => (
