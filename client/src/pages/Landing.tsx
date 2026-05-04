@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, CheckCircle2, Target, Clock, BarChart3, Zap, Shield, Award, Star, ChevronUp, TrendingUp, Brain, Layers, Hash, BookOpen, Trophy, Flame, Calendar, Sparkles, PlayCircle, GraduationCap, X, RotateCcw } from "lucide-react";
+import { ArrowRight, CheckCircle2, Target, Clock, BarChart3, Zap, Shield, Award, Star, ChevronUp, ChevronRight, TrendingUp, Brain, Layers, Hash, BookOpen, Trophy, Flame, Calendar, Sparkles, PlayCircle, GraduationCap, X, RotateCcw } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 import { useAuth } from "../lib/auth";
 import { TestCountdownBadge } from "../components/shared/TestCountdownBadge";
@@ -280,22 +280,30 @@ function ProgressPanel() {
 
 function PracticeQuestionPanel() {
   return (
-    <div className="w-full space-y-3" data-testid="showcase-practice">
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-        <div className="flex items-center justify-between px-4 py-2.5 bg-slate-50 border-b border-slate-100">
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-violet-500" />
-            <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider">Verbal Reasoning</span>
+    <div className="w-full rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 p-4 shadow-xl" data-testid="showcase-practice">
+      {/* Session header */}
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <div className="p-1.5 bg-white/20 rounded-lg">
+            <Zap className="h-3.5 w-3.5 text-white" />
           </div>
-          <div className="flex items-center gap-1.5 text-[11px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
-            <Clock className="h-3 w-3" />
-            <span>1:42</span>
+          <div>
+            <p className="text-[10px] font-bold text-white/60 uppercase tracking-widest">Adaptive Practice</p>
+            <p className="text-xs font-semibold text-white">Verbal Reasoning · Hard</p>
           </div>
         </div>
+        <div className="flex items-center gap-1.5 text-[11px] font-bold text-amber-300 bg-amber-400/20 px-2.5 py-1 rounded-full border border-amber-400/30">
+          <Clock className="h-3 w-3" />
+          <span>1:42</span>
+        </div>
+      </div>
+
+      {/* Question card */}
+      <div className="bg-white rounded-xl overflow-hidden shadow-lg mb-3">
         <div className="p-4">
           <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400 mb-2">Question 14 of 25</p>
           <p className="text-sm font-medium text-slate-800 mb-4 leading-relaxed">
-            Which word is the <span className="font-bold text-violet-700">odd one out</span> from the group below?
+            Which word is the <span className="font-bold text-indigo-700">odd one out</span> from the group below?
           </p>
           <div className="grid grid-cols-1 gap-2">
             {[
@@ -310,7 +318,7 @@ function PracticeQuestionPanel() {
                 className={`flex items-center gap-3 px-3 py-2 rounded-lg border text-sm cursor-default transition-colors ${
                   opt.highlight
                     ? "border-emerald-300 bg-emerald-50 text-emerald-800"
-                    : "border-slate-200 bg-white text-slate-700 hover:border-slate-300"
+                    : "border-slate-200 bg-white text-slate-700"
                 }`}
               >
                 <span className={`w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0 ${opt.highlight ? "bg-emerald-500 text-white" : "bg-slate-100 text-slate-600"}`}>
@@ -330,18 +338,19 @@ function PracticeQuestionPanel() {
         </div>
       </div>
 
+      {/* Stats row */}
       <div className="grid grid-cols-3 gap-2">
-        <div className="rounded-xl bg-white border border-slate-200 p-2.5 text-center shadow-sm">
-          <div className="text-base font-bold text-emerald-600">18/25</div>
-          <div className="text-[10px] text-slate-500">Correct</div>
+        <div className="rounded-xl bg-white/15 border border-white/20 p-2.5 text-center">
+          <div className="text-base font-bold text-white">18/25</div>
+          <div className="text-[10px] text-white/60">Correct</div>
         </div>
-        <div className="rounded-xl bg-white border border-slate-200 p-2.5 text-center shadow-sm">
-          <div className="text-base font-bold text-primary">72%</div>
-          <div className="text-[10px] text-slate-500">Accuracy</div>
+        <div className="rounded-xl bg-white/15 border border-white/20 p-2.5 text-center">
+          <div className="text-base font-bold text-white">72%</div>
+          <div className="text-[10px] text-white/60">Accuracy</div>
         </div>
-        <div className="rounded-xl bg-white border border-slate-200 p-2.5 text-center shadow-sm">
-          <div className="text-base font-bold text-violet-600">Hard</div>
-          <div className="text-[10px] text-slate-500">Level</div>
+        <div className="rounded-xl bg-white/15 border border-white/20 p-2.5 text-center">
+          <div className="text-base font-bold text-amber-300">Hard</div>
+          <div className="text-[10px] text-white/60">Adapting ↑</div>
         </div>
       </div>
     </div>
@@ -1075,7 +1084,7 @@ function ChildExperiencePanel() {
 
 export default function Landing() {
   const { user } = useAuth();
-  const [activeFeature, setActiveFeature] = useState(0);
+  const [activeFeature, setActiveFeature] = useState(2);
 
   // Countdown to next Bucks 11+ test (Sept of relevant academic year)
   const today = new Date();
@@ -1213,29 +1222,70 @@ export default function Landing() {
 
           {/* Tabbed feature navigator */}
           <div className="lg:grid lg:grid-cols-3 lg:gap-10 space-y-6 lg:space-y-0">
-            {/* Left: tab list */}
-            <div className="lg:col-span-1 space-y-1">
-              {[
-                { dot: "bg-amber-400",   label: "Free · Readiness Diagnostics", title: "Start with a real picture, not a guess" },
-                { dot: "bg-violet-500",  label: "Subject Breakdown",             title: 'Not \u201cNVR needs work\u201d \u2014 exactly which skills' },
-                { dot: "bg-blue-500",    label: "Adaptive Practice",             title: "The right questions, at the right difficulty" },
-                { dot: "bg-red-500",     label: "Pace & Stamina Tracking",       title: "The Bucks 11+ is timed. We track every second." },
-                { dot: "bg-emerald-500", label: "Guided Weekly Programme",       title: 'No more \u201cwhat should we practise tonight?\u201d' },
-                { dot: "bg-amber-600",   label: "Progress Over Time",            title: "See if preparation is working — week by week" },
-              ].map((tab, i) => (
-                <button
-                  key={i}
-                  onClick={() => setActiveFeature(i)}
-                  className={`w-full text-left px-4 py-3 rounded-xl border transition-all ${activeFeature === i ? "border-primary/20 bg-primary/5 shadow-sm" : "border-transparent hover:bg-slate-50"}`}
-                  data-testid={`showcase-tab-${i}`}
-                >
-                  <div className="flex items-center gap-2.5 mb-0.5">
-                    <div className={`w-2 h-2 rounded-full shrink-0 ${tab.dot}`} />
-                    <span className={`text-[10px] font-bold uppercase tracking-widest ${activeFeature === i ? "text-primary/70" : "text-slate-400"}`}>{tab.label}</span>
-                  </div>
-                  <p className={`text-sm font-semibold font-serif leading-snug pl-[18px] ${activeFeature === i ? "text-primary" : "text-slate-500"}`}>{tab.title}</p>
-                </button>
-              ))}
+            {/* Mobile: horizontal scrollable pill strip */}
+            <div className="lg:hidden">
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 text-center">Tap a feature to explore</p>
+              <div className="flex gap-2 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide -mx-4 px-4">
+                {[
+                  { dot: "bg-amber-400",   label: "Diagnostics" },
+                  { dot: "bg-violet-500",  label: "Breakdown" },
+                  { dot: "bg-blue-500",    label: "Practice" },
+                  { dot: "bg-red-500",     label: "Pace" },
+                  { dot: "bg-emerald-500", label: "Programme" },
+                  { dot: "bg-amber-600",   label: "Progress" },
+                ].map((tab, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setActiveFeature(i)}
+                    className={`flex items-center gap-1.5 px-3.5 py-2 rounded-full border text-xs font-semibold whitespace-nowrap snap-start shrink-0 transition-all ${
+                      activeFeature === i
+                        ? "border-primary bg-primary text-white shadow-md"
+                        : "border-slate-200 bg-white text-slate-600 shadow-sm hover:border-slate-300"
+                    }`}
+                    data-testid={`showcase-tab-mobile-${i}`}
+                  >
+                    <div className={`w-2 h-2 rounded-full shrink-0 ${activeFeature === i ? "bg-white/80" : tab.dot}`} />
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Desktop: vertical tab list */}
+            <div className="hidden lg:block lg:col-span-1">
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 pl-4">Select a feature to explore</p>
+              <div className="space-y-1">
+                {[
+                  { dot: "bg-amber-400",   label: "Free · Readiness Diagnostics", title: "Start with a real picture, not a guess" },
+                  { dot: "bg-violet-500",  label: "Subject Breakdown",             title: 'Not \u201cNVR needs work\u201d \u2014 exactly which skills' },
+                  { dot: "bg-blue-500",    label: "Adaptive Practice",             title: "The right questions, at the right difficulty" },
+                  { dot: "bg-red-500",     label: "Pace & Stamina Tracking",       title: "The Bucks 11+ is timed. We track every second." },
+                  { dot: "bg-emerald-500", label: "Guided Weekly Programme",       title: 'No more \u201cwhat should we practise tonight?\u201d' },
+                  { dot: "bg-amber-600",   label: "Progress Over Time",            title: "See if preparation is working — week by week" },
+                ].map((tab, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setActiveFeature(i)}
+                    className={`w-full text-left px-4 py-3 rounded-xl border transition-all group ${
+                      activeFeature === i
+                        ? "border-primary/30 bg-primary/5 shadow-sm"
+                        : "border-slate-200 bg-white hover:border-primary/20 hover:bg-slate-50 hover:shadow-sm"
+                    }`}
+                    data-testid={`showcase-tab-${i}`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2.5 mb-0.5">
+                          <div className={`w-2 h-2 rounded-full shrink-0 ${tab.dot}`} />
+                          <span className={`text-[10px] font-bold uppercase tracking-widest ${activeFeature === i ? "text-primary/70" : "text-slate-400"}`}>{tab.label}</span>
+                        </div>
+                        <p className={`text-sm font-semibold font-serif leading-snug pl-[18px] ${activeFeature === i ? "text-primary" : "text-slate-600"}`}>{tab.title}</p>
+                      </div>
+                      <ChevronRight className={`h-4 w-4 shrink-0 ml-2 transition-all ${activeFeature === i ? "text-primary" : "text-slate-300 group-hover:text-slate-400"}`} />
+                    </div>
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Right: panel + copy for active tab */}
