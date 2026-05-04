@@ -1301,7 +1301,7 @@ function InsidePlatformPanel() {
 
 export default function Landing() {
   const { user } = useAuth();
-  const [activeFeature, setActiveFeature] = useState(2);
+  const [activeFeature, setActiveFeature] = useState(6);
 
   // Countdown to next Bucks 11+ test (Sept of relevant academic year)
   const today = new Date();
