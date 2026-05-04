@@ -1100,6 +1100,98 @@ function FreeBadge() {
   return <span className="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded-full border border-emerald-200">Free</span>;
 }
 
+const BANK_SUBJECTS = [
+  {
+    label: "Non-Verbal Reasoning", icon: "📐", sub: "Shape & pattern puzzles",
+    drills: [
+      { name: "Mirror Images",            diff: "Easy",   qs: "10 Qs" },
+      { name: "Odd One Out",              diff: "Easy",   qs: "12 Qs" },
+      { name: "Different Sequences",      diff: "Easy",   qs: "12 Qs" },
+      { name: "Pattern Recognition",      diff: "Easy",   qs: "15 Qs" },
+      { name: "Symmetry & Spatial",       diff: "Medium", qs: "12 Qs" },
+      { name: "Classification Challenge", diff: "Medium", qs: "12 Qs" },
+      { name: "Advanced Transformations", diff: "Hard",   qs: "12 Qs" },
+      { name: "Advanced Symmetry",        diff: "Hard",   qs: "12 Qs" },
+    ],
+  },
+  {
+    label: "Verbal Reasoning", icon: "🔤", sub: "Language, logic & patterns",
+    drills: [
+      { name: "Word Analogies",            diff: "Medium", qs: "15 Qs" },
+      { name: "Logical Deduction",         diff: "Medium", qs: "15 Qs" },
+      { name: "Hidden Words",             diff: "Medium", qs: "10 Qs" },
+      { name: "Word Classification",       diff: "Medium", qs: "10 Qs" },
+      { name: "Letter Sequences",          diff: "Hard",   qs: "12 Qs" },
+      { name: "Code Breaking",             diff: "Hard",   qs: "12 Qs" },
+      { name: "Adv. Word Analogies",       diff: "Hard",   qs: "12 Qs" },
+      { name: "Adv. Hidden Words",         diff: "Hard",   qs: "12 Qs" },
+      { name: "Adv. Logical Deduction",    diff: "Hard",   qs: "12 Qs" },
+      { name: "Adv. Word Classification",  diff: "Hard",   qs: "10 Qs" },
+    ],
+  },
+  {
+    label: "Mathematics", icon: "➗", sub: "Arithmetic, geometry & problem-solving",
+    drills: [
+      { name: "Starter Arithmetic",         diff: "Easy",   qs: "10 Qs" },
+      { name: "Starter Fractions",          diff: "Easy",   qs: "8 Qs"  },
+      { name: "Starter Number Patterns",    diff: "Easy",   qs: "6 Qs"  },
+      { name: "Starter Percentages",        diff: "Easy",   qs: "6 Qs"  },
+      { name: "Starter Ratio",              diff: "Easy",   qs: "4 Qs"  },
+      { name: "Starter Shape & Geometry",   diff: "Easy",   qs: "10 Qs" },
+      { name: "Starter Data & Averages",    diff: "Easy",   qs: "6 Qs"  },
+      { name: "Data Interpretation",        diff: "Easy",   qs: "10 Qs" },
+      { name: "Arithmetic & Number",        diff: "Medium", qs: "15 Qs" },
+      { name: "Number Patterns",            diff: "Medium", qs: "12 Qs" },
+      { name: "Shape & Geometry",           diff: "Medium", qs: "15 Qs" },
+      { name: "Fractions & Percentages",    diff: "Medium", qs: "10 Qs" },
+      { name: "Percentages",               diff: "Medium", qs: "10 Qs" },
+      { name: "Ratio & Proportion",         diff: "Medium", qs: "10 Qs" },
+      { name: "Multi-step Word Problems",   diff: "Medium", qs: "12 Qs" },
+      { name: "Adv. Data Interpretation",   diff: "Medium", qs: "10 Qs" },
+      { name: "Advanced Arithmetic",        diff: "Hard",   qs: "12 Qs" },
+      { name: "Advanced Shape & Geometry",  diff: "Hard",   qs: "15 Qs" },
+      { name: "Advanced Fractions",         diff: "Hard",   qs: "10 Qs" },
+      { name: "Advanced Number Patterns",   diff: "Hard",   qs: "10 Qs" },
+      { name: "Advanced Percentages",       diff: "Hard",   qs: "10 Qs" },
+      { name: "Advanced Ratio & Proportion",diff: "Hard",   qs: "10 Qs" },
+    ],
+  },
+  {
+    label: "English Comprehension", icon: "📖", sub: "Passage reading & analysis",
+    drills: [
+      { name: "Fact Retrieval",          diff: "Easy",   qs: "15 Qs" },
+      { name: "Vocabulary in Context",   diff: "Medium", qs: "12 Qs" },
+      { name: "Inference & Deduction",   diff: "Medium", qs: "12 Qs" },
+      { name: "Detail Retrieval",        diff: "Medium", qs: "12 Qs" },
+      { name: "Mood & Tone",             diff: "Hard",   qs: "10 Qs" },
+      { name: "Advanced Comprehension",  diff: "Hard",   qs: "10 Qs" },
+    ],
+  },
+];
+
+const DIFF_STYLES: Record<string, string> = {
+  Easy:   "bg-emerald-100 text-emerald-700",
+  Medium: "bg-amber-100 text-amber-700",
+  Hard:   "bg-red-100 text-red-700",
+};
+
+function DrillGrid({ drills }: { drills: typeof BANK_SUBJECTS[0]["drills"] }) {
+  return (
+    <div className="grid grid-cols-3 gap-1.5">
+      {drills.map((d, i) => (
+        <div key={i} className="rounded-lg border border-slate-200 bg-white p-2">
+          <div className="flex items-center justify-between mb-1">
+            <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded ${DIFF_STYLES[d.diff]}`}>{d.diff}</span>
+            <span className="text-[8px] text-slate-400">{d.qs}</span>
+          </div>
+          <div className="text-[9px] font-bold text-slate-800 leading-tight mb-1.5">{d.name}</div>
+          <div className="text-center text-[8px] font-bold py-0.5 rounded bg-slate-100 text-slate-600">Start</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function InsidePlatformPanel() {
   return (
     <div className="w-full space-y-3" data-testid="showcase-inside">
@@ -1107,17 +1199,19 @@ function InsidePlatformPanel() {
       {/* Screen 1 — Readiness Checks & Mocks */}
       <div className="rounded-xl border border-slate-200 overflow-hidden shadow-sm">
         <BrowserChrome title="Readiness Checks & Mocks" />
-        <div className="bg-white p-3">
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Fixed Readiness Checks & Mocks</p>
-          <p className="text-[9px] text-slate-400 mb-2.5">Structured assessments to measure progress and recalibrate your forecast score.</p>
+        <div className="bg-slate-50 px-3 pt-3 pb-1">
+          <p className="text-[10px] font-bold text-slate-700 mb-0.5">Fixed Readiness Checks & Mocks</p>
+          <p className="text-[9px] text-slate-400">Structured assessments to measure progress and recalibrate your forecast score.</p>
+        </div>
+        <div className="overflow-y-auto max-h-[240px] bg-white px-3 py-2">
           <div className="grid grid-cols-2 gap-2">
             {[
-              { name: "Mini Diagnostic", time: "8 mins", qs: "12 Qs", free: true,  btn: "Start Readiness Check", btnStyle: "bg-slate-900 text-white" },
-              { name: "Full Diagnostic A", time: "30 mins", qs: "45 Qs", free: false, btn: "Start", btnStyle: "bg-slate-100 text-slate-700" },
-              { name: "Full Diagnostic B", time: "30 mins", qs: "45 Qs", free: false, btn: "Start", btnStyle: "bg-slate-100 text-slate-700" },
-              { name: "Mock Exam 1",      time: "35 mins", qs: "50 Qs", free: false, btn: "Start", btnStyle: "bg-slate-100 text-slate-700" },
-              { name: "Mock Exam 2",      time: "50 mins", qs: "50 Qs", free: false, btn: "Start", btnStyle: "bg-slate-100 text-slate-700" },
-              { name: "Mock Exam 3",      time: "50 mins", qs: "50 Qs", free: false, btn: "Start", btnStyle: "bg-slate-100 text-slate-700" },
+              { name: "Mini Diagnostic",  time: "8 mins",  qs: "12 Qs", free: true,  btn: "Start Readiness Check", btnStyle: "bg-slate-900 text-white" },
+              { name: "Full Diagnostic A",time: "30 mins", qs: "45 Qs", free: false, btn: "Start",                 btnStyle: "bg-slate-100 text-slate-700" },
+              { name: "Full Diagnostic B",time: "30 mins", qs: "45 Qs", free: false, btn: "Start",                 btnStyle: "bg-slate-100 text-slate-700" },
+              { name: "Mock Exam 1",      time: "35 mins", qs: "50 Qs", free: false, btn: "Start",                 btnStyle: "bg-slate-100 text-slate-700" },
+              { name: "Mock Exam 2",      time: "50 mins", qs: "50 Qs", free: false, btn: "Start",                 btnStyle: "bg-slate-100 text-slate-700" },
+              { name: "Mock Exam 3",      time: "50 mins", qs: "50 Qs", free: false, btn: "Start",                 btnStyle: "bg-slate-100 text-slate-700" },
             ].map((c, i) => (
               <div key={i} className="rounded-lg border border-slate-200 bg-white p-2.5">
                 <div className="flex items-start justify-between mb-1.5">
@@ -1125,8 +1219,7 @@ function InsidePlatformPanel() {
                   {c.free ? <FreeBadge /> : <PaidBadge />}
                 </div>
                 <div className="flex items-center gap-2 text-[9px] text-slate-500 mb-2">
-                  <span>⏱ {c.time}</span>
-                  <span>· {c.qs}</span>
+                  <span>⏱ {c.time}</span><span>· {c.qs}</span>
                 </div>
                 <div className={`text-center text-[9px] font-bold py-1 rounded-md ${c.btnStyle}`}>{c.btn}</div>
               </div>
@@ -1134,7 +1227,7 @@ function InsidePlatformPanel() {
           </div>
         </div>
         <div className="px-3 py-2 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-          <span className="text-[10px] text-slate-500 font-medium">1 free mini diagnostic · 2 full diagnostics · 3 mock exams · PDF report each</span>
+          <span className="text-[10px] text-slate-500 font-medium">1 free mini · 2 full diagnostics · 3 mock exams · PDF report each</span>
           <PaidBadge />
         </div>
       </div>
@@ -1142,17 +1235,19 @@ function InsidePlatformPanel() {
       {/* Screen 2 — Practice Papers */}
       <div className="rounded-xl border border-slate-200 overflow-hidden shadow-sm">
         <BrowserChrome title="Practice Papers" />
-        <div className="bg-white p-3">
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Practice Papers</p>
-          <p className="text-[9px] text-slate-400 mb-2.5">Unlimited practice papers drawn from our full question bank.</p>
+        <div className="bg-slate-50 px-3 pt-3 pb-1">
+          <p className="text-[10px] font-bold text-slate-700 mb-0.5">Practice Papers</p>
+          <p className="text-[9px] text-slate-400">Unlimited practice papers drawn from our full question bank.</p>
+        </div>
+        <div className="overflow-y-auto max-h-[200px] bg-white px-3 py-2">
           <div className="grid grid-cols-3 gap-2">
             {[
-              { name: "Quick Paper",  icon: "⚡", time: "25 min", qs: "20 Qs", desc: "A focused paper across all sections" },
-              { name: "Full Paper",   icon: "📄", time: "45 min", qs: "80 Qs", desc: "Complete paper mirroring real exam balance" },
-              { name: "Mock Exam",    icon: "🎓", time: "50 min", qs: "100 Qs",desc: "50-question exam under timed conditions" },
+              { name: "Quick Paper", icon: "⚡", time: "25 min", qs: "20 Qs", desc: "Focused paper across all 4 sections" },
+              { name: "Full Paper",  icon: "📄", time: "45 min", qs: "40 Qs", desc: "Complete paper mirroring real exam balance" },
+              { name: "Mock Exam",   icon: "🎓", time: "50 min", qs: "50 Qs", desc: "Exam simulation under timed conditions" },
             ].map((p, i) => (
               <div key={i} className="rounded-lg border border-slate-200 bg-white p-2.5 flex flex-col">
-                <div className="text-lg mb-1">{p.icon}</div>
+                <div className="text-base mb-1">{p.icon}</div>
                 <div className="text-[10px] font-bold text-slate-800 mb-0.5">{p.name}</div>
                 <div className="text-[9px] text-slate-500 mb-0.5">{p.time} · {p.qs}</div>
                 <div className="text-[8px] text-slate-400 leading-snug mb-2 flex-1">{p.desc}</div>
@@ -1167,53 +1262,33 @@ function InsidePlatformPanel() {
         </div>
       </div>
 
-      {/* Screen 3 — Practice Bank */}
+      {/* Screen 3 — Practice Bank (all 4 subjects, scrollable) */}
       <div className="rounded-xl border border-slate-200 overflow-hidden shadow-sm">
         <BrowserChrome title="Practice Bank" />
-        <div className="bg-white p-3">
-          <div className="flex items-center justify-between mb-1">
-            <div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Practice Bank</p>
-              <p className="text-[9px] text-slate-400">Targeted drills grouped by subject — work on the areas your child needs most.</p>
-            </div>
-            <div className="flex gap-1 shrink-0 ml-2">
-              {["Untimed", "Timed"].map((t, i) => (
-                <span key={i} className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${i === 0 ? "bg-slate-900 text-white border-slate-900" : "bg-white text-slate-600 border-slate-300"}`}>{t}</span>
-              ))}
-            </div>
+        <div className="bg-slate-50 px-3 pt-3 pb-1 flex items-start justify-between">
+          <div>
+            <p className="text-[10px] font-bold text-slate-700 mb-0.5">Practice Bank</p>
+            <p className="text-[9px] text-slate-400">Targeted drills grouped by subject — work on the areas your child needs most.</p>
           </div>
-          <div className="mt-2.5 mb-1">
-            <div className="flex items-center gap-1.5 mb-2">
-              <span className="text-[9px] font-bold text-slate-700">📐 Non-Verbal Reasoning</span>
-              <span className="text-[8px] text-slate-400">Shape & pattern puzzles</span>
-            </div>
-            <div className="grid grid-cols-3 gap-1.5">
-              {[
-                { name: "Pattern Recognition",      diff: "Easy",   qs: "15 Qs", diffColor: "bg-emerald-100 text-emerald-700" },
-                { name: "Symmetry & Spatial",       diff: "Medium", qs: "12 Qs", diffColor: "bg-amber-100 text-amber-700" },
-                { name: "Advanced Transformations", diff: "Hard",   qs: "12 Qs", diffColor: "bg-red-100 text-red-700" },
-                { name: "Mirror Images",            diff: "Easy",   qs: "10 Qs", diffColor: "bg-emerald-100 text-emerald-700" },
-                { name: "Odd One Out",              diff: "Easy",   qs: "12 Qs", diffColor: "bg-emerald-100 text-emerald-700" },
-                { name: "Different Sequences",      diff: "Easy",   qs: "12 Qs", diffColor: "bg-emerald-100 text-emerald-700" },
-              ].map((d, i) => (
-                <div key={i} className="rounded-lg border border-slate-200 bg-white p-2">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded ${d.diffColor}`}>{d.diff}</span>
-                    <span className="text-[8px] text-slate-400">{d.qs}</span>
-                  </div>
-                  <div className="text-[9px] font-bold text-slate-800 leading-tight mb-1.5">{d.name}</div>
-                  <div className="text-center text-[8px] font-bold py-0.5 rounded bg-slate-100 text-slate-600">Start</div>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="mt-2 flex items-center gap-1.5">
-            <span className="text-[9px] font-bold text-slate-700">🔤 Verbal Reasoning</span>
-            <span className="text-[8px] text-slate-400 italic">+ Maths, English — 24 drill types in total</span>
+          <div className="flex gap-1 shrink-0 ml-2 mt-0.5">
+            {["Untimed", "Timed"].map((t, i) => (
+              <span key={i} className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${i === 0 ? "bg-slate-900 text-white border-slate-900" : "bg-white text-slate-600 border-slate-300"}`}>{t}</span>
+            ))}
           </div>
         </div>
+        <div className="overflow-y-auto max-h-[380px] bg-white px-3 py-2 space-y-4">
+          {BANK_SUBJECTS.map((subj) => (
+            <div key={subj.label}>
+              <div className="flex items-center gap-1.5 mb-2">
+                <span className="text-[10px] font-bold text-slate-700">{subj.icon} {subj.label}</span>
+                <span className="text-[8px] text-slate-400">{subj.sub}</span>
+              </div>
+              <DrillGrid drills={subj.drills} />
+            </div>
+          ))}
+        </div>
         <div className="px-3 py-2 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-          <span className="text-[10px] text-slate-500 font-medium">24 drill types · 2,500+ questions · adaptive difficulty · worked solutions</span>
+          <span className="text-[10px] text-slate-500 font-medium">46 drills across 4 subjects · 2,500+ questions · adaptive difficulty · worked solutions</span>
           <PaidBadge />
         </div>
       </div>

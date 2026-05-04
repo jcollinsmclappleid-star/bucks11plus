@@ -18,3 +18,9 @@ id = "XKNQQHqcKj5FieON27NNP"
 uri = "file://.local/landing-page-spec-for-11plustesthub.md"
 type = "text"
 title = "Landing Page Spec — for 11PlusTestHub adaptation"
+
+[[outputs]]
+id = "pNJ2eqm5N3Z0kRv-OGugC"
+uri = "file://client/public/platform-panel-replication.md"
+type = "text"
+title = "Platform Panel — Full Replication Guide"
