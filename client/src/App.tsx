@@ -60,6 +60,8 @@ import ParentGuide from "./pages/ParentGuide";
 import WhyChoosePlatform from "./pages/WhyChoosePlatform";
 import GuidePrint from "./pages/GuidePrint";
 import PracticePaperPrint from "./pages/PracticePaperPrint";
+import PracticePaperPrint2 from "./pages/PracticePaperPrint2";
+import FreeSamplePapers from "./pages/seo/FreeSamplePapers";
 import SiteLinks from "./pages/SiteLinks";
 import LearnHub from "./pages/learn/LearnHub";
 import LearnArticle from "./pages/learn/LearnArticle";
@@ -313,6 +315,7 @@ function Router() {
             <Route path="/bucks-11-plus-parent-guide" component={ParentGuide} />
             <Route path="/guide-print" component={GuidePrint} />
             <Route path="/practice-paper-print" component={PracticePaperPrint} />
+            <Route path="/practice-paper-print-2" component={PracticePaperPrint2} />
             <Route path="/sign-in" component={SignIn} />
             <Route path="/sign-up" component={SignUp} />
             <Route path="/forgot-password" component={ForgotPassword} />
@@ -451,6 +454,7 @@ function Router() {
 
             {/* Free Resources hub */}
             <Route path="/free-11-plus-resources" component={FreeResources} />
+            <Route path="/bucks-11-plus-free-sample-papers" component={FreeSamplePapers} />
 
             <Route path="/checkout-success" component={CheckoutSuccess} />
             <Route path="/account-deleted" component={AccountDeleted} />

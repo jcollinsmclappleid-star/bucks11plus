@@ -401,7 +401,8 @@ function ProgrammePanel() {
   );
 }
 
-/* ─── 8 sample questions for the carousel (2 Maths · 2 VR · 2 NVR · 2 Comp) ─── */
+/* ─── REMOVED: interactive question carousel ─── */
+// Removed in favour of platform showcase section
 type SampleQ = {
   subject: "Maths" | "Verbal Reasoning" | "Non-Verbal Reasoning" | "Comprehension";
   type: string;
@@ -1124,55 +1125,181 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── SECTION 1B: TRY A REAL QUESTION (interactive carousel under hero) ── */}
-      <section
-        className="relative py-14 md:py-20 border-b border-amber-100/80 overflow-hidden"
-        style={{ background: "linear-gradient(180deg, #fffbeb 0%, #ffffff 70%)" }}
-        data-testid="section-try-questions"
-      >
+      {/* ── SECTION: PLATFORM SHOWCASE ── */}
+      <section className="py-16 md:py-24 bg-white border-b border-border/30" data-testid="section-platform-showcase">
         <div className="container mx-auto max-w-6xl px-4">
-          <MockQuestionsCarousel />
+          <div className="text-center mb-14 md:mb-20">
+            <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">What you get</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4 leading-tight">
+              More than a question bank.<br className="hidden md:block" /> A complete preparation system.
+            </h2>
+            <p className="text-slate-500 max-w-2xl mx-auto leading-relaxed">
+              2,500+ GL-style questions is the foundation. What makes it work is everything built on top — diagnostics, sub-skill breakdown, pace tracking, a guided programme, and a trend line that shows whether it's all adding up.
+            </p>
+          </div>
+
+          <div className="space-y-20 md:space-y-28">
+            {/* Row 1: Readiness Diagnostics — copy left, panel right */}
+            <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+              <div>
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-amber-700 bg-amber-100 border border-amber-200 px-3 py-1 rounded-full uppercase tracking-widest mb-4">
+                  Free · Readiness Diagnostics
+                </span>
+                <h3 className="text-2xl md:text-3xl font-bold text-primary font-serif mb-3 leading-tight">
+                  Start with a real picture, not a guess
+                </h3>
+                <p className="text-slate-600 leading-relaxed mb-3">
+                  Take a 12-question timed check across all four sections — the same format as the real GL paper. We return an indicative readiness score against our 121 benchmark, plus your child's three weakest areas. No account needed, no payment required.
+                </p>
+                <p className="text-xs text-slate-400 font-medium">8 minutes · instant results · no account needed</p>
+              </div>
+              <div>
+                <ForecastPanel />
+                <p className="text-[10px] text-slate-400 italic text-center mt-3">Illustrative example — not official results</p>
+              </div>
+            </div>
+
+            {/* Row 2: Sub-skill Breakdown — panel left, copy right */}
+            <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+              <div className="order-2 lg:order-1">
+                <SectionsPanel />
+              </div>
+              <div className="order-1 lg:order-2">
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-violet-700 bg-violet-100 border border-violet-200 px-3 py-1 rounded-full uppercase tracking-widest mb-4">
+                  Subject Breakdown
+                </span>
+                <h3 className="text-2xl md:text-3xl font-bold text-primary font-serif mb-3 leading-tight">
+                  Not "NVR needs work" — exactly which NVR skills need work
+                </h3>
+                <p className="text-slate-600 leading-relaxed mb-3">
+                  Most platforms show you a subject score. We drill down to 32 sub-skills — so instead of "Verbal Reasoning 65%", you see "Vocab &amp; Synonyms 60%, Code Sequences 75%". Knowing which sub-skill is weak is what turns practice time into progress.
+                </p>
+                <p className="text-xs text-slate-400 font-medium">4 subjects · 32 sub-skills tracked · updated after every session</p>
+              </div>
+            </div>
+
+            {/* Row 3: Targeted Drills — copy left, panel right */}
+            <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+              <div>
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-blue-700 bg-blue-100 border border-blue-200 px-3 py-1 rounded-full uppercase tracking-widest mb-4">
+                  Adaptive Practice
+                </span>
+                <h3 className="text-2xl md:text-3xl font-bold text-primary font-serif mb-3 leading-tight">
+                  The right questions, at the right difficulty, every session
+                </h3>
+                <p className="text-slate-600 leading-relaxed mb-3">
+                  2,500+ GL-style questions across VR, NVR, Maths and Comprehension — each with a worked solution and instant feedback. Difficulty adapts as your child improves: they're never coasting on questions they've already mastered, and never stuck on a wall they can't get over.
+                </p>
+                <p className="text-xs text-slate-400 font-medium">2,500+ questions · 24 question types · worked solutions · adapts difficulty</p>
+              </div>
+              <div>
+                <PracticeQuestionPanel />
+              </div>
+            </div>
+
+            {/* Row 4: Pace & Stamina — panel left, copy right */}
+            <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+              <div className="order-2 lg:order-1">
+                <AnalyticsPanel />
+              </div>
+              <div className="order-1 lg:order-2">
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-red-700 bg-red-100 border border-red-200 px-3 py-1 rounded-full uppercase tracking-widest mb-4">
+                  Pace &amp; Stamina Tracking
+                </span>
+                <h3 className="text-2xl md:text-3xl font-bold text-primary font-serif mb-3 leading-tight">
+                  The real GL paper is timed. We track every second.
+                </h3>
+                <p className="text-slate-600 leading-relaxed mb-3">
+                  Most children don't realise their accuracy drops in the second half of a timed test. We measure how long each answer takes and whether stamina holds under pressure. That's an insight no static practice paper can give you — and it's often the difference between borderline and clear.
+                </p>
+                <p className="text-xs text-slate-400 font-medium">Per-question timing · accuracy vs pace · stamina analysis</p>
+              </div>
+            </div>
+
+            {/* Row 5: Weekly Programme — copy left, panel right */}
+            <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+              <div>
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-700 bg-emerald-100 border border-emerald-200 px-3 py-1 rounded-full uppercase tracking-widest mb-4">
+                  Guided Weekly Programme
+                </span>
+                <h3 className="text-2xl md:text-3xl font-bold text-primary font-serif mb-3 leading-tight">
+                  No more "what should we practise tonight?"
+                </h3>
+                <p className="text-slate-600 leading-relaxed mb-3">
+                  Once we know the gaps, we generate a weekly plan — five short, prioritised drills, 10–15 minutes each, targeting the sub-skills that will move the score the most. Priority-ranked so the most important thing is always first.
+                </p>
+                <p className="text-xs text-slate-400 font-medium">5 drills per week · ~60 mins total · priority-ordered by impact</p>
+              </div>
+              <div>
+                <ProgrammePanel />
+              </div>
+            </div>
+
+            {/* Row 6: Progress Over Time — panel left, copy right */}
+            <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+              <div className="order-2 lg:order-1">
+                <ProgressPanel />
+              </div>
+              <div className="order-1 lg:order-2">
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-amber-700 bg-amber-100 border border-amber-200 px-3 py-1 rounded-full uppercase tracking-widest mb-4">
+                  Progress Over Time
+                </span>
+                <h3 className="text-2xl md:text-3xl font-bold text-primary font-serif mb-3 leading-tight">
+                  See if preparation is working — week by week
+                </h3>
+                <p className="text-slate-600 leading-relaxed mb-3">
+                  Every readiness check adds a point to your child's trend line. You'll see the indicative readiness score moving — or not — against the 121 benchmark. If it's not moving after a month, that's important information too.
+                </p>
+                <p className="text-xs text-slate-400 font-medium">Test-by-test trend · vs 121 readiness benchmark · no guesswork</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="text-center mt-16 md:mt-20 pt-10 border-t border-border/30">
+            <p className="text-sm text-slate-500 mb-5">See how your child compares — before you pay anything</p>
+            <Button size="lg" className="h-12 px-8 bg-amber-400 text-amber-950 hover:bg-amber-300 font-bold border-none shadow-lg" asChild data-testid="button-showcase-cta">
+              <Link href="/free-diagnostic">
+                Take the Free Readiness Check <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+            </Button>
+            <p className="text-xs text-slate-400 mt-3">12 questions · 8 minutes · no account needed · instant results</p>
+          </div>
         </div>
       </section>
 
-      {/* ── SECTION 2: PLATFORM VISUAL TRIPTYCH ── */}
-      <section className="py-16 md:py-20 bg-white border-b border-border/30" id="see-product" data-testid="section-triptych">
-        <div className="container mx-auto max-w-6xl px-4">
-          <div className="text-center mb-12">
-            <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">The Platform</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-3">Focused preparation for the Buckinghamshire 11+</h2>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-
-            {/* Card 2: Subject Breakdown */}
-            <div className="flex flex-col gap-3" data-testid="triptych-breakdown">
-              <div className="flex items-center gap-2 mb-1">
-                <div className="w-7 h-7 rounded-lg bg-amber-100 flex items-center justify-center">
-                  <Target className="h-4 w-4 text-amber-600" />
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-primary">Intelligent Diagnostics</p>
-                  <p className="text-[11px] text-slate-500">Exact gaps by subject & sub-topic</p>
-                </div>
+      {/* ── SECTION: DIAGNOSTIC ENTRY ── */}
+      <section
+        className="relative py-14 md:py-20 border-b border-amber-100/80 overflow-hidden"
+        style={{ background: "linear-gradient(180deg, #fffbeb 0%, #ffffff 70%)" }}
+        data-testid="section-diagnostic-entry"
+      >
+        <div className="container mx-auto max-w-3xl px-4 text-center">
+          <span className="inline-block text-xs font-bold text-amber-700/60 uppercase tracking-widest mb-4">Free · No account needed</span>
+          <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4 leading-tight">
+            Find out where your child really stands — in 8 minutes
+          </h2>
+          <p className="text-slate-600 leading-relaxed mb-8 max-w-xl mx-auto">
+            12 timed questions across all four sections. The same format as the real GL paper. Instant section-by-section breakdown and indicative readiness score against our 121 benchmark.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center mb-8">
+            {[
+              "Timed like the real GL paper",
+              "Instant section breakdown",
+              "Indicative readiness score",
+            ].map((pt, i) => (
+              <div key={i} className="flex items-center gap-2 text-sm text-slate-700 font-medium">
+                <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                {pt}
               </div>
-              <SectionsPanel />
-            </div>
-
-            {/* Card 3: Programme */}
-            <div className="flex flex-col gap-3" data-testid="triptych-programme">
-              <div className="flex items-center gap-2 mb-1">
-                <div className="w-7 h-7 rounded-lg bg-emerald-100 flex items-center justify-center">
-                  <TrendingUp className="h-4 w-4 text-emerald-600" />
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-primary">Guided Programme</p>
-                  <p className="text-[11px] text-slate-500">Priority-ranked weekly task plan</p>
-                </div>
-              </div>
-              <ProgrammePanel />
-            </div>
+            ))}
           </div>
+          <Button size="lg" className="h-12 px-10 text-base bg-amber-400 text-amber-950 hover:bg-amber-300 font-bold border-none shadow-lg shadow-amber-200/60 mb-4" asChild data-testid="button-diagnostic-entry-cta">
+            <Link href="/free-diagnostic">
+              Take the Free Readiness Check <ArrowRight className="ml-2 h-5 w-5" />
+            </Link>
+          </Button>
+          <p className="text-xs text-slate-400">12 questions · 8 minutes · no card required · instant results</p>
+          <p className="text-[11px] text-slate-400/70 mt-2 italic">Independent practice indicator — not an official test score.</p>
         </div>
       </section>
 
@@ -1371,34 +1498,42 @@ export default function Landing() {
           <div className="text-center mb-10">
             <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">Simple to start</span>
             <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-3">How it works</h2>
-            <p className="text-muted-foreground max-w-lg mx-auto">From your first readiness check to lifting your child's indicative readiness score toward the 121 indicative readiness benchmark — here's the path.</p>
+            <p className="text-muted-foreground max-w-lg mx-auto">From your first readiness check to a clear trend line showing progress against the 121 benchmark — four steps, each building on the last.</p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-10">
+          <div className="grid md:grid-cols-2 gap-6 mb-10">
             {[
               {
                 step: "01",
-                title: "Take a free readiness check",
-                desc: "12 GL-style questions. 8 minutes. No account needed. Get an instant forecast score and your three priority gaps.",
+                title: "Take the free readiness check",
+                desc: "12 timed questions across all four sections — takes 8 minutes. No account needed. You get an instant indicative readiness score and your child's three weakest sub-skills.",
                 cta: { href: "/free-diagnostic", label: "Start free" },
                 accent: "border-amber-300 bg-amber-50",
                 numColor: "text-amber-600",
               },
               {
                 step: "02",
-                title: "See exactly what to fix",
-                desc: "Get a subject breakdown to sub-topic level — ranked by how many points each gap is worth. No more guessing what to practice.",
+                title: "See exactly where the gaps are",
+                desc: "The platform breaks down results to sub-skill level — not just 'VR needs work', but 'Vocab & Synonyms 60%, Code Sequences 75%'. That specificity is what makes the next step possible.",
                 cta: null,
                 accent: "border-violet-200 bg-violet-50",
                 numColor: "text-violet-600",
               },
               {
                 step: "03",
-                title: "Follow the guided programme",
-                desc: "Your weekly programme prioritises the highest-impact tasks first. Every session updates your indicative readiness score against the 121 indicative readiness benchmark.",
-                cta: { href: "/pricing", label: "Start programme" },
+                title: "Practise the right things in the right order",
+                desc: "Your weekly programme targets the sub-skills with the most to gain — five short drills a week, 10–15 minutes each, with difficulty that adapts as your child improves.",
+                cta: { href: "/pricing", label: "See plans" },
                 accent: "border-emerald-200 bg-emerald-50",
                 numColor: "text-emerald-600",
+              },
+              {
+                step: "04",
+                title: "Track progress toward the 121 benchmark",
+                desc: "Every readiness check adds a point to the trend line. You'll see the indicative readiness score moving against the 121 benchmark — week by week. If it's working, you'll see it. If it isn't, you'll know.",
+                cta: null,
+                accent: "border-blue-200 bg-blue-50",
+                numColor: "text-blue-600",
               },
             ].map((s, i) => (
               <div key={i} className={`flex flex-col gap-4 rounded-2xl border-2 p-6 ${s.accent}`} data-testid={`how-it-works-step-${i}`}>

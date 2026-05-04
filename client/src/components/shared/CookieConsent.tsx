@@ -18,7 +18,7 @@ export function CookieConsent() {
   }, []);
 
   if (!mounted || decision !== null) return null;
-  if (location === "/practice-paper-print") return null;
+  if (location === "/practice-paper-print" || location === "/practice-paper-print-2") return null;
 
   const accept = () => {
     storeConsent("accepted");

@@ -2148,6 +2148,19 @@ export async function registerRoutes(
     }
   });
 
+  app.get("/api/practice-paper-2/download", async (req, res, next) => {
+    try {
+      const { getCachedPracticePaper2Pdf } = await import("./leadMagnet");
+      const buffer = await getCachedPracticePaper2Pdf();
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader("Content-Disposition", 'attachment; filename="bucks-11-plus-free-practice-paper-2.pdf"');
+      res.setHeader("Content-Length", buffer.length);
+      res.send(buffer);
+    } catch (err) {
+      next(err);
+    }
+  });
+
   app.get("/api/leads/practice-paper/unsubscribe", async (req, res) => {
     const { email, token } = req.query as { email?: string; token?: string };
     if (!email || !token) return res.status(400).send("Invalid link");
@@ -2720,6 +2733,7 @@ Disallow: /reset-password
       { path: "/gl-assessment-past-papers", priority: "0.9", changefreq: "monthly" as const },
       { path: "/gl-assessment-question-types", priority: "0.9", changefreq: "monthly" as const },
       { path: "/free-11-plus-resources", priority: "0.9", changefreq: "monthly" as const },
+      { path: "/bucks-11-plus-free-sample-papers", priority: "0.9", changefreq: "monthly" as const },
       { path: "/bucks-11-plus-practice-papers-free", priority: "0.9", changefreq: "monthly" },
       { path: "/bucks-11-plus-year-5-summer-plan", priority: "0.8", changefreq: "monthly" },
       { path: "/bucks-11-plus-year-6-revision-timetable", priority: "0.8", changefreq: "monthly" },

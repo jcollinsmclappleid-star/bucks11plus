@@ -170,6 +170,45 @@ export async function getCachedPracticePaperPdf(): Promise<Buffer> {
   return buffer;
 }
 
+let cachedPdf2: { buffer: Buffer; generatedAt: number } | null = null;
+
+export async function getCachedPracticePaper2Pdf(): Promise<Buffer> {
+  if (cachedPdf2 && Date.now() - cachedPdf2.generatedAt < PDF_CACHE_TTL_MS) {
+    return cachedPdf2.buffer;
+  }
+  await ensureChromium();
+  const puppeteer = await import("puppeteer");
+  const port = process.env.PORT || "5000";
+  const url = `http://localhost:${port}/practice-paper-print-2`;
+  const browser = await puppeteer.default.launch({
+    headless: true,
+    args: [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-gpu",
+      "--no-first-run",
+      "--no-zygote",
+      "--single-process",
+    ],
+  });
+  try {
+    const page = await browser.newPage();
+    await page.goto(url, { waitUntil: "networkidle0", timeout: 30000 });
+    await page.emulateMediaType("print");
+    const pdfBuffer = await page.pdf({
+      format: "A4",
+      printBackground: true,
+      margin: { top: "14mm", bottom: "14mm", left: "14mm", right: "14mm" },
+    });
+    const buffer = Buffer.from(pdfBuffer);
+    cachedPdf2 = { buffer, generatedAt: Date.now() };
+    return buffer;
+  } finally {
+    await browser.close();
+  }
+}
+
 // ── Post-diagnostic nurture sequence ─────────────────────────────────────────
 
 type NurtureEmailContext = {
