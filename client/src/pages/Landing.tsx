@@ -1080,6 +1080,133 @@ function ChildExperiencePanel() {
   );
 }
 
+function InsidePlatformPanel() {
+  return (
+    <div className="w-full space-y-3" data-testid="showcase-inside">
+      <div className="grid grid-cols-1 gap-3">
+
+        {/* Screen 1: Full Readiness Check */}
+        <div className="rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+          <div className="flex items-center gap-1.5 px-3 py-2 bg-slate-800">
+            <div className="w-2 h-2 rounded-full bg-red-400" />
+            <div className="w-2 h-2 rounded-full bg-amber-400" />
+            <div className="w-2 h-2 rounded-full bg-emerald-400" />
+            <span className="text-[10px] text-white/50 ml-2 font-medium">Full Readiness Check</span>
+            <div className="ml-auto flex items-center gap-1.5 text-[10px] font-bold text-amber-300">
+              <Clock className="h-3 w-3" /> 0:38 remaining
+            </div>
+          </div>
+          <div className="bg-white p-3">
+            <div className="flex items-center justify-between mb-2.5">
+              <div className="flex gap-1.5">
+                {["VR", "NVR", "Maths", "English"].map((s, i) => (
+                  <span key={i} className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${i < 3 ? "bg-emerald-100 text-emerald-700" : "bg-blue-100 text-blue-700 ring-1 ring-blue-400"}`}>{s}</span>
+                ))}
+              </div>
+              <span className="text-[10px] text-slate-400 font-medium">Q 8 of 45</span>
+            </div>
+            <p className="text-xs font-medium text-slate-800 mb-3 leading-relaxed">A train travels 240 km in 3 hours. What is its average speed in km/h?</p>
+            <div className="grid grid-cols-2 gap-1.5">
+              {[{ l: "A", v: "60 km/h" }, { l: "B", v: "80 km/h", sel: true }, { l: "C", v: "90 km/h" }, { l: "D", v: "120 km/h" }].map((o) => (
+                <div key={o.l} className={`flex items-center gap-2 px-2 py-1.5 rounded-lg border text-[11px] font-medium cursor-default ${o.sel ? "border-blue-400 bg-blue-50 text-blue-800" : "border-slate-200 text-slate-600"}`}>
+                  <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 ${o.sel ? "bg-blue-500 text-white" : "bg-slate-100 text-slate-500"}`}>{o.l}</span>
+                  {o.v}
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="px-3 py-2 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+            <span className="text-[10px] text-slate-500 font-medium">Full check · 45 questions · all 4 domains · full PDF report included</span>
+            <span className="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">Edge & above</span>
+          </div>
+        </div>
+
+        {/* Screen 2: Practice Drills */}
+        <div className="rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+          <div className="flex items-center gap-1.5 px-3 py-2 bg-slate-800">
+            <div className="w-2 h-2 rounded-full bg-red-400" />
+            <div className="w-2 h-2 rounded-full bg-amber-400" />
+            <div className="w-2 h-2 rounded-full bg-emerald-400" />
+            <span className="text-[10px] text-white/50 ml-2 font-medium">Practice Drills</span>
+          </div>
+          <div className="bg-white p-3">
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2.5">Choose a drill · 2,500+ questions</p>
+            <div className="grid grid-cols-2 gap-2 mb-2.5">
+              {[
+                { subject: "Verbal Reasoning",     shortColor: "bg-violet-50 border-violet-200", dot: "bg-violet-500", score: "72%", status: "Developing",  drills: "8 drills" },
+                { subject: "Non-Verbal Reasoning", shortColor: "bg-red-50 border-red-200",       dot: "bg-red-500",    score: "58%", status: "Needs Focus", drills: "10 drills" },
+                { subject: "Mathematics",          shortColor: "bg-emerald-50 border-emerald-200", dot: "bg-emerald-500", score: "82%", status: "Strong",    drills: "7 drills" },
+                { subject: "English Comprehension",shortColor: "bg-orange-50 border-orange-200", dot: "bg-orange-400", score: "66%", status: "Developing",  drills: "6 drills" },
+              ].map((d, i) => (
+                <div key={i} className={`rounded-lg border p-2 cursor-default hover:shadow-sm transition-shadow ${d.shortColor}`}>
+                  <div className="flex items-center gap-1 mb-1.5">
+                    <div className={`w-1.5 h-1.5 rounded-full ${d.dot}`} />
+                    <span className="text-[9px] font-bold text-slate-700">{d.subject.split(" ")[0]}</span>
+                  </div>
+                  <div className="text-sm font-bold text-slate-800">{d.score}</div>
+                  <div className="text-[9px] text-slate-500">{d.status}</div>
+                  <div className="text-[9px] font-semibold text-slate-400 mt-1">{d.drills}</div>
+                </div>
+              ))}
+            </div>
+            <div className="flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-lg px-2.5 py-2">
+              <Zap className="h-3 w-3 text-blue-600 shrink-0" />
+              <span className="text-[10px] text-blue-700 font-medium">Difficulty adapts as your child improves — worked solution after every question</span>
+            </div>
+          </div>
+          <div className="px-3 py-2 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+            <span className="text-[10px] text-slate-500 font-medium">24 question types · adaptive difficulty · instant worked solutions</span>
+            <span className="text-[9px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">All paid plans</span>
+          </div>
+        </div>
+
+        {/* Screen 3: Timed Mock Test */}
+        <div className="rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+          <div className="flex items-center gap-1.5 px-3 py-2 bg-slate-800">
+            <div className="w-2 h-2 rounded-full bg-red-400" />
+            <div className="w-2 h-2 rounded-full bg-amber-400" />
+            <div className="w-2 h-2 rounded-full bg-emerald-400" />
+            <span className="text-[10px] text-white/50 ml-2 font-medium">Timed Mock Test</span>
+            <span className="ml-auto text-[9px] font-bold text-emerald-400">● Ready to start</span>
+          </div>
+          <div className="bg-white p-3">
+            <div className="flex items-center justify-between mb-2.5">
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Full Mock · Exam-day format</p>
+              <span className="text-[9px] font-bold text-slate-500">~100 min total</span>
+            </div>
+            <div className="space-y-2 mb-3">
+              {[
+                { paper: "Paper 1", desc: "Verbal Reasoning & NVR", q: "50 questions", time: "50 min", color: "bg-violet-50 border-violet-200", bar: "bg-violet-500" },
+                { paper: "Paper 2", desc: "Maths & English Comprehension", q: "50 questions", time: "50 min", color: "bg-emerald-50 border-emerald-200", bar: "bg-emerald-500" },
+              ].map((p, i) => (
+                <div key={i} className={`rounded-lg border p-2.5 flex items-center justify-between ${p.color}`}>
+                  <div>
+                    <div className="flex items-center gap-1.5 mb-0.5">
+                      <div className={`w-1.5 h-1.5 rounded-full ${p.bar}`} />
+                      <span className="text-[10px] font-bold text-slate-700">{p.paper} — {p.desc}</span>
+                    </div>
+                    <span className="text-[9px] text-slate-500">{p.q} · {p.time}</span>
+                  </div>
+                  <div className="text-[9px] font-bold text-slate-600 px-2 py-1 bg-white rounded-md border border-slate-200 ml-2 shrink-0">▶ Start</div>
+                </div>
+              ))}
+            </div>
+            <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-lg px-2.5 py-2">
+              <Clock className="h-3 w-3 text-amber-600 shrink-0" />
+              <span className="text-[10px] text-amber-700 font-medium">Per-question timing tracked · accuracy vs stamina · full PDF report on completion</span>
+            </div>
+          </div>
+          <div className="px-3 py-2 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+            <span className="text-[10px] text-slate-500 font-medium">Timed under exam conditions · pace & stamina analysis · PDF report</span>
+            <span className="text-[9px] font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-full border border-purple-200">Edge & above</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+}
+
 /* ─── MAIN LANDING PAGE ─── */
 
 export default function Landing() {
@@ -1159,7 +1286,7 @@ export default function Landing() {
                 </div>
               </div>
               <p className="text-base md:text-lg text-white/65 leading-relaxed" data-testid="text-hero-sub">
-                Bucks-specific 11+ diagnostics that show exactly where marks are being lost. Pinpoint gaps, prioritise the highest-impact focus areas, and <span className="text-amber-300 font-semibold">compare your child's practice result with our indicative 121 readiness benchmark</span>. Includes 2,500+ GL-style questions for targeted practice.
+                Bucks 11+ style diagnostics, practice tests and mock tests that show exactly where marks are being lost. Pinpoint gaps, prioritise the highest-impact focus areas, and <span className="text-amber-300 font-semibold">compare your child's practice result with our indicative 121 readiness benchmark</span>. Includes 2,500+ GL-style questions for targeted practice.
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
                 <Button size="lg" className="h-12 px-8 text-base bg-amber-400 text-amber-950 hover:bg-amber-300 font-bold shadow-lg shadow-amber-400/20 border-none" asChild data-testid="button-hero-primary">
@@ -1216,7 +1343,7 @@ export default function Landing() {
               More than a question bank.<br className="hidden md:block" /> A complete preparation system.
             </h2>
             <p className="text-slate-500 max-w-2xl mx-auto leading-relaxed">
-              2,500+ GL-style questions is the foundation. What makes it work is everything built on top — diagnostics, sub-skill breakdown, pace tracking, a guided programme, and a trend line that shows whether it's all adding up.
+              Readiness diagnostics, adaptive practice tests and timed mock tests — all built for the Buckinghamshire 11+. The 2,500+ GL-style questions are the foundation; the sub-skill breakdown, pace tracking, guided programme and progress trend line are what make it actually work.
             </p>
           </div>
 
@@ -1233,6 +1360,7 @@ export default function Landing() {
                   { dot: "bg-red-500",     label: "Pace" },
                   { dot: "bg-emerald-500", label: "Programme" },
                   { dot: "bg-amber-600",   label: "Progress" },
+                  { dot: "bg-purple-500",  label: "Full Suite" },
                 ].map((tab, i) => (
                   <button
                     key={i}
@@ -1262,6 +1390,7 @@ export default function Landing() {
                   { dot: "bg-red-500",     label: "Pace & Stamina Tracking",       title: "The Bucks 11+ is timed. We track every second." },
                   { dot: "bg-emerald-500", label: "Guided Weekly Programme",       title: 'No more \u201cwhat should we practise tonight?\u201d' },
                   { dot: "bg-amber-600",   label: "Progress Over Time",            title: "See if preparation is working — week by week" },
+                  { dot: "bg-purple-500",  label: "Full Platform Suite",           title: "See everything subscribers access — unlocked" },
                 ].map((tab, i) => (
                   <button
                     key={i}
@@ -1297,6 +1426,7 @@ export default function Landing() {
                 {activeFeature === 3 && <AnalyticsPanel />}
                 {activeFeature === 4 && <ProgrammePanel />}
                 {activeFeature === 5 && <ProgressPanel />}
+                {activeFeature === 6 && <InsidePlatformPanel />}
               </div>
               {[
                 {
@@ -1334,6 +1464,12 @@ export default function Landing() {
                   title: "See if preparation is working — week by week",
                   body: "Every readiness check adds a point to your child's trend line. You'll see the indicative readiness score moving — or not — against the 121 benchmark. If it's not moving after a month, that's important information too.",
                   meta: "Test-by-test trend · vs 121 readiness benchmark · no guesswork",
+                },
+                {
+                  badge: "Full Platform Suite", badgeColor: "text-purple-700 bg-purple-100 border-purple-200",
+                  title: "Readiness checks, practice tests and mock tests — here's exactly what's inside",
+                  body: "Full 45-question readiness checks across all four domains, adaptive practice drills targeting your child's weakest sub-skills, and timed mock tests in exam-day format. Browse the complete suite below — no vague upgrade prompts, no hidden content.",
+                  meta: "45-question readiness checks · adaptive practice drills · timed mock tests · PDF reports",
                 },
               ].map((f, i) => activeFeature === i && (
                 <div key={i}>
