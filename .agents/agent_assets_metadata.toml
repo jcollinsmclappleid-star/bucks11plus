@@ -12,3 +12,9 @@ id = "kAhH3lIITaNu8oSxUwvaP"
 uri = "file://tmp_practice_paper.pdf"
 type = "pdf"
 title = "Bucks 11+ Free Practice Paper"
+
+[[outputs]]
+id = "XKNQQHqcKj5FieON27NNP"
+uri = "file://.local/landing-page-spec-for-11plustesthub.md"
+type = "text"
+title = "Landing Page Spec — for 11PlusTestHub adaptation"
