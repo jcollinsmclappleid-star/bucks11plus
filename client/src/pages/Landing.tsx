@@ -1080,129 +1080,144 @@ function ChildExperiencePanel() {
   );
 }
 
+function BrowserChrome({ title, right }: { title: string; right?: React.ReactNode }) {
+  return (
+    <div className="flex items-center gap-1.5 px-3 py-2 bg-slate-800">
+      <div className="w-2 h-2 rounded-full bg-red-400" />
+      <div className="w-2 h-2 rounded-full bg-amber-400" />
+      <div className="w-2 h-2 rounded-full bg-emerald-400" />
+      <span className="text-[10px] text-white/50 ml-2 font-medium">{title}</span>
+      {right && <div className="ml-auto">{right}</div>}
+    </div>
+  );
+}
+
+function PaidBadge() {
+  return <span className="text-[9px] font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-200">Paid plan</span>;
+}
+
+function FreeBadge() {
+  return <span className="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded-full border border-emerald-200">Free</span>;
+}
+
 function InsidePlatformPanel() {
   return (
     <div className="w-full space-y-3" data-testid="showcase-inside">
-      <div className="grid grid-cols-1 gap-3">
 
-        {/* Screen 1: Full Readiness Check */}
-        <div className="rounded-xl border border-slate-200 overflow-hidden shadow-sm">
-          <div className="flex items-center gap-1.5 px-3 py-2 bg-slate-800">
-            <div className="w-2 h-2 rounded-full bg-red-400" />
-            <div className="w-2 h-2 rounded-full bg-amber-400" />
-            <div className="w-2 h-2 rounded-full bg-emerald-400" />
-            <span className="text-[10px] text-white/50 ml-2 font-medium">Full Readiness Check</span>
-            <div className="ml-auto flex items-center gap-1.5 text-[10px] font-bold text-amber-300">
-              <Clock className="h-3 w-3" /> 0:38 remaining
-            </div>
-          </div>
-          <div className="bg-white p-3">
-            <div className="flex items-center justify-between mb-2.5">
-              <div className="flex gap-1.5">
-                {["VR", "NVR", "Maths", "English"].map((s, i) => (
-                  <span key={i} className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${i < 3 ? "bg-emerald-100 text-emerald-700" : "bg-blue-100 text-blue-700 ring-1 ring-blue-400"}`}>{s}</span>
-                ))}
+      {/* Screen 1 — Readiness Checks & Mocks */}
+      <div className="rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+        <BrowserChrome title="Readiness Checks & Mocks" />
+        <div className="bg-white p-3">
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Fixed Readiness Checks & Mocks</p>
+          <p className="text-[9px] text-slate-400 mb-2.5">Structured assessments to measure progress and recalibrate your forecast score.</p>
+          <div className="grid grid-cols-2 gap-2">
+            {[
+              { name: "Mini Diagnostic", time: "8 mins", qs: "12 Qs", free: true,  btn: "Start Readiness Check", btnStyle: "bg-slate-900 text-white" },
+              { name: "Full Diagnostic A", time: "30 mins", qs: "45 Qs", free: false, btn: "Start", btnStyle: "bg-slate-100 text-slate-700" },
+              { name: "Full Diagnostic B", time: "30 mins", qs: "45 Qs", free: false, btn: "Start", btnStyle: "bg-slate-100 text-slate-700" },
+              { name: "Mock Exam 1",      time: "35 mins", qs: "50 Qs", free: false, btn: "Start", btnStyle: "bg-slate-100 text-slate-700" },
+              { name: "Mock Exam 2",      time: "50 mins", qs: "50 Qs", free: false, btn: "Start", btnStyle: "bg-slate-100 text-slate-700" },
+              { name: "Mock Exam 3",      time: "50 mins", qs: "50 Qs", free: false, btn: "Start", btnStyle: "bg-slate-100 text-slate-700" },
+            ].map((c, i) => (
+              <div key={i} className="rounded-lg border border-slate-200 bg-white p-2.5">
+                <div className="flex items-start justify-between mb-1.5">
+                  <span className="text-[10px] font-bold text-slate-800 leading-tight">{c.name}</span>
+                  {c.free ? <FreeBadge /> : <PaidBadge />}
+                </div>
+                <div className="flex items-center gap-2 text-[9px] text-slate-500 mb-2">
+                  <span>⏱ {c.time}</span>
+                  <span>· {c.qs}</span>
+                </div>
+                <div className={`text-center text-[9px] font-bold py-1 rounded-md ${c.btnStyle}`}>{c.btn}</div>
               </div>
-              <span className="text-[10px] text-slate-400 font-medium">Q 8 of 45</span>
-            </div>
-            <p className="text-xs font-medium text-slate-800 mb-3 leading-relaxed">A train travels 240 km in 3 hours. What is its average speed in km/h?</p>
-            <div className="grid grid-cols-2 gap-1.5">
-              {[{ l: "A", v: "60 km/h" }, { l: "B", v: "80 km/h", sel: true }, { l: "C", v: "90 km/h" }, { l: "D", v: "120 km/h" }].map((o) => (
-                <div key={o.l} className={`flex items-center gap-2 px-2 py-1.5 rounded-lg border text-[11px] font-medium cursor-default ${o.sel ? "border-blue-400 bg-blue-50 text-blue-800" : "border-slate-200 text-slate-600"}`}>
-                  <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 ${o.sel ? "bg-blue-500 text-white" : "bg-slate-100 text-slate-500"}`}>{o.l}</span>
-                  {o.v}
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="px-3 py-2 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-            <span className="text-[10px] text-slate-500 font-medium">Full check · 45 questions · all 4 domains · full PDF report included</span>
-            <span className="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">Edge & above</span>
+            ))}
           </div>
         </div>
-
-        {/* Screen 2: Practice Drills */}
-        <div className="rounded-xl border border-slate-200 overflow-hidden shadow-sm">
-          <div className="flex items-center gap-1.5 px-3 py-2 bg-slate-800">
-            <div className="w-2 h-2 rounded-full bg-red-400" />
-            <div className="w-2 h-2 rounded-full bg-amber-400" />
-            <div className="w-2 h-2 rounded-full bg-emerald-400" />
-            <span className="text-[10px] text-white/50 ml-2 font-medium">Practice Drills</span>
-          </div>
-          <div className="bg-white p-3">
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2.5">Choose a drill · 2,500+ questions</p>
-            <div className="grid grid-cols-2 gap-2 mb-2.5">
-              {[
-                { subject: "Verbal Reasoning",     shortColor: "bg-violet-50 border-violet-200", dot: "bg-violet-500", score: "72%", status: "Developing",  drills: "8 drills" },
-                { subject: "Non-Verbal Reasoning", shortColor: "bg-red-50 border-red-200",       dot: "bg-red-500",    score: "58%", status: "Needs Focus", drills: "10 drills" },
-                { subject: "Mathematics",          shortColor: "bg-emerald-50 border-emerald-200", dot: "bg-emerald-500", score: "82%", status: "Strong",    drills: "7 drills" },
-                { subject: "English Comprehension",shortColor: "bg-orange-50 border-orange-200", dot: "bg-orange-400", score: "66%", status: "Developing",  drills: "6 drills" },
-              ].map((d, i) => (
-                <div key={i} className={`rounded-lg border p-2 cursor-default hover:shadow-sm transition-shadow ${d.shortColor}`}>
-                  <div className="flex items-center gap-1 mb-1.5">
-                    <div className={`w-1.5 h-1.5 rounded-full ${d.dot}`} />
-                    <span className="text-[9px] font-bold text-slate-700">{d.subject.split(" ")[0]}</span>
-                  </div>
-                  <div className="text-sm font-bold text-slate-800">{d.score}</div>
-                  <div className="text-[9px] text-slate-500">{d.status}</div>
-                  <div className="text-[9px] font-semibold text-slate-400 mt-1">{d.drills}</div>
-                </div>
-              ))}
-            </div>
-            <div className="flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-lg px-2.5 py-2">
-              <Zap className="h-3 w-3 text-blue-600 shrink-0" />
-              <span className="text-[10px] text-blue-700 font-medium">Difficulty adapts as your child improves — worked solution after every question</span>
-            </div>
-          </div>
-          <div className="px-3 py-2 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-            <span className="text-[10px] text-slate-500 font-medium">24 question types · adaptive difficulty · instant worked solutions</span>
-            <span className="text-[9px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">All paid plans</span>
-          </div>
+        <div className="px-3 py-2 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+          <span className="text-[10px] text-slate-500 font-medium">1 free mini diagnostic · 2 full diagnostics · 3 mock exams · PDF report each</span>
+          <PaidBadge />
         </div>
-
-        {/* Screen 3: Timed Mock Test */}
-        <div className="rounded-xl border border-slate-200 overflow-hidden shadow-sm">
-          <div className="flex items-center gap-1.5 px-3 py-2 bg-slate-800">
-            <div className="w-2 h-2 rounded-full bg-red-400" />
-            <div className="w-2 h-2 rounded-full bg-amber-400" />
-            <div className="w-2 h-2 rounded-full bg-emerald-400" />
-            <span className="text-[10px] text-white/50 ml-2 font-medium">Timed Mock Test</span>
-            <span className="ml-auto text-[9px] font-bold text-emerald-400">● Ready to start</span>
-          </div>
-          <div className="bg-white p-3">
-            <div className="flex items-center justify-between mb-2.5">
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Full Mock · Exam-day format</p>
-              <span className="text-[9px] font-bold text-slate-500">~100 min total</span>
-            </div>
-            <div className="space-y-2 mb-3">
-              {[
-                { paper: "Paper 1", desc: "Verbal Reasoning & NVR", q: "50 questions", time: "50 min", color: "bg-violet-50 border-violet-200", bar: "bg-violet-500" },
-                { paper: "Paper 2", desc: "Maths & English Comprehension", q: "50 questions", time: "50 min", color: "bg-emerald-50 border-emerald-200", bar: "bg-emerald-500" },
-              ].map((p, i) => (
-                <div key={i} className={`rounded-lg border p-2.5 flex items-center justify-between ${p.color}`}>
-                  <div>
-                    <div className="flex items-center gap-1.5 mb-0.5">
-                      <div className={`w-1.5 h-1.5 rounded-full ${p.bar}`} />
-                      <span className="text-[10px] font-bold text-slate-700">{p.paper} — {p.desc}</span>
-                    </div>
-                    <span className="text-[9px] text-slate-500">{p.q} · {p.time}</span>
-                  </div>
-                  <div className="text-[9px] font-bold text-slate-600 px-2 py-1 bg-white rounded-md border border-slate-200 ml-2 shrink-0">▶ Start</div>
-                </div>
-              ))}
-            </div>
-            <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-lg px-2.5 py-2">
-              <Clock className="h-3 w-3 text-amber-600 shrink-0" />
-              <span className="text-[10px] text-amber-700 font-medium">Per-question timing tracked · accuracy vs stamina · full PDF report on completion</span>
-            </div>
-          </div>
-          <div className="px-3 py-2 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-            <span className="text-[10px] text-slate-500 font-medium">Timed under exam conditions · pace & stamina analysis · PDF report</span>
-            <span className="text-[9px] font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-full border border-purple-200">Edge & above</span>
-          </div>
-        </div>
-
       </div>
+
+      {/* Screen 2 — Practice Papers */}
+      <div className="rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+        <BrowserChrome title="Practice Papers" />
+        <div className="bg-white p-3">
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Practice Papers</p>
+          <p className="text-[9px] text-slate-400 mb-2.5">Unlimited practice papers drawn from our full question bank.</p>
+          <div className="grid grid-cols-3 gap-2">
+            {[
+              { name: "Quick Paper",  icon: "⚡", time: "25 min", qs: "20 Qs", desc: "A focused paper across all sections" },
+              { name: "Full Paper",   icon: "📄", time: "45 min", qs: "80 Qs", desc: "Complete paper mirroring real exam balance" },
+              { name: "Mock Exam",    icon: "🎓", time: "50 min", qs: "100 Qs",desc: "50-question exam under timed conditions" },
+            ].map((p, i) => (
+              <div key={i} className="rounded-lg border border-slate-200 bg-white p-2.5 flex flex-col">
+                <div className="text-lg mb-1">{p.icon}</div>
+                <div className="text-[10px] font-bold text-slate-800 mb-0.5">{p.name}</div>
+                <div className="text-[9px] text-slate-500 mb-0.5">{p.time} · {p.qs}</div>
+                <div className="text-[8px] text-slate-400 leading-snug mb-2 flex-1">{p.desc}</div>
+                <div className="text-center text-[9px] font-bold py-1 rounded-md bg-slate-100 text-slate-700">Start Paper</div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="px-3 py-2 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+          <span className="text-[10px] text-slate-500 font-medium">Quick, Full & Mock formats · unlimited attempts · fresh questions each time</span>
+          <PaidBadge />
+        </div>
+      </div>
+
+      {/* Screen 3 — Practice Bank */}
+      <div className="rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+        <BrowserChrome title="Practice Bank" />
+        <div className="bg-white p-3">
+          <div className="flex items-center justify-between mb-1">
+            <div>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Practice Bank</p>
+              <p className="text-[9px] text-slate-400">Targeted drills grouped by subject — work on the areas your child needs most.</p>
+            </div>
+            <div className="flex gap-1 shrink-0 ml-2">
+              {["Untimed", "Timed"].map((t, i) => (
+                <span key={i} className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${i === 0 ? "bg-slate-900 text-white border-slate-900" : "bg-white text-slate-600 border-slate-300"}`}>{t}</span>
+              ))}
+            </div>
+          </div>
+          <div className="mt-2.5 mb-1">
+            <div className="flex items-center gap-1.5 mb-2">
+              <span className="text-[9px] font-bold text-slate-700">📐 Non-Verbal Reasoning</span>
+              <span className="text-[8px] text-slate-400">Shape & pattern puzzles</span>
+            </div>
+            <div className="grid grid-cols-3 gap-1.5">
+              {[
+                { name: "Pattern Recognition",      diff: "Easy",   qs: "15 Qs", diffColor: "bg-emerald-100 text-emerald-700" },
+                { name: "Symmetry & Spatial",       diff: "Medium", qs: "12 Qs", diffColor: "bg-amber-100 text-amber-700" },
+                { name: "Advanced Transformations", diff: "Hard",   qs: "12 Qs", diffColor: "bg-red-100 text-red-700" },
+                { name: "Mirror Images",            diff: "Easy",   qs: "10 Qs", diffColor: "bg-emerald-100 text-emerald-700" },
+                { name: "Odd One Out",              diff: "Easy",   qs: "12 Qs", diffColor: "bg-emerald-100 text-emerald-700" },
+                { name: "Different Sequences",      diff: "Easy",   qs: "12 Qs", diffColor: "bg-emerald-100 text-emerald-700" },
+              ].map((d, i) => (
+                <div key={i} className="rounded-lg border border-slate-200 bg-white p-2">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded ${d.diffColor}`}>{d.diff}</span>
+                    <span className="text-[8px] text-slate-400">{d.qs}</span>
+                  </div>
+                  <div className="text-[9px] font-bold text-slate-800 leading-tight mb-1.5">{d.name}</div>
+                  <div className="text-center text-[8px] font-bold py-0.5 rounded bg-slate-100 text-slate-600">Start</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="mt-2 flex items-center gap-1.5">
+            <span className="text-[9px] font-bold text-slate-700">🔤 Verbal Reasoning</span>
+            <span className="text-[8px] text-slate-400 italic">+ Maths, English — 24 drill types in total</span>
+          </div>
+        </div>
+        <div className="px-3 py-2 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+          <span className="text-[10px] text-slate-500 font-medium">24 drill types · 2,500+ questions · adaptive difficulty · worked solutions</span>
+          <PaidBadge />
+        </div>
+      </div>
+
     </div>
   );
 }
