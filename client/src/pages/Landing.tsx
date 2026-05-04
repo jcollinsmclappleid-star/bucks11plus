@@ -38,7 +38,7 @@ function ForecastPanel() {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-3 w-full">
+      <div className="grid grid-cols-2 gap-2 w-full">
         <div className="rounded-xl bg-white border border-slate-200 p-3 text-center shadow-sm">
           <div className="text-xl font-bold text-emerald-600">82%</div>
           <div className="text-[10px] text-slate-500 mt-0.5">Maths</div>
@@ -53,6 +53,11 @@ function ForecastPanel() {
           <div className="text-xl font-bold text-red-600">58%</div>
           <div className="text-[10px] text-slate-500 mt-0.5">NVR</div>
           <div className="h-1 rounded-full bg-red-400 mt-1.5 mx-auto w-2/3" />
+        </div>
+        <div className="rounded-xl bg-white border border-orange-100 p-3 text-center shadow-sm">
+          <div className="text-xl font-bold text-orange-600">66%</div>
+          <div className="text-[10px] text-slate-500 mt-0.5">English</div>
+          <div className="h-1 rounded-full bg-orange-400 mt-1.5 mx-auto w-2/3" />
         </div>
       </div>
 
