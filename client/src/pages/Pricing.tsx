@@ -175,7 +175,7 @@ export default function Pricing() {
                 Full Bucks 11+ preparation.<br className="hidden sm:block" /> Intelligent. Targeted. Proven.
               </h1>
               <p className="text-lg text-white/60 max-w-2xl mx-auto mb-7 leading-relaxed">
-                Know exactly what to fix. 2,500+ GL-style questions. Parent analytics. Guided programme. Benchmarked to 121.
+                Know exactly what to fix. 2,500+ GL-style questions. Parent analytics. Guided programme. Scored on the 121 scale.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Button size="lg" className="h-12 px-8 bg-amber-400 text-amber-950 hover:bg-amber-300 font-bold border-none" asChild data-testid="button-view-plans">
@@ -409,7 +409,7 @@ export default function Pricing() {
                     <tbody>
                       {[
                         { feature: "Quick readiness check (12 questions)", free: true, paid: true },
-                        { feature: "Readiness forecast vs 121 benchmark", free: true, paid: true },
+                        { feature: "Readiness forecast on the 121 scale", free: true, paid: true },
                         { feature: "Top focus area revealed", free: true, paid: true },
                         { feature: "2,500+ VR, NVR, Maths & Comprehension questions", free: false, paid: true },
                         { feature: "Full-length practice papers (50 questions)", free: false, paid: true },
@@ -498,7 +498,7 @@ export default function Pricing() {
           <div className="rounded-2xl border border-slate-200 bg-slate-50 px-8 py-8 md:px-12 md:py-10" data-testid="why-parents-card">
             <div className="flex flex-col gap-4 text-slate-600 leading-relaxed text-[15px] mb-8">
               <p>Developed with input from senior leadership within Primary Education, the platform is grounded in the realities of Year 6 and preparation for selective education.</p>
-              <p>The approach is informed by the structure and demands of the Buckinghamshire Secondary Transfer Test — focusing on where marks are lost, how timing affects performance, and what reaching the 121 standard requires in practice.</p>
+              <p>The approach is informed by the structure and demands of the Buckinghamshire Secondary Transfer Test — focusing on where marks are lost, how timing affects performance, and what thorough preparation for the Buckinghamshire 11+ looks like in practice.</p>
             </div>
             <div className="border-t border-slate-200 pt-6 flex items-end justify-between gap-4">
               <p className="text-xs text-slate-400 max-w-xs">Built specifically for Bucks 11+ — giving parents clarity on readiness and what to do next.</p>

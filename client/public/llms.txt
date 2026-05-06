@@ -4,12 +4,12 @@
 
 ## What this platform does
 
-- Delivers a free 12-question GL-style mini diagnostic that benchmarks a child's readiness across Verbal Reasoning, Non-Verbal Reasoning, Mathematics and English Comprehension — no account required, results in under 10 minutes
-- Produces an indicative readiness forecast benchmarked against the 121 qualifying standard used for Buckinghamshire grammar school selection, showing whether the child is On Track, Within Reach, or has a Clear Improvement Opportunity. The forecast is an indicator only and is not the official GL Assessment standardised score.
+- Delivers a free 12-question GL-style mini diagnostic that gives a child a practice score on the 121 scale across Verbal Reasoning, Non-Verbal Reasoning, Mathematics and English Comprehension — no account required, results in under 10 minutes
+- Shows whether the child is On Track, Within Reach, or has a Clear Improvement Opportunity. The practice score on the 121 scale is an indicator only and is not the official GL Assessment standardised score.
 - Provides a full Practice Platform with 2,500+ questions, timed drills by section and difficulty, full-length 40-question timed diagnostic papers, and a parent analytics dashboard
-- Gives parents session-by-session progress tracking, accuracy and pacing data, and an indicative readiness score against the 121 qualifying standard — framed as "is preparation actually working?" not just raw percentages
+- Gives parents session-by-session progress tracking, accuracy and pacing data, and a practice score on the 121 scale — framed as "is preparation actually working?" not just raw percentages
 - Covers all five subject areas tested in the Bucks 11+: Verbal Reasoning, Non-Verbal Reasoning, Mathematics, English Comprehension, and Spatial Reasoning
-- Free tier: full 12-question diagnostic with readiness band and score forecast, no account needed. Paid tiers: Bucks Practice Platform (£24.99/mo), Bucks Practice Platform Edge (£59.99/mo or £495/yr), Bucks Young Scholar Programme (£349 one-time)
+- Free tier: full 12-question diagnostic with readiness band and practice score on the 121 scale, no account needed. Paid tiers: Bucks Practice Platform (£24.99/mo), Bucks Practice Platform Edge (£59.99/mo or £495/yr), Bucks Young Scholar Programme (£349 one-time)
 - Questions developed with input from an experienced UK primary school leader with specialist expertise in Year 6 and the transition into selective grammar education
 - Independent of GL Assessment, Buckinghamshire Council, and all grammar schools
 
@@ -23,7 +23,7 @@ A private tutor costs £30–£60 per hour and typically provides feedback witho
 
 ## Pricing
 
-- Free: 12-question GL-style mini diagnostic, readiness band, indicative readiness score against the 121 qualifying standard, no account needed
+- Free: 12-question GL-style mini diagnostic, readiness band, practice score on the 121 scale, no account needed
 - Bucks Practice Platform — £24.99/month: 2,500+ questions, timed drills (Easy & Medium), full diagnostics, parent analytics, PDF reports (limited Hard drill access)
 - Bucks Practice Platform Edge — £59.99/month or £495/year: everything above plus all Hard drills, mock exams, analytics, guided roadmap, milestone diagnostics, and weekly plans. Monthly and annual options have identical access.
 - Bucks Young Scholar Programme — £349 one-time: identical full access to Platform Edge for 6 months as a one-off payment (no subscription)
@@ -129,6 +129,23 @@ https://bucks11plustest.co.uk/free-diagnostic
 - https://bucks11plustest.co.uk/11-plus-mental-maths-practice — 11+ Mental maths
 - https://bucks11plustest.co.uk/11-plus-maths-word-problems-practice — 11+ Maths: word problems
 - https://bucks11plustest.co.uk/11-plus-maths-units-measures-practice — 11+ Maths: units & measurement
+
+### Question Type Deep-Dives
+- https://bucks11plustest.co.uk/11-plus-nvr-matrix — 11+ NVR matrix questions
+- https://bucks11plustest.co.uk/11-plus-nvr-odd-one-out — 11+ NVR odd-one-out questions
+- https://bucks11plustest.co.uk/11-plus-nvr-sequences — 11+ NVR sequences
+- https://bucks11plustest.co.uk/11-plus-nvr-classification — 11+ NVR classification questions
+- https://bucks11plustest.co.uk/11-plus-nvr-symmetry — 11+ NVR symmetry & reflection
+- https://bucks11plustest.co.uk/11-plus-letter-sequences — 11+ VR letter sequences
+- https://bucks11plustest.co.uk/11-plus-verbal-codes — 11+ VR verbal codes
+- https://bucks11plustest.co.uk/11-plus-word-relationships — 11+ VR word relationships
+- https://bucks11plustest.co.uk/11-plus-synonyms-antonyms — 11+ VR synonyms & antonyms
+- https://bucks11plustest.co.uk/11-plus-comprehension-vocabulary — 11+ comprehension vocabulary-in-context questions
+- https://bucks11plustest.co.uk/11-plus-comprehension-main-idea — 11+ comprehension main-idea questions
+- https://bucks11plustest.co.uk/11-plus-comprehension-inference — 11+ comprehension inference questions
+- https://bucks11plustest.co.uk/11-plus-maths-bidmas — 11+ BIDMAS / order of operations
+- https://bucks11plustest.co.uk/11-plus-maths-percentages-questions — 11+ percentage questions
+- https://bucks11plustest.co.uk/11-plus-maths-fractions-questions — 11+ fraction questions
 
 ### Vocabulary
 - https://bucks11plustest.co.uk/11-plus-synonyms-list — 11+ synonyms list

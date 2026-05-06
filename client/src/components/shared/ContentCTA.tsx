@@ -12,7 +12,7 @@ type Props = {
 
 export function ContentCTA({
   heading = "Assess Your Child's Readiness",
-  subhead = "Take a free 8-minute readiness check to see where your child stands against our 121 readiness benchmark.",
+  subhead = "Take a free 8-minute readiness check to see how your child is performing across all four 11+ domains.",
   ctaLabel = "Start Free Readiness Check",
   secondaryHref = "/buckinghamshire-11-plus-guide",
   secondaryLabel = "Read the Full Guide",

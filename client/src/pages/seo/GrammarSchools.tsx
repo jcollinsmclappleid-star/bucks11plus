@@ -95,7 +95,7 @@ export default function GrammarSchools() {
       <p>
         The test covers Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension. Understanding the format and practising
         under timed conditions is essential. Our <Link href="/free-diagnostic" className="text-primary hover:underline">free readiness check</Link> measures
-        your child's current readiness against our 121 readiness benchmark across all four domains.
+        how your child is performing across all four domains, shown on the 121 scale.
       </p>
       <p>
         For a comprehensive overview of the test structure, scoring, and preparation strategies, see
@@ -103,7 +103,7 @@ export default function GrammarSchools() {
       </p>
 
       <ChildExperienceCTA />
-      <ContentCTA heading="Which Bucks grammar is your target?" subhead="An 8-minute readiness check shows your child's current standing against our 121 readiness benchmark." ctaLabel="Take the readiness check" />
+      <ContentCTA heading="Which Bucks grammar is your target?" subhead="An 8-minute readiness check shows how your child is performing across all four domains on the 121 scale." ctaLabel="Take the readiness check" />
       <Disclaimer />
     </div>
   );

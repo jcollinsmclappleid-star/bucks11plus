@@ -124,7 +124,7 @@ export default function TownGuide({ townSlug }: { townSlug: string }) {
       ))}
 
       <ChildExperienceCTA />
-      <ContentCTA heading="Compete for grammar in your area" subhead="An 8-minute readiness check gives an indicative readiness score against our 121 readiness benchmark." ctaLabel="See the score" />
+      <ContentCTA heading="Compete for grammar in your area" subhead="An 8-minute readiness check shows how your child is performing across all four domains on the 121 scale." ctaLabel="See the score" />
       <Disclaimer />
     </div>
   );

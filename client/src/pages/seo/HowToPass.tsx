@@ -130,10 +130,10 @@ export default function HowToPass() {
 
       <h2 className="text-primary font-serif">A Data-Led Approach to Preparation</h2>
       <p>
-        The most effective preparation strategy combines <strong>readiness check</strong> with <strong>targeted practice</strong>. Rather than working through every topic equally, a readiness check identifies exactly where your child is below the 121 benchmark — and targeted drills help address those specific areas.
+        The most effective preparation strategy combines <strong>readiness check</strong> with <strong>targeted practice</strong>. Rather than working through every topic equally, a readiness check identifies exactly where your child is falling short on the 121 scale — and targeted drills help address those specific areas.
       </p>
       <p>
-        This is the approach used by Bucks 11 Plus Tests. Our <Link href="/free-diagnostic" className="text-primary hover:underline">free 8-minute readiness check</Link> measures both accuracy and pacing across all four domains, providing a readiness estimate against the 121 benchmark. From there, the platform recommends targeted micro-drills to help with the areas that need work.
+        This is the approach used by Bucks 11 Plus Tests. Our <Link href="/free-diagnostic" className="text-primary hover:underline">free 8-minute readiness check</Link> measures both accuracy and pacing across all four domains, showing a practice score on the 121 scale. From there, the platform recommends targeted micro-drills to help with the areas that need work.
       </p>
 
       <ChildExperienceCTA />

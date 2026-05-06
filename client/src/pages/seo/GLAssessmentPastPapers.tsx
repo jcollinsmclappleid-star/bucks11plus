@@ -82,7 +82,7 @@ export default function GLAssessmentPastPapers() {
       <ChildExperienceCTA />
       <ContentCTA
         heading="Start with a free GL-style mini paper"
-        subhead="Our free 8-minute diagnostic is a GL-style paper in miniature — 12 questions across all four sections, with a readiness band against the 121 threshold."
+        subhead="Our free 8-minute diagnostic is a GL-style paper in miniature — 12 questions across all four sections, with a practice score on the 121 scale."
         ctaLabel="Sit the free GL-style mini paper"
       />
 

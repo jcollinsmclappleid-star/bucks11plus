@@ -124,8 +124,8 @@ export default function QualifyingScore() {
         <li><strong>Breadth of ability</strong> — performing strongly across Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension, not just in one area</li>
       </ul>
       <p>
-        Our <Link href="/free-diagnostic" className="text-primary hover:underline">free readiness check</Link> measures your child's
-        current performance against the 121 preparation benchmark, providing an <strong>indicative readiness score</strong> (not the official GL standardised score) and identifying specific areas for improvement.
+        Our <Link href="/free-diagnostic" className="text-primary hover:underline">free readiness check</Link> shows your child's
+        current practice score on the 121 scale (not the official GL standardised score) and identifies specific areas for improvement.
       </p>
 
       <h2 className="text-primary font-serif">Understanding Your Child's Score</h2>
@@ -170,15 +170,15 @@ export default function QualifyingScore() {
 
       <h2 className="text-primary font-serif">How Our Readiness Check Relates to 121</h2>
       <p>
-        Our free readiness check produces an <strong>Indicative Readiness Score</strong> calibrated against the 121 qualifying threshold using GL-style question types and difficulty weightings. It is <strong>not</strong> an official GL Assessment standardised score, and achieving 121 on our check does not indicate that a child will achieve the same result on the official Secondary Transfer Test. GL Assessment uses proprietary age-standardised scoring tables that are not available to independent providers.
+        Our free readiness check produces an <strong>Indicative Practice Score</strong> shown on the 121 scale using GL-style question types and difficulty weightings. It is <strong>not</strong> an official GL Assessment standardised score, and achieving 121 on our check does not indicate that a child will achieve the same result on the official Secondary Transfer Test. GL Assessment uses proprietary age-standardised scoring tables that are not available to independent providers.
       </p>
       <p>
-        We treat 121 as a <em>preparation benchmark</em>: a target to calibrate readiness against, not a prediction of GL's official number. Read the full methodology on our <Link href="/scoring-methodology" className="text-primary hover:underline">scoring methodology page</Link>.
+        We use the 121 scale because it is the number every Bucks parent is working towards — it is a familiar reference point, not a prediction of GL's official number. Read the full methodology on our <Link href="/scoring-methodology" className="text-primary hover:underline">scoring methodology page</Link>.
       </p>
 
       <ChildExperienceCTA />
       <LeadMagnetBlock source="seo:qualifying-score" />
-      <ContentCTA heading="Where is your child against 121?" subhead="Take a free 8-minute check to see your child's indicative readiness score against the 121 qualifying benchmark — not the official GL Assessment score." ctaLabel="See the indicative readiness score" />
+      <ContentCTA heading="How is your child tracking toward 121?" subhead="Take a free 8-minute check to see your child's practice score on the 121 scale — this is not the official GL Assessment score." ctaLabel="See the practice score" />
       <Disclaimer />
     </div>
   );

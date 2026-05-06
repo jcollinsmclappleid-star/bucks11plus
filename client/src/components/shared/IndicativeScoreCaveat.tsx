@@ -15,9 +15,9 @@ export function IndicativeScoreCaveat({ variant = "inline", className = "" }: Pr
       >
         <Info className="h-4 w-4 text-blue-600 shrink-0 mt-0.5" />
         <div className="text-sm text-blue-900 leading-relaxed">
-          <p className="font-semibold mb-1">Independent benchmark, not an official GL Assessment</p>
+          <p className="font-semibold mb-1">Independent practice score, not an official GL Assessment</p>
           <p>
-            Our 121 readiness benchmark is designed to help parents understand how their child is performing within our practice tests against an indicative 121 readiness level.
+            Our practice score uses the 121 scale that Bucks parents know — it shows how your child is performing across the four domains in GL-style practice.
           </p>
           <p className="mt-1.5">
             It is not an official Buckinghamshire Secondary Transfer Test 121 score, not a GL Assessment score, and not a prediction or guarantee of your child's final result. Official outcomes are calculated using GL Assessment's own age-standardised scoring process, which independent practice providers cannot replicate.{" "}
@@ -38,7 +38,7 @@ export function IndicativeScoreCaveat({ variant = "inline", className = "" }: Pr
     >
       <Info className="h-3.5 w-3.5 text-slate-500 shrink-0 mt-0.5" />
       <p>
-        Indicative readiness estimate only. <strong className="font-semibold">Not an official GL Assessment score.</strong> 121 is used as a preparation benchmark — achieving it here does not indicate a child will pass the official Secondary Transfer Test.{" "}
+        Indicative practice score only. <strong className="font-semibold">Not an official GL Assessment score.</strong> We use the 121 scale for familiarity — achieving 121 in practice does not indicate a child will pass the official Secondary Transfer Test.{" "}
         <Link href="/scoring-methodology" className="underline" data-testid="link-scoring-methodology-inline">
           How we calculate this
         </Link>

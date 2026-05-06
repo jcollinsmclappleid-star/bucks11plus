@@ -176,7 +176,7 @@ const TOOLTIPS = {
   pressureDelta: "The difference in accuracy between relaxed practice and timed test conditions. A large gap means pressure — not gaps in knowledge — is the problem.",
   pp: "Percentage points. For example, −8 means accuracy fell by 8% under timed conditions compared to practice.",
   fatigueFlag: "Your child's accuracy or speed drops noticeably in the second half of the test — a sign that stamina may be affecting their results.",
-  gv: "How quickly your child's readiness is improving over time. A positive number means their indicative readiness score is climbing toward our 121 readiness benchmark.",
+  gv: "How quickly your child's readiness is improving over time. A positive number means their practice score on the 121 scale is climbing toward 121.",
   primaryConstraint: "The single biggest thing currently holding your child back. Focusing here will have the largest impact on their score.",
   impact10: "How many readiness points your child could gain if accuracy on this topic improves by 10 percentage points.",
   weightedAccuracy: "Accuracy adjusted for difficulty — getting harder questions right counts for more than easier ones.",
@@ -870,7 +870,7 @@ export default function ParentAnalytics() {
             </div>
             <h2 className="text-2xl font-bold text-primary font-serif mb-2">Included with Bucks Plus Edge</h2>
             <p className="text-muted-foreground max-w-md mb-6">
-              Upgrade to unlock readiness scoring, timing analysis, stamina profiling, indicative readiness tracking against our 121 readiness benchmark, and personalised improvement priorities.
+              Upgrade to unlock readiness scoring, timing analysis, stamina profiling, practice score tracking on the 121 scale, and personalised improvement priorities.
             </p>
             <Link href="/pricing">
               <Button size="lg" className="bg-primary text-lg h-12 px-8" data-testid="button-upgrade-analytics">

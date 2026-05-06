@@ -30,7 +30,7 @@ export const MOCK_VARIANTS: MockVariant[] = [
       "Start the timer with the child. Resist the urge to talk through the first question.",
       "When the time ends, end the test — even if questions are unfinished. Pacing data matters.",
     ],
-    whatGoodLooksLike: "On a 12-question diagnostic, 9 or more correct (75%+) is consistent with a child currently on track for our 121 readiness benchmark. 7–8 correct is 'within reach with consistent practice'. Below 7 indicates a clear improvement opportunity. Pacing matters too: a child who finishes well within time but scores low has a knowledge gap; a child who runs out of time has a fluency gap. The two are addressed differently.",
+    whatGoodLooksLike: "On a 12-question diagnostic, 9 or more correct (75%+) is consistent with a child currently on track to reach 121. 7–8 correct is 'within reach with consistent practice'. Below 7 indicates a clear improvement opportunity. Pacing matters too: a child who finishes well within time but scores low has a knowledge gap; a child who runs out of time has a fluency gap. The two are addressed differently.",
     whatToDoAfter: [
       "Look at the breakdown by section, not just the overall score. A child who is strong in three sections and weak in one needs targeted practice on the weak section, not more generic drilling.",
       "Note any question type the child consistently misses — that's the priority area for the next two weeks.",
@@ -79,7 +79,7 @@ export const MOCK_VARIANTS: MockVariant[] = [
     pathSegment: "/11-plus-mock-test-50-questions",
     title: "50-Question 11+ Mock Test",
     metaTitle: "50-Question 11+ Mock Test — Stamina & Full-Paper Practice",
-    metaDescription: "A 50-question 11+ mock test designed to test stamina and full-paper pacing, with section breakdowns and a readiness band against the 121 standard.",
+    metaDescription: "A 50-question 11+ mock test designed to test stamina and full-paper pacing, with section breakdowns and a practice score on the 121 scale.",
     intro: "A 50-question mock is longer than the typical practice paper and shorter than a full multi-paper sitting. It's the right length for testing real-world stamina without consuming a whole morning, and is particularly useful in the final 8–12 weeks before the test.",
     whatItIs: "A timed paper of 50 mixed-domain questions, with section breaks and a strict overall time limit. Designed to feel like a 'long Saturday' rather than a quick check — the pacing pressure builds toward the end, which is exactly the dynamic the real test produces.",
     whoItSuits: "Year 6 children in the run-up to September, and well-prepared Year 5 children in the summer holiday before Year 6. Not appropriate for first-time mock takers — the length will exhaust a child who hasn't built up to it.",

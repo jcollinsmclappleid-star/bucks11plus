@@ -109,7 +109,7 @@ export default function PastPapers() {
             </tr>
             <tr>
               <td className="p-3 font-medium">On-screen practice (such as our platform)</td>
-              <td className="p-3">Replicates the on-screen format, automatic timing, instant marking, indicative readiness score against 121.</td>
+              <td className="p-3">Replicates the on-screen format, automatic timing, instant marking, practice score on the 121 scale.</td>
               <td className="p-3">Look for material specifically aligned to GL Assessment question types.</td>
             </tr>
           </tbody>
@@ -130,7 +130,7 @@ export default function PastPapers() {
         Print papers don't replicate the actual test conditions, which since 2013 have been on-screen with mouse-based answering and a fixed countdown. Children who only practise on paper may lose 5–10 standardised points on test day simply from interface unfamiliarity.
       </p>
       <p>
-        Our <Link href="/free-diagnostic" className="text-primary hover:underline">free 8-minute diagnostic</Link> uses the same on-screen format as the real test and provides an indicative readiness score against the 121 qualifying standard — a more useful snapshot of test-day readiness than any print paper can provide.
+        Our <Link href="/free-diagnostic" className="text-primary hover:underline">free 8-minute diagnostic</Link> uses the same on-screen format as the real test and shows a practice score on the 121 scale — a more useful snapshot of test-day readiness than any print paper can provide.
       </p>
 
       <h2 className="text-primary font-serif" id="faq">Frequently Asked Questions</h2>
@@ -145,7 +145,7 @@ export default function PastPapers() {
 
       <ChildExperienceCTA />
       <LeadMagnetBlock source="seo:past-papers" />
-      <ContentCTA heading="Past papers tell you yesterday — this tells you today" subhead="An 8-minute timed check shows your child's current standing against the 121 standard, not their score on a paper from years ago." ctaLabel="Take a current readiness check" />
+      <ContentCTA heading="Past papers tell you yesterday — this tells you today" subhead="An 8-minute timed check shows how your child is performing now — scored on the 121 scale, not based on a paper from years ago." ctaLabel="Take a current readiness check" />
 
       <div className="not-prose my-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">
         <h3 className="text-lg font-semibold text-primary font-serif mb-3">Related Practice Material</h3>

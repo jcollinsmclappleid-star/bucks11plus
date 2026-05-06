@@ -26,7 +26,7 @@ const faqItems = [
   },
   {
     question: "Can I tell from the familiarisation test whether my child will pass?",
-    answer: "No — and that is the most important thing for parents to understand. The familiarisation test is not designed as an assessment. It does not produce a forecast score, it does not benchmark against 121, and a child who completes it confidently can still fall well below the qualifying standard on the real test. To gauge readiness, you need a properly benchmarked diagnostic.",
+    answer: "No — and that is the most important thing for parents to understand. The familiarisation test is not designed as an assessment. It does not produce a scored result, and a child who completes it confidently can still fall well below 121 on the real test. To gauge readiness, you need a properly scored diagnostic.",
   },
   {
     question: "Where do I find the official familiarisation test?",
@@ -128,15 +128,15 @@ export default function FamiliarisationTest() {
 
       <h2 className="text-primary font-serif">The Limitation: One Snapshot, No Score</h2>
       <p>
-        Because the familiarisation test produces no standardised score, parents have no objective way of knowing whether their child is on track. This is the main reason many families combine the official familiarisation paper with a properly benchmarked diagnostic.
+        Because the familiarisation test produces no scored result, parents have no objective way of knowing whether their child is on track. This is the main reason many families combine the official familiarisation paper with a properly scored diagnostic.
       </p>
       <p>
-        A diagnostic measures both accuracy and pace, breaks performance down by subject and sub-topic, and produces an indicative readiness score against our 121 readiness benchmark. It tells you what to fix, in what order, and how much each gap is worth — turning the familiarisation paper from a navigation rehearsal into a measurable starting point for preparation.
+        A diagnostic measures both accuracy and pace, breaks performance down by subject and sub-topic, and shows a practice score on the 121 scale. It tells you what to fix, in what order, and how much each gap is worth — turning the familiarisation paper from a navigation rehearsal into a measurable starting point for preparation.
       </p>
 
       <h2 className="text-primary font-serif">Going Beyond the Familiarisation Test</h2>
       <p>
-        Our <Link href="/free-diagnostic" className="text-primary hover:underline">free 8-minute readiness check</Link> is designed to be used alongside the official familiarisation test. It provides what TBGS does not: an indicative readiness score against our 121 readiness benchmark, a breakdown of strengths and weaknesses across all four GL Assessment domains, and the three highest-impact priorities to fix next.
+        Our <Link href="/free-diagnostic" className="text-primary hover:underline">free 8-minute readiness check</Link> is designed to be used alongside the official familiarisation test. It provides what TBGS does not: a practice score on the 121 scale, a breakdown of strengths and weaknesses across all four GL Assessment domains, and the three highest-impact priorities to fix next.
       </p>
       <p>
         For a deeper look at the test itself, see our <Link href="/buckinghamshire-secondary-transfer-test" className="text-primary hover:underline">Secondary Transfer Test overview</Link> and <a href="/bucks-11-plus-sample-questions" className="text-primary hover:underline">sample questions guide</a>.

@@ -15,7 +15,7 @@ const breadcrumbItems = [
 const faqItems = [
   {
     question: "What is a Bucks 11+ mock test?",
-    answer: "A mock test is a full-length practice paper sat under timed exam conditions, designed to simulate the real Buckinghamshire Secondary Transfer Test as closely as possible. A proper mock includes the correct number of questions per section, the actual time limits, the same multiple-choice answer-sheet format, and ideally produces an indicative readiness score against the 121 qualifying standard.",
+    answer: "A mock test is a full-length practice paper sat under timed exam conditions, designed to simulate the real Buckinghamshire Secondary Transfer Test as closely as possible. A proper mock includes the correct number of questions per section, the actual time limits, the same multiple-choice answer-sheet format, and ideally produces a practice score on the 121 scale alongside a section breakdown.",
   },
   {
     question: "When should my child sit their first mock test?",
@@ -87,7 +87,7 @@ export default function MockTest() {
             <tr className="border-b border-slate-100"><td className="p-3 font-medium">Length</td><td className="p-3 text-slate-600">One section at a time</td><td className="p-3 text-slate-600">All four sections in one sitting</td></tr>
             <tr className="border-b border-slate-100"><td className="p-3 font-medium">Timing</td><td className="p-3 text-slate-600">Often relaxed</td><td className="p-3 text-slate-600">Strict, matches real test</td></tr>
             <tr className="border-b border-slate-100"><td className="p-3 font-medium">Environment</td><td className="p-3 text-slate-600">Casual</td><td className="p-3 text-slate-600">Quiet, exam-like</td></tr>
-            <tr className="border-b border-slate-100"><td className="p-3 font-medium">Scoring</td><td className="p-3 text-slate-600">Raw mark or percentage</td><td className="p-3 text-slate-600">Indicative readiness score vs 121</td></tr>
+            <tr className="border-b border-slate-100"><td className="p-3 font-medium">Scoring</td><td className="p-3 text-slate-600">Raw mark or percentage</td><td className="p-3 text-slate-600">Practice score on the 121 scale</td></tr>
             <tr className="border-b border-slate-100"><td className="p-3 font-medium">Purpose</td><td className="p-3 text-slate-600">Build skill in one area</td><td className="p-3 text-slate-600">Measure overall readiness</td></tr>
             <tr className="border-b border-slate-100"><td className="p-3 font-medium">Frequency</td><td className="p-3 text-slate-600">Daily or weekly</td><td className="p-3 text-slate-600">Every 4–8 weeks</td></tr>
           </tbody>
@@ -120,7 +120,7 @@ export default function MockTest() {
         <li><strong>Strict timing</strong> matching real test conditions — approximately 35–50 seconds per question</li>
         <li><strong>Multiple-choice answer sheet</strong> separate from the question booklet, as in the real test</li>
         <li><strong>Audio instructions</strong> for the comprehension paper, which uses a two-phase reading-then-answering structure</li>
-        <li><strong>An indicative readiness score</strong> against the 121 qualifying standard — not just a percentage</li>
+        <li><strong>A practice score on the 121 scale</strong> — not just a raw percentage</li>
         <li><strong>Section-level analytics</strong> showing strengths, weaknesses, and pacing per domain</li>
         <li><strong>A clear set of priority next-steps</strong> based on where the most points were lost</li>
       </ul>
@@ -138,7 +138,7 @@ export default function MockTest() {
 
       <h2 className="text-primary font-serif">Mock Tests on Bucks 11 Plus Tests</h2>
       <p>
-        Our paid plans include full-length GL-style mock exams across all four domains, sat under proper timed conditions, with an indicative readiness score against the 121 qualifying standard. Each mock produces a section breakdown, a pacing analysis, a stamina report, and a ranked list of the highest-impact gaps to address before the next mock.
+        Our paid plans include full-length GL-style mock exams across all four domains, sat under proper timed conditions, with a practice score on the 121 scale. Each mock produces a section breakdown, a pacing analysis, a stamina report, and a ranked list of the highest-impact gaps to address before the next mock.
       </p>
       <p>
         Free users can take our <Link href="/free-diagnostic" className="text-primary hover:underline">8-minute readiness check</Link>, which is shorter than a full mock but uses the same scoring methodology — giving you a reliable first indicator of where your child stands without committing to a subscription.

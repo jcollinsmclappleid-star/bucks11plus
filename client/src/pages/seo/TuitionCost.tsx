@@ -108,7 +108,7 @@ export default function TuitionCost() {
         Our Bucks Plus Edge plan is £35 per month or £279 per year — roughly the cost of two to three hours of private tutoring, but for a year of access. For that price your child gets:
       </p>
       <ul>
-        <li>Full-length GL-style mock exams across all four domains, with an indicative readiness score against our 121 readiness benchmark</li>
+        <li>Full-length GL-style mock exams across all four domains, with a practice score on the 121 scale</li>
         <li>A diagnostic engine that identifies the highest-impact gaps and ranks them by score impact</li>
         <li>Targeted micro-drills focused on those specific gaps, not generic practice</li>
         <li>Pacing analysis that flags timing problems separately from accuracy problems</li>
@@ -125,9 +125,9 @@ export default function TuitionCost() {
       </p>
       <ul>
         <li><strong>Most "free" papers are old, poorly formatted, or don't reflect the current GL Assessment style</strong></li>
-        <li><strong>There is no scoring against 121</strong> — you only get raw percentages, which mean very little without standardisation</li>
+        <li><strong>You only get raw percentages</strong> — no practice score on the 121 scale, which means little for gauging actual readiness</li>
         <li><strong>The parent does all the marking, analysis and pacing assessment</strong> — usually 60–90 minutes per paper</li>
-        <li><strong>You don't know whether your child is on track</strong> until you sit a properly benchmarked mock</li>
+        <li><strong>You don't know whether your child is on track</strong> until you sit a properly scored mock</li>
       </ul>
       <p>
         Free papers are useful as supplementary material. They are not a substitute for structured preparation that gives you genuine readiness data.

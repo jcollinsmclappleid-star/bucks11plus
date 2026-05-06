@@ -79,7 +79,7 @@ export default function MockVariant({ slug }: { slug: string }) {
       <ChildExperienceCTA />
       <ContentCTA
         heading="Sit a free 8-minute mock right now"
-        subhead="A 12-question GL-style diagnostic with a readiness band against our 121 readiness benchmark. No account needed."
+        subhead="A 12-question GL-style diagnostic with a practice score on the 121 scale. No account needed."
         ctaLabel="Start the free mock"
       />
 

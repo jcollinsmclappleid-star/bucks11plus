@@ -191,7 +191,7 @@ export default function SampleQuestions() {
 
       <ChildExperienceCTA />
       <LeadMagnetBlock source="seo:sample-questions" />
-      <ContentCTA heading="Sample questions are a start. A scored check is the answer." subhead="An 8-minute readiness check turns curiosity into a clear indicative score against the 121 standard." ctaLabel="Take the scored check" />
+      <ContentCTA heading="Sample questions are a start. A scored check is the answer." subhead="An 8-minute readiness check turns curiosity into a clear practice score on the 121 scale." ctaLabel="Take the scored check" />
       <Disclaimer />
     </div>
   );

@@ -87,7 +87,7 @@ export default function GLAssessmentPractice() {
       <ChildExperienceCTA />
       <ContentCTA
         heading="Get a GL-style baseline in 8 minutes"
-        subhead="Our free 8-minute diagnostic uses the GL Assessment format and gives you an indicative readiness band against the 121 threshold."
+        subhead="Our free 8-minute diagnostic uses the GL Assessment format and gives you a practice score on the 121 scale."
         ctaLabel="Take the free GL-style diagnostic"
       />
 

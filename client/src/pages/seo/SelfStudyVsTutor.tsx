@@ -79,7 +79,7 @@ export default function SelfStudyVsTutor() {
         <li>You want format-matched practice (on-screen, timed, mouse-based).</li>
         <li>You'd benefit from automatic gap analysis after each session — knowing exactly which question types to focus on next.</li>
         <li>Parent time is limited but you want substantial structure for the child.</li>
-        <li>You want an indicative readiness score to gauge progress against the 121 qualifying standard.</li>
+        <li>You want a practice score on the 121 scale to gauge how preparation is tracking.</li>
         <li>You're using self-study workbooks alongside but want to add timed on-screen mocks.</li>
       </ul>
       <p>

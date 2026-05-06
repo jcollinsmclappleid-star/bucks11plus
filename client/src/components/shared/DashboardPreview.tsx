@@ -196,7 +196,7 @@ function ImpactSimulator() {
               <div className="text-lg font-bold text-green-800">118 – 123</div>
             </div>
           </div>
-          <p className="text-[10px] text-green-600 mt-2">A 10% improvement in Verbal Reasoning moves the forecast above our 121 readiness benchmark</p>
+          <p className="text-[10px] text-green-600 mt-2">A 10% improvement in Verbal Reasoning would push the practice score above 121</p>
         </div>
       </CardContent>
     </Card>

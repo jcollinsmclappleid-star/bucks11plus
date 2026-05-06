@@ -451,7 +451,7 @@ export default function PracticePaperPrint2() {
         <div className="rounded-xl border border-slate-200 bg-slate-50 p-5">
           <p className="text-xs font-bold uppercase tracking-widest text-[#0d1f30]/50 mb-2">Looking for a more detailed picture?</p>
           <p className="text-sm text-slate-600 mb-3">
-            Our free 12-question Readiness Check is timed, marked instantly, and returns an indicative readiness score against our 121 readiness benchmark — plus your child's three areas for improvement.
+            Our free 12-question Readiness Check is timed, marked instantly, and returns a practice score on the 121 scale — plus your child's three areas for improvement.
           </p>
           <a
             href="https://bucks11plustest.co.uk/free-diagnostic"
@@ -549,7 +549,7 @@ export default function PracticePaperPrint2() {
         <div className="rounded-xl border border-slate-200 p-6 bg-slate-50 text-center">
           <h3 className="text-xl font-serif font-bold text-[#0d1f30] mb-2">Get an indicative picture of readiness</h3>
           <p className="text-sm text-slate-500 mb-4 max-w-md mx-auto">
-            The free Readiness Check is timed, instantly marked, and produces an indicative readiness score against our 121 readiness benchmark — along with the three areas most worth focusing on next.
+            The free Readiness Check is timed, instantly marked, and produces a practice score on the 121 scale — along with the three areas most worth focusing on next.
           </p>
           <a
             href="https://bucks11plustest.co.uk/free-diagnostic"

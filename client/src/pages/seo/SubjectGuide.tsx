@@ -343,20 +343,36 @@ export default function SubjectGuide({ subject }: { subject: Subject }) {
               <>
                 <li><Link href="/11-plus-maths-fractions-practice" className="text-primary hover:underline">11+ Maths: fractions</Link></li>
                 <li><Link href="/11-plus-maths-percentages-practice" className="text-primary hover:underline">11+ Maths: percentages</Link></li>
+                <li><Link href="/11-plus-maths-decimals-practice" className="text-primary hover:underline">11+ Maths: decimals</Link></li>
+                <li><Link href="/11-plus-maths-ratio-proportion-practice" className="text-primary hover:underline">11+ Maths: ratio & proportion</Link></li>
+                <li><Link href="/11-plus-maths-bidmas-practice" className="text-primary hover:underline">11+ Maths: BIDMAS / order of operations</Link></li>
+                <li><Link href="/11-plus-maths-algebra-practice" className="text-primary hover:underline">11+ Maths: algebra basics</Link></li>
+                <li><Link href="/11-plus-maths-sequences-practice" className="text-primary hover:underline">11+ Maths: number sequences</Link></li>
+                <li><Link href="/11-plus-maths-area-perimeter-practice" className="text-primary hover:underline">11+ Maths: area & perimeter</Link></li>
+                <li><Link href="/11-plus-maths-time-practice" className="text-primary hover:underline">11+ Maths: time questions</Link></li>
+                <li><Link href="/11-plus-maths-money-practice" className="text-primary hover:underline">11+ Maths: money questions</Link></li>
                 <li><Link href="/11-plus-maths-word-problems-practice" className="text-primary hover:underline">11+ Maths: word problems</Link></li>
-                <li><Link href="/11-plus-mental-maths-practice" className="text-primary hover:underline">11+ Mental maths</Link></li>
+                <li><Link href="/11-plus-maths-units-measures-practice" className="text-primary hover:underline">11+ Maths: units & measurement</Link></li>
+                <li><Link href="/11-plus-mental-maths-practice" className="text-primary hover:underline">11+ Mental maths shortcuts</Link></li>
               </>
             )}
             {subject === "verbal-reasoning" && (
               <>
-                <li><Link href="/11-plus-synonyms-list" className="text-primary hover:underline">11+ synonyms list</Link></li>
-                <li><Link href="/11-plus-antonyms-list" className="text-primary hover:underline">11+ antonyms list</Link></li>
+                <li><Link href="/11-plus-letter-sequences" className="text-primary hover:underline">11+ VR: letter sequences</Link></li>
+                <li><Link href="/11-plus-verbal-codes" className="text-primary hover:underline">11+ VR: verbal codes</Link></li>
+                <li><Link href="/11-plus-word-relationships" className="text-primary hover:underline">11+ VR: word relationships & analogies</Link></li>
+                <li><Link href="/11-plus-synonyms-antonyms" className="text-primary hover:underline">11+ VR: synonyms & antonyms</Link></li>
+                <li><Link href="/11-plus-synonyms-list" className="text-primary hover:underline">11+ synonyms word list</Link></li>
+                <li><Link href="/11-plus-antonyms-list" className="text-primary hover:underline">11+ antonyms word list</Link></li>
                 <li><Link href="/11-plus-prefixes-suffixes" className="text-primary hover:underline">11+ prefixes & suffixes</Link></li>
                 <li><Link href="/11-plus-tricky-words" className="text-primary hover:underline">11+ tricky vocabulary list</Link></li>
               </>
             )}
             {subject === "comprehension" && (
               <>
+                <li><Link href="/11-plus-comprehension-inference" className="text-primary hover:underline">11+ comprehension: inference questions</Link></li>
+                <li><Link href="/11-plus-comprehension-vocabulary" className="text-primary hover:underline">11+ comprehension: vocabulary in context</Link></li>
+                <li><Link href="/11-plus-comprehension-main-idea" className="text-primary hover:underline">11+ comprehension: main idea questions</Link></li>
                 <li><Link href="/11-plus-tricky-words" className="text-primary hover:underline">11+ tricky vocabulary list</Link></li>
                 <li><Link href="/11-plus-homophones" className="text-primary hover:underline">11+ homophones list</Link></li>
                 <li><Link href="/11-plus-synonyms-list" className="text-primary hover:underline">11+ synonyms list</Link></li>
@@ -365,6 +381,11 @@ export default function SubjectGuide({ subject }: { subject: Subject }) {
             )}
             {subject === "non-verbal-reasoning" && (
               <>
+                <li><Link href="/11-plus-nvr-matrix" className="text-primary hover:underline">11+ NVR: matrix questions</Link></li>
+                <li><Link href="/11-plus-nvr-sequences" className="text-primary hover:underline">11+ NVR: sequences</Link></li>
+                <li><Link href="/11-plus-nvr-classification" className="text-primary hover:underline">11+ NVR: classification questions</Link></li>
+                <li><Link href="/11-plus-nvr-odd-one-out" className="text-primary hover:underline">11+ NVR: odd one out</Link></li>
+                <li><Link href="/11-plus-nvr-symmetry" className="text-primary hover:underline">11+ NVR: symmetry & reflection</Link></li>
                 <li><Link href="/gl-assessment-question-types" className="text-primary hover:underline">Every GL Assessment question type</Link></li>
                 <li><Link href="/11-plus-mock-test-online-free" className="text-primary hover:underline">Free GL-style mock test</Link></li>
               </>

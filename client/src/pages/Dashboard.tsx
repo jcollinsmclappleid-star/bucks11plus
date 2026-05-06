@@ -95,7 +95,7 @@ export default function Dashboard() {
                 Based on {latest.diagnosticId.includes("mini") ? "Quick" : "Full"} Readiness Check completed {new Date(latest.completedAt!).toLocaleDateString()}.
               </p>
               <p className="text-xs text-muted-foreground/60 mt-0.5">
-                Forecast calibrated against the 121+ Buckinghamshire qualifying benchmark.{" "}
+                Practice score shown on the 121 scale.{" "}
                 <Link href="/how-forecast-works" className="underline underline-offset-2 hover:text-muted-foreground transition-colors">
                   How scoring works
                 </Link>

@@ -143,7 +143,7 @@ export default function FreeSamplePapers() {
         <p className="text-xs font-bold uppercase tracking-widest text-primary/50 mb-2">Start for free</p>
         <h3 className="text-2xl font-bold text-primary font-serif mb-3">See how your child compares — before you pay anything</h3>
         <p className="text-slate-500 text-sm mb-5 max-w-lg mx-auto">
-          The free 12-question Readiness Check is timed, marked instantly, and returns an indicative readiness score against our 121 benchmark — plus the three sub-skills most worth focusing on next.
+          The free 12-question Readiness Check is timed, marked instantly, and returns a practice score on the 121 scale — plus the three sub-skills most worth focusing on next.
         </p>
         <Link
           href="/free-diagnostic"

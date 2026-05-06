@@ -132,7 +132,7 @@ export default function ExamsCompared() {
         Generic 11+ practice platforms tend to teach the broad shape of the exam — vocabulary, arithmetic, basic reasoning patterns. They are useful for foundational work, but they cannot prepare a child for the specific format, pacing demands, or qualifying threshold of the Bucks test.
       </p>
       <p>
-        A Bucks-specific platform aligns to the four GL Assessment domains as separately tested papers, benchmarks performance against the 121 qualifying score, and uses the timing structure your child will actually encounter on test day. That alignment matters because a child who has prepared well for a CEM-style paper has not necessarily prepared well for a GL-style Bucks paper — and vice versa.
+        A Bucks-specific platform aligns to the four GL Assessment domains as separately tested papers, shows practice scores on the 121 scale that Bucks parents know, and uses the timing structure your child will actually encounter on test day. That alignment matters because a child who has prepared well for a CEM-style paper has not necessarily prepared well for a GL-style Bucks paper — and vice versa.
       </p>
 
       <h2 className="text-primary font-serif">Which Test Does My Area Use?</h2>

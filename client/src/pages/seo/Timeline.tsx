@@ -120,7 +120,7 @@ export default function Timeline() {
       </p>
       <p>
         Our <Link href="/free-diagnostic" className="text-primary hover:underline">free readiness check</Link> takes
-        just 8 minutes and gives you an immediate picture of where your child stands against the 121 benchmark —
+        just 8 minutes and gives you an immediate practice score on the 121 scale —
         helping you plan the right preparation timeline.
       </p>
       <p>
