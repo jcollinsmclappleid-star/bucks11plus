@@ -1337,7 +1337,7 @@ export default function Landing() {
       />
 
       {/* ── SECTION 1: HERO ── */}
-      <section className="relative overflow-hidden pt-12 pb-16 md:pt-16 md:pb-24 border-b border-border/50" style={{ backgroundColor: '#0d1f30' }} data-testid="section-hero">
+      <section className="relative overflow-hidden pt-12 pb-16 md:pt-16 md:pb-24 border-b border-border/50" style={{ backgroundColor: '#1e3a6e' }} data-testid="section-hero">
         <div className="absolute inset-0 z-0 hero-texture" />
         <div className="absolute inset-0 z-0 hero-vignette" />
         <div className="absolute inset-0 z-0" style={{ background: 'radial-gradient(ellipse 60% 50% at 30% 50%, rgba(255,255,255,0.04) 0%, transparent 100%)' }} />
@@ -1630,7 +1630,7 @@ export default function Landing() {
       </section>
 
       {/* ── SECTION 2A: INSIDE THE PLATFORM (DASHBOARD SHOWCASE) ── */}
-      <section className="relative py-16 md:py-24 overflow-hidden border-b border-border/30" style={{ background: "linear-gradient(135deg, #0d1f30 0%, #1a3550 100%)" }} data-testid="section-dashboard-showcase">
+      <section className="relative py-16 md:py-24 overflow-hidden border-b border-border/30" style={{ background: "linear-gradient(135deg, #1e3a6e 0%, #1a3550 100%)" }} data-testid="section-dashboard-showcase">
         <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)", backgroundSize: "24px 24px" }} />
         <div className="container mx-auto max-w-6xl px-4 relative">
           <div className="text-center mb-12 md:mb-14">

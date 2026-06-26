@@ -151,7 +151,7 @@ export default function WhyChoosePlatform() {
       />
 
       {/* ── HERO ── */}
-      <section className="relative overflow-hidden pt-12 pb-16 md:pt-16 md:pb-20 border-b border-border/50" style={{ backgroundColor: '#0d1f30' }} data-testid="section-hero">
+      <section className="relative overflow-hidden pt-12 pb-16 md:pt-16 md:pb-20 border-b border-border/50" style={{ backgroundColor: '#1e3a6e' }} data-testid="section-hero">
         <div className="absolute inset-0 z-0 hero-texture" />
         <div className="absolute inset-0 z-0 hero-vignette" />
         <div className="container mx-auto max-w-4xl px-4 relative z-10 text-center">

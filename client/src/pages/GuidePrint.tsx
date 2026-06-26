@@ -3,7 +3,7 @@ import { learnArticles, LEARN_CATEGORIES, getArticlesByCategory } from "../data/
 
 const BASE = "https://bucks11plustest.co.uk";
 
-function PageHeader({ title, subtitle, accent = "#0d1f30" }: { title: string; subtitle?: string; accent?: string }) {
+function PageHeader({ title, subtitle, accent = "#1e3a6e" }: { title: string; subtitle?: string; accent?: string }) {
   return (
     <div className="mb-6 pb-4 border-b-2" style={{ borderColor: accent }}>
       <div className="flex items-center justify-between">
@@ -37,11 +37,11 @@ function CTALink({ href, label, sub }: { href: string; label: string; sub?: stri
   return (
     <a
       href={href}
-      className="block no-underline rounded-xl border-2 border-[#0d1f30] px-5 py-3 text-center my-3 hover:bg-slate-50"
+      className="block no-underline rounded-xl border-2 border-[#1e3a6e] px-5 py-3 text-center my-3 hover:bg-slate-50"
       target="_blank"
       rel="noopener noreferrer"
     >
-      <span className="font-bold text-[#0d1f30] text-sm">{label}</span>
+      <span className="font-bold text-[#1e3a6e] text-sm">{label}</span>
       {sub && <span className="block text-xs text-slate-500 mt-0.5">{sub}</span>}
     </a>
   );
@@ -120,40 +120,40 @@ export default function GuidePrint() {
           .page-break { page-break-after: always; }
           nav, footer, header, .no-print { display: none !important; }
           a { color: inherit; text-decoration: none; }
-          .print-link { text-decoration: underline; color: #0d1f30 !important; }
+          .print-link { text-decoration: underline; color: #1e3a6e !important; }
         }
         @media screen {
           .guide-print { padding: 2rem; }
           .page-break { border-bottom: 3px dashed #e2e8f0; margin: 2.5rem 0; padding-bottom: 2.5rem; }
         }
-        .print-link { text-decoration: underline; color: #0d1f30; }
+        .print-link { text-decoration: underline; color: #1e3a6e; }
       `}</style>
 
       {/* PAGE 1 — COVER */}
       <div className="page-break">
         <div className="flex flex-col items-center justify-center min-h-[90vh] text-center relative">
-          <div className="absolute top-0 left-0 right-0 h-2 bg-[#0d1f30]" />
-          <div className="absolute bottom-0 left-0 right-0 h-1 bg-[#0d1f30]" />
+          <div className="absolute top-0 left-0 right-0 h-2 bg-[#1e3a6e]" />
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-[#1e3a6e]" />
 
           <div className="mb-8">
             <div className="inline-flex items-center gap-3 mb-6">
               <svg viewBox="0 0 48 48" className="w-12 h-12" aria-hidden="true">
-                <circle cx="24" cy="24" r="22" fill="none" stroke="#0d1f30" strokeWidth="2" />
-                <circle cx="24" cy="24" r="14" fill="none" stroke="#0d1f30" strokeWidth="1" opacity="0.3" />
-                <circle cx="24" cy="24" r="4" fill="#0d1f30" />
+                <circle cx="24" cy="24" r="22" fill="none" stroke="#1e3a6e" strokeWidth="2" />
+                <circle cx="24" cy="24" r="14" fill="none" stroke="#1e3a6e" strokeWidth="1" opacity="0.3" />
+                <circle cx="24" cy="24" r="4" fill="#1e3a6e" />
               </svg>
               <div className="text-left">
-                <span className="block text-xl font-serif font-bold text-[#0d1f30]">Bucks 11 Plus Tests</span>
+                <span className="block text-xl font-serif font-bold text-[#1e3a6e]">Bucks 11 Plus Tests</span>
                 <span className="block text-xs text-slate-500 tracking-widest uppercase">bucks11plustest.co.uk</span>
               </div>
             </div>
           </div>
 
           <div className="max-w-lg mx-auto">
-            <div className="inline-block border border-[#0d1f30]/20 rounded-full px-4 py-1 text-xs font-bold uppercase tracking-widest text-[#0d1f30]/60 mb-6">
+            <div className="inline-block border border-[#1e3a6e]/20 rounded-full px-4 py-1 text-xs font-bold uppercase tracking-widest text-[#1e3a6e]/60 mb-6">
               2026 Edition · {GUIDE_PAGES} Pages
             </div>
-            <h1 className="text-5xl font-serif font-bold text-[#0d1f30] mb-4 leading-tight">
+            <h1 className="text-5xl font-serif font-bold text-[#1e3a6e] mb-4 leading-tight">
               The Complete Buckinghamshire 11+ Parent Guide
             </h1>
             <p className="text-xl text-slate-500 leading-relaxed mb-8">
@@ -167,7 +167,7 @@ export default function GuidePrint() {
                 { value: `${totalArticles}`, label: "In-Depth Guides Inside" },
               ].map(({ value, label }) => (
                 <div key={label} className="rounded-xl border border-slate-200 px-3 py-4">
-                  <div className="text-3xl font-black text-[#0d1f30]">{value}</div>
+                  <div className="text-3xl font-black text-[#1e3a6e]">{value}</div>
                   <div className="text-[10px] text-slate-500 mt-1 leading-tight">{label}</div>
                 </div>
               ))}
@@ -227,7 +227,7 @@ export default function GuidePrint() {
       {/* PAGE 3 — HOW THE SYSTEM WORKS */}
       <div className="page-break">
         <PageHeader title="How the Bucks Grammar School System Works" />
-        <h3 className="text-base font-serif font-bold text-[#0d1f30] mt-4 mb-2">The Secondary Transfer Test</h3>
+        <h3 className="text-base font-serif font-bold text-[#1e3a6e] mt-4 mb-2">The Secondary Transfer Test</h3>
         <p className="text-sm leading-relaxed mb-3">
           The Buckinghamshire Secondary Transfer Test — the Bucks 11+ — is a selective entrance exam determining eligibility for all 13 grammar schools in Buckinghamshire. Unlike other selective areas where children may sit multiple tests for different schools, Buckinghamshire operates a single-test system: one exam, one standardised score, one eligibility decision for all 13 schools simultaneously.
         </p>
@@ -237,11 +237,11 @@ export default function GuidePrint() {
         <p className="text-sm leading-relaxed mb-4">
           One of the most distinctive features is the use of <strong>audio-recorded instructions</strong>. A recorded voice manages all section timings — telling children when to start, how many questions are in each section, and when to stop. Children who encounter this format for the first time on test day often find it unexpectedly pressured. Practising with audio-led mock tests in the weeks before the real test is essential preparation.
         </p>
-        <h3 className="text-base font-serif font-bold text-[#0d1f30] mb-2">Registration</h3>
+        <h3 className="text-base font-serif font-bold text-[#1e3a6e] mb-2">Registration</h3>
         <p className="text-sm leading-relaxed mb-3">
           Most children at Buckinghamshire state primary schools are registered automatically. However, parents should confirm this with their school. Children from outside Buckinghamshire, or at independent schools, must register directly with Buckinghamshire Council. Registration typically opens in spring of Year 5 and closes in late June. Missing the deadline means missing the test entirely — there is no facility for late registration in standard circumstances.
         </p>
-        <h3 className="text-base font-serif font-bold text-[#0d1f30] mb-2">Who Sits It</h3>
+        <h3 className="text-base font-serif font-bold text-[#1e3a6e] mb-2">Who Sits It</h3>
         <p className="text-sm leading-relaxed mb-3">
           The test is sat by Year 6 children in September, approximately 12 months before they start secondary school. Approximately 6,000–7,000 children sit the test annually across Buckinghamshire. The test is designed to identify the top roughly 15–20% of the cohort — it is calibrated to be genuinely challenging, and children who have not specifically prepared for the format and question types will likely underperform relative to their true academic ability.
         </p>
@@ -258,12 +258,12 @@ export default function GuidePrint() {
         <p className="text-sm leading-relaxed mb-4">
           The qualifying score for Buckinghamshire grammar schools is a <strong>standardised score of 121</strong>. This threshold has been consistent for many years and represents performance significantly above the national average. A score of 100 is the standardised average — 121 is approximately 1.4 standard deviations above that mean, representing roughly the top 8–12% of performance nationwide.
         </p>
-        <h3 className="text-base font-serif font-bold text-[#0d1f30] mb-2">How Standardisation Works</h3>
+        <h3 className="text-base font-serif font-bold text-[#1e3a6e] mb-2">How Standardisation Works</h3>
         <p className="text-sm leading-relaxed mb-3">
           Raw test scores are converted into standardised scores using age adjustment. Because children born in September are almost a full year older than children born in August when they sit the September test, raw scores are mathematically adjusted to ensure fair comparison. An August-born child who achieves the same raw score as a September-born child will receive a slightly higher standardised score. This is the standardisation process — it levels the playing field across all birthdays within the school year.
         </p>
         <InfoBox>
-          <h4 className="text-sm font-bold text-[#0d1f30] mb-3">Score Ranges and What They Mean</h4>
+          <h4 className="text-sm font-bold text-[#1e3a6e] mb-3">Score Ranges and What They Mean</h4>
           <div className="space-y-2 text-sm">
             {[
               { range: "Below 110", label: "Well below qualifying — significant targeted work needed", color: "text-red-600 bg-red-50 border-red-200" },
@@ -279,11 +279,11 @@ export default function GuidePrint() {
             ))}
           </div>
         </InfoBox>
-        <h3 className="text-base font-serif font-bold text-[#0d1f30] mt-4 mb-2">Qualifying Does Not Guarantee a Place</h3>
+        <h3 className="text-base font-serif font-bold text-[#1e3a6e] mt-4 mb-2">Qualifying Does Not Guarantee a Place</h3>
         <p className="text-sm leading-relaxed mb-3">
           Achieving a score of 121 confirms grammar school eligibility — but does not guarantee a place. Places are allocated based on each school's oversubscription criteria, primarily distance from home to school. In the most popular schools (Royal Grammar School, Aylesbury High, Dr Challoner's), the distance cut-off can fall within 2–3 miles when demand exceeds capacity. A qualifying child living 5 miles from a heavily oversubscribed school may not receive a place there, while receiving a place at a less oversubscribed school further afield.
         </p>
-        <h3 className="text-base font-serif font-bold text-[#0d1f30] mb-2">What Our Platform Provides</h3>
+        <h3 className="text-base font-serif font-bold text-[#1e3a6e] mb-2">What Our Platform Provides</h3>
         <p className="text-sm leading-relaxed mb-2">
           The free 8-minute readiness check generates a practice score on the 121 scale. It identifies your child's current standing across all four subjects and highlights the specific question types with the highest impact on that score. The practice score is an independent practice indicator — not an official GL Assessment score.
         </p>
@@ -322,7 +322,7 @@ export default function GuidePrint() {
             },
             {
               when: "Year 5–6 Summer",
-              accent: "#0d1f30",
+              accent: "#1e3a6e",
               title: "Structured Preparation Begins",
               points: [
                 "Begin systematic familiarisation with all four question type groups",
@@ -359,7 +359,7 @@ export default function GuidePrint() {
               <div>
                 <div className="flex items-baseline gap-2 mb-1">
                   <span className="text-xs font-bold uppercase tracking-wider" style={{ color: accent }}>{when}</span>
-                  <span className="text-sm font-semibold text-[#0d1f30]">{title}</span>
+                  <span className="text-sm font-semibold text-[#1e3a6e]">{title}</span>
                 </div>
                 <ul className="space-y-0.5">
                   {points.map((p) => (
@@ -394,7 +394,7 @@ export default function GuidePrint() {
             },
             {
               area: "High Wycombe",
-              accent: "#0d1f30",
+              accent: "#1e3a6e",
               schools: [
                 { name: "The Royal Grammar School", type: "Boys", url: "rgshw.com" },
                 { name: "Wycombe High School", type: "Girls", url: "whs.bucks.sch.uk" },
@@ -428,7 +428,7 @@ export default function GuidePrint() {
               <ul className="divide-y divide-slate-100">
                 {schools.map((s) => (
                   <li key={s.name} className="px-4 py-2">
-                    <a href={`https://www.${s.url}`} className="print-link text-xs font-medium text-[#0d1f30]" target="_blank" rel="noopener noreferrer">
+                    <a href={`https://www.${s.url}`} className="print-link text-xs font-medium text-[#1e3a6e]" target="_blank" rel="noopener noreferrer">
                       {s.name}
                     </a>
                     <span className="text-[10px] text-slate-400 ml-2">{s.type}</span>
@@ -474,7 +474,7 @@ export default function GuidePrint() {
             A readiness-led approach — one that measures specific skills, identifies gaps, tracks progress over time, and generates actionable priorities — provides the clarity that generic practice cannot. The Bucks 11 Plus Tests platform is built on this principle: every readiness check produces a practice score on the 121 scale, subject breakdowns, and a specific recommended focus order.
           </p>
         </InfoBox>
-        <h3 className="text-base font-serif font-bold text-[#0d1f30] mt-5 mb-2">Common Preparation Mistakes</h3>
+        <h3 className="text-base font-serif font-bold text-[#1e3a6e] mt-5 mb-2">Common Preparation Mistakes</h3>
         <div className="space-y-2">
           {[
             { mistake: "Starting too late", fix: "Structured preparation should begin in Year 5 — the final weeks before the test are for refinement, not learning new skills." },
@@ -497,7 +497,7 @@ export default function GuidePrint() {
       {/* PAGE 8 — PREPARATION STRATEGY */}
       <div className="page-break">
         <PageHeader title="Preparation Strategy: What Actually Works" />
-        <h3 className="text-base font-serif font-bold text-[#0d1f30] mb-2">The Three-Phase Approach</h3>
+        <h3 className="text-base font-serif font-bold text-[#1e3a6e] mb-2">The Three-Phase Approach</h3>
         <div className="grid grid-cols-3 gap-3 mb-5">
           {[
             { phase: "Phase 1", title: "Diagnose", when: "Year 5 start", desc: "Identify current baseline across all four subjects using a structured readiness check. Pinpoint the two or three weakest skill areas before any targeted practice begins." },
@@ -505,7 +505,7 @@ export default function GuidePrint() {
             { phase: "Phase 3", title: "Simulate", when: "Final 8–12 weeks", desc: "Full timed mock tests under authentic conditions, including audio instructions. Track score progression and adjust focus based on improving and remaining gaps." },
           ].map(({ phase, title, when, desc }) => (
             <div key={phase} className="rounded-xl border border-slate-200 overflow-hidden">
-              <div className="bg-[#0d1f30] px-3 py-2 text-center">
+              <div className="bg-[#1e3a6e] px-3 py-2 text-center">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-white/60">{phase}</span>
                 <p className="text-sm font-bold text-white">{title}</p>
                 <span className="text-[10px] text-white/50">{when}</span>
@@ -516,15 +516,15 @@ export default function GuidePrint() {
             </div>
           ))}
         </div>
-        <h3 className="text-base font-serif font-bold text-[#0d1f30] mb-2">The Role of Timing</h3>
+        <h3 className="text-base font-serif font-bold text-[#1e3a6e] mb-2">The Role of Timing</h3>
         <p className="text-sm leading-relaxed mb-3">
           The GL Assessment format presents questions at a pace of under a minute each. Children must develop the habit of moving on quickly from difficult questions — staying on an unsolvable question means losing time from easier ones later. This requires deliberate timed practice from early in preparation, not just in the final weeks.
         </p>
-        <h3 className="text-base font-serif font-bold text-[#0d1f30] mb-2">Mock Test Strategy</h3>
+        <h3 className="text-base font-serif font-bold text-[#1e3a6e] mb-2">Mock Test Strategy</h3>
         <p className="text-sm leading-relaxed mb-3">
           Mock tests serve two distinct purposes: familiarisation with the format, and measurement of progress. Run two to three full audio-led mock tests in the final eight weeks — one before the final push, one mid-way, and one as a final check. Use the gap between mock test scores to adjust preparation intensity in the remaining weeks.
         </p>
-        <h3 className="text-base font-serif font-bold text-[#0d1f30] mb-2">Using a Readiness Platform</h3>
+        <h3 className="text-base font-serif font-bold text-[#1e3a6e] mb-2">Using a Readiness Platform</h3>
         <p className="text-sm leading-relaxed mb-2">
           A structured digital platform — rather than books or papers alone — enables real-time measurement of progress, adapts question difficulty, and generates specific improvement recommendations. The Bucks 11 Plus Tests platform provides a free 8-minute readiness check and a full subscription practice service with scores shown on the 121 scale.
         </p>
@@ -540,7 +540,7 @@ export default function GuidePrint() {
         <p className="text-sm leading-relaxed mb-4">
           Verbal Reasoning tests linguistic flexibility and pattern recognition with words. Unlike English comprehension — which tests reading skills — verbal reasoning tests the ability to identify relationships between words, solve letter-based codes, and recognise patterns in language. It is not taught explicitly in primary schools, which means all children need specific preparation regardless of their English ability.
         </p>
-        <h3 className="text-base font-serif font-bold text-[#0d1f30] mb-2">Key Question Types</h3>
+        <h3 className="text-base font-serif font-bold text-[#1e3a6e] mb-2">Key Question Types</h3>
         <div className="grid grid-cols-2 gap-2 mb-4">
           {[
             { type: "Word Analogies", desc: "AUTHOR : BOOK = COMPOSER : ___. Tests ability to identify relationships between word pairs." },
@@ -556,7 +556,7 @@ export default function GuidePrint() {
             </div>
           ))}
         </div>
-        <h3 className="text-base font-serif font-bold text-[#0d1f30] mb-2">How to Improve</h3>
+        <h3 className="text-base font-serif font-bold text-[#1e3a6e] mb-2">How to Improve</h3>
         <p className="text-sm leading-relaxed mb-2">
           All verbal reasoning question types are finite and learnable. Systematic exposure to each type — working through specific question banks for each category rather than mixed practice — produces the fastest improvement. Vocabulary breadth is the strongest underlying predictor of verbal reasoning performance. Regular reading of age-appropriate books, particularly fiction with varied vocabulary, remains one of the highest-impact preparation activities.
         </p>
@@ -570,7 +570,7 @@ export default function GuidePrint() {
       {/* PAGE 10 — NVR & SPATIAL */}
       <div className="page-break">
         <PageHeader title="Non-Verbal Reasoning & Spatial Reasoning" subtitle="Subject Deep Dive" accent="#3b82f6" />
-        <h3 className="text-base font-serif font-bold text-[#0d1f30] mb-2">Non-Verbal Reasoning</h3>
+        <h3 className="text-base font-serif font-bold text-[#1e3a6e] mb-2">Non-Verbal Reasoning</h3>
         <p className="text-sm leading-relaxed mb-3">
           Non-verbal reasoning tests the ability to recognise patterns, sequences, and relationships between shapes without using language. This skill is largely independent of curriculum knowledge — which is why high-achieving academic children sometimes struggle initially if they haven't encountered the question formats before. With targeted practice, improvement is rapid and consistent.
         </p>
@@ -587,7 +587,7 @@ export default function GuidePrint() {
             </div>
           ))}
         </div>
-        <h3 className="text-base font-serif font-bold text-[#0d1f30] mb-2">Spatial Reasoning</h3>
+        <h3 className="text-base font-serif font-bold text-[#1e3a6e] mb-2">Spatial Reasoning</h3>
         <p className="text-sm leading-relaxed mb-3">
           Spatial reasoning requires mentally manipulating 2D and 3D shapes — rotating, reflecting, unfolding nets, and identifying views. Like NVR, it is not part of the standard curriculum. Children improve quickly with targeted practice and visual exercises.
         </p>
@@ -604,7 +604,7 @@ export default function GuidePrint() {
             </div>
           ))}
         </div>
-        <h3 className="text-base font-serif font-bold text-[#0d1f30] mb-2">How to Improve</h3>
+        <h3 className="text-base font-serif font-bold text-[#1e3a6e] mb-2">How to Improve</h3>
         <p className="text-sm leading-relaxed mb-2">
           Many children make rapid gains in NVR and spatial reasoning because the skill set is highly learnable once the patterns are understood. Focus on matrices and series first — these appear most frequently. Physical spatial exercises (Lego building from instructions, folding paper nets) build the underlying 3D reasoning skills. Digital practice with instant feedback on NVR questions is the most efficient improvement method.
         </p>
@@ -618,7 +618,7 @@ export default function GuidePrint() {
       {/* PAGE 11 — MATHS & ENGLISH */}
       <div className="page-break">
         <PageHeader title="Mathematics & English Comprehension" subtitle="Subject Deep Dive" />
-        <h3 className="text-base font-serif font-bold text-[#0d1f30] mb-2" style={{ color: "#059669" }}>Mathematics</h3>
+        <h3 className="text-base font-serif font-bold text-[#1e3a6e] mb-2" style={{ color: "#059669" }}>Mathematics</h3>
         <p className="text-sm leading-relaxed mb-3">
           The mathematics element of the Bucks 11+ goes beyond the Year 5 curriculum. Children encounter fractions, percentages, ratio, algebra, data interpretation, and multi-step word problems — some of which may not be formally taught until Year 6. Speed is as important as accuracy: the timed format means children who cannot calculate quickly will lose marks even on questions they understand.
         </p>
@@ -642,7 +642,7 @@ export default function GuidePrint() {
             <strong>Maths tip:</strong> Mental arithmetic speed is the biggest differentiator between children who run out of time and those who don't. Regular 5-minute daily mental arithmetic drills from Year 5 onwards have an outsized impact on test-day score.
           </p>
         </InfoBox>
-        <h3 className="text-base font-serif font-bold text-[#0d1f30] mt-5 mb-2" style={{ color: "#d97706" }}>English Comprehension</h3>
+        <h3 className="text-base font-serif font-bold text-[#1e3a6e] mt-5 mb-2" style={{ color: "#d97706" }}>English Comprehension</h3>
         <p className="text-sm leading-relaxed mb-3">
           English comprehension involves reading a passage — typically 400–600 words — and answering 10–12 questions about it under strict time pressure. Unlike curriculum comprehension, 11+ comprehension tests a specific range of skills that require targeted practice rather than general reading ability alone.
         </p>
@@ -796,15 +796,15 @@ export default function GuidePrint() {
       {/* PAGE 14 — TEST DAY */}
       <div className="page-break">
         <PageHeader title="Test Day: What to Expect" />
-        <h3 className="text-base font-serif font-bold text-[#0d1f30] mb-2">Logistics</h3>
+        <h3 className="text-base font-serif font-bold text-[#1e3a6e] mb-2">Logistics</h3>
         <p className="text-sm leading-relaxed mb-4">
           The test is held at allocated test centres in September, typically on a Saturday. Children sit in a supervised room with speakers delivering audio-recorded instructions. No mobile phones, watches, or electronic devices are permitted. Children must bring an HB pencil and a good eraser — all other equipment is provided.
         </p>
-        <h3 className="text-base font-serif font-bold text-[#0d1f30] mb-2">The Audio Format</h3>
+        <h3 className="text-base font-serif font-bold text-[#1e3a6e] mb-2">The Audio Format</h3>
         <p className="text-sm leading-relaxed mb-4">
           Every instruction in the test — when to open the booklet, how many questions are in each section, when to stop writing — is delivered by a pre-recorded voice. The recording will not wait for children who aren't ready, will not repeat instructions, and cannot be paused. Children who are practiced with this format work calmly through it. Those who encounter it for the first time are often startled and lose composure during the opening minutes, which affects their performance across the whole paper.
         </p>
-        <h3 className="text-base font-serif font-bold text-[#0d1f30] mb-2">The Answer Sheet</h3>
+        <h3 className="text-base font-serif font-bold text-[#1e3a6e] mb-2">The Answer Sheet</h3>
         <p className="text-sm leading-relaxed mb-4">
           Children record answers on a separate machine-scanned answer sheet — not in the question booklet. Answers must be in the correct grid position, clearly marked, and erased cleanly if changed. Children who practice this mechanic before test day are significantly less likely to make costly alignment errors under pressure.
         </p>
@@ -828,7 +828,7 @@ export default function GuidePrint() {
             ))}
           </div>
         </InfoBox>
-        <h3 className="text-base font-serif font-bold text-[#0d1f30] mt-4 mb-2">Managing Anxiety</h3>
+        <h3 className="text-base font-serif font-bold text-[#1e3a6e] mt-4 mb-2">Managing Anxiety</h3>
         <p className="text-sm leading-relaxed mb-3">
           Test anxiety is real and affects performance. The most effective anxiety management strategy is not reassurance — it is preparedness. Children who have taken multiple mock tests under authentic timed conditions, including audio instructions, simply have less to be anxious about. The format feels familiar. The pace feels manageable. Confidence is built through practice, not through promises.
         </p>
@@ -840,19 +840,19 @@ export default function GuidePrint() {
       {/* PAGE 15 — AFTER THE TEST */}
       <div className="page-break">
         <PageHeader title="After the Test: Results, Appeals & Next Steps" />
-        <h3 className="text-base font-serif font-bold text-[#0d1f30] mb-2">Results</h3>
+        <h3 className="text-base font-serif font-bold text-[#1e3a6e] mb-2">Results</h3>
         <p className="text-sm leading-relaxed mb-4">
           Results arrive in mid-October — approximately four weeks after the test. Parents receive a letter stating their child's standardised score and whether it reached the qualifying threshold of 121. The letter does not break down performance by subject. School preferences are submitted on the Common Application Form (CAF) by <strong>31 October</strong>. National Offer Day is <strong>1 March</strong> of the Year 7 entry year.
         </p>
-        <h3 className="text-base font-serif font-bold text-[#0d1f30] mb-2">If Your Child Does Not Qualify</h3>
+        <h3 className="text-base font-serif font-bold text-[#1e3a6e] mb-2">If Your Child Does Not Qualify</h3>
         <p className="text-sm leading-relaxed mb-4">
           The majority of children in Buckinghamshire do not qualify — this is by design. The test is calibrated to identify the top 15–20% of the cohort for grammar school entry. Upper schools in Buckinghamshire are strong schools with good Ofsted ratings and GCSE outcomes. The perception that not qualifying represents a failure is both outdated and unhelpful. Many children thrive at upper schools in ways they would not have in the more academically pressured environment of a grammar school.
         </p>
-        <h3 className="text-base font-serif font-bold text-[#0d1f30] mb-2">The Year 9 Entry Route</h3>
+        <h3 className="text-base font-serif font-bold text-[#1e3a6e] mb-2">The Year 9 Entry Route</h3>
         <p className="text-sm leading-relaxed mb-4">
           Children who do not qualify at Year 6 can apply for grammar school entry at Year 9 through a separate assessment process. This is a significantly less-known route and gives children who matured late or who were not ready at Year 6 a second opportunity. The Year 9 entry test has its own registration timeline — enquire with individual schools from Year 7 onwards.
         </p>
-        <h3 className="text-base font-serif font-bold text-[#0d1f30] mb-2">Appeals</h3>
+        <h3 className="text-base font-serif font-bold text-[#1e3a6e] mb-2">Appeals</h3>
         <p className="text-sm leading-relaxed mb-4">
           Parents can request a review of the test result if they believe there was an error in test administration or scoring — not on the basis of disagreeing with the result. Appeals based on test content, difficulty, or scoring methodology are very rarely successful. The standardisation process is robust and independently validated. Admissions appeals (a separate process) are handled by individual schools and relate to place allocation, not test result.
         </p>
@@ -884,7 +884,7 @@ export default function GuidePrint() {
           ].map(({ icon, title, desc }) => (
             <div key={title} className="rounded-xl border border-slate-200 p-4">
               <span className="text-xl mb-2 block">{icon}</span>
-              <h4 className="text-xs font-bold text-[#0d1f30] mb-1">{title}</h4>
+              <h4 className="text-xs font-bold text-[#1e3a6e] mb-1">{title}</h4>
               <p className="text-[11px] text-slate-500 leading-relaxed">{desc}</p>
             </div>
           ))}
@@ -919,7 +919,7 @@ export default function GuidePrint() {
               price: "£35",
               sub: "per month · cancel any time · no lock-in",
               color: "blue",
-              accent: "#0d1f30",
+              accent: "#1e3a6e",
               features: [
                 "2,500+ GL-style practice questions",
                 "All four subject areas: VR, NVR, Maths, English",
@@ -987,14 +987,14 @@ export default function GuidePrint() {
       {LEARN_CATEGORIES.filter(cat => getArticlesByCategory(cat).length > 0).map((category, catIdx) => {
         const articles = getArticlesByCategory(category);
         const categoryColors: Record<string, string> = {
-          "Understanding the Test": "#0d1f30",
+          "Understanding the Test": "#1e3a6e",
           "Grammar Schools & Admissions": "#7c3aed",
           "Preparation Strategy": "#059669",
           "Subject Guides": "#d97706",
           "Test Day & After": "#dc2626",
           "Other Guides": "#64748b",
         };
-        const accent = categoryColors[category] ?? "#0d1f30";
+        const accent = categoryColors[category] ?? "#1e3a6e";
 
         return (
           <div key={category} className={catIdx < LEARN_CATEGORIES.filter(c => getArticlesByCategory(c).length > 0).length - 1 ? "page-break" : ""}>
@@ -1007,7 +1007,7 @@ export default function GuidePrint() {
               {articles.map((article) => (
                 <div key={article.slug} className="rounded-xl border border-slate-200 overflow-hidden">
                   <div className="px-4 py-3 border-b border-slate-100" style={{ backgroundColor: accent + "06" }}>
-                    <h3 className="text-sm font-bold text-[#0d1f30] leading-snug mb-0.5">{article.title}</h3>
+                    <h3 className="text-sm font-bold text-[#1e3a6e] leading-snug mb-0.5">{article.title}</h3>
                     <a
                       href={`${BASE}/learn/${article.slug}`}
                       className="print-link text-[10px]"
@@ -1040,17 +1040,17 @@ export default function GuidePrint() {
       {/* BACK COVER */}
       <div>
         <div className="flex flex-col items-center justify-center min-h-[90vh] text-center relative">
-          <div className="absolute top-0 left-0 right-0 h-2 bg-[#0d1f30]" />
+          <div className="absolute top-0 left-0 right-0 h-2 bg-[#1e3a6e]" />
           <div className="max-w-lg mx-auto">
             <div className="inline-flex items-center gap-3 mb-8">
               <svg viewBox="0 0 48 48" className="w-10 h-10" aria-hidden="true">
-                <circle cx="24" cy="24" r="22" fill="none" stroke="#0d1f30" strokeWidth="2" />
-                <circle cx="24" cy="24" r="14" fill="none" stroke="#0d1f30" strokeWidth="1" opacity="0.3" />
-                <circle cx="24" cy="24" r="4" fill="#0d1f30" />
+                <circle cx="24" cy="24" r="22" fill="none" stroke="#1e3a6e" strokeWidth="2" />
+                <circle cx="24" cy="24" r="14" fill="none" stroke="#1e3a6e" strokeWidth="1" opacity="0.3" />
+                <circle cx="24" cy="24" r="4" fill="#1e3a6e" />
               </svg>
-              <span className="text-xl font-serif font-bold text-[#0d1f30]">Bucks 11 Plus Tests</span>
+              <span className="text-xl font-serif font-bold text-[#1e3a6e]">Bucks 11 Plus Tests</span>
             </div>
-            <h2 className="text-4xl font-serif font-bold text-[#0d1f30] mb-4 leading-tight">
+            <h2 className="text-4xl font-serif font-bold text-[#1e3a6e] mb-4 leading-tight">
               Measure Your Child's Readiness Today
             </h2>
             <p className="text-lg text-slate-500 max-w-md mb-8 leading-relaxed">
@@ -1059,7 +1059,7 @@ export default function GuidePrint() {
             <div className="space-y-3 mb-8">
               <a
                 href={`${BASE}/free-diagnostic`}
-                className="block rounded-xl border-2 border-[#0d1f30] px-6 py-4 text-center no-underline bg-[#0d1f30]"
+                className="block rounded-xl border-2 border-[#1e3a6e] px-6 py-4 text-center no-underline bg-[#1e3a6e]"
                 target="_blank" rel="noopener noreferrer"
               >
                 <span className="text-white font-bold text-sm block">Start Free 8-Minute Readiness Check</span>
@@ -1067,10 +1067,10 @@ export default function GuidePrint() {
               </a>
               <a
                 href={`${BASE}/pricing`}
-                className="block rounded-xl border-2 border-[#0d1f30] px-6 py-4 text-center no-underline"
+                className="block rounded-xl border-2 border-[#1e3a6e] px-6 py-4 text-center no-underline"
                 target="_blank" rel="noopener noreferrer"
               >
-                <span className="text-[#0d1f30] font-bold text-sm block">Subscribe from £35/month</span>
+                <span className="text-[#1e3a6e] font-bold text-sm block">Subscribe from £35/month</span>
                 <span className="text-slate-500 text-xs">{BASE}/pricing</span>
               </a>
             </div>
@@ -1081,7 +1081,7 @@ export default function GuidePrint() {
                 { val: "8 min", label: "Free Readiness Check" },
               ].map(({ val, label }) => (
                 <div key={label} className="rounded-lg border border-slate-200 px-2 py-3">
-                  <div className="text-2xl font-black text-[#0d1f30]">{val}</div>
+                  <div className="text-2xl font-black text-[#1e3a6e]">{val}</div>
                   <div className="text-[10px] text-slate-500 mt-0.5">{label}</div>
                 </div>
               ))}

@@ -75,7 +75,7 @@ export default function ResultsReport() {
   if (isLoading || !session) {
     return (
       <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh" }}>
-        <Loader2 className="animate-spin" style={{ width: 32, height: 32, color: "#0d1f30" }} />
+        <Loader2 className="animate-spin" style={{ width: 32, height: 32, color: "#1e3a6e" }} />
       </div>
     );
   }
@@ -135,19 +135,19 @@ export default function ResultsReport() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          borderBottom: "2px solid #0d1f30",
+          borderBottom: "2px solid #1e3a6e",
           paddingBottom: 16,
           marginBottom: 24,
         }}
       >
         <div>
-          <div style={{ fontSize: 20, fontWeight: 700, color: "#0d1f30" }}>Bucks 11 Plus Tests</div>
+          <div style={{ fontSize: 20, fontWeight: 700, color: "#1e3a6e" }}>Bucks 11 Plus Tests</div>
           <div style={{ fontSize: 12, color: "#64748b", marginTop: 2 }}>
             Independent Buckinghamshire 11+ Readiness Assessment
           </div>
         </div>
         <div style={{ textAlign: "right" }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: "#0d1f30" }}>Readiness Report</div>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#1e3a6e" }}>Readiness Report</div>
           <div style={{ fontSize: 11, color: "#64748b", marginTop: 2 }}>Completed {dateStr}</div>
         </div>
       </div>
@@ -166,7 +166,7 @@ export default function ResultsReport() {
         }}
       >
         <div style={{ textAlign: "center", minWidth: 90 }}>
-          <div style={{ fontSize: 52, fontWeight: 800, color: "#0d1f30", lineHeight: 1 }}>
+          <div style={{ fontSize: 52, fontWeight: 800, color: "#1e3a6e", lineHeight: 1 }}>
             {forecastScore}
           </div>
           <div style={{ fontSize: 11, color: "#64748b", marginTop: 4, textTransform: "uppercase", letterSpacing: "0.05em" }}>
@@ -187,7 +187,7 @@ export default function ResultsReport() {
               <div style={{ fontSize: 11, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                 Questions Correct
               </div>
-              <div style={{ fontSize: 16, fontWeight: 700, color: "#0d1f30", marginTop: 2 }}>
+              <div style={{ fontSize: 16, fontWeight: 700, color: "#1e3a6e", marginTop: 2 }}>
                 {totalCorrect} / {totalQs}
               </div>
             </div>
@@ -217,7 +217,7 @@ export default function ResultsReport() {
 
       {/* ── SECTION BREAKDOWN ── */}
       <div style={{ marginBottom: 28 }}>
-        <div style={{ fontSize: 15, fontWeight: 700, color: "#0d1f30", marginBottom: 14, borderBottom: "1px solid #e2e8f0", paddingBottom: 8 }}>
+        <div style={{ fontSize: 15, fontWeight: 700, color: "#1e3a6e", marginBottom: 14, borderBottom: "1px solid #e2e8f0", paddingBottom: 8 }}>
           Section Breakdown
         </div>
         <table style={{ width: "100%", borderCollapse: "collapse" }}>
@@ -246,7 +246,7 @@ export default function ResultsReport() {
               const barColor = pct >= 70 ? "#16a34a" : pct >= 50 ? "#d97706" : "#dc2626";
               return (
                 <tr key={i} style={{ borderBottom: "1px solid #f1f5f9" }}>
-                  <td style={{ padding: "10px 12px", fontSize: 13, fontWeight: 600, color: "#0d1f30" }}>
+                  <td style={{ padding: "10px 12px", fontSize: 13, fontWeight: 600, color: "#1e3a6e" }}>
                     {getSectionLabel(s.name)}
                   </td>
                   <td style={{ textAlign: "center", padding: "10px 12px", fontSize: 14, fontWeight: 700, color: barColor }}>
@@ -280,7 +280,7 @@ export default function ResultsReport() {
       {/* ── WEAKEST AREAS ── */}
       {weakestAreas.length > 0 && (
         <div style={{ marginBottom: 28 }}>
-          <div style={{ fontSize: 15, fontWeight: 700, color: "#0d1f30", marginBottom: 14, borderBottom: "1px solid #e2e8f0", paddingBottom: 8 }}>
+          <div style={{ fontSize: 15, fontWeight: 700, color: "#1e3a6e", marginBottom: 14, borderBottom: "1px solid #e2e8f0", paddingBottom: 8 }}>
             Areas to Focus On First
           </div>
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
@@ -303,7 +303,7 @@ export default function ResultsReport() {
             <tbody>
               {weakestAreas.map((w, i) => (
                 <tr key={i} style={{ borderBottom: "1px solid #fef3c7" }}>
-                  <td style={{ padding: "9px 12px", fontSize: 13, fontWeight: 600, color: "#0d1f30" }}>
+                  <td style={{ padding: "9px 12px", fontSize: 13, fontWeight: 600, color: "#1e3a6e" }}>
                     {w.label}
                   </td>
                   <td style={{ padding: "9px 12px", fontSize: 12, color: "#64748b" }}>

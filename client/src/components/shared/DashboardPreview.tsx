@@ -374,8 +374,8 @@ function TrajectoryChart() {
             </g>
           ))}
 
-          <line x1={padL} y1={targetY} x2={svgW - padR} y2={targetY} stroke="#0d1f30" strokeWidth="1.5" strokeDasharray="6 3" />
-          <text x={svgW - padR + 2} y={targetY + 3} fontSize="9" fontWeight="bold" fill="#0d1f30">121</text>
+          <line x1={padL} y1={targetY} x2={svgW - padR} y2={targetY} stroke="#1e3a6e" strokeWidth="1.5" strokeDasharray="6 3" />
+          <text x={svgW - padR + 2} y={targetY + 3} fontSize="9" fontWeight="bold" fill="#1e3a6e">121</text>
 
           <defs>
             <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
@@ -393,7 +393,7 @@ function TrajectoryChart() {
           {dataPoints.map((d, i) => (
             <g key={i}>
               <circle cx={toX(i)} cy={toY(d.score)} r="5" fill="white" stroke="#d97706" strokeWidth="2.5" />
-              <text x={toX(i)} y={toY(d.score) - 10} textAnchor="middle" fontSize="10" fontWeight="bold" fill="#0d1f30">{d.score}</text>
+              <text x={toX(i)} y={toY(d.score) - 10} textAnchor="middle" fontSize="10" fontWeight="bold" fill="#1e3a6e">{d.score}</text>
               <text x={toX(i)} y={padT + chartH + 16} textAnchor="middle" fontSize="9" fill="#94a3b8">{d.date}</text>
             </g>
           ))}

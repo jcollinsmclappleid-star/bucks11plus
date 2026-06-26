@@ -36,8 +36,8 @@ function RotationDot({ pos }: { pos: "tr" | "br" | "bl" | "tl" }) {
   const [cx, cy] = coords[pos];
   return (
     <svg width={44} height={44} viewBox="0 0 44 44">
-      <rect x="3" y="3" width="38" height="38" fill="none" stroke="#0d1f30" strokeWidth="2" rx="3" />
-      <circle cx={cx} cy={cy} r="5" fill="#0d1f30" />
+      <rect x="3" y="3" width="38" height="38" fill="none" stroke="#1e3a6e" strokeWidth="2" rx="3" />
+      <circle cx={cx} cy={cy} r="5" fill="#1e3a6e" />
     </svg>
   );
 }
@@ -90,7 +90,7 @@ function MatrixCell({ sides, filled, empty }: { sides: number; filled: boolean; 
   }
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-      <polygon points={points.join(" ")} fill={filled ? "#0d1f30" : "none"} stroke="#0d1f30" strokeWidth="2" strokeLinejoin="round" />
+      <polygon points={points.join(" ")} fill={filled ? "#1e3a6e" : "none"} stroke="#1e3a6e" strokeWidth="2" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -105,7 +105,7 @@ function MatrixOptionShape({ sides, filled }: { sides: number; filled: boolean }
   }
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-      <polygon points={points.join(" ")} fill={filled ? "#0d1f30" : "none"} stroke="#0d1f30" strokeWidth="2" strokeLinejoin="round" />
+      <polygon points={points.join(" ")} fill={filled ? "#1e3a6e" : "none"} stroke="#1e3a6e" strokeWidth="2" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -146,13 +146,13 @@ function ReflectionFlag({ mirrored }: { mirrored: boolean }) {
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
       {mirrored ? (
         <>
-          <line x1="30" y1="6" x2="30" y2="42" stroke="#0d1f30" strokeWidth="3" strokeLinecap="round" />
-          <polygon points="30,8 10,15 30,22" fill="#0d1f30" />
+          <line x1="30" y1="6" x2="30" y2="42" stroke="#1e3a6e" strokeWidth="3" strokeLinecap="round" />
+          <polygon points="30,8 10,15 30,22" fill="#1e3a6e" />
         </>
       ) : (
         <>
-          <line x1="18" y1="6" x2="18" y2="42" stroke="#0d1f30" strokeWidth="3" strokeLinecap="round" />
-          <polygon points="18,8 38,15 18,22" fill="#0d1f30" />
+          <line x1="18" y1="6" x2="18" y2="42" stroke="#1e3a6e" strokeWidth="3" strokeLinecap="round" />
+          <polygon points="18,8 38,15 18,22" fill="#1e3a6e" />
         </>
       )}
     </svg>
@@ -183,13 +183,13 @@ function NvrReflection() {
           <div key={i} className="flex flex-col items-center">
             {i === 1 ? (
               <svg width={48} height={48} viewBox="0 0 48 48">
-                <line x1="24" y1="6" x2="24" y2="42" stroke="#0d1f30" strokeWidth="3" strokeLinecap="round" />
-                <polygon points="24,8 44,15 24,22" fill="#0d1f30" />
+                <line x1="24" y1="6" x2="24" y2="42" stroke="#1e3a6e" strokeWidth="3" strokeLinecap="round" />
+                <polygon points="24,8 44,15 24,22" fill="#1e3a6e" />
               </svg>
             ) : i === 3 ? (
               <svg width={48} height={48} viewBox="0 0 48 48">
-                <line x1="24" y1="6" x2="24" y2="42" stroke="#0d1f30" strokeWidth="3" strokeLinecap="round" />
-                <polygon points="24,28 4,35 24,42" fill="#0d1f30" />
+                <line x1="24" y1="6" x2="24" y2="42" stroke="#1e3a6e" strokeWidth="3" strokeLinecap="round" />
+                <polygon points="24,28 4,35 24,42" fill="#1e3a6e" />
               </svg>
             ) : (
               <ReflectionFlag mirrored={m} />
@@ -305,7 +305,7 @@ const QUESTIONS2: Q2[] = [
 ];
 
 function QuestionCard2({ q, showAnswer }: { q: Q2; showAnswer: boolean }) {
-  const colour = SUBJECT_COLOUR2[q.subject] || "#0d1f30";
+  const colour = SUBJECT_COLOUR2[q.subject] || "#1e3a6e";
   return (
     <div className="rounded-xl border border-slate-200 overflow-hidden mb-4 break-inside-avoid">
       <div className="px-4 py-2 flex items-center justify-between" style={{ backgroundColor: colour + "15" }}>
@@ -354,7 +354,7 @@ export default function PracticePaperPrint2() {
           .page-break { page-break-after: always; }
           nav, footer, header, .no-print { display: none !important; }
           a { color: inherit; text-decoration: none; }
-          .print-link { text-decoration: underline; color: #0d1f30 !important; }
+          .print-link { text-decoration: underline; color: #1e3a6e !important; }
         }
         @media screen {
           .practice-print { padding: 2rem; }
@@ -365,28 +365,28 @@ export default function PracticePaperPrint2() {
       {/* COVER */}
       <div className="page-break">
         <div className="flex flex-col items-center justify-center min-h-[90vh] text-center relative">
-          <div className="absolute top-0 left-0 right-0 h-2 bg-[#0d1f30]" />
-          <div className="absolute bottom-0 left-0 right-0 h-1 bg-[#0d1f30]/20" />
+          <div className="absolute top-0 left-0 right-0 h-2 bg-[#1e3a6e]" />
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-[#1e3a6e]/20" />
 
           <div className="mb-8">
             <div className="inline-flex items-center gap-3 mb-6">
               <svg viewBox="0 0 48 48" className="w-12 h-12" aria-hidden="true">
-                <circle cx="24" cy="24" r="22" fill="none" stroke="#0d1f30" strokeWidth="2" />
-                <circle cx="24" cy="24" r="14" fill="none" stroke="#0d1f30" strokeWidth="1" opacity="0.3" />
-                <circle cx="24" cy="24" r="4" fill="#0d1f30" />
+                <circle cx="24" cy="24" r="22" fill="none" stroke="#1e3a6e" strokeWidth="2" />
+                <circle cx="24" cy="24" r="14" fill="none" stroke="#1e3a6e" strokeWidth="1" opacity="0.3" />
+                <circle cx="24" cy="24" r="4" fill="#1e3a6e" />
               </svg>
               <div className="text-left">
-                <span className="block text-xl font-serif font-bold text-[#0d1f30]">Bucks 11 Plus Tests</span>
+                <span className="block text-xl font-serif font-bold text-[#1e3a6e]">Bucks 11 Plus Tests</span>
                 <span className="block text-xs text-slate-500 tracking-widest uppercase">bucks11plustest.co.uk</span>
               </div>
             </div>
           </div>
 
           <div className="max-w-lg mx-auto">
-            <div className="inline-block border border-[#0d1f30]/20 rounded-full px-4 py-1 text-xs font-bold uppercase tracking-widest text-[#0d1f30]/60 mb-6">
+            <div className="inline-block border border-[#1e3a6e]/20 rounded-full px-4 py-1 text-xs font-bold uppercase tracking-widest text-[#1e3a6e]/60 mb-6">
               Free Practice Paper 2 · 2026 Edition
             </div>
-            <h1 className="text-5xl font-serif font-bold text-[#0d1f30] mb-4 leading-tight">
+            <h1 className="text-5xl font-serif font-bold text-[#1e3a6e] mb-4 leading-tight">
               Bucks 11+ Free Practice Paper 2
             </h1>
             <p className="text-lg text-slate-500 leading-relaxed mb-8">
@@ -404,7 +404,7 @@ export default function PracticePaperPrint2() {
                   <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: colour }} />
                   <div>
                     <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{label}</div>
-                    <div className="font-bold text-[#0d1f30] text-sm">3 questions</div>
+                    <div className="font-bold text-[#1e3a6e] text-sm">3 questions</div>
                   </div>
                 </div>
               ))}
@@ -426,8 +426,8 @@ export default function PracticePaperPrint2() {
 
       {/* HOW TO USE */}
       <div className="page-break">
-        <div className="border-l-4 border-[#0d1f30] pl-4 mb-6">
-          <h2 className="text-2xl font-serif font-bold text-[#0d1f30]">How to use this paper</h2>
+        <div className="border-l-4 border-[#1e3a6e] pl-4 mb-6">
+          <h2 className="text-2xl font-serif font-bold text-[#1e3a6e]">How to use this paper</h2>
           <p className="text-sm text-slate-500 mt-1">Tips for getting the most from this practice session</p>
         </div>
 
@@ -439,9 +439,9 @@ export default function PracticePaperPrint2() {
             { n: "4", title: "Compare with Paper 1", body: "If your child has already completed Paper 1, compare results across subjects. A pattern that shows up in both papers is more reliable than a result from just one session." },
           ].map((step) => (
             <div key={step.n} className="rounded-lg border border-slate-200 p-4 flex gap-3">
-              <div className="shrink-0 w-7 h-7 rounded-full bg-[#0d1f30]/10 flex items-center justify-center text-xs font-bold text-[#0d1f30]">{step.n}</div>
+              <div className="shrink-0 w-7 h-7 rounded-full bg-[#1e3a6e]/10 flex items-center justify-center text-xs font-bold text-[#1e3a6e]">{step.n}</div>
               <div>
-                <div className="font-bold text-[#0d1f30] mb-1">{step.title}</div>
+                <div className="font-bold text-[#1e3a6e] mb-1">{step.title}</div>
                 <p>{step.body}</p>
               </div>
             </div>
@@ -449,13 +449,13 @@ export default function PracticePaperPrint2() {
         </div>
 
         <div className="rounded-xl border border-slate-200 bg-slate-50 p-5">
-          <p className="text-xs font-bold uppercase tracking-widest text-[#0d1f30]/50 mb-2">Looking for a more detailed picture?</p>
+          <p className="text-xs font-bold uppercase tracking-widest text-[#1e3a6e]/50 mb-2">Looking for a more detailed picture?</p>
           <p className="text-sm text-slate-600 mb-3">
             Our free 12-question Readiness Check is timed, marked instantly, and returns a practice score on the 121 scale — plus your child's three areas for improvement.
           </p>
           <a
             href="https://bucks11plustest.co.uk/free-diagnostic"
-            className="inline-block bg-[#0d1f30] text-white text-sm font-bold px-5 py-2.5 rounded-lg print-link"
+            className="inline-block bg-[#1e3a6e] text-white text-sm font-bold px-5 py-2.5 rounded-lg print-link"
           >
             Take the Free Readiness Check →
           </a>
@@ -465,8 +465,8 @@ export default function PracticePaperPrint2() {
 
       {/* QUESTIONS */}
       <div className="page-break">
-        <div className="border-l-4 border-[#0d1f30] pl-4 mb-6">
-          <h2 className="text-2xl font-serif font-bold text-[#0d1f30]">Questions</h2>
+        <div className="border-l-4 border-[#1e3a6e] pl-4 mb-6">
+          <h2 className="text-2xl font-serif font-bold text-[#1e3a6e]">Questions</h2>
           <p className="text-sm text-slate-500 mt-1">12 questions &nbsp;·&nbsp; Suggested 20 minutes &nbsp;·&nbsp; Circle or write your answers on rough paper</p>
         </div>
 
@@ -481,7 +481,7 @@ export default function PracticePaperPrint2() {
             </span>
           </div>
           <div className="px-5 py-4">
-            <h3 className="font-serif font-bold text-base text-[#0d1f30] mb-3">{PASSAGE_AURORA.title}</h3>
+            <h3 className="font-serif font-bold text-base text-[#1e3a6e] mb-3">{PASSAGE_AURORA.title}</h3>
             <div className="text-[13px] text-slate-700 leading-[1.8] whitespace-pre-line bg-slate-50 rounded-lg border border-slate-100 px-4 py-3">
               {PASSAGE_AURORA.text}
             </div>
@@ -496,12 +496,12 @@ export default function PracticePaperPrint2() {
       {/* ANSWER KEY */}
       <div className="page-break">
         <div className="border-l-4 border-emerald-500 pl-4 mb-6">
-          <h2 className="text-2xl font-serif font-bold text-[#0d1f30]">Answer key &amp; explanations</h2>
+          <h2 className="text-2xl font-serif font-bold text-[#1e3a6e]">Answer key &amp; explanations</h2>
           <p className="text-sm text-slate-500 mt-1">Read each explanation with your child — this is where the learning happens</p>
         </div>
 
         {QUESTIONS2.map((q) => {
-          const colour = SUBJECT_COLOUR2[q.subject] || "#0d1f30";
+          const colour = SUBJECT_COLOUR2[q.subject] || "#1e3a6e";
           return (
             <div key={q.n} className="border border-slate-200 rounded-xl p-4 mb-3 break-inside-avoid">
               <div className="flex items-start gap-3 mb-2">
@@ -526,34 +526,34 @@ export default function PracticePaperPrint2() {
 
       {/* WHERE TO GO NEXT */}
       <div>
-        <div className="border-l-4 border-[#0d1f30] pl-4 mb-6">
-          <h2 className="text-2xl font-serif font-bold text-[#0d1f30]">Where to go from here</h2>
+        <div className="border-l-4 border-[#1e3a6e] pl-4 mb-6">
+          <h2 className="text-2xl font-serif font-bold text-[#1e3a6e]">Where to go from here</h2>
           <p className="text-sm text-slate-500 mt-1">Suggestions based on how this paper felt</p>
         </div>
 
         <div className="space-y-3 mb-8">
           <div className="rounded-xl border-l-4 border-emerald-500 border border-slate-200 p-4">
-            <div className="font-bold text-[#0d1f30] mb-1 text-sm">Most questions felt manageable (9–12 right)</div>
+            <div className="font-bold text-[#1e3a6e] mb-1 text-sm">Most questions felt manageable (9–12 right)</div>
             <p className="text-sm text-slate-600">A good starting point. The next step is tackling more challenging question types and practising under stricter timed conditions — that's where preparation tends to make the biggest difference.</p>
           </div>
           <div className="rounded-xl border-l-4 border-amber-400 border border-slate-200 p-4">
-            <div className="font-bold text-[#0d1f30] mb-1 text-sm">A mixed result (5–8 right)</div>
+            <div className="font-bold text-[#1e3a6e] mb-1 text-sm">A mixed result (5–8 right)</div>
             <p className="text-sm text-slate-600">Notice which subject area felt hardest and compare with Paper 1. A consistent weak area across both papers is a reliable signal of where to focus practice time.</p>
           </div>
           <div className="rounded-xl border-l-4 border-slate-300 border border-slate-200 p-4">
-            <div className="font-bold text-[#0d1f30] mb-1 text-sm">Found it quite difficult (0–4 right)</div>
+            <div className="font-bold text-[#1e3a6e] mb-1 text-sm">Found it quite difficult (0–4 right)</div>
             <p className="text-sm text-slate-600">These questions reflect the difficulty level typical of this type of preparation material — harder than most school work. Reading the explanations carefully is the most useful thing to do at this stage. Understanding why an answer is correct matters more than the mark.</p>
           </div>
         </div>
 
         <div className="rounded-xl border border-slate-200 p-6 bg-slate-50 text-center">
-          <h3 className="text-xl font-serif font-bold text-[#0d1f30] mb-2">Get an indicative picture of readiness</h3>
+          <h3 className="text-xl font-serif font-bold text-[#1e3a6e] mb-2">Get an indicative picture of readiness</h3>
           <p className="text-sm text-slate-500 mb-4 max-w-md mx-auto">
             The free Readiness Check is timed, instantly marked, and produces a practice score on the 121 scale — along with the three areas most worth focusing on next.
           </p>
           <a
             href="https://bucks11plustest.co.uk/free-diagnostic"
-            className="inline-block bg-[#0d1f30] text-white text-sm font-bold px-6 py-3 rounded-lg print-link"
+            className="inline-block bg-[#1e3a6e] text-white text-sm font-bold px-6 py-3 rounded-lg print-link"
           >
             Take the Free Readiness Check
           </a>

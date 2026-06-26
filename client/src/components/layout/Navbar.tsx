@@ -92,7 +92,7 @@ export default function Navbar() {
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 group shrink-0" aria-label="Bucks 11 Plus Tests — Home">
-          <div className="w-14 h-14 rounded-xl overflow-hidden shrink-0 shadow-md relative bg-[#0d1f30]">
+          <div className="w-14 h-14 rounded-xl overflow-hidden shrink-0 shadow-md relative bg-[#1e3a6e]">
             <picture>
               <source srcSet="/logo-shield-sm.webp" type="image/webp" />
               <img
@@ -199,7 +199,7 @@ export default function Navbar() {
               <div className="flex flex-col h-full">
                 <div className="p-4 border-b border-border/40">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl overflow-hidden shrink-0 shadow-md relative bg-[#0d1f30]">
+                    <div className="w-12 h-12 rounded-xl overflow-hidden shrink-0 shadow-md relative bg-[#1e3a6e]">
                       <picture>
                         <source srcSet="/logo-shield-sm.webp" type="image/webp" />
                         <img src="/logo-shield-sm.png" alt="Bucks 11 Plus Tests" width={300} height={200} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[175%]" />

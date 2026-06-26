@@ -105,7 +105,7 @@ export default function ParentGuide() {
         schema={schema}
       />
 
-      <section className="relative overflow-hidden pt-20 pb-24 md:pt-28 md:pb-36 border-b border-border/50" style={{ backgroundColor: '#0d1f30' }}>
+      <section className="relative overflow-hidden pt-20 pb-24 md:pt-28 md:pb-36 border-b border-border/50" style={{ backgroundColor: '#1e3a6e' }}>
         <div className="absolute inset-0 z-0 hero-texture"></div>
         <div className="absolute inset-0 z-0 hero-vignette"></div>
         <div className="absolute inset-0 z-0" style={{ background: 'radial-gradient(ellipse 50% 40% at 50% 35%, rgba(255,255,255,0.04) 0%, transparent 100%)' }}></div>
