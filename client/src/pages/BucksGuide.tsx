@@ -232,7 +232,7 @@ export default function BucksGuide() {
               </p>
             </div>
             <Button asChild variant="outline" className="border-primary/20 font-semibold text-primary">
-              <Link href="/pricing">View full access plans</Link>
+              <Link href="/platform">Browse full platform suite</Link>
             </Button>
           </div>
           <div className="grid gap-6">

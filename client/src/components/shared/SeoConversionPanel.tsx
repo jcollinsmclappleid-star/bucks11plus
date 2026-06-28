@@ -30,13 +30,13 @@ type SeoConversionPanelProps = {
 const variantCopy: Record<PanelVariant, Required<Omit<SeoConversionPanelProps, "variant">>> = {
   guide: {
     eyebrow: "Built for Bucks parents",
-    heading: "Do not just read about the 11+. See where your child stands.",
+    heading: "Guides explain the test. The platform prepares your child for it.",
     subhead:
-      "The free readiness check shows a practice score on the 121 scale, weak sections, pace risk, and what to fix first before you spend on tutors or more books.",
-    primaryLabel: "Start the free readiness check",
-    primaryHref: "/free-diagnostic",
-    secondaryLabel: "See plans",
-    secondaryHref: "/pricing",
+      "2,500+ GL-style questions, full mock exams, unlimited practice papers, readiness checks on the 121 scale, and parent dashboards that show exactly what to practise next.",
+    primaryLabel: "See what's in the platform",
+    primaryHref: "/platform",
+    secondaryLabel: "Try free practice test",
+    secondaryHref: "/free-diagnostic",
   },
   registration: {
     eyebrow: "After registration, the clock is running",
@@ -69,14 +69,14 @@ const variantCopy: Record<PanelVariant, Required<Omit<SeoConversionPanelProps, "
     secondaryHref: "/pricing",
   },
   learn: {
-    eyebrow: "Free guides are useful. Data is better.",
-    heading: "Use the guide, then check the child in front of you.",
+    eyebrow: "More than free guides",
+    heading: "Guides explain the test. Bucks Plus Edge prepares your child for it.",
     subhead:
-      "Every child has a different 11+ profile. Our platform turns general advice into a concrete readiness score, weak-area map, and next practice priorities.",
-    primaryLabel: "Take the free check",
-    primaryHref: "/free-diagnostic",
-    secondaryLabel: "Browse pricing",
-    secondaryHref: "/pricing",
+      "Parent dashboards, 2,500+ GL-style questions, unlimited practice papers, mock exams, and readiness checks scored on the 121 benchmark — built for Buckinghamshire families.",
+    primaryLabel: "Browse the full platform",
+    primaryHref: "/platform",
+    secondaryLabel: "Try free practice test",
+    secondaryHref: "/free-diagnostic",
   },
   general: {
     eyebrow: "Bucks-specific preparation",

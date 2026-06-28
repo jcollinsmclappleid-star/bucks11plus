@@ -39,8 +39,8 @@ export function SubscribeCTA() {
             variant="cta"
             data-testid="button-subscribe-cta-pricing"
           >
-            <Link href="/pricing">
-              See Plans &amp; Start Today <ArrowRight className="ml-2 h-4 w-4" />
+            <Link href="/platform">
+              See what's in the platform <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
           <Button
@@ -49,7 +49,7 @@ export function SubscribeCTA() {
             className="h-11 px-6 border-white/25 text-white bg-transparent hover:bg-white/10 hover:text-white hover:border-white/40"
             data-testid="button-subscribe-cta-diagnostic"
           >
-            <Link href="/free-diagnostic">Try Free Readiness Check First</Link>
+            <Link href="/free-diagnostic">Try Free Practice Test First</Link>
           </Button>
           <span className="text-white/45 text-xs sm:ml-1">From £35/month · interactive Bucks 11+ practice · cancel anytime</span>
         </div>

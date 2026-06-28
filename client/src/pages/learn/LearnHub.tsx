@@ -3,6 +3,7 @@ import { learnArticles, LEARN_CATEGORIES, getArticlesByCategory } from "@/data/l
 import { Seo } from "@/components/shared/Seo";
 import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
 import { SeoConversionPanel } from "@/components/shared/SeoConversionPanel";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
 
 const CATEGORY_ICONS: Record<string, string> = {
   "Understanding the Test": "📋",
@@ -99,6 +100,8 @@ export default function LearnHub() {
             );
           })}
         </div>
+
+        <GuideConversionBlock className="mt-14" />
 
         <SubscribeCTA />
       </div>

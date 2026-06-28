@@ -5,6 +5,7 @@ import NotFound from "@/pages/not-found";
 import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
 import { SeoConversionPanel } from "@/components/shared/SeoConversionPanel";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
 
 export default function LearnArticle() {
   const { slug } = useParams<{ slug: string }>();
@@ -143,6 +144,8 @@ export default function LearnArticle() {
             </div>
           </div>
         )}
+
+        <GuideConversionBlock className="mt-10" />
 
         <SubscribeCTA />
 

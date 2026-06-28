@@ -1,119 +1,58 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Target, Zap, ChevronsDown } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { ArrowRight, Zap, ChevronsDown } from "lucide-react";
 import { SampleQuestionsCarousel } from "./SampleQuestionsCarousel";
+import { DashboardPreviewForecast } from "./DashboardPreview";
+import { PlatformSuitePreview } from "./PlatformSuitePreview";
 
-type SubjectColor = "violet" | "emerald" | "blue" | "amber";
-
-const SUBJECT_BAR_COLORS: Record<SubjectColor, string> = {
-  violet: "bg-violet-500",
-  emerald: "bg-emerald-500",
-  blue: "bg-blue-500",
-  amber: "bg-amber-500",
+type GuideConversionBlockProps = {
+  className?: string;
+  /** Hide the full platform suite (e.g. when shown elsewhere on the page). */
+  hideSuite?: boolean;
 };
 
-function ScoreMockup() {
-  const subjects = [
-    { label: "Verbal Reasoning", score: 89, color: "violet" as SubjectColor },
-    { label: "Non-Verbal Reasoning", score: 72, color: "blue" as SubjectColor },
-    { label: "Mathematics", score: 78, color: "emerald" as SubjectColor },
-    { label: "English Comprehension", score: 85, color: "amber" as SubjectColor },
-  ];
-
+export function GuideConversionBlock({ className = "", hideSuite = false }: GuideConversionBlockProps) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white shadow-xl overflow-hidden">
-      <div className="bg-primary px-6 py-5 flex items-center justify-between">
-        <div>
-          <p className="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-1">
-            Sample Readiness Report
-          </p>
-          <h4 className="text-xl font-bold font-serif text-white leading-snug">
-            Where Does Your Child Sit?
-          </h4>
-        </div>
-        <div className="h-11 w-11 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
-          <Target className="h-6 w-6 text-white" />
-        </div>
-      </div>
-
-      <div className="px-6 pt-6 pb-5">
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-5">
-          <div>
-            <p className="text-xs text-muted-foreground mb-1">Indicative readiness score</p>
-            <div className="flex items-baseline gap-2">
-              <span className="text-6xl font-black text-primary leading-none">116</span>
-              <span className="text-xl text-slate-400 font-medium">/130</span>
-            </div>
-          </div>
-          <div className="flex flex-col items-start sm:items-end gap-1">
-            <div className="inline-flex items-center gap-2 rounded-full bg-amber-50 border border-amber-200 px-3 py-1.5">
-              <div className="h-2 w-2 rounded-full bg-amber-400 flex-shrink-0" />
-              <span className="text-xs font-semibold text-amber-800">5 points below qualifying</span>
-            </div>
-            <p className="text-[11px] text-muted-foreground">Qualifying threshold: 121</p>
-          </div>
-        </div>
-
-        <div className="mb-1">
-          <div className="h-3.5 rounded-full bg-slate-100 overflow-hidden relative">
-            <div className="h-full rounded-full bg-primary" style={{ width: "89%" }} />
-            <div className="absolute top-0 bottom-0 w-0.5 bg-amber-400" style={{ left: "93.1%" }} />
-          </div>
-          <div className="flex justify-between text-[10px] text-muted-foreground mt-1.5">
-            <span>70</span>
-            <span className="text-amber-600 font-semibold">↑ 121 qualifying</span>
-            <span>140</span>
-          </div>
-        </div>
-
-        <div className="mt-6 space-y-3">
-          <p className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-            Subject Breakdown
-          </p>
-          {subjects.map((sub) => (
-            <div key={sub.label}>
-              <div className="flex justify-between items-center mb-1.5">
-                <span className="text-xs font-medium text-slate-700">{sub.label}</span>
-                <span className="text-xs font-bold text-slate-800">{sub.score}%</span>
-              </div>
-              <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
-                <div
-                  className={cn("h-full rounded-full", SUBJECT_BAR_COLORS[sub.color])}
-                  style={{ width: `${sub.score}%` }}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-5 rounded-xl bg-slate-50 border border-slate-200 px-4 py-3">
-          <p className="text-xs leading-relaxed text-slate-600">
-            <span className="font-semibold text-slate-800">Recommended focus: </span>
-            Non-Verbal Reasoning is the biggest drag on overall score. Targeted practice
-            across matrix patterns and classification is the fastest route to qualifying.
-          </p>
-        </div>
-        <p className="text-[10px] text-muted-foreground/70 italic text-center mt-3">
-          Illustrative preview · Indicative readiness, not the official GL Assessment standardised score
+    <div className={`not-prose space-y-8 ${className}`} data-testid="guide-conversion-block">
+      <div className="text-center max-w-2xl mx-auto">
+        <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary/60 mb-2">The preparation platform</p>
+        <h3 className="text-2xl md:text-3xl font-bold font-serif text-primary leading-snug">
+          Guides explain the test. Bucks Plus Edge prepares your child for it.
+        </h3>
+        <p className="mt-3 text-sm text-slate-600 leading-relaxed">
+          Parent dashboards, 2,500+ GL-style questions, unlimited practice papers, full mock exams, and readiness checks scored on the 121 benchmark — built specifically for Buckinghamshire.
         </p>
       </div>
-    </div>
-  );
-}
 
-export function GuideConversionBlock({ className = "" }: { className?: string }) {
-  return (
-    <div className={`not-prose space-y-7 ${className}`}>
-      <ScoreMockup />
-
-      <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-        <ChevronsDown className="h-4 w-4 text-primary/60" />
-        <span>Explore the interactive platform</span>
-        <ChevronsDown className="h-4 w-4 text-primary/60" />
+      <div className="rounded-2xl border border-slate-200 bg-white p-4 md:p-5 shadow-lg">
+        <p className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3 text-center">Parent dashboard preview</p>
+        <DashboardPreviewForecast />
+        <p className="text-[10px] text-muted-foreground italic text-center mt-3">
+          Illustrative preview · Indicative readiness score, not an official GL result
+        </p>
       </div>
 
-      <SampleQuestionsCarousel />
+      <div>
+        <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground mb-4">
+          <ChevronsDown className="h-4 w-4 text-primary/60" />
+          <span>Swipe to see real GL-style practice questions</span>
+          <ChevronsDown className="h-4 w-4 text-primary/60" />
+        </div>
+        <SampleQuestionsCarousel />
+      </div>
+
+      {!hideSuite && (
+        <div>
+          <div className="mb-4 text-center">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary/60 mb-1">Full platform suite</p>
+            <h4 className="text-xl font-bold font-serif text-primary">Readiness checks, practice papers &amp; mock exams</h4>
+            <p className="text-sm text-slate-600 mt-2 max-w-xl mx-auto">
+              Everything subscribers access — browse the complete library below before you subscribe.
+            </p>
+          </div>
+          <PlatformSuitePreview />
+        </div>
+      )}
 
       <div className="rounded-2xl bg-primary overflow-hidden shadow-xl">
         <div className="px-7 py-8 md:px-9 md:py-9">
@@ -124,29 +63,17 @@ export function GuideConversionBlock({ className = "" }: { className?: string })
             </span>
           </div>
           <h3 className="text-2xl md:text-3xl font-bold font-serif text-white mb-3 leading-snug">
-            The Complete Interactive Preparation Platform
+            Turn advice into measurable progress
           </h3>
-          <p className="text-white/80 text-sm leading-relaxed mb-3 max-w-2xl">
-            The children who qualify for Buckinghamshire grammar schools don't get lucky — they
-            build the{" "}
-            <strong className="text-white">speed, accuracy, and stamina</strong> that the real test
-            demands. That requires more than a workbook. It requires a readiness-led platform that
-            shows exactly where the gaps are and targets practice precisely.
-          </p>
-          <p className="text-white/70 text-sm leading-relaxed mb-7 max-w-2xl">
-            Bucks Plus Edge includes 2,500+ GL-style questions, full timed readiness checks scored
-            against the 121 benchmark, all Hard drills, mock exam simulations, and a detailed parent
-            analytics dashboard — <strong className="text-white">£35/month</strong> or{" "}
-            <strong className="text-white">£279/year</strong>.
+          <p className="text-white/80 text-sm leading-relaxed mb-7 max-w-2xl">
+            The children who qualify build <strong className="text-white">speed, accuracy, and stamina</strong> under timed GL-style conditions.
+            Bucks Plus Edge includes 2,500+ questions, full readiness checks, mock exams, targeted drills, and parent analytics —{" "}
+            <strong className="text-white">£35/month</strong> or <strong className="text-white">£279/year</strong>.
           </p>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 flex-wrap">
-            <Button
-              asChild
-              variant="cta"
-              data-testid="button-guide-conversion-subscribe"
-            >
+            <Button asChild variant="cta" data-testid="button-guide-conversion-subscribe">
               <Link href="/pricing">
-                See Plans & Start Today <ArrowRight className="ml-2 h-4 w-4" />
+                See Plans &amp; Start Today <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
             <Button
@@ -155,9 +82,16 @@ export function GuideConversionBlock({ className = "" }: { className?: string })
               className="h-11 px-6 border-white/25 text-white bg-transparent hover:bg-white/10 hover:text-white hover:border-white/40"
               data-testid="button-guide-conversion-diagnostic"
             >
-              <Link href="/free-diagnostic">Take the Free Readiness Check First</Link>
+              <Link href="/free-diagnostic">Try Free Practice Test</Link>
             </Button>
-            <span className="text-white/40 text-xs sm:ml-1">£35/month or £279/year · Cancel anytime</span>
+            <Button
+              variant="outline"
+              asChild
+              className="h-11 px-6 border-white/25 text-white bg-transparent hover:bg-white/10 hover:text-white hover:border-white/40"
+              data-testid="button-guide-conversion-platform"
+            >
+              <Link href="/platform">Browse full platform suite</Link>
+            </Button>
           </div>
         </div>
       </div>
