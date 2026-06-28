@@ -151,7 +151,7 @@ export default function WhyChoosePlatform() {
       />
 
       {/* ── HERO ── */}
-      <section className="relative overflow-hidden pt-12 pb-16 md:pt-16 md:pb-20 border-b border-border/50" style={{ backgroundColor: '#1e3a6e' }} data-testid="section-hero">
+      <section className="relative overflow-hidden bg-primary pt-12 pb-16 md:pt-16 md:pb-20 border-b border-border/50" data-testid="section-hero">
         <div className="absolute inset-0 z-0 hero-texture" />
         <div className="absolute inset-0 z-0 hero-vignette" />
         <div className="container mx-auto max-w-4xl px-4 relative z-10 text-center">
@@ -168,7 +168,7 @@ export default function WhyChoosePlatform() {
             Practice papers are great for building exam stamina and familiarity. What they can't do is tell you which sub-topics are costing marks, why answers were wrong, or what to prioritise next. That's what the platform does.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button size="lg" className="h-12 px-8 bg-amber-400 text-amber-950 hover:bg-amber-300 font-bold border-none" asChild data-testid="button-hero-free">
+            <Button variant="cta" size="lg"  asChild data-testid="button-hero-free">
               <Link href="/free-diagnostic">Free Readiness Check <ArrowRight className="ml-2 h-5 w-5" /></Link>
             </Button>
             <Button size="lg" variant="outline" className="h-12 px-6 border-white/20 text-white hover:bg-white/10 font-semibold" asChild data-testid="button-hero-platform">
@@ -229,7 +229,7 @@ export default function WhyChoosePlatform() {
               <p className="text-sm font-bold text-amber-900 mb-1">Designed for 10-year-olds, not just their parents.</p>
               <p className="text-sm text-amber-700 leading-relaxed">Your child sees subject names in language they understand — 'Shape puzzles', 'Word puzzles' — receives warm encouragement after every drill, and can jump straight back in. Preparation that builds confidence, not anxiety.</p>
             </div>
-            <Button asChild size="sm" className="bg-amber-500 hover:bg-amber-400 text-white border-none shrink-0" data-testid="button-child-callout-cta">
+            <Button asChild size="sm" variant="cta" className="shrink-0" data-testid="button-child-callout-cta">
               <Link href="/free-diagnostic">Try it free</Link>
             </Button>
           </div>
@@ -354,7 +354,7 @@ export default function WhyChoosePlatform() {
           <h2 className="text-2xl md:text-3xl font-bold text-white font-serif mb-3">See the difference for yourself — it's free.</h2>
           <p className="text-white/60 text-base mb-8 max-w-md mx-auto">No account needed. 8 minutes. Get a readiness forecast, a band, and 3 specific things to fix first.</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button size="lg" className="h-12 px-8 font-bold bg-amber-400 text-amber-950 hover:bg-amber-300 border-none" asChild data-testid="button-cta-final">
+            <Button variant="cta" size="lg"  asChild data-testid="button-cta-final">
               <Link href="/free-diagnostic"><ArrowRight className="mr-2 h-5 w-5" />Start Free Readiness Check</Link>
             </Button>
             <Button variant="outline" size="lg" className="h-12 px-6 font-semibold border-white/25 text-white hover:bg-white/10" asChild data-testid="button-cta-pricing">

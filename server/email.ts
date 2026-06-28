@@ -2,6 +2,7 @@ import { db } from "./db";
 import { users, emailEvents } from "@shared/schema";
 import { eq, and, isNull, lt, sql } from "drizzle-orm";
 import { storage } from "./storage";
+import { getBaseUrl, RESEND_FROM_EMAIL, SUPPORT_EMAIL } from "./contactConfig";
 
 /**
  * Mask an email address for log output. Keeps just enough information to
@@ -33,7 +34,6 @@ export function redactEmailsInText(value: string | null | undefined): string {
 }
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const RESEND_FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "Bucks 11 Plus Tests <noreply@bucks11plustest.co.uk>";
 // EMAIL_SECRET protects HMAC-derived tokens for unsubscribe links and email
 // verification. In production we refuse to boot without it so tokens are never
 // predictable. In dev we fall back to a fixed string so local testing works.
@@ -53,14 +53,6 @@ const EMAIL_SECRET = (() => {
   return "dev-only-email-secret-do-not-use-in-prod";
 })();
 
-function getBaseUrl(): string {
-  if (process.env.BASE_URL) return process.env.BASE_URL;
-  const domains = process.env.REPLIT_DOMAINS || "";
-  const parts = domains.split(",").map(d => d.trim()).filter(Boolean);
-  const customDomain = parts.find(d => d.includes(".co.uk") || (!d.includes("replit.app") && !d.includes("replit.dev")));
-  if (customDomain) return `https://${customDomain}`;
-  return "https://bucks11plustest.co.uk";
-}
 const BASE_URL = getBaseUrl();
 
 async function generateUnsubscribeToken(userId: string): Promise<string> {
@@ -141,7 +133,7 @@ export async function sendAdminNotificationEmail(
   event: "payment",
   data: { userEmail: string; tier: string; amount?: string; timestamp: Date },
 ): Promise<void> {
-  const adminEmail = "admin@bucks11plus.co.uk";
+  const adminEmail = SUPPORT_EMAIL;
   const subject = `New Payment — ${maskEmail(data.userEmail)}`;
 
   const html = `<!DOCTYPE html>
@@ -260,7 +252,7 @@ export async function sendGuideDownloadAdminEmail(
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
-      body: JSON.stringify({ from: RESEND_FROM_EMAIL, to: ["support@bucks11plustest.co.uk"], subject, html }),
+      body: JSON.stringify({ from: RESEND_FROM_EMAIL, to: [SUPPORT_EMAIL], subject, html }),
     });
     if (!res.ok) console.error(`[GuideEmail] Send failed: ${res.status}`);
     else console.log(`[GuideEmail] Admin notification sent for ${maskEmail(email)}`);
@@ -304,7 +296,7 @@ export async function sendPurchaseNotificationEmail(
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
-      body: JSON.stringify({ from: RESEND_FROM_EMAIL, to: ["support@bucks11plustest.co.uk"], subject, html }),
+      body: JSON.stringify({ from: RESEND_FROM_EMAIL, to: [SUPPORT_EMAIL], subject, html }),
     });
     if (!res.ok) console.error(`[PurchaseEmail] Send failed: ${res.status}`);
     else console.log(`[PurchaseEmail] Admin notification sent for ${maskEmail(email)}`);
@@ -352,7 +344,7 @@ export async function sendSubscriptionCancelledAdminEmail(
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
-      body: JSON.stringify({ from: RESEND_FROM_EMAIL, to: ["support@bucks11plustest.co.uk"], subject, html }),
+      body: JSON.stringify({ from: RESEND_FROM_EMAIL, to: [SUPPORT_EMAIL], subject, html }),
     });
     if (!res.ok) console.error(`[CancelEmail] Send failed: ${res.status}`);
     else console.log(`[CancelEmail] Admin notification sent for ${maskEmail(email)}`);

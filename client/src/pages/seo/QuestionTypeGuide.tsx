@@ -4,6 +4,7 @@ import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
+import { SeoConversionPanel } from "@/components/shared/SeoConversionPanel";
 import { getQuestionType, QUESTION_TYPES } from "../../data/question-types";
 import NotFound from "../not-found";
 
@@ -62,6 +63,11 @@ export default function QuestionTypeGuide({ slug }: { slug: string }) {
           <p className="text-sm text-slate-600 mt-2 leading-relaxed">{q.example.explanation}</p>
         </div>
       </div>
+
+      <SeoConversionPanel
+        variant="question"
+        heading={`Find out if ${q.title.toLowerCase()} is costing your child marks.`}
+      />
 
       <h2 className="text-primary font-serif">Why This Question Type Is Hard</h2>
       <p>{q.whyHard}</p>

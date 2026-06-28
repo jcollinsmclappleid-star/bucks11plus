@@ -3,9 +3,9 @@ import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
 import { LeadMagnetBlock } from "@/components/shared/LeadMagnetBlock";
-import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
+import { SeoConversionPanel } from "@/components/shared/SeoConversionPanel";
 
 const breadcrumbItems = [
   { label: "Resources", href: "/buckinghamshire-11-plus-guide" },
@@ -67,7 +67,7 @@ export default function QualifyingScore() {
         </p>
       </div>
 
-      <SubscribeCTA />
+      <SeoConversionPanel variant="score" />
 
       <h2 className="text-primary font-serif">What Is the Qualifying Score?</h2>
       <p>

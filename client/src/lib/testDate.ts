@@ -22,3 +22,17 @@ export function getWeeksToTest(now: Date = new Date()): number {
 export function getTestYear(now: Date = new Date()): number {
   return getNextTestDate(now).getFullYear();
 }
+
+export function getFollowingTestDate(now: Date = new Date()): Date {
+  const next = getNextTestDate(now);
+  const nextIdx = KNOWN_TEST_DATES.findIndex((d) => d.getTime() === next.getTime());
+  if (nextIdx >= 0 && nextIdx < KNOWN_TEST_DATES.length - 1) {
+    return KNOWN_TEST_DATES[nextIdx + 1]!;
+  }
+  return new Date(next.getFullYear() + 1, 8, 12);
+}
+
+/** Test sit year for families starting structured prep early (typically one cycle ahead). */
+export function getEarlyPrepTestYear(now: Date = new Date()): number {
+  return getFollowingTestDate(now).getFullYear();
+}

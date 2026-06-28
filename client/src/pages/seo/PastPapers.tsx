@@ -1,9 +1,9 @@
 import { Link } from "wouter";
 import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
-import { ContentCTA } from "@/components/shared/ContentCTA";
+import { PlatformPrepHero, SecondaryPdfDownloads } from "@/components/shared/PlatformPrepHero";
+import { FreeToPlatformPanel, FreeToPlatformStrip } from "@/components/shared/FreeToPlatformPanel";
 import { LeadMagnetBlock } from "@/components/shared/LeadMagnetBlock";
-import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
 
@@ -13,6 +13,10 @@ const breadcrumbItems = [
 ];
 
 const faqItems = [
+  {
+    question: "Can I download free Bucks 11+ past papers?",
+    answer: "Official past papers are not released. For real preparation, Bucks Plus Edge gives access to 2,500+ GL-style questions, timed mocks, and parent analytics. Two free practice PDFs (12 questions each) are also available if you want something to print first.",
+  },
   {
     question: "Are real Bucks 11+ past papers available to download?",
     answer: "No. Buckinghamshire Council and GL Assessment do not release the live test papers — they are reused (in part) across years and are protected by copyright. Any website offering 'official' downloadable Bucks past papers is either misleading or illegally hosting copyrighted material. The closest legitimate equivalent is the official Familiarisation Test published by the Council each year.",
@@ -35,8 +39,8 @@ export default function PastPapers() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
       <Seo
-        title="Bucks 11 Plus Past Papers – What's Available & What Isn't (2026)"
-        description="The honest guide to Bucks 11+ past papers: what's actually available, why no real past papers are released, and the best practice papers to use instead."
+        title="Bucks 11+ Past Papers & Free Practice Papers Download (2026)"
+        description="Official Bucks 11+ past papers don't exist — download two free GL-style practice papers (PDF), see what to use instead, and how to prepare for the Secondary Transfer Test."
         canonicalPath="/bucks-11-plus-past-papers"
         schema={[
           breadcrumbSchema(breadcrumbItems),
@@ -58,11 +62,11 @@ export default function PastPapers() {
           Bucks 11+ Past Papers
         </h1>
         <p className="text-xl text-slate-600 leading-relaxed">
-          The honest guide to what's available, what isn't, and what to use instead.
+          Official past papers don't exist — here's why, and what your child actually needs to prepare.
         </p>
       </div>
 
-      <SubscribeCTA />
+      <PlatformPrepHero context="past-papers" />
 
       <h2 className="text-primary font-serif">Are Real Past Papers Available?</h2>
       <p>
@@ -130,8 +134,10 @@ export default function PastPapers() {
         Print papers don't replicate the actual test conditions, which since 2013 have been on-screen with mouse-based answering and a fixed countdown. Children who only practise on paper may lose 5–10 standardised points on test day simply from interface unfamiliarity.
       </p>
       <p>
-        Our <Link href="/free-diagnostic" className="text-primary hover:underline">free 8-minute diagnostic</Link> uses the same on-screen format as the real test and shows a practice score on the 121 scale — a more useful snapshot of test-day readiness than any print paper can provide.
+        Our platform gives your child <Link href="/pricing" className="text-primary hover:underline font-semibold">2,500+ timed GL-style questions</Link> in the on-screen format used on test day — with instant marking, full mocks, and an indicative readiness score against 121. That is what replaces past papers for serious preparation.
       </p>
+
+      <FreeToPlatformStrip freeOffer="A handful of free PDFs" />
 
       <h2 className="text-primary font-serif" id="faq">Frequently Asked Questions</h2>
       <div className="not-prose space-y-4 my-6">
@@ -144,12 +150,14 @@ export default function PastPapers() {
       </div>
 
       <ChildExperienceCTA />
-      <LeadMagnetBlock source="seo:past-papers" />
-      <ContentCTA heading="Past papers tell you yesterday — this tells you today" subhead="An 8-minute timed check shows how your child is performing now — scored on the 121 scale, not based on a paper from years ago." ctaLabel="Take a current readiness check" />
+      <FreeToPlatformPanel freeOffer="2 free PDF practice papers (not official past papers)" />
+      <SecondaryPdfDownloads />
 
       <div className="not-prose my-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">
         <h3 className="text-lg font-semibold text-primary font-serif mb-3">Related Practice Material</h3>
         <ul className="space-y-2 text-sm text-muted-foreground">
+          <li><Link href="/bucks-11-plus-free-sample-papers" className="text-primary hover:underline">Free practice papers PDF download (2 papers)</Link></li>
+          <li><Link href="/bucks-11-plus-sample-questions" className="text-primary hover:underline">14 worked sample questions online</Link></li>
           <li><Link href="/gl-assessment-past-papers" className="text-primary hover:underline">GL Assessment past papers — what's actually available</Link></li>
           <li><Link href="/gl-assessment-question-types" className="text-primary hover:underline">Every GL Assessment question type explained</Link></li>
           <li><Link href="/11-plus-mock-test-online-free" className="text-primary hover:underline">Free online 11+ mock test</Link></li>

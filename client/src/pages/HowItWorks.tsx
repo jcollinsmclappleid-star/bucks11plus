@@ -98,7 +98,7 @@ export default function HowItWorks() {
       />
 
       {/* ── HERO ── */}
-      <section className="relative overflow-hidden pt-12 pb-16 md:pt-16 md:pb-20 border-b border-border/50" style={{ backgroundColor: '#1e3a6e' }} data-testid="section-hero">
+      <section className="relative overflow-hidden bg-primary pt-12 pb-16 md:pt-16 md:pb-20 border-b border-border/50" data-testid="section-hero">
         <div className="absolute inset-0 z-0 hero-texture" />
         <div className="absolute inset-0 z-0 hero-vignette" />
         <div className="container mx-auto max-w-4xl px-4 relative z-10 text-center">
@@ -115,7 +115,7 @@ export default function HowItWorks() {
             Not more questions. <em>Smarter</em> questions. We diagnose the exact gaps costing marks, rank them by points available, and guide your child's preparation to close them.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button size="lg" className="h-12 px-8 bg-amber-400 text-amber-950 hover:bg-amber-300 font-bold border-none" asChild data-testid="button-hero-cta">
+            <Button variant="cta" size="lg"  asChild data-testid="button-hero-cta">
               <Link href="/free-diagnostic">Free Readiness Check <ArrowRight className="ml-2 h-5 w-5" /></Link>
             </Button>
             <Button size="lg" variant="outline" className="h-12 px-6 border-white/20 text-white hover:bg-white/10 font-semibold" asChild>
@@ -383,7 +383,7 @@ export default function HowItWorks() {
             ))}
           </div>
           <div className="text-center mt-10">
-            <Button size="lg" className="h-12 px-8 bg-amber-400 text-amber-950 hover:bg-amber-300 font-bold border-none" asChild data-testid="button-platform-cta">
+            <Button variant="cta" size="lg"  asChild data-testid="button-platform-cta">
               <Link href="/pricing">See Plans & Pricing <ArrowRight className="ml-2 h-5 w-5" /></Link>
             </Button>
           </div>
@@ -423,7 +423,7 @@ export default function HowItWorks() {
           <h2 className="text-2xl md:text-3xl font-bold text-white font-serif mb-3">Ready to see where your child stands?</h2>
           <p className="text-white/60 text-base mb-8 max-w-md mx-auto">No account needed. 8 minutes. Get a readiness forecast, a band, and 3 specific things to fix first.</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button size="lg" className="h-12 px-8 font-bold bg-amber-400 text-amber-950 hover:bg-amber-300 border-none" asChild data-testid="button-cta-final">
+            <Button variant="cta" size="lg"  asChild data-testid="button-cta-final">
               <Link href="/free-diagnostic"><ArrowRight className="mr-2 h-5 w-5" />Start Free Readiness Check</Link>
             </Button>
             <Button variant="outline" size="lg" className="h-12 px-6 font-semibold border-white/25 text-white hover:bg-white/10" asChild>

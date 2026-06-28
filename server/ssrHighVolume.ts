@@ -1,6 +1,6 @@
 import {
   ssrShell, ssrBreadcrumbs, breadcrumbSchema, faqSchema,
-  ssrCtaBox, ssrDisclaimer, ssrFaqSection, esc,
+  ssrCtaBox, ssrDownloadBox, ssrDisclaimer, ssrFaqSection, esc,
 } from "./ssrShared";
 
 const BASE = "https://bucks11plustest.co.uk";
@@ -175,7 +175,7 @@ export function getTestDate2025Html(): string {
     ${ssrCtaBox()}
     <section class="ssr-section">
       <h2>For Families Currently Preparing (2026 Cohort)</h2>
-      <p>If your child is currently in Year 4 or Year 5 and preparing for the <strong>2026</strong> test, see our dedicated <a href="/bucks-11-plus-test-date-2026" style="color:#0e1f30;text-decoration:underline;">2026 test date guide</a> for the full timeline relevant to your cohort.</p>
+      <p>If your child is currently in Year 4 or Year 5 and preparing for the <strong>2026</strong> test, see our dedicated <a href="/bucks-11-plus-test-date-2026" style="color:#1e3a6e;text-decoration:underline;">2026 test date guide</a> for the full timeline relevant to your cohort.</p>
       <h2>After the October 2025 Results</h2>
       <p>Families who received 'qualified' in October 2025 should have submitted their Secondary Common Application Form (SCAF) listing grammar school preferences by the October/November 2025 deadline. National Offer Day for this cohort is 1 March 2026 — the date when grammar school place offers are released for all qualifying children who applied on time.</p>
       <h2>Waiting Lists After Offer Day</h2>
@@ -205,15 +205,16 @@ export function getTestDate2025Html(): string {
 
 export function getPastPapersHtml(): string {
   const url = `${BASE}/bucks-11-plus-past-papers`;
-  const title = "Bucks 11 Plus Past Papers & Practice Materials: The Complete Guide | Bucks 11 Plus Tests";
-  const desc = "Are there Bucks 11 Plus past papers? What practice papers to use, where to get them, and how to use them effectively. GL Assessment-style materials guide for Buckinghamshire families.";
+  const title = "Bucks 11 Plus Past Papers & Free Practice Papers Download (2026) | Bucks 11 Plus Tests";
+  const desc = "Are there official Bucks 11+ past papers? No — but download two free GL-style practice papers (PDF), see what parents use instead, and how to prepare for the Secondary Transfer Test.";
 
   const faqs = [
     { question: "Are there official Bucks 11 Plus past papers?", answer: "No. GL Assessment and The Buckinghamshire Grammar Schools do not release actual past papers from previous years' Secondary Transfer Tests. The test papers are confidential and are not made available to the public after the test has taken place. This is unlike some other exam systems (such as independent school 11+ papers) where past papers are occasionally released. The best alternative is GL Assessment-style specimen and practice papers from specialist publishers." },
     { question: "What practice papers should I use for the Bucks 11+?", answer: "The most directly relevant materials are GL Assessment-format practice papers and books. GL Assessment itself publishes a limited range of official specimen materials, and established UK education publishers produce comprehensive practice sets in the GL Assessment format. These are designed to replicate the question styles, format, and difficulty level used in the Buckinghamshire Secondary Transfer Test. Ensure any materials you use are explicitly marked as 'GL Assessment format' — CEM-format papers (used in other areas) have different question styles and are less relevant." },
     { question: "How many practice papers should my child complete before the test?", answer: "Most preparation specialists recommend completing between 10 and 20 full timed practice papers before the test. The exact number matters less than the quality of the review process afterwards. Completing a paper and not reviewing errors systematically is far less effective than completing fewer papers with careful analysis of each wrong answer by question type. Practice papers should be introduced in the spring or summer term of Year 5, not at the start of preparation." },
     { question: "Should practice papers be done under timed conditions?", answer: "Yes, and increasingly so as the test date approaches. Early in preparation, working through papers without time pressure helps children learn the question formats and understand where they make errors. From the spring term of Year 5 onwards, all practice papers should be completed under strict timed conditions — two 45-minute sittings, ideally with audio instructions, to replicate the actual test experience. The audio format specifically (where a recorded voice controls the pace) should be practised before the real test." },
-    { question: "Are free 11+ practice papers available online?", answer: "Some free sample questions and mini-tests are available online, including the free 12-question readiness check on Bucks 11 Plus Tests, which covers all four domains. A complete set of GL Assessment-style practice papers comparable to the full test is not available for free — the most comprehensive practice materials require purchase from specialist publishers or digital platforms." },
+    { question: "Are free 11+ practice papers available online?", answer: "Yes — in limited form. Bucks 11 Plus Tests offers two free GL-style practice papers to download as PDF (12 questions each, all four subjects, with worked answers, no email required). There is also a free 12-question timed readiness check online. Full-length papers matching the real test are not available for free; comprehensive preparation typically uses publisher practice packs or a digital platform with 2,500+ GL-style questions." },
+    { question: "Where can I download Bucks 11+ example papers?", answer: "Download two free GL-style practice papers (PDF) from Bucks 11 Plus Tests — Paper 1 and Paper 2, each with 12 questions across Verbal Reasoning, Non-Verbal Reasoning, Maths and Comprehension, plus worked explanations. These are practice papers written in GL Assessment style, not official past papers (which GL does not release)." },
   ];
 
   const body = `
@@ -224,6 +225,7 @@ export function getPastPapersHtml(): string {
       <p class="ssr-intro">One of the most common questions from parents beginning 11+ preparation is whether official past papers are available. The short answer is no — but there are high-quality alternatives that closely replicate the Secondary Transfer Test. Here is the complete guide.</p>
     </div>
     ${ssrCtaBox()}
+    ${ssrDownloadBox()}
     <section class="ssr-section">
       <h2>Why Official Past Papers Are Not Available</h2>
       <p>GL Assessment and The Buckinghamshire Grammar Schools (TBGS) do not publish previous years' Secondary Transfer Test papers. The papers are designed to be used fresh each year, and releasing them would compromise the integrity of the test for future cohorts. This is different from some other selective assessment systems — for example, many independent schools release past papers voluntarily, and some state grammar areas (outside Buckinghamshire) have released specimen materials. The Bucks 11+ does not.</p>
@@ -250,12 +252,13 @@ export function getPastPapersHtml(): string {
       <p>Quality beats quantity. Children who complete 15 papers with careful error analysis typically outperform those who rush through 30 papers without reviewing. As a general guide: 10–15 complete papers completed between the spring term of Year 5 and test day in September of Year 6 is a reasonable target. More important than the number is ensuring the final 4–6 papers are completed under strict timed conditions, with audio instructions, in one sitting.</p>
 
       <h2>Free Practice Options</h2>
-      <p>A free 12-question GL-style readiness check is available on this platform — it covers all four test domains and returns an instant practice score on the 121 scale with a section breakdown. This is a useful starting point before purchasing paper-based materials. It does not replace full practice papers, but it identifies which domains need the most preparation time.</p>
+      <p>Parents searching for past papers usually want example questions they can print and mark. Start with our <a href="/bucks-11-plus-free-sample-papers" style="color:#1e3a6e;text-decoration:underline;">free practice paper downloads</a> (two PDFs, no email) or the <a href="/free-diagnostic" style="color:#1e3a6e;text-decoration:underline;">free 12-question timed readiness check</a> for an indicative score against 121. For full preparation, Bucks Plus Edge includes 2,500+ interactive GL-style questions, timed mocks, and parent analytics.</p>
     </section>
     ${ssrFaqSection(faqs)}
     <section class="ssr-related" style="margin-top:2rem;">
       <h2>Related</h2>
       <div class="ssr-related-grid">
+        <a class="ssr-card" href="/bucks-11-plus-free-sample-papers"><div class="ssr-card-label">Free download</div><div class="ssr-card-title">Practice Papers PDF →</div></a>
         <a class="ssr-card" href="/bucks-11-plus-sample-questions"><div class="ssr-card-label">Examples</div><div class="ssr-card-title">Sample Question Guide →</div></a>
         <a class="ssr-card" href="/preparing-for-11-plus-year-5"><div class="ssr-card-label">Preparation guide</div><div class="ssr-card-title">Year 5 Preparation →</div></a>
         <a class="ssr-card" href="/11-plus-verbal-reasoning-practice"><div class="ssr-card-label">Subject guide</div><div class="ssr-card-title">Verbal Reasoning →</div></a>
@@ -266,6 +269,66 @@ export function getPastPapersHtml(): string {
   `;
 
   return ssrShell({ title, description: desc, canonical: url, schemas: [breadcrumbSchema([{ label: "Bucks 11+ Guide", href: "/buckinghamshire-11-plus-guide" }, { label: "Past Papers" }]), faqSchema(faqs), articleSchema(title, desc, url)], body });
+}
+
+// ─── FREE SAMPLE PAPERS (PDF DOWNLOAD) ───────────────────────────────────────
+
+export function getFreeSamplePapersHtml(): string {
+  const url = `${BASE}/bucks-11-plus-free-sample-papers`;
+  const title = "Free Bucks 11+ Practice Papers PDF Download — 2 GL-Style Papers | Bucks 11 Plus Tests";
+  const desc = "Download two free Bucks 11+ practice papers (PDF). Parents searching for past papers: 12 GL-style questions per paper, all four subjects, worked answers — no email required. Practice papers, not official past papers.";
+
+  const faqs = [
+    { question: "Can I download free Bucks 11+ past papers?", answer: "Official Bucks 11+ past papers are not released by GL Assessment. You can download two free GL-style practice papers (PDF) from this page — 12 questions each across Verbal Reasoning, Non-Verbal Reasoning, Maths and Comprehension, with full worked explanations. These are practice papers designed to match the question style of the Secondary Transfer Test." },
+    { question: "Do I need to enter an email to download the practice papers?", answer: "No. Both PDFs download immediately with no account or email required. An optional email signup is available if you want the papers sent to your inbox as well." },
+    { question: "How should my child use these practice papers?", answer: "Sit each paper in a quiet room with rough paper, under timed conditions — aim for around 20 minutes (roughly 100 seconds per question). Mark together using the answer key; the explanations show how to reach each answer. Re-take the free 12-question readiness check online for an indicative score against the 121 benchmark." },
+    { question: "Are these the same as the real Bucks 11+ test?", answer: "No. These are independent practice resources in GL Assessment style. They are not official Buckinghamshire Secondary Transfer Test papers and are not produced by or affiliated with GL Assessment or Buckinghamshire Council. For full-length timed mocks and 2,500+ questions, see Bucks Plus Edge on the pricing page." },
+  ];
+
+  const body = `
+    ${ssrBreadcrumbs([{ label: "Resources", href: "/buckinghamshire-11-plus-guide" }, { label: "Free Sample Papers" }])}
+    <div class="ssr-hero">
+      <span class="ssr-tag">Free PDF Download</span>
+      <h1 class="ssr-h1">Free Bucks 11+ Practice Papers — Download PDF (2 Papers)</h1>
+      <p class="ssr-intro">Parents often search for past papers — official ones are not released. These two free PDFs are optional printables. For real preparation, your child needs <strong>2,500+ timed GL-style questions</strong> on Bucks Plus Edge — start now.</p>
+    </div>
+    ${ssrCtaBox()}
+    ${ssrDownloadBox()}
+    <section class="ssr-section">
+      <h2>What's in Each Paper</h2>
+      <p><strong>Paper 1</strong> covers antonyms, letter sequences, codes, percentages, time, ratio, NVR sequences, odd-one-out, analogies, and a comprehension passage. <strong>Paper 2</strong> covers synonyms, compound words, letter sequences, area, number sequences, fractions, NVR rotation, matrices, reflections, and comprehension. Both are suitable for Year 4–5 children building familiarity with GL-style question types.</p>
+
+      <h2>Past Papers vs Practice Papers</h2>
+      <p>GL Assessment does not publish previous years' Secondary Transfer Test papers. High-quality <strong>practice papers</strong> — new papers written in the same format — are what most Buckinghamshire families use. These free PDFs are a starting point; serious preparation typically adds publisher packs and/or an on-screen platform with timed mocks and progress tracking.</p>
+
+      <h2>After the PDF — Try the Timed Check</h2>
+      <p>Print papers cannot replicate the on-screen test interface. The free 12-question readiness check uses the same digital format as test day and returns an indicative practice score against 121 with a section breakdown.</p>
+    </section>
+    ${ssrCtaBox()}
+    ${ssrFaqSection(faqs)}
+    <section class="ssr-related" style="margin-top:2rem;">
+      <h2>Related</h2>
+      <div class="ssr-related-grid">
+        <a class="ssr-card" href="/bucks-11-plus-past-papers"><div class="ssr-card-label">Guide</div><div class="ssr-card-title">Past Papers Explained →</div></a>
+        <a class="ssr-card" href="/bucks-11-plus-sample-questions"><div class="ssr-card-label">Examples</div><div class="ssr-card-title">14 Worked Sample Questions →</div></a>
+        <a class="ssr-card" href="/bucks-11-plus-practice-papers-free"><div class="ssr-card-label">Guide</div><div class="ssr-card-title">All Free Material →</div></a>
+        <a class="ssr-card" href="/free-diagnostic"><div class="ssr-card-label">Free tool</div><div class="ssr-card-title">Timed Readiness Check →</div></a>
+      </div>
+    </section>
+    ${ssrDisclaimer()}
+  `;
+
+  return ssrShell({
+    title,
+    description: desc,
+    canonical: url,
+    schemas: [
+      breadcrumbSchema([{ label: "Resources", href: "/buckinghamshire-11-plus-guide" }, { label: "Free Sample Papers" }]),
+      faqSchema(faqs),
+      articleSchema(title, desc, url),
+    ],
+    body,
+  });
 }
 
 // ─── RESULTS GUIDE ───────────────────────────────────────────────────────────
@@ -330,8 +393,8 @@ export function getResultsGuideHtml(): string {
 
 export function getSampleQuestionsHtml(): string {
   const url = `${BASE}/bucks-11-plus-sample-questions`;
-  const title = "Bucks 11 Plus Sample Questions: What to Expect in Each Domain | Bucks 11 Plus Tests";
-  const desc = "What do Bucks 11 Plus questions actually look like? Sample question descriptions, worked examples, and difficulty guides for Verbal Reasoning, Non-Verbal Reasoning, Maths, and Comprehension.";
+  const title = "Bucks 11+ Sample Questions & Example Papers — 14 Worked Answers | Bucks 11 Plus Tests";
+  const desc = "14 free Bucks 11+ sample questions with worked answers. Parents searching for example papers: also download 2 free GL-style practice papers (PDF) — all four subjects, no email required.";
 
   const faqs = [
     { question: "What types of questions appear in the Bucks 11+?", answer: "The Buckinghamshire Secondary Transfer Test covers four domains: Verbal Reasoning (word relationships, letter codes, analogies, compound words, hidden words), Non-Verbal Reasoning including spatial reasoning (matrices, sequences, reflections, rotations, nets, cube views), Mathematical Reasoning (number operations, fractions, percentages, ratio, algebra, word problems, shape, data), and English Comprehension (literal retrieval, inference, vocabulary in context, language technique)." },
@@ -348,6 +411,7 @@ export function getSampleQuestionsHtml(): string {
       <p class="ssr-intro">GL Assessment does not release actual past papers, but the question formats are consistent and well-documented. Here is a guide to what children encounter in each of the four domains of the Buckinghamshire Secondary Transfer Test — with example question types and preparation notes.</p>
     </div>
     ${ssrCtaBox()}
+    ${ssrDownloadBox()}
     <section class="ssr-section">
       <h2>How the Test Is Structured</h2>
       <p>The Buckinghamshire Secondary Transfer Test consists of two 45-minute papers. All questions are multiple choice — children select one answer from five options (A–E) by shading a bubble on a separate answer sheet. All instructions are delivered by audio recording. Questions across all four domains are mixed throughout the two papers. Children do not know in advance which question types will appear in which order.</p>

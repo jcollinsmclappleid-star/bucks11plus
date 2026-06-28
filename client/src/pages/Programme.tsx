@@ -148,13 +148,13 @@ export default function Programme() {
     return (
       <div className="container mx-auto max-w-2xl px-4 py-20 text-center">
         <div className="bg-amber-50 border border-amber-200 rounded-2xl p-10">
-          <h2 className="text-2xl font-bold text-primary font-serif mb-3">Young Scholar Programme</h2>
+          <h2 className="text-2xl font-bold text-primary font-serif mb-3">Guided Programme</h2>
           <p className="text-slate-600 mb-6 leading-relaxed">
-            The 24-week structured programme includes a personalised roadmap, weekly task plans, milestone readiness checks, and full platform access — everything needed to reach 121.
+            The guided programme includes a personalised roadmap, weekly task plans, milestone readiness checks, and full platform access — included with Bucks Plus Edge (£35/month or £279/year).
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/pricing">
-              <Button className="bg-primary text-white px-8 h-11 font-semibold">View Pricing &amp; Enrol</Button>
+              <Button variant="cta" className="px-8">View Pricing &amp; Enrol</Button>
             </Link>
             <Link href="/app">
               <Button variant="outline" className="h-11 px-6">Back to Dashboard</Button>
@@ -227,7 +227,7 @@ export default function Programme() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-border/60 pb-6">
         <div>
           <h1 className="text-3xl font-bold text-primary font-serif" data-testid="text-programme-title">
-            Young Scholar Programme
+            Guided Programme
           </h1>
           <p className="text-muted-foreground mt-1">16-week guided preparation roadmap</p>
         </div>

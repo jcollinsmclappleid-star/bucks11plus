@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
-import { ContentCTA } from "@/components/shared/ContentCTA";
+import { FreeToPlatformPanel, FreeToPlatformStrip } from "@/components/shared/FreeToPlatformPanel";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
 import { getMockVariant, MOCK_VARIANTS } from "../../data/mock-variants";
@@ -46,6 +46,8 @@ export default function MockVariant({ slug }: { slug: string }) {
         <p className="text-xl text-slate-600 leading-relaxed">{m.intro}</p>
       </div>
 
+      <FreeToPlatformStrip freeOffer="A free 12-question mock-style check" />
+
       <h2 className="text-primary font-serif">What This Mock Test Is</h2>
       <p>{m.whatItIs}</p>
 
@@ -77,11 +79,7 @@ export default function MockVariant({ slug }: { slug: string }) {
       </ul>
 
       <ChildExperienceCTA />
-      <ContentCTA
-        heading="Sit a free 8-minute mock right now"
-        subhead="A 12-question GL-style diagnostic with a practice score on the 121 scale. No account needed."
-        ctaLabel="Start the free mock"
-      />
+      <FreeToPlatformPanel freeOffer="a free 12-question mock-style check (not a full 40- or 50-question exam)" />
 
       <h2 className="text-primary font-serif">Other Mock Test Formats</h2>
       <div className="not-prose grid sm:grid-cols-2 gap-3 my-6">

@@ -11,18 +11,8 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useState } from "react";
 
 function tierLabel(tier: string): string {
-  switch (tier) {
-    case "free": return "Free";
-    case "pack12":
-    case "pack12_family":
-    case "pack_monthly": return "Practice Platform";
-    case "programme8":
-    case "programme12":
-    case "programme16":
-    case "programme16_family": return "Young Scholar Programme";
-    case "programme24_plus": return "Programme+";
-    default: return "Practice Platform";
-  }
+  if (tier === "free") return "Free";
+  return "Bucks Plus Edge";
 }
 
 const TIER_RANK: Record<string, number> = {
@@ -140,7 +130,7 @@ export default function Diagnostics() {
           <p className="text-muted-foreground mt-2">Take readiness checks, mock exams, or unlimited practice papers drawn from our full question bank.</p>
         </div>
         {!hasPaidAccess() && (
-          <Button className="bg-brand-amber text-amber-950 hover:bg-brand-amber/90 font-bold" asChild>
+          <Button variant="cta" className="font-bold" asChild>
             <Link href="/pricing" data-testid="link-pricing">See Plans & Start Today</Link>
           </Button>
         )}
@@ -161,7 +151,7 @@ export default function Diagnostics() {
                     <Lock className="h-8 w-8 text-slate-400 mb-2" />
                     <p className="text-sm font-medium text-slate-600 mb-2">Requires {tierLabel(diag.requiredTier)}</p>
                     <p className="text-xs text-muted-foreground mb-4">Upgrade to Bucks Plus Edge — from £35/month</p>
-                    <Button size="sm" className="bg-primary text-white" asChild data-testid={`button-upgrade-${diag.id}`}>
+                    <Button variant="cta" size="sm" size="sm"  asChild data-testid={`button-upgrade-${diag.id}`}>
                       <Link href="/pricing">See Plans</Link>
                     </Button>
                   </div>
@@ -225,7 +215,7 @@ export default function Diagnostics() {
                       <Lock className="h-7 w-7 text-slate-400 mb-2" />
                       <p className="text-sm font-medium text-slate-600 mb-1">Requires {tierLabel(paper.requiredTier)}</p>
                       <p className="text-xs text-muted-foreground mb-3">Upgrade to Bucks Plus Edge — from £35/month</p>
-                      <Button size="sm" className="bg-primary text-white" asChild data-testid={`button-upgrade-paper-${paper.key}`}>
+                      <Button variant="cta" size="sm" size="sm"  asChild data-testid={`button-upgrade-paper-${paper.key}`}>
                         <Link href="/pricing">See Plans</Link>
                       </Button>
                     </div>
@@ -300,7 +290,7 @@ export default function Diagnostics() {
                 </button>
               </div>
               {!hasPaidAccess() && (
-                <Button className="gap-2 bg-primary" asChild size="sm" data-testid="button-unlock-drills">
+                <Button variant="cta" size="sm" className="gap-2" asChild size="sm" data-testid="button-unlock-drills">
                   <Link href="/pricing"><Lock className="h-3.5 w-3.5" /> See Plans</Link>
                 </Button>
               )}
@@ -350,7 +340,7 @@ export default function Diagnostics() {
                       <div className="flex items-center gap-3 rounded-lg border border-violet-200 bg-gradient-to-r from-violet-50 to-indigo-50 p-4 mb-4" data-testid={`banner-hard-upgrade-${category}`}>
                         <Zap className="h-5 w-5 text-violet-600 shrink-0" />
                         <div className="flex-1">
-                          <p className="font-medium text-violet-900 text-sm">Unlock all Hard challenge drills with Platform Edge</p>
+                          <p className="font-medium text-violet-900 text-sm">Unlock all Hard challenge drills with Bucks Plus Edge</p>
                           <p className="text-violet-600 text-xs mt-0.5">Upgrade to Bucks Plus Edge — from £35/month.</p>
                         </div>
                         <Button size="sm" className="bg-violet-600 hover:bg-violet-700 text-white shrink-0" asChild data-testid={`button-upgrade-hard-${category}`}>
@@ -384,7 +374,7 @@ export default function Diagnostics() {
                             </CardHeader>
                             <CardContent>
                               {isLocked ? (
-                                <Button className="w-full mt-4 bg-primary text-white" asChild data-testid={`button-drill-see-plans-${drill.id}`}>
+                                <Button variant="cta" className="w-full mt-4" asChild data-testid={`button-drill-see-plans-${drill.id}`}>
                                   <Link href="/pricing">See Plans</Link>
                                 </Button>
                               ) : (

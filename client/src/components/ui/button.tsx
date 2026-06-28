@@ -26,6 +26,7 @@ const buttonVariants = cva(
         // @replit no hover, transparent border
         ghost: "border border-transparent",
         link: "text-primary underline-offset-4 hover:underline",
+        cta: "bg-amber-400 text-amber-950 hover:bg-amber-300 font-bold border-none shadow-sm shadow-amber-400/20",
       },
       size: {
         // @replit changed sizes
@@ -35,6 +36,11 @@ const buttonVariants = cva(
         icon: "h-9 w-9",
       },
     },
+    compoundVariants: [
+      { variant: "cta", size: "lg", class: "min-h-12 h-12 px-8 text-base shadow-lg shadow-amber-400/25" },
+      { variant: "cta", size: "sm", class: "min-h-8 h-8 px-2.5 text-[11px]" },
+      { variant: "cta", size: "default", class: "min-h-11 h-11 px-6" },
+    ],
     defaultVariants: {
       variant: "default",
       size: "default",
@@ -53,7 +59,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : "button"
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
+        className={cn(buttonVariants({ variant, size }), className)}
         ref={ref}
         {...props}
       />

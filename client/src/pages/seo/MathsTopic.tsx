@@ -4,6 +4,7 @@ import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
+import { SeoConversionPanel } from "@/components/shared/SeoConversionPanel";
 import { getMathsTopic, MATHS_TOPICS } from "../../data/maths-topics";
 import NotFound from "../not-found";
 
@@ -73,6 +74,12 @@ export default function MathsTopic({ slug }: { slug: string }) {
           <p className="text-sm text-slate-600 leading-relaxed"><strong className="text-amber-700">Watch out:</strong> {t.workedExample.gotcha}</p>
         </div>
       </div>
+
+      <SeoConversionPanel
+        variant="question"
+        heading={`See whether ${t.title.replace("11+ ", "").toLowerCase()} is holding your child back.`}
+        subhead="A single maths topic can quietly drag down a 121-scale readiness score. The free check shows topic gaps, pace risk, and what to practise next."
+      />
 
       <h2 className="text-primary font-serif">Common Mistakes</h2>
       <ul>

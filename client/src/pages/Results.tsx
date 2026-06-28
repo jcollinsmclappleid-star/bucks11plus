@@ -111,8 +111,8 @@ function getUpsellMessage(tier: string, weakestSection: string, weakestScore: nu
   if (rank < 0) {
     if (overallScore < 110) {
       return {
-        title: "Unlock the Full Readiness & Practice Hub",
-        message: `${weakestSection} at ${weakestScore}% needs focused attention. Bucks Plus Edge gives your child 2,500+ GL-style questions, full readiness checks, all Hard drills, and a detailed analytics dashboard — from £35/month.`,
+        title: "Unlock Bucks Plus Edge",
+        message: `${weakestSection} at ${weakestScore}% needs focused attention. Bucks Plus Edge gives your child 2,500+ GL-style questions, full readiness checks, all Hard drills, and a detailed analytics dashboard — £35/month or £279/year.`,
         cta: "See Plans & Start Today",
         tier: "pack_plus",
         link: "/pricing",
@@ -120,7 +120,7 @@ function getUpsellMessage(tier: string, weakestSection: string, weakestScore: nu
     }
     return {
       title: "Build Confidence with the Full Platform",
-      message: `Great start! Bucks Plus Edge is the complete Readiness & Practice Hub — 2,500+ questions, all 20 Hard challenge drills, full readiness checks, and a detailed parent analytics dashboard. From £35/month, cancel any time.`,
+      message: `Great start! Bucks Plus Edge includes 2,500+ questions, all Hard challenge drills, full readiness checks, and a detailed parent analytics dashboard — £35/month or £279/year.`,
       cta: "See Plans & Start Today",
       tier: "pack_plus",
       link: "/pricing",
@@ -139,7 +139,7 @@ function getUpsellMessage(tier: string, weakestSection: string, weakestScore: nu
     }
     return {
       title: "Go Deeper with the Full Platform",
-      message: `Your child is making progress. Bucks Plus Edge is the complete Readiness & Practice Hub — all Hard drills, full-length mock exams, and detailed gap analysis to work towards the qualifying benchmark. From £35/month.`,
+      message: `Your child is making progress. Bucks Plus Edge unlocks all Hard drills, full-length mock exams, and detailed gap analysis — £35/month or £279/year.`,
       cta: "See Plans & Start Today",
       tier: "pack_plus",
       link: "/pricing",
@@ -408,7 +408,7 @@ export default function Results() {
                 <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-10 flex flex-col items-center justify-center p-6 text-center">
                   <SlidersHorizontal className="h-8 w-8 text-slate-400 mb-2" />
                   <p className="font-bold text-primary mb-2">Impact Simulator</p>
-                  <p className="text-sm text-muted-foreground mb-3">Unlock with Practice Platform or Programme</p>
+                  <p className="text-sm text-muted-foreground mb-3">Unlock with Bucks Plus Edge</p>
                   <Button size="sm" asChild>
                     <Link href="/pricing">View Plans</Link>
                   </Button>
@@ -596,7 +596,7 @@ export default function Results() {
                   <Zap className="h-6 w-6 text-amber-600" /> {upsell.title}
                 </h3>
                 <p className="text-slate-700 mb-6 leading-relaxed">{upsell.message}</p>
-                <Button size="lg" className="w-full bg-brand-amber text-white hover:bg-brand-amber/90 shadow-lg hover:shadow-xl transition-shadow text-base" asChild>
+                <Button variant="cta" size="lg" className="w-full transition-shadow hover:shadow-xl" asChild>
                   <Link href={upsell.link ?? (upsell.isUpgrade ? "/pricing#upgrade" : "/pricing#tiers")} data-testid="button-upsell-cta">{upsell.cta} <ArrowRight className="ml-2 h-5 w-5" /></Link>
                 </Button>
               </CardContent>
@@ -621,7 +621,7 @@ export default function Results() {
               ) : (
                 <p className="text-slate-700 mb-6 leading-relaxed">Start a practice drill to improve your forecast.</p>
               )}
-              <Button size="lg" className="w-full bg-primary shadow-lg hover:shadow-xl transition-shadow text-base" asChild>
+              <Button variant="cta" size="lg" className="w-full transition-shadow hover:shadow-xl" asChild>
                 <Link href="/app/practice" data-testid="button-start-drill">Start Highest Impact Drill <ArrowRight className="ml-2 h-5 w-5" /></Link>
               </Button>
             </CardContent>
@@ -749,7 +749,7 @@ export default function Results() {
               <TrendingUp className="h-5 w-5 text-blue-600" />
             </div>
             <div className="flex-1">
-              <h3 className="font-bold text-primary mb-1">Accelerate with Bucks Practice Platform Edge</h3>
+              <h3 className="font-bold text-primary mb-1">Accelerate with Bucks Plus Edge</h3>
               <p className="text-sm text-slate-600">
                 {weakest.name} at {weakest.score}% needs structured improvement. Edge unlocks all 20 Hard drills, premium analytics, and mock exams to work towards the 121 benchmark.
               </p>

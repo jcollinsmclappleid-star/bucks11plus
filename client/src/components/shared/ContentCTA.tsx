@@ -29,7 +29,7 @@ export function ContentCTA({
         {subhead}
       </p>
       <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-        <Button asChild className="h-11 px-6 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold" data-testid="button-content-cta-diagnostic">
+        <Button variant="cta" asChild  data-testid="button-content-cta-diagnostic">
           <Link href="/free-diagnostic">{ctaLabel} <ArrowRight className="ml-2 h-4 w-4" /></Link>
         </Button>
         <Button variant="outline" asChild className="h-11 px-6" data-testid="button-content-cta-guide">

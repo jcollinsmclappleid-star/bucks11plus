@@ -1,8 +1,8 @@
 import { Link } from "wouter";
 import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
-import { ContentCTA } from "@/components/shared/ContentCTA";
-import { LeadMagnetBlock } from "@/components/shared/LeadMagnetBlock";
+import { FreeToPlatformPanel, FreeToPlatformStrip } from "@/components/shared/FreeToPlatformPanel";
+import { PlatformPrepHero, SecondaryPdfDownloads } from "@/components/shared/PlatformPrepHero";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
 
@@ -124,8 +124,8 @@ export default function SampleQuestions() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
       <Seo
-        title="Bucks 11+ Sample Questions – Worked Examples Across All 4 Sections"
-        description="14 worked Bucks 11+ sample questions covering Verbal Reasoning, Non-Verbal Reasoning, Maths and Comprehension — with full explanations of how to solve each."
+        title="Bucks 11+ Sample Questions & Example Papers — 14 Worked GL-Style Answers"
+        description="14 free Bucks 11+ sample questions with worked answers across VR, NVR, Maths and Comprehension. Plus download two free practice papers (PDF) — what parents search for instead of past papers."
         canonicalPath="/bucks-11-plus-sample-questions"
         schema={[
           breadcrumbSchema(breadcrumbItems),
@@ -145,17 +145,21 @@ export default function SampleQuestions() {
           Bucks 11+ Sample Questions
         </h1>
         <p className="text-xl text-slate-600 leading-relaxed">
-          14 worked examples across Verbal Reasoning, Non-Verbal Reasoning, Maths and Comprehension — with explanations.
+          14 worked examples to see the level — then give your child access to 2,500+ timed questions on the full platform.
         </p>
       </div>
 
+      <PlatformPrepHero context="sample-questions" />
+
       <p>
-        Below are 14 representative sample questions from across all four Bucks 11+ test sections. Each comes with the correct answer and a worked explanation showing how to reach it. Use them as a quick benchmark of the level of questions your child should be comfortable with by the start of Year 6.
+        Below are 14 representative sample questions from across all four Bucks 11+ test sections. Each comes with the correct answer and a worked explanation. They show what the test looks like — but <strong>14 questions is not preparation</strong>. Your child needs hundreds of timed attempts, mock exams, and tracked progress against 121.
       </p>
       <p>
-        Want to see how your child performs on a longer set under timed conditions? Take our{" "}
-        <Link href="/free-diagnostic" className="text-primary hover:underline">free 8-minute diagnostic</Link> for an automatic forecast against the 121 qualifying threshold.
+        <Link href="/pricing?autoCheckout=pack_plus" className="text-primary hover:underline font-semibold">Start now on Bucks Plus Edge</Link> — 2,500+ GL-style questions, full mocks, Hard drills, and a parent dashboard. Or take the{" "}
+        <Link href="/free-diagnostic" className="text-primary hover:underline">free 12-question check</Link> first if you want a quick baseline.
       </p>
+
+      <FreeToPlatformStrip freeOffer="14 worked sample questions" />
 
       <div className="not-prose space-y-6 my-10">
         {SAMPLES.map((s, i) => (
@@ -186,12 +190,12 @@ export default function SampleQuestions() {
         These 14 questions span the four domains and the most common question types within each. A child who solves 11–12 of them comfortably is at or near the 121 qualifying standard. A child who solves 6–8 has the foundation but needs structured preparation. A child who finds them difficult should focus on building underlying skills (vocabulary, mental arithmetic, reading volume) before attempting timed paper practice.
       </p>
       <p>
-        Our <Link href="/free-diagnostic" className="text-primary hover:underline">8-minute diagnostic</Link> gives a more reliable picture by combining 12 timed questions with an age-adjusted forecast — closer to a real test snapshot than any sample set can be.
+        For a reliable readiness picture, <Link href="/pricing?autoCheckout=pack_plus" className="text-primary hover:underline font-semibold">start on the full platform</Link> — timed practice, mocks, and an indicative score against 121. The free 12-question check is a starting point, not a preparation plan.
       </p>
 
       <ChildExperienceCTA />
-      <LeadMagnetBlock source="seo:sample-questions" />
-      <ContentCTA heading="Sample questions are a start. A scored check is the answer." subhead="An 8-minute readiness check turns curiosity into a clear practice score on the 121 scale." ctaLabel="Take the scored check" />
+      <FreeToPlatformPanel freeOffer="14 worked sample questions on this page" />
+      <SecondaryPdfDownloads />
       <Disclaimer />
     </div>
   );

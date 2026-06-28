@@ -2,7 +2,7 @@ import { Link } from "wouter";
 import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
-import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
+import { TutorCostComparison } from "@/components/shared/SeoConversionPanel";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
 
@@ -62,7 +62,7 @@ export default function TuitionCost() {
         </p>
       </div>
 
-      <SubscribeCTA />
+      <TutorCostComparison />
 
       <h2 className="text-primary font-serif">What Does 11+ Preparation Typically Cost?</h2>
       <p>

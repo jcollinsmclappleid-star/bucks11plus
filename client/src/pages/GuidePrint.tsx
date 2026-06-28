@@ -893,9 +893,9 @@ export default function GuidePrint() {
 
       {/* PAGE 17 — SUBSCRIPTION PLANS */}
       <div className="page-break">
-        <PageHeader title="Subscription Plans & Pricing" subtitle="Access the full Bucks Practice Platform" />
+        <PageHeader title="Subscription Plans & Pricing" subtitle="Bucks Plus Edge — full platform access" />
         <p className="text-sm text-slate-500 mb-5">
-          All plans give access to the same GL-style question bank. Higher tiers unlock full readiness checks, platform analytics, and the Young Scholar Programme.
+          Start with the free readiness check, then choose monthly (£35) or annual (£279) for unlimited interactive Bucks 11+ preparation.
         </p>
         <div className="space-y-3">
           {[
@@ -941,7 +941,6 @@ export default function GuidePrint() {
               features: [
                 "Everything in the monthly plan",
                 "12 months of full platform access",
-                "Priority email support",
                 "Best value for Year 5 → test day preparation",
               ],
               url: `${BASE}/pricing`,

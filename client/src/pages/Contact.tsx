@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { Seo } from "../components/shared/Seo";
 import { Button } from "@/components/ui/button";
-import { Send, Loader2, MessageSquare, Clock, Heart } from "lucide-react";
+import { Send, Loader2, MessageSquare, Clock, Heart, Mail } from "lucide-react";
 import { useState } from "react";
 
 export default function Contact() {
@@ -27,6 +27,14 @@ export default function Contact() {
           <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed mb-8">
             Questions about your child's progress, the platform, or the Buckinghamshire 11+? Our team is ready to support you on your preparation journey.
           </p>
+          <a
+            href="mailto:support@11plustesthub.co.uk"
+            className="mb-8 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-white px-4 py-2 text-sm font-semibold text-primary shadow-sm hover:border-primary/30 hover:bg-primary/5"
+            data-testid="link-contact-support-email"
+          >
+            <Mail className="h-4 w-4" />
+            support@11plustesthub.co.uk
+          </a>
           
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto mb-8">
             <div className="bg-white rounded-lg border border-emerald-100 p-4">
@@ -204,7 +212,8 @@ function ContactForm() {
       <Button 
         type="submit" 
         disabled={submitting || !email.trim() || !message.trim()}
-        className="w-full h-11 bg-primary text-primary-foreground font-semibold" 
+        variant="cta"
+        className="w-full h-11" 
         data-testid="button-contact-submit"
       >
         {submitting ? (

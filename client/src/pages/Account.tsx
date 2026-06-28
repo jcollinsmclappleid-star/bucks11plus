@@ -717,7 +717,7 @@ export default function Account() {
                   </div>
                   <p className="text-xs text-muted-foreground mt-3 leading-relaxed">
                     Need rectification, restriction, objection, or have a question we can't self-serve? Email{" "}
-                    <a href="mailto:support@bucks11plustest.co.uk" className="underline text-primary hover:text-primary/80">support@bucks11plustest.co.uk</a>
+                    <a href="mailto:support@11plustesthub.co.uk" className="underline text-primary hover:text-primary/80">support@11plustesthub.co.uk</a>
                     {" "}— we respond within 30 days.
                   </p>
                 </CardContent>

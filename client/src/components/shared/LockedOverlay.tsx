@@ -51,7 +51,7 @@ export default function LockedOverlay({ children, section, requiredTier = "any",
                       Free Readiness Check <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
                     </Link>
                   </Button>
-                  <Button size="sm" variant="ghost" className="text-primary-foreground/70 hover:text-primary-foreground hover:bg-primary-foreground/10" asChild data-testid={`button-banner-pricing-${section}`}>
+                  <Button variant="cta" size="sm" asChild data-testid={`button-banner-pricing-${section}`}>
                     <Link href="/pricing">Packages</Link>
                   </Button>
                 </>

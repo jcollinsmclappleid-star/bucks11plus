@@ -1,4 +1,4 @@
-const PRIMARY = "#0e1f30";
+const PRIMARY = "#1e3a6e";
 const PRIMARY_FG = "#f8fafc";
 const AMBER = "#f59e0b";
 const AMBER_DARK = "#92400e";
@@ -90,6 +90,15 @@ export function ssrShell({
     .ssr-cta-box strong { font-size: 1rem; }
     .ssr-cta-box a { display: inline-block; background: ${AMBER}; color: ${AMBER_DARK}; padding: 0.5rem 1.25rem; border-radius: 6px; font-weight: 700; font-size: 0.875rem; white-space: nowrap; flex-shrink: 0; }
     .ssr-cta-box a:hover { background: #fbbf24; }
+
+    .ssr-download-box { background: #f8fafc; border: 2px solid rgba(14,31,48,0.12); border-radius: 12px; padding: 1.25rem 1.5rem; margin: 1.75rem 0; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .ssr-download-box strong { font-size: 1rem; color: ${PRIMARY}; display: block; margin-bottom: 0.35rem; }
+    .ssr-download-box p { font-size: 0.875rem; color: #64748b; line-height: 1.55; max-width: 36rem; }
+    .ssr-download-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; flex-shrink: 0; }
+    .ssr-btn-download { display: inline-block; background: ${PRIMARY}; color: ${PRIMARY_FG}; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 700; font-size: 0.8rem; white-space: nowrap; }
+    .ssr-btn-download:hover { background: #2a4a7a; }
+    .ssr-btn-download-outline { display: inline-block; border: 1px solid rgba(14,31,48,0.2); color: ${PRIMARY}; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; font-size: 0.8rem; white-space: nowrap; }
+    .ssr-btn-download-outline:hover { background: rgba(14,31,48,0.04); }
 
     .ssr-section h2 { font-family: 'Libre Baskerville', serif; font-size: 1.15rem; font-weight: 700; color: ${PRIMARY}; margin: 2.25rem 0 0.6rem; }
     .ssr-section p { color: #475569; line-height: 1.75; margin-bottom: 1rem; }
@@ -252,7 +261,7 @@ function ssrFooter(): string {
     <p>Bucks 11 Plus Tests is operated by <strong>Ianson Systems Limited</strong> — a UK educational technology company developing diagnostic assessment platforms to support 11+ preparation in Buckinghamshire.</p>
     <p>Independent educational resource. Not affiliated with The Buckinghamshire Grammar Schools (TBGS), GL Assessment Limited, or any individual grammar school or local authority.</p>
     <p>All admissions information is for guidance only. Always verify current details directly with your school, Buckinghamshire Council, and the grammar school concerned.</p>
-    <p>&copy; ${year} Ianson Systems Limited. Registered in England &amp; Wales. Contact: <a href="mailto:support@bucks11plustest.co.uk" style="color:rgba(248,250,252,0.4);">support@bucks11plustest.co.uk</a></p>
+    <p>&copy; ${year} Ianson Systems Limited. Registered in England &amp; Wales. Contact: <a href="mailto:support@11plustesthub.co.uk" style="color:rgba(248,250,252,0.4);">support@11plustesthub.co.uk</a></p>
   </div>
 </footer>`;
 }
@@ -310,10 +319,24 @@ export function ssrFaqSection(faqs: { question: string; answer: string }[]): str
 export function ssrCtaBox(): string {
   return `<div class="ssr-cta-box">
   <div>
-    <strong>Take a Free Bucks 11+ Diagnostic</strong>
-    <p>12 questions across all four domains — instant GL-style score and readiness band. No account needed.</p>
+    <strong>Your child needs 2,500+ GL-style questions — start preparing now.</strong>
+    <p>Bucks Plus Edge: timed mocks, Hard drills, parent analytics, readiness against 121. From £35/mo or £279/yr. 3-day money-back guarantee.</p>
   </div>
-  <a href="/free-diagnostic">Start Free Test</a>
+  <a href="/pricing?autoCheckout=pack_plus">Start now</a>
+</div>`;
+}
+
+export function ssrDownloadBox(): string {
+  return `<div class="ssr-download-box" style="opacity:0.92;">
+  <div>
+    <strong style="font-size:0.85rem;color:#64748b;">Optional — print something first</strong>
+    <p>Two free GL-style practice PDFs (12 questions each). Not a substitute for the full platform.</p>
+  </div>
+  <div class="ssr-download-actions">
+    <a href="/api/practice-paper/download" class="ssr-btn-download">Paper 1 (PDF)</a>
+    <a href="/api/practice-paper-2/download" class="ssr-btn-download">Paper 2 (PDF)</a>
+    <a href="/bucks-11-plus-free-sample-papers" class="ssr-btn-download-outline">All downloads →</a>
+  </div>
 </div>`;
 }
 

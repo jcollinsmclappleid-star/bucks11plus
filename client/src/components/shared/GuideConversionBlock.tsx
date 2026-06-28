@@ -40,7 +40,7 @@ function ScoreMockup() {
       <div className="px-6 pt-6 pb-5">
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-5">
           <div>
-            <p className="text-xs text-muted-foreground mb-1">Predicted Standardised Score</p>
+            <p className="text-xs text-muted-foreground mb-1">Indicative readiness score</p>
             <div className="flex items-baseline gap-2">
               <span className="text-6xl font-black text-primary leading-none">116</span>
               <span className="text-xl text-slate-400 font-medium">/130</span>
@@ -94,14 +94,17 @@ function ScoreMockup() {
             across matrix patterns and classification is the fastest route to qualifying.
           </p>
         </div>
+        <p className="text-[10px] text-muted-foreground/70 italic text-center mt-3">
+          Illustrative preview · Indicative readiness, not the official GL Assessment standardised score
+        </p>
       </div>
     </div>
   );
 }
 
-export function GuideConversionBlock() {
+export function GuideConversionBlock({ className = "" }: { className?: string }) {
   return (
-    <div className="not-prose my-14 space-y-7">
+    <div className={`not-prose space-y-7 ${className}`}>
       <ScoreMockup />
 
       <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
@@ -117,7 +120,7 @@ export function GuideConversionBlock() {
           <div className="flex items-center gap-2 mb-3">
             <Zap className="h-3.5 w-3.5 text-brand-amber" />
             <span className="text-[10px] font-bold uppercase tracking-widest text-brand-amber">
-              Bucks 11+ Readiness & Practice Hub
+              Bucks Plus Edge
             </span>
           </div>
           <h3 className="text-2xl md:text-3xl font-bold font-serif text-white mb-3 leading-snug">
@@ -131,14 +134,15 @@ export function GuideConversionBlock() {
             shows exactly where the gaps are and targets practice precisely.
           </p>
           <p className="text-white/70 text-sm leading-relaxed mb-7 max-w-2xl">
-            Get full access to the Bucks 11+ Readiness & Practice Hub: 2,500+ GL-style questions,
-            full timed readiness checks scored on the 121 scale, all 20 Hard drills, mock exam
-            simulations, and a detailed parent analytics dashboard.
+            Bucks Plus Edge includes 2,500+ GL-style questions, full timed readiness checks scored
+            against the 121 benchmark, all Hard drills, mock exam simulations, and a detailed parent
+            analytics dashboard — <strong className="text-white">£35/month</strong> or{" "}
+            <strong className="text-white">£279/year</strong>.
           </p>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 flex-wrap">
             <Button
               asChild
-              className="h-11 px-6 bg-brand-amber text-amber-950 hover:bg-brand-amber/90 font-bold shadow-sm"
+              variant="cta"
               data-testid="button-guide-conversion-subscribe"
             >
               <Link href="/pricing">
@@ -151,9 +155,9 @@ export function GuideConversionBlock() {
               className="h-11 px-6 border-white/25 text-white bg-transparent hover:bg-white/10 hover:text-white hover:border-white/40"
               data-testid="button-guide-conversion-diagnostic"
             >
-              <Link href="/free-diagnostic">Take the Free 11+ Readiness Check First</Link>
+              <Link href="/free-diagnostic">Take the Free Readiness Check First</Link>
             </Button>
-            <span className="text-white/40 text-xs sm:ml-1">From £35/month · Cancel anytime</span>
+            <span className="text-white/40 text-xs sm:ml-1">£35/month or £279/year · Cancel anytime</span>
           </div>
         </div>
       </div>

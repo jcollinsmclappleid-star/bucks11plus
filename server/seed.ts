@@ -9,6 +9,7 @@ import type { NvrSequenceConfig, NvrTransformConfig, NvrClassificationConfig } f
 import { FULL_FREE_POOL_QUESTIONS } from "./freePoolData";
 import { applyQuestionQualityFixes } from "./questionQualityFixes";
 import { maskEmail } from "./email";
+import { repairQuestionAlignment } from "./productionReadiness";
 
 const scryptAsync = promisify(scrypt);
 
@@ -250,6 +251,8 @@ async function ensureComprehensionSection() {
 }
 
 export async function repairSeedQuestions() {
+  await repairQuestionAlignment();
+
   const seedIdPattern = sql`(id LIKE 'mini-q-%' OR id LIKE 'full-a-q-%' OR id LIKE 'full-b-q-%' OR id LIKE 'mock-%')`;
 
   const approveResult = await db
@@ -601,7 +604,9 @@ export async function ensureQuestionBank() {
         britishSpelling?: boolean; version?: number; qaStatus?: string; explanation?: string;
       }> = JSON.parse(fs.readFileSync(seedPath, "utf-8"));
 
-      const nonCompSeed = seedData.filter(q => q.section !== "English Comprehension");
+      const nonCompSeed = seedData.filter(
+        (q) => q.section !== "English Comprehension" && q.section !== "comprehension",
+      );
       console.log(`  [Question Bank] Loading ${nonCompSeed.length} non-comp questions from seed file...`);
 
       let ncInserted = 0;
@@ -707,10 +712,12 @@ async function reseedQuestionType(opts: {
 
   const fresh = seedData.filter((q) => q.type === type);
 
+  let rowsToInsert = fresh;
+
   const batchSize = 50;
   let inserted = 0;
-  for (let i = 0; i < fresh.length; i += batchSize) {
-    const batch = fresh.slice(i, i + batchSize).map((q, idx) => {
+  for (let i = 0; i < rowsToInsert.length; i += batchSize) {
+    const batch = rowsToInsert.slice(i, i + batchSize).map((q, idx) => {
       const row: any = {
         section: q.section,
         type: q.type,
@@ -1044,14 +1051,27 @@ export async function seedDatabase() {
   });
 
   if (!existingAdmin) {
-    const adminPassword = await hashPassword("Admin11plus!");
-    await db.insert(users).values({
-      username: "admin@bucks11plus.co.uk",
-      password: adminPassword,
-      isAdmin: true,
-      subscriptionTier: "programme24_plus",
-    });
-    console.log("✓ Admin user created: admin@bucks11plus.co.uk / Admin11plus!");
+    const adminPassword =
+      process.env.ADMIN_PASSWORD?.trim() ||
+      (process.env.NODE_ENV === "production" ? null : "Admin11plus!");
+
+    if (!adminPassword) {
+      console.warn(
+        "⚠ Admin user missing and ADMIN_PASSWORD not set — create admin manually or set ADMIN_PASSWORD before boot",
+      );
+    } else {
+      const hashed = await hashPassword(adminPassword);
+      await db.insert(users).values({
+        username: "admin@bucks11plus.co.uk",
+        password: hashed,
+        isAdmin: true,
+        subscriptionTier: "programme24_plus",
+      });
+      console.log("✓ Admin user created: admin@bucks11plus.co.uk");
+      if (process.env.NODE_ENV !== "production") {
+        console.log("  (dev default password — change before production)");
+      }
+    }
   } else if (!existingAdmin.isAdmin || existingAdmin.subscriptionTier !== "programme24_plus") {
     await db.update(users)
       .set({ isAdmin: true, subscriptionTier: "programme24_plus" })

@@ -124,7 +124,7 @@ export default function Practice() {
             </button>
           </div>
           {!hasPaidAccess() && (
-            <Button className="gap-2 bg-primary" asChild data-testid="button-unlock-all">
+            <Button variant="cta" size="sm" className="gap-2" asChild data-testid="button-unlock-all">
               <Link href="/pricing"><Lock className="h-4 w-4" /> See Plans & Upgrade</Link>
             </Button>
           )}
@@ -175,7 +175,7 @@ export default function Practice() {
                 <div className="flex items-center gap-3 rounded-lg border border-violet-200 bg-gradient-to-r from-violet-50 to-indigo-50 p-4 mb-4" data-testid="banner-hard-upgrade">
                   <Zap className="h-5 w-5 text-violet-600 shrink-0" />
                   <div className="flex-1">
-                    <p className="font-medium text-violet-900 text-sm">Unlock all Hard challenge drills with Platform Edge</p>
+                    <p className="font-medium text-violet-900 text-sm">Unlock all Hard challenge drills with Bucks Plus Edge</p>
                     <p className="text-violet-600 text-xs mt-0.5">Upgrade to Bucks Plus Edge to unlock all Hard drills — from £35/month.</p>
                   </div>
                   <Button size="sm" className="bg-violet-600 hover:bg-violet-700 text-white shrink-0" asChild data-testid="button-upgrade-hard">
@@ -210,7 +210,7 @@ export default function Practice() {
                       <CardContent>
                         {isLocked ? (
                           <Button 
-                            className="w-full mt-4 bg-primary text-white"
+                            variant="cta" className="w-full mt-4"
                             asChild
                             data-testid={`button-start-drill-${drill.id}`}
                           >
@@ -219,7 +219,7 @@ export default function Practice() {
                         ) : (
                           <Button 
                             variant="default" 
-                            className="w-full mt-4 bg-primary" 
+                            variant="cta" className="w-full mt-4" 
                             asChild
                             data-testid={`button-start-drill-${drill.id}`}
                           >

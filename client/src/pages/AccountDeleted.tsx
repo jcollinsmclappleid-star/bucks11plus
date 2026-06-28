@@ -25,8 +25,8 @@ export default function AccountDeleted() {
           </Button>
           <p className="text-xs text-muted-foreground">
             If you have any questions, please contact us at{" "}
-            <a href="mailto:support@bucks11plus.co.uk" className="text-primary underline">
-              support@bucks11plus.co.uk
+            <a href="mailto:support@11plustesthub.co.uk" className="text-primary underline">
+              support@11plustesthub.co.uk
             </a>
           </p>
         </div>

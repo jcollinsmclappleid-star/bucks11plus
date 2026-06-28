@@ -17,6 +17,8 @@ import { MOCK_VARIANTS } from "../client/src/data/mock-variants";
 import { VOCAB_CLUSTERS } from "../client/src/data/vocab-clusters";
 import { URGENCY_PLANS } from "../client/src/data/urgency-plans";
 import { ensureFreePool, repairSeedQuestions } from "./seed";
+import { buildProductionReadinessReport } from "./productionReadiness";
+import { RESEND_FROM_EMAIL, SUPPORT_EMAIL } from "./contactConfig";
 import {
   getTownHtml, getGrammarSchoolHtml, getSubjectGuideHtml,
   getYearGroupGuideHtml, getLearnHubHtml, getLearnArticleHtml,
@@ -25,6 +27,7 @@ import {
 import { getGlossaryIndexHtml, getGlossaryTermHtml, GLOSSARY_TERMS } from "./ssrGlossary";
 import {
   getTestDate2026Html, getTestDate2025Html, getPastPapersHtml,
+  getFreeSamplePapersHtml,
   getResultsGuideHtml, getSampleQuestionsHtml, getScoreGuideHtml,
   getTutorsGuideHtml, getAppealsGuideHtml, getRegistrationDetailedHtml,
 } from "./ssrHighVolume";
@@ -1321,7 +1324,7 @@ export async function registerRoutes(
   app.get("/api/analytics", requireAuth, async (req, res, next) => {
     try {
       if (!PROGRAMME_TIERS.has(req.user!.subscriptionTier ?? "")) {
-        return res.json({ available: false, gated: true, message: "Premium Parent Analytics is included with Platform Edge and the Young Scholar Programme." });
+        return res.json({ available: false, gated: true, message: "Premium Parent Analytics is included with Bucks Plus Edge." });
       }
       const userId = req.user!.id;
       const sessions = await storage.getUserTestSessions(userId);
@@ -1876,6 +1879,8 @@ export async function registerRoutes(
 
   app.post("/api/admin/repair-seed-data", requireAdmin, async (_req, res, next) => {
     try {
+      const { repairQuestionAlignment } = await import("./productionReadiness");
+      await repairQuestionAlignment();
       await repairSeedQuestions();
       const [freePoolResult] = await db.select({ count: sql<number>`count(*)` }).from(questions).where(eq(questions.freePool, true));
       if (Number(freePoolResult.count) === 0) {
@@ -1928,6 +1933,25 @@ export async function registerRoutes(
         stats.byRenderType[q.renderType] = (stats.byRenderType[q.renderType] || 0) + 1;
       }
       res.json(stats);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.get("/api/admin/production-readiness", requireAdmin, async (_req, res, next) => {
+    try {
+      const report = await buildProductionReadinessReport();
+      res.json(report);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.post("/api/admin/sync-stripe-products", requireAdmin, async (_req, res, next) => {
+    try {
+      const { seedStripeProducts } = await import("./stripeProducts");
+      await seedStripeProducts();
+      res.json({ ok: true });
     } catch (error) {
       next(error);
     }
@@ -2424,7 +2448,7 @@ export async function registerRoutes(
       if (!email || !message) return res.status(400).json({ message: "Email and message are required" });
 
       const RESEND_API_KEY = process.env.RESEND_API_KEY;
-      const FROM = process.env.RESEND_FROM_EMAIL || "Bucks 11 Plus Tests <noreply@bucks11plustest.co.uk>";
+      const FROM = RESEND_FROM_EMAIL;
 
       const html = `
         <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
@@ -2444,7 +2468,7 @@ export async function registerRoutes(
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
           body: JSON.stringify({
             from: FROM,
-            to: ["support@bucks11plustest.co.uk"],
+            to: [SUPPORT_EMAIL],
             reply_to: email,
             subject: `[Bucks 11 Plus Tests] Chat enquiry from ${name || email}`,
             html,
@@ -2464,7 +2488,7 @@ export async function registerRoutes(
       if (!email || !message) return res.status(400).json({ message: "Email and message are required" });
 
       const RESEND_API_KEY = process.env.RESEND_API_KEY;
-      const FROM = process.env.RESEND_FROM_EMAIL || "Bucks 11 Plus Tests <noreply@bucks11plustest.co.uk>";
+      const FROM = RESEND_FROM_EMAIL;
 
       const enquiryTypeLabel = {
         general: "General Enquiry",
@@ -2492,7 +2516,7 @@ export async function registerRoutes(
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
           body: JSON.stringify({
             from: FROM,
-            to: ["support@bucks11plustest.co.uk"],
+            to: [SUPPORT_EMAIL],
             reply_to: email,
             subject: `[Bucks 11 Plus Tests] ${enquiryTypeLabel} — ${name || email}`,
             html,
@@ -2603,6 +2627,7 @@ Disallow: /reset-password
     ["/bucks-11-plus-test-date-2025", getTestDate2025Html],
     ["/bucks-11-plus-past-papers", getPastPapersHtml],
     ["/bucks-11-plus-practice-papers", getPastPapersHtml],
+    ["/bucks-11-plus-free-sample-papers", getFreeSamplePapersHtml],
     ["/bucks-11-plus-results", getResultsGuideHtml],
     ["/when-do-bucks-11-plus-results-come-out", getResultsGuideHtml],
     ["/bucks-11-plus-sample-questions", getSampleQuestionsHtml],

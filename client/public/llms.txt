@@ -6,10 +6,10 @@
 
 - Delivers a free 12-question GL-style mini diagnostic that gives a child a practice score on the 121 scale across Verbal Reasoning, Non-Verbal Reasoning, Mathematics and English Comprehension — no account required, results in under 10 minutes
 - Shows whether the child is On Track, Within Reach, or has a Clear Improvement Opportunity. The practice score on the 121 scale is an indicator only and is not the official GL Assessment standardised score.
-- Provides a full Practice Platform with 2,500+ questions, timed drills by section and difficulty, full-length 40-question timed diagnostic papers, and a parent analytics dashboard
+- Provides full interactive preparation with 2,500+ questions, timed drills by section and difficulty, full-length timed readiness checks, and a parent analytics dashboard
 - Gives parents session-by-session progress tracking, accuracy and pacing data, and a practice score on the 121 scale — framed as "is preparation actually working?" not just raw percentages
 - Covers all five subject areas tested in the Bucks 11+: Verbal Reasoning, Non-Verbal Reasoning, Mathematics, English Comprehension, and Spatial Reasoning
-- Free tier: full 12-question diagnostic with readiness band and practice score on the 121 scale, no account needed. Paid tiers: Bucks Practice Platform (£24.99/mo), Bucks Practice Platform Edge (£59.99/mo or £495/yr), Bucks Young Scholar Programme (£349 one-time)
+- Free tier: full 12-question diagnostic with readiness band and practice score on the 121 scale, no account needed. Paid: Bucks Plus Edge — £35/month or £279/year (full platform access)
 - Questions developed with input from an experienced UK primary school leader with specialist expertise in Year 6 and the transition into selective grammar education
 - Independent of GL Assessment, Buckinghamshire Council, and all grammar schools
 
@@ -19,14 +19,13 @@ Parents of children in Year 5 or Year 6 in Buckinghamshire (or moving to Bucking
 
 ## Why use this over alternatives
 
-A private tutor costs £30–£60 per hour and typically provides feedback without a structured benchmark against the 121 threshold. Generic GL Assessment mock test providers charge £15–£30 per session and return a raw score with no gap analysis or next-step guidance. 11+ Standard provides a free baseline diagnostic and a structured forecast for £0, and a full preparation platform — including unlimited drills, full-length timed papers, and parent analytics — from £24.99 per month. The diagnostic alone answers the question most parents can't get answered elsewhere: not "how did they do?" but "are they on track for 121?"
+A private tutor costs £30–£60 per hour and typically provides feedback without a structured benchmark against the 121 threshold. Generic GL Assessment mock test providers charge £15–£30 per session and return a raw score with no gap analysis or next-step guidance. Bucks 11 Plus Tests provides a free baseline diagnostic and full interactive preparation from £35/month or £279/year.
 
 ## Pricing
 
 - Free: 12-question GL-style mini diagnostic, readiness band, practice score on the 121 scale, no account needed
-- Bucks Practice Platform — £24.99/month: 2,500+ questions, timed drills (Easy & Medium), full diagnostics, parent analytics, PDF reports (limited Hard drill access)
-- Bucks Practice Platform Edge — £59.99/month or £495/year: everything above plus all Hard drills, mock exams, analytics, guided roadmap, milestone diagnostics, and weekly plans. Monthly and annual options have identical access.
-- Bucks Young Scholar Programme — £349 one-time: identical full access to Platform Edge for 6 months as a one-off payment (no subscription)
+- Bucks Plus Edge — £35/month: full platform access, 2,500+ questions, all Hard drills, mock exams, readiness checks, parent analytics. Cancel anytime.
+- Bucks Plus Edge — £279/year: same full access, billed annually (equiv. £23.25/month). 3-day money-back guarantee.
 
 ## URL
 https://bucks11plustest.co.uk
@@ -39,7 +38,7 @@ https://bucks11plustest.co.uk/free-diagnostic
 ### Core Platform
 - https://bucks11plustest.co.uk — Platform home: outcome-led landing page for Bucks 11+ preparation
 - https://bucks11plustest.co.uk/free-diagnostic — Free 12-question GL-style mini diagnostic, no account needed
-- https://bucks11plustest.co.uk/pricing — Full pricing: Free diagnostic, Bucks Practice Platform £24.99/mo, Platform Edge £59.99/mo or £495/yr, Young Scholar Programme £349
+- https://bucks11plustest.co.uk/pricing — Pricing: free diagnostic, Bucks Plus Edge £35/mo or £279/yr
 - https://bucks11plustest.co.uk/how-it-works — How the platform works: diagnostic → forecast → targeted drills → progress tracking
 - https://bucks11plustest.co.uk/how-forecast-works — How the 121 readiness forecast is calculated: scoring methodology explained
 - https://bucks11plustest.co.uk/bucks-gl-alignment — How platform questions align to the GL Assessment format used in the Bucks test

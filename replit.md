@@ -6,20 +6,28 @@ A full-stack web platform for Buckinghamshire 11+ exam preparation, helping stud
 
 **Required Environment Variables:**
 - `DATABASE_URL`
+- `SESSION_SECRET`
+- `EMAIL_SECRET` (≥16 chars in production)
+- `BASE_URL` (production: `https://bucks11plustest.co.uk`)
 - `STRIPE_SECRET_KEY`
+- `STRIPE_PUBLISHABLE_KEY`
 - `STRIPE_WEBHOOK_SECRET`
 - `RESEND_API_KEY`
-- `EMAIL_SECRET`
-- `ADMIN_USERNAME`
-- `ADMIN_PASSWORD`
+- `RESEND_FROM_EMAIL`
+- `SUPPORT_EMAIL`
+- `ADMIN_PASSWORD` (first boot only, if admin user missing)
+
+See `production/SETUP.md` and `production/env.template` for full deployment guide.
 
 **Commands:**
 - `npm install`: Install dependencies.
 - `npm run dev`: Start the development server (client and server).
 - `npm run build`: Build the client and server for production.
-- `npm run typecheck`: Run TypeScript type checking.
-- `npx drizzle-kit push:pg`: Push Drizzle schema changes to PostgreSQL.
-- `npm run stripe-replit-sync`: Sync Stripe schema.
+- `npm run check`: Run TypeScript type checking.
+- `npm run db:push`: Push Drizzle schema changes to PostgreSQL.
+- `npm run verify:prod`: Production readiness report (questions, diagnostics, env).
+- `npm run verify:prod:repair`: Run DB repairs + readiness report.
+- `npm run stripe:seed`: Create Stripe products if missing (requires Stripe keys in env).
 
 ## Stack
 

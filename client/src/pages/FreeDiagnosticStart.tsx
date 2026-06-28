@@ -150,7 +150,7 @@ export default function FreeDiagnosticStart() {
             )}
             <Button
               size="lg"
-              className="h-14 px-12 text-lg bg-primary w-full sm:w-auto"
+              variant="cta" size="lg" className="h-14 px-12 text-lg w-full sm:w-auto"
               onClick={() => startGuestSession.mutate()}
               disabled={starting}
               data-testid="button-begin-free-assessment"

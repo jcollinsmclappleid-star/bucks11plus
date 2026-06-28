@@ -6,3 +6,7 @@ vite.config.ts.*
 *.tar.gz
 .replit
 replit.nix
+.env
+.env.local
+.neon
+production/secrets.env

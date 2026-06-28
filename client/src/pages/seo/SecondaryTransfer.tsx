@@ -3,9 +3,9 @@ import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
 import { LeadMagnetBlock } from "@/components/shared/LeadMagnetBlock";
-import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
+import { SeoConversionPanel } from "@/components/shared/SeoConversionPanel";
 
 const breadcrumbItems = [
   { label: "Resources", href: "/buckinghamshire-11-plus-guide" },
@@ -35,7 +35,12 @@ export default function SecondaryTransfer() {
         </p>
       </div>
 
-      <SubscribeCTA />
+      <SeoConversionPanel
+        variant="general"
+        eyebrow="Secondary Transfer Test preparation"
+        heading="Understand the test. Then check if your child is ready for it."
+        subhead="The Bucks STT is not just knowledge; it is timed reasoning under pressure. The platform shows readiness, section gaps, pace risk, and the next practice priority."
+      />
 
       <h2 className="text-primary font-serif">Official Purpose</h2>
       <p>

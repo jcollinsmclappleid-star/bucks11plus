@@ -3,10 +3,12 @@ import Stripe from 'stripe';
 let connectionSettings: any;
 
 async function getCredentials() {
-  const publishableKey = process.env.STRIPE_PUBLISHABLE_KEY;
-  const secretKey = process.env.STRIPE_SECRET_KEY || process.env.SLACK_LIVE_API_KEY2;
+  const publishableKey = process.env.STRIPE_PUBLISHABLE_KEY?.trim() || "";
+  const secretKey =
+    process.env.STRIPE_SECRET_KEY?.trim() || process.env.SLACK_LIVE_API_KEY2?.trim();
 
-  if (publishableKey && secretKey) {
+  // Server-side Stripe (checkout, webhooks, portal) only needs the secret key.
+  if (secretKey) {
     return { publishableKey, secretKey };
   }
 
@@ -19,7 +21,10 @@ async function getCredentials() {
       : null;
 
   if (!xReplitToken) {
-    throw new Error('X-Replit-Token not found for repl/depl');
+    throw new Error(
+      'Stripe not configured: set STRIPE_SECRET_KEY in environment, ' +
+      'or run on Replit with the Stripe connector',
+    );
   }
 
   const connectorName = 'stripe';
@@ -60,6 +65,11 @@ export async function getUncachableStripeClient() {
 
 export async function getStripePublishableKey() {
   const { publishableKey } = await getCredentials();
+  if (!publishableKey) {
+    throw new Error(
+      'STRIPE_PUBLISHABLE_KEY is not set — add pk_live_... from Stripe Dashboard (Developers → API keys)',
+    );
+  }
   return publishableKey;
 }
 

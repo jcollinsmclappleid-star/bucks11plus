@@ -96,8 +96,8 @@ body {
   --popover: 0 0% 100%;
   --popover-foreground: 222 47% 11%;
   
-  /* Rich Royal Navy */
-  --primary: 219 57% 27%; 
+  /* Rich royal navy (#1e3a6e) */
+  --primary: 219 57% 27%;
   --primary-foreground: 210 40% 98%;
   
   --secondary: 210 40% 96.1%;
@@ -117,7 +117,7 @@ body {
   --ring: 219 57% 27%;
 
   /* Custom Brand Tokens */
-  --brand-primary: 219 57% 27%; /* Rich royal navy */
+  --brand-primary: 219 57% 27%;
   --brand-amber: 40 65% 52%; /* Muted restrained gold */
   --brand-green: 142 71% 45%; /* Calm green */
   --brand-red: 348 83% 47%; /* Muted red */
@@ -136,6 +136,21 @@ body {
     @apply font-serif;
     line-height: 1.2;
     letter-spacing: -0.01em;
+  }
+}
+
+@layer utilities {
+  .btn-cta {
+    @apply !bg-amber-400 !text-amber-950 hover:!bg-amber-300 font-bold border-none;
+  }
+  .btn-cta-lg {
+    @apply !bg-amber-400 !text-amber-950 hover:!bg-amber-300 font-bold border-none h-12 px-8 text-base shadow-lg shadow-amber-400/25;
+  }
+  .btn-cta-md {
+    @apply !bg-amber-400 !text-amber-950 hover:!bg-amber-300 font-bold border-none h-11 px-6 shadow-sm;
+  }
+  .btn-cta-sm {
+    @apply !bg-amber-400 !text-amber-950 hover:!bg-amber-300 font-bold border-none h-8 px-2.5 text-[11px] shadow-sm;
   }
 }
 
@@ -242,9 +257,9 @@ body {
 }
 
 .option-selected .option-badge {
-  background: hsl(210 55% 12%) !important;
+  background: hsl(219 57% 27%) !important;
   color: hsl(210 40% 98%) !important;
-  border-color: hsl(210 55% 12%) !important;
+  border-color: hsl(219 57% 27%) !important;
 }
 
 .option-badge {
@@ -264,9 +279,9 @@ body {
 }
 
 .option-button:hover:not(:disabled) .option-badge {
-  background: hsl(210 55% 12%);
+  background: hsl(219 57% 27%);
   color: hsl(210 40% 98%);
-  border-color: hsl(210 55% 12%);
+  border-color: hsl(219 57% 27%);
 }
 
 .option-correct {

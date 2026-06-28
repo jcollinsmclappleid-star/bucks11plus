@@ -181,7 +181,7 @@ export default function Badges() {
         <div className="text-center py-8 space-y-4">
           <p className="text-muted-foreground">Sign in to start earning badges!</p>
           <Link href="/sign-in">
-            <button className="px-6 py-2 bg-primary text-primary-foreground rounded-md text-sm font-medium hover:bg-primary/90" data-testid="button-sign-in-badges">
+            <button className="px-6 py-2.5 bg-brand-amber text-amber-950 rounded-md text-sm font-bold hover:bg-brand-amber/90" data-testid="button-sign-in-badges">
               Sign In
             </button>
           </Link>

@@ -3,22 +3,10 @@ import { db } from "./db";
 import { practicePaperLeads, nurtureSequences } from "@shared/schema";
 import { and, eq, lte, isNull, sql } from "drizzle-orm";
 import { ensureChromium } from "./chromium";
+import { getBaseUrl, RESEND_FROM_EMAIL } from "./contactConfig";
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const RESEND_FROM_EMAIL =
-  process.env.RESEND_FROM_EMAIL || "Bucks 11 Plus Tests <noreply@bucks11plustest.co.uk>";
 const EMAIL_SECRET = process.env.EMAIL_SECRET || "dev-only-email-secret-do-not-use-in-prod";
-
-function getBaseUrl(): string {
-  if (process.env.BASE_URL) return process.env.BASE_URL;
-  const domains = process.env.REPLIT_DOMAINS || "";
-  const parts = domains.split(",").map((d) => d.trim()).filter(Boolean);
-  const customDomain = parts.find(
-    (d) => d.includes(".co.uk") || (!d.includes("replit.app") && !d.includes("replit.dev")),
-  );
-  if (customDomain) return `https://${customDomain}`;
-  return "https://bucks11plustest.co.uk";
-}
 
 function maskEmail(value: string): string {
   const at = value.indexOf("@");
@@ -109,6 +97,7 @@ export async function sendPracticePaperEmail(
     <div style="text-align:center;margin:28px 0;">
       <a href="${downloadUrl}" style="display:inline-block;background:#0d1f30;color:#ffffff;text-decoration:none;font-weight:700;font-size:15px;padding:14px 32px;border-radius:8px;">Download Practice Paper (PDF)</a>
     </div>
+    <p style="color:#64748b;font-size:12px;text-align:center;line-height:1.5;">If the button does not open, copy this link into your browser:<br><a href="${downloadUrl}" style="color:#0d1f30;word-break:break-all;">${downloadUrl}</a></p>
 
     <p style="color:#475569;font-size:14px;"><strong style="color:#0d1f30;">How to use it:</strong> sit your child in a quiet room with rough paper. Aim for 20 minutes (around 100 seconds per question — close to test-day pace). Mark together using the answer key — the explanations are where the learning happens.</p>
 

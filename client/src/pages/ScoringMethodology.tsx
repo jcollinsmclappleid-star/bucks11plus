@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Seo } from "../components/shared/Seo";
 import { ArrowRight, BookOpen, Target, Info, CheckCircle2, AlertCircle, Clock, BarChart2 } from "lucide-react";
+import { SeoConversionPanel } from "../components/shared/SeoConversionPanel";
 
 export default function ScoringMethodology() {
   const bands = [
@@ -53,6 +54,8 @@ export default function ScoringMethodology() {
           An honest explanation of how we calculate your child's readiness forecast, what the 121 benchmark means, and the limitations you should be aware of.
         </p>
       </div>
+
+      <SeoConversionPanel variant="score" />
 
       <Card className="border-blue-200/60 bg-blue-50/30">
         <CardContent className="p-6 flex gap-4">
@@ -197,7 +200,7 @@ export default function ScoringMethodology() {
 
       <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-border/60">
         <Button asChild>
-          <Link href="/app/diagnostic">
+          <Link href="/free-diagnostic">
             Take a Readiness Check <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
         </Button>

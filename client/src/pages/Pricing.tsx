@@ -4,7 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/componen
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle, Loader2, ArrowRight, Target, TrendingUp, BarChart3, Shield, ChevronDown, Sparkles, Lock, Brain, Clock } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
-import { TestCountdownBadge } from "../components/shared/TestCountdownBadge";
+import { TestCountdownBadge, PrepYearBadge } from "../components/shared/TestCountdownBadge";
+import { TutorCostComparison } from "../components/shared/SeoConversionPanel";
+import { DashboardPreviewForecast } from "../components/shared/DashboardPreview";
 import { useAuth } from "../lib/auth";
 import { useState, useEffect, useRef } from "react";
 import { apiRequest } from "../lib/queryClient";
@@ -103,6 +105,10 @@ export default function Pricing() {
 
   const faqs = [
     {
+      q: "How does this compare to a private 11+ tutor?",
+      a: "A tutor at £40/hr for one session a week works out at roughly £160/month. Bucks Plus Edge is £35/month (or £23.25/month on annual) for unlimited interactive practice — timed mocks, targeted drills, readiness checks, and parent analytics. It is a modern preparation platform, not a substitute for every type of teaching, but many families use it as their main structured prep because children can practise little and often with clear feedback."
+    },
+    {
       q: "What's the difference between Monthly and Annual?",
       a: "Both plans give you identical access to everything on the platform — 2,500+ questions, full readiness checks, all Hard drills, mock exam simulations, PDF reports, progress tracking, and premium analytics. Annual is simply billed once a year (£279) rather than monthly (£35/mo). Choosing Annual saves you £141 — that's 34% off — compared to 12 months of monthly billing."
     },
@@ -131,13 +137,13 @@ export default function Pricing() {
   return (
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
       <Seo
-        title="Bucks 11 Plus Preparation Plans & Pricing (2026) | Bucks 11 Plus Tests"
-        description="Free readiness check plus Bucks Plus Edge — £35/month or £279/year. Full access to 2,500+ targeted questions, readiness checks, mock exams and progress tracking for Bucks 11 Plus preparation."
+        title="Bucks 11 Plus Preparation Plans & Pricing (2026–2027) | Bucks 11 Plus Tests"
+        description="Free readiness check plus Bucks Plus Edge — £35/month or £279/year. Structured interactive prep for the September 2027 test and beyond."
         canonicalPath="/pricing"
       />
 
       {/* ── HERO ── */}
-      <section className="relative overflow-hidden pt-12 pb-14 md:pt-16 md:pb-18 border-b border-border/50" style={{ backgroundColor: '#1e3a6e' }} data-testid="section-hero">
+      <section className="relative overflow-hidden bg-primary pt-12 pb-14 md:pt-16 md:pb-18 border-b border-border/50" data-testid="section-hero">
         <div className="absolute inset-0 z-0 hero-texture" />
         <div className="absolute inset-0 z-0 hero-vignette" />
         <div className="container mx-auto max-w-3xl px-4 relative z-10 text-center">
@@ -156,7 +162,7 @@ export default function Pricing() {
                   : "You have full monthly access. Switch to Annual for £279/year and save £141 on your current billing."}
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Button size="lg" className="h-12 px-8 bg-amber-400 text-amber-950 hover:bg-amber-300 font-bold border-none" asChild data-testid="button-go-dashboard">
+                <Button variant="cta" size="lg"  asChild data-testid="button-go-dashboard">
                   <Link href="/app">Go to Dashboard <ArrowRight className="ml-2 h-5 w-5" /></Link>
                 </Button>
                 <Button size="lg" variant="outline" className="h-12 px-6 border-white/20 text-white hover:bg-white/10 font-semibold" onClick={handleBillingPortal} disabled={loading === "portal"} data-testid="button-billing-portal">
@@ -168,17 +174,24 @@ export default function Pricing() {
           ) : (
             <>
               <span className="inline-block text-xs font-semibold uppercase tracking-[0.2em] text-amber-400/80 mb-5">Built for the Buckinghamshire 11+</span>
-              <div className="mb-4">
+              <div className="mb-4 flex flex-wrap items-center justify-center gap-2">
+                <PrepYearBadge variant="dark" />
                 <TestCountdownBadge variant="dark" />
               </div>
               <h1 className="text-4xl md:text-5xl font-bold text-white font-serif mb-4">
                 Full Bucks 11+ preparation.<br className="hidden sm:block" /> Intelligent. Targeted. Proven.
               </h1>
-              <p className="text-lg text-white/60 max-w-2xl mx-auto mb-7 leading-relaxed">
-                Know exactly what to fix. 2,500+ GL-style questions. Parent analytics. Guided programme. Scored on the 121 scale.
+              <p className="text-lg text-white/60 max-w-2xl mx-auto mb-4 leading-relaxed">
+                Know exactly what to fix. 2,500+ GL-style questions. Parent analytics. Guided programme.
+              </p>
+              <p className="mx-auto mb-7 max-w-xl rounded-xl border border-amber-400/25 bg-amber-400/10 px-4 py-3 text-sm leading-relaxed text-amber-100">
+                <strong className="text-amber-200">Monthly comparison:</strong> one tutor hour a week at £40 ≈{" "}
+                <span className="line-through decoration-2 decoration-red-400/70 text-amber-200/60">£160/month</span>{" "}
+                <span className="text-amber-200/70 text-xs">(typical tutor)</span>.
+                Our platform from <strong className="text-white">£35/month</strong> or <strong className="text-white">£23.25/month</strong> on annual.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Button size="lg" className="h-12 px-8 bg-amber-400 text-amber-950 hover:bg-amber-300 font-bold border-none" asChild data-testid="button-view-plans">
+                <Button variant="cta" size="lg"  asChild data-testid="button-view-plans">
                   <a href="#tiers">View Plans <ArrowRight className="ml-2 h-5 w-5" /></a>
                 </Button>
                 <Button size="lg" variant="outline" className="h-12 px-6 border-white/20 text-white hover:bg-white/10 font-semibold" asChild data-testid="button-hero-free">
@@ -195,6 +208,43 @@ export default function Pricing() {
           )}
         </div>
       </section>
+
+      {!hasPaidPlan && (
+        <section className="border-b border-border/30 bg-white py-10 md:py-12" data-testid="section-tutor-comparison">
+          <div className="container mx-auto max-w-5xl px-4">
+            <TutorCostComparison variant="pricing" />
+          </div>
+        </section>
+      )}
+
+      {!hasPaidPlan && (
+        <section id="demos" className="scroll-mt-24 border-b border-border/30 bg-slate-50 py-14 md:py-16" data-testid="section-platform-demos">
+          <div className="container mx-auto max-w-4xl px-4">
+            <div className="text-center mb-8">
+              <span className="inline-block text-xs font-bold uppercase tracking-widest text-primary/50 mb-3">Platform preview</span>
+              <h2 className="text-2xl md:text-3xl font-bold text-primary font-serif mb-3">
+                See what Bucks Plus Edge includes
+              </h2>
+              <p className="text-muted-foreground max-w-xl mx-auto text-sm leading-relaxed">
+                Parent analytics, indicative readiness tracking, and section breakdowns — the same views you unlock with monthly or annual access.
+              </p>
+            </div>
+            <DashboardPreviewForecast />
+            <p className="text-[10px] text-muted-foreground italic text-center mt-3">
+              Illustrative dashboard preview · Indicative readiness, not the official GL Assessment standardised score
+            </p>
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Button variant="cta" size="lg" asChild data-testid="button-demos-monthly">
+                <Link href="/pricing?autoCheckout=pack_plus">Start monthly — £35/mo</Link>
+              </Button>
+              <Button variant="outline" size="lg" asChild className="h-12 font-semibold" data-testid="button-demos-annual">
+                <Link href="/pricing?autoCheckout=pack_annual">Annual — £279/yr</Link>
+              </Button>
+            </div>
+            <p className="text-center text-xs text-muted-foreground mt-3">3-day money-back guarantee · Cancel anytime</p>
+          </div>
+        </section>
+      )}
 
       {/* ── PLANS ── */}
       <section className="py-16 md:py-20 bg-slate-50 border-b border-border/30" id="tiers" data-testid="section-tiers">
@@ -276,7 +326,9 @@ export default function Pricing() {
                       <span className="text-5xl font-bold text-primary">£35</span>
                       <span className="text-muted-foreground font-medium text-sm"> / month</span>
                     </div>
-                    <p className="text-xs text-brand-amber font-semibold mb-1">That's just £1.17/day</p>
+                    <p className="text-xs text-brand-amber font-semibold mb-1">
+                      vs <span className="line-through decoration-red-500/70 text-slate-400">£160/mo</span> tutor · £35/mo here
+                    </p>
                     <p className="text-xs text-slate-500 mb-5">Cancel any time · No lock-in</p>
                     <ul className="space-y-2.5">
                       {[
@@ -301,7 +353,8 @@ export default function Pricing() {
                   </CardContent>
                   <CardFooter className="flex-col items-stretch gap-2">
                     <Button
-                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-12 font-bold text-base"
+                      variant="cta"
+                      className="w-full h-12 text-base shadow-md"
                       onClick={() => handleCheckout("pack_plus")}
                       disabled={loading === "pack_plus"}
                       data-testid="button-get-pack-plus"
@@ -326,7 +379,7 @@ export default function Pricing() {
                       <span className="text-5xl font-bold text-primary">£279</span>
                       <span className="text-muted-foreground font-medium text-sm"> / year</span>
                     </div>
-                    <p className="text-xs text-brand-amber font-semibold mb-1">That's just 76p/day</p>
+                    <p className="text-xs text-brand-amber font-semibold mb-1">£23.25/mo — unlimited interactive practice</p>
                     <div className="flex flex-wrap items-center gap-2 mb-5">
                       <p className="text-xs text-slate-500">Equiv. £23.25/mo · 34% off monthly</p>
                       <span className="inline-flex items-center text-[11px] font-bold text-amber-700 bg-amber-100 border border-amber-200 px-2 py-0.5 rounded-full">
@@ -357,7 +410,7 @@ export default function Pricing() {
                   </CardContent>
                   <CardFooter className="flex-col items-stretch gap-2">
                     <Button
-                      className="w-full bg-brand-amber text-amber-950 hover:bg-brand-amber/90 h-12 font-bold text-base shadow-md"
+                      className="w-full h-12 text-base shadow-md"
                       onClick={() => handleCheckout("pack_annual")}
                       disabled={loading === "pack_annual"}
                       data-testid="button-get-pack-annual"
@@ -388,8 +441,8 @@ export default function Pricing() {
                 <div className="rounded-xl border border-slate-200 bg-white p-4 flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-brand-green shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-bold text-primary text-sm">Less than one tutor hour</p>
-                    <p className="text-xs text-slate-500">A year of full access (£279) costs less than 8 hours of in-person 11+ tutoring.</p>
+                    <p className="font-bold text-primary text-sm">Interactive Bucks 11+ practice</p>
+                    <p className="text-xs text-slate-500">Timed mocks, drills, and instant feedback — structured prep children can use between school and homework.</p>
                   </div>
                 </div>
               </div>
@@ -453,7 +506,7 @@ export default function Pricing() {
             <h3 className="text-2xl font-bold text-primary font-serif mb-3">Switch to Annual and save £141</h3>
             <p className="text-slate-600 text-sm mb-6">You're on monthly billing at £35/month. Switch to Annual for £279/year — identical access, 12 months locked in, £141 saved (34% off).</p>
             {availableUpgrades.includes("pack_annual") && (
-              <Button className="bg-brand-amber text-amber-950 hover:bg-brand-amber/90 h-11 px-8 font-bold" onClick={() => handleUpgrade("pack_annual")} disabled={loading === "upgrade"} data-testid="button-upgrade-pack-annual">
+              <Button variant="cta" className="px-8" onClick={() => handleUpgrade("pack_annual")} disabled={loading === "upgrade"} data-testid="button-upgrade-pack-annual">
                 {loading === "upgrade" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Switch to Annual — £279"}
               </Button>
             )}
@@ -561,12 +614,12 @@ export default function Pricing() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             {hasPaidPlan ? (
-              <Button size="lg" className="h-12 px-8 font-bold bg-amber-400 text-amber-950 hover:bg-amber-300 border-none" asChild data-testid="button-cta-dashboard">
+              <Button variant="cta" size="lg"  asChild data-testid="button-cta-dashboard">
                 <Link href="/app">Go to Dashboard <ArrowRight className="ml-2 h-5 w-5" /></Link>
               </Button>
             ) : (
               <>
-                <Button size="lg" className="h-12 px-8 font-bold bg-amber-400 text-amber-950 hover:bg-amber-300 border-none" asChild data-testid="button-cta-final">
+                <Button variant="cta" size="lg"  asChild data-testid="button-cta-final">
                   <Link href="/free-diagnostic"><ArrowRight className="mr-2 h-5 w-5" />Start Free Check</Link>
                 </Button>
                 <Button variant="outline" size="lg" className="h-12 px-6 font-semibold border-white/25 text-white hover:bg-white/10" asChild data-testid="button-cta-plans">

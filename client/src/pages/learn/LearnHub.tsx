@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { learnArticles, LEARN_CATEGORIES, getArticlesByCategory } from "@/data/learn-articles";
 import { Seo } from "@/components/shared/Seo";
 import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
+import { SeoConversionPanel } from "@/components/shared/SeoConversionPanel";
 
 const CATEGORY_ICONS: Record<string, string> = {
   "Understanding the Test": "📋",
@@ -59,6 +60,8 @@ export default function LearnHub() {
       </div>
 
       <div className="container mx-auto max-w-5xl px-4 py-12">
+        <SeoConversionPanel variant="learn" />
+
         <div className="space-y-14">
           {LEARN_CATEGORIES.map((category) => {
             const articles = getArticlesByCategory(category);

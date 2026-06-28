@@ -131,7 +131,7 @@ export default function DiagnosticStart() {
           <div className="pt-6 border-t border-border/50 text-center">
             <Button 
               size="lg" 
-              className="h-14 px-12 text-lg bg-primary w-full sm:w-auto"
+              variant="cta" size="lg" className="h-14 px-12 text-lg w-full sm:w-auto"
               onClick={() => startSessionMutation.mutate()}
               disabled={startSessionMutation.isPending}
               data-testid="button-begin-assessment"

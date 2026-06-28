@@ -2,9 +2,9 @@ import { Seo } from "../../components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "../../components/shared/Breadcrumbs";
 import { ContentCTA } from "../../components/shared/ContentCTA";
 import { LeadMagnetBlock } from "../../components/shared/LeadMagnetBlock";
-import { SubscribeCTA } from "../../components/shared/SubscribeCTA";
 import { Disclaimer } from "../../components/shared/Disclaimer";
 import { ChildExperienceCTA } from "../../components/shared/ChildExperienceCTA";
+import { SeoConversionPanel } from "../../components/shared/SeoConversionPanel";
 import { Link } from "wouter";
 
 const breadcrumbItems = [
@@ -41,7 +41,7 @@ export default function Registration() {
         </p>
       </div>
 
-      <SubscribeCTA />
+      <SeoConversionPanel variant="registration" />
 
       <h2 className="text-primary font-serif">Who Can Register?</h2>
       <p>

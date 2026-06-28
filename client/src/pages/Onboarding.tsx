@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation, useSearch } from "wouter";
+import { useLocation, useSearch, Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -54,8 +54,6 @@ export default function Onboarding() {
           setLocation(`/app/checkout-success?tier=${tierParam}&session_id=${sessionIdParam}`);
         } else if (redirectParam === "checkout" && tierParam) {
           setLocation(`/pricing?autoCheckout=${tierParam}`);
-        } else if (isEarlyYear && user?.subscriptionTier === "early_learner") {
-          setLocation("/app/early-dashboard");
         } else {
           setLocation("/app");
         }
@@ -107,8 +105,10 @@ export default function Onboarding() {
                   ))}
                 </div>
                 {isEarlyYear && (
-                  <div className="mt-4 p-3 bg-amber-50 rounded-lg border border-amber-200 text-sm text-amber-800" data-testid="text-early-learner-hint">
-                    Our <strong>Early Learner</strong> plan (£49, 6 months) is designed specifically for Year 4 &amp; 5 — building foundations at a comfortable pace, with no exam pressure.
+                  <div className="mt-4 p-3 bg-amber-50 rounded-lg border border-amber-200 text-sm text-amber-800" data-testid="text-early-prep-hint">
+                    Starting in Year 4 or 5? Structured prep now builds stamina before the pressure year. Take the{" "}
+                    <Link href="/free-diagnostic" className="font-semibold text-primary underline">free readiness check</Link> first — then choose{" "}
+                    <strong>£35/month</strong> or <strong>£279/year</strong> for full access.
                   </div>
                 )}
               </div>
@@ -181,7 +181,7 @@ export default function Onboarding() {
                   />
                 </div>
                 <Button
-                  className="w-full h-14 text-lg bg-primary text-primary-foreground mt-4"
+                  variant="cta" size="lg" className="w-full h-14 text-lg mt-4"
                   onClick={handleNext}
                   disabled={isSubmitting}
                   data-testid="button-complete-onboarding"

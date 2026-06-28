@@ -6,16 +6,17 @@ import { Shield, ChevronUp, ChevronDown } from "lucide-react";
 
 const TIERS = [
   { value: "free", label: "Free", color: "bg-slate-100 text-slate-700" },
-  { value: "early_learner", label: "Early Learner · £49", color: "bg-amber-100 text-amber-800" },
-  { value: "pack_monthly", label: "Bucks Plus Edge Monthly · £35/mo (legacy)", color: "bg-blue-100 text-blue-800" },
   { value: "pack_plus", label: "Bucks Plus Edge Monthly · £35/mo", color: "bg-indigo-100 text-indigo-800" },
   { value: "pack_annual", label: "Bucks Plus Edge Annual · £279/yr", color: "bg-indigo-200 text-indigo-900" },
-  { value: "pack12", label: "Practice Platform (legacy · £119)", color: "bg-blue-50 text-blue-600" },
-  { value: "programme8", label: "8 Week Programme · £59", color: "bg-emerald-100 text-emerald-800" },
-  { value: "programme12", label: "12 Week Programme · £89", color: "bg-emerald-100 text-emerald-800" },
-  { value: "programme24_plus", label: "Programme+ · £349", color: "bg-emerald-200 text-emerald-900" },
-  { value: "programme16", label: "Young Scholar (legacy · £249)", color: "bg-emerald-50 text-emerald-600" },
-  { value: "programme16_family", label: "Scholar Family (legacy · £349)", color: "bg-emerald-50 text-emerald-600" },
+  { value: "pack_monthly", label: "Legacy monthly (maps to Plus Edge)", color: "bg-blue-50 text-blue-600" },
+  { value: "pack12", label: "Legacy pack12 (full access)", color: "bg-blue-50 text-blue-600" },
+  { value: "pack12_family", label: "Legacy pack12 family", color: "bg-blue-50 text-blue-600" },
+  { value: "early_learner", label: "Legacy early_learner", color: "bg-amber-50 text-amber-700" },
+  { value: "programme8", label: "Legacy programme8", color: "bg-emerald-50 text-emerald-600" },
+  { value: "programme12", label: "Legacy programme12", color: "bg-emerald-50 text-emerald-600" },
+  { value: "programme16", label: "Legacy programme16", color: "bg-emerald-50 text-emerald-600" },
+  { value: "programme16_family", label: "Legacy programme16 family", color: "bg-emerald-50 text-emerald-600" },
+  { value: "programme24_plus", label: "Legacy programme24_plus", color: "bg-emerald-50 text-emerald-600" },
 ];
 
 export default function AdminTierSwitcher() {
@@ -26,7 +27,7 @@ export default function AdminTierSwitcher() {
 
   if (!user?.isAdmin) return null;
 
-  const currentTier = TIERS.find(t => t.value === user.subscriptionTier) || TIERS[0];
+  const currentTier = TIERS.find(t => t.value === user.subscriptionTier) || { value: user.subscriptionTier, label: user.subscriptionTier, color: "bg-slate-100 text-slate-700" };
 
   const switchTier = async (tier: string) => {
     setSwitching(true);
@@ -42,44 +43,31 @@ export default function AdminTierSwitcher() {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 z-50" data-testid="admin-tier-switcher">
-      <div className="bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden w-64">
-        <button
-          onClick={() => setOpen(!open)}
-          className="w-full flex items-center justify-between gap-2 px-4 py-3 bg-slate-900 text-white text-sm font-medium hover:bg-slate-800 transition-colors"
-          data-testid="button-toggle-admin-panel"
-        >
-          <div className="flex items-center gap-2">
-            <Shield className="h-4 w-4 text-amber-400" />
-            <span>Admin: {currentTier.label.split(" ·")[0]}</span>
-          </div>
-          {open ? <ChevronDown className="h-4 w-4" /> : <ChevronUp className="h-4 w-4" />}
-        </button>
-
-        {open && (
-          <div className="p-2 space-y-1 max-h-72 overflow-y-auto">
-            <p className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold px-2 pt-1 pb-1">Switch Tier to Test</p>
-            {TIERS.map(tier => (
-              <button
-                key={tier.value}
-                onClick={() => switchTier(tier.value)}
-                disabled={switching || tier.value === user.subscriptionTier}
-                className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-all ${
-                  tier.value === user.subscriptionTier
-                    ? tier.color + " ring-2 ring-primary ring-offset-1"
-                    : "hover:bg-slate-50 text-slate-600"
-                } disabled:opacity-50`}
-                data-testid={`button-switch-tier-${tier.value}`}
-              >
-                {tier.label}
-                {tier.value === user.subscriptionTier && (
-                  <span className="ml-2 text-[10px] uppercase font-bold">Active</span>
-                )}
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
+    <div className="fixed bottom-4 left-4 z-50" data-testid="admin-tier-switcher">
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-900 text-white text-xs font-medium shadow-lg hover:bg-slate-800 transition-colors"
+        data-testid="button-admin-tier-toggle"
+      >
+        <Shield className="h-3.5 w-3.5" />
+        <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${currentTier.color}`}>{currentTier.label}</span>
+        {open ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronUp className="h-3.5 w-3.5" />}
+      </button>
+      {open && (
+        <div className="absolute bottom-full left-0 mb-2 w-64 max-h-72 overflow-y-auto rounded-lg bg-white border border-slate-200 shadow-xl p-2 space-y-1">
+          {TIERS.map((tier) => (
+            <button
+              key={tier.value}
+              onClick={() => switchTier(tier.value)}
+              disabled={switching || user.subscriptionTier === tier.value}
+              className={`w-full text-left px-3 py-2 rounded-md text-xs font-medium transition-colors disabled:opacity-50 ${tier.color} hover:opacity-80`}
+              data-testid={`button-tier-${tier.value}`}
+            >
+              {tier.label}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -33,7 +33,7 @@ const sections: LinkSection[] = [
       { title: "Readiness Checks", description: "Timed readiness checks across Verbal Reasoning, Non-Verbal Reasoning, Maths and English.", href: "/app/diagnostic" },
       { title: "Practice Tests", description: "Targeted topic-by-topic practice to build skills in each section of the 11+ exam.", href: "/app/practice" },
       { title: "Progress Tracking", description: "Detailed charts and trends showing improvement over time against the 121 qualifying benchmark.", href: "/app/progress" },
-      { title: "Young Scholar Programme", description: "16-week structured study plan with guided preparation, mock exams, and advanced questions.", href: "/app/programme" },
+      { title: "Guided Programme", description: "Structured study plan with guided preparation, mock exams, and targeted practice.", href: "/app/programme" },
       { title: "Parent Analytics", description: "In-depth performance breakdowns and insights to help parents support their child's preparation.", href: "/app/analytics" },
     ],
   },

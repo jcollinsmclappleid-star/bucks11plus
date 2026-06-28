@@ -129,7 +129,8 @@ export default function SignUp() {
             </label>
             <Button
               type="submit"
-              className="w-full h-12 text-lg bg-primary"
+              variant="cta"
+              className="w-full h-12 text-lg"
               disabled={isLoading || !parentConfirmed}
               data-testid="button-signup"
             >

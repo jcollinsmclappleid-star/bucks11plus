@@ -25,8 +25,7 @@ async function main() {
   const existing: any[] = JSON.parse(fs.readFileSync(SEED_PATH, "utf-8"));
   console.log(`Existing seed entries: ${existing.length}`);
 
-  // Remove any existing sequence/symmetry/transform entries from seed
-  // (they'll be replaced with the new ones including IDs)
+  // Remove sequence/symmetry/transform entries — replaced below from DB / generator
   const nonNvr = existing.filter(
     (q) => !["sequence", "symmetry", "transformation"].includes(q.type)
   );
@@ -57,6 +56,20 @@ async function main() {
 
   // Merge: start with non-NVR, then add fixed (deduplicated), then remaining sequence
   const fixedIds = new Set(fixedRows.map((q) => q.id));
+  // Fetch transformation questions (v3+) from DB
+  const transformRows = await db
+    .select()
+    .from(questions)
+    .where(
+      and(
+        eq(questions.type, "transformation"),
+        eq(questions.questionPool, "practice"),
+        eq(questions.qaStatus, "approved"),
+        sql`COALESCE((render_config->>'version')::int, version, 1) >= 3`,
+      ),
+    );
+  console.log(`Found ${transformRows.length} transformation questions`);
+
   const seqNonFixed = seqRows.filter((q) => !fixedIds.has(q.id));
 
   // Convert DB rows to seed format (with id field preserved)
@@ -87,6 +100,7 @@ async function main() {
     ...nonNvr,
     ...fixedRows.map(toSeed),
     ...seqNonFixed.map(toSeed),
+    ...transformRows.map(toSeed),
   ];
 
   console.log(`Total seed entries after merge: ${merged.length}`);

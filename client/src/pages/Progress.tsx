@@ -363,7 +363,7 @@ export default function Progress() {
               <p className="text-lg text-slate-600 max-w-lg mb-8 leading-relaxed">
                 Paid users receive a structured, week-by-week schedule targeting their exact weaknesses to lift the indicative readiness score toward the 121 standard as efficiently as possible.
               </p>
-              <Button size="lg" className="bg-primary shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all text-lg h-14 px-8" asChild data-testid="button-upgrade-plan">
+              <Button variant="cta" size="lg" className="shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all" asChild data-testid="button-upgrade-plan">
                 <Link href="/pricing">Upgrade to View Plan <ArrowRight className="ml-2 h-5 w-5" /></Link>
               </Button>
             </div>

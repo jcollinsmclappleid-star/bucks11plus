@@ -105,7 +105,7 @@ export default function Dashboard() {
             <p className="text-muted-foreground mt-1">Take your first readiness check to see your forecast.</p>
           )}
         </div>
-        <Button className="bg-primary text-primary-foreground" asChild>
+        <Button variant="cta"  asChild>
           <Link href="/app/diagnostic">
             {hasData ? "Take Full Readiness Check" : "Start Free Readiness Check"} <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
@@ -124,7 +124,7 @@ export default function Dashboard() {
                 Take a free 8-minute quick readiness check to get your child's initial readiness forecast against the 121 benchmark.
               </p>
             </div>
-            <Button size="lg" className="bg-primary text-lg h-14 px-8" asChild>
+            <Button variant="cta" size="lg" className="h-14" asChild>
               <Link href="/app/diagnostic/mini-1/start" data-testid="button-first-diagnostic">
                 Start Quick Readiness Check <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
@@ -252,7 +252,7 @@ export default function Dashboard() {
                       Upgrade to unlock full 45-minute readiness checks, complete practice bank, and PDF reports.
                     </p>
                   </div>
-                  <Button className="mt-2 bg-primary" asChild>
+                  <Button variant="cta" className="mt-2" asChild>
                     <Link href="/pricing" data-testid="button-upgrade">View Upgrade Options</Link>
                   </Button>
                 </CardContent>

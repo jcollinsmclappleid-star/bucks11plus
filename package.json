@@ -5,11 +5,18 @@
   "license": "MIT",
   "scripts": {
     "dev:client": "vite dev --port 5000",
-    "dev": "NODE_ENV=development tsx server/index.ts",
+    "dev": "NODE_ENV=development tsx --env-file=.env.local server/index.ts",
     "build": "tsx script/build.ts",
     "start": "NODE_ENV=production node dist/index.cjs",
     "check": "tsc",
-    "db:push": "drizzle-kit push"
+    "db:push": "tsx --env-file=.env.local node_modules/drizzle-kit/bin.cjs push",
+    "verify:local": "tsx --env-file=.env.local scripts/verify-local-env.ts",
+    "verify:prod": "tsx --env-file=production/secrets.env scripts/verify-production-readiness.ts",
+    "verify:prod:repair": "tsx --env-file=production/secrets.env scripts/verify-production-readiness.ts -- --repair",
+    "stripe:seed": "tsx --env-file=production/secrets.env server/stripe-seed.ts",
+    "seed:merge-transformation": "tsx scripts/merge_transformation_seed.ts",
+    "seed:restore-nvr-git": "tsx scripts/restore_nvr_from_git.ts",
+    "seed:reseed-nvr-db": "tsx --env-file=production/secrets.env scripts/reseed_nvr_from_seed.ts"
   },
   "dependencies": {
     "@fontsource/inter": "^5.2.8",

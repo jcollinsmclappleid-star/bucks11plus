@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { LeadMagnetBlock } from "@/components/shared/LeadMagnetBlock";
+import { FreeToPlatformPanel, FreeToPlatformStrip } from "@/components/shared/FreeToPlatformPanel";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ArrowDownToLine, CheckCircle2, Clock, BarChart3, TrendingUp, Target, Zap } from "lucide-react";
 
@@ -47,10 +48,34 @@ export default function FreeSamplePapers() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-16">
       <Seo
-        title="Free Bucks 11+ Sample Papers – Two GL-Style Practice Papers with Answers"
-        description="Download two free Bucks 11+ practice papers — 12 GL-style questions each, covering all four sections, with full worked explanations. No email required."
+        title="Free Bucks 11+ Practice Papers PDF Download — 2 GL-Style Papers"
+        description="Download two free Bucks 11+ practice papers (PDF). Parents searching for past papers: 12 GL-style questions per paper, all four subjects, worked answers — no email required."
         canonicalPath="/bucks-11-plus-free-sample-papers"
-        schema={[breadcrumbSchema(breadcrumbItems)]}
+        schema={[
+          breadcrumbSchema(breadcrumbItems),
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: [
+              {
+                "@type": "Question",
+                name: "Can I download free Bucks 11+ past papers?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Official past papers are not released by GL Assessment. You can download two free GL-style practice papers (PDF) from this page with no email required.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "Do I need an email to download the practice papers?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "No. Both PDFs download immediately. Email signup is optional if you want a copy sent to your inbox.",
+                },
+              },
+            ],
+          },
+        ]}
       />
       <Breadcrumbs items={breadcrumbItems} />
 
@@ -59,7 +84,7 @@ export default function FreeSamplePapers() {
           Free Bucks 11+ Sample Papers
         </h1>
         <p className="text-xl text-slate-600 leading-relaxed">
-          Two GL-style practice papers — 12 questions each, covering all four subject areas, with full worked explanations. Download both below, no email required.
+          Parents often search for <strong>past papers</strong> — official ones aren't released. These two free <strong>practice papers</strong> are the closest legal alternative: GL-style, printable, with worked answers. Download both below — no email required.
         </p>
       </div>
 
@@ -97,8 +122,7 @@ export default function FreeSamplePapers() {
             </div>
             <a
               href={paper.href}
-              target="_blank"
-              rel="noopener noreferrer"
+              download={paper.filename}
               className="mt-5 inline-flex items-center justify-center gap-2 rounded-xl bg-primary text-white font-bold text-sm px-5 py-3 hover:bg-primary/90 transition-colors"
               data-testid={`button-download-${paper.num.toLowerCase().replace(" ", "-")}`}
             >
@@ -110,9 +134,11 @@ export default function FreeSamplePapers() {
         ))}
       </div>
 
-      <p className="not-prose text-[11px] text-slate-400 text-center mb-12 leading-relaxed">
+      <p className="not-prose text-[11px] text-slate-400 text-center mb-8 leading-relaxed">
         These are independent practice resources produced by Bucks 11 Plus Tests. They are not official Buckinghamshire Secondary Transfer Test papers and are not produced by or affiliated with GL Assessment or Buckinghamshire Council.
       </p>
+
+      <FreeToPlatformStrip freeOffer="2 free PDF practice papers" />
 
       {/* Want them emailed? */}
       <div className="not-prose mb-14">
@@ -139,21 +165,7 @@ export default function FreeSamplePapers() {
         ))}
       </div>
 
-      <div className="not-prose rounded-2xl border border-slate-200 bg-slate-50 p-6 text-center my-10">
-        <p className="text-xs font-bold uppercase tracking-widest text-primary/50 mb-2">Start for free</p>
-        <h3 className="text-2xl font-bold text-primary font-serif mb-3">See how your child compares — before you pay anything</h3>
-        <p className="text-slate-500 text-sm mb-5 max-w-lg mx-auto">
-          The free 12-question Readiness Check is timed, marked instantly, and returns a practice score on the 121 scale — plus the three sub-skills most worth focusing on next.
-        </p>
-        <Link
-          href="/free-diagnostic"
-          className="inline-flex items-center gap-2 bg-primary text-white font-bold px-7 py-3 rounded-xl hover:bg-primary/90 transition-colors text-sm"
-          data-testid="button-cta-diagnostic"
-        >
-          Take the Free Readiness Check
-        </Link>
-        <p className="text-[11px] text-slate-400 mt-3">12 questions · 8 minutes · no account needed · instant results</p>
-      </div>
+      <FreeToPlatformPanel freeOffer="2 free PDF practice papers (static, untimed)" />
 
       <div className="not-prose my-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">
         <h3 className="text-lg font-semibold text-primary font-serif mb-3">More free 11+ resources</h3>

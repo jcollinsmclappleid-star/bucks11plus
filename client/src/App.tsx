@@ -9,6 +9,7 @@ import React, { useEffect } from "react";
 import { AuthProvider } from "./lib/auth";
 import { CookieConsent } from "./components/shared/CookieConsent";
 import { EmailVerificationBanner } from "./components/shared/EmailVerificationBanner";
+import { Button } from "@/components/ui/button";
 import Navbar from "./components/layout/Navbar";
 import AdminTierSwitcher from "./components/layout/AdminTierSwitcher";
 import LockedOverlay from "./components/shared/LockedOverlay";
@@ -139,6 +140,29 @@ function MainLayout({ children }: { children: React.ReactNode }) {
       <ChatWidget />
 
       <footer className="bg-primary text-primary-foreground/70 py-12 mt-auto">
+        <div className="container mx-auto max-w-6xl px-4 mb-10" data-testid="footer-cta-strip">
+          <div className="rounded-2xl border border-primary-foreground/15 bg-primary-foreground/5 p-6 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div>
+              <h3 className="font-serif text-xl font-bold text-primary-foreground mb-2">Start with a free readiness check</h3>
+              <p className="text-sm text-primary-foreground/70 max-w-lg">
+                No account needed · 8 minutes · See where your child stands against the 121 benchmark. Then choose £35/month or £279/year for full access.
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3 shrink-0">
+              <Button variant="cta" asChild data-testid="button-footer-free-check">
+                <Link href="/free-diagnostic">Free Readiness Check</Link>
+              </Button>
+              <Button
+                variant="outline"
+                asChild
+                className="h-11 border-primary-foreground/25 text-primary-foreground bg-transparent hover:bg-primary-foreground/10 hover:text-primary-foreground"
+                data-testid="button-footer-pricing"
+              >
+                <Link href="/pricing">See plans</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
         <div className="container mx-auto max-w-6xl px-4 grid md:grid-cols-5 gap-8">
           <div>
             <div className="font-serif font-bold text-xl text-primary-foreground mb-4">Bucks 11 Plus Tests</div>
@@ -201,7 +225,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
             Independent educational resource. Not affiliated with The Buckinghamshire Grammar Schools, GL Assessment, or any individual grammar school.
           </p>
           <p className="text-xs text-primary-foreground/40 text-center" data-testid="text-footer-statutory">
-            Registered office: 71-75 Shelton Street, Covent Garden, London, WC2H 9JQ &nbsp;·&nbsp; Company no. 17084981 &nbsp;·&nbsp; <a href="mailto:support@bucks11plustest.co.uk" className="underline hover:text-white">support@bucks11plustest.co.uk</a>
+            Registered office: 71-75 Shelton Street, Covent Garden, London, WC2H 9JQ &nbsp;·&nbsp; Company no. 17084981 &nbsp;·&nbsp; <a href="mailto:support@11plustesthub.co.uk" className="underline hover:text-white">support@11plustesthub.co.uk</a>
           </p>
           <div className="flex justify-center pt-1">
             <a
@@ -246,7 +270,7 @@ function AuthGate({ children }: { children: React.ReactNode }) {
           <p className="text-muted-foreground">Please sign in or create an account to access your dashboard, diagnostics, and progress tracking.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/sign-in">
-              <button className="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground px-6 py-2.5 text-sm font-medium hover:bg-primary/90 transition-colors w-full sm:w-auto" data-testid="button-sign-in">
+              <button className="inline-flex items-center justify-center rounded-md btn-cta px-6 py-2.5 text-sm transition-colors w-full sm:w-auto" data-testid="button-sign-in">
                 Sign In
               </button>
             </Link>
@@ -510,7 +534,7 @@ function Router() {
               <PreviewGate section="Reports" requiredTier="pack12"><ReportArchive /></PreviewGate>
             </Route>
             <Route path="/app/programme">
-              <PreviewGate section="Young Scholar Programme" requiredTier="programme16"><Programme /></PreviewGate>
+              <PreviewGate section="Guided Programme" requiredTier="programme16"><Programme /></PreviewGate>
             </Route>
             <Route path="/app/programme/summary">
               <AuthGate><ProgrammeCompletion /></AuthGate>
@@ -569,7 +593,7 @@ class ErrorBoundary extends React.Component<
                 this.setState({ hasError: false });
                 window.location.href = "/";
               }}
-              className="px-6 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
+              className="px-6 py-2 btn-cta rounded-md"
             >
               Try again
             </button>

@@ -57,13 +57,13 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   const mobileNavLinks = [
-    { href: "/app", label: "Dashboard", show: true, matchPrefix: false },
-    { href: "/app/diagnostic", label: "Readiness Checks", show: true, matchPrefix: true },
-    { href: "/app/practice", label: "Practice", show: true, matchPrefix: true },
-    { href: "/app/progress", label: "Progress", show: true, matchPrefix: false },
-    { href: "/app/report-archive", label: "Reports", show: true, matchPrefix: false },
-    { href: "/app/programme", label: "Programme", show: true, matchPrefix: false },
-    { href: "/app/analytics", label: "Analytics", show: true, matchPrefix: false },
+    { href: "/app", label: "Dashboard", show: !!user, matchPrefix: false },
+    { href: "/app/diagnostic", label: "Readiness Checks", show: !!user, matchPrefix: true },
+    { href: "/app/practice", label: "Practice", show: !!user, matchPrefix: true },
+    { href: "/app/progress", label: "Progress", show: !!user, matchPrefix: false },
+    { href: "/app/report-archive", label: "Reports", show: !!user, matchPrefix: false },
+    { href: "/app/programme", label: "Programme", show: !!user, matchPrefix: false },
+    { href: "/app/analytics", label: "Analytics", show: !!user, matchPrefix: false },
     { href: "/app/account", label: "Account & Subscription", show: !!user, matchPrefix: false },
     { href: "/why-choose-bucks-11-plus-tests", label: "Why Choose Us", show: true, matchPrefix: false },
     { href: "/how-it-works", label: "How It Works", show: true, matchPrefix: false },
@@ -92,7 +92,7 @@ export default function Navbar() {
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 group shrink-0" aria-label="Bucks 11 Plus Tests — Home">
-          <div className="w-14 h-14 rounded-xl overflow-hidden shrink-0 shadow-md relative bg-[#1e3a6e]">
+          <div className="w-14 h-14 rounded-xl overflow-hidden shrink-0 shadow-md relative bg-primary">
             <picture>
               <source srcSet="/logo-shield-sm.webp" type="image/webp" />
               <img
@@ -111,10 +111,10 @@ export default function Navbar() {
           </div>
         </Link>
 
-        {/* Desktop nav — all users see app links */}
+        {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-1 flex-1 justify-center">
           <div className="flex items-center gap-2 lg:gap-4">
-            {appNavLinks.map(link => (
+            {user && appNavLinks.map(link => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -125,7 +125,7 @@ export default function Navbar() {
               </Link>
             ))}
 
-            {/* Resources dropdown */}
+            {/* Resources dropdown — all visitors */}
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
@@ -163,7 +163,7 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              <Button size="sm" className="bg-amber-400 hover:bg-amber-300 text-amber-950 font-bold border-none shadow-sm" asChild data-testid="link-free-diagnostic-desktop">
+              <Button variant="cta" size="sm" asChild data-testid="link-free-diagnostic-desktop">
                 <Link href="/free-diagnostic">
                   <span className="hidden lg:inline">Free Readiness Check</span>
                   <span className="lg:hidden">Free Check</span>
@@ -172,7 +172,7 @@ export default function Navbar() {
               <Button variant="ghost" size="sm" asChild data-testid="link-signin">
                 <Link href="/sign-in">Sign In</Link>
               </Button>
-              <Button size="sm" className="bg-primary" asChild data-testid="link-get-started">
+              <Button variant="cta" size="sm" asChild data-testid="link-get-started">
                 <Link href="/pricing">
                   <span className="hidden lg:inline">See Plans</span>
                   <span className="lg:hidden">Plans</span>
@@ -185,7 +185,7 @@ export default function Navbar() {
         {/* Mobile */}
         <div className="flex items-center gap-2 md:hidden">
           {!user && (
-            <Button size="sm" asChild className="bg-amber-400 text-amber-950 hover:bg-amber-300 font-bold shadow-sm text-[11px] px-2.5 h-8 shrink-0" data-testid="link-free-diagnostic-mobile">
+            <Button variant="cta" size="sm" asChild className="shrink-0" data-testid="link-free-diagnostic-mobile">
               <Link href="/free-diagnostic">Free Check</Link>
             </Button>
           )}
@@ -199,7 +199,7 @@ export default function Navbar() {
               <div className="flex flex-col h-full">
                 <div className="p-4 border-b border-border/40">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl overflow-hidden shrink-0 shadow-md relative bg-[#1e3a6e]">
+                    <div className="w-12 h-12 rounded-xl overflow-hidden shrink-0 shadow-md relative bg-primary">
                       <picture>
                         <source srcSet="/logo-shield-sm.webp" type="image/webp" />
                         <img src="/logo-shield-sm.png" alt="Bucks 11 Plus Tests" width={300} height={200} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[175%]" />
@@ -255,13 +255,13 @@ export default function Navbar() {
                     </>
                   ) : (
                     <>
-                      <Button className="w-full bg-amber-400 hover:bg-amber-300 text-amber-950 font-bold" asChild>
+                      <Button variant="cta" className="w-full" asChild>
                         <Link href="/free-diagnostic" onClick={() => setOpen(false)}>Free Readiness Check</Link>
                       </Button>
                       <Button className="w-full" asChild>
                         <Link href="/sign-in" onClick={() => setOpen(false)}>Sign In</Link>
                       </Button>
-                      <Button className="w-full bg-primary" asChild>
+                      <Button variant="cta" className="w-full" asChild>
                         <Link href="/pricing" onClick={() => setOpen(false)}>See Plans & Start Today</Link>
                       </Button>
                     </>

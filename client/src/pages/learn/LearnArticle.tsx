@@ -4,6 +4,7 @@ import { Seo } from "@/components/shared/Seo";
 import NotFound from "@/pages/not-found";
 import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
+import { SeoConversionPanel } from "@/components/shared/SeoConversionPanel";
 
 export default function LearnArticle() {
   const { slug } = useParams<{ slug: string }>();
@@ -71,6 +72,8 @@ export default function LearnArticle() {
             {article.category}
           </span>
         </div>
+
+        <SeoConversionPanel variant="learn" />
 
         <article
           className="prose prose-slate max-w-none

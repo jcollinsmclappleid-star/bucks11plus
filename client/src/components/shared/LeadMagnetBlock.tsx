@@ -134,7 +134,8 @@ export function LeadMagnetBlock({ source = "seo", variant = "default" }: Props) 
               type="submit"
               size="lg"
               disabled={submit.isPending || !email.trim()}
-              className="h-11 px-6 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold"
+              variant="cta"
+              className="h-11 px-6"
               data-testid="button-lead-magnet-submit"
             >
               {submit.isPending ? (

@@ -1,5 +1,6 @@
 import express, { type Request, Response, NextFunction } from "express";
 import helmet from "helmet";
+import os from "os";
 import { registerRoutes } from "./routes";
 import { startNurtureProcessor } from "./leadMagnet";
 import { serveStatic } from "./static";
@@ -11,6 +12,8 @@ import { WebhookHandlers } from "./webhookHandlers";
 import { runEmailTriggers } from "./email";
 import { ensureChromium } from "./chromium";
 import { runRetentionSweep } from "./retention";
+import { getBaseUrl } from "./contactConfig";
+import { seedStripeProducts } from "./stripeProducts";
 
 const app = express();
 const httpServer = createServer(app);
@@ -47,22 +50,25 @@ async function initStripe() {
 
     const stripeSync = await getStripeSync();
 
-    const domains = process.env.REPLIT_DOMAINS || process.env.REPLIT_DEV_DOMAIN || '';
-    const domain = domains.split(',')[0];
-    if (domain) {
-      const webhookUrl = `https://${domain}/api/stripe/webhook`;
-      try {
-        const { Pool } = await import('pg');
-        const pool = new Pool({ connectionString: databaseUrl });
-        await pool.query(`DELETE FROM stripe._managed_webhooks WHERE url != $1`, [webhookUrl]);
-        await pool.end();
-        const result = await stripeSync.findOrCreateManagedWebhook(webhookUrl);
-        console.log(`Webhook configured: ${result?.webhook?.url || webhookUrl}`);
-      } catch (webhookErr: any) {
-        console.warn('Webhook registration skipped:', webhookErr.message);
-      }
-    } else {
-      console.warn('No domain found, skipping webhook registration');
+    const webhookBase = getBaseUrl();
+    const webhookUrl = `${webhookBase}/api/stripe/webhook`;
+
+    try {
+      const { Pool } = await import("pg");
+      const pool = new Pool({ connectionString: databaseUrl });
+      await pool.query(`DELETE FROM stripe._managed_webhooks WHERE url != $1`, [webhookUrl]);
+      await pool.end();
+      const result = await stripeSync.findOrCreateManagedWebhook(webhookUrl);
+      console.log(`Webhook configured: ${result?.webhook?.url || webhookUrl}`);
+    } catch (webhookErr: any) {
+      console.warn("Webhook registration skipped:", webhookErr.message);
+      console.warn(`Register manually in Stripe Dashboard: ${webhookUrl}`);
+    }
+
+    try {
+      await seedStripeProducts();
+    } catch (productErr: any) {
+      console.warn("Stripe product seed skipped:", productErr.message);
     }
 
     try {
@@ -223,7 +229,7 @@ app.use((req, res, next) => {
     {
       port,
       host: "0.0.0.0",
-      reusePort: true,
+      reusePort: os.platform() === "linux",
     },
     () => {
       log(`serving on port ${port}`);
@@ -232,7 +238,18 @@ app.use((req, res, next) => {
 
   // Run background tasks after the server is already listening so startup
   // latency never blocks incoming requests
-  ensureChromium(); // fire and forget — PDF endpoints await this promise before launching Puppeteer
+  ensureChromium().then(() => {
+    import("./leadMagnet")
+      .then(({ getCachedPracticePaperPdf, getCachedPracticePaper2Pdf }) => {
+        getCachedPracticePaperPdf().catch((err) =>
+          console.error("[PDF] Paper 1 cache warm failed:", err?.message ?? err),
+        );
+        getCachedPracticePaper2Pdf().catch((err) =>
+          console.error("[PDF] Paper 2 cache warm failed:", err?.message ?? err),
+        );
+      })
+      .catch((err) => console.error("[PDF] leadMagnet import failed:", err?.message ?? err));
+  }).catch((err) => console.error("[Chrome] ensureChromium failed:", err?.message ?? err));
   initStripe().catch(err => console.error('Stripe init error:', err));
   seedDatabase().catch(err => console.error("Seed error:", err));
   ensureNvrGeneratorReseeds().catch(err => console.error("NVR reseed error:", err));

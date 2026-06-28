@@ -26,10 +26,10 @@ export function StickyResultsBar({ sessionId }: Props) {
       className="fixed bottom-0 inset-x-0 z-40 border-t border-amber-200 bg-white/95 backdrop-blur shadow-[0_-4px_16px_rgba(0,0,0,0.08)]"
       data-testid="sticky-results-bar"
       role="region"
-      aria-label="Save your results"
+      aria-label="Save your results or upgrade"
     >
       <div className="container mx-auto max-w-5xl px-4 py-3 flex items-center justify-between gap-3">
-        <div className="flex items-center gap-3 flex-1 min-w-0">
+        <div className="flex items-center gap-3 flex-1 min-w-0 hidden sm:flex">
           <div className="h-9 w-9 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
             <Bookmark className="h-4 w-4 text-amber-700" aria-hidden="true" />
           </div>
@@ -38,15 +38,27 @@ export function StickyResultsBar({ sessionId }: Props) {
             <p className="text-xs text-slate-600 leading-tight">Closing this tab will delete them.</p>
           </div>
         </div>
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-2 shrink-0 flex-1 sm:flex-none justify-end">
+          <Button
+            variant="cta"
+            size="sm"
+            asChild
+            className="h-9 px-3 sm:px-4 font-semibold whitespace-nowrap"
+            data-testid="button-sticky-upgrade"
+          >
+            <Link href="/pricing?autoCheckout=pack_plus">
+              Full access — £35/mo <ArrowRight className="ml-1 h-3.5 w-3.5" />
+            </Link>
+          </Button>
           <Button
             asChild
+            variant="outline"
             size="sm"
             className="h-9 px-3 sm:px-4 font-semibold whitespace-nowrap"
             data-testid="button-sticky-save-results"
           >
             <Link href={`/sign-up?guestSession=${sessionId}`}>
-              Save free <ArrowRight className="ml-1 h-3.5 w-3.5" />
+              Save free
             </Link>
           </Button>
           <button

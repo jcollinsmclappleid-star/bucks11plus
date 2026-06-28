@@ -6,6 +6,7 @@ import { Disclaimer } from "../components/shared/Disclaimer";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, BookOpen, Target, Clock, BarChart3, CheckCircle2, Download, Zap } from "lucide-react";
 import { DashboardPreviewForecast, DashboardPreviewPace, DashboardPreviewTrajectory } from "../components/shared/DashboardPreview";
+import { GuideConversionBlock } from "../components/shared/GuideConversionBlock";
 import { apiRequest } from "../lib/queryClient";
 
 const breadcrumbItems = [
@@ -105,7 +106,7 @@ export default function ParentGuide() {
         schema={schema}
       />
 
-      <section className="relative overflow-hidden pt-20 pb-24 md:pt-28 md:pb-36 border-b border-border/50" style={{ backgroundColor: '#1e3a6e' }}>
+      <section className="relative overflow-hidden bg-primary pt-20 pb-24 md:pt-28 md:pb-36 border-b border-border/50">
         <div className="absolute inset-0 z-0 hero-texture"></div>
         <div className="absolute inset-0 z-0 hero-vignette"></div>
         <div className="absolute inset-0 z-0" style={{ background: 'radial-gradient(ellipse 50% 40% at 50% 35%, rgba(255,255,255,0.04) 0%, transparent 100%)' }}></div>
@@ -143,7 +144,7 @@ export default function ParentGuide() {
             </ul>
 
             <div className="pt-8">
-              <Button size="lg" className="h-14 px-10 text-lg bg-brand-amber text-white hover:bg-brand-amber/90 font-bold shadow-lg shadow-brand-amber/15 border-none" onClick={scrollToForm} data-testid="button-hero-download">
+              <Button variant="cta" size="lg" className="h-14 px-10 text-lg shadow-lg shadow-brand-amber/15" onClick={scrollToForm} data-testid="button-hero-download">
                 Download the Free 22-Page Guide <Download className="ml-2 h-5 w-5" />
               </Button>
             </div>
@@ -328,7 +329,7 @@ export default function ParentGuide() {
           <p className="text-center text-xs text-muted-foreground mt-3">Impact simulator, pace discipline, sub-skill heatmap, and fatigue analysis</p>
 
           <div className="text-center mt-10">
-            <Button size="lg" className="h-14 px-10 text-lg bg-brand-amber text-white hover:bg-brand-amber/90 font-bold shadow-lg shadow-brand-amber/15 border-none" asChild data-testid="button-platform-diagnostic">
+            <Button variant="cta" size="lg" className="h-14 px-10 text-lg shadow-lg shadow-brand-amber/15" asChild data-testid="button-platform-diagnostic">
               <Link href="/free-diagnostic">
                 Start Free Readiness Check <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
@@ -418,7 +419,8 @@ export default function ParentGuide() {
                   Want to see where your child stands right now?
                 </p>
                 <Button
-                  className="h-11 px-6 bg-brand-amber text-white hover:bg-brand-amber/90 font-semibold"
+                  variant="cta"
+                  className="h-11 px-6 font-semibold"
                   data-testid="button-post-download-diagnostic"
                   onClick={() => {
                     if (leadId) {
@@ -461,7 +463,7 @@ export default function ParentGuide() {
                   />
                 </div>
                 {error && <p className="text-sm text-red-600" data-testid="text-form-error">{error}</p>}
-                <Button type="submit" disabled={submitting} className="w-full h-12 bg-brand-amber text-white hover:bg-brand-amber/90 font-bold text-base" data-testid="button-submit-guide">
+                <Button type="submit" disabled={submitting} variant="cta" size="lg" className="w-full" data-testid="button-submit-guide">
                   {submitting ? "Sending..." : "Send My Free Guide"}
                   {!submitting && <Download className="ml-2 h-5 w-5" />}
                 </Button>
@@ -501,8 +503,15 @@ export default function ParentGuide() {
               </Link>.
             </p>
           </div>
-          <Disclaimer />
         </div>
+      </section>
+
+      <section className="container mx-auto max-w-5xl px-4 pb-14">
+        <GuideConversionBlock />
+      </section>
+
+      <section className="container mx-auto max-w-xl px-4 pb-12">
+        <Disclaimer />
       </section>
     </div>
   );

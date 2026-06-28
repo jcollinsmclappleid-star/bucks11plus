@@ -410,7 +410,9 @@ export default function GuestResults() {
                 <h3 className="text-xl font-bold text-primary font-serif">Bucks Plus Edge</h3>
                 <span className="text-2xl font-bold text-primary">£35<span className="text-sm font-medium text-slate-500">/mo</span></span>
               </div>
-              <p className="text-xs text-emerald-700 font-semibold mb-1">Less than one hour with a private 11+ tutor</p>
+              <p className="text-xs text-emerald-700 font-semibold mb-1">
+                vs <span className="line-through decoration-red-500/70 text-slate-400">£160/mo</span> tutor · £35/mo here
+              </p>
               <p className="text-xs text-slate-400 mb-3">Cancel any time · no lock-in</p>
               <p className="text-sm text-slate-600 mb-4">Full platform access — every feature, monthly flexibility</p>
               <ul className="space-y-2 mb-6">
@@ -421,10 +423,10 @@ export default function GuestResults() {
                   </li>
                 ))}
               </ul>
-              <Button className="w-full" asChild data-testid="button-upsell-pack-monthly">
+              <Button variant="cta" size="lg" className="w-full" asChild data-testid="button-upsell-pack-monthly">
                 <Link href="/pricing?autoCheckout=pack_plus">Start Monthly — £35/mo</Link>
               </Button>
-              <p className="text-[11px] text-slate-500 text-center mt-2">Cancel any time · No lock-in</p>
+              <p className="text-[11px] text-slate-500 text-center mt-2">3-day money-back guarantee · Cancel any time</p>
             </CardContent>
           </Card>
 
@@ -440,17 +442,17 @@ export default function GuestResults() {
               <p className="text-xs text-emerald-600 font-semibold mb-1">Save £141 vs monthly · equiv. £23.25/mo · 34% off</p>
               <p className="text-sm text-slate-600 mb-4">Everything in the monthly plan · 12 months of full access</p>
               <ul className="space-y-2 mb-6">
-                {["2,500+ GL-style questions across all four subjects", "Full 40q and 50q mock exams", "All Hard-level challenge drills", "Priority email support", "Cancel any time"].map((f, i) => (
+                {["2,500+ GL-style questions across all four subjects", "Full 40q and 50q mock exams", "All Hard-level challenge drills", "PDF readiness reports after every session", "Parent analytics dashboard"].map((f, i) => (
                   <li key={i} className="flex items-center gap-2 text-sm text-slate-700">
                     <TrendingUp className="h-4 w-4 text-primary shrink-0" />
                     {f}
                   </li>
                 ))}
               </ul>
-              <Button className="w-full bg-primary" asChild data-testid="button-upsell-pack-annual">
+              <Button variant="cta" size="lg" className="w-full" asChild data-testid="button-upsell-pack-annual">
                 <Link href="/pricing?autoCheckout=pack_annual">Get Annual Access — £279</Link>
               </Button>
-              <p className="text-[11px] text-slate-500 text-center mt-2">Equiv. £23.25/mo · Cancel any time</p>
+              <p className="text-[11px] text-slate-500 text-center mt-2">3-day money-back guarantee · Equiv. £23.25/mo</p>
             </CardContent>
           </Card>
         </div>
@@ -469,7 +471,7 @@ export default function GuestResults() {
         <div className="absolute inset-0 bg-white/60 backdrop-blur-[2px] z-10 flex flex-col items-center justify-center p-6 text-center">
           <Lock className="h-10 w-10 text-slate-300 mb-3" />
           <h3 className="text-xl font-bold text-primary mb-2">Premium Analytics Dashboard</h3>
-          <p className="text-xs font-semibold text-brand-amber uppercase tracking-wide mb-2">Included with Platform Edge</p>
+          <p className="text-xs font-semibold text-brand-amber uppercase tracking-wide mb-2">Included with Bucks Plus Edge</p>
           <p className="text-sm text-muted-foreground mb-4 max-w-md">
             See detailed readiness metrics, pace analysis, section breakdowns, and personalised improvement priorities.
           </p>

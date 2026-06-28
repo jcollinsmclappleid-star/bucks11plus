@@ -4,7 +4,9 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle2, Target, Clock, BarChart3, Zap, Shield, Award, Star, ChevronUp, ChevronRight, TrendingUp, Brain, Layers, Hash, BookOpen, Trophy, Flame, Calendar, Sparkles, PlayCircle, GraduationCap, X, RotateCcw } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 import { useAuth } from "../lib/auth";
-import { TestCountdownBadge } from "../components/shared/TestCountdownBadge";
+import { TestCountdownBadge, PrepYearBadge, PrepUrgencyBanner } from "../components/shared/TestCountdownBadge";
+import { TutorCostComparison } from "../components/shared/SeoConversionPanel";
+import { GuideConversionBlock } from "../components/shared/GuideConversionBlock";
 
 /* ─── PANEL COMPONENTS (used as platform visual mockups) ─── */
 
@@ -1303,26 +1305,20 @@ export default function Landing() {
   const { user } = useAuth();
   const [activeFeature, setActiveFeature] = useState(6);
 
-  // Countdown to next Bucks 11+ test (Sept of relevant academic year)
-  const today = new Date();
-  const year = today.getMonth() >= 8 ? today.getFullYear() + 1 : today.getFullYear();
-  const testDate = new Date(year, 8, 12); // approx 2nd Saturday of September
-  const weeksToTest = Math.max(1, Math.ceil((testDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24 * 7)));
+  // Countdown / prep cycle messaging — shared via testDate.ts (see PrepUrgencyBanner)
 
   return (
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
       {/* ── URGENCY BANNER ── */}
       <div className="bg-amber-400 text-amber-950 border-b border-amber-500/40" data-testid="banner-countdown">
-        <div className="container mx-auto max-w-6xl px-4 py-2 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-3 text-center text-xs sm:text-sm font-semibold">
-          <span>Next Bucks 11+ test: September {year}</span>
-          <span className="hidden sm:inline opacity-50">·</span>
-          <span><span className="font-bold">{weeksToTest} weeks</span> of focused preparation left</span>
+        <div className="container mx-auto max-w-6xl px-4 py-2">
+          <PrepUrgencyBanner />
         </div>
       </div>
 
       <Seo
-        title="Bucks 11 Plus Practice Tests — Free GL-Style Readiness Check | Bucks 11 Plus Tests"
-        description="Know exactly where your child stands for the Buckinghamshire 11+. Take a free 8-minute GL-style readiness check and see a practice score on the 121 scale — with the 3 priorities to fix next."
+        title="Bucks 11 Plus Preparation — Help Your Child Pass Without the Guesswork | Bucks 11 Plus Tests"
+        description="Get your child ready for the Buckinghamshire 11+ — free readiness check, interactive practice, and parent dashboards. Start preparing for the September 2027 test and beyond."
         canonicalPath="/"
         schema={{
           "@context": "https://schema.org",
@@ -1337,7 +1333,7 @@ export default function Landing() {
       />
 
       {/* ── SECTION 1: HERO ── */}
-      <section className="relative overflow-hidden pt-12 pb-16 md:pt-16 md:pb-24 border-b border-border/50" style={{ backgroundColor: '#1e3a6e' }} data-testid="section-hero">
+      <section className="relative overflow-hidden bg-primary pt-12 pb-16 md:pt-16 md:pb-24 border-b border-border/50" data-testid="section-hero">
         <div className="absolute inset-0 z-0 hero-texture" />
         <div className="absolute inset-0 z-0 hero-vignette" />
         <div className="absolute inset-0 z-0" style={{ background: 'radial-gradient(ellipse 60% 50% at 30% 50%, rgba(255,255,255,0.04) 0%, transparent 100%)' }} />
@@ -1369,17 +1365,18 @@ export default function Landing() {
               <div>
                 <span className="inline-block text-xs font-semibold uppercase tracking-[0.2em] text-amber-400/80 mb-4">Built for the Buckinghamshire 11+</span>
                 <h1 className="text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-bold text-white tracking-tight leading-[1.1] font-serif">
-                  Get your child to <span className="text-amber-300">121</span> — without the guesswork.
+                  Get your child to pass the Buckinghamshire 11+ — without the guesswork.
                 </h1>
-                <div className="mt-4">
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <PrepYearBadge variant="dark" />
                   <TestCountdownBadge variant="dark" />
                 </div>
               </div>
               <p className="text-base md:text-lg text-white/65 leading-relaxed" data-testid="text-hero-sub">
-                Bucks 11+ style diagnostics, practice tests and mock tests that show exactly where marks are being lost. Pinpoint gaps, prioritise the highest-impact focus areas, and <span className="text-amber-300 font-semibold">see your child's practice score on the 121 scale and where the marks are being lost</span>. Includes 2,500+ GL-style questions for targeted practice.
+                Bucks 11+ diagnostics, practice tests and mock exams that show exactly where marks are being lost. Pinpoint weak areas, prioritise what matters, and see clear parent dashboards — with 2,500+ GL-style questions for targeted practice.
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
-                <Button size="lg" className="h-12 px-8 text-base bg-amber-400 text-amber-950 hover:bg-amber-300 font-bold shadow-lg shadow-amber-400/20 border-none" asChild data-testid="button-hero-primary">
+                <Button variant="cta" size="lg"  asChild data-testid="button-hero-primary">
                   <Link href="/free-diagnostic">
                     Free Readiness Check <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
@@ -1397,7 +1394,7 @@ export default function Landing() {
               <div className="flex flex-wrap items-center gap-x-5 gap-y-2" data-testid="trust-signal-hero">
                 <div className="flex items-center gap-1.5 text-white/55 text-xs font-medium">
                   <Shield className="h-3.5 w-3.5 text-emerald-400" />
-                  <span>Money-back guarantee</span>
+                  <span>3-day money-back guarantee</span>
                 </div>
                 <div className="flex items-center gap-1.5 text-white/55 text-xs font-medium">
                   <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
@@ -1574,7 +1571,7 @@ export default function Landing() {
 
           <div className="text-center mt-16 md:mt-20 pt-10 border-t border-border/30">
             <p className="text-sm text-slate-500 mb-5">See how your child compares — before you pay anything</p>
-            <Button size="lg" className="h-12 px-8 bg-amber-400 text-amber-950 hover:bg-amber-300 font-bold border-none shadow-lg" asChild data-testid="button-showcase-cta">
+            <Button variant="cta" size="lg"  asChild data-testid="button-showcase-cta">
               <Link href="/free-diagnostic">
                 Take the Free Readiness Check <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
@@ -1613,7 +1610,7 @@ export default function Landing() {
                   </div>
                 ))}
               </div>
-              <Button size="lg" className="h-12 px-10 text-base bg-amber-400 text-amber-950 hover:bg-amber-300 font-bold border-none shadow-lg shadow-amber-200/60 mb-4" asChild data-testid="button-diagnostic-entry-cta">
+              <Button variant="cta" size="lg" className="px-10 mb-4" asChild data-testid="button-diagnostic-entry-cta">
                 <Link href="/free-diagnostic">
                   Take the Free Readiness Check <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
@@ -1630,7 +1627,7 @@ export default function Landing() {
       </section>
 
       {/* ── SECTION 2A: INSIDE THE PLATFORM (DASHBOARD SHOWCASE) ── */}
-      <section className="relative py-16 md:py-24 overflow-hidden border-b border-border/30" style={{ background: "linear-gradient(135deg, #1e3a6e 0%, #1a3550 100%)" }} data-testid="section-dashboard-showcase">
+      <section className="relative py-16 md:py-24 overflow-hidden border-b border-border/30 bg-gradient-to-br from-primary to-[#1a3550]" data-testid="section-dashboard-showcase">
         <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)", backgroundSize: "24px 24px" }} />
         <div className="container mx-auto max-w-6xl px-4 relative">
           <div className="text-center mb-12 md:mb-14">
@@ -1714,7 +1711,7 @@ export default function Landing() {
               ))}
 
               <div className="flex flex-col sm:flex-row gap-3 pt-3">
-                <Button size="lg" className="h-12 px-7 bg-amber-400 text-amber-950 hover:bg-amber-300 font-bold border-none shadow-lg" asChild data-testid="button-dashboard-cta-diagnostic">
+                <Button variant="cta" size="lg" className="px-7" asChild data-testid="button-dashboard-cta-diagnostic">
                   <Link href="/free-diagnostic">
                     See your child's forecast — free <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
@@ -1808,7 +1805,7 @@ export default function Landing() {
             ))}
           </div>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button asChild className="bg-primary" data-testid="button-analytics-practice">
+            <Button variant="cta" asChild className="min-w-[200px]" data-testid="button-analytics-practice">
               <Link href="/app/practice">See Practice Tests <ArrowRight className="ml-2 h-4 w-4" /></Link>
             </Button>
             <Button asChild variant="outline" data-testid="button-analytics-readiness">
@@ -1878,7 +1875,7 @@ export default function Landing() {
           </div>
 
           <div className="text-center">
-            <Button size="lg" className="h-12 px-8 bg-amber-400 text-amber-950 hover:bg-amber-300 font-bold border-none" asChild data-testid="button-how-it-works-cta">
+            <Button variant="cta" size="lg"  asChild data-testid="button-how-it-works-cta">
               <Link href="/free-diagnostic">Start your free readiness check — no account needed <ArrowRight className="ml-2 h-5 w-5" /></Link>
             </Button>
           </div>
@@ -1915,7 +1912,7 @@ export default function Landing() {
             {[
               { q: "Will this actually work for my child?", a: "The free 8-minute readiness check shows you, before you pay anything, whether our diagnostic accurately identifies your child's gaps and produces a useful practice score on the 121 scale. If the free check doesn't give you useful insight, the paid programme isn't for you — and you'll have spent nothing." },
               { q: "What if I subscribe and change my mind?", a: "You can cancel any subscription at any time from your account, and we offer a money-back guarantee on new subscriptions if the platform isn't right for you. See pricing terms below for full details." },
-              { q: "How is this different from a private tutor?", a: "A private tutor in Buckinghamshire typically charges £40–£60 per hour. Our annual plan works out at £23.25 per month — less than half the cost of a single tutoring session — and gives unlimited access to 2,500+ GL-style questions, full mock exams, and parent analytics that a tutor can't provide." },
+              { q: "How is this different from a private tutor?", a: "A weekly tutor at £40/hr is roughly £160/month for one hour. Bucks Plus Edge is £35/month for unlimited interactive GL-style practice — timed mocks, targeted drills, instant explanations, and parent analytics. It is modern structured preparation children can use little and often, not a race to the cheapest option." },
               { q: "Will my child enjoy using it?", a: "Sessions are short, friendly, and end with encouragement — not just a score. Your child can jump back in with one tap, and section names are written in language a 10-year-old understands. The free check is a good way to see how they respond before committing." },
             ].map((item, i) => (
               <details key={i} className="group" data-testid={`faq-prepricing-${i}`}>
@@ -1930,13 +1927,31 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* ── PLATFORM PREVIEW + CONVERSION ── */}
+      <section className="border-b border-border/30 bg-white py-14 md:py-16" data-testid="section-guide-conversion">
+        <div className="container mx-auto max-w-5xl px-4">
+          <GuideConversionBlock />
+        </div>
+      </section>
+
+      {/* ── TUTOR vs PLATFORM ── */}
+      <section className="border-b border-border/30 bg-slate-50 py-14 md:py-16" data-testid="section-tutor-comparison">
+        <div className="container mx-auto max-w-5xl px-4">
+          <TutorCostComparison />
+        </div>
+      </section>
+
       {/* ── SECTION 7: PRICING ── */}
       <section id="pricing" className="py-16 md:py-20 bg-white border-b border-border/30" data-testid="section-pricing">
         <div className="container mx-auto max-w-5xl px-4">
           <div className="text-center mb-10">
             <span className="inline-block text-xs font-bold text-primary/50 uppercase tracking-widest mb-3">Pricing</span>
             <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-3">Simple, transparent pricing</h2>
-            <p className="text-muted-foreground max-w-xl mx-auto">Start with the free readiness check. Upgrade when you're ready. Both paid plans include every feature.</p>
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              One tutor session a week at £40 is roughly{" "}
+              <span className="line-through decoration-red-500/60 text-slate-400">£160/month</span> (typical tutor cost).
+              Our platform is <strong className="text-foreground">£35/month</strong> or <strong className="text-foreground">£23.25/month</strong> on annual.
+            </p>
           </div>
 
           {/* Free tier */}
@@ -1959,6 +1974,9 @@ export default function Landing() {
                 <span className="text-4xl font-bold text-primary">£35</span>
                 <span className="text-slate-500 text-sm mb-1">/month</span>
               </div>
+              <p className="text-xs text-amber-700 font-semibold mb-1">
+                vs <span className="line-through decoration-red-500/70 text-slate-400">£160/mo</span> tutor · £35/mo here
+              </p>
               <p className="text-xs text-slate-400 mb-6">Cancel anytime · Money-back guarantee</p>
               <ul className="space-y-2 text-sm text-slate-700 mb-8 flex-1">
                 {[
@@ -1973,8 +1991,8 @@ export default function Landing() {
                   <li key={i} className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />{f}</li>
                 ))}
               </ul>
-              <Link href="/pricing?autoCheckout=pack_plus" className="block text-center w-full rounded-lg bg-primary text-white font-semibold py-2.5 text-sm hover:bg-primary/90 transition-colors" data-testid="button-pricing-monthly">
-                Start Monthly
+              <Link href="/pricing?autoCheckout=pack_plus" className="btn-cta-lg block w-full rounded-lg py-2.5 text-center text-sm no-underline" data-testid="button-pricing-monthly">
+                Start Monthly — £35
               </Link>
             </div>
 
@@ -1986,7 +2004,7 @@ export default function Landing() {
                 <span className="text-4xl font-bold text-primary">£279</span>
                 <span className="text-slate-500 text-sm mb-1">/year</span>
               </div>
-              <p className="text-xs text-slate-400 mb-1">equiv. £23.25/month · less than 1 hour of tutoring</p>
+              <p className="text-xs text-slate-400 mb-1">£23.25/mo equiv. · unlimited interactive practice</p>
               <p className="text-xs text-emerald-600 font-semibold mb-1">Save £141 vs monthly</p>
               <p className="text-xs text-slate-400 mb-6">Cancel anytime · Money-back guarantee</p>
               <ul className="space-y-2 text-sm text-slate-700 mb-8 flex-1">
@@ -2001,8 +2019,8 @@ export default function Landing() {
                   <li key={i} className="flex gap-2"><CheckCircle2 className={`h-4 w-4 shrink-0 mt-0.5 ${i === 0 ? 'text-amber-400' : 'text-emerald-500'}`} /><span className={i === 0 ? 'font-bold text-primary' : ''}>{f}</span></li>
                 ))}
               </ul>
-              <Link href="/pricing?autoCheckout=pack_annual" className="block text-center w-full rounded-lg bg-primary text-white font-semibold py-2.5 text-sm hover:bg-primary/90 transition-colors" data-testid="button-pricing-annual">
-                Get Annual Access
+              <Link href="/pricing?autoCheckout=pack_annual" className="btn-cta-lg block w-full rounded-lg py-2.5 text-center text-sm no-underline" data-testid="button-pricing-annual">
+                Get Annual — £279 (best value)
               </Link>
             </div>
           </div>
@@ -2021,7 +2039,7 @@ export default function Landing() {
             <p className="text-center text-xs text-slate-400">Registered in England · Operated by Ianson Systems Limited</p>
           </div>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-8" data-testid="pricing-explore-ctas">
-            <Button asChild className="bg-primary min-w-[200px]" data-testid="button-pricing-practice">
+            <Button variant="cta" asChild className="min-w-[200px]" data-testid="button-pricing-practice">
               <Link href="/app/practice">See Practice Tests <ArrowRight className="ml-2 h-4 w-4" /></Link>
             </Button>
             <Button asChild variant="outline" className="min-w-[200px]" data-testid="button-pricing-readiness">
@@ -2041,7 +2059,7 @@ export default function Landing() {
             <span className="inline-flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />Cancel anytime</span>
           </div>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button size="lg" className="h-12 px-8 font-bold bg-amber-400 text-amber-950 hover:bg-amber-300 border-none" asChild data-testid="button-cta-final">
+            <Button variant="cta" size="lg"  asChild data-testid="button-cta-final">
               <Link href="/free-diagnostic"><ArrowRight className="mr-2 h-5 w-5" />Start Free Readiness Check</Link>
             </Button>
             <Button variant="outline" size="lg" className="h-12 px-6 font-semibold border-white/25 text-white hover:bg-white/10" asChild data-testid="button-cta-pricing">

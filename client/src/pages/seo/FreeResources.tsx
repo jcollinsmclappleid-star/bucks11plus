@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
-import { ContentCTA } from "@/components/shared/ContentCTA";
+import { FreeToPlatformPanel, FreeToPlatformStrip } from "@/components/shared/FreeToPlatformPanel";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
 
@@ -82,10 +82,12 @@ export default function FreeResources() {
         If you only do one thing on this page, take the free 8-minute diagnostic first. It's a 12-question GL-style mini paper covering all four sections, with a practice score on the 121 scale and a section breakdown. The result tells you which of the resources below to read in detail — so you don't waste time on the wrong topics.
       </p>
       <div className="not-prose my-6">
-        <Link href="/free-diagnostic" className="inline-block rounded-xl bg-primary text-white px-6 py-3 font-semibold no-underline hover:opacity-95" data-testid="link-start-diagnostic">
+        <Link href="/free-diagnostic" className="inline-block rounded-xl btn-cta px-6 py-3 no-underline hover:opacity-95" data-testid="link-start-diagnostic">
           Take the free 8-minute diagnostic →
         </Link>
       </div>
+
+      <FreeToPlatformStrip freeOffer="Free guides and PDFs on this page" />
 
       <h2 className="text-primary font-serif">Free Practice Material</h2>
       <div className="not-prose grid sm:grid-cols-2 gap-3 my-6">
@@ -116,11 +118,7 @@ export default function FreeResources() {
       </ol>
 
       <ChildExperienceCTA />
-      <ContentCTA
-        heading="Build a personalised reading list in 8 minutes"
-        subhead="The free diagnostic shows you exactly which of the resources on this page to prioritise — and which to skip."
-        ctaLabel="Take the free diagnostic"
-      />
+      <FreeToPlatformPanel freeOffer="free guides, PDFs, and a 12-question check on this site" />
 
       <Disclaimer />
     </div>

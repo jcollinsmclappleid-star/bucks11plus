@@ -119,7 +119,7 @@ export default function ReportArchive() {
             <p className="text-slate-600 max-w-md mb-6">
               Subscribers can download detailed PDF readiness reports for every session — perfect for sharing with tutors or keeping offline records.
             </p>
-            <Button size="lg" className="bg-primary shadow-lg" asChild data-testid="button-upgrade-reports">
+            <Button variant="cta" size="lg" className="shadow-lg" asChild data-testid="button-upgrade-reports">
               <Link href="/pricing">View Upgrade Options</Link>
             </Button>
           </div>

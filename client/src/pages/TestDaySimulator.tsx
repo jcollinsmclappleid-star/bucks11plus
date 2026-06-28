@@ -141,7 +141,7 @@ export default function TestDaySimulator() {
         <div className="text-5xl">🔒</div>
         <h1 className="text-2xl font-serif font-bold text-primary">Test Day Simulator</h1>
         <p className="text-muted-foreground">
-          The Test Day Simulator is exclusive to Young Scholar Programme members. Experience the real exam format with two papers and a timed break.
+          The Test Day Simulator is included with Bucks Plus Edge. Experience the real exam format with two papers and a timed break.
         </p>
         <Link href="/pricing">
           <button className="bg-primary text-primary-foreground px-6 py-2.5 rounded-md font-medium hover:bg-primary/90" data-testid="button-upgrade-simulator">

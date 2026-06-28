@@ -52,7 +52,7 @@ export default function Legal({ type }: { type: 'terms' | 'privacy' | 'safeguard
         },
         {
           heading: "12. Contact",
-          body: "If you have any questions about these Terms of Service, please contact us at support@bucks11plustest.co.uk."
+          body: "If you have any questions about these Terms of Service, please contact us at support@11plustesthub.co.uk."
         }
       ]
     },
@@ -98,7 +98,7 @@ export default function Legal({ type }: { type: 'terms' | 'privacy' | 'safeguard
         },
         {
           heading: "9. Your Rights Under UK GDPR",
-          body: "Under UK data protection law, you have the following rights: Right of access — to request a copy of the personal data we hold about you. Right to rectification — to request correction of inaccurate or incomplete data. Right to erasure — to request deletion of your personal data, subject to legal retention requirements. Right to restrict processing — to request that we limit how we use your data. Right to data portability — to receive your data in a structured, commonly used format. Right to object — to object to processing based on legitimate interests. Right to withdraw consent — where processing is based on consent (cookies, marketing emails), you may withdraw it at any time without affecting the lawfulness of processing carried out before withdrawal. How to exercise these rights: For data portability and erasure, the fastest route is the self-serve buttons in your Account Settings — 'Download my data' gives you an immediate JSON export of your account, child profiles, test sessions, answers and email history, and 'Delete account' immediately removes all of your data from our live systems. For any other right, or if you cannot access your account, please email us at support@bucks11plustest.co.uk and we will respond within 30 days."
+          body: "Under UK data protection law, you have the following rights: Right of access — to request a copy of the personal data we hold about you. Right to rectification — to request correction of inaccurate or incomplete data. Right to erasure — to request deletion of your personal data, subject to legal retention requirements. Right to restrict processing — to request that we limit how we use your data. Right to data portability — to receive your data in a structured, commonly used format. Right to object — to object to processing based on legitimate interests. Right to withdraw consent — where processing is based on consent (cookies, marketing emails), you may withdraw it at any time without affecting the lawfulness of processing carried out before withdrawal. How to exercise these rights: For data portability and erasure, the fastest route is the self-serve buttons in your Account Settings — 'Download my data' gives you an immediate JSON export of your account, child profiles, test sessions, answers and email history, and 'Delete account' immediately removes all of your data from our live systems. For any other right, or if you cannot access your account, please email us at support@11plustesthub.co.uk and we will respond within 30 days."
         },
         {
           heading: "10. Data Security",
@@ -114,7 +114,7 @@ export default function Legal({ type }: { type: 'terms' | 'privacy' | 'safeguard
         },
         {
           heading: "13. Contact and Complaints",
-          body: "If you have any questions about this Privacy Policy or wish to exercise your data protection rights, please contact us at support@bucks11plustest.co.uk. If you are unsatisfied with our response, you have the right to lodge a complaint with the Information Commissioner's Office (ICO) at ico.org.uk."
+          body: "If you have any questions about this Privacy Policy or wish to exercise your data protection rights, please contact us at support@11plustesthub.co.uk. If you are unsatisfied with our response, you have the right to lodge a complaint with the Information Commissioner's Office (ICO) at ico.org.uk."
         }
       ]
     },
@@ -140,7 +140,7 @@ export default function Legal({ type }: { type: 'terms' | 'privacy' | 'safeguard
         },
         {
           heading: "Raising a Concern",
-          body: "If you have a safeguarding concern relating to anything you encounter on the platform — content you believe is inappropriate, a suspected technical issue affecting a child's session, or anything else — please email us at safeguarding@bucks11plustest.co.uk or support@bucks11plustest.co.uk. We aim to acknowledge safeguarding emails within one working day. If you believe a child is at immediate risk of harm, contact the NSPCC on 0808 800 5000 or, in an emergency, the police on 999."
+          body: "If you have a safeguarding concern relating to anything you encounter on the platform — content you believe is inappropriate, a suspected technical issue affecting a child's session, or anything else — please email us at support@11plustesthub.co.uk. We aim to acknowledge safeguarding emails within one working day. If you believe a child is at immediate risk of harm, contact the NSPCC on 0808 800 5000 or, in an emergency, the police on 999."
         },
         {
           heading: "Policy Review",
@@ -162,7 +162,7 @@ export default function Legal({ type }: { type: 'terms' | 'privacy' | 'safeguard
         },
         {
           heading: "Your Right to Cancel (14-Day Cooling-Off Period) — One-Time Programme Purchases",
-          body: "This section applies to one-time programme plan purchases (8-week, 12-week, and Bucks Young Scholar Programme 6-month plans). Under the Consumer Contracts (Information, Cancellation and Additional Charges) Regulations 2013, you have 14 days from the date of purchase to cancel your order and receive a full refund — provided you have not accessed, started or used any of the digital content included in your plan. This includes starting a diagnostic, accessing practice questions, viewing dashboard analytics or downloading any reports. For monthly subscriptions, see the section above."
+          body: "Bucks Plus Edge is sold as a monthly (£35) or annual (£279) subscription. Under the Consumer Contracts (Information, Cancellation and Additional Charges) Regulations 2013, you have 14 days from the date of your first subscription purchase to cancel and receive a full refund — provided you have not substantially used the digital content (starting a full diagnostic, accessing paid practice content, or downloading reports). See the refund policy for full details. If you purchased under a legacy one-time plan before our current pricing, contact support@11plustesthub.co.uk for plan-specific terms.",
         },
         {
           heading: "When a Refund Cannot Be Issued",
@@ -170,19 +170,19 @@ export default function Legal({ type }: { type: 'terms' | 'privacy' | 'safeguard
         },
         {
           heading: "How to Request a Refund",
-          body: "If you are within the 14-day window and have not accessed any digital content, please email us at support@bucks11plustest.co.uk with your account email address and order reference. We aim to process all eligible refund requests within 5 working days. Refunds will be returned to the original payment method."
+          body: "If you are within the 14-day window and have not accessed any digital content, please email us at support@11plustesthub.co.uk with your account email address and order reference. We aim to process all eligible refund requests within 5 working days. Refunds will be returned to the original payment method."
         },
         {
           heading: "Exceptional Circumstances",
-          body: "If you experience a technical issue that prevents you from using the platform as intended, please contact us at support@bucks11plustest.co.uk. We will review each case individually and may offer a partial refund, credit, or extension at our discretion."
+          body: "If you experience a technical issue that prevents you from using the platform as intended, please contact us at support@11plustesthub.co.uk. We will review each case individually and may offer a partial refund, credit, or extension at our discretion."
         },
         {
           heading: "Plan Changes & Upgrades",
-          body: "Current plan prices: Bucks Plus Edge Monthly £35/month; Bucks Plus Edge Annual £279/year. If you wish to change your plan, please contact support@bucks11plustest.co.uk. Downgrades are not available once content from a higher-tier plan has been accessed."
+          body: "Current plan prices: Bucks Plus Edge Monthly £35/month; Bucks Plus Edge Annual £279/year. If you wish to change your plan, please contact support@11plustesthub.co.uk. Downgrades are not available once content from a higher-tier plan has been accessed."
         },
         {
           heading: "Contact",
-          body: "For any questions about this refund policy or to request a refund, please email support@bucks11plustest.co.uk."
+          body: "For any questions about this refund policy or to request a refund, please email support@11plustesthub.co.uk."
         }
       ]
     }

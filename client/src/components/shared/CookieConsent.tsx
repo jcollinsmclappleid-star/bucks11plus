@@ -58,7 +58,7 @@ export function CookieConsent() {
           <button
             type="button"
             onClick={accept}
-            className="px-4 py-1.5 rounded-md bg-amber-400 text-amber-950 text-[11px] font-bold hover:bg-amber-300 transition-colors"
+            className="px-4 py-1.5 rounded-md btn-cta text-[11px] transition-colors"
             data-testid="button-cookie-accept"
           >
             Accept

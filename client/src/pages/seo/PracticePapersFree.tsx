@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
-import { ContentCTA } from "@/components/shared/ContentCTA";
+import { FreeToPlatformPanel, FreeToPlatformStrip } from "@/components/shared/FreeToPlatformPanel";
 import { LeadMagnetBlock } from "@/components/shared/LeadMagnetBlock";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
@@ -15,8 +15,8 @@ export default function PracticePapersFree() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
       <Seo
-        title="Bucks 11 Plus Practice Papers Free – Where to Get Genuinely Free Material"
-        description="A practical guide to genuinely free Bucks 11+ practice papers and questions, what each is good for, and how to use them without wasting your child's time."
+        title="Free Bucks 11+ Practice Papers — Where to Get GL-Style Material (2026)"
+        description="Genuinely free Bucks 11+ practice papers and PDF downloads: what's available, what each is good for, and how to use them. Includes two free printable GL-style papers — no email required."
         canonicalPath="/bucks-11-plus-practice-papers-free"
         schema={[breadcrumbSchema(breadcrumbItems)]}
       />
@@ -29,6 +29,22 @@ export default function PracticePapersFree() {
         <p className="text-xl text-slate-600 leading-relaxed">
           What's genuinely free, what each is good for, and how to use them sensibly.
         </p>
+      </div>
+
+      <FreeToPlatformStrip freeOffer="Free PDFs and a 12-question check" />
+
+      <div className="not-prose my-6 rounded-xl border border-primary/15 bg-primary/[0.03] p-5">
+        <p className="text-sm font-bold text-primary mb-2">Fastest free download</p>
+        <p className="text-sm text-slate-600 mb-4 leading-relaxed">
+          Two printable GL-style practice papers (12 questions each, worked answers) —{" "}
+          <Link href="/bucks-11-plus-free-sample-papers" className="text-primary font-semibold hover:underline">download both PDFs now</Link>
+          {" "}with no email, or take the{" "}
+          <Link href="/free-diagnostic" className="text-primary font-semibold hover:underline">free timed readiness check</Link>.
+        </p>
+        <div className="flex flex-wrap gap-2">
+          <a href="/api/practice-paper/download" download="bucks-11-plus-free-practice-paper.pdf" className="inline-block rounded-lg bg-primary text-white text-xs font-bold px-4 py-2 hover:bg-primary/90">Paper 1 PDF</a>
+          <a href="/api/practice-paper-2/download" download="bucks-11-plus-free-practice-paper-2.pdf" className="inline-block rounded-lg bg-primary text-white text-xs font-bold px-4 py-2 hover:bg-primary/90">Paper 2 PDF</a>
+        </div>
       </div>
 
       <h2 className="text-primary font-serif">The Honest Picture</h2>
@@ -57,9 +73,9 @@ export default function PracticePapersFree() {
         <li>Takes 8 minutes — a realistic snapshot rather than an exhausting full paper.</li>
       </ul>
 
-      <h2 className="text-primary font-serif">3. Our Free Practice Bank</h2>
+      <h2 className="text-primary font-serif">3. Bucks Plus Edge — Full Question Bank</h2>
       <p>
-        Beyond the diagnostic, we make a rotating set of free practice questions available to all signed-up users — 50 questions spanning all four domains, refreshed periodically. Sign up takes less than a minute and there's no payment requirement to access them.
+        Free material gets you started; structured preparation needs volume, timing, and feedback. <Link href="/pricing" className="text-primary hover:underline">Bucks Plus Edge</Link> gives your child <strong>2,500+ interactive GL-style questions</strong> across all four domains — full 40- and 50-question timed mocks, Hard-level drills, instant explanations, and a parent dashboard that tracks gaps by question type. From <strong>£35/month</strong> or <strong>£279/year</strong>.
       </p>
 
       <h2 className="text-primary font-serif">4. Publisher Free Samples</h2>
@@ -84,16 +100,16 @@ export default function PracticePapersFree() {
       <ol>
         <li><strong>Spring of Year 5:</strong> Take our free diagnostic to establish a baseline.</li>
         <li><strong>Year 5 throughout:</strong> Build vocabulary through wide reading; daily mental arithmetic; publisher free samples to introduce question types.</li>
-        <li><strong>Summer holiday before Year 6:</strong> Sit the official Familiarisation Test under timed conditions; use our free practice bank to drill specific weak areas.</li>
+        <li><strong>Summer holiday before Year 6:</strong> Sit the official Familiarisation Test under timed conditions; use Bucks Plus Edge drills to target weak areas identified in the diagnostic.</li>
         <li><strong>August / early September:</strong> Re-take the diagnostic to refresh the indicative readiness score and adjust focus in the final two weeks.</li>
       </ol>
       <p>
-        Families that progress beyond this typically invest in either one or two paid practice papers from established publishers (£10–£20 per book) or a structured online platform. Our paid plans start at £19 — see <Link href="/pricing" className="text-primary hover:underline">pricing</Link> for what's included.
+        Families that progress beyond this typically invest in either one or two paid practice papers from established publishers (£10–£20 per book) or a structured online platform. Bucks Plus Edge is <strong>£35/month or £279/year</strong> — see <Link href="/pricing" className="text-primary hover:underline">pricing</Link> for the full 2,500+ question bank, mocks, and parent analytics.
       </p>
 
       <ChildExperienceCTA />
       <LeadMagnetBlock source="seo:practice-papers-free" />
-      <ContentCTA heading="Free practice paper above. Free readiness score below." subhead="An 8-minute check gives your child a practice score on the 121 scale — no account needed." ctaLabel="Get the readiness score" />
+      <FreeToPlatformPanel freeOffer="free PDFs and a 12-question readiness check" />
 
       <div className="not-prose my-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">
         <h3 className="text-lg font-semibold text-primary font-serif mb-3">More Free 11+ Resources</h3>

@@ -873,7 +873,7 @@ export default function ParentAnalytics() {
               Upgrade to unlock readiness scoring, timing analysis, stamina profiling, practice score tracking on the 121 scale, and personalised improvement priorities.
             </p>
             <Link href="/pricing">
-              <Button size="lg" className="bg-primary text-lg h-12 px-8" data-testid="button-upgrade-analytics">
+              <Button variant="cta" size="lg"  data-testid="button-upgrade-analytics">
                 View Pricing <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>

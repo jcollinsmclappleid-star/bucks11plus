@@ -58,13 +58,13 @@ export function getTownHtml(slug: string): string | null {
       <p>${esc(town.uniqueChallenge)}</p>
 
       <h2>Preparation Timeline for ${esc(town.name)} Families</h2>
-      <div style="border-left:3px solid #0e1f30;padding-left:1.25rem;margin:1rem 0;">
-        <p style="margin-bottom:0.75rem;"><strong style="color:#0e1f30;">Year 4 or Early Year 5:</strong> Take a readiness check to establish a baseline across all four domains. Identify which areas are strong and which need dedicated practice. Begin reading regularly in preparation for comprehension.</p>
-        <p style="margin-bottom:0.75rem;"><strong style="color:#0e1f30;">Spring Term Year 5:</strong> Registration opens — confirm whether your school registers automatically or whether you must register directly. Begin domain-specific practice, focusing on the weakest areas identified in the readiness check. Build familiarity with Verbal Reasoning and Non-Verbal Reasoning question formats.</p>
-        <p style="margin-bottom:0.75rem;"><strong style="color:#0e1f30;">June Year 5:</strong> Registration deadline — confirm registration is complete. Do not miss this. Begin maths topic work for any gaps identified (fractions, percentages, ratio, basic algebra).</p>
-        <p style="margin-bottom:0.75rem;"><strong style="color:#0e1f30;">Summer Holidays (Year 5 to Year 6):</strong> Introduce full timed practice papers. Work through at least 4–6 complete papers under timed conditions. Review every paper carefully — categorise errors by question type to direct remaining preparation.</p>
-        <p style="margin-bottom:0.75rem;"><strong style="color:#0e1f30;">September Year 6 (Test Day):</strong> All children sit the Secondary Transfer Test at their primary school (or assigned test centre for out-of-county children). Ensure your child has had recent practice with audio-controlled timed conditions.</p>
-        <p><strong style="color:#0e1f30;">October Year 6:</strong> Results released — 'qualified' or 'not qualified'. If qualified, submit the SCAF listing grammar school preferences before the October/November deadline.</p>
+      <div style="border-left:3px solid #1e3a6e;padding-left:1.25rem;margin:1rem 0;">
+        <p style="margin-bottom:0.75rem;"><strong style="color:#1e3a6e;">Year 4 or Early Year 5:</strong> Take a readiness check to establish a baseline across all four domains. Identify which areas are strong and which need dedicated practice. Begin reading regularly in preparation for comprehension.</p>
+        <p style="margin-bottom:0.75rem;"><strong style="color:#1e3a6e;">Spring Term Year 5:</strong> Registration opens — confirm whether your school registers automatically or whether you must register directly. Begin domain-specific practice, focusing on the weakest areas identified in the readiness check. Build familiarity with Verbal Reasoning and Non-Verbal Reasoning question formats.</p>
+        <p style="margin-bottom:0.75rem;"><strong style="color:#1e3a6e;">June Year 5:</strong> Registration deadline — confirm registration is complete. Do not miss this. Begin maths topic work for any gaps identified (fractions, percentages, ratio, basic algebra).</p>
+        <p style="margin-bottom:0.75rem;"><strong style="color:#1e3a6e;">Summer Holidays (Year 5 to Year 6):</strong> Introduce full timed practice papers. Work through at least 4–6 complete papers under timed conditions. Review every paper carefully — categorise errors by question type to direct remaining preparation.</p>
+        <p style="margin-bottom:0.75rem;"><strong style="color:#1e3a6e;">September Year 6 (Test Day):</strong> All children sit the Secondary Transfer Test at their primary school (or assigned test centre for out-of-county children). Ensure your child has had recent practice with audio-controlled timed conditions.</p>
+        <p><strong style="color:#1e3a6e;">October Year 6:</strong> Results released — 'qualified' or 'not qualified'. If qualified, submit the SCAF listing grammar school preferences before the October/November deadline.</p>
       </div>
 
       <h2>Understanding the 121 Qualifying Score</h2>
@@ -171,12 +171,12 @@ export function getGrammarSchoolHtml(slug: string): string | null {
 
       <h2>The Admissions Process for ${esc(school.shortName)}</h2>
       <p>There is no separate entrance examination for ${esc(school.shortName)} — entry is based entirely on the Buckinghamshire Secondary Transfer Test result. The process for families applying to this school follows the standard Buckinghamshire grammar school admissions timeline:</p>
-      <div style="border-left:3px solid #0e1f30;padding-left:1.25rem;margin:1rem 0;">
-        <p style="margin-bottom:0.5rem;"><strong style="color:#0e1f30;">June (Year 5):</strong> Registration deadline for the Secondary Transfer Test.</p>
-        <p style="margin-bottom:0.5rem;"><strong style="color:#0e1f30;">September (Year 6):</strong> Secondary Transfer Test — all children sit the test at their primary school.</p>
-        <p style="margin-bottom:0.5rem;"><strong style="color:#0e1f30;">October (Year 6):</strong> Results released ('qualified' or 'not qualified').</p>
-        <p style="margin-bottom:0.5rem;"><strong style="color:#0e1f30;">October–November (Year 6):</strong> SCAF deadline — qualified families list grammar school preferences. Include ${esc(school.shortName)} on your SCAF if it is a genuine preference.</p>
-        <p><strong style="color:#0e1f30;">1 March (following year):</strong> National Offer Day — grammar school place offers released.</p>
+      <div style="border-left:3px solid #1e3a6e;padding-left:1.25rem;margin:1rem 0;">
+        <p style="margin-bottom:0.5rem;"><strong style="color:#1e3a6e;">June (Year 5):</strong> Registration deadline for the Secondary Transfer Test.</p>
+        <p style="margin-bottom:0.5rem;"><strong style="color:#1e3a6e;">September (Year 6):</strong> Secondary Transfer Test — all children sit the test at their primary school.</p>
+        <p style="margin-bottom:0.5rem;"><strong style="color:#1e3a6e;">October (Year 6):</strong> Results released ('qualified' or 'not qualified').</p>
+        <p style="margin-bottom:0.5rem;"><strong style="color:#1e3a6e;">October–November (Year 6):</strong> SCAF deadline — qualified families list grammar school preferences. Include ${esc(school.shortName)} on your SCAF if it is a genuine preference.</p>
+        <p><strong style="color:#1e3a6e;">1 March (following year):</strong> National Offer Day — grammar school place offers released.</p>
       </div>
 
       <h2>Preparation Advice for ${esc(school.shortName)} Applicants</h2>
@@ -190,7 +190,7 @@ export function getGrammarSchoolHtml(slug: string): string | null {
       <div style="margin:1.5rem 0;padding:1rem 1.25rem;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;">
         <p style="font-size:0.85rem;color:#475569;margin:0;">
           <strong>Address:</strong> ${esc(school.address)}<br>
-          <a href="${esc(school.website)}" target="_blank" rel="noopener noreferrer" style="color:#0e1f30;">Official school website →</a>
+          <a href="${esc(school.website)}" target="_blank" rel="noopener noreferrer" style="color:#1e3a6e;">Official school website →</a>
         </p>
       </div>
     </section>
@@ -686,7 +686,7 @@ export function getLearnArticleHtml(slug: string): string | null {
     ">
       <style>
         .ssr-article-body h1 { display:none; }
-        .ssr-article-body h2 { font-family:'Libre Baskerville',serif; font-size:1.15rem; font-weight:700; color:#0e1f30; margin:2.25rem 0 0.6rem; }
+        .ssr-article-body h2 { font-family:'Libre Baskerville',serif; font-size:1.15rem; font-weight:700; color:#1e3a6e; margin:2.25rem 0 0.6rem; }
         .ssr-article-body h3 { font-size:0.95rem; font-weight:600; color:#1e293b; margin:1.5rem 0 0.4rem; }
         .ssr-article-body p { color:#475569; line-height:1.75; margin-bottom:1rem; }
         .ssr-article-body ul, .ssr-article-body ol { padding-left:1.25rem; margin-bottom:1rem; }
@@ -697,7 +697,7 @@ export function getLearnArticleHtml(slug: string): string | null {
         .ssr-article-body .keytakeaways li { color:#166534; font-size:0.875rem; padding:0.2rem 0 0.2rem 1.25rem; position:relative; }
         .ssr-article-body .keytakeaways li::before { content:"✓"; position:absolute; left:0; color:#16a34a; }
         .ssr-article-body .faq h2 { margin-top:2rem; }
-        .ssr-article-body .faq h3 { font-size:0.9rem; font-weight:600; color:#0e1f30; }
+        .ssr-article-body .faq h3 { font-size:0.9rem; font-weight:600; color:#1e3a6e; }
         .ssr-article-body .faq p { font-size:0.875rem; }
       </style>
       <div class="ssr-article-body">${article.content}</div>
