@@ -140,20 +140,18 @@ function bootOnce(): Promise<void> {
         ensureNvrGeneratorReseeds(),
       ];
 
-      if (!isVercel) {
-        tasks.push(
-          ensureChromium().then(() => {
-            return import("./leadMagnet").then(({ getCachedPracticePaperPdf, getCachedPracticePaper2Pdf }) => {
-              getCachedPracticePaperPdf().catch((err) =>
-                console.error("[PDF] Paper 1 cache warm failed:", err?.message ?? err),
-              );
-              getCachedPracticePaper2Pdf().catch((err) =>
-                console.error("[PDF] Paper 2 cache warm failed:", err?.message ?? err),
-              );
-            });
-          }),
-        );
-      }
+      tasks.push(
+        ensureChromium().then(() => {
+          return import("./leadMagnet").then(({ getCachedPracticePaperPdf, getCachedPracticePaper2Pdf }) => {
+            getCachedPracticePaperPdf().catch((err) =>
+              console.error("[PDF] Paper 1 cache warm failed:", err?.message ?? err),
+            );
+            getCachedPracticePaper2Pdf().catch((err) =>
+              console.error("[PDF] Paper 2 cache warm failed:", err?.message ?? err),
+            );
+          });
+        }),
+      );
 
       await Promise.allSettled(tasks);
     })();

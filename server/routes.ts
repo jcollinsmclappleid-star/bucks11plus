@@ -9,7 +9,7 @@ import { db } from "./db";
 import { computeAttemptMetrics, computeFullAnalytics, type AnswerRecord, type DrillAnswerRecord, type HistoricalMetrics } from "./metrics";
 import { sendDiagnosticCompleteEmail, sendAdminNotificationEmail, sendGuideDownloadAdminEmail, sendGuideDownloadUserEmail, sendSubscriptionCancelledAdminEmail, sendEmailVerificationEmail, generateEmailVerifyToken } from "./email";
 import { timingSafeEqual } from "crypto";
-import { ensureChromium } from "./chromium";
+import { ensureChromium, getPdfRenderBaseUrl, launchBrowser, pdfCookieDomain } from "./chromium";
 import { learnArticles } from "../client/src/data/learn-articles";
 import { QUESTION_TYPES } from "../client/src/data/question-types";
 import { MATHS_TOPICS } from "../client/src/data/maths-topics";
@@ -1070,15 +1070,11 @@ export async function registerRoutes(
       if (!session.completedAt) return res.status(400).json({ message: "Session not yet completed" });
 
       await ensureChromium();
-      const puppeteer = await import("puppeteer");
-      const port = process.env.PORT || "5000";
-      const url = `http://localhost:${port}/app/results/${req.params.id}/report`;
+      const url = `${getPdfRenderBaseUrl()}/app/results/${req.params.id}/report`;
       const rawCookieHeader = req.headers.cookie || "";
+      const cookieDomain = pdfCookieDomain();
 
-      const browser = await puppeteer.default.launch({
-        headless: true,
-        args: ["--no-sandbox","--disable-setuid-sandbox","--disable-dev-shm-usage","--disable-gpu","--no-first-run","--no-zygote","--single-process"],
-      });
+      const browser = await launchBrowser();
       try {
         const page = await browser.newPage();
         if (rawCookieHeader) {
@@ -1088,7 +1084,7 @@ export async function registerRoutes(
             if (eqIdx < 0) continue;
             const name = pair.slice(0, eqIdx).trim();
             const value = pair.slice(eqIdx + 1).trim();
-            await page.setCookie({ name, value, domain: "localhost", path: "/" });
+            await page.setCookie({ name, value, domain: cookieDomain, path: "/" });
           }
         }
         await page.goto(url, { waitUntil: "networkidle0", timeout: 30000 });
@@ -2066,22 +2062,9 @@ export async function registerRoutes(
       }
 
       await ensureChromium();
-      const puppeteer = await import("puppeteer");
-      const port = process.env.PORT || "5000";
-      const url = `http://localhost:${port}/guide-print`;
+      const url = `${getPdfRenderBaseUrl()}/guide-print`;
 
-      const browser = await puppeteer.default.launch({
-        headless: true,
-        args: [
-          "--no-sandbox",
-          "--disable-setuid-sandbox",
-          "--disable-dev-shm-usage",
-          "--disable-gpu",
-          "--no-first-run",
-          "--no-zygote",
-          "--single-process",
-        ],
-      });
+      const browser = await launchBrowser();
 
       try {
         const page = await browser.newPage();

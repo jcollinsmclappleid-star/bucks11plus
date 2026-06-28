@@ -11,3 +11,4 @@ replit.nix
 .neon
 production/secrets.env
 .vercel
+.env*

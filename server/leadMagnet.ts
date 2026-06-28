@@ -2,7 +2,7 @@ import crypto from "crypto";
 import { db } from "./db";
 import { practicePaperLeads, nurtureSequences } from "@shared/schema";
 import { and, eq, lte, isNull, sql } from "drizzle-orm";
-import { ensureChromium } from "./chromium";
+import { ensureChromium, getPdfRenderBaseUrl, launchBrowser } from "./chromium";
 import { getBaseUrl, RESEND_FROM_EMAIL } from "./contactConfig";
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
@@ -116,22 +116,9 @@ export async function sendPracticePaperEmail(
 
 export async function generatePracticePaperPdf(): Promise<Buffer> {
   await ensureChromium();
-  const puppeteer = await import("puppeteer");
-  const port = process.env.PORT || "5000";
-  const url = `http://localhost:${port}/practice-paper-print`;
+  const url = `${getPdfRenderBaseUrl()}/practice-paper-print`;
 
-  const browser = await puppeteer.default.launch({
-    headless: true,
-    args: [
-      "--no-sandbox",
-      "--disable-setuid-sandbox",
-      "--disable-dev-shm-usage",
-      "--disable-gpu",
-      "--no-first-run",
-      "--no-zygote",
-      "--single-process",
-    ],
-  });
+  const browser = await launchBrowser();
   try {
     const page = await browser.newPage();
     await page.goto(url, { waitUntil: "networkidle0", timeout: 30000 });
@@ -166,21 +153,8 @@ export async function getCachedPracticePaper2Pdf(): Promise<Buffer> {
     return cachedPdf2.buffer;
   }
   await ensureChromium();
-  const puppeteer = await import("puppeteer");
-  const port = process.env.PORT || "5000";
-  const url = `http://localhost:${port}/practice-paper-print-2`;
-  const browser = await puppeteer.default.launch({
-    headless: true,
-    args: [
-      "--no-sandbox",
-      "--disable-setuid-sandbox",
-      "--disable-dev-shm-usage",
-      "--disable-gpu",
-      "--no-first-run",
-      "--no-zygote",
-      "--single-process",
-    ],
-  });
+  const url = `${getPdfRenderBaseUrl()}/practice-paper-print-2`;
+  const browser = await launchBrowser();
   try {
     const page = await browser.newPage();
     await page.goto(url, { waitUntil: "networkidle0", timeout: 30000 });
