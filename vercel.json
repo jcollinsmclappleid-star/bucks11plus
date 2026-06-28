@@ -8,7 +8,7 @@
   "functions": {
     "api/index.ts": {
       "maxDuration": 60,
-      "memory": 3008,
+      "memory": 2048,
       "includeFiles": "dist/public/**"
     }
   },
@@ -16,8 +16,8 @@
     { "source": "/(.*)", "destination": "/api" }
   ],
   "crons": [
-    { "path": "/api/cron/nurture", "schedule": "*/5 * * * *" },
-    { "path": "/api/cron/email-triggers", "schedule": "0 */6 * * *" },
-    { "path": "/api/cron/retention", "schedule": "0 3 * * 0" }
+    { "path": "/api/cron/nurture", "schedule": "0 8 * * *" },
+    { "path": "/api/cron/email-triggers", "schedule": "0 9 * * *" },
+    { "path": "/api/cron/retention", "schedule": "0 3 * * *" }
   ]
 }
