@@ -1,73 +1,85 @@
 # Vercel deployment
 
+Replit is **not** required. The app runs entirely on Vercel + Neon + Stripe + Resend.
+
 ## Prerequisites
 
 1. [Vercel account](https://vercel.com) linked to GitHub
-2. Vercel CLI: `npm i -g vercel` or use `npx vercel`
+2. Vercel CLI: `npx vercel`
 3. `vercel login`
 
-## First-time setup
+## Project
 
-```bash
-# From repo root
-vercel link          # create or link project "bucks11plus"
-```
+- **Name:** `bucks11plus`
+- **Production URL:** https://bucks11plus.vercel.app
+- **Custom domain:** `bucks11plustest.co.uk` (DNS cutover pending — see below)
 
 ## Environment variables
 
-Copy from `production/secrets.env` into Vercel → Project → Settings → Environment Variables (Production + Preview).
+Push from `production/secrets.env` (never commit that file):
 
-Required:
+```bash
+npm run vercel:env
+```
+
+**Do not** set `NODE_ENV` or `PORT` on Vercel — that breaks the build (devDependencies skipped during install).
 
 | Variable | Notes |
 |----------|--------|
+| `NEON_BRANCH` | `main` |
 | `DATABASE_URL` | Neon pooler URL |
-| `SESSION_SECRET` | Same as current prod — keeps sessions valid |
-| `EMAIL_SECRET` | ≥16 chars |
+| `DATABASE_URL_UNPOOLED` | Neon direct URL |
+| `SESSION_SECRET` | `openssl rand -hex 32` |
+| `EMAIL_SECRET` | `openssl rand -hex 32` |
 | `BASE_URL` | `https://bucks11plustest.co.uk` (production) |
-| `STRIPE_SECRET_KEY` | Live key |
+| `STRIPE_SECRET_KEY` | Live secret key (checkout is server-side; publishable key optional) |
 | `RESEND_API_KEY` | Send-only key |
 | `RESEND_FROM_EMAIL` | `Bucks 11 Plus Tests <noreply@11plustesthub.co.uk>` |
 | `SUPPORT_EMAIL` | `support@11plustesthub.co.uk` |
 | `CRON_SECRET` | `openssl rand -hex 32` — secures `/api/cron/*` |
-| `NODE_ENV` | `production` |
 
-Optional: `ADMIN_PASSWORD`, `DATABASE_URL_UNPOOLED`
-
-Or push from file (after `vercel link`):
-
-```bash
-bash scripts/push-vercel-env.sh production
-```
+Optional: `ADMIN_PASSWORD` (first-time admin bootstrap only), `STRIPE_WEBHOOK_SECRET` (auto-registered on boot if omitted).
 
 ## Deploy
 
-**Git (recommended):** Connect the GitHub repo in Vercel — every push to `main` deploys production.
+**Git (recommended):** Push to `main` — Vercel auto-deploys.
 
-**CLI:**
+**CLI:** `npx vercel deploy --prod --scope jcollinsmclappleid-stars-projects`
+
+## Custom domain (DNS cutover)
+
+Domain `bucks11plustest.co.uk` is added to the Vercel project. At your registrar (currently GoDaddy), either:
+
+**Option A — A record (recommended, keep GoDaddy nameservers):**
+
+| Type | Name | Value |
+|------|------|-------|
+| A | `@` | `76.76.21.21` |
+| CNAME | `www` | `cname.vercel-dns.com` |
+
+**Option B — Vercel nameservers:** `ns1.vercel-dns.com`, `ns2.vercel-dns.com`
+
+After DNS propagates, verify:
 
 ```bash
-vercel --prod
+curl https://bucks11plustest.co.uk/api/health
 ```
 
-## Custom domain
+Stripe webhooks re-register automatically on first boot with `BASE_URL` set.
 
-1. Vercel → Project → Domains → Add `bucks11plustest.co.uk`
-2. Update DNS at your registrar per Vercel’s instructions
-3. Ensure `BASE_URL=https://bucks11plustest.co.uk` in production env
-4. First deploy auto-registers Stripe webhook for that URL
+See `production/DOMAIN-CUTOVER.md` for the full checklist.
 
-See also `production/DOMAIN-CUTOVER.md`.
+## Architecture
 
-## Architecture notes
-
-- `api/index.ts` — Express app (SSR, API, SPA fallback)
-- `vercel.json` — crons replace background `setInterval` jobs
-- PDF generation (Puppeteer) is **disabled on Vercel** — use Replit or add `@sparticuz/chromium` later if PDFs must run on Vercel
+- `script/build.ts` — builds client (`dist/public`) and server bundles (`dist/index.cjs`, `dist/vercel-app.cjs`)
+- `api/index.ts` — Vercel serverless entry; loads prebuilt `dist/vercel-app.cjs`
+- `server/createApp.ts` — Express app (API, SSR, static SPA, crons)
+- `vercel.json` — rewrites all routes to `/api`; daily crons replace background intervals
+- PDF generation uses `@sparticuz/chromium` + `puppeteer-core` on Vercel (no Replit)
 
 ## Verify
 
 ```bash
-curl https://<your-deployment>.vercel.app/api/health
+curl https://bucks11plus.vercel.app/api/health   # → {"status":"ok"}
 npm run verify:prod
 ```
