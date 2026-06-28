@@ -15,6 +15,7 @@
   "vercel:env": "tsx scripts/push-vercel-env.ts",
     "verify:prod:repair": "tsx --env-file=production/secrets.env scripts/verify-production-readiness.ts -- --repair",
     "stripe:seed": "tsx --env-file=production/secrets.env server/stripe-seed.ts",
+    "stripe:branding": "tsx --env-file=production/secrets.env scripts/stripe-branding.ts",
     "seed:merge-transformation": "tsx scripts/merge_transformation_seed.ts",
     "seed:restore-nvr-git": "tsx scripts/restore_nvr_from_git.ts",
     "seed:reseed-nvr-db": "tsx --env-file=production/secrets.env scripts/reseed_nvr_from_seed.ts"

@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { setupAuth, requireAuth } from "./auth";
 import { onboardingSchema, insertGuideLeadSchema, testSessions, testAnswers, questions, users, childProfiles, emailEvents, programmeEnrolments, testDayConfig, programmeMilestones, weeklyPlans, programmeTasks, userBadges, questionUsage } from "@shared/schema";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
+import { ensureStripeBranding, checkoutBrandingExtras } from "./stripeBranding";
 import { sql, eq, and, desc, inArray } from "drizzle-orm";
 import { db } from "./db";
 import { computeAttemptMetrics, computeFullAnalytics, type AnswerRecord, type DrillAnswerRecord, type HistoricalMetrics } from "./metrics";
@@ -314,6 +315,11 @@ export async function registerRoutes(
         return res.status(400).json({ message: "No billing account found. Please contact support." });
       }
       const stripe = await getUncachableStripeClient();
+      try {
+        await ensureStripeBranding();
+      } catch (brandErr: any) {
+        console.warn("Stripe branding skipped:", brandErr?.message ?? brandErr);
+      }
       const host = req.get("host");
       const protocol = req.protocol;
       const session = await stripe.billingPortal.sessions.create({
@@ -403,6 +409,11 @@ export async function registerRoutes(
       }
 
       const stripe = await getUncachableStripeClient();
+      try {
+        await ensureStripeBranding();
+      } catch (brandErr: any) {
+        console.warn("Stripe branding skipped:", brandErr?.message ?? brandErr);
+      }
       const user = req.user!;
 
       let customerId = user.stripeCustomerId;
@@ -445,7 +456,10 @@ export async function registerRoutes(
         },
       };
 
-      const session = await stripe.checkout.sessions.create(sessionParams);
+      const session = await stripe.checkout.sessions.create({
+        ...sessionParams,
+        ...checkoutBrandingExtras(),
+      });
 
       res.json({ url: session.url });
     } catch (error) {
@@ -479,6 +493,11 @@ export async function registerRoutes(
       }
 
       const stripe = await getUncachableStripeClient();
+      try {
+        await ensureStripeBranding();
+      } catch (brandErr: any) {
+        console.warn("Stripe branding skipped:", brandErr?.message ?? brandErr);
+      }
 
       let customerId = user.stripeCustomerId;
       if (!customerId) {
@@ -515,6 +534,7 @@ export async function registerRoutes(
         success_url: `${protocol}://${host}/app/checkout-success?tier=${targetTier}&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${protocol}://${host}/pricing`,
         metadata: { userId: user.id, tier: targetTier, upgradeFrom: currentTier },
+        ...checkoutBrandingExtras(),
       });
 
       res.json({ url: session.url });
@@ -531,6 +551,11 @@ export async function registerRoutes(
       }
 
       const stripe = await getUncachableStripeClient();
+      try {
+        await ensureStripeBranding();
+      } catch (brandErr: any) {
+        console.warn("Stripe branding skipped:", brandErr?.message ?? brandErr);
+      }
       const host = req.get('host');
       const protocol = req.protocol;
 
@@ -556,6 +581,7 @@ export async function registerRoutes(
         success_url: `${protocol}://${host}/checkout-success?tier=${tier}&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${protocol}://${host}/pricing`,
         metadata: { tier },
+        ...checkoutBrandingExtras(),
       });
 
       res.json({ url: session.url });

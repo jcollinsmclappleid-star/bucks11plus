@@ -9,7 +9,7 @@
     "api/index.ts": {
       "maxDuration": 60,
       "memory": 2048,
-      "includeFiles": "{dist/public/**,dist/vercel-app.cjs}"
+      "includeFiles": "{dist/public/**,dist/vercel-app.cjs,client/public/logo-shield-sm.png}"
     }
   },
   "rewrites": [

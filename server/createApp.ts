@@ -9,6 +9,7 @@ import { getStripeSync } from "./stripeClient";
 import { WebhookHandlers } from "./webhookHandlers";
 import { getBaseUrl } from "./contactConfig";
 import { seedStripeProducts } from "./stripeProducts";
+import { ensureStripeBranding } from "./stripeBranding";
 import { processNurtureQueue } from "./leadMagnet";
 import { runEmailTriggers } from "./email";
 import { runRetentionSweep } from "./retention";
@@ -106,6 +107,12 @@ async function initStripe() {
       await seedStripeProducts();
     } catch (productErr: any) {
       console.warn("Stripe product seed skipped:", productErr.message);
+    }
+
+    try {
+      await ensureStripeBranding();
+    } catch (brandErr: any) {
+      console.warn("Stripe branding skipped:", brandErr.message);
     }
 
     try {

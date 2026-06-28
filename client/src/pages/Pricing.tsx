@@ -598,7 +598,7 @@ export default function Pricing() {
           <div className="mt-8 p-5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4" data-testid="trust-footer">
             <div className="flex items-center gap-2 text-slate-500 text-xs">
               <Shield className="h-4 w-4" />
-              <span>Payments powered by Stripe · Registered in England · Operated by Ianson Systems Limited</span>
+              <span>Payments powered by Stripe · Bucks 11 Plus Tests</span>
             </div>
             <Button variant="ghost" size="sm" className="text-slate-500 text-xs" onClick={handleBillingPortal} disabled={loading === "portal"} data-testid="button-billing-portal-faq">
               {loading === "portal" ? <Loader2 className="h-3.5 w-3.5 animate-spin mr-1.5" /> : <Lock className="h-3.5 w-3.5 mr-1.5" />}
