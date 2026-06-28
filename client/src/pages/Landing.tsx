@@ -8,7 +8,15 @@ import { TestCountdownBadge, PrepYearBadge, PrepUrgencyBanner } from "../compone
 import { TutorCostComparison } from "../components/shared/SeoConversionPanel";
 import { GuideConversionBlock } from "../components/shared/GuideConversionBlock";
 import { PlatformSuitePreview } from "../components/shared/PlatformSuitePreview";
-import { PLATFORM_PRACTICE_PAPERS_PATH, PLATFORM_PREVIEW_CTA } from "../lib/marketing";
+import { HeroQuickLinks } from "../components/shared/HeroQuickLinks";
+import {
+  FREE_PRACTICE_TEST_CTA,
+  FREE_PRACTICE_TEST_PATH,
+  PLATFORM_PRACTICE_PAPERS_PATH,
+  PLATFORM_PREVIEW_CTA,
+  PRACTICE_PAPERS_NAV_LABEL,
+  platformPath,
+} from "../lib/marketing";
 
 /* ─── PANEL COMPONENTS (used as platform visual mockups) ─── */
 
@@ -1162,8 +1170,8 @@ export default function Landing() {
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
                 <Button variant="cta" size="lg"  asChild data-testid="button-hero-primary">
-                  <Link href="/free-diagnostic">
-                    Free Readiness Check <ArrowRight className="ml-2 h-5 w-5" />
+                  <Link href={FREE_PRACTICE_TEST_PATH}>
+                    {FREE_PRACTICE_TEST_CTA} <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
                 <Button size="lg" variant="outline" className="h-12 px-6 text-base border-white/20 text-white hover:bg-white/10 font-semibold" asChild data-testid="button-hero-secondary">
@@ -1171,7 +1179,7 @@ export default function Landing() {
                 </Button>
               </div>
               <p className="text-xs text-white/50 -mt-2" data-testid="text-hero-cta-subtext">
-                No account needed for the free check · Browse diagnostics, mocks &amp; practice papers before you subscribe
+                No account needed · Browse practice papers, mocks &amp; drills before you subscribe
               </p>
               <p className="text-[11px] text-white/35 leading-snug -mt-1" data-testid="text-hero-disclaimer">
                 The practice score on the 121 scale is an independent practice indicator. It is not an official Buckinghamshire Secondary Transfer Test score or a guarantee of performance.
@@ -1203,6 +1211,8 @@ export default function Landing() {
               </div>
             </div>
           </div>
+
+          <HeroQuickLinks variant="dark" className="mt-12 md:mt-14" />
         </div>
       </section>
 
@@ -1357,8 +1367,8 @@ export default function Landing() {
           <div className="text-center mt-16 md:mt-20 pt-10 border-t border-border/30">
             <p className="text-sm text-slate-500 mb-5">See how your child compares — before you pay anything</p>
             <Button variant="cta" size="lg"  asChild data-testid="button-showcase-cta">
-              <Link href="/free-diagnostic">
-                Take the Free Readiness Check <ArrowRight className="ml-2 h-5 w-5" />
+              <Link href={FREE_PRACTICE_TEST_PATH}>
+                Take the Free Practice Test <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
             <p className="text-xs text-slate-400 mt-3">12 questions · 8 minutes · no account needed · instant results</p>
@@ -1591,10 +1601,10 @@ export default function Landing() {
           </div>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button variant="cta" asChild className="min-w-[200px]" data-testid="button-analytics-practice">
-              <Link href="/app/practice">See Practice Tests <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              <Link href={platformPath("practicePapers")}>{PRACTICE_PAPERS_NAV_LABEL} <ArrowRight className="ml-2 h-4 w-4" /></Link>
             </Button>
             <Button asChild variant="outline" data-testid="button-analytics-readiness">
-              <Link href="/app/diagnostic">See Readiness Tests <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              <Link href={FREE_PRACTICE_TEST_PATH}>{FREE_PRACTICE_TEST_CTA} <ArrowRight className="ml-2 h-4 w-4" /></Link>
             </Button>
           </div>
         </div>
@@ -1661,7 +1671,7 @@ export default function Landing() {
 
           <div className="text-center">
             <Button variant="cta" size="lg"  asChild data-testid="button-how-it-works-cta">
-              <Link href="/free-diagnostic">Start your free readiness check — no account needed <ArrowRight className="ml-2 h-5 w-5" /></Link>
+              <Link href={FREE_PRACTICE_TEST_PATH}>Start your free practice test — no account needed <ArrowRight className="ml-2 h-5 w-5" /></Link>
             </Button>
           </div>
         </div>
@@ -1742,7 +1752,7 @@ export default function Landing() {
           {/* Free tier */}
           <div className="rounded-2xl border border-slate-200 bg-slate-50 px-6 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 max-w-3xl mx-auto" data-testid="pricing-card-free">
             <div>
-              <p className="font-bold text-primary text-sm">Free Readiness Check</p>
+              <p className="font-bold text-primary text-sm">Free Practice Test</p>
               <p className="text-xs text-slate-500 mt-0.5">No account needed · 12-question GL-style check · Readiness band · Forecast score · 3 priorities</p>
             </div>
             <Link href="/free-diagnostic" className="shrink-0 inline-flex items-center gap-1.5 rounded-lg border border-primary text-primary font-semibold py-2 px-5 text-sm hover:bg-primary/5 transition-colors whitespace-nowrap" data-testid="button-pricing-free">
@@ -1825,10 +1835,10 @@ export default function Landing() {
           </div>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-8" data-testid="pricing-explore-ctas">
             <Button variant="cta" asChild className="min-w-[200px]" data-testid="button-pricing-practice">
-              <Link href="/app/practice">See Practice Tests <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              <Link href={platformPath("practicePapers")}>{PRACTICE_PAPERS_NAV_LABEL} <ArrowRight className="ml-2 h-4 w-4" /></Link>
             </Button>
             <Button asChild variant="outline" className="min-w-[200px]" data-testid="button-pricing-readiness">
-              <Link href="/app/diagnostic">See Readiness Tests <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              <Link href={FREE_PRACTICE_TEST_PATH}>{FREE_PRACTICE_TEST_CTA} <ArrowRight className="ml-2 h-4 w-4" /></Link>
             </Button>
           </div>
         </div>
@@ -1837,7 +1847,7 @@ export default function Landing() {
       {/* ── FINAL CTA ── */}
       <section className="py-14 bg-primary border-t border-border/30" data-testid="section-final-cta">
         <div className="container mx-auto max-w-3xl px-4 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-white font-serif mb-3">Start your free readiness check</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-white font-serif mb-3">Start your free practice test</h2>
           <p className="text-white/60 text-base mb-3 max-w-md mx-auto">No account needed. 8 minutes. See exactly where your child stands — and the 3 things to fix first.</p>
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 mb-8 text-xs text-white/50">
             <span className="inline-flex items-center gap-1.5"><Shield className="h-3.5 w-3.5 text-emerald-400" />Money-back guarantee</span>
@@ -1845,7 +1855,7 @@ export default function Landing() {
           </div>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button variant="cta" size="lg"  asChild data-testid="button-cta-final">
-              <Link href="/free-diagnostic"><ArrowRight className="mr-2 h-5 w-5" />Start Free Readiness Check</Link>
+              <Link href={FREE_PRACTICE_TEST_PATH}><ArrowRight className="mr-2 h-5 w-5" />{FREE_PRACTICE_TEST_CTA}</Link>
             </Button>
             <Button variant="outline" size="lg" className="h-12 px-6 font-semibold border-white/25 text-white hover:bg-white/10" asChild data-testid="button-cta-pricing">
               <Link href="/pricing">View Plans</Link>

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { ChevronsDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { PLATFORM_ANCHORS } from "@/lib/marketing";
 
 function BrowserChrome({ title, right }: { title: string; right?: ReactNode }) {
   return (
@@ -158,7 +159,7 @@ export function PlatformSuitePreview({ showScrollHint = true, className }: Platf
         </div>
       )}
 
-      <div className="rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+      <div id={PLATFORM_ANCHORS.practiceTests} className="scroll-mt-24 rounded-xl border border-slate-200 overflow-hidden shadow-sm">
         <BrowserChrome title="Practice Tests & Mocks" />
         <div className="bg-slate-50 px-3 pt-3 pb-1">
           <p className="text-[10px] font-bold text-slate-700 mb-0.5">Practice Tests &amp; Mock Exams</p>
@@ -193,7 +194,7 @@ export function PlatformSuitePreview({ showScrollHint = true, className }: Platf
         </div>
       </div>
 
-      <div className="rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+      <div id={PLATFORM_ANCHORS.practicePapers} className="scroll-mt-24 rounded-xl border border-slate-200 overflow-hidden shadow-sm">
         <BrowserChrome title="Practice Papers" />
         <div className="bg-slate-50 px-3 pt-3 pb-1">
           <p className="text-[10px] font-bold text-slate-700 mb-0.5">Practice Papers</p>
@@ -222,7 +223,7 @@ export function PlatformSuitePreview({ showScrollHint = true, className }: Platf
         </div>
       </div>
 
-      <div className="rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+      <div id={PLATFORM_ANCHORS.practiceBank} className="scroll-mt-24 rounded-xl border border-slate-200 overflow-hidden shadow-sm">
         <BrowserChrome title="Practice Bank" />
         <div className="bg-slate-50 px-3 pt-3 pb-1 flex items-start justify-between">
           <div>

@@ -60,7 +60,7 @@ import QuestionEditor from "./pages/admin/QuestionEditor";
 import ParentGuide from "./pages/ParentGuide";
 import WhyChoosePlatform from "./pages/WhyChoosePlatform";
 import PlatformPreview from "./pages/PlatformPreview";
-import { PLATFORM_PRACTICE_PAPERS_PATH, PLATFORM_PREVIEW_CTA } from "./lib/marketing";
+import { PLATFORM_PRACTICE_PAPERS_PATH, PLATFORM_PREVIEW_CTA, PRACTICE_PAPERS_NAV_LABEL, FREE_PRACTICE_TEST_PATH, FREE_PRACTICE_TEST_CTA } from "./lib/marketing";
 import GuidePrint from "./pages/GuidePrint";
 import PracticePaperPrint from "./pages/PracticePaperPrint";
 import PracticePaperPrint2 from "./pages/PracticePaperPrint2";
@@ -175,7 +175,8 @@ function MainLayout({ children }: { children: React.ReactNode }) {
             <ul className="space-y-2 text-sm">
               <li><Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
               <li><Link href="/how-it-works" className="hover:text-white transition-colors">How It Works</Link></li>
-              <li><Link href={PLATFORM_PRACTICE_PAPERS_PATH} className="hover:text-white transition-colors">11 Plus Practice Papers</Link></li>
+              <li><Link href={PLATFORM_PRACTICE_PAPERS_PATH} className="hover:text-white transition-colors">{PRACTICE_PAPERS_NAV_LABEL}</Link></li>
+              <li><Link href={FREE_PRACTICE_TEST_PATH} className="hover:text-white transition-colors">{FREE_PRACTICE_TEST_CTA}</Link></li>
               <li><Link href="/why-choose-bucks-11-plus-tests" className="hover:text-white transition-colors">Why Choose Us</Link></li>
               <li><Link href="/bucks-gl-alignment" className="hover:text-white transition-colors">GL Assessment Domains</Link></li>
               <li><Link href="/how-forecast-works" className="hover:text-white transition-colors">How Scoring Works</Link></li>

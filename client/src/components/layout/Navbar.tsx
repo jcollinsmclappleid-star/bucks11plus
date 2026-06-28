@@ -16,12 +16,14 @@ import { Menu } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import {
+  FREE_PRACTICE_TEST_CTA,
+  FREE_PRACTICE_TEST_PATH,
   PLATFORM_PRACTICE_PAPERS_PATH,
   PLATFORM_PREVIEW_CTA,
+  PRACTICE_PAPERS_NAV_LABEL,
 } from "@/lib/marketing";
 
 const resourceLinks = [
-  { href: PLATFORM_PRACTICE_PAPERS_PATH, label: "11 Plus Practice Papers", desc: "Practice tests, mock exams, papers & 2,500+ drills" },
   { href: "/why-choose-bucks-11-plus-tests", label: "Why Choose Us", desc: "Platform vs practice papers — side by side" },
   { href: "/how-it-works", label: "How It Works", desc: "How readiness forecasting and the programme work" },
   { href: "/bucks-11-plus-parent-guide", label: "Free Parent Guide", desc: "Complete prep guide for Bucks parents" },
@@ -47,8 +49,8 @@ function DropdownItem({ href, label, desc }: { href: string; label: string; desc
 
 const appNavLinks = [
   { href: "/app", label: "Dashboard", matchPrefix: false },
-  { href: "/app/diagnostic", label: "Readiness Checks", matchPrefix: true },
-  { href: "/app/practice", label: "Practice", matchPrefix: true },
+  { href: "/app/diagnostic", label: "Practice Tests", matchPrefix: true },
+  { href: "/app/practice", label: "Practice Drills", matchPrefix: true },
   { href: "/app/progress", label: "Progress", matchPrefix: false },
   { href: "/app/report-archive", label: "Reports", matchPrefix: false },
   { href: "/app/programme", label: "Programme", matchPrefix: false },
@@ -61,26 +63,33 @@ export default function Navbar() {
   const navChildName = useDisplayName(user?.activeChildProfileId, user?.id, "");
   const [open, setOpen] = useState(false);
 
+  const guestNavLinks = [
+    { href: FREE_PRACTICE_TEST_PATH, label: FREE_PRACTICE_TEST_CTA, matchPrefix: false },
+    { href: PLATFORM_PRACTICE_PAPERS_PATH, label: PRACTICE_PAPERS_NAV_LABEL, matchPrefix: false },
+    { href: "/pricing", label: "Pricing", matchPrefix: false },
+  ];
+
   const mobileNavLinks = [
-    { href: "/app", label: "Dashboard", show: !!user, matchPrefix: false },
-    { href: "/app/diagnostic", label: "Readiness Checks", show: !!user, matchPrefix: true },
-    { href: "/app/practice", label: "Practice", show: !!user, matchPrefix: true },
-    { href: "/app/progress", label: "Progress", show: !!user, matchPrefix: false },
-    { href: "/app/report-archive", label: "Reports", show: !!user, matchPrefix: false },
-    { href: "/app/programme", label: "Programme", show: !!user, matchPrefix: false },
-    { href: "/app/analytics", label: "Analytics", show: !!user, matchPrefix: false },
-    { href: "/app/account", label: "Account & Subscription", show: !!user, matchPrefix: false },
-    { href: PLATFORM_PRACTICE_PAPERS_PATH, label: "11 Plus Practice Papers", show: true, matchPrefix: false },
-    { href: "/why-choose-bucks-11-plus-tests", label: "Why Choose Us", show: true, matchPrefix: false },
-    { href: "/how-it-works", label: "How It Works", show: true, matchPrefix: false },
-    { href: "/bucks-11-plus-parent-guide", label: "Free Guide", show: true, matchPrefix: false },
-    { href: "/pricing", label: "Pricing", show: true, matchPrefix: false },
-    { href: "/contact", label: "Contact", show: true, matchPrefix: false },
-    { href: "/free-diagnostic", label: "Free Practice Test", show: !user, matchPrefix: false },
-    { href: "/parent-hub", label: "Parent Hub", show: !user, matchPrefix: false },
-    { href: "/learn", label: "Learn Hub", show: !user, matchPrefix: false },
-    { href: "/about", label: "About", show: !user, matchPrefix: false },
-    { href: "/bucks-grammar-schools", label: "Grammar Schools", show: !user, matchPrefix: false },
+    { href: FREE_PRACTICE_TEST_PATH, label: FREE_PRACTICE_TEST_CTA, show: !user, matchPrefix: false, section: "product" as const },
+    { href: PLATFORM_PRACTICE_PAPERS_PATH, label: PRACTICE_PAPERS_NAV_LABEL, show: !user, matchPrefix: false, section: "product" as const },
+    { href: "/pricing", label: "Pricing", show: !user, matchPrefix: false, section: "product" as const },
+    { href: "/app", label: "Dashboard", show: !!user, matchPrefix: false, section: "app" as const },
+    { href: "/app/diagnostic", label: "Practice Tests", show: !!user, matchPrefix: true, section: "app" as const },
+    { href: "/app/practice", label: "Practice Drills", show: !!user, matchPrefix: true, section: "app" as const },
+    { href: "/app/progress", label: "Progress", show: !!user, matchPrefix: false, section: "app" as const },
+    { href: "/app/report-archive", label: "Reports", show: !!user, matchPrefix: false, section: "app" as const },
+    { href: "/app/programme", label: "Programme", show: !!user, matchPrefix: false, section: "app" as const },
+    { href: "/app/analytics", label: "Analytics", show: !!user, matchPrefix: false, section: "app" as const },
+    { href: "/app/account", label: "Account & Subscription", show: !!user, matchPrefix: false, section: "app" as const },
+    { href: PLATFORM_PRACTICE_PAPERS_PATH, label: PRACTICE_PAPERS_NAV_LABEL, show: !!user, matchPrefix: false, section: "explore" as const },
+    { href: "/why-choose-bucks-11-plus-tests", label: "Why Choose Us", show: true, matchPrefix: false, section: "explore" as const },
+    { href: "/how-it-works", label: "How It Works", show: true, matchPrefix: false, section: "explore" as const },
+    { href: "/bucks-11-plus-parent-guide", label: "Free Guide", show: true, matchPrefix: false, section: "explore" as const },
+    { href: "/contact", label: "Contact", show: true, matchPrefix: false, section: "explore" as const },
+    { href: "/parent-hub", label: "Parent Hub", show: !user, matchPrefix: false, section: "explore" as const },
+    { href: "/learn", label: "Learn Hub", show: !user, matchPrefix: false, section: "explore" as const },
+    { href: "/about", label: "About", show: !user, matchPrefix: false, section: "explore" as const },
+    { href: "/bucks-grammar-schools", label: "Grammar Schools", show: !user, matchPrefix: false, section: "explore" as const },
   ];
 
   const isActive = (href: string, matchPrefix?: boolean) => {
@@ -126,6 +135,17 @@ export default function Navbar() {
                 href={link.href}
                 className={`text-sm font-medium transition-colors whitespace-nowrap ${isActive(link.href, link.matchPrefix) ? 'text-primary' : 'text-slate-600 hover:text-primary'}`}
                 data-testid={`link-${link.label.toLowerCase().replace(/\s/g, '-')}`}
+              >
+                {link.label}
+              </Link>
+            ))}
+
+            {!user && guestNavLinks.map(link => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`text-sm font-medium transition-colors whitespace-nowrap hidden md:inline ${isActive(link.href, link.matchPrefix) ? 'text-primary' : 'text-slate-600 hover:text-primary'}`}
+                data-testid={`link-guest-${link.label.toLowerCase().replace(/\s/g, '-')}`}
               >
                 {link.label}
               </Link>
@@ -221,7 +241,32 @@ export default function Navbar() {
                 </div>
 
                 <nav className="flex-1 overflow-y-auto p-4 space-y-1">
-                  {mobileNavLinks.filter(l => l.show).map(link => (
+                  {!user && (
+                    <>
+                      <p className="px-3 pt-1 pb-2 text-[10px] font-bold uppercase tracking-widest text-slate-400">Get started</p>
+                      {mobileNavLinks.filter(l => l.show && l.section === "product").map(link => (
+                        <Link
+                          key={link.href}
+                          href={link.href}
+                          className={`block px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors ${
+                            isActive(link.href, link.matchPrefix)
+                              ? "bg-primary/10 text-primary"
+                              : "text-slate-800 hover:bg-slate-100"
+                          }`}
+                          onClick={() => setOpen(false)}
+                          data-testid={`link-mobile-${link.label.toLowerCase().replace(/\s/g, '-')}`}
+                        >
+                          {link.label}
+                        </Link>
+                      ))}
+                      <div className="my-3 border-t border-border/40" />
+                      <p className="px-3 pb-2 text-[10px] font-bold uppercase tracking-widest text-slate-400">Guides &amp; resources</p>
+                    </>
+                  )}
+                  {user && (
+                    <p className="px-3 pt-1 pb-2 text-[10px] font-bold uppercase tracking-widest text-slate-400">Your account</p>
+                  )}
+                  {mobileNavLinks.filter(l => l.show && l.section !== "product").map(link => (
                     <Link
                       key={link.href}
                       href={link.href}

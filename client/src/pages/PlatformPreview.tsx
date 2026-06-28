@@ -11,6 +11,7 @@ import { TutorCostComparison } from "@/components/shared/SeoConversionPanel";
 import {
   FREE_PRACTICE_TEST_CTA,
   FREE_PRACTICE_TEST_PATH,
+  PLATFORM_ANCHORS,
   PLATFORM_PRACTICE_PAPERS_PATH,
   PLATFORM_PREVIEW_CTA,
 } from "@/lib/marketing";
@@ -75,11 +76,11 @@ export default function PlatformPreview() {
                   className="h-12 border-white/25 bg-white/5 px-7 font-semibold text-white hover:bg-white/10 hover:text-white"
                   data-testid="button-platform-hero-free"
                 >
-                  <Link href="/free-diagnostic">Try free practice test</Link>
+                  <Link href={FREE_PRACTICE_TEST_PATH}>{FREE_PRACTICE_TEST_CTA}</Link>
                 </Button>
               </div>
             </div>
-            <div className="rounded-3xl border border-white/10 bg-white/95 p-4 shadow-2xl shadow-black/20">
+            <div id={PLATFORM_ANCHORS.parentDashboard} className="scroll-mt-24 rounded-3xl border border-white/10 bg-white/95 p-4 shadow-2xl shadow-black/20">
               <DashboardPreviewForecast />
             </div>
           </div>
@@ -87,7 +88,7 @@ export default function PlatformPreview() {
       </section>
 
       <main className="container mx-auto max-w-6xl space-y-14 px-4 py-12 md:py-16">
-        <section>
+        <section id={PLATFORM_ANCHORS.sampleQuestions} className="scroll-mt-24">
           <div className="mb-6 text-center max-w-2xl mx-auto">
             <div className="inline-flex items-center gap-2 text-primary/60 mb-2">
               <BarChart3 className="h-4 w-4" />
@@ -101,7 +102,7 @@ export default function PlatformPreview() {
           <SampleQuestionsCarousel />
         </section>
 
-        <section>
+        <section className="scroll-mt-24">
           <div className="mb-6 text-center max-w-2xl mx-auto">
             <h2 className="font-serif text-3xl font-bold text-primary">The complete platform suite</h2>
             <p className="mt-3 text-slate-600 leading-relaxed">
