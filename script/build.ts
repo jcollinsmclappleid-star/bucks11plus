@@ -36,15 +36,17 @@ const allowlist = [
 async function buildAll() {
   await rm("dist", { recursive: true, force: true });
 
-  console.log("installing puppeteer chrome...");
-  try {
-    execSync("npx puppeteer browsers install chrome", { stdio: "inherit" });
-  } catch (err) {
-    console.warn("Chrome install failed (non-fatal):", err);
-  }
-
   console.log("building client...");
   await viteBuild();
+
+  if (process.env.VERCEL !== "1") {
+    console.log("installing puppeteer chrome...");
+    try {
+      execSync("npx puppeteer browsers install chrome", { stdio: "inherit" });
+    } catch (err) {
+      console.warn("Chrome install failed (non-fatal):", err);
+    }
+  }
 
   console.log("building server...");
   const pkg = JSON.parse(await readFile("package.json", "utf-8"));

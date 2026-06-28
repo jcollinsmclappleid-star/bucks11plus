@@ -1365,7 +1365,7 @@ export default function Landing() {
               <div>
                 <span className="inline-block text-xs font-semibold uppercase tracking-[0.2em] text-amber-400/80 mb-4">Built for the Buckinghamshire 11+</span>
                 <h1 className="text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-bold text-white tracking-tight leading-[1.1] font-serif">
-                  Get your child to pass the Buckinghamshire 11+ — without the guesswork.
+                  Time to get ready for the Bucks 11 Plus
                 </h1>
                 <div className="mt-4 flex flex-wrap gap-2">
                   <PrepYearBadge variant="dark" />

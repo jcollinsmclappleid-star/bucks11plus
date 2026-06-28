@@ -10,3 +10,4 @@ replit.nix
 .env.local
 .neon
 production/secrets.env
+.vercel
