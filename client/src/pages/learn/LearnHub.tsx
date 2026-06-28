@@ -101,7 +101,7 @@ export default function LearnHub() {
           })}
         </div>
 
-        <GuideConversionBlock className="mt-14" />
+        <GuideConversionBlock className="mt-14" hideQuestions />
 
         <SubscribeCTA />
       </div>

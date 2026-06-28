@@ -151,7 +151,7 @@ export function PlatformSuitePreview({ showScrollHint = true, className }: Platf
         <div className="rounded-xl border border-primary/15 bg-primary/[0.04] px-4 py-3 text-center">
           <p className="text-sm font-semibold text-primary flex items-center justify-center gap-2 flex-wrap">
             <ChevronsDown className="h-4 w-4 text-primary/60 shrink-0 animate-bounce" />
-            Scroll inside each panel below to explore readiness checks, practice papers, and the full drill library
+            Scroll inside each panel below to explore practice tests, practice papers, and the full drill library
             <ChevronsDown className="h-4 w-4 text-primary/60 shrink-0 animate-bounce" />
           </p>
           <p className="text-xs text-slate-500 mt-1">46 drills · 2,500+ GL-style questions · unlimited practice papers</p>
@@ -159,17 +159,17 @@ export function PlatformSuitePreview({ showScrollHint = true, className }: Platf
       )}
 
       <div className="rounded-xl border border-slate-200 overflow-hidden shadow-sm">
-        <BrowserChrome title="Readiness Checks & Mocks" />
+        <BrowserChrome title="Practice Tests & Mocks" />
         <div className="bg-slate-50 px-3 pt-3 pb-1">
-          <p className="text-[10px] font-bold text-slate-700 mb-0.5">Fixed Readiness Checks & Mocks</p>
+          <p className="text-[10px] font-bold text-slate-700 mb-0.5">Practice Tests &amp; Mock Exams</p>
           <p className="text-[9px] text-slate-400">Structured assessments to measure progress and recalibrate your forecast score.</p>
         </div>
         <ScrollablePanel maxHeight="240px">
           <div className="grid grid-cols-2 gap-2">
             {[
-              { name: "Mini Diagnostic", time: "8 mins", qs: "12 Qs", free: true, btn: "Start Readiness Check", btnStyle: "bg-slate-900 text-white" },
-              { name: "Full Diagnostic A", time: "30 mins", qs: "45 Qs", free: false, btn: "Start", btnStyle: "bg-slate-100 text-slate-700" },
-              { name: "Full Diagnostic B", time: "30 mins", qs: "45 Qs", free: false, btn: "Start", btnStyle: "bg-slate-100 text-slate-700" },
+              { name: "Mini Practice Test", time: "8 mins", qs: "12 Qs", free: true, btn: "Start Free Test", btnStyle: "bg-slate-900 text-white" },
+              { name: "Full Practice Test A", time: "30 mins", qs: "45 Qs", free: false, btn: "Start", btnStyle: "bg-slate-100 text-slate-700" },
+              { name: "Full Practice Test B", time: "30 mins", qs: "45 Qs", free: false, btn: "Start", btnStyle: "bg-slate-100 text-slate-700" },
               { name: "Mock Exam 1", time: "35 mins", qs: "50 Qs", free: false, btn: "Start", btnStyle: "bg-slate-100 text-slate-700" },
               { name: "Mock Exam 2", time: "50 mins", qs: "50 Qs", free: false, btn: "Start", btnStyle: "bg-slate-100 text-slate-700" },
               { name: "Mock Exam 3", time: "50 mins", qs: "50 Qs", free: false, btn: "Start", btnStyle: "bg-slate-100 text-slate-700" },
@@ -188,7 +188,7 @@ export function PlatformSuitePreview({ showScrollHint = true, className }: Platf
           </div>
         </ScrollablePanel>
         <div className="px-3 py-2 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-2">
-          <span className="text-[10px] text-slate-500 font-medium">1 free mini · 2 full diagnostics · 3 mock exams · PDF report each</span>
+          <span className="text-[10px] text-slate-500 font-medium">1 free mini test · 2 full practice tests · 3 mock exams · PDF report each</span>
           <PaidBadge />
         </div>
       </div>

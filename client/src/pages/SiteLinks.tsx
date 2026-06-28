@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { Seo } from "../components/shared/Seo";
 import { ArrowRight } from "lucide-react";
 import { learnArticles, LEARN_CATEGORIES, getArticlesByCategory } from "@/data/learn-articles";
+import { PLATFORM_PRACTICE_PAPERS_PATH } from "@/lib/marketing";
 
 interface SiteLink {
   title: string;
@@ -22,7 +23,7 @@ const sections: LinkSection[] = [
       { title: "Why Choose Us Over Practice Papers", description: "Platform vs practice papers — a direct comparison showing how intelligent diagnostics, parent analytics and a guided programme go beyond generic prep.", href: "/why-choose-bucks-11-plus-tests" },
       { title: "Pricing & Plans", description: "Compare all subscription tiers from the free readiness check through to the full Bucks Plus Edge annual plan.", href: "/pricing" },
       { title: "How It Works", description: "Understand how the platform forecasts your child's readiness using readiness checks across all four GL Assessment domains.", href: "/how-it-works" },
-      { title: "What's in the Platform", description: "Browse readiness checks, mock exams, unlimited practice papers, and 2,500+ GL-style drills — the full subscriber library.", href: "/platform" },
+      { title: "11 Plus Practice Papers", description: "Browse practice tests, mock exams, unlimited practice papers, and 2,500+ GL-style drills — the full subscriber library.", href: PLATFORM_PRACTICE_PAPERS_PATH },
       { title: "Free Baseline Readiness Check", description: "Take a free 8-minute assessment to see where your child stands — no account needed.", href: "/free-diagnostic" },
       { title: "GL Assessment Domains", description: "Learn how our independently developed questions cover the four GL Assessment domains of the Buckinghamshire Secondary Transfer Test.", href: "/bucks-gl-alignment" },
     ],

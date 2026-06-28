@@ -8,6 +8,7 @@ import { TestCountdownBadge, PrepYearBadge, PrepUrgencyBanner } from "../compone
 import { TutorCostComparison } from "../components/shared/SeoConversionPanel";
 import { GuideConversionBlock } from "../components/shared/GuideConversionBlock";
 import { PlatformSuitePreview } from "../components/shared/PlatformSuitePreview";
+import { PLATFORM_PRACTICE_PAPERS_PATH, PLATFORM_PREVIEW_CTA } from "../lib/marketing";
 
 /* ─── PANEL COMPONENTS (used as platform visual mockups) ─── */
 
@@ -1166,7 +1167,7 @@ export default function Landing() {
                   </Link>
                 </Button>
                 <Button size="lg" variant="outline" className="h-12 px-6 text-base border-white/20 text-white hover:bg-white/10 font-semibold" asChild data-testid="button-hero-secondary">
-                  <Link href="/platform">See what&apos;s included <ArrowRight className="ml-2 h-5 w-5" /></Link>
+                  <Link href={PLATFORM_PRACTICE_PAPERS_PATH}>{PLATFORM_PREVIEW_CTA} <ArrowRight className="ml-2 h-5 w-5" /></Link>
                 </Button>
               </div>
               <p className="text-xs text-white/50 -mt-2" data-testid="text-hero-cta-subtext">

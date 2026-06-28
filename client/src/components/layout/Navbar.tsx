@@ -15,9 +15,13 @@ import ChildSwitcher from "./ChildSwitcher";
 import { Menu } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import {
+  PLATFORM_PRACTICE_PAPERS_PATH,
+  PLATFORM_PREVIEW_CTA,
+} from "@/lib/marketing";
 
 const resourceLinks = [
-  { href: "/platform", label: "What's in the Platform", desc: "Readiness checks, mock exams, practice papers & 2,500+ drills" },
+  { href: PLATFORM_PRACTICE_PAPERS_PATH, label: "11 Plus Practice Papers", desc: "Practice tests, mock exams, papers & 2,500+ drills" },
   { href: "/why-choose-bucks-11-plus-tests", label: "Why Choose Us", desc: "Platform vs practice papers — side by side" },
   { href: "/how-it-works", label: "How It Works", desc: "How readiness forecasting and the programme work" },
   { href: "/bucks-11-plus-parent-guide", label: "Free Parent Guide", desc: "Complete prep guide for Bucks parents" },
@@ -66,7 +70,7 @@ export default function Navbar() {
     { href: "/app/programme", label: "Programme", show: !!user, matchPrefix: false },
     { href: "/app/analytics", label: "Analytics", show: !!user, matchPrefix: false },
     { href: "/app/account", label: "Account & Subscription", show: !!user, matchPrefix: false },
-    { href: "/platform", label: "What's in the Platform", show: true, matchPrefix: false },
+    { href: PLATFORM_PRACTICE_PAPERS_PATH, label: "11 Plus Practice Papers", show: true, matchPrefix: false },
     { href: "/why-choose-bucks-11-plus-tests", label: "Why Choose Us", show: true, matchPrefix: false },
     { href: "/how-it-works", label: "How It Works", show: true, matchPrefix: false },
     { href: "/bucks-11-plus-parent-guide", label: "Free Guide", show: true, matchPrefix: false },
@@ -175,9 +179,9 @@ export default function Navbar() {
                 <Link href="/sign-in">Sign In</Link>
               </Button>
               <Button variant="cta" size="sm" asChild data-testid="link-get-started">
-                <Link href="/platform">
-                  <span className="hidden lg:inline">What&apos;s Included</span>
-                  <span className="lg:hidden">Included</span>
+                <Link href={PLATFORM_PRACTICE_PAPERS_PATH}>
+                  <span className="hidden lg:inline">{PLATFORM_PREVIEW_CTA}</span>
+                  <span className="lg:hidden">Platform</span>
                 </Link>
               </Button>
             </>
@@ -264,7 +268,7 @@ export default function Navbar() {
                         <Link href="/sign-in" onClick={() => setOpen(false)}>Sign In</Link>
                       </Button>
                       <Button variant="cta" className="w-full" asChild>
-                        <Link href="/platform" onClick={() => setOpen(false)}>See What&apos;s Included</Link>
+                        <Link href={PLATFORM_PRACTICE_PAPERS_PATH} onClick={() => setOpen(false)}>{PLATFORM_PREVIEW_CTA}</Link>
                       </Button>
                     </>
                   )}

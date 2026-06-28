@@ -8,11 +8,18 @@ import { SampleQuestionsCarousel } from "@/components/shared/SampleQuestionsCaro
 import { PlatformSuitePreview } from "@/components/shared/PlatformSuitePreview";
 import { TutorCostComparison } from "@/components/shared/SeoConversionPanel";
 
-const breadcrumbItems = [{ label: "What's in the Platform" }];
+import {
+  FREE_PRACTICE_TEST_CTA,
+  FREE_PRACTICE_TEST_PATH,
+  PLATFORM_PRACTICE_PAPERS_PATH,
+  PLATFORM_PREVIEW_CTA,
+} from "@/lib/marketing";
+
+const breadcrumbItems = [{ label: "11 Plus Practice Papers" }];
 
 const highlights = [
   "Free 12-question practice test · no account needed",
-  "2 full readiness checks (45 questions each) + 3 timed mock exams",
+  "2 full practice tests (45 questions each) + 3 timed mock exams",
   "Unlimited Quick, Full & Mock practice papers",
   "46 targeted drills · 2,500+ GL-style questions · worked solutions",
   "Parent dashboard: 121-scale forecast, pace analysis, progress trends",
@@ -22,9 +29,9 @@ export default function PlatformPreview() {
   return (
     <div className="min-h-screen bg-slate-50">
       <Seo
-        title="What's in the Platform — Practice Papers, Mocks & Dashboards | Bucks 11 Plus Tests"
-        description="Browse everything inside Bucks Plus Edge: readiness checks, mock exams, unlimited practice papers, 2,500+ GL-style questions, and parent dashboards built for the Buckinghamshire 11+."
-        canonicalPath="/platform"
+        title="11 Plus Practice Papers — Mocks, Drills & Parent Dashboards | Bucks 11 Plus Tests"
+        description="Browse everything inside Bucks Plus Edge: practice tests, mock exams, unlimited practice papers, 2,500+ GL-style questions, and parent dashboards built for the Buckinghamshire 11+."
+        canonicalPath={PLATFORM_PRACTICE_PAPERS_PATH}
         schema={breadcrumbSchema(breadcrumbItems)}
       />
 
@@ -42,10 +49,10 @@ export default function PlatformPreview() {
                 Full platform preview
               </div>
               <h1 className="font-serif text-4xl font-bold leading-tight md:text-5xl" data-testid="heading-platform-preview">
-                Readiness checks, practice papers, mocks &amp; 2,500+ questions
+                11 Plus Practice Papers, Mocks &amp; 2,500+ Questions
               </h1>
               <p className="mt-5 max-w-2xl text-lg leading-8 text-white/75">
-                This is what subscribers get — not vague bullet points. Browse the dashboards, question styles, diagnostics, practice papers, and drill library before you decide.
+                This is what subscribers get — not vague bullet points. Browse practice papers, mock exams, timed drills, parent dashboards, and the full question library before you decide.
               </p>
               <ul className="mt-6 space-y-2.5">
                 {highlights.map((item) => (
@@ -98,7 +105,7 @@ export default function PlatformPreview() {
           <div className="mb-6 text-center max-w-2xl mx-auto">
             <h2 className="font-serif text-3xl font-bold text-primary">The complete platform suite</h2>
             <p className="mt-3 text-slate-600 leading-relaxed">
-              Scroll inside each panel to explore readiness checks, practice paper formats, and every drill category across VR, NVR, Maths and Comprehension.
+              Scroll inside each panel to explore practice tests, practice paper formats, and every drill category across VR, NVR, Maths and Comprehension.
             </p>
           </div>
           <PlatformSuitePreview />
@@ -121,7 +128,7 @@ export default function PlatformPreview() {
               className="h-12 border-white/25 text-white bg-transparent hover:bg-white/10 hover:text-white"
               data-testid="button-platform-footer-free"
             >
-              <Link href="/free-diagnostic">Free practice test</Link>
+              <Link href={FREE_PRACTICE_TEST_PATH}>{FREE_PRACTICE_TEST_CTA}</Link>
             </Button>
           </div>
         </section>

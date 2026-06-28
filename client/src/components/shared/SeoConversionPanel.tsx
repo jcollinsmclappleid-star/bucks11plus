@@ -3,12 +3,19 @@ import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { scrollToAnchor } from "@/lib/scrollToAnchor";
 import {
+  FREE_PRACTICE_TEST_CTA,
+  FREE_PRACTICE_TEST_PATH,
+  PLATFORM_PRACTICE_PAPERS_PATH,
+  PLATFORM_PREVIEW_CTA,
+} from "@/lib/marketing";
+import { SampleQuestionsCarousel } from "./SampleQuestionsCarousel";
+import {
   ArrowRight,
   BarChart3,
   CheckCircle2,
   Clock,
   Gauge,
-  Shield,
+  ChevronsDown,
   Target,
   Zap,
   PlayCircle,
@@ -25,73 +32,75 @@ type SeoConversionPanelProps = {
   primaryHref?: string;
   secondaryLabel?: string;
   secondaryHref?: string;
+  /** Show interactive GL-style question examples below the panel. */
+  showQuestionExamples?: boolean;
 };
 
-const variantCopy: Record<PanelVariant, Required<Omit<SeoConversionPanelProps, "variant">>> = {
+const variantCopy: Record<PanelVariant, Required<Omit<SeoConversionPanelProps, "variant" | "showQuestionExamples">>> = {
   guide: {
     eyebrow: "Built for Bucks parents",
     heading: "Guides explain the test. The platform prepares your child for it.",
     subhead:
-      "2,500+ GL-style questions, full mock exams, unlimited practice papers, readiness checks on the 121 scale, and parent dashboards that show exactly what to practise next.",
-    primaryLabel: "See what's in the platform",
-    primaryHref: "/platform",
-    secondaryLabel: "Try free practice test",
-    secondaryHref: "/free-diagnostic",
+      "2,500+ GL-style questions, unlimited practice papers, full mock exams, timed practice tests on the 121 scale, and parent dashboards that show exactly what to practise next.",
+    primaryLabel: PLATFORM_PREVIEW_CTA,
+    primaryHref: PLATFORM_PRACTICE_PAPERS_PATH,
+    secondaryLabel: FREE_PRACTICE_TEST_CTA,
+    secondaryHref: FREE_PRACTICE_TEST_PATH,
   },
   registration: {
     eyebrow: "After registration, the clock is running",
-    heading: "Registered or about to register? Get the baseline now.",
+    heading: "Registered or about to register? See what your child needs to practise.",
     subhead:
-      "Registration only gets your child into the test. The platform shows whether they are actually ready for the September 2027 test and beyond.",
-    primaryLabel: "Check readiness free",
-    primaryHref: "/free-diagnostic",
-    secondaryLabel: "Compare plans",
-    secondaryHref: "/pricing",
+      "Registration gets your child into the test. Our practice tests, mock exams, and parent dashboards show whether they are actually on track for 121 — before you spend on tutors or more books.",
+    primaryLabel: PLATFORM_PREVIEW_CTA,
+    primaryHref: PLATFORM_PRACTICE_PAPERS_PATH,
+    secondaryLabel: FREE_PRACTICE_TEST_CTA,
+    secondaryHref: FREE_PRACTICE_TEST_PATH,
   },
   question: {
     eyebrow: "Question types decide marks",
     heading: "Find the exact question types costing your child points.",
     subhead:
-      "A child can look strong overall and still lose the 121 margin on cube nets, inference, timing, or one hidden reasoning family. The dashboard shows the gaps.",
-    primaryLabel: "Find weak question types",
-    primaryHref: "/free-diagnostic",
-    secondaryLabel: "See the platform",
-    secondaryHref: "/pricing",
+      "A child can look strong overall and still lose the 121 margin on cube nets, inference, timing, or one hidden reasoning family. Browse the full practice library and see the gaps in your parent dashboard.",
+    primaryLabel: PLATFORM_PREVIEW_CTA,
+    primaryHref: PLATFORM_PRACTICE_PAPERS_PATH,
+    secondaryLabel: FREE_PRACTICE_TEST_CTA,
+    secondaryHref: FREE_PRACTICE_TEST_PATH,
   },
   score: {
     eyebrow: "121 is the benchmark",
     heading: "Stop guessing whether your child is close to 121.",
     subhead:
-      "Get an indicative practice score, section breakdown, pace analysis, and a ranked focus list. It is not an official GL score, but it is the clearest starting point for preparation.",
-    primaryLabel: "See the practice score",
-    primaryHref: "/free-diagnostic",
-    secondaryLabel: "How pricing works",
-    secondaryHref: "/pricing",
+      "Get an indicative practice score, section breakdown, pace analysis, and a ranked focus list. Browse mock exams and practice papers built for the Bucks 11+ before you subscribe.",
+    primaryLabel: PLATFORM_PREVIEW_CTA,
+    primaryHref: PLATFORM_PRACTICE_PAPERS_PATH,
+    secondaryLabel: FREE_PRACTICE_TEST_CTA,
+    secondaryHref: FREE_PRACTICE_TEST_PATH,
   },
   learn: {
     eyebrow: "More than free guides",
     heading: "Guides explain the test. Bucks Plus Edge prepares your child for it.",
     subhead:
-      "Parent dashboards, 2,500+ GL-style questions, unlimited practice papers, mock exams, and readiness checks scored on the 121 benchmark — built for Buckinghamshire families.",
-    primaryLabel: "Browse the full platform",
-    primaryHref: "/platform",
-    secondaryLabel: "Try free practice test",
-    secondaryHref: "/free-diagnostic",
+      "Parent dashboards, 2,500+ GL-style questions, unlimited practice papers, full mock exams, and timed practice tests scored on the 121 benchmark — built for Buckinghamshire families.",
+    primaryLabel: PLATFORM_PREVIEW_CTA,
+    primaryHref: PLATFORM_PRACTICE_PAPERS_PATH,
+    secondaryLabel: FREE_PRACTICE_TEST_CTA,
+    secondaryHref: FREE_PRACTICE_TEST_PATH,
   },
   general: {
     eyebrow: "Bucks-specific preparation",
     heading: "Know what to fix before the test window closes.",
     subhead:
-      "Readiness forecast, GL-style practice, parent analytics, mock exams, and targeted drills in one Bucks-specific platform.",
-    primaryLabel: "Start free",
-    primaryHref: "/free-diagnostic",
-    secondaryLabel: "See plans",
-    secondaryHref: "/pricing",
+      "Practice score forecast, GL-style questions, parent analytics, mock exams, and targeted drills — everything in one Bucks-specific platform. See exactly what you get before you pay.",
+    primaryLabel: PLATFORM_PREVIEW_CTA,
+    primaryHref: PLATFORM_PRACTICE_PAPERS_PATH,
+    secondaryLabel: FREE_PRACTICE_TEST_CTA,
+    secondaryHref: FREE_PRACTICE_TEST_PATH,
   },
 };
 
 const proofPoints = [
-  { icon: Gauge, label: "121-scale readiness forecast" },
+  { icon: Gauge, label: "121-scale practice score forecast" },
   { icon: BarChart3, label: "Section and question-type gaps" },
   { icon: Clock, label: "Pace and timing risk" },
   { icon: Target, label: "Priority practice recommendations" },
@@ -106,6 +115,7 @@ export function SeoConversionPanel({
   primaryHref,
   secondaryLabel,
   secondaryHref,
+  showQuestionExamples = true,
 }: SeoConversionPanelProps) {
   const copy = {
     ...variantCopy[variant],
@@ -132,8 +142,8 @@ export function SeoConversionPanel({
           <p className="mt-4 max-w-2xl text-sm leading-7 text-white/75 md:text-base">
             {copy.subhead}
           </p>
-          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-            <Button variant="cta" size="lg" asChild  data-testid="button-seo-conversion-primary">
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <Button variant="cta" size="lg" asChild data-testid="button-seo-conversion-primary">
               <Link href={copy.primaryHref}>
                 {copy.primaryLabel} <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
@@ -143,13 +153,13 @@ export function SeoConversionPanel({
             </Button>
           </div>
           <p className="mt-4 text-xs text-white/45">
-            No account needed for the free check · Full platform from £35/month
+            Free 12-question practice test · no account needed · Full platform from £35/month
           </p>
         </div>
         <div className="bg-slate-50 p-6 md:p-8">
           <div className="mb-4 flex items-center gap-2">
-            <Shield className="h-4 w-4 text-primary" />
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary/70">What parents see</p>
+            <Target className="h-4 w-4 text-primary" />
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary/70">What parents get</p>
           </div>
           <div className="grid gap-3">
             {proofPoints.map((point) => {
@@ -165,13 +175,31 @@ export function SeoConversionPanel({
             })}
           </div>
           <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 p-4">
-            <p className="text-sm font-bold text-emerald-900">The decision point</p>
+            <p className="text-sm font-bold text-emerald-900">Browse before you buy</p>
             <p className="mt-1 text-xs leading-6 text-emerald-800">
-              If the baseline is strong, keep preparation efficient. If it exposes gaps, you know exactly what to fix before paying for broad tutoring.
+              See every practice paper, mock exam, and drill category — then decide if Bucks Plus Edge is right for your family.
             </p>
           </div>
         </div>
       </div>
+
+      {showQuestionExamples && (
+        <div className="border-t border-slate-200 bg-white px-5 py-6 md:px-8 md:py-8">
+          <div className="flex items-center justify-center gap-2 text-sm text-slate-600 mb-4">
+            <ChevronsDown className="h-4 w-4 text-primary/60 shrink-0" />
+            <span className="font-medium text-center">Swipe through real GL-style practice questions from the platform</span>
+            <ChevronsDown className="h-4 w-4 text-primary/60 shrink-0" />
+          </div>
+          <SampleQuestionsCarousel />
+          <div className="mt-6 flex justify-center">
+            <Button variant="cta" size="lg" asChild data-testid="button-seo-conversion-questions-platform">
+              <Link href={PLATFORM_PRACTICE_PAPERS_PATH}>
+                {PLATFORM_PREVIEW_CTA} <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
@@ -186,7 +214,7 @@ const costRows = [
   {
     label: "Bucks Plus Edge — Monthly",
     price: "£35/mo",
-    detail: "Unlimited interactive practice, mocks, drills, readiness checks, and parent analytics.",
+    detail: "Unlimited interactive practice, mocks, drills, practice tests, and parent analytics.",
     isTutorCost: false,
   },
   {
@@ -214,7 +242,7 @@ const practiceBenefits = [
   {
     icon: BarChart3,
     title: "Preparation you can see",
-    detail: "Readiness checks, mock exams, pace tracking, and a parent dashboard that shows what to fix next.",
+    detail: "Practice tests, mock exams, pace tracking, and a parent dashboard that shows what to fix next.",
   },
   {
     icon: Zap,
@@ -308,16 +336,18 @@ export function TutorCostComparison({ compact = false, variant = "default", flus
             </Button>
           ) : (
             <>
-              <Button variant="cta" size="lg" asChild data-testid="button-tutor-comparison-monthly">
-                <Link href="/pricing?autoCheckout=pack_plus">
-                  Start monthly — £35/mo <ArrowRight className="ml-2 h-4 w-4" />
+              <Button variant="cta" size="lg" asChild data-testid="button-tutor-comparison-platform">
+                <Link href={PLATFORM_PRACTICE_PAPERS_PATH}>
+                  {PLATFORM_PREVIEW_CTA} <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
-              <Button variant="outline" asChild className="h-12 border-primary/20 font-semibold text-primary" data-testid="button-tutor-comparison-annual">
-                <Link href="/pricing?autoCheckout=pack_annual">Annual — £23.25/mo</Link>
+              <Button variant="outline" asChild className="h-12 border-primary/20 font-semibold text-primary" data-testid="button-tutor-comparison-monthly">
+                <Link href="/pricing?autoCheckout=pack_plus">
+                  Start monthly — £35/mo
+                </Link>
               </Button>
               <Button variant="outline" asChild className="h-12 border-primary/20 font-semibold text-primary" data-testid="button-tutor-comparison-secondary">
-                <Link href="/free-diagnostic">Try the free check</Link>
+                <Link href={FREE_PRACTICE_TEST_PATH}>{FREE_PRACTICE_TEST_CTA}</Link>
               </Button>
             </>
           )}

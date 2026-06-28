@@ -78,7 +78,7 @@ export default function MathsTopic({ slug }: { slug: string }) {
       <SeoConversionPanel
         variant="question"
         heading={`See whether ${t.title.replace("11+ ", "").toLowerCase()} is holding your child back.`}
-        subhead="A single maths topic can quietly drag down a 121-scale readiness score. The free check shows topic gaps, pace risk, and what to practise next."
+        subhead="A single maths topic can quietly drag down a 121-scale practice score. Browse the practice library and see topic gaps, pace risk, and what to practise next."
       />
 
       <h2 className="text-primary font-serif">Common Mistakes</h2>

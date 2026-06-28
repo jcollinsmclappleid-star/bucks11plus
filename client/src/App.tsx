@@ -1,4 +1,4 @@
-import { Switch, Route, Link, useLocation } from "wouter";
+import { Switch, Route, Link, useLocation, Redirect } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -60,6 +60,7 @@ import QuestionEditor from "./pages/admin/QuestionEditor";
 import ParentGuide from "./pages/ParentGuide";
 import WhyChoosePlatform from "./pages/WhyChoosePlatform";
 import PlatformPreview from "./pages/PlatformPreview";
+import { PLATFORM_PRACTICE_PAPERS_PATH, PLATFORM_PREVIEW_CTA } from "./lib/marketing";
 import GuidePrint from "./pages/GuidePrint";
 import PracticePaperPrint from "./pages/PracticePaperPrint";
 import PracticePaperPrint2 from "./pages/PracticePaperPrint2";
@@ -159,7 +160,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
                 className="h-11 border-primary-foreground/25 text-primary-foreground bg-transparent hover:bg-primary-foreground/10 hover:text-primary-foreground"
                 data-testid="button-footer-pricing"
               >
-                <Link href="/platform">See what&apos;s included</Link>
+                <Link href={PLATFORM_PRACTICE_PAPERS_PATH}>{PLATFORM_PREVIEW_CTA}</Link>
               </Button>
             </div>
           </div>
@@ -174,7 +175,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
             <ul className="space-y-2 text-sm">
               <li><Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
               <li><Link href="/how-it-works" className="hover:text-white transition-colors">How It Works</Link></li>
-              <li><Link href="/platform" className="hover:text-white transition-colors">What's in the Platform</Link></li>
+              <li><Link href={PLATFORM_PRACTICE_PAPERS_PATH} className="hover:text-white transition-colors">11 Plus Practice Papers</Link></li>
               <li><Link href="/why-choose-bucks-11-plus-tests" className="hover:text-white transition-colors">Why Choose Us</Link></li>
               <li><Link href="/bucks-gl-alignment" className="hover:text-white transition-colors">GL Assessment Domains</Link></li>
               <li><Link href="/how-forecast-works" className="hover:text-white transition-colors">How Scoring Works</Link></li>
@@ -333,7 +334,8 @@ function Router() {
             <Route path="/parent-hub" component={ParentHub} />
             <Route path="/parent-hub/:slug" component={Article} />
             <Route path="/how-it-works" component={HowItWorks} />
-            <Route path="/platform" component={PlatformPreview} />
+            <Route path="/platform"><Redirect to={PLATFORM_PRACTICE_PAPERS_PATH} /></Route>
+            <Route path={PLATFORM_PRACTICE_PAPERS_PATH} component={PlatformPreview} />
             <Route path="/why-choose-bucks-11-plus-tests" component={WhyChoosePlatform} />
             <Route path="/how-forecast-works" component={ScoringMethodology} />
             <Route path="/bucks-gl-alignment" component={GLAlignment} />

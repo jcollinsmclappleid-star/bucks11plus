@@ -145,7 +145,7 @@ export default function LearnArticle() {
           </div>
         )}
 
-        <GuideConversionBlock className="mt-10" />
+        <GuideConversionBlock className="mt-10" hideQuestions />
 
         <SubscribeCTA />
 
