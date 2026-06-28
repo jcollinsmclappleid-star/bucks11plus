@@ -52,7 +52,7 @@ export default function ChatWidget() {
   return (
     <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3">
       {open && (
-        <div className="w-[340px] rounded-2xl border border-slate-200 bg-white shadow-2xl overflow-hidden animate-in slide-in-from-bottom-4 fade-in duration-200">
+        <div className="w-[min(340px,calc(100vw-2.5rem))] rounded-2xl border border-slate-200 bg-white shadow-2xl overflow-hidden animate-in slide-in-from-bottom-4 fade-in duration-200">
           <div className="bg-primary px-5 py-4 flex items-center justify-between">
             <div>
               <p className="font-bold text-primary-foreground text-sm">Contact Support</p>

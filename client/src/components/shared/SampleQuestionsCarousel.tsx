@@ -202,7 +202,7 @@ export function SampleQuestionsCarousel({ className, showLabel = true }: SampleQ
     <div className={cn("relative max-w-full overflow-hidden", className)}>
       <div
         ref={scrollRef}
-        className="flex gap-4 overflow-x-auto pb-3 snap-x snap-mandatory min-w-0"
+        className="flex gap-4 overflow-x-auto overscroll-x-contain pb-3 snap-x snap-mandatory min-w-0 max-w-full"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         {EXAMPLES.map((example) => (

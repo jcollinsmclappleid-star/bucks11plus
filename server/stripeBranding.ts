@@ -44,6 +44,13 @@ export function checkoutBrandingExtras(): Pick<Stripe.Checkout.SessionCreatePara
   };
 }
 
+export function scheduleStripeBranding(): void {
+  void ensureStripeBranding().catch((err: unknown) => {
+    const message = err instanceof Error ? err.message : String(err);
+    console.warn("[Stripe Branding] Skipped:", message);
+  });
+}
+
 export async function ensureStripeBranding(force = false): Promise<void> {
   if (!force && brandingPromise) return brandingPromise;
 

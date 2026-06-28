@@ -1308,7 +1308,7 @@ export default function Landing() {
   // Countdown / prep cycle messaging — shared via testDate.ts (see PrepUrgencyBanner)
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-4rem)]">
+    <div className="flex flex-col min-h-[calc(100vh-4rem)] overflow-x-hidden w-full min-w-0">
       {/* ── URGENCY BANNER ── */}
       <div className="bg-amber-400 text-amber-950 border-b border-amber-500/40" data-testid="banner-countdown">
         <div className="container mx-auto max-w-6xl px-4 py-2">
@@ -1409,7 +1409,7 @@ export default function Landing() {
 
             {/* Right: Forecast mockup — visible on all sizes */}
             <div className="block">
-              <div className="relative max-w-md mx-auto lg:max-w-none">
+              <div className="relative max-w-md mx-auto lg:max-w-none overflow-hidden">
                 <div className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-amber-400/10 to-transparent blur-2xl" />
                 <div className="relative">
                   <ForecastPanel />
@@ -2025,10 +2025,10 @@ export default function Landing() {
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
-            <p className="text-center text-xs text-slate-400">All prices include VAT. Subscriptions renew automatically and can be cancelled anytime. Money-back guarantee available within 3 days of purchase — see <Link href="/pricing" className="text-primary hover:underline">full pricing terms</Link>.</p>
-            <div className="flex items-center gap-2 shrink-0 border border-slate-200 rounded-lg px-3 py-1.5 bg-white shadow-sm" data-testid="badge-stripe">
-              <svg width="40" height="16" viewBox="0 0 60 25" fill="none" aria-label="Stripe" role="img">
+          <div className="flex flex-col items-center justify-center gap-4 mt-8 max-w-full px-1">
+            <p className="text-center text-xs text-slate-400 max-w-prose">All prices include VAT. Subscriptions renew automatically and can be cancelled anytime. Money-back guarantee available within 3 days of purchase — see <Link href="/pricing" className="text-primary hover:underline">full pricing terms</Link>.</p>
+            <div className="flex items-center gap-2 shrink-0 border border-slate-200 rounded-lg px-3 py-1.5 bg-white shadow-sm max-w-full" data-testid="badge-stripe">
+              <svg width="40" height="16" viewBox="0 0 64 25" fill="none" aria-label="Stripe" role="img" className="shrink-0">
                 <path d="M5.45 9.77c0-.92.76-1.28 2.01-1.28 1.8 0 4.06.54 5.86 1.5V4.82A15.6 15.6 0 0 0 7.46 4C3.17 4 .25 6.18.25 9.99c0 5.92 8.16 4.98 8.16 7.54 0 1.09-.95 1.44-2.26 1.44-1.96 0-4.47-.8-6.45-1.9v5.24A16.4 16.4 0 0 0 6.15 24c4.4 0 7.44-2.17 7.44-6.03C13.6 11.5 5.45 12.6 5.45 9.77zm16.3-8.33L17 2.56l-.04 16.78H22V1.44h-.25zM28.6 6.1l-.33 1.52h-3.14v16.1h5.06V12.4c1.2-1.56 3.23-1.27 3.86-1.05V6.43c-.65-.24-3.02-.68-5.45.67zm9.7-2.27a2.9 2.9 0 1 0 0-5.8 2.9 2.9 0 0 0 0 5.8zm-2.53 20h5.06V7.62h-5.06v16.1zm14.27-8.5c0-3.28 1.52-4.66 3.97-4.66 2.33 0 3.5 1.3 3.5 4.66v8.5H62.6V14.8C62.6 8.72 59.45 7 56.18 7c-2.55 0-4.42 1.12-5.51 2.97l-.23-2.35H45.5v16.1h5.06V15.33z" fill="#635BFF"/>
               </svg>
               <span className="text-[11px] text-slate-400 font-medium">Payments by Stripe</span>

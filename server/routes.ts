@@ -4,7 +4,7 @@ import { storage } from "./storage";
 import { setupAuth, requireAuth } from "./auth";
 import { onboardingSchema, insertGuideLeadSchema, testSessions, testAnswers, questions, users, childProfiles, emailEvents, programmeEnrolments, testDayConfig, programmeMilestones, weeklyPlans, programmeTasks, userBadges, questionUsage } from "@shared/schema";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
-import { ensureStripeBranding, checkoutBrandingExtras } from "./stripeBranding";
+import { scheduleStripeBranding, checkoutBrandingExtras } from "./stripeBranding";
 import { sql, eq, and, desc, inArray } from "drizzle-orm";
 import { db } from "./db";
 import { computeAttemptMetrics, computeFullAnalytics, type AnswerRecord, type DrillAnswerRecord, type HistoricalMetrics } from "./metrics";
@@ -315,11 +315,7 @@ export async function registerRoutes(
         return res.status(400).json({ message: "No billing account found. Please contact support." });
       }
       const stripe = await getUncachableStripeClient();
-      try {
-        await ensureStripeBranding();
-      } catch (brandErr: any) {
-        console.warn("Stripe branding skipped:", brandErr?.message ?? brandErr);
-      }
+      scheduleStripeBranding();
       const host = req.get("host");
       const protocol = req.protocol;
       const session = await stripe.billingPortal.sessions.create({
@@ -409,11 +405,7 @@ export async function registerRoutes(
       }
 
       const stripe = await getUncachableStripeClient();
-      try {
-        await ensureStripeBranding();
-      } catch (brandErr: any) {
-        console.warn("Stripe branding skipped:", brandErr?.message ?? brandErr);
-      }
+      scheduleStripeBranding();
       const user = req.user!;
 
       let customerId = user.stripeCustomerId;
@@ -493,11 +485,7 @@ export async function registerRoutes(
       }
 
       const stripe = await getUncachableStripeClient();
-      try {
-        await ensureStripeBranding();
-      } catch (brandErr: any) {
-        console.warn("Stripe branding skipped:", brandErr?.message ?? brandErr);
-      }
+      scheduleStripeBranding();
 
       let customerId = user.stripeCustomerId;
       if (!customerId) {
@@ -551,11 +539,7 @@ export async function registerRoutes(
       }
 
       const stripe = await getUncachableStripeClient();
-      try {
-        await ensureStripeBranding();
-      } catch (brandErr: any) {
-        console.warn("Stripe branding skipped:", brandErr?.message ?? brandErr);
-      }
+      scheduleStripeBranding();
       const host = req.get('host');
       const protocol = req.protocol;
 

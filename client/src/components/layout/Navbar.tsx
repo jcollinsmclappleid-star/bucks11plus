@@ -87,7 +87,7 @@ export default function Navbar() {
   );
 
   return (
-    <header className="border-b border-border/40 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 sticky top-0 z-50">
+    <header className="border-b border-border/40 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 sticky top-0 z-50 overflow-x-hidden w-full">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between max-w-6xl gap-2">
 
         {/* Logo */}

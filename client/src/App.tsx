@@ -129,11 +129,11 @@ function ScrollToTop() {
 
 function MainLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-background font-sans flex flex-col">
+    <div className="min-h-screen bg-background font-sans flex flex-col overflow-x-hidden w-full min-w-0">
       <ScrollToTop />
       <Navbar />
       <EmailVerificationBanner />
-      <main className="flex-1">
+      <main className="flex-1 min-w-0 overflow-x-hidden w-full">
         {children}
       </main>
       <AdminTierSwitcher />
