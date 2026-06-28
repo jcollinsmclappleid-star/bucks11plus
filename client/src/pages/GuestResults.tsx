@@ -98,6 +98,13 @@ export default function GuestResults() {
   const sectionScores = session?.sectionScores || [];
   const paceData = session?.paceData || [];
   const weakestSection = sectionScores.length > 0 ? [...sectionScores].sort((a, b) => a.score - b.score)[0] : null;
+  const totalCorrect =
+    session?.totalScore ??
+    sectionScores.reduce((sum, section) => sum + section.correct, 0);
+  const totalQuestions =
+    sectionScores.reduce((sum, section) => sum + section.total, 0) || 12;
+  const rawAccuracyPct =
+    totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
 
   if (isLoading) {
     return (
@@ -136,6 +143,21 @@ export default function GuestResults() {
         </div>
       </div>
 
+      <div className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3" data-testid="raw-score-summary">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-wider text-slate-500">Questions answered correctly</p>
+          <p className="text-2xl font-bold text-primary mt-1" data-testid="text-raw-score">
+            {totalCorrect} of {totalQuestions} <span className="text-lg font-semibold text-slate-600">({rawAccuracyPct}%)</span>
+          </p>
+          <p className="text-xs text-muted-foreground mt-1">
+            This 12-question practice test covers VR, NVR, Maths (3 questions), and Comprehension — not maths only.
+          </p>
+        </div>
+        <div className="text-sm text-slate-600 max-w-md sm:text-right leading-relaxed">
+          The <strong className="text-primary">{currentScore}</strong> indicative score uses the same <strong>69–141</strong> GL-style scale as the real test (where ~69 is the floor, not zero). Low raw accuracy still maps above 69.
+        </div>
+      </div>
+
       <div className="grid lg:grid-cols-2 gap-8">
         <Card className="border-border/60 shadow-md overflow-hidden relative">
           <div className="absolute top-0 inset-x-0 h-2 bg-gradient-to-r from-amber-400 to-amber-600"></div>
@@ -170,7 +192,9 @@ export default function GuestResults() {
               </div>
               <p className="text-muted-foreground text-lg">
                 {(target - currentScore) > 0 ? (
-                  <>Your child is currently showing an indicative <strong className="text-primary">{target - currentScore} point gap</strong> to the 121 preparation benchmark.</>
+                  <>
+                    At <strong className="text-primary">{rawAccuracyPct}%</strong> raw accuracy ({totalCorrect}/{totalQuestions}), the indicative practice score is <strong className="text-primary">{currentScore}</strong> — roughly <strong className="text-primary">{target - currentScore} points</strong> below the 121 preparation benchmark on this scale.
+                  </>
                 ) : (
                   <>Your child is <strong className="text-green-700">meeting or exceeding</strong> the 121 preparation benchmark on this indicative readiness check.</>
                 )}

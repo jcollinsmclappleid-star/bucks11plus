@@ -75,17 +75,28 @@ export default function ScoringMethodology() {
       <section className="space-y-4">
         <h2 className="text-xl font-bold text-primary font-serif">The Scoring Scale</h2>
         <p className="text-muted-foreground leading-relaxed">
-          GL Assessment standardised scores run from approximately 69 to 141, with 100 representing the population average for a child of that age. We use this same 0–141 scale for our forecast so that parents and children have a familiar reference point.
+          GL Assessment standardised scores run from approximately <strong>69 to 141</strong>, with 100 representing the population average. We use this same scale for our indicative practice score so Bucks parents can compare against the familiar <strong>121</strong> qualifying threshold.
         </p>
         <p className="text-muted-foreground leading-relaxed">
-          Your forecast is calculated as:
+          Your indicative score is calculated in two steps:
         </p>
-        <div className="bg-slate-50 border border-border rounded-xl p-6 font-mono text-sm text-center">
-          <p className="text-primary font-bold text-lg">Forecast = (Questions Correct ÷ Total Questions) × 141</p>
-          <p className="text-muted-foreground text-xs mt-2 font-sans">Rounded to the nearest whole number</p>
+        <ol className="list-decimal list-inside space-y-2 text-muted-foreground text-sm leading-relaxed">
+          <li>
+            <strong className="text-primary">Section accuracy</strong> — correct ÷ attempted in each of the four GL domains (Verbal Reasoning 35%, Mathematics 25%, Non-Verbal Reasoning 25%, English Comprehension 15%).
+          </li>
+          <li>
+            <strong className="text-primary">Map to the 69–141 scale</strong> — weighted accuracy is converted with a floor of 69 (the GL minimum), not zero.
+          </li>
+        </ol>
+        <div className="bg-slate-50 border border-border rounded-xl p-6 font-mono text-sm text-center space-y-2">
+          <p className="text-primary font-bold text-lg">Indicative score = 69 + (weighted accuracy × 72)</p>
+          <p className="text-muted-foreground text-xs font-sans">Rounded to the nearest whole number · 100% accuracy → 141 · 0% accuracy → 69</p>
         </div>
         <p className="text-muted-foreground leading-relaxed text-sm">
-          For example: if a child answers 43 of 50 questions correctly, their raw score is 86%, and their forecast score is <strong>round(0.86 × 141) = 121</strong>.
+          Example: <strong>1 of 12 correct (8%)</strong> → indicative score <strong>75</strong> (not 8 or 12). The scale starts at 69, so a very low practice score still appears well below 121 — in this case <strong>46 points</strong> under the benchmark.
+        </p>
+        <p className="text-muted-foreground leading-relaxed text-sm">
+          Example: <strong>43 of 50 correct (86%)</strong> → weighted accuracy ≈ 86% → indicative score <strong>round(69 + 0.86 × 72) = 121</strong>.
         </p>
       </section>
 
