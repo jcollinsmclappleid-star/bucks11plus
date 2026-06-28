@@ -1081,6 +1081,9 @@ export async function seedDatabase() {
 
   const [existing] = await db.select({ count: sql<number>`count(*)` }).from(diagnostics);
   if (existing.count > 0) {
+    if (process.env.VERCEL === "1") {
+      return;
+    }
     await ensurePracticePaperDiagnostics();
     await syncDiagnosticTimings();
     await ensureComprehensionSection();

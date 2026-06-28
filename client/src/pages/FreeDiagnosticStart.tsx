@@ -4,14 +4,21 @@ import { Card, CardContent } from "@/components/ui/card";
 import { AlertCircle, Clock, CheckCircle2, Loader2 } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { Diagnostic } from "@shared/schema";
 
 const FREE_DIAGNOSTIC_ID = "mini-1";
+const DISPLAY_TITLE = "Free Practice Test";
 
 export default function FreeDiagnosticStart() {
   const [, setLocation] = useLocation();
   const [starting, setStarting] = useState(false);
+  const [slowLoad, setSlowLoad] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setSlowLoad(true), 5000);
+    return () => clearTimeout(t);
+  }, []);
 
   const { data: diagnostic, isLoading } = useQuery<Diagnostic>({
     queryKey: [`/api/diagnostics/${FREE_DIAGNOSTIC_ID}`],
@@ -37,7 +44,7 @@ export default function FreeDiagnosticStart() {
       sessionStorage.setItem("guestSessionId", data.session.id);
       sessionStorage.setItem("guestQuestions", JSON.stringify(data.questions));
       sessionStorage.setItem("guestDiagnosticDuration", String(diagnostic?.duration || 12));
-      sessionStorage.setItem("guestDiagnosticTitle", diagnostic?.title || "Free Baseline Diagnostic");
+      sessionStorage.setItem("guestDiagnosticTitle", diagnostic?.title || DISPLAY_TITLE);
       setLocation(`/app/test/${data.session.id}?guest=true`);
     },
     onError: () => {
@@ -47,8 +54,13 @@ export default function FreeDiagnosticStart() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[50vh]">
+      <div className="flex flex-col items-center justify-center min-h-[50vh] gap-4 px-4 text-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        {slowLoad && (
+          <p className="text-sm text-muted-foreground max-w-sm">
+            Loading your free practice test… This can take a few seconds on first visit.
+          </p>
+        )}
       </div>
     );
   }
@@ -56,7 +68,7 @@ export default function FreeDiagnosticStart() {
   if (!diagnostic) {
     return (
       <div className="container mx-auto max-w-3xl px-4 py-16 text-center">
-        <h1 className="text-2xl font-bold text-primary">Readiness check not available</h1>
+        <h1 className="text-2xl font-bold text-primary">Free practice test not available</h1>
         <p className="text-muted-foreground mt-2">Please try again later.</p>
       </div>
     );
@@ -65,8 +77,8 @@ export default function FreeDiagnosticStart() {
   return (
     <div className="container mx-auto max-w-3xl px-4 py-16">
       <Seo
-        title="Free Baseline Readiness Check | Bucks 11 Plus Tests"
-        description="Take a free 8-minute readiness check to get an indicative readiness signal calibrated to the Bucks 121 qualifying benchmark. Not the official GL Assessment standardised score. No account needed."
+        title="Free Practice Test | Bucks 11 Plus Tests"
+        description="Take a free 12-question practice test to get an indicative readiness signal calibrated to the Bucks 121 qualifying benchmark. No account needed."
       />
 
       <Card className="border-border/60 shadow-lg overflow-hidden" data-testid="card-free-diagnostic-start">
@@ -75,10 +87,10 @@ export default function FreeDiagnosticStart() {
             No Account Needed
           </span>
           <h1 className="text-3xl md:text-4xl font-bold text-primary-foreground font-serif tracking-tight" data-testid="text-free-diagnostic-title">
-            {diagnostic.title}
+            {DISPLAY_TITLE}
           </h1>
           <p className="text-primary-foreground/80 mt-4 max-w-lg mx-auto">
-            {diagnostic.subtitle}
+            {diagnostic.subtitle || "Quick timed assessment across core GL-style reasoning"}
           </p>
         </div>
 
@@ -150,7 +162,8 @@ export default function FreeDiagnosticStart() {
             )}
             <Button
               size="lg"
-              variant="cta" size="lg" className="h-14 px-12 text-lg w-full sm:w-auto"
+              variant="cta"
+              className="h-14 px-12 text-lg w-full sm:w-auto"
               onClick={() => startGuestSession.mutate()}
               disabled={starting}
               data-testid="button-begin-free-assessment"
@@ -161,7 +174,7 @@ export default function FreeDiagnosticStart() {
                   Starting...
                 </>
               ) : (
-                "Begin Free Assessment"
+                "Begin Free Practice Test"
               )}
             </Button>
             <p className="text-xs text-muted-foreground mt-4">

@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
+import { scrollToAnchor } from "@/lib/scrollToAnchor";
 import {
   ArrowRight,
   BarChart3,
@@ -297,10 +298,13 @@ export function TutorCostComparison({ compact = false, variant = "default", flus
         </div>
         <div className="flex shrink-0 flex-col gap-2 sm:flex-row sm:flex-wrap sm:justify-end">
           {isPricing ? (
-            <Button variant="cta" size="lg" asChild data-testid="button-tutor-comparison-primary">
-              <Link href="#tiers">
-                See monthly & annual plans <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
+            <Button
+              variant="cta"
+              size="lg"
+              data-testid="button-tutor-comparison-primary"
+              onClick={() => scrollToAnchor("tiers")}
+            >
+              See monthly & annual plans <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           ) : (
             <>

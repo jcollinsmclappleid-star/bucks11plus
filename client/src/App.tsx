@@ -143,14 +143,14 @@ function MainLayout({ children }: { children: React.ReactNode }) {
         <div className="container mx-auto max-w-6xl px-4 mb-10" data-testid="footer-cta-strip">
           <div className="rounded-2xl border border-primary-foreground/15 bg-primary-foreground/5 p-6 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div>
-              <h3 className="font-serif text-xl font-bold text-primary-foreground mb-2">Start with a free readiness check</h3>
+              <h3 className="font-serif text-xl font-bold text-primary-foreground mb-2">Start with a free practice test</h3>
               <p className="text-sm text-primary-foreground/70 max-w-lg">
                 No account needed · 8 minutes · See where your child stands against the 121 benchmark. Then choose £35/month or £279/year for full access.
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-3 shrink-0">
               <Button variant="cta" asChild data-testid="button-footer-free-check">
-                <Link href="/free-diagnostic">Free Readiness Check</Link>
+                <Link href="/free-diagnostic">Free Practice Test</Link>
               </Button>
               <Button
                 variant="outline"

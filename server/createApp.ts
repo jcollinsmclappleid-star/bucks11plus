@@ -72,6 +72,10 @@ function redactForLog(value: unknown, depth = 0): unknown {
 }
 
 async function initStripe() {
+  if (isVercel) {
+    return;
+  }
+
   const databaseUrl = process.env.DATABASE_URL;
   if (!databaseUrl) {
     console.warn("DATABASE_URL not set, skipping Stripe init");
@@ -134,24 +138,24 @@ let bootPromise: Promise<void> | null = null;
 function bootOnce(): Promise<void> {
   if (!bootPromise) {
     bootPromise = (async () => {
-      const tasks: Promise<unknown>[] = [
-        initStripe(),
-        seedDatabase(),
-        ensureNvrGeneratorReseeds(),
-      ];
+      const tasks: Promise<unknown>[] = [seedDatabase()];
 
-      tasks.push(
-        ensureChromium().then(() => {
-          return import("./leadMagnet").then(({ getCachedPracticePaperPdf, getCachedPracticePaper2Pdf }) => {
-            getCachedPracticePaperPdf().catch((err) =>
-              console.error("[PDF] Paper 1 cache warm failed:", err?.message ?? err),
-            );
-            getCachedPracticePaper2Pdf().catch((err) =>
-              console.error("[PDF] Paper 2 cache warm failed:", err?.message ?? err),
-            );
-          });
-        }),
-      );
+      if (!isVercel) {
+        tasks.unshift(initStripe());
+        tasks.push(ensureNvrGeneratorReseeds());
+        tasks.push(
+          ensureChromium().then(() => {
+            return import("./leadMagnet").then(({ getCachedPracticePaperPdf, getCachedPracticePaper2Pdf }) => {
+              getCachedPracticePaperPdf().catch((err) =>
+                console.error("[PDF] Paper 1 cache warm failed:", err?.message ?? err),
+              );
+              getCachedPracticePaper2Pdf().catch((err) =>
+                console.error("[PDF] Paper 2 cache warm failed:", err?.message ?? err),
+              );
+            });
+          }),
+        );
+      }
 
       await Promise.allSettled(tasks);
     })();
@@ -160,7 +164,7 @@ function bootOnce(): Promise<void> {
 }
 
 export async function createApp(): Promise<{ app: Express; httpServer: Server }> {
-  await bootOnce();
+  const bootReady = bootOnce();
 
   const app = express();
   app.set("trust proxy", 1);
@@ -236,6 +240,16 @@ export async function createApp(): Promise<{ app: Express; httpServer: Server }>
     });
 
     next();
+  });
+
+  app.use(async (req, res, next) => {
+    if (req.path === "/api/health") return next();
+    try {
+      await bootReady;
+      next();
+    } catch (err) {
+      next(err);
+    }
   });
 
   const httpServer = createServer(app);

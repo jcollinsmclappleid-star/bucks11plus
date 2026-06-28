@@ -10,6 +10,7 @@ import { DashboardPreviewForecast } from "../components/shared/DashboardPreview"
 import { useAuth } from "../lib/auth";
 import { useState, useEffect, useRef } from "react";
 import { apiRequest } from "../lib/queryClient";
+import { scrollToAnchor } from "../lib/scrollToAnchor";
 
 export default function Pricing() {
   const { user, isLoading } = useAuth();
@@ -27,6 +28,12 @@ export default function Pricing() {
       handleCheckout(autoTier);
     }
   }, [user, search, isLoading]);
+
+  useEffect(() => {
+    if (window.location.hash === "#tiers") {
+      requestAnimationFrame(() => scrollToAnchor("tiers"));
+    }
+  }, []);
 
   const [error, setError] = useState<string | null>(null);
 
@@ -191,11 +198,11 @@ export default function Pricing() {
                 Our platform from <strong className="text-white">£35/month</strong> or <strong className="text-white">£23.25/month</strong> on annual.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Button variant="cta" size="lg"  asChild data-testid="button-view-plans">
-                  <a href="#tiers">View Plans <ArrowRight className="ml-2 h-5 w-5" /></a>
+                <Button variant="cta" size="lg" data-testid="button-view-plans" onClick={() => scrollToAnchor("tiers")}>
+                  View Plans <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
                 <Button size="lg" variant="outline" className="h-12 px-6 border-white/20 text-white hover:bg-white/10 font-semibold" asChild data-testid="button-hero-free">
-                  <Link href="/free-diagnostic">Try Free First</Link>
+                  <Link href="/free-diagnostic">Try Free Practice Test</Link>
                 </Button>
               </div>
               <p className="text-xs text-white/30 mt-5">No account needed for the free check · Cancel monthly anytime</p>
@@ -298,8 +305,8 @@ export default function Pricing() {
                     <Sparkles className="h-5 w-5 text-slate-500" />
                   </div>
                   <div>
-                    <p className="font-bold text-primary text-sm">Free Readiness Check</p>
-                    <p className="text-xs text-slate-500">12-question timed check · No sign-up · Readiness band + forecast score + 3 priorities</p>
+                    <p className="font-bold text-primary text-sm">Free Practice Test</p>
+                    <p className="text-xs text-slate-500">12-question timed test · No sign-up · Readiness band + forecast score + 3 priorities</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-6 shrink-0">
@@ -308,7 +315,7 @@ export default function Pricing() {
                     <p className="text-[11px] text-slate-400">Always free</p>
                   </div>
                   <Button variant="outline" size="sm" className="h-9 px-5 text-sm" asChild data-testid="button-get-free">
-                    <Link href="/free-diagnostic">Start Free Check</Link>
+                    <Link href="/free-diagnostic">Start Free Test</Link>
                   </Button>
                 </div>
               </div>
@@ -605,7 +612,7 @@ export default function Pricing() {
       <section className="py-14 bg-primary" data-testid="section-final-cta">
         <div className="container mx-auto max-w-3xl px-4 text-center">
           <h2 className="text-2xl md:text-3xl font-bold text-white font-serif mb-3">
-            {hasPaidPlan ? "Keep up the preparation." : "Start your free readiness check"}
+            {hasPaidPlan ? "Keep up the preparation." : "Start your free practice test"}
           </h2>
           <p className="text-white/60 text-base mb-8 max-w-md mx-auto">
             {hasPaidPlan
@@ -620,10 +627,10 @@ export default function Pricing() {
             ) : (
               <>
                 <Button variant="cta" size="lg"  asChild data-testid="button-cta-final">
-                  <Link href="/free-diagnostic"><ArrowRight className="mr-2 h-5 w-5" />Start Free Check</Link>
+                  <Link href="/free-diagnostic"><ArrowRight className="mr-2 h-5 w-5" />Start Free Practice Test</Link>
                 </Button>
-                <Button variant="outline" size="lg" className="h-12 px-6 font-semibold border-white/25 text-white hover:bg-white/10" asChild data-testid="button-cta-plans">
-                  <a href="#tiers">View Plans</a>
+                <Button variant="outline" size="lg" className="h-12 px-6 font-semibold border-white/25 text-white hover:bg-white/10" data-testid="button-cta-plans" onClick={() => scrollToAnchor("tiers")}>
+                  View Plans
                 </Button>
               </>
             )}

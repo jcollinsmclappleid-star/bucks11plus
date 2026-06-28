@@ -70,7 +70,7 @@ export default function Navbar() {
     { href: "/bucks-11-plus-parent-guide", label: "Free Guide", show: true, matchPrefix: false },
     { href: "/pricing", label: "Pricing", show: true, matchPrefix: false },
     { href: "/contact", label: "Contact", show: true, matchPrefix: false },
-    { href: "/free-diagnostic", label: "Free Readiness Check", show: !user, matchPrefix: false },
+    { href: "/free-diagnostic", label: "Free Practice Test", show: !user, matchPrefix: false },
     { href: "/parent-hub", label: "Parent Hub", show: !user, matchPrefix: false },
     { href: "/learn", label: "Learn Hub", show: !user, matchPrefix: false },
     { href: "/about", label: "About", show: !user, matchPrefix: false },
@@ -165,8 +165,8 @@ export default function Navbar() {
             <>
               <Button variant="cta" size="sm" asChild data-testid="link-free-diagnostic-desktop">
                 <Link href="/free-diagnostic">
-                  <span className="hidden lg:inline">Free Readiness Check</span>
-                  <span className="lg:hidden">Free Check</span>
+                  <span className="hidden lg:inline">Free Practice Test</span>
+                  <span className="lg:hidden">Free Test</span>
                 </Link>
               </Button>
               <Button variant="ghost" size="sm" asChild data-testid="link-signin">
@@ -186,7 +186,7 @@ export default function Navbar() {
         <div className="flex items-center gap-2 md:hidden">
           {!user && (
             <Button variant="cta" size="sm" asChild className="shrink-0" data-testid="link-free-diagnostic-mobile">
-              <Link href="/free-diagnostic">Free Check</Link>
+              <Link href="/free-diagnostic">Free Test</Link>
             </Button>
           )}
           <Sheet open={open} onOpenChange={setOpen}>
@@ -256,7 +256,7 @@ export default function Navbar() {
                   ) : (
                     <>
                       <Button variant="cta" className="w-full" asChild>
-                        <Link href="/free-diagnostic" onClick={() => setOpen(false)}>Free Readiness Check</Link>
+                        <Link href="/free-diagnostic" onClick={() => setOpen(false)}>Free Practice Test</Link>
                       </Button>
                       <Button className="w-full" asChild>
                         <Link href="/sign-in" onClick={() => setOpen(false)}>Sign In</Link>
