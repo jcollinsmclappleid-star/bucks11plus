@@ -45,8 +45,10 @@ function vercelEnvAdd(key: string, value: string, target: string): void {
 
 const vars = parseEnvFile(ENV_FILE);
 
-// Ensure NODE_ENV for Vercel runtimes
-vars.NODE_ENV = "production";
+// NODE_ENV and PORT must not be set on Vercel — NODE_ENV=production during install
+// skips devDependencies (tsx, vite) and breaks the build. Vercel sets NODE_ENV at runtime.
+delete vars.NODE_ENV;
+delete vars.PORT;
 
 for (const target of TARGETS) {
   console.log(`\n── ${target} ──`);
