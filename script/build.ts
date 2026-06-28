@@ -56,18 +56,28 @@ async function buildAll() {
   ];
   const externals = allDeps.filter((dep) => !allowlist.includes(dep));
 
-  await esbuild({
-    entryPoints: ["server/index.ts"],
-    platform: "node",
+  const esbuildBase = {
+    platform: "node" as const,
     bundle: true,
-    format: "cjs",
-    outfile: "dist/index.cjs",
+    format: "cjs" as const,
     define: {
       "process.env.NODE_ENV": '"production"',
     },
     minify: true,
     external: externals,
-    logLevel: "info",
+    logLevel: "info" as const,
+  };
+
+  await esbuild({
+    ...esbuildBase,
+    entryPoints: ["server/index.ts"],
+    outfile: "dist/index.cjs",
+  });
+
+  await esbuild({
+    ...esbuildBase,
+    entryPoints: ["server/createApp.ts"],
+    outfile: "dist/vercel-app.cjs",
   });
 }
 
