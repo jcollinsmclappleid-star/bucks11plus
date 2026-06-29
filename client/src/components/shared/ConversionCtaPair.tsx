@@ -7,6 +7,7 @@ import {
   FREE_PRACTICE_TEST_PATH,
   GET_FULL_ACCESS_CTA,
   PRICING_ANCHOR_SUBLINE,
+  PRICING_UI,
   SEE_PLANS_PRICING_CTA,
 } from "@/lib/marketing";
 
@@ -75,9 +76,11 @@ export function ConversionCtaPair({
   );
 
   const anchorClass = cn(
-    "text-xs mt-2",
-    variant === "onPrimary" ? "text-white/50" : variant === "dark" ? "text-white/50" : "text-slate-500",
-    layout === "center" && "text-center",
+    "mt-2",
+    variant === "onPrimary" || variant === "dark"
+      ? cn(PRICING_UI.darkHeroSubline, layout === "center" && "mx-auto")
+      : cn("text-xs font-semibold", PRICING_UI.subline),
+    layout === "center" && variant !== "onPrimary" && variant !== "dark" && "text-center",
   );
 
   return (

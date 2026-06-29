@@ -11,6 +11,7 @@ import {
   PLATFORM_LIBRARY_LABEL,
   PLATFORM_SUITE_PATH,
   PRICING_ANCHOR_SUBLINE,
+  PRICING_UI,
 } from "@/lib/marketing";
 import { scrollToAnchor } from "@/lib/scrollToAnchor";
 
@@ -115,7 +116,15 @@ export function HeroQuickLinks({ variant = "dark", className = "" }: HeroQuickLi
                 <p className={`text-base font-bold leading-snug ${titleClass}`}>{item.title}</p>
                 <p className={`mt-1.5 text-sm leading-relaxed flex-1 ${descClass}`}>{item.desc}</p>
                 {!isPrimary && (
-                  <p className="mt-2 text-xs font-bold text-amber-800/90">{PRICING_ANCHOR_SUBLINE}</p>
+                  <p
+                    className={
+                      isDark
+                        ? `mt-2 ${PRICING_UI.darkHeroSubline}`
+                        : `mt-2 text-xs font-bold ${PRICING_UI.subline}`
+                    }
+                  >
+                    {PRICING_ANCHOR_SUBLINE}
+                  </p>
                 )}
                 {"trust" in item && item.trust && (
                   <p className="mt-2 text-[11px] font-medium text-amber-950/60">{item.trust}</p>

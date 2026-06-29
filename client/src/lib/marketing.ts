@@ -41,6 +41,29 @@ export const PRICING_ANNUAL_SAVINGS_NOTE = "Save £141 vs monthly (34% off)";
 export const GET_FULL_ACCESS_CTA = "Get full access";
 export const SEE_PLANS_PRICING_CTA = "See plans & pricing";
 
+/** Shared Tailwind classes for pricing UI — green accent, never red. */
+export const PRICING_UI = {
+  cardBorder: "border-emerald-200",
+  cardBg: "bg-gradient-to-br from-emerald-50/90 via-white to-emerald-50/50",
+  cardShadow: "shadow-lg shadow-emerald-100/40",
+  barBg: "bg-gradient-to-r from-emerald-50/90 to-emerald-50/40",
+  eyebrow: "text-emerald-800/80",
+  headline: "text-emerald-950",
+  price: "text-emerald-700",
+  priceMuted: "text-emerald-800",
+  savings: "text-emerald-700",
+  subline: "text-emerald-800",
+  icon: "text-emerald-600",
+  outlineBtn: "border-emerald-300 text-emerald-800 hover:bg-emerald-50",
+  innerCard: "border-emerald-100",
+  /** High-contrast chip on dark blue hero — white background, bold green text. */
+  darkHeroBadge:
+    "inline-flex w-fit items-center rounded-lg bg-white px-3 py-1.5 text-sm font-bold text-emerald-800 shadow-lg ring-2 ring-emerald-400/60",
+  darkHeroSubline:
+    "inline-flex w-fit items-center rounded-md bg-white px-2.5 py-1.5 text-xs font-bold text-emerald-800 shadow-md ring-1 ring-emerald-400/50",
+  darkHeroAnchor: "text-white font-semibold",
+} as const;
+
 /** SEO lead pages — not promoted in homepage hero. */
 export const FREE_PDF_PAPERS_PATH = "/bucks-11-plus-free-sample-papers";
 export const FREE_PDF_PAPERS_LABEL = "Download PDF papers";

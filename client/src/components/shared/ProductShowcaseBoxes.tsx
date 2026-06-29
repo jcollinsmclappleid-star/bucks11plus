@@ -11,6 +11,7 @@ import {
   PLATFORM_LIBRARY_ACTION,
   PLATFORM_SUITE_PATH,
   PRICING_ANCHOR_SUBLINE,
+  PRICING_UI,
   SEE_PLANS_PRICING_CTA,
 } from "@/lib/marketing";
 
@@ -193,9 +194,9 @@ export function ProductShowcaseBoxes({
                 {PLATFORM_LIBRARY_ACTION} <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
-            <p className="text-center text-xs font-semibold text-primary/80">{PRICING_ANCHOR_SUBLINE}</p>
+            <p className={`text-center text-xs font-semibold ${PRICING_UI.subline}`}>{PRICING_ANCHOR_SUBLINE}</p>
             <p className="text-center">
-              <Link href="/pricing" className="text-[11px] font-semibold text-slate-500 hover:text-primary transition-colors">
+              <Link href="/pricing" className="text-[11px] font-semibold text-slate-500 hover:text-emerald-700 transition-colors">
                 {SEE_PLANS_PRICING_CTA} →
               </Link>
             </p>

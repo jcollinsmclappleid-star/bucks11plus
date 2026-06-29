@@ -7,6 +7,7 @@ import {
   PLATFORM_PRACTICE_PAPERS_PATH,
   PLATFORM_PREVIEW_CTA,
   PRICING_FROM_HEADLINE,
+  PRICING_UI,
   SEE_PLANS_PRICING_CTA,
 } from "@/lib/marketing";
 import { SeoPricingBar } from "./SeoPricingTeaser";
@@ -45,7 +46,7 @@ export function ContentCTA({
           {subhead}
         </p>
         {showPricing && (
-          <p className="text-xs font-semibold text-primary/80 mb-6">
+          <p className={`text-xs font-semibold ${PRICING_UI.subline} mb-6`}>
             Full platform access {PRICING_FROM_HEADLINE}
           </p>
         )}
@@ -57,7 +58,7 @@ export function ContentCTA({
             <Link href={secondaryHref}>{secondaryLabel}</Link>
           </Button>
           {showPricing && (
-            <Button variant="outline" asChild className="h-11 px-6 border-primary/20 text-primary font-semibold" data-testid="button-content-cta-pricing">
+            <Button variant="outline" asChild className={`h-11 px-6 font-semibold ${PRICING_UI.outlineBtn}`} data-testid="button-content-cta-pricing">
               <Link href="/pricing">{SEE_PLANS_PRICING_CTA}</Link>
             </Button>
           )}
