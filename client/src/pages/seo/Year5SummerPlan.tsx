@@ -4,6 +4,10 @@ import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 const breadcrumbItems = [
   { label: "Resources", href: "/buckinghamshire-11-plus-guide" },
@@ -25,7 +29,7 @@ const weeks = [
 
 export default function Year5SummerPlan() {
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title="Year 5 Summer Plan – 10-Week Bucks 11+ Preparation Schedule"
         description="A realistic 10-week summer plan for Year 5 children preparing for the Bucks 11+. Week-by-week schedule covering all four sections, with mock tests built in."
@@ -43,6 +47,8 @@ export default function Year5SummerPlan() {
         </p>
       </div>
 
+
+      <SeoPageProductLead />
       <h2 className="text-primary font-serif">Why This Summer Matters Most</h2>
       <p>
         The summer between Year 5 and Year 6 is the single most productive period of 11+ preparation. The reasons are practical: there's no school workload competing for attention, holidays create predictable daily slots, and the test sits just six to eight weeks into Year 6. Families that use this summer well can typically lift a child by 8–15 standardised points; families that don't usually find the September pressure compresses everything that didn't get done.
@@ -50,6 +56,8 @@ export default function Year5SummerPlan() {
       <p>
         This plan assumes around <strong>60–90 minutes of focused work, 4–5 days a week</strong>. More than that produces diminishing returns at this age; less than that won't move the needle.
       </p>
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">The 10-Week Schedule</h2>
       <div className="not-prose overflow-x-auto my-6">
@@ -95,8 +103,12 @@ export default function Year5SummerPlan() {
         Our platform is designed around exactly this 10-week structure. The <Link href="/free-diagnostic" className="text-primary hover:underline">free 8-minute diagnostic</Link> gives the baseline; the full platform provides timed practice across every question type with automatic gap analysis after each session.
       </p>
 
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
+
       <ChildExperienceCTA />
-      <ContentCTA heading="Start the summer with a clear baseline" subhead="An 8-minute check shows exactly which sections need the summer's focus." ctaLabel="Get the baseline" />
+      <ContentCTA heading="Start the summer with a clear baseline" subhead="An 8-minute check shows exactly which sections need the summer's focus." ctaLabel="Get the baseline" />      <SeoContentAd variant="cta" />
+
       <Disclaimer />
     </div>
   );

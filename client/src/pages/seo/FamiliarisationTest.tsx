@@ -2,9 +2,12 @@ import { Link } from "wouter";
 import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
-import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 const breadcrumbItems = [
   { label: "Resources", href: "/buckinghamshire-11-plus-guide" },
@@ -36,7 +39,7 @@ const faqItems = [
 
 export default function FamiliarisationTest() {
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title="Bucks 11 Plus Familiarisation Test (2026) – What It Is & How to Use It"
         description="Understand the official Bucks 11 Plus familiarisation test — when it's released, what it covers, what it does and doesn't tell you about your child's readiness, and how to use it well."
@@ -66,7 +69,8 @@ export default function FamiliarisationTest() {
         </p>
       </div>
 
-      <SubscribeCTA />
+
+      <SeoPageProductLead />
 
       <h2 className="text-primary font-serif">What Is the Familiarisation Test?</h2>
       <p>
@@ -75,6 +79,8 @@ export default function FamiliarisationTest() {
       <p>
         It is not a mock exam. It is not standardised. It is not graded against the <Link href="/bucks-11-plus-qualifying-score" className="text-primary hover:underline">121 qualifying threshold</Link>. It exists so that no child arrives on test day having never seen a multiple-choice 11+ paper before.
       </p>
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">When Is It Released?</h2>
       <p>
@@ -142,6 +148,9 @@ export default function FamiliarisationTest() {
         For a deeper look at the test itself, see our <Link href="/buckinghamshire-secondary-transfer-test" className="text-primary hover:underline">Secondary Transfer Test overview</Link> and <a href="/bucks-11-plus-sample-questions" className="text-primary hover:underline">sample questions guide</a>.
       </p>
 
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
+
       <ChildExperienceCTA />
       <ContentCTA heading="Familiarisation in real exam format" subhead="An 8-minute timed check uses the same Bucks STT structure — section format, pace, GL-style questions." ctaLabel="Try the format now" />
 
@@ -154,7 +163,8 @@ export default function FamiliarisationTest() {
           <li><Link href="/bucks-11-plus-mock-test" className="text-primary hover:underline">Mock Tests vs Familiarisation</Link></li>
           <li><a href="/bucks-11-plus-sample-questions" className="text-primary hover:underline">Sample Questions by Domain</a></li>
         </ul>
-      </div>
+      </div>      <SeoContentAd variant="cta" />
+
 
       <Disclaimer />
     </div>

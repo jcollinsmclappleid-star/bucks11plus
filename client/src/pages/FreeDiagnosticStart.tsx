@@ -4,75 +4,81 @@ import { Card, CardContent } from "@/components/ui/card";
 import { AlertCircle, Clock, CheckCircle2, Loader2 } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import type { Diagnostic } from "@shared/schema";
 
 const FREE_DIAGNOSTIC_ID = "mini-1";
 const DISPLAY_TITLE = "Free Practice Test";
 
+/** Shown immediately while the API loads — matches seeded mini-1 metadata. */
+const MINI_DIAGNOSTIC_PLACEHOLDER: Diagnostic = {
+  id: FREE_DIAGNOSTIC_ID,
+  title: "Mini Diagnostic",
+  subtitle: "Quick 8-minute assessment across core GL-style reasoning",
+  type: "mini",
+  duration: 8,
+  questionCount: 12,
+  requiredTier: "free",
+  sections: ["Verbal Reasoning", "Non-Verbal Reasoning", "Mathematics", "English Comprehension"],
+};
+
+async function startGuestDiagnostic(attempt = 0): Promise<{
+  session: { id: string };
+  guestToken: string;
+  questions: unknown[];
+}> {
+  const res = await fetch("/api/guest/start-diagnostic", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ diagnosticId: FREE_DIAGNOSTIC_ID }),
+  });
+  if (!res.ok) {
+    if (res.status >= 500 && attempt < 3) {
+      await new Promise((r) => setTimeout(r, 1200 * (attempt + 1)));
+      return startGuestDiagnostic(attempt + 1);
+    }
+    throw new Error("Failed to start practice test. Please try again in a moment.");
+  }
+  const data = await res.json();
+  if (!data.questions || data.questions.length === 0) {
+    if (attempt < 3) {
+      await new Promise((r) => setTimeout(r, 1200 * (attempt + 1)));
+      return startGuestDiagnostic(attempt + 1);
+    }
+    throw new Error("Questions are still loading. Please wait a few seconds and try again.");
+  }
+  return data;
+}
+
 export default function FreeDiagnosticStart() {
   const [, setLocation] = useLocation();
   const [starting, setStarting] = useState(false);
-  const [slowLoad, setSlowLoad] = useState(false);
 
-  useEffect(() => {
-    const t = setTimeout(() => setSlowLoad(true), 5000);
-    return () => clearTimeout(t);
-  }, []);
-
-  const { data: diagnostic, isLoading } = useQuery<Diagnostic>({
+  const { data: diagnostic } = useQuery<Diagnostic>({
     queryKey: [`/api/diagnostics/${FREE_DIAGNOSTIC_ID}`],
+    retry: 3,
+    retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 6000),
   });
 
+  const info = diagnostic ?? MINI_DIAGNOSTIC_PLACEHOLDER;
+
   const startGuestSession = useMutation({
-    mutationFn: async () => {
-      setStarting(true);
-      const res = await fetch("/api/guest/start-diagnostic", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ diagnosticId: FREE_DIAGNOSTIC_ID }),
-      });
-      if (!res.ok) throw new Error("Failed to start readiness check");
-      const data = await res.json();
-      if (!data.questions || data.questions.length === 0) {
-        throw new Error("No questions available. Please try again in a moment.");
-      }
-      return data;
-    },
+    mutationFn: () => startGuestDiagnostic(),
     onSuccess: (data) => {
       sessionStorage.setItem("guestToken", data.guestToken);
       sessionStorage.setItem("guestSessionId", data.session.id);
       sessionStorage.setItem("guestQuestions", JSON.stringify(data.questions));
-      sessionStorage.setItem("guestDiagnosticDuration", String(diagnostic?.duration || 12));
-      sessionStorage.setItem("guestDiagnosticTitle", diagnostic?.title || DISPLAY_TITLE);
+      sessionStorage.setItem("guestDiagnosticDuration", String(info.duration || 8));
+      sessionStorage.setItem("guestDiagnosticTitle", info.title || DISPLAY_TITLE);
       setLocation(`/app/test/${data.session.id}?guest=true`);
     },
     onError: () => {
       setStarting(false);
     },
+    onMutate: () => {
+      setStarting(true);
+    },
   });
-
-  if (isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[50vh] gap-4 px-4 text-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        {slowLoad && (
-          <p className="text-sm text-muted-foreground max-w-sm">
-            Loading your free practice test… This can take a few seconds on first visit.
-          </p>
-        )}
-      </div>
-    );
-  }
-
-  if (!diagnostic) {
-    return (
-      <div className="container mx-auto max-w-3xl px-4 py-16 text-center">
-        <h1 className="text-2xl font-bold text-primary">Free practice test not available</h1>
-        <p className="text-muted-foreground mt-2">Please try again later.</p>
-      </div>
-    );
-  }
 
   return (
     <div className="container mx-auto max-w-3xl px-4 py-16">
@@ -90,7 +96,7 @@ export default function FreeDiagnosticStart() {
             {DISPLAY_TITLE}
           </h1>
           <p className="text-primary-foreground/80 mt-4 max-w-lg mx-auto">
-            {diagnostic.subtitle || "Quick timed assessment across core GL-style reasoning"}
+            {info.subtitle || "Quick timed assessment across core GL-style reasoning"}
           </p>
         </div>
 
@@ -98,12 +104,12 @@ export default function FreeDiagnosticStart() {
           <div className="grid sm:grid-cols-3 gap-6 text-center">
             <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
               <Clock className="h-6 w-6 text-primary mx-auto mb-2" />
-              <div className="font-bold text-xl text-primary" data-testid="text-duration">{diagnostic.duration}</div>
+              <div className="font-bold text-xl text-primary" data-testid="text-duration">{info.duration}</div>
               <div className="text-sm text-muted-foreground">Minutes</div>
             </div>
             <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
               <CheckCircle2 className="h-6 w-6 text-primary mx-auto mb-2" />
-              <div className="font-bold text-xl text-primary" data-testid="text-question-count">{diagnostic.questionCount}</div>
+              <div className="font-bold text-xl text-primary" data-testid="text-question-count">{info.questionCount}</div>
               <div className="text-sm text-muted-foreground">Questions</div>
             </div>
             <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
@@ -146,7 +152,7 @@ export default function FreeDiagnosticStart() {
               </div>
               <div>
                 <div className="text-xs font-bold uppercase tracking-wider text-primary mb-0.5">No account · No card</div>
-                <div className="text-[11px] text-slate-500">Results stay yours — email them to yourself if you'd like</div>
+                <div className="text-[11px] text-slate-500">Results stay yours — email them to yourself if you&apos;d like</div>
               </div>
             </div>
           </div>
@@ -171,7 +177,7 @@ export default function FreeDiagnosticStart() {
               {starting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Starting...
+                  Preparing your test…
                 </>
               ) : (
                 "Begin Free Practice Test"

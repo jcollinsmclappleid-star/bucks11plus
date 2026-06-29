@@ -4,6 +4,10 @@ import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { FreeToPlatformPanel, FreeToPlatformStrip } from "@/components/shared/FreeToPlatformPanel";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 interface Resource {
   title: string;
@@ -55,7 +59,7 @@ export default function FreeResources() {
   const byType = (type: Resource["type"]) => RESOURCES.filter((r) => r.type === type);
 
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title="Free 11+ Resources — Practice Papers, Plans & Reference Guides"
         description="A complete library of free 11+ resources for Buckinghamshire families: practice papers, revision plans, vocabulary lists, test-day checklists and more."
@@ -77,6 +81,8 @@ export default function FreeResources() {
         </p>
       </div>
 
+      <SeoPageProductLead />
+
       <h2 className="text-primary font-serif">Start Here: Free Diagnostic</h2>
       <p>
         If you only do one thing on this page, take the free 8-minute diagnostic first. It's a 12-question GL-style mini paper covering all four sections, with a practice score on the 121 scale and a section breakdown. The result tells you which of the resources below to read in detail — so you don't waste time on the wrong topics.
@@ -88,6 +94,8 @@ export default function FreeResources() {
       </div>
 
       <FreeToPlatformStrip freeOffer="Free guides and PDFs on this page" />
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">Free Practice Material</h2>
       <div className="not-prose grid sm:grid-cols-2 gap-3 my-6">
@@ -117,8 +125,12 @@ export default function FreeResources() {
         <li>Re-take the diagnostic every six to eight weeks to measure progress.</li>
       </ol>
 
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
+
       <ChildExperienceCTA />
-      <FreeToPlatformPanel freeOffer="free guides, PDFs, and a 12-question check on this site" />
+      <FreeToPlatformPanel freeOffer="free guides, PDFs, and a 12-question check on this site" />      <SeoContentAd variant="cta" />
+
 
       <Disclaimer />
     </div>

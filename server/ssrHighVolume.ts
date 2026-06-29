@@ -225,7 +225,6 @@ export function getPastPapersHtml(): string {
       <p class="ssr-intro">One of the most common questions from parents beginning 11+ preparation is whether official past papers are available. The short answer is no — but there are high-quality alternatives that closely replicate the Secondary Transfer Test. Here is the complete guide.</p>
     </div>
     ${ssrCtaBox()}
-    ${ssrDownloadBox()}
     <section class="ssr-section">
       <h2>Why Official Past Papers Are Not Available</h2>
       <p>GL Assessment and The Buckinghamshire Grammar Schools (TBGS) do not publish previous years' Secondary Transfer Test papers. The papers are designed to be used fresh each year, and releasing them would compromise the integrity of the test for future cohorts. This is different from some other selective assessment systems — for example, many independent schools release past papers voluntarily, and some state grammar areas (outside Buckinghamshire) have released specimen materials. The Bucks 11+ does not.</p>
@@ -290,7 +289,7 @@ export function getFreeSamplePapersHtml(): string {
     <div class="ssr-hero">
       <span class="ssr-tag">Free PDF Download</span>
       <h1 class="ssr-h1">Free Bucks 11+ Practice Papers — Download PDF (2 Papers)</h1>
-      <p class="ssr-intro">Parents often search for past papers — official ones are not released. These two free PDFs are optional printables. For real preparation, your child needs <strong>2,500+ timed GL-style questions</strong> on Bucks Plus Edge — start now.</p>
+      <p class="ssr-intro">Parents search for past papers — official ones are not released. Download two free GL-style PDFs below if you want printables. For real preparation: <strong>2,500+ timed GL-style questions</strong>, full mocks, targeted drills, and a parent dashboard on <a href="/11-plus-practice-suite" style="color:#1e3a6e;text-decoration:underline;">Bucks Plus Edge</a> — or start with the <a href="/free-diagnostic" style="color:#1e3a6e;text-decoration:underline;">free practice test</a>.</p>
     </div>
     ${ssrCtaBox()}
     ${ssrDownloadBox()}
@@ -411,7 +410,6 @@ export function getSampleQuestionsHtml(): string {
       <p class="ssr-intro">GL Assessment does not release actual past papers, but the question formats are consistent and well-documented. Here is a guide to what children encounter in each of the four domains of the Buckinghamshire Secondary Transfer Test — with example question types and preparation notes.</p>
     </div>
     ${ssrCtaBox()}
-    ${ssrDownloadBox()}
     <section class="ssr-section">
       <h2>How the Test Is Structured</h2>
       <p>The Buckinghamshire Secondary Transfer Test consists of two 45-minute papers. All questions are multiple choice — children select one answer from five options (A–E) by shading a bubble on a separate answer sheet. All instructions are delivered by audio recording. Questions across all four domains are mixed throughout the two papers. Children do not know in advance which question types will appear in which order.</p>

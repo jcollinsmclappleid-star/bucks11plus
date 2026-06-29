@@ -2,10 +2,12 @@ import { Link } from "wouter";
 import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
-import { LeadMagnetBlock } from "@/components/shared/LeadMagnetBlock";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
-import { SeoConversionPanel } from "@/components/shared/SeoConversionPanel";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 const breadcrumbItems = [
   { label: "Resources", href: "/buckinghamshire-11-plus-guide" },
@@ -37,7 +39,7 @@ const faqItems = [
 
 export default function QualifyingScore() {
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title="Bucks 11 Plus Qualifying Score (2026) – What 121 Means & How It Works"
         description="Understand the Bucks 11 Plus qualifying score of 121, how standardised scores work, and what annual variation means for your child's grammar school application."
@@ -67,7 +69,8 @@ export default function QualifyingScore() {
         </p>
       </div>
 
-      <SeoConversionPanel variant="score" />
+
+      <SeoPageProductLead />
 
       <h2 className="text-primary font-serif">What Is the Qualifying Score?</h2>
       <p>
@@ -80,6 +83,8 @@ export default function QualifyingScore() {
         It is important to understand that 121 is not a raw mark or a percentage — it is a standardised score that accounts
         for the difficulty of the specific test paper and the age of the child on the day of the test.
       </p>
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">How Standardisation Works</h2>
       <p>
@@ -176,9 +181,12 @@ export default function QualifyingScore() {
         We use the 121 scale because it is the number every Bucks parent is working towards — it is a familiar reference point, not a prediction of GL's official number. Read the full methodology on our <Link href="/how-forecast-works" className="text-primary hover:underline">scoring methodology page</Link>.
       </p>
 
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
+
       <ChildExperienceCTA />
-      <LeadMagnetBlock source="seo:qualifying-score" />
-      <ContentCTA heading="How is your child tracking toward 121?" subhead="Take a free 8-minute check to see your child's practice score on the 121 scale — this is not the official GL Assessment score." ctaLabel="See the practice score" />
+      <ContentCTA heading="How is your child tracking toward 121?" subhead="Take a free 8-minute check to see your child's practice score on the 121 scale — this is not the official GL Assessment score." ctaLabel="See the practice score" />      <SeoContentAd variant="cta" />
+
       <Disclaimer />
     </div>
   );

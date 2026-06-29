@@ -31,7 +31,13 @@ export const HERO_QUICK_LINKS_HEADING = "Not sure where to start?";
 /** Paid conversion copy — keep pricing anchors consistent site-wide. */
 export const PRICING_MONTHLY_LABEL = "£35/month";
 export const PRICING_ANNUAL_LABEL = "£279/year";
-export const PRICING_ANCHOR_SUBLINE = "from £35/mo · cancel anytime";
+/** Effective monthly cost when billed annually (£279 ÷ 12). */
+export const PRICING_ANNUAL_EQUIV_LABEL = "£23.25/month";
+/** Lowest headline rate — annual plan equivalent (use with annual billing context). */
+export const PRICING_FROM_LABEL = "£23.25/month";
+export const PRICING_FROM_HEADLINE = "from £23.25/month on annual";
+export const PRICING_ANCHOR_SUBLINE = "from £23.25/mo on annual · or £35/mo monthly";
+export const PRICING_ANNUAL_SAVINGS_NOTE = "Save £141 vs monthly (34% off)";
 export const GET_FULL_ACCESS_CTA = "Get full access";
 export const SEE_PLANS_PRICING_CTA = "See plans & pricing";
 

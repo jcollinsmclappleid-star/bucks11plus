@@ -7,6 +7,10 @@ import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
 import { TestCountdownBadge } from "@/components/shared/TestCountdownBadge";
 import { getUrgencyPlan, URGENCY_PLANS } from "../../data/urgency-plans";
 import NotFound from "../not-found";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 export default function UrgencyPlan({ slug }: { slug: string }) {
   const p = getUrgencyPlan(slug);
@@ -21,7 +25,7 @@ export default function UrgencyPlan({ slug }: { slug: string }) {
   const others = URGENCY_PLANS.filter((x) => x.slug !== slug);
 
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title={p.metaTitle}
         description={p.metaDescription}
@@ -51,8 +55,12 @@ export default function UrgencyPlan({ slug }: { slug: string }) {
         <p className="text-xl text-slate-600 leading-relaxed">{p.intro}</p>
       </div>
 
+      <SeoPageProductLead />
+
       <h2 className="text-primary font-serif">A Reality Check First</h2>
       <p>{p.realityCheck}</p>
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">Week-by-Week Structure</h2>
       <div className="not-prose space-y-6 my-6">
@@ -84,6 +92,9 @@ export default function UrgencyPlan({ slug }: { slug: string }) {
       <h2 className="text-primary font-serif">A Closing Note</h2>
       <p>{p.closingNote}</p>
 
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
+
       <ChildExperienceCTA />
       <ContentCTA
         heading="Get a baseline before you start the plan"
@@ -104,7 +115,8 @@ export default function UrgencyPlan({ slug }: { slug: string }) {
             <div className="font-semibold text-primary font-serif">{o.title}</div>
           </Link>
         ))}
-      </div>
+      </div>      <SeoContentAd variant="cta" />
+
 
       <Disclaimer />
     </div>

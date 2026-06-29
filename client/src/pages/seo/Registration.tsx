@@ -1,11 +1,13 @@
 import { Seo } from "../../components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "../../components/shared/Breadcrumbs";
 import { ContentCTA } from "../../components/shared/ContentCTA";
-import { LeadMagnetBlock } from "../../components/shared/LeadMagnetBlock";
 import { Disclaimer } from "../../components/shared/Disclaimer";
 import { ChildExperienceCTA } from "../../components/shared/ChildExperienceCTA";
-import { SeoConversionPanel } from "../../components/shared/SeoConversionPanel";
 import { Link } from "wouter";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 const breadcrumbItems = [
   { label: "Resources", href: "/buckinghamshire-11-plus-guide" },
@@ -14,7 +16,7 @@ const breadcrumbItems = [
 
 export default function Registration() {
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title="Bucks 11 Plus Registration (2026) – How & When to Register"
         description="Everything parents need to know about registering for the Bucks 11 Plus Secondary Transfer Test. Who can register, key deadlines, and special arrangements."
@@ -41,7 +43,8 @@ export default function Registration() {
         </p>
       </div>
 
-      <SeoConversionPanel variant="registration" />
+
+      <SeoPageProductLead />
 
       <h2 className="text-primary font-serif">Who Can Register?</h2>
       <p>
@@ -55,6 +58,8 @@ export default function Registration() {
       <p>
         Your child does not need to be attending a Buckinghamshire school to sit the test. Families from neighbouring counties such as Oxfordshire, Hertfordshire, and Berkshire regularly register their children.
       </p>
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">The Registration Process</h2>
       <p>
@@ -147,8 +152,10 @@ export default function Registration() {
         To understand exactly where your child currently stands, take our <Link href="/free-diagnostic" className="text-primary hover:underline">free 8-minute readiness check</Link>. It measures accuracy and pacing across all four domains and shows a practice score on the 121 scale.
       </p>
 
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
+
       <ChildExperienceCTA />
-      <LeadMagnetBlock source="seo:registration" />
       <ContentCTA heading="Registered? Now find out if they're ready." subhead="An 8-minute check gives a clear picture of where your child stands against 121." ctaLabel="Check readiness" />
 
       <div className="not-prose my-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">
@@ -167,7 +174,8 @@ export default function Registration() {
             <Link href="/bucks-grammar-schools" className="text-primary hover:underline" data-testid="link-grammar-schools">Buckinghamshire Grammar Schools Directory</Link>
           </li>
         </ul>
-      </div>
+      </div>      <SeoContentAd variant="cta" />
+
 
       <Disclaimer />
     </div>

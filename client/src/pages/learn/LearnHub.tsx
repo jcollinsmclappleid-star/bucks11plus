@@ -1,8 +1,9 @@
 import { Link } from "wouter";
+import { Fragment } from "react";
 import { learnArticles, LEARN_CATEGORIES, getArticlesByCategory } from "@/data/learn-articles";
 import { Seo } from "@/components/shared/Seo";
-import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
-import { SeoConversionPanel } from "@/components/shared/SeoConversionPanel";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
 import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
 
 const CATEGORY_ICONS: Record<string, string> = {
@@ -61,14 +62,16 @@ export default function LearnHub() {
       </div>
 
       <div className="container mx-auto max-w-5xl px-4 py-12">
-        <SeoConversionPanel variant="learn" />
+        <SeoPageProductLead compact />
 
         <div className="space-y-14">
-          {LEARN_CATEGORIES.map((category) => {
+          {LEARN_CATEGORIES.map((category, categoryIndex) => {
             const articles = getArticlesByCategory(category);
             if (articles.length === 0) return null;
             return (
-              <section key={category}>
+              <Fragment key={category}>
+                {categoryIndex === 2 && <SeoContentAd variant="dashboard" compact />}
+                <section>
                 <div className="flex items-start gap-3 mb-6">
                   <span className="text-2xl mt-0.5" aria-hidden="true">{CATEGORY_ICONS[category]}</span>
                   <div>
@@ -97,13 +100,12 @@ export default function LearnHub() {
                   ))}
                 </div>
               </section>
+              </Fragment>
             );
           })}
         </div>
 
         <GuideConversionBlock className="mt-14" hideQuestions />
-
-        <SubscribeCTA />
       </div>
     </div>
   );

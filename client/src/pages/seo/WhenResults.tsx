@@ -3,6 +3,10 @@ import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 const breadcrumbItems = [
   { label: "Resources", href: "/buckinghamshire-11-plus-guide" },
@@ -34,7 +38,7 @@ const faqItems = [
 
 export default function WhenResults() {
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title="When Do Bucks 11+ Results Come Out? (2026 Dates)"
         description="The exact date Bucks 11+ results are released, how they reach parents, what the letter contains, and what happens next on the path to a school offer."
@@ -63,6 +67,8 @@ export default function WhenResults() {
         </p>
       </div>
 
+
+      <SeoPageProductLead />
       <h2 className="text-primary font-serif">The Short Answer</h2>
       <div className="not-prose my-6">
         <div className="rounded-xl border-2 border-primary bg-primary/5 p-6">
@@ -71,6 +77,8 @@ export default function WhenResults() {
           <div className="text-sm text-slate-600 mt-2">Typically a Friday between 10–17 October. Confirmed by the Council in late summer.</div>
         </div>
       </div>
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">How Results Reach Parents</h2>
       <p>
@@ -136,6 +144,10 @@ export default function WhenResults() {
       </div>
 
       <ContentCTA heading="Don't wait for the official letter" subhead="An 8-minute check gives an indicative readiness score against 121 — months before the real result arrives." ctaLabel="Get an indicative result" />
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />      <SeoContentAd variant="cta" />
+
+
       <Disclaimer />
     </div>
   );

@@ -104,7 +104,11 @@ export function injectSpaMeta(html: string, meta: PageMeta): string {
   </header>
   <p style="font-size:0.9rem;color:#64748b">Interactive content loads below. <a href="/free-diagnostic" style="color:#1e3a6e;font-weight:600">Take the free practice test</a> or <a href="/pricing" style="color:#1e3a6e;font-weight:600">see pricing</a>.</p>
 </article>`;
-  out = out.replace("<div id=\"root\"></div>", `<div id="root">${fallback}</div>`);
+  // Keep #root empty so React/Vite can mount. SEO fallback is a sibling removed on client load.
+  out = out.replace(
+    "<div id=\"root\"></div>",
+    `<div id="seo-prerender">${fallback}</div>\n    <div id="root"></div>`,
+  );
 
   return out;
 }
@@ -118,6 +122,11 @@ export function sendSpaPage(res: Response, meta: PageMeta): void {
 
 /** Register GET handlers that serve index.html with page-specific meta in <head>. */
 export function registerSpaMetaRoutes(app: Express): void {
+  if (process.env.NODE_ENV !== "production") {
+    // Dev: vite catch-all injects meta + transformIndexHtml (avoids middleware deadlock).
+    return;
+  }
+
   for (const routePath of SPA_META_PATHS) {
     app.get(routePath, (req: Request, res: Response, next) => {
       if (req.path !== routePath) {

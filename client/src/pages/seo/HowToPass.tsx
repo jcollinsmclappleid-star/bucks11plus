@@ -1,11 +1,13 @@
 import { Seo } from "../../components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "../../components/shared/Breadcrumbs";
 import { ContentCTA } from "../../components/shared/ContentCTA";
-import { LeadMagnetBlock } from "../../components/shared/LeadMagnetBlock";
-import { SubscribeCTA } from "../../components/shared/SubscribeCTA";
 import { Disclaimer } from "../../components/shared/Disclaimer";
 import { ChildExperienceCTA } from "../../components/shared/ChildExperienceCTA";
 import { Link } from "wouter";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 const breadcrumbItems = [
   { label: "Resources", href: "/buckinghamshire-11-plus-guide" },
@@ -14,7 +16,7 @@ const breadcrumbItems = [
 
 export default function HowToPass() {
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title="How to Pass the Bucks 11 Plus (2026) – Strategy, 121 Score & Prep Tips"
         description="What it takes to pass the Bucks 11 Plus: understanding the 121 qualifying score, avoiding common mistakes, balancing speed with accuracy, and when to start preparing."
@@ -41,7 +43,8 @@ export default function HowToPass() {
         </p>
       </div>
 
-      <SubscribeCTA />
+
+      <SeoPageProductLead />
 
       <h2 className="text-primary font-serif">Understanding the 121 Qualifying Score</h2>
       <p>
@@ -53,6 +56,8 @@ export default function HowToPass() {
       <p>
         It is important to understand that 121 is a <em>minimum qualifying score</em>. Achieving 121 qualifies your child for grammar school consideration, but individual schools may have higher effective thresholds depending on demand. Learn more about how standardisation works in our <Link href="/bucks-11-plus-qualifying-score" className="text-primary hover:underline">qualifying score guide</Link>.
       </p>
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">Common Preparation Mistakes</h2>
       <p>
@@ -136,8 +141,10 @@ export default function HowToPass() {
         This is the approach used by Bucks 11 Plus Tests. Our <Link href="/free-diagnostic" className="text-primary hover:underline">free 8-minute readiness check</Link> measures both accuracy and pacing across all four domains, showing a practice score on the 121 scale. From there, the platform recommends targeted micro-drills to help with the areas that need work.
       </p>
 
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
+
       <ChildExperienceCTA />
-      <LeadMagnetBlock source="seo:how-to-pass" />
       <ContentCTA heading="Stop guessing — find out where they stand" subhead="An 8-minute check gives you a section-by-section breakdown plus an indicative readiness score against 121." ctaLabel="Take the readiness check" />
 
       <div className="not-prose my-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">
@@ -156,7 +163,8 @@ export default function HowToPass() {
             <Link href="/bucks-11-plus-registration" className="text-primary hover:underline" data-testid="link-registration">Bucks 11+ Registration Guide</Link>
           </li>
         </ul>
-      </div>
+      </div>      <SeoContentAd variant="cta" />
+
 
       <Disclaimer />
     </div>

@@ -7,8 +7,12 @@ import { PlatformSuitePreview } from "./PlatformSuitePreview";
 import {
   FREE_PRACTICE_TEST_CTA,
   FREE_PRACTICE_TEST_PATH,
-  PLATFORM_PRACTICE_PAPERS_PATH,
   PLATFORM_PREVIEW_CTA,
+  PLATFORM_SUITE_PATH,
+  PRICING_ANCHOR_SUBLINE,
+  PRICING_ANNUAL_LABEL,
+  PRICING_FROM_HEADLINE,
+  PRICING_MONTHLY_LABEL,
 } from "@/lib/marketing";
 
 type GuideConversionBlockProps = {
@@ -35,7 +39,7 @@ export function GuideConversionBlock({
         </p>
         <div className="mt-5 flex flex-col sm:flex-row items-center justify-center gap-3">
           <Button variant="cta" asChild data-testid="button-guide-block-platform-top">
-            <Link href={PLATFORM_PRACTICE_PAPERS_PATH}>
+            <Link href={PLATFORM_SUITE_PATH}>
               {PLATFORM_PREVIEW_CTA} <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
@@ -91,11 +95,11 @@ export function GuideConversionBlock({
           <p className="text-white/80 text-sm leading-relaxed mb-7 max-w-2xl">
             The children who qualify build <strong className="text-white">speed, accuracy, and stamina</strong> under timed GL-style conditions.
             Bucks Plus Edge includes 2,500+ questions, full mock exams, unlimited practice papers, targeted drills, and parent analytics —{" "}
-            <strong className="text-white">£35/month</strong> or <strong className="text-white">£279/year</strong>.
+            <strong className="text-white">{PRICING_FROM_HEADLINE}</strong> ({PRICING_ANNUAL_LABEL}) or <strong className="text-white">{PRICING_MONTHLY_LABEL}</strong>.
           </p>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 flex-wrap">
             <Button asChild variant="cta" data-testid="button-guide-conversion-platform">
-              <Link href={PLATFORM_PRACTICE_PAPERS_PATH}>
+              <Link href={PLATFORM_SUITE_PATH}>
                 {PLATFORM_PREVIEW_CTA} <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>

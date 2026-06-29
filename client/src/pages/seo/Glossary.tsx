@@ -4,6 +4,10 @@ import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { GLOSSARY_TERMS } from "../../data/glossary";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 const breadcrumbItems = [
   { label: "Resources", href: "/buckinghamshire-11-plus-guide" },
@@ -13,7 +17,7 @@ const breadcrumbItems = [
 export default function Glossary() {
   const sorted = [...GLOSSARY_TERMS].sort((a, b) => a.term.localeCompare(b.term));
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title="11+ Glossary – Plain-English Definitions of Every Bucks 11+ Term"
         description="A plain-English glossary of every term parents encounter during the Buckinghamshire 11+ — from standardised scores and oversubscription criteria to EHCPs and waiting lists."
@@ -44,6 +48,8 @@ export default function Glossary() {
         </p>
       </div>
 
+
+      <SeoPageProductLead />
       <p>
         The Buckinghamshire 11+ comes with its own vocabulary — standardised scores, oversubscription criteria, EHCPs, supplementary information forms, and a dozen other terms that appear in admissions letters without explanation. This glossary defines each one in plain English with links to deeper guides where useful.
       </p>
@@ -63,6 +69,10 @@ export default function Glossary() {
       </div>
 
       <ContentCTA heading="Beyond definitions — see what matters" subhead="Take a free 8-minute readiness check to find which concepts your child has actually mastered." ctaLabel="Start the readiness check" />
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />      <SeoContentAd variant="cta" />
+
+
       <Disclaimer />
     </div>
   );

@@ -4,6 +4,10 @@ import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 export default function GLAssessmentPastPapers() {
   const path = "/gl-assessment-past-papers";
@@ -13,7 +17,7 @@ export default function GLAssessmentPastPapers() {
   ];
 
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title="GL Assessment Past Papers — What's Available & How to Use Them"
         description="An honest guide to GL Assessment past papers for the 11+: what is publicly available, what isn't, and how to build a strong practice plan from the resources that exist."
@@ -35,10 +39,14 @@ export default function GLAssessmentPastPapers() {
         </p>
       </div>
 
+      <SeoPageProductLead />
+
       <h2 className="text-primary font-serif">Why Real Past Papers Aren't Public</h2>
       <p>
         GL Assessment licenses its papers to local authorities (including Buckinghamshire Council) under terms that prevent public redistribution. Releasing a real paper after a test sitting would compromise question banks that are reused, in modified form, in subsequent years. This is the same approach used by most commercial test publishers worldwide, and it is the reason families searching for "real" past papers will not find them on official sites.
       </p>
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">What Is Officially Available</h2>
       <ul>
@@ -79,6 +87,9 @@ export default function GLAssessmentPastPapers() {
         <li><strong>Final week:</strong> No mocks. Short confidence-building sections only.</li>
       </ul>
 
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
+
       <ChildExperienceCTA />
       <ContentCTA
         heading="Start with a free GL-style mini paper"
@@ -92,7 +103,8 @@ export default function GLAssessmentPastPapers() {
         <Link href="/bucks-11-plus-practice-papers-free" className="block rounded-lg border border-slate-200 bg-white p-4 hover:border-primary hover:shadow-sm transition-all" data-testid="link-free-papers"><div className="text-xs text-slate-500">Free</div><div className="font-semibold text-primary font-serif">Free 11+ Practice Papers</div></Link>
         <Link href="/gl-assessment-question-types" className="block rounded-lg border border-slate-200 bg-white p-4 hover:border-primary hover:shadow-sm transition-all" data-testid="link-gl-q-types"><div className="text-xs text-slate-500">Question Types</div><div className="font-semibold text-primary font-serif">GL Assessment Question Types</div></Link>
         <Link href="/gl-assessment-11-plus-practice" className="block rounded-lg border border-slate-200 bg-white p-4 hover:border-primary hover:shadow-sm transition-all" data-testid="link-gl-practice"><div className="text-xs text-slate-500">Practice Guide</div><div className="font-semibold text-primary font-serif">GL Assessment Practice Guide</div></Link>
-      </div>
+      </div>      <SeoContentAd variant="cta" />
+
 
       <Disclaimer />
     </div>

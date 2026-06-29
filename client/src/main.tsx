@@ -12,4 +12,6 @@ import "@fontsource/libre-baskerville/400.css";
 import "@fontsource/libre-baskerville/700.css";
 import "@fontsource/libre-baskerville/400-italic.css";
 
-createRoot(document.getElementById("root")!).render(<App />);
+const rootEl = document.getElementById("root")!;
+createRoot(rootEl).render(<App />);
+document.getElementById("seo-prerender")?.remove();

@@ -8,6 +8,7 @@ import { MATHS_TOPICS } from "@/data/maths-topics";
 import { MOCK_VARIANTS } from "@/data/mock-variants";
 import { VOCAB_CLUSTERS } from "@/data/vocab-clusters";
 import { URGENCY_PLANS } from "@/data/urgency-plans";
+import { PRICING_FROM_HEADLINE, PRICING_MONTHLY_LABEL, PRICING_ANNUAL_LABEL } from "@/lib/marketing";
 
 export const SITE_BASE_URL = "https://bucks11plustest.co.uk";
 
@@ -89,9 +90,9 @@ const CORE_PAGES: PageMeta[] = [
   meta(
     "/pricing",
     "Bucks 11 Plus Preparation Plans & Pricing (2026–2027) | Bucks 11 Plus Tests",
-    "Free readiness check plus Bucks Plus Edge — £35/month or £279/year. Structured interactive prep for the September 2027 test and beyond.",
+    `Free readiness check plus Bucks Plus Edge — ${PRICING_FROM_HEADLINE} (${PRICING_ANNUAL_LABEL}) or ${PRICING_MONTHLY_LABEL}. Structured interactive prep for the September 2027 test and beyond.`,
     "Bucks 11 Plus preparation plans & pricing",
-    "Compare the free practice test with Bucks Plus Edge — full access to 2,500+ GL-style questions, mocks, drills, and parent analytics from £35/month.",
+    `Compare the free practice test with Bucks Plus Edge — full access to 2,500+ GL-style questions, mocks, drills, and parent analytics ${PRICING_FROM_HEADLINE}.`,
     SEO_CONTENT_REVISION,
   ),
   meta(
@@ -220,6 +221,110 @@ const CORE_PAGES: PageMeta[] = [
     "Genuinely free Bucks 11+ practice papers and PDF downloads: what's available, what each is good for, and how to use them. Includes two free printable GL-style papers — no email required.",
     "Free Bucks 11+ practice papers",
     "Where to find genuinely free GL-style material for the Buckinghamshire 11+, including two downloadable PDF practice papers.",
+    SEO_CONTENT_REVISION,
+  ),
+  meta(
+    "/bucks-11-plus-free-sample-papers",
+    "Free Bucks 11+ Practice Papers PDF Download — 2 GL-Style Papers | Bucks 11 Plus Tests",
+    "Download two free Bucks 11+ practice papers (PDF). Parents searching for past papers: 12 GL-style questions per paper, all four subjects, worked answers — no email required. Practice papers, not official past papers.",
+    "Free Bucks 11+ Practice Papers — Download PDF (2 Papers)",
+    "Official past papers are not released. Download two free GL-style PDF practice papers (12 questions each, all four subjects, worked answers) or use Bucks Plus Edge for 2,500+ timed questions, mocks, and parent dashboards.",
+    SEO_CONTENT_REVISION,
+  ),
+  meta(
+    "/bucks-11-plus-past-papers",
+    "Bucks 11 Plus Past Papers & Free Practice Papers Download (2026) | Bucks 11 Plus Tests",
+    "Are there official Bucks 11+ past papers? No — but download two free GL-style practice papers (PDF), see what parents use instead, and how to prepare for the Secondary Transfer Test.",
+    "Bucks 11+ past papers and practice papers",
+    "Official past papers are not released. See what to use instead — free PDF practice papers, timed mocks, and 2,500+ GL-style questions on Bucks Plus Edge.",
+    SEO_CONTENT_REVISION,
+  ),
+  meta(
+    "/bucks-11-plus-sample-questions",
+    "Bucks 11+ Sample Questions & Example Papers — 14 Worked Answers | Bucks 11 Plus Tests",
+    "14 free Bucks 11+ sample questions with worked answers. Parents searching for example papers: also download 2 free GL-style practice papers (PDF) — all four subjects, no email required.",
+    "Bucks 11+ sample questions with worked answers",
+    "Worked example questions across all four Bucks 11+ domains, plus links to free PDF practice papers and the interactive practice suite.",
+    SEO_CONTENT_REVISION,
+  ),
+  meta(
+    "/bucks-11-plus-results",
+    "Bucks 11 Plus Results: When They Come Out & What They Mean | Bucks 11 Plus Tests",
+    "When do Bucks 11 Plus results come out? What 'qualified' and 'not qualified' mean, what to do next, how to get your child's score, and the next steps for grammar school applications.",
+    "Bucks 11+ results explained",
+    "When results are released, what qualified and not qualified mean, and what to do next in the grammar school application process.",
+    SEO_CONTENT_REVISION,
+  ),
+  meta(
+    "/when-do-bucks-11-plus-results-come-out",
+    "When Do Bucks 11 Plus Results Come Out? (2026) | Bucks 11 Plus Tests",
+    "When Bucks 11+ results are released in 2026, how you receive them, and what to do on results day.",
+    "When do Bucks 11+ results come out?",
+    "Typical October release dates, how Buckinghamshire Council communicates results, and next steps after qualified or not qualified.",
+    SEO_CONTENT_REVISION,
+  ),
+  meta(
+    "/bucks-11-plus-test-date-2026",
+    "Bucks 11 Plus Test Date 2026: All Key Dates & Deadlines | Bucks 11 Plus Tests",
+    "The Bucks 11 Plus 2026 test is sat in September 2026. Full timeline: registration deadline (June 2026), test day (September 2026), results (October 2026), SCAF deadline (November 2026), National Offer Day (March 2027).",
+    "Bucks 11+ test date 2026 — full timeline",
+    "Registration, test day, results, SCAF and National Offer Day dates for children sitting the Bucks 11+ in September 2026.",
+    SEO_CONTENT_REVISION,
+  ),
+  meta(
+    "/bucks-11-plus-test-date-2025",
+    "Bucks 11 Plus Test Date 2025: Key Dates & Deadlines | Bucks 11 Plus Tests",
+    "Bucks 11 Plus 2025 test information: registration deadline (June 2025), test day (September 2025), results (October 2025), SCAF deadline (November 2025), National Offer Day (1 March 2026).",
+    "Bucks 11+ test date 2025 — key dates",
+    "Timeline for the 2025 cohort: registration, test day, results release, and school offer dates.",
+    SEO_CONTENT_REVISION,
+  ),
+  meta(
+    "/bucks-11-plus-appeals",
+    "Bucks 11 Plus Appeals: What You Can & Cannot Appeal | Bucks 11 Plus Tests",
+    "Can you appeal a Bucks 11 Plus result? Guide to the grammar school admissions appeal process in Buckinghamshire — what grounds exist, the timeline, and realistic outcomes.",
+    "Bucks 11+ appeals guide",
+    "What can and cannot be appealed after the Secondary Transfer Test, and how grammar school admissions appeals work in Buckinghamshire.",
+    SEO_CONTENT_REVISION,
+  ),
+  meta(
+    "/11-plus-tutors-buckinghamshire",
+    "11 Plus Tutors in Buckinghamshire: How to Find One & What to Look For | Bucks 11 Plus Tests",
+    "Guide to finding a good 11+ tutor in Buckinghamshire. What to look for, what questions to ask, how much tutoring costs, and when a digital platform is a better alternative.",
+    "11+ tutors in Buckinghamshire",
+    "How to choose a Bucks 11+ tutor, typical costs, and when structured online practice is a better fit for your family.",
+    SEO_CONTENT_REVISION,
+  ),
+  meta(
+    "/11-plus-tutors-high-wycombe",
+    "11 Plus Tutors in High Wycombe | Bucks 11 Plus Tests",
+    "Finding an 11+ tutor in High Wycombe: what to look for, typical costs, and how online Bucks 11+ preparation compares.",
+    "11+ tutors in High Wycombe",
+    "Tutor selection tips for High Wycombe families preparing for the Buckinghamshire Secondary Transfer Test.",
+    SEO_CONTENT_REVISION,
+  ),
+  meta(
+    "/11-plus-tutors-aylesbury",
+    "11 Plus Tutors in Aylesbury | Bucks 11 Plus Tests",
+    "Finding an 11+ tutor in Aylesbury: what to look for, typical costs, and how online Bucks 11+ preparation compares.",
+    "11+ tutors in Aylesbury",
+    "Tutor selection tips for Aylesbury families preparing for the Buckinghamshire Secondary Transfer Test.",
+    SEO_CONTENT_REVISION,
+  ),
+  meta(
+    "/learn",
+    "Buckinghamshire 11+ Learning Hub – Free Expert Guides | Bucks 11 Plus Tests",
+    "Free expert guides on every aspect of the Buckinghamshire 11+ Secondary Transfer Test — format, grammar schools, preparation strategy, and test day.",
+    "Buckinghamshire 11+ Learning Hub",
+    "In-depth free articles covering the Bucks 11+, GL Assessment format, grammar school admissions, and preparation strategy.",
+    SEO_CONTENT_REVISION,
+  ),
+  meta(
+    "/glossary",
+    "11+ Glossary – Plain-English Definitions of Every Bucks 11+ Term | Bucks 11 Plus Tests",
+    "A plain-English glossary of every term parents encounter during the Buckinghamshire 11+ — from standardised scores and oversubscription criteria to EHCPs and waiting lists.",
+    "Bucks 11+ glossary",
+    "Plain-English definitions of 11+ terms every Buckinghamshire parent needs to understand.",
     SEO_CONTENT_REVISION,
   ),
   meta(

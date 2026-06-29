@@ -6,6 +6,10 @@ import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
 import { getMockVariant, MOCK_VARIANTS } from "../../data/mock-variants";
 import NotFound from "../not-found";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 export default function MockVariant({ slug }: { slug: string }) {
   const m = getMockVariant(slug);
@@ -20,7 +24,7 @@ export default function MockVariant({ slug }: { slug: string }) {
   const others = MOCK_VARIANTS.filter((x) => x.slug !== slug);
 
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title={m.metaTitle}
         description={m.metaDescription}
@@ -46,10 +50,14 @@ export default function MockVariant({ slug }: { slug: string }) {
         <p className="text-xl text-slate-600 leading-relaxed">{m.intro}</p>
       </div>
 
+      <SeoPageProductLead />
+
       <FreeToPlatformStrip freeOffer="A free 12-question mock-style check" />
 
       <h2 className="text-primary font-serif">What This Mock Test Is</h2>
       <p>{m.whatItIs}</p>
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">Who It Suits</h2>
       <p>{m.whoItSuits}</p>
@@ -78,6 +86,9 @@ export default function MockVariant({ slug }: { slug: string }) {
         ))}
       </ul>
 
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
+
       <ChildExperienceCTA />
       <FreeToPlatformPanel freeOffer="a free 12-question mock-style check (not a full 40- or 50-question exam)" />
 
@@ -94,7 +105,8 @@ export default function MockVariant({ slug }: { slug: string }) {
             <div className="font-semibold text-primary font-serif">{o.title}</div>
           </Link>
         ))}
-      </div>
+      </div>      <SeoContentAd variant="cta" />
+
 
       <Disclaimer />
     </div>

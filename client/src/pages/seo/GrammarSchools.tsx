@@ -2,11 +2,14 @@ import { Link } from "wouter";
 import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
-import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
 import { ExternalLink } from "lucide-react";
 import { grammarSchools } from "@/data/grammar-schools";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 const breadcrumbItems = [
   { label: "Resources", href: "/buckinghamshire-11-plus-guide" },
@@ -15,7 +18,7 @@ const breadcrumbItems = [
 
 export default function GrammarSchools() {
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title="Bucks 11 Plus Grammar Schools (2026) – All 13 Schools Directory"
         description="Complete directory of all 13 Bucks 11 Plus grammar schools. Locations, descriptions and official links to help you find the right school for your child."
@@ -36,7 +39,8 @@ export default function GrammarSchools() {
         </p>
       </div>
 
-      <SubscribeCTA />
+
+      <SeoPageProductLead />
 
       <h2 className="text-primary font-serif">The 13 Grammar Schools</h2>
       <p>
@@ -79,6 +83,8 @@ export default function GrammarSchools() {
         ))}
       </div>
 
+      <SeoContentAd variant="dashboard" />
+
       <h2 className="text-primary font-serif">How Admissions Work</h2>
       <p>
         All 13 grammar schools use the same Secondary Transfer Test result to determine eligibility. Children who achieve the
@@ -102,8 +108,12 @@ export default function GrammarSchools() {
         our <Link href="/buckinghamshire-11-plus-guide" className="text-primary hover:underline">Complete Buckinghamshire 11+ Guide</Link>.
       </p>
 
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
+
       <ChildExperienceCTA />
-      <ContentCTA heading="Which Bucks grammar is your target?" subhead="An 8-minute readiness check shows how your child is performing across all four domains on the 121 scale." ctaLabel="Take the readiness check" />
+      <ContentCTA heading="Which Bucks grammar is your target?" subhead="An 8-minute readiness check shows how your child is performing across all four domains on the 121 scale." ctaLabel="Take the readiness check" />      <SeoContentAd variant="cta" />
+
       <Disclaimer />
     </div>
   );

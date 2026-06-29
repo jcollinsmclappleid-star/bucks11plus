@@ -2,10 +2,12 @@ import { Link } from "wouter";
 import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
-import { LeadMagnetBlock } from "@/components/shared/LeadMagnetBlock";
-import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 const breadcrumbItems = [
   { label: "Resources", href: "/buckinghamshire-11-plus-guide" },
@@ -33,7 +35,7 @@ const faqItems = [
 
 export default function MockTest() {
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title="Bucks 11 Plus Mock Test (2026) – When, How & Why They Matter"
         description="A complete guide to Bucks 11+ mock tests: when to sit them, what makes a good mock, how to interpret results, and how mocks differ from practice papers and the official familiarisation test."
@@ -63,7 +65,8 @@ export default function MockTest() {
         </p>
       </div>
 
-      <SubscribeCTA />
+
+      <SeoPageProductLead />
 
       <h2 className="text-primary font-serif">What a Mock Test Actually Is</h2>
       <p>
@@ -72,6 +75,8 @@ export default function MockTest() {
       <p>
         A mock is not the same as a practice paper, a topic drill, or the official <Link href="/bucks-11-plus-familiarisation-test" className="text-primary hover:underline">familiarisation test</Link>. The familiarisation test shows your child the format. A practice paper builds skills in one section. A mock combines all of it under exam conditions and tells you, with reasonable accuracy, how your child is likely to perform on test day.
       </p>
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">How a Mock Differs from Practice</h2>
       <div className="not-prose overflow-x-auto my-8">
@@ -152,8 +157,10 @@ export default function MockTest() {
         That trajectory data shapes what you do next. A climbing trajectory means "keep going". A flat trajectory means "change approach". A descending trajectory (which does happen, usually due to over-tiredness) means "pause and rest". You cannot make any of these calls without repeated, comparable mocks.
       </p>
 
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
+
       <ChildExperienceCTA />
-      <LeadMagnetBlock source="seo:mock-test" />
       <ContentCTA heading="A real-format mock in 8 minutes" subhead="A free GL-style readiness check with timed sections and a per-section breakdown — like a mini mock exam." ctaLabel="Take the readiness check" />
 
       <div className="not-prose my-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">
@@ -176,7 +183,8 @@ export default function MockTest() {
           <li><Link href="/11-plus-30-days-to-go" className="text-primary hover:underline">30 Days to Go: Final-Month Mock Schedule</Link></li>
           <li><Link href="/free-11-plus-resources" className="text-primary hover:underline">Complete Free 11+ Resources Library</Link></li>
         </ul>
-      </div>
+      </div>      <SeoContentAd variant="cta" />
+
 
       <Disclaimer />
     </div>

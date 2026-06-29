@@ -1,6 +1,7 @@
 import { Seo } from "../components/shared/Seo";
 import { Link } from "wouter";
 import { Building2, Mail, ShieldCheck, Brain, Layers, Hash, BookOpen, Target, Clock, BarChart3, Users, CheckCircle2, TrendingUp } from "lucide-react";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 const stats = [
   { value: "2,500+", label: "Practice questions" },
@@ -65,7 +66,7 @@ export default function About() {
         </div>
       </div>
 
-      <div className="container mx-auto max-w-4xl px-4 py-14 prose prose-slate prose-lg">
+      <div className={`container mx-auto max-w-4xl px-4 py-14 ${SEO_GUIDE_PROSE}`}>
 
         <h2 className="text-primary font-serif">The Problem</h2>
         <p>
@@ -106,7 +107,7 @@ export default function About() {
         </div>
       </div>
 
-      <div className="container mx-auto max-w-4xl px-4 py-14 prose prose-slate prose-lg">
+      <div className={`container mx-auto max-w-4xl px-4 py-14 ${SEO_GUIDE_PROSE}`}>
 
         <h2 className="text-primary font-serif">How Our Questions Are Built</h2>
         <p>
@@ -134,7 +135,7 @@ export default function About() {
         </div>
       </div>
 
-      <div className="container mx-auto max-w-4xl px-4 py-14 prose prose-slate prose-lg">
+      <div className={`container mx-auto max-w-4xl px-4 py-14 ${SEO_GUIDE_PROSE}`}>
 
         <h2 className="text-primary font-serif">What This Platform Is — and Isn't</h2>
         <ul>

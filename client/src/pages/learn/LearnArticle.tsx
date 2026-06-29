@@ -1,11 +1,13 @@
+import { Fragment } from "react";
 import { Link, useParams } from "wouter";
 import { getArticleBySlug, getArticlesByCategory, learnArticles } from "@/data/learn-articles";
 import { Seo } from "@/components/shared/Seo";
 import NotFound from "@/pages/not-found";
-import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
-import { SeoConversionPanel } from "@/components/shared/SeoConversionPanel";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
 import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 export default function LearnArticle() {
   const { slug } = useParams<{ slug: string }>();
@@ -46,6 +48,13 @@ export default function LearnArticle() {
     },
   };
 
+  const articleSections = splitArticleSections(article.content);
+  const proseClass =
+    SEO_GUIDE_PROSE +
+    " prose-h1:font-serif prose-h1:text-3xl prose-h1:font-bold prose-h1:text-foreground prose-h1:mb-6 prose-h1:leading-tight " +
+    "prose-h2:text-foreground prose-h3:text-foreground " +
+    "prose-p:text-muted-foreground prose-ul:text-muted-foreground";
+
   return (
     <div className="min-h-screen bg-background">
       <Seo
@@ -74,19 +83,21 @@ export default function LearnArticle() {
           </span>
         </div>
 
-        <SeoConversionPanel variant="learn" />
+        <SeoPageProductLead compact />
 
-        <article
-          className="prose prose-slate max-w-none
-            prose-h1:font-serif prose-h1:text-3xl prose-h1:font-bold prose-h1:text-foreground prose-h1:mb-6 prose-h1:leading-tight
-            prose-h2:font-serif prose-h2:text-xl prose-h2:font-bold prose-h2:text-foreground prose-h2:mt-8 prose-h2:mb-3
-            prose-h3:font-semibold prose-h3:text-base prose-h3:text-foreground prose-h3:mt-6 prose-h3:mb-2
-            prose-p:text-muted-foreground prose-p:leading-relaxed prose-p:mb-4
-            prose-ul:text-muted-foreground prose-li:mb-1
-            prose-strong:text-foreground"
-          data-testid="article-content"
-          dangerouslySetInnerHTML={{ __html: styledContent(article.content) }}
-        />
+        <article className={proseClass} data-testid="article-content">
+          {articleSections.map((section, i) => (
+            <Fragment key={i}>
+              <div dangerouslySetInnerHTML={{ __html: styledSection(section) }} />
+              {i === 1 && <SeoContentAd variant="full" compact />}
+              {i === Math.floor(articleSections.length / 2) && i !== 1 && (
+                <SeoContentAd variant="cta" compact />
+              )}
+            </Fragment>
+          ))}
+        </article>
+
+        <SeoContentAd variant="suite" compact />
 
         <ChildExperienceCTA />
 
@@ -147,8 +158,6 @@ export default function LearnArticle() {
 
         <GuideConversionBlock className="mt-10" hideQuestions />
 
-        <SubscribeCTA />
-
         <div className="mt-6 flex gap-3">
           <Link href="/learn">
             <button
@@ -164,14 +173,19 @@ export default function LearnArticle() {
   );
 }
 
-function styledContent(html: string): string {
+function splitArticleSections(html: string): string[] {
+  const sections = html.split(/(?=<h2[\s>])/i).filter(Boolean);
+  return sections.length > 0 ? sections : [html];
+}
+
+function styledSection(html: string): string {
   return html
     .replace(
       /<div class="keytakeaways">/g,
-      `<div class="my-6 bg-green-50 border border-green-200 rounded-xl p-5">`
+      `<div class="my-8 bg-green-50 border border-green-200 rounded-xl p-5">`
     )
     .replace(
       /<div class="faq">/g,
-      `<div class="my-8 border border-border rounded-xl p-6 bg-muted/20">`
+      `<div class="my-10 border border-border rounded-xl p-6 bg-muted/20">`
     );
 }

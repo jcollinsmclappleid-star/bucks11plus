@@ -1,11 +1,13 @@
 import { Seo } from "../../components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "../../components/shared/Breadcrumbs";
 import { ContentCTA } from "../../components/shared/ContentCTA";
-import { LeadMagnetBlock } from "../../components/shared/LeadMagnetBlock";
-import { SubscribeCTA } from "../../components/shared/SubscribeCTA";
 import { Disclaimer } from "../../components/shared/Disclaimer";
 import { ChildExperienceCTA } from "../../components/shared/ChildExperienceCTA";
 import { Link } from "wouter";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 const breadcrumbItems = [
   { label: "Resources", href: "/buckinghamshire-11-plus-guide" },
@@ -14,7 +16,7 @@ const breadcrumbItems = [
 
 export default function CommonMistakes() {
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title="Common Bucks 11 Plus Mistakes (2026) – Preparation Pitfalls to Avoid"
         description="Avoid the most common Bucks 11 Plus preparation mistakes: starting too late, ignoring timing, skipping comprehension, and misunderstanding the 121 standardised score."
@@ -41,7 +43,8 @@ export default function CommonMistakes() {
         </p>
       </div>
 
-      <SubscribeCTA />
+
+      <SeoPageProductLead />
 
       <h2 className="text-primary font-serif">Mistake 1: Starting Too Late</h2>
       <p>
@@ -53,6 +56,8 @@ export default function CommonMistakes() {
       <p>
         <strong>What to do instead:</strong> Begin gentle, structured preparation in Year 4 or early Year 5. Focus initially on vocabulary enrichment, reading widely, and introducing the main reasoning question types. Intensive timed practice should begin from the spring of Year 5. See our <Link href="/how-to-pass-bucks-11-plus" className="text-primary hover:underline">preparation strategy guide</Link> for a recommended timeline.
       </p>
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">Mistake 2: Paper-Only Practice Without Diagnosis</h2>
       <p>
@@ -121,8 +126,10 @@ export default function CommonMistakes() {
         Bucks 11 Plus Tests was designed to solve this problem. Our readiness check measures what matters — accuracy <em>and</em> speed — and translates it into a clear readiness forecast. From there, targeted micro-drills help address the specific areas where your child needs the most practice.
       </p>
 
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
+
       <ChildExperienceCTA />
-      <LeadMagnetBlock source="seo:common-mistakes" />
       <ContentCTA heading="Find out which mistakes your child is actually making" subhead="An 8-minute check shows you the question types they're getting wrong — not generic advice." ctaLabel="See your child's specific gaps" />
 
       <div className="not-prose my-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">
@@ -141,7 +148,8 @@ export default function CommonMistakes() {
             <Link href="/bucks-11-plus-registration" className="text-primary hover:underline" data-testid="link-registration">Registration Guide</Link>
           </li>
         </ul>
-      </div>
+      </div>      <SeoContentAd variant="cta" />
+
 
       <Disclaimer />
     </div>

@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, BookOpen, Target, Clock, BarChart3, CheckCircle2, Download, Zap } from "lucide-react";
 import { DashboardPreviewForecast, DashboardPreviewPace, DashboardPreviewTrajectory } from "../components/shared/DashboardPreview";
 import { GuideConversionBlock } from "../components/shared/GuideConversionBlock";
+import { SeoPageProductLead } from "../components/shared/SeoPageProductLead";
+import { SeoContentAd } from "../components/shared/SeoContentAd";
 import { apiRequest } from "../lib/queryClient";
 
 const breadcrumbItems = [
@@ -149,6 +151,12 @@ export default function ParentGuide() {
               </Button>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="bg-white py-10 md:py-14 border-b border-slate-100">
+        <div className="container mx-auto max-w-6xl px-4">
+          <SeoPageProductLead />
         </div>
       </section>
 

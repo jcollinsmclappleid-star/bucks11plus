@@ -6,6 +6,10 @@ import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
 import { getVocabCluster, VOCAB_CLUSTERS } from "../../data/vocab-clusters";
 import NotFound from "../not-found";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 export default function VocabCluster({ slug }: { slug: string }) {
   const v = getVocabCluster(slug);
@@ -20,7 +24,7 @@ export default function VocabCluster({ slug }: { slug: string }) {
   const others = VOCAB_CLUSTERS.filter((x) => x.slug !== slug);
 
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title={v.metaTitle}
         description={v.metaDescription}
@@ -46,8 +50,12 @@ export default function VocabCluster({ slug }: { slug: string }) {
         <p className="text-xl text-slate-600 leading-relaxed">{v.intro}</p>
       </div>
 
+      <SeoPageProductLead />
+
       <h2 className="text-primary font-serif">Why It Matters</h2>
       <p>{v.whyMatters}</p>
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">How to Teach It Effectively</h2>
       <ul>
@@ -70,6 +78,9 @@ export default function VocabCluster({ slug }: { slug: string }) {
       <h2 className="text-primary font-serif">Practice Routine</h2>
       <p>{v.practiceRoutine}</p>
 
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
+
       <ChildExperienceCTA />
       <ContentCTA
         heading="See exactly which vocabulary gaps are costing marks"
@@ -90,7 +101,8 @@ export default function VocabCluster({ slug }: { slug: string }) {
             <div className="font-semibold text-primary font-serif">{o.title}</div>
           </Link>
         ))}
-      </div>
+      </div>      <SeoContentAd variant="cta" />
+
 
       <Disclaimer />
     </div>

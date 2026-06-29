@@ -140,7 +140,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
       <ScrollToTop />
       <Navbar />
       <EmailVerificationBanner />
-      <main className="flex-1 min-w-0 overflow-x-hidden w-full">
+      <main className="flex-1 min-w-0 w-full">
         {children}
       </main>
       <AdminTierSwitcher />
@@ -437,7 +437,9 @@ function Router() {
             <Route path="/when-do-bucks-11-plus-results-come-out" component={WhenResults} />
             <Route path="/bucks-11-plus-results" component={ResultsExplained} />
             <Route path="/bucks-11-plus-appeals" component={Appeals} />
-            {/* /bucks-11-plus-registration-guide is server-rendered by getRegistrationDetailedHtml — no client route needed */}
+            <Route path="/11-plus-tutors-buckinghamshire" component={TuitionCost} />
+            <Route path="/11-plus-tutors-high-wycombe" component={TuitionCost} />
+            <Route path="/11-plus-tutors-aylesbury" component={TuitionCost} />
             {/* Tier 2 — new high-traffic pages */}
             {QUESTION_TYPES.map((q) => (
               <Route key={q.slug} path={q.pathSegment}>

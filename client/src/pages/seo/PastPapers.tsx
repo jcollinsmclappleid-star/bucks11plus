@@ -1,11 +1,14 @@
 import { Link } from "wouter";
 import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
-import { PlatformPrepHero, SecondaryPdfDownloads } from "@/components/shared/PlatformPrepHero";
+import { PlatformPrepHero } from "@/components/shared/PlatformPrepHero";
 import { FreeToPlatformPanel, FreeToPlatformStrip } from "@/components/shared/FreeToPlatformPanel";
-import { LeadMagnetBlock } from "@/components/shared/LeadMagnetBlock";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 const breadcrumbItems = [
   { label: "Resources", href: "/buckinghamshire-11-plus-guide" },
@@ -37,7 +40,7 @@ const faqItems = [
 
 export default function PastPapers() {
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title="Bucks 11+ Past Papers & Free Practice Papers Download (2026)"
         description="Official Bucks 11+ past papers don't exist — download two free GL-style practice papers (PDF), see what to use instead, and how to prepare for the Secondary Transfer Test."
@@ -66,6 +69,8 @@ export default function PastPapers() {
         </p>
       </div>
 
+
+      <SeoPageProductLead />
       <PlatformPrepHero context="past-papers" />
 
       <h2 className="text-primary font-serif">Are Real Past Papers Available?</h2>
@@ -75,6 +80,8 @@ export default function PastPapers() {
       <p>
         Any website offering "official 2024 Bucks 11+ past paper" or similar is either misleading parents (selling generic practice papers under a misleading label) or hosting copyrighted material illegally. Neither is reliable preparation.
       </p>
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">What Is Officially Available?</h2>
       <p>
@@ -149,9 +156,11 @@ export default function PastPapers() {
         ))}
       </div>
 
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
+
       <ChildExperienceCTA />
-      <FreeToPlatformPanel freeOffer="2 free PDF practice papers (not official past papers)" />
-      <SecondaryPdfDownloads />
+      <FreeToPlatformPanel freeOffer="free sample PDFs on our dedicated download page" />
 
       <div className="not-prose my-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">
         <h3 className="text-lg font-semibold text-primary font-serif mb-3">Related Practice Material</h3>
@@ -164,7 +173,8 @@ export default function PastPapers() {
           <li><Link href="/bucks-11-plus-practice-papers-free" className="text-primary hover:underline">Free practice papers</Link></li>
           <li><Link href="/free-11-plus-resources" className="text-primary hover:underline">Complete free 11+ resources library</Link></li>
         </ul>
-      </div>
+      </div>      <SeoContentAd variant="cta" />
+
 
       <Disclaimer />
     </div>

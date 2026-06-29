@@ -3,6 +3,10 @@ import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 const breadcrumbItems = [
   { label: "Resources", href: "/buckinghamshire-11-plus-guide" },
@@ -34,7 +38,7 @@ const faqItems = [
 
 export default function Appeals() {
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title="Bucks 11 Plus Appeals – Process, Deadlines & Realistic Success Rates"
         description="A clear, honest guide to Bucks 11+ appeals: when to appeal, how to prepare evidence, the timeline, and what success rates parents should realistically expect."
@@ -63,6 +67,8 @@ export default function Appeals() {
         </p>
       </div>
 
+
+      <SeoPageProductLead />
       <h2 className="text-primary font-serif">Two Different Appeals</h2>
       <p>There are two completely separate appeals processes, often confused:</p>
       <div className="not-prose overflow-x-auto my-6">
@@ -88,6 +94,8 @@ export default function Appeals() {
           </tbody>
         </table>
       </div>
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">When to Appeal</h2>
       <p>An appeal is most likely to succeed where there is one or more of the following:</p>
@@ -153,6 +161,10 @@ export default function Appeals() {
       </ul>
 
       <ContentCTA heading="Worried about an appeal? Build a stronger case." subhead="An indicative readiness score with a per-section breakdown gives you concrete evidence of where your child stands — useful before the appeal window opens." ctaLabel="Get the readiness check" />
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />      <SeoContentAd variant="cta" />
+
+
       <Disclaimer />
     </div>
   );

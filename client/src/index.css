@@ -385,32 +385,87 @@ body {
   padding: 1rem 1.25rem;
 }
 
-.prose > p {
+.prose > p,
+.prose p {
   margin-top: 0;
-  margin-bottom: 1.25em;
+  margin-bottom: 1.35em;
+  line-height: 1.75;
 }
 
-.prose > h2 {
-  margin-top: 2em;
-  margin-bottom: 0.75em;
+.prose > h2,
+.prose h2 {
+  margin-top: 0;
+  margin-bottom: 0.85em;
+  line-height: 1.3;
 }
 
-.prose > h3 {
-  margin-top: 1.5em;
-  margin-bottom: 0.5em;
+.prose > h3,
+.prose h3 {
+  margin-top: 1.75em;
+  margin-bottom: 0.65em;
+  line-height: 1.35;
 }
 
 .prose > ul,
-.prose > ol {
-  margin-top: 0.5em;
-  margin-bottom: 1.25em;
+.prose > ol,
+.prose ul,
+.prose ol {
+  margin-top: 0.65em;
+  margin-bottom: 1.35em;
   padding-left: 1.5em;
 }
 
 .prose > ul > li,
-.prose > ol > li {
-  margin-top: 0.25em;
-  margin-bottom: 0.25em;
+.prose > ol > li,
+.prose ul > li,
+.prose ol > li {
+  margin-top: 0.35em;
+  margin-bottom: 0.35em;
+}
+
+/* SEO guide articles — section breaks (works inside nested divs, not only direct children) */
+.seo-guide-prose h2 {
+  margin-top: 2.75rem;
+  margin-bottom: 1rem;
+  padding-top: 0.25rem;
+}
+
+.seo-guide-prose h2:first-child {
+  margin-top: 0;
+}
+
+.seo-guide-prose .not-prose + h2 {
+  margin-top: 2.75rem;
+  padding-top: 2rem;
+  border-top: 1px solid hsl(var(--border) / 0.65);
+}
+
+.seo-guide-prose h3 {
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.seo-guide-prose p {
+  margin-bottom: 1.35rem;
+}
+
+.seo-guide-prose p + p {
+  margin-top: 0;
+}
+
+.seo-guide-prose h2 + p,
+.seo-guide-prose h3 + p {
+  margin-top: 0.35rem;
+}
+
+.seo-guide-prose ul,
+.seo-guide-prose ol {
+  margin-top: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.seo-guide-prose li + li {
+  margin-top: 0.4rem;
 }
 
 .drill-complete-card {

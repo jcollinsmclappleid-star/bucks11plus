@@ -3,6 +3,10 @@ import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 const breadcrumbItems = [
   { label: "Resources", href: "/buckinghamshire-11-plus-guide" },
@@ -11,7 +15,7 @@ const breadcrumbItems = [
 
 export default function IndependentVsGrammar() {
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title="Independent School vs Buckinghamshire Grammar – An Honest Comparison"
         description="Independent school or Buckinghamshire grammar — how the two compare on academic outcomes, cost, admissions, class size, and wider opportunities."
@@ -29,6 +33,8 @@ export default function IndependentVsGrammar() {
         </p>
       </div>
 
+
+      <SeoPageProductLead />
       <h2 className="text-primary font-serif">The Short Answer</h2>
       <p>
         For an academically able child living within a Bucks grammar school's effective catchment, a Bucks grammar typically delivers academic outcomes comparable to a mid-tier independent school at no cost. Top-tier independents (the most academically selective day schools and the leading boarding schools) generally outperform on absolute attainment but the gap is narrower than headline league tables suggest.
@@ -36,6 +42,8 @@ export default function IndependentVsGrammar() {
       <p>
         For families who don't live in catchment, who can comfortably afford fees, or who place high value on smaller class sizes and broader extra-curricular provision, an independent school may be the better fit. The choice is rarely binary on academic grounds alone.
       </p>
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">Side-by-Side Comparison</h2>
       <div className="not-prose overflow-x-auto my-6">
@@ -95,6 +103,10 @@ export default function IndependentVsGrammar() {
       </p>
 
       <ContentCTA heading="Going for grammar? Find out if your child's ready" subhead="An 8-minute check gives a practice score on the 121 scale across all four GL Assessment domains." ctaLabel="Check grammar readiness" />
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />      <SeoContentAd variant="cta" />
+
+
       <Disclaimer />
     </div>
   );

@@ -5,8 +5,12 @@ import { scrollToAnchor } from "@/lib/scrollToAnchor";
 import {
   FREE_PRACTICE_TEST_CTA,
   FREE_PRACTICE_TEST_PATH,
-  PLATFORM_PRACTICE_PAPERS_PATH,
+  PLATFORM_SUITE_PATH,
   PLATFORM_PREVIEW_CTA,
+  PRICING_ANCHOR_SUBLINE,
+  PRICING_ANNUAL_EQUIV_LABEL,
+  PRICING_FROM_HEADLINE,
+  PRICING_MONTHLY_LABEL,
 } from "@/lib/marketing";
 import { SampleQuestionsCarousel } from "./SampleQuestionsCarousel";
 import {
@@ -43,7 +47,7 @@ const variantCopy: Record<PanelVariant, Required<Omit<SeoConversionPanelProps, "
     subhead:
       "2,500+ GL-style questions, unlimited practice papers, full mock exams, timed practice tests on the 121 scale, and parent dashboards that show exactly what to practise next.",
     primaryLabel: PLATFORM_PREVIEW_CTA,
-    primaryHref: PLATFORM_PRACTICE_PAPERS_PATH,
+    primaryHref: PLATFORM_SUITE_PATH,
     secondaryLabel: FREE_PRACTICE_TEST_CTA,
     secondaryHref: FREE_PRACTICE_TEST_PATH,
   },
@@ -53,7 +57,7 @@ const variantCopy: Record<PanelVariant, Required<Omit<SeoConversionPanelProps, "
     subhead:
       "Registration gets your child into the test. Our practice tests, mock exams, and parent dashboards show whether they are actually on track for 121 — before you spend on tutors or more books.",
     primaryLabel: PLATFORM_PREVIEW_CTA,
-    primaryHref: PLATFORM_PRACTICE_PAPERS_PATH,
+    primaryHref: PLATFORM_SUITE_PATH,
     secondaryLabel: FREE_PRACTICE_TEST_CTA,
     secondaryHref: FREE_PRACTICE_TEST_PATH,
   },
@@ -63,7 +67,7 @@ const variantCopy: Record<PanelVariant, Required<Omit<SeoConversionPanelProps, "
     subhead:
       "A child can look strong overall and still lose the 121 margin on cube nets, inference, timing, or one hidden reasoning family. Browse the full practice library and see the gaps in your parent dashboard.",
     primaryLabel: PLATFORM_PREVIEW_CTA,
-    primaryHref: PLATFORM_PRACTICE_PAPERS_PATH,
+    primaryHref: PLATFORM_SUITE_PATH,
     secondaryLabel: FREE_PRACTICE_TEST_CTA,
     secondaryHref: FREE_PRACTICE_TEST_PATH,
   },
@@ -73,7 +77,7 @@ const variantCopy: Record<PanelVariant, Required<Omit<SeoConversionPanelProps, "
     subhead:
       "Get an indicative practice score, section breakdown, pace analysis, and a ranked focus list. Browse mock exams and practice papers built for the Bucks 11+ before you subscribe.",
     primaryLabel: PLATFORM_PREVIEW_CTA,
-    primaryHref: PLATFORM_PRACTICE_PAPERS_PATH,
+    primaryHref: PLATFORM_SUITE_PATH,
     secondaryLabel: FREE_PRACTICE_TEST_CTA,
     secondaryHref: FREE_PRACTICE_TEST_PATH,
   },
@@ -83,7 +87,7 @@ const variantCopy: Record<PanelVariant, Required<Omit<SeoConversionPanelProps, "
     subhead:
       "Parent dashboards, 2,500+ GL-style questions, unlimited practice papers, full mock exams, and timed practice tests scored on the 121 benchmark — built for Buckinghamshire families.",
     primaryLabel: PLATFORM_PREVIEW_CTA,
-    primaryHref: PLATFORM_PRACTICE_PAPERS_PATH,
+    primaryHref: PLATFORM_SUITE_PATH,
     secondaryLabel: FREE_PRACTICE_TEST_CTA,
     secondaryHref: FREE_PRACTICE_TEST_PATH,
   },
@@ -93,7 +97,7 @@ const variantCopy: Record<PanelVariant, Required<Omit<SeoConversionPanelProps, "
     subhead:
       "Practice score forecast, GL-style questions, parent analytics, mock exams, and targeted drills — everything in one Bucks-specific platform. See exactly what you get before you pay.",
     primaryLabel: PLATFORM_PREVIEW_CTA,
-    primaryHref: PLATFORM_PRACTICE_PAPERS_PATH,
+    primaryHref: PLATFORM_SUITE_PATH,
     secondaryLabel: FREE_PRACTICE_TEST_CTA,
     secondaryHref: FREE_PRACTICE_TEST_PATH,
   },
@@ -153,7 +157,7 @@ export function SeoConversionPanel({
             </Button>
           </div>
           <p className="mt-4 text-xs text-white/45">
-            Free 12-question practice test · no account needed · Full platform from £35/month
+            Free 12-question practice test · no account needed · {PRICING_ANCHOR_SUBLINE}
           </p>
         </div>
         <div className="bg-slate-50 p-6 md:p-8">
@@ -193,7 +197,7 @@ export function SeoConversionPanel({
           <SampleQuestionsCarousel />
           <div className="mt-6 flex justify-center">
             <Button variant="cta" size="lg" asChild data-testid="button-seo-conversion-questions-platform">
-              <Link href={PLATFORM_PRACTICE_PAPERS_PATH}>
+              <Link href={PLATFORM_SUITE_PATH}>
                 {PLATFORM_PREVIEW_CTA} <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
@@ -212,16 +216,18 @@ const costRows = [
     isTutorCost: true,
   },
   {
-    label: "Bucks Plus Edge — Monthly",
-    price: "£35/mo",
-    detail: "Unlimited interactive practice, mocks, drills, practice tests, and parent analytics.",
+    label: "Bucks Plus Edge — Annual",
+    price: PRICING_ANNUAL_EQUIV_LABEL.replace("/month", "/mo"),
+    detail: `Same full platform, billed once a year. ${PRICING_FROM_HEADLINE}.`,
     isTutorCost: false,
+    featured: true,
   },
   {
-    label: "Bucks Plus Edge — Annual",
-    price: "£23.25/mo",
-    detail: "Same full platform, billed once a year (£279). Cancel any time.",
+    label: "Bucks Plus Edge — Monthly",
+    price: PRICING_MONTHLY_LABEL.replace("/month", "/mo"),
+    detail: "Unlimited interactive practice, mocks, drills, practice tests, and parent analytics.",
     isTutorCost: false,
+    featured: true,
   },
 ];
 
@@ -275,14 +281,13 @@ export function TutorCostComparison({ compact = false, variant = "default", flus
             Compared to a private 11+ tutor
           </p>
           <h2 className="mt-1 font-serif text-2xl font-bold text-primary md:text-3xl">
-            <TutorCostStrike>~£160/month</TutorCostStrike> for one hour a week. £35/month for a full preparation platform.
+            <TutorCostStrike>~£160/month</TutorCostStrike> for one hour a week. {PRICING_FROM_HEADLINE} for a full preparation platform.
           </h2>
           <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600 md:text-base">
             Most families paying a tutor at <strong className="text-primary">£40/hr</strong> book at least one session a week — roughly{" "}
             <TutorCostStrike className="font-semibold">£160/month</TutorCostStrike>{" "}
             <span className="text-xs text-slate-500">(typical tutor cost)</span>. Bucks Plus Edge is modern, interactive 11+ practice: timed mocks, targeted drills,
-            instant explanations, and clear parent visibility — for <strong className="text-primary">£35/month</strong> (or{" "}
-            <strong className="text-primary">£23.25/month</strong> on annual).
+            instant explanations, and clear parent visibility — {PRICING_ANCHOR_SUBLINE}.
           </p>
         </div>
       </div>
@@ -337,7 +342,7 @@ export function TutorCostComparison({ compact = false, variant = "default", flus
           ) : (
             <>
               <Button variant="cta" size="lg" asChild data-testid="button-tutor-comparison-platform">
-                <Link href={PLATFORM_PRACTICE_PAPERS_PATH}>
+                <Link href={PLATFORM_SUITE_PATH}>
                   {PLATFORM_PREVIEW_CTA} <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>

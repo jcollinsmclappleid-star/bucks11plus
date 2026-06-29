@@ -2,10 +2,12 @@ import { Link } from "wouter";
 import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
-import { LeadMagnetBlock } from "@/components/shared/LeadMagnetBlock";
-import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 const breadcrumbItems = [
   { label: "Resources", href: "/buckinghamshire-11-plus-guide" },
@@ -83,7 +85,7 @@ const allQuestions: FAQ[] = faqSections.flatMap(s => s.questions);
 
 export default function FAQHub() {
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title="Bucks 11 Plus FAQs (2026) – Every Parent Question Answered"
         description="Comprehensive Bucks 11+ FAQ hub: the test, the 121 qualifying score, registration, preparation, grammar school allocation and our platform. Every common parent question, answered clearly."
@@ -113,7 +115,8 @@ export default function FAQHub() {
         </p>
       </div>
 
-      <SubscribeCTA />
+
+      <SeoPageProductLead />
 
       {faqSections.map((section, sIdx) => (
         <section key={sIdx} className="mt-10">
@@ -141,8 +144,10 @@ export default function FAQHub() {
         For deeper coverage of any specific topic, see our <Link href="/buckinghamshire-11-plus-guide" className="text-primary hover:underline">complete Bucks 11+ guide</Link> or the <Link href="/learn" className="text-primary hover:underline">learning hub</Link>.
       </p>
 
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
+
       <ChildExperienceCTA />
-      <LeadMagnetBlock source="seo:faq-hub" />
       <ContentCTA heading="Got questions? Get answers — and a number." subhead="An 8-minute check answers the only question that really matters: where does my child currently stand against 121?" ctaLabel="Take the readiness check" />
 
       <div className="not-prose my-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">
@@ -157,7 +162,8 @@ export default function FAQHub() {
           <li><Link href="/11-plus-30-days-to-go" className="text-primary hover:underline">30 Days to Go — Final-Month Plan</Link></li>
           <li><Link href="/11-plus-score-royal-grammar-school-high-wycombe" className="text-primary hover:underline">School-Specific Score Targets (e.g. RGS High Wycombe)</Link></li>
         </ul>
-      </div>
+      </div>      <SeoContentAd variant="cta" />
+
 
       <Disclaimer />
     </div>

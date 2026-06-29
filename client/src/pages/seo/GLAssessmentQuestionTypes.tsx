@@ -5,6 +5,10 @@ import { ContentCTA } from "@/components/shared/ContentCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
 import { QUESTION_TYPES } from "../../data/question-types";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 export default function GLAssessmentQuestionTypes() {
   const path = "/gl-assessment-question-types";
@@ -16,7 +20,7 @@ export default function GLAssessmentQuestionTypes() {
   const byDomain = (domain: string) => QUESTION_TYPES.filter((q) => q.domain === domain);
 
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title="GL Assessment Question Types — Full Bucks 11+ Question Bank Guide"
         description="Every question type tested in the GL Assessment 11+ used by Buckinghamshire — across Verbal Reasoning, Non-Verbal Reasoning, Maths and Comprehension — with linked guides."
@@ -38,10 +42,14 @@ export default function GLAssessmentQuestionTypes() {
         </p>
       </div>
 
+      <SeoPageProductLead />
+
       <h2 className="text-primary font-serif">Why Knowing the Question Types Matters</h2>
       <p>
         Children who walk into the test having seen every question type before answer faster and with less anxiety than children meeting an unfamiliar format under exam pressure. The actual content of the questions varies year to year; the question types do not. A child who has practised matrix questions, cloze questions and ratio word problems specifically will recognise them on sight in the real test and reach for the right method without hesitation.
       </p>
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">Verbal Reasoning Question Types</h2>
       <p>
@@ -100,12 +108,16 @@ export default function GLAssessmentQuestionTypes() {
         Working through every question-type guide on this page in a single sitting is overwhelming. A more useful approach: take a diagnostic mock first to identify the two or three weakest question types, then read those guides in depth. Return to the others as practice broadens.
       </p>
 
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
+
       <ChildExperienceCTA />
       <ContentCTA
         heading="Find out which question types are costing your child marks"
         subhead="Our free 8-minute diagnostic breaks performance down by question type — so you read the right guides first, not all of them at once."
         ctaLabel="Take the free diagnostic"
-      />
+      />      <SeoContentAd variant="cta" />
+
 
       <Disclaimer />
     </div>

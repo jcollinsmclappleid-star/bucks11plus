@@ -3,7 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Seo } from "../components/shared/Seo";
 import { ArrowRight, BookOpen, Target, Info, CheckCircle2, AlertCircle, Clock, BarChart2 } from "lucide-react";
-import { SeoConversionPanel } from "../components/shared/SeoConversionPanel";
+import { SeoPageProductLead } from "../components/shared/SeoPageProductLead";
+import { SeoContentAd } from "../components/shared/SeoContentAd";
 
 export default function ScoringMethodology() {
   const bands = [
@@ -55,7 +56,7 @@ export default function ScoringMethodology() {
         </p>
       </div>
 
-      <SeoConversionPanel variant="score" />
+      <SeoPageProductLead />
 
       <Card className="border-blue-200/60 bg-blue-50/30">
         <CardContent className="p-6 flex gap-4">

@@ -1,13 +1,16 @@
 import { Link } from "wouter";
 import { Seo } from "../../components/shared/Seo";
 import { ContentCTA } from "../../components/shared/ContentCTA";
-import { SubscribeCTA } from "../../components/shared/SubscribeCTA";
 import { Disclaimer } from "../../components/shared/Disclaimer";
 import { ChildExperienceCTA } from "../../components/shared/ChildExperienceCTA";
 import { Breadcrumbs, breadcrumbSchema } from "../../components/shared/Breadcrumbs";
 import { getTownBySlug } from "../../data/towns";
 import { ExternalLink } from "lucide-react";
 import NotFound from "../not-found";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 export default function TownGuide({ townSlug }: { townSlug: string }) {
   const town = getTownBySlug(townSlug);
@@ -41,7 +44,7 @@ export default function TownGuide({ townSlug }: { townSlug: string }) {
   ];
 
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title={`Bucks 11 Plus Preparation in ${town.name} (2026) – 121 Score & Local Guide`}
         description={`Guide for families in ${town.name} preparing for the Bucks 11 Plus. Understand the 121 qualifying score, Secondary Transfer Test format, and how to assess your child's readiness.`}
@@ -58,7 +61,8 @@ export default function TownGuide({ townSlug }: { townSlug: string }) {
         <p className="text-xl text-slate-600 leading-relaxed">{town.intro}</p>
       </div>
 
-      <SubscribeCTA />
+
+      <SeoPageProductLead />
 
       <h2 className="text-primary font-serif">Nearby Grammar Schools</h2>
       <p>
@@ -79,6 +83,8 @@ export default function TownGuide({ townSlug }: { townSlug: string }) {
           </a>
         ))}
       </div>
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">How the Bucks 11+ Works</h2>
       <p>
@@ -123,8 +129,12 @@ export default function TownGuide({ townSlug }: { townSlug: string }) {
         </div>
       ))}
 
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
+
       <ChildExperienceCTA />
-      <ContentCTA heading="Compete for grammar in your area" subhead="An 8-minute readiness check shows how your child is performing across all four domains on the 121 scale." ctaLabel="See the score" />
+      <ContentCTA heading="Compete for grammar in your area" subhead="An 8-minute readiness check shows how your child is performing across all four domains on the 121 scale." ctaLabel="See the score" />      <SeoContentAd variant="cta" />
+
       <Disclaimer />
     </div>
   );

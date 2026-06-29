@@ -2,9 +2,12 @@ import { Link } from "wouter";
 import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
-import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 interface YearData {
   testYear: number;
@@ -48,7 +51,7 @@ export default function TestDate({ year }: { year: 2025 | 2026 }) {
   ];
 
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title={`Bucks 11 Plus Test Date ${year} – When Is the Test & Key Deadlines`}
         description={`The official Bucks 11+ test date for ${year}, plus registration opens, registration deadline, results release date and the national application deadline.`}
@@ -79,7 +82,8 @@ export default function TestDate({ year }: { year: 2025 | 2026 }) {
         </p>
       </div>
 
-      <SubscribeCTA />
+
+      <SeoPageProductLead />
 
       <h2 className="text-primary font-serif">When Is the Test?</h2>
       <p>
@@ -92,6 +96,8 @@ export default function TestDate({ year }: { year: 2025 | 2026 }) {
           <div className="text-3xl font-bold text-primary font-serif" data-testid={`text-test-date-${year}`}>{data.testDate}</div>
         </div>
       </div>
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">Full {year} Timeline</h2>
       <div className="not-prose overflow-x-auto my-6">
@@ -140,8 +146,12 @@ export default function TestDate({ year }: { year: 2025 | 2026 }) {
         <li><Link href="/bucks-11-plus-test-day-checklist" className="text-primary hover:underline">Test day checklist</Link></li>
       </ul>
 
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
+
       <ChildExperienceCTA />
-      <ContentCTA heading="Test day is approaching" subhead="An 8-minute readiness check tells you exactly where your child stands against 121 — with weeks still on the clock." ctaLabel="Take the check now" />
+      <ContentCTA heading="Test day is approaching" subhead="An 8-minute readiness check tells you exactly where your child stands against 121 — with weeks still on the clock." ctaLabel="Take the check now" />      <SeoContentAd variant="cta" />
+
       <Disclaimer />
     </div>
   );

@@ -4,9 +4,12 @@ import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
-import { SeoConversionPanel } from "@/components/shared/SeoConversionPanel";
 import { getMathsTopic, MATHS_TOPICS } from "../../data/maths-topics";
 import NotFound from "../not-found";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 export default function MathsTopic({ slug }: { slug: string }) {
   const t = getMathsTopic(slug);
@@ -21,7 +24,7 @@ export default function MathsTopic({ slug }: { slug: string }) {
   const others = MATHS_TOPICS.filter((x) => x.slug !== slug);
 
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title={t.metaTitle}
         description={t.metaDescription}
@@ -48,8 +51,12 @@ export default function MathsTopic({ slug }: { slug: string }) {
         <p className="text-xl text-slate-600 leading-relaxed">{t.intro}</p>
       </div>
 
+      <SeoPageProductLead />
+
       <h2 className="text-primary font-serif">Why This Topic Is Tested</h2>
       <p>{t.whyTested}</p>
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">Key Methods</h2>
       <div className="not-prose space-y-4 my-6">
@@ -75,11 +82,7 @@ export default function MathsTopic({ slug }: { slug: string }) {
         </div>
       </div>
 
-      <SeoConversionPanel
-        variant="question"
-        heading={`See whether ${t.title.replace("11+ ", "").toLowerCase()} is holding your child back.`}
-        subhead="A single maths topic can quietly drag down a 121-scale practice score. Browse the practice library and see topic gaps, pace risk, and what to practise next."
-      />
+      <SeoContentAd variant="suite" />
 
       <h2 className="text-primary font-serif">Common Mistakes</h2>
       <ul>
@@ -97,6 +100,9 @@ export default function MathsTopic({ slug }: { slug: string }) {
 
       <h2 className="text-primary font-serif">When This Topic Is Taught</h2>
       <p>{t.yearGroupNote}</p>
+
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
 
       <ChildExperienceCTA />
       <ContentCTA
@@ -118,7 +124,8 @@ export default function MathsTopic({ slug }: { slug: string }) {
             <div className="font-semibold text-primary font-serif">{o.title}</div>
           </Link>
         ))}
-      </div>
+      </div>      <SeoContentAd variant="cta" />
+
 
       <Disclaimer />
     </div>

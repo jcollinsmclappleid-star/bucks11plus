@@ -7,6 +7,7 @@ import {
   FREE_PRACTICE_TEST_PATH,
   PLATFORM_PRACTICE_PAPERS_PATH,
   PLATFORM_PREVIEW_CTA,
+  PRICING_ANCHOR_SUBLINE,
 } from "@/lib/marketing";
 
 const benefits = [
@@ -54,7 +55,7 @@ export function SubscribeCTA() {
           >
             <Link href={FREE_PRACTICE_TEST_PATH}>{FREE_PRACTICE_TEST_CTA}</Link>
           </Button>
-          <span className="text-white/45 text-xs sm:ml-1">From £35/month · cancel anytime</span>
+          <span className="text-white/45 text-xs sm:ml-1">{PRICING_ANCHOR_SUBLINE}</span>
         </div>
       </div>
 

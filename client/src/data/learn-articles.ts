@@ -600,7 +600,7 @@ export const learnArticles: LearnArticle[] = [
 <p>Mock tests are one of the most valuable and most consistently underused tools in Bucks 11 plus preparation. Many children invest months in workbook practice and topic learning but arrive at the real test in September never having sat under genuine exam conditions — with strict timing, audio instructions, an unfamiliar room, and an adult invigilator who is not their parent. This gap between preparation conditions and test conditions is a significant and very avoidable cause of underperformance.</p>
 <h2>What a Proper Bucks 11 Plus Mock Test Is</h2>
 <p>A proper mock test for the Bucks 11 plus is not a practice paper done at the kitchen table with occasional breaks. It is a full-length test that replicates the real test as closely as possible across every dimension: two papers of 45 minutes each, multiple choice format with answers recorded on a separate answer sheet, audio instructions managing section transitions, a supervised break between papers, and formal exam conditions.</p>
-<p>Mock tests are available in two forms. Home mocks are administered by parents at home, replicating conditions as closely as possible. External mocks are organised by 11 plus preparation providers and take place at a venue with other children, a proper invigilator who is unknown to the child, and a more complete replication of the real test environment. Both have distinct value, and ideally children should experience both before test day.</p>
+<p>Mock tests are available in two forms. Home mocks are administered by parents at home, replicating conditions as closely as possible. Timed on-screen mocks on <a href="/11-plus-practice-suite">Bucks Plus Edge</a> replicate audio pacing, strict timing, and instant section breakdowns — so you see exactly which question types cost marks under pressure. Both have distinct value, and ideally children should experience full timed mocks before test day.</p>
 <h2>Why Exam Conditions Specifically Matter</h2>
 <p>Performance anxiety — the gap between what a child knows and what they demonstrate under pressure — is one of the most common and most preventable causes of underperformance at the 11 plus. Children who have only ever done practice papers at home in comfortable, familiar conditions often find the unfamiliarity of the real test environment genuinely disorienting. The presence of many other children working simultaneously, an adult invigilator they do not know, a recorded voice giving instructions, rigid timing that cannot be paused — all of these elements contribute to heightened anxiety in children who encounter them for the first time on test day itself.</p>
 <p>The remedy is to make the conditions so familiar through repeated exposure that there is nothing novel or anxiety-provoking about the environment itself. A child who has sat four or five mock tests under proper conditions walks into the real test in September recognising a format and an environment they have experienced before.</p>
@@ -614,7 +614,7 @@ export const learnArticles: LearnArticle[] = [
 <li>Familiarity with exam conditions significantly reduces performance anxiety on the day</li>
 <li>Audio instruction practice is non-negotiable — this is a distinctive Bucks test feature that surprises unprepared children</li>
 <li>First mock test in June-July Year 5; final mocks in the weeks immediately before the September test</li>
-<li>External mock tests add the crucial dimension of an unfamiliar environment with other children</li>
+<li>Timed on-screen mocks on Bucks Plus Edge build familiarity with audio pacing and strict timing</li>
 <li>Review every wrong answer after every mock — categorise errors and direct preparation accordingly</li>
 </ul></div>
 <div class="faq">
@@ -623,8 +623,8 @@ export const learnArticles: LearnArticle[] = [
 <p>4-8 full mock tests across the preparation period is the typical recommendation. More than this risks desensitisation without improvement; fewer may not build sufficient familiarity with the format and conditions.</p>
 <h3>My child scores well at home but much worse in external mocks — what does this mean?</h3>
 <p>This is exactly the performance anxiety gap that mock tests identify. The solution is more external mock experience, with good debrief conversations afterwards. The gap typically narrows as the child accumulates more external test experience.</p>
-<h3>Are external mock tests worth the cost?</h3>
-<p>Yes — specifically for the experience of the unfamiliar environment, adult invigilator other than a parent, and the presence of other children working simultaneously. These elements cannot be replicated at home and are all present in the real test. At least one or two external mock tests before test day is strongly recommended.</p>
+<h3>Are timed on-screen mocks worth using?</h3>
+<p>Yes — especially for the Bucks test, where audio instructions and strict pacing are distinctive. Bucks Plus Edge timed mocks replicate those conditions and return section-level analytics so you know what to fix before test day. Start with the <a href="/free-diagnostic">free practice test</a> or browse the <a href="/11-plus-practice-suite">full practice suite</a>.</p>
 </div>`,
   },
   {

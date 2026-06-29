@@ -4,6 +4,10 @@ import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 const breadcrumbItems = [
   { label: "Resources", href: "/buckinghamshire-11-plus-guide" },
@@ -22,7 +26,7 @@ const days = [
 
 export default function Year6Revision() {
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title="Bucks 11+ Final Weeks Revision Timetable (Year 6, August–September)"
         description="A focused 4-week revision timetable for the final stretch before the Bucks 11+ in early September. Daily structure, weekend mocks, and what to drop."
@@ -40,6 +44,8 @@ export default function Year6Revision() {
         </p>
       </div>
 
+
+      <SeoPageProductLead />
       <h2 className="text-primary font-serif">The Goal of the Final Weeks</h2>
       <p>
         By August of Year 6, the time for building new skills has largely passed. The final four weeks should focus on three things only:
@@ -52,6 +58,8 @@ export default function Year6Revision() {
       <p>
         Anything beyond this — new topics, new question types, last-minute panicked tutoring — usually erodes confidence rather than building it.
       </p>
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">Weekly Schedule</h2>
       <p>This pattern repeats for the four weeks leading to the test, with the Saturday session alternating between full timed sections (weeks 1 and 3) and shorter consolidation sets (weeks 2 and 4).</p>
@@ -100,8 +108,12 @@ export default function Year6Revision() {
         <li><strong>Stop talking about consequences.</strong> The test is hard enough without the weight of "what happens if you don't pass". Children who feel relaxed perform measurably better.</li>
       </ul>
 
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
+
       <ChildExperienceCTA />
-      <ContentCTA heading="Revising? Make sure it's the right things" subhead="An 8-minute check identifies which sections to focus revision on first." ctaLabel="Find the focus" />
+      <ContentCTA heading="Revising? Make sure it's the right things" subhead="An 8-minute check identifies which sections to focus revision on first." ctaLabel="Find the focus" />      <SeoContentAd variant="cta" />
+
       <Disclaimer />
     </div>
   );

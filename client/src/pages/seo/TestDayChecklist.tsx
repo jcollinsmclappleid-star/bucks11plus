@@ -2,9 +2,12 @@ import { Link } from "wouter";
 import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
-import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 const breadcrumbItems = [
   { label: "Resources", href: "/buckinghamshire-11-plus-guide" },
@@ -56,7 +59,7 @@ const checklistAvoid = [
 
 export default function TestDayChecklist() {
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title="Bucks 11 Plus Test Day Checklist (2026) – What to Bring & How to Prepare"
         description="A practical Bucks 11+ test day checklist: what to bring, what to wear, what to eat, and how to keep the morning calm. Plus the night-before routine that helps your child do their best."
@@ -86,7 +89,8 @@ export default function TestDayChecklist() {
         </p>
       </div>
 
-      <SubscribeCTA />
+
+      <SeoPageProductLead />
 
       <h2 className="text-primary font-serif">What to Bring</h2>
       <p>
@@ -106,6 +110,8 @@ export default function TestDayChecklist() {
           </ul>
         </div>
       </div>
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">What to Wear</h2>
       <p>
@@ -187,6 +193,9 @@ export default function TestDayChecklist() {
         </table>
       </div>
 
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
+
       <ChildExperienceCTA />
       <ContentCTA heading="Test-day-ready? Get the actual answer" subhead="An 8-minute check gives an indicative readiness score against 121 so you walk in knowing where they stand." ctaLabel="Check readiness" />
 
@@ -198,7 +207,8 @@ export default function TestDayChecklist() {
           <li><a href="/bucks-11-plus-results" className="text-primary hover:underline">Results Day — What to Expect</a></li>
           <li><Link href="/learn/what-happens-on-bucks-11-plus-test-day" className="text-primary hover:underline">What Happens on Test Day</Link></li>
         </ul>
-      </div>
+      </div>      <SeoContentAd variant="cta" />
+
 
       <Disclaimer />
     </div>

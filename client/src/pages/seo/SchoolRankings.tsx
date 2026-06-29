@@ -3,6 +3,10 @@ import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 const breadcrumbItems = [
   { label: "Grammar Schools", href: "/bucks-grammar-schools" },
@@ -34,7 +38,7 @@ const RANKINGS: SchoolRanking[] = [
 
 export default function SchoolRankings() {
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title="Buckinghamshire Grammar School Rankings & Academic Outcomes"
         description="Buckinghamshire grammar school rankings explained. Honest summary of academic outcomes across all 13 grammars — and why league-table position should not be the main factor in choice."
@@ -52,6 +56,8 @@ export default function SchoolRankings() {
         </p>
       </div>
 
+
+      <SeoPageProductLead />
       <h2 className="text-primary font-serif">A Word Before the Rankings</h2>
       <p>
         Every grammar school in Buckinghamshire would rank in the top 10–15% of state secondary schools nationally. The differences between them on any league table are real but small in practical terms. A child at any Bucks grammar can expect strong academic outcomes; the differences between them matter much less than the differences between grammars and the average national state secondary.
@@ -59,6 +65,8 @@ export default function SchoolRankings() {
       <p>
         We strongly caution against using a single league table position as the basis for a school choice. Distance, journey time, sibling links, school culture, single-sex vs co-educational preference, and the child's own personality all matter more than the difference between (say) #4 and #7 on the Sunday Times Parent Power list.
       </p>
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">All 13 Bucks Grammars at a Glance</h2>
       <div className="not-prose overflow-x-auto my-6">
@@ -117,6 +125,10 @@ export default function SchoolRankings() {
       </div>
 
       <ContentCTA heading="Want to know if your child can compete?" subhead="An 8-minute check gives a practice score on the 121 scale across all four GL Assessment domains." ctaLabel="Check the score" />
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />      <SeoContentAd variant="cta" />
+
+
       <Disclaimer />
     </div>
   );

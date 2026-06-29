@@ -5,6 +5,10 @@ import { ContentCTA } from "@/components/shared/ContentCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { getGlossaryTerm, GLOSSARY_TERMS } from "../../data/glossary";
 import NotFound from "../not-found";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 export default function GlossaryTerm({ slug }: { slug: string }) {
   const term = getGlossaryTerm(slug);
@@ -19,7 +23,7 @@ export default function GlossaryTerm({ slug }: { slug: string }) {
   const related = GLOSSARY_TERMS.filter((t) => t.slug !== slug).slice(0, 6);
 
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title={`${term.term} – Bucks 11+ Glossary`}
         description={term.short}
@@ -44,6 +48,8 @@ export default function GlossaryTerm({ slug }: { slug: string }) {
         </h1>
         <p className="text-lg text-slate-600 leading-relaxed">{term.short}</p>
       </div>
+
+      <SeoPageProductLead />
 
       <h2 className="text-primary font-serif">Definition</h2>
       <p>{term.body}</p>
@@ -76,6 +82,10 @@ export default function GlossaryTerm({ slug }: { slug: string }) {
       </div>
 
       <ContentCTA heading="Apply this in a real check" subhead="An 8-minute readiness check shows whether your child has actually mastered concepts like this — not just defined them." ctaLabel="See where they stand" />
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />      <SeoContentAd variant="cta" />
+
+
       <Disclaimer />
     </div>
   );

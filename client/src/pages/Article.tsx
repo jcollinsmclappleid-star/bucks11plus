@@ -2,10 +2,12 @@ import { useParams, Link } from "wouter";
 import { ArrowLeft } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
 import { SubscribeCTA } from "../components/shared/SubscribeCTA";
+import { SeoPageProductLead } from "../components/shared/SeoPageProductLead";
 import { ChildExperienceCTA } from "../components/shared/ChildExperienceCTA";
 import { useQuery } from "@tanstack/react-query";
 import { type Article } from "@shared/schema";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 export default function Article() {
   const { slug } = useParams();
@@ -69,10 +71,12 @@ export default function Article() {
         </p>
       </div>
 
+      <SeoPageProductLead compact />
+
       <SubscribeCTA />
 
       <div 
-        className="prose prose-slate prose-lg max-w-none" 
+        className={SEO_GUIDE_PROSE} 
         dangerouslySetInnerHTML={{ __html: article.content }} 
         data-testid="text-article-content"
       />

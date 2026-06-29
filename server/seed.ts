@@ -1044,6 +1044,19 @@ async function syncPracticeSections() {
   console.log("✓ Practice sections synced");
 }
 
+async function runDeferredSeedMaintenance() {
+  await ensurePracticePaperDiagnostics();
+  await syncDiagnosticTimings();
+  await ensureComprehensionSection();
+  await syncPracticeSections();
+  await repairSeedQuestions();
+  await ensureFreePool();
+  await ensureQuestionBank();
+  await ensureDiagnosticPool();
+  await applyQuestionQualityFixes();
+  await provisionMissedCustomer();
+}
+
 export async function seedDatabase() {
   // Always ensure admin user exists with full programme24_plus access
   const existingAdmin = await db.query.users.findFirst({
@@ -1084,16 +1097,10 @@ export async function seedDatabase() {
     if (process.env.VERCEL === "1") {
       return;
     }
-    await ensurePracticePaperDiagnostics();
-    await syncDiagnosticTimings();
-    await ensureComprehensionSection();
-    await syncPracticeSections();
-    await repairSeedQuestions();
-    await ensureFreePool();
-    await ensureQuestionBank();
-    await ensureDiagnosticPool();
-    await applyQuestionQualityFixes();
-    await provisionMissedCustomer();
+    // DB already seeded — run maintenance in background so API routes (e.g. free practice test) respond immediately.
+    void runDeferredSeedMaintenance().catch((err) =>
+      console.error("Deferred seed maintenance error:", err),
+    );
     return;
   }
 

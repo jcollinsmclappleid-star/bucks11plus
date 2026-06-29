@@ -2,9 +2,12 @@ import { Link } from "wouter";
 import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
-import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 const breadcrumbItems = [
   { label: "Resources", href: "/buckinghamshire-11-plus-guide" },
@@ -69,7 +72,7 @@ const verbalQuestionTypes = [
 
 export default function VocabularyList() {
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title="Bucks 11 Plus Vocabulary List (2026) – 150 Essential Words by Tier"
         description="A structured Bucks 11+ vocabulary list of 150 essential words organised by difficulty tier, plus how vocabulary is tested in the Verbal Reasoning paper and how to build word knowledge that lasts."
@@ -99,7 +102,8 @@ export default function VocabularyList() {
         </p>
       </div>
 
-      <SubscribeCTA />
+
+      <SeoPageProductLead />
 
       <h2 className="text-primary font-serif">Why Vocabulary Matters in the Bucks 11+</h2>
       <p>
@@ -108,6 +112,8 @@ export default function VocabularyList() {
       <p>
         Crucially, vocabulary is the <strong>slowest</strong> skill to build. Unlike arithmetic or pattern recognition, you cannot drill it into existence in a few months. It accumulates through sustained reading and repeated exposure. Families who start vocabulary work early have a substantial advantage over those who treat it as a last-minute add-on.
       </p>
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">How Vocabulary Is Tested</h2>
       <p>
@@ -180,6 +186,9 @@ export default function VocabularyList() {
         Word lists tell you what to learn. They don't tell you what your child already knows. Our <Link href="/free-diagnostic" className="text-primary hover:underline">free 8-minute readiness check</Link> includes vocabulary-led Verbal Reasoning questions and shows you whether vocabulary is currently a strength, a developing area, or the highest-impact gap to close before September.
       </p>
 
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
+
       <ChildExperienceCTA />
       <ContentCTA heading="Words memorised. Now test them." subhead="An 8-minute check shows whether vocabulary is actually paying off in real GL-style verbal reasoning." ctaLabel="Take the check" />
 
@@ -191,7 +200,8 @@ export default function VocabularyList() {
           <li><Link href="/learn/bucks-11-plus-verbal-reasoning-complete-guide" className="text-primary hover:underline">Verbal Reasoning Complete Guide</Link></li>
           <li><a href="/bucks-11-plus-sample-questions" className="text-primary hover:underline">Sample Questions</a></li>
         </ul>
-      </div>
+      </div>      <SeoContentAd variant="cta" />
+
 
       <Disclaimer />
     </div>

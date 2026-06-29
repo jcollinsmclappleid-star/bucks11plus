@@ -20,18 +20,8 @@ import { URGENCY_PLANS } from "../client/src/data/urgency-plans";
 import { ensureFreePool, repairSeedQuestions } from "./seed";
 import { buildProductionReadinessReport } from "./productionReadiness";
 import { RESEND_FROM_EMAIL, SUPPORT_EMAIL } from "./contactConfig";
-import {
-  getTownHtml, getGrammarSchoolHtml, getSubjectGuideHtml,
-  getYearGroupGuideHtml, getLearnHubHtml, getLearnArticleHtml,
-  towns as ssrTowns, grammarSchools as ssrGrammarSchools,
-} from "./ssrPages";
-import { getGlossaryIndexHtml, getGlossaryTermHtml, GLOSSARY_TERMS } from "./ssrGlossary";
-import {
-  getTestDate2026Html, getTestDate2025Html, getPastPapersHtml,
-  getFreeSamplePapersHtml,
-  getResultsGuideHtml, getSampleQuestionsHtml, getScoreGuideHtml,
-  getTutorsGuideHtml, getAppealsGuideHtml, getRegistrationDetailedHtml,
-} from "./ssrHighVolume";
+import { grammarSchools as ssrGrammarSchools } from "./ssrPages";
+import { getGlossaryTermHtml, GLOSSARY_TERMS } from "./ssrGlossary";
 import { registerSpaMetaRoutes, sendSpaPage } from "./spaHtml";
 import { getPageMeta } from "../client/src/lib/spaPageMeta";
 import { isSsrSitemapPath, SSR_CONTENT_LASTMOD } from "./seoConfig";
@@ -2556,75 +2546,6 @@ Disallow: /practice-paper-print
 `);
   });
 
-  // ─── SSR town guides ─────────────────────────────────────────────────────
-  for (const town of ssrTowns) {
-    app.get(`/bucks-11-plus-${town.slug}`, (_req, res) => {
-      const html = getTownHtml(town.slug);
-      if (!html) { res.status(404).send("Not found"); return; }
-      res.setHeader("Content-Type", "text/html; charset=utf-8");
-      res.setHeader("Cache-Control", "public, max-age=3600");
-      res.send(html);
-    });
-  }
-
-  // ─── SSR grammar school guides ───────────────────────────────────────────
-  for (const school of ssrGrammarSchools) {
-    app.get(`/grammar-schools/${school.slug}`, (_req, res) => {
-      const html = getGrammarSchoolHtml(school.slug);
-      if (!html) { res.status(404).send("Not found"); return; }
-      res.setHeader("Content-Type", "text/html; charset=utf-8");
-      res.setHeader("Cache-Control", "public, max-age=3600");
-      res.send(html);
-    });
-  }
-
-  // ─── SSR subject guides ──────────────────────────────────────────────────
-  const subjectRoutes: Record<string, string> = {
-    "/11-plus-verbal-reasoning-practice": "verbal-reasoning",
-    "/11-plus-non-verbal-reasoning-practice": "non-verbal-reasoning",
-    "/11-plus-maths-practice": "maths",
-    "/11-plus-comprehension-practice": "comprehension",
-  };
-  for (const [path, subject] of Object.entries(subjectRoutes)) {
-    app.get(path, (_req, res) => {
-      const html = getSubjectGuideHtml(subject);
-      if (!html) { res.status(404).send("Not found"); return; }
-      res.setHeader("Content-Type", "text/html; charset=utf-8");
-      res.setHeader("Cache-Control", "public, max-age=3600");
-      res.send(html);
-    });
-  }
-
-  // ─── SSR year group guides ───────────────────────────────────────────────
-  for (const year of [4, 5, 6]) {
-    app.get(`/preparing-for-11-plus-year-${year}`, (_req, res) => {
-      const html = getYearGroupGuideHtml(year);
-      if (!html) { res.status(404).send("Not found"); return; }
-      res.setHeader("Content-Type", "text/html; charset=utf-8");
-      res.setHeader("Cache-Control", "public, max-age=3600");
-      res.send(html);
-    });
-  }
-
-  // ─── SSR learn hub ───────────────────────────────────────────────────────
-  app.get("/learn", (_req, res) => {
-    const html = getLearnHubHtml();
-    res.setHeader("Content-Type", "text/html; charset=utf-8");
-    res.setHeader("Cache-Control", "public, max-age=1800");
-    res.send(html);
-  });
-
-  // ─── SSR learn articles ──────────────────────────────────────────────────
-  for (const article of learnArticles) {
-    app.get(`/learn/${article.slug}`, (_req, res) => {
-      const html = getLearnArticleHtml(article.slug);
-      if (!html) { res.status(404).send("Not found"); return; }
-      res.setHeader("Content-Type", "text/html; charset=utf-8");
-      res.setHeader("Cache-Control", "public, max-age=3600");
-      res.send(html);
-    });
-  }
-
   // ─── 301 redirects for retired pages ──────────────────────────────────────
   app.get("/bucks-11-plus-score-calculator", (_req, res) => {
     res.redirect(301, "/bucks-11-plus-qualifying-score");
@@ -2638,41 +2559,14 @@ Disallow: /practice-paper-print
   app.get("/bucks-11-plus-practice-papers", (_req, res) => {
     res.redirect(301, "/bucks-11-plus-past-papers");
   });
-
-  // ─── SSR high-volume pages ────────────────────────────────────────────────
-  const highVolumeRoutes: Array<[string, () => string]> = [
-    ["/bucks-11-plus-test-date-2026", getTestDate2026Html],
-    ["/bucks-11-plus-test-date-2025", getTestDate2025Html],
-    ["/bucks-11-plus-past-papers", getPastPapersHtml],
-    ["/bucks-11-plus-free-sample-papers", getFreeSamplePapersHtml],
-    ["/bucks-11-plus-results", getResultsGuideHtml],
-    ["/when-do-bucks-11-plus-results-come-out", getResultsGuideHtml],
-    ["/bucks-11-plus-sample-questions", getSampleQuestionsHtml],
-    ["/bucks-11-plus-how-scoring-works", getScoreGuideHtml],
-    ["/11-plus-tutors-buckinghamshire", getTutorsGuideHtml],
-    ["/11-plus-tutors-high-wycombe", getTutorsGuideHtml],
-    ["/11-plus-tutors-aylesbury", getTutorsGuideHtml],
-    ["/bucks-11-plus-appeals", getAppealsGuideHtml],
-    ["/bucks-11-plus-registration-guide", getRegistrationDetailedHtml],
-  ];
-
-  for (const [path, generator] of highVolumeRoutes) {
-    app.get(path, (_req, res) => {
-      const html = generator();
-      res.setHeader("Content-Type", "text/html; charset=utf-8");
-      res.setHeader("Cache-Control", "public, max-age=7200");
-      res.send(html);
-    });
-  }
-
-  // ─── SSR glossary ─────────────────────────────────────────────────────────
-  app.get("/glossary", (_req, res) => {
-    const html = getGlossaryIndexHtml();
-    res.setHeader("Content-Type", "text/html; charset=utf-8");
-    res.setHeader("Cache-Control", "public, max-age=3600");
-    res.send(html);
+  app.get("/bucks-11-plus-how-scoring-works", (_req, res) => {
+    res.redirect(301, "/bucks-11-plus-qualifying-score");
+  });
+  app.get("/bucks-11-plus-registration-guide", (_req, res) => {
+    res.redirect(301, "/bucks-11-plus-registration");
   });
 
+  // ─── SSR glossary (term pages only — index is React SPA with product showcase) ─
   app.get("/glossary/:slug", (req, res, next) => {
     const html = getGlossaryTermHtml(req.params.slug);
     if (!html) { next(); return; } // fall through to SPA for client-only slugs
@@ -2697,6 +2591,18 @@ Disallow: /practice-paper-print
         ? article.publishedAt
         : new Date(article.publishedAt);
       const lastmod = published.toISOString().split("T")[0];
+      if (process.env.NODE_ENV !== "production") {
+        (res.locals as { spaMeta?: { path: string; title: string; description: string; h1: string; intro: string; lastmod: string } }).spaMeta = {
+          path,
+          title: `${article.title} | Bucks 11 Plus Tests Hub`,
+          description: article.excerpt,
+          h1: article.title,
+          intro: article.excerpt,
+          lastmod,
+        };
+        next();
+        return;
+      }
       sendSpaPage(res, {
         path,
         title: `${article.title} | Bucks 11 Plus Tests Hub`,
@@ -2813,10 +2719,8 @@ Disallow: /practice-paper-print
       { path: "/bucks-11-plus-results", priority: "0.9", changefreq: "monthly" },
       { path: "/when-do-bucks-11-plus-results-come-out", priority: "0.8", changefreq: "monthly" },
       { path: "/bucks-11-plus-sample-questions", priority: "0.9", changefreq: "monthly" },
-      { path: "/bucks-11-plus-how-scoring-works", priority: "0.8", changefreq: "monthly" },
       { path: "/bucks-11-plus-self-study-vs-tutor", priority: "0.8", changefreq: "monthly" },
       { path: "/bucks-11-plus-appeals", priority: "0.8", changefreq: "monthly" },
-      { path: "/bucks-11-plus-registration-guide", priority: "0.8", changefreq: "monthly" },
       ...QUESTION_TYPES.map(q => ({ path: q.pathSegment, priority: "0.8", changefreq: "monthly" as const })),
       ...MATHS_TOPICS.map(t => ({ path: t.pathSegment, priority: "0.8", changefreq: "monthly" as const })),
       ...MOCK_VARIANTS.map(m => ({ path: m.pathSegment, priority: "0.8", changefreq: "monthly" as const })),

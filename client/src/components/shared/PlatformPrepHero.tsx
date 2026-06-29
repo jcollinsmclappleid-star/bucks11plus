@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle2, Zap } from "lucide-react";
+import { FREE_PRACTICE_TEST_PATH, PLATFORM_SUITE_PATH } from "@/lib/marketing";
 
 const STATS = [
   { value: "2,500+", label: "GL-style questions" },
@@ -69,25 +70,33 @@ export function PlatformPrepHero({ context }: { context: Context }) {
         </ul>
 
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-          <Button variant="cta" size="lg" asChild data-testid="button-prep-hero-start">
-            <Link href="/pricing?autoCheckout=pack_plus">
-              Start now — £35/mo <ArrowRight className="ml-2 h-4 w-4" />
+          <Button variant="cta" size="lg" asChild data-testid="button-prep-hero-suite">
+            <Link href={PLATFORM_SUITE_PATH}>
+              Browse practice suite <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
           <Button
             variant="outline"
             asChild
             className="h-12 border-white/30 bg-transparent font-semibold text-white hover:bg-white/10 hover:text-white"
-            data-testid="button-prep-hero-annual"
+            data-testid="button-prep-hero-free"
           >
-            <Link href="/pricing?autoCheckout=pack_annual">Annual — £279/yr</Link>
+            <Link href={FREE_PRACTICE_TEST_PATH}>Try free practice test</Link>
+          </Button>
+          <Button
+            variant="outline"
+            asChild
+            className="h-12 border-white/30 bg-transparent font-semibold text-white hover:bg-white/10 hover:text-white"
+            data-testid="button-prep-hero-start"
+          >
+            <Link href="/pricing?autoCheckout=pack_plus">Start — £35/mo</Link>
           </Button>
           <Link
-            href="/free-diagnostic"
+            href="/pricing"
             className="text-sm text-white/55 hover:text-white/80 underline-offset-2 hover:underline sm:ml-1"
-            data-testid="link-prep-hero-free-check"
+            data-testid="link-prep-hero-pricing"
           >
-            Or try the free 12-question check first
+            See all plans
           </Link>
         </div>
         <p className="mt-4 text-[11px] text-white/40">3-day money-back guarantee · Cancel anytime</p>
@@ -96,42 +105,28 @@ export function PlatformPrepHero({ context }: { context: Context }) {
   );
 }
 
-/** Muted secondary block — PDFs after platform messaging */
+/** Muted link to the dedicated free PDF download page only */
 export function SecondaryPdfDownloads() {
   return (
     <aside
       className="not-prose my-8 rounded-xl border border-slate-200 bg-slate-50/80 p-5"
       data-testid="secondary-pdf-downloads"
     >
-      <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Optional — print first</p>
+      <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">Optional — print only</p>
       <p className="text-sm text-slate-600 mb-3 leading-relaxed">
-        Want something on paper before you start? Two free GL-style practice PDFs (12 questions each, worked answers) — not a substitute for the platform.
-      </p>
-      <div className="flex flex-wrap gap-2">
-        <a
-          href="/api/practice-paper/download"
-          download="bucks-11-plus-free-practice-paper.pdf"
-          className="inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 hover:border-primary/30 hover:text-primary transition-colors"
-          data-testid="button-secondary-pdf-1"
-        >
-          Paper 1 PDF
-        </a>
-        <a
-          href="/api/practice-paper-2/download"
-          download="bucks-11-plus-free-practice-paper-2.pdf"
-          className="inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 hover:border-primary/30 hover:text-primary transition-colors"
-          data-testid="button-secondary-pdf-2"
-        >
-          Paper 2 PDF
-        </a>
-        <Link
-          href="/bucks-11-plus-free-sample-papers"
-          className="inline-flex items-center rounded-lg px-3 py-1.5 text-xs font-medium text-slate-500 hover:text-primary transition-colors"
-          data-testid="link-secondary-pdf-page"
-        >
-          Download page →
+        Want something on paper? Two free GL-style practice PDFs live on our{" "}
+        <Link href="/bucks-11-plus-free-sample-papers" className="text-primary font-semibold hover:underline">
+          free sample papers page
         </Link>
-      </div>
+        . For real preparation, use the practice suite above — timed mocks, drills, and parent analytics.
+      </p>
+      <Link
+        href="/bucks-11-plus-free-sample-papers"
+        className="inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 hover:border-primary/30 hover:text-primary transition-colors"
+        data-testid="link-secondary-pdf-page"
+      >
+        Free printable PDFs →
+      </Link>
     </aside>
   );
 }

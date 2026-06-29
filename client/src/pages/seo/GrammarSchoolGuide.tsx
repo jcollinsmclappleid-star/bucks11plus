@@ -1,13 +1,16 @@
 import { Link } from "wouter";
 import { Seo } from "@/components/shared/Seo";
 import { ContentCTA } from "@/components/shared/ContentCTA";
-import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { getSchoolBySlug, grammarSchools } from "@/data/grammar-schools";
 import { ExternalLink, Users, MapPin, GraduationCap } from "lucide-react";
 import NotFound from "@/pages/not-found";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 const GENDER_LABELS: Record<string, string> = {
   boys: "Boys' grammar school",
@@ -74,7 +77,7 @@ export default function GrammarSchoolGuide({ schoolSlug }: { schoolSlug: string 
         </div>
       </div>
 
-      <div className="container mx-auto max-w-4xl px-4 py-12">
+      <div className="container mx-auto max-w-6xl px-4 py-12">
         <div className="mb-8 border-l-4 border-primary bg-primary/[0.03] rounded-r-xl pl-7 pr-6 py-6">
           <div className="flex flex-wrap gap-3 mb-3">
             <span className="inline-flex items-center gap-1.5 text-xs font-medium bg-primary/10 text-primary px-3 py-1 rounded-full">
@@ -96,6 +99,8 @@ export default function GrammarSchoolGuide({ schoolSlug }: { schoolSlug: string 
           <p className="text-lg text-slate-600 leading-relaxed">{school.intro}</p>
         </div>
 
+      <SeoPageProductLead />
+
         <div className="not-prose mb-6">
           <a
             href={school.website}
@@ -108,13 +113,8 @@ export default function GrammarSchoolGuide({ schoolSlug }: { schoolSlug: string 
           </a>
         </div>
 
-        <SubscribeCTA />
 
-        <div className="prose prose-slate max-w-none
-          prose-h2:font-serif prose-h2:text-xl prose-h2:font-bold prose-h2:text-primary prose-h2:mt-10 prose-h2:mb-3
-          prose-h3:font-semibold prose-h3:text-base prose-h3:text-foreground prose-h3:mt-6 prose-h3:mb-2
-          prose-p:text-muted-foreground prose-p:leading-relaxed prose-p:mb-4
-          prose-strong:text-foreground">
+        <div className={`${SEO_GUIDE_PROSE} prose-p:text-muted-foreground prose-strong:text-foreground`}>
 
           <h2>The Qualifying Score Requirement</h2>
           <p>
@@ -211,6 +211,8 @@ export default function GrammarSchoolGuide({ schoolSlug }: { schoolSlug: string 
 
         <ChildExperienceCTA />
         <ContentCTA heading="Targeting this grammar school?" subhead="Get a practice score on the 121 scale — and a breakdown of which sections need work." ctaLabel="Check readiness now" />
+      <SeoContentAd variant="cta" />
+        <GuideConversionBlock className="my-10" hideQuestions />
         <Disclaimer />
       </div>
     </div>

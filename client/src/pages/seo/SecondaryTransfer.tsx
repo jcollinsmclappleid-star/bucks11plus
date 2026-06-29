@@ -2,10 +2,12 @@ import { Link } from "wouter";
 import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
-import { LeadMagnetBlock } from "@/components/shared/LeadMagnetBlock";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
-import { SeoConversionPanel } from "@/components/shared/SeoConversionPanel";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 const breadcrumbItems = [
   { label: "Resources", href: "/buckinghamshire-11-plus-guide" },
@@ -14,7 +16,7 @@ const breadcrumbItems = [
 
 export default function SecondaryTransfer() {
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title="Bucks 11 Plus Secondary Transfer Test (2026) – Purpose, Format & Structure"
         description="Understand the Bucks 11 Plus Secondary Transfer Test: its official purpose, four-paper structure, and how standardised scores determine grammar school eligibility."
@@ -35,12 +37,8 @@ export default function SecondaryTransfer() {
         </p>
       </div>
 
-      <SeoConversionPanel
-        variant="general"
-        eyebrow="Secondary Transfer Test preparation"
-        heading="Understand the test. Then check if your child is ready for it."
-        subhead="The Bucks STT is not just knowledge; it is timed reasoning under pressure. The platform shows readiness, section gaps, pace risk, and the next practice priority."
-      />
+
+      <SeoPageProductLead />
 
       <h2 className="text-primary font-serif">Official Purpose</h2>
       <p>
@@ -53,6 +51,8 @@ export default function SecondaryTransfer() {
         It aims to be as fair as possible across children from different backgrounds and primary schools, using
         standardised scoring to account for age differences within the cohort.
       </p>
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">Test Structure</h2>
       <p>
@@ -150,9 +150,12 @@ export default function SecondaryTransfer() {
         see our <Link href="/buckinghamshire-11-plus-guide" className="text-primary hover:underline">Complete Buckinghamshire 11+ Guide</Link>.
       </p>
 
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
+
       <ChildExperienceCTA />
-      <LeadMagnetBlock source="seo:secondary-transfer" />
-      <ContentCTA heading="Take a Bucks STT-format readiness check" subhead="Free 8-minute check using the Bucks Secondary Transfer Test format — VR, NVR, Maths and Comprehension." ctaLabel="Start the check" />
+      <ContentCTA heading="Take a Bucks STT-format readiness check" subhead="Free 8-minute check using the Bucks Secondary Transfer Test format — VR, NVR, Maths and Comprehension." ctaLabel="Start the check" />      <SeoContentAd variant="cta" />
+
       <Disclaimer />
     </div>
   );

@@ -4,6 +4,10 @@ import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 export default function GLAssessmentPractice() {
   const path = "/gl-assessment-11-plus-practice";
@@ -13,7 +17,7 @@ export default function GLAssessmentPractice() {
   ];
 
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title="GL Assessment 11+ Practice — How to Prepare for the Bucks Test"
         description="The GL Assessment is the test format used by the Bucks 11+. A guide to its structure, sections, timings and the most effective practice routine."
@@ -35,10 +39,14 @@ export default function GLAssessmentPractice() {
         </p>
       </div>
 
+      <SeoPageProductLead />
+
       <h2 className="text-primary font-serif">What the GL Assessment 11+ Tests</h2>
       <p>
         The Bucks GL Assessment 11+ tests four domains, weighted equally in the final standardised score: Verbal Reasoning, Non-Verbal Reasoning, Mathematics and English Comprehension. Every question is multiple-choice, with answers marked on a separate answer sheet. Children do not write extended answers; they shade a box. This format makes timing strict but also means there are no "half marks" — an answer is either right or wrong.
       </p>
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">Section Structure</h2>
       <div className="not-prose grid gap-3 my-6">
@@ -84,6 +92,9 @@ export default function GLAssessmentPractice() {
         <li><strong>Final two weeks:</strong> Reduce volume. Focus on confidence and rest. No new material.</li>
       </ul>
 
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
+
       <ChildExperienceCTA />
       <ContentCTA
         heading="Get a GL-style baseline in 8 minutes"
@@ -97,7 +108,8 @@ export default function GLAssessmentPractice() {
         <Link href="/gl-assessment-question-types" className="block rounded-lg border border-slate-200 bg-white p-4 hover:border-primary hover:shadow-sm transition-all" data-testid="link-gl-question-types"><div className="text-xs text-slate-500">Question Types</div><div className="font-semibold text-primary font-serif">GL Assessment Question Types</div></Link>
         <Link href="/bucks-gl-alignment" className="block rounded-lg border border-slate-200 bg-white p-4 hover:border-primary hover:shadow-sm transition-all" data-testid="link-bucks-gl-alignment"><div className="text-xs text-slate-500">Bucks Alignment</div><div className="font-semibold text-primary font-serif">How Our Practice Aligns to GL</div></Link>
         <Link href="/bucks-11-plus-vs-cem-vs-kent" className="block rounded-lg border border-slate-200 bg-white p-4 hover:border-primary hover:shadow-sm transition-all" data-testid="link-bucks-vs-cem"><div className="text-xs text-slate-500">Comparison</div><div className="font-semibold text-primary font-serif">Bucks vs CEM vs Kent 11+</div></Link>
-      </div>
+      </div>      <SeoContentAd variant="cta" />
+
 
       <Disclaimer />
     </div>

@@ -2,9 +2,17 @@ import { Link } from "wouter";
 import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { LeadMagnetBlock } from "@/components/shared/LeadMagnetBlock";
-import { FreeToPlatformPanel, FreeToPlatformStrip } from "@/components/shared/FreeToPlatformPanel";
+import { FreeToPlatformPanel } from "@/components/shared/FreeToPlatformPanel";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ArrowDownToLine, CheckCircle2, Clock, BarChart3, TrendingUp, Target, Zap } from "lucide-react";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
+import {
+  FREE_PRACTICE_TEST_PATH,
+  PLATFORM_SUITE_PATH,
+} from "@/lib/marketing";
 
 const breadcrumbItems = [
   { label: "Resources", href: "/buckinghamshire-11-plus-guide" },
@@ -46,7 +54,7 @@ const digitalAdvantages = [
 
 export default function FreeSamplePapers() {
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16">
+    <div className="container mx-auto max-w-6xl px-4 py-16">
       <Seo
         title="Free Bucks 11+ Practice Papers PDF Download — 2 GL-Style Papers"
         description="Download two free Bucks 11+ practice papers (PDF). Parents searching for past papers: 12 GL-style questions per paper, all four subjects, worked answers — no email required."
@@ -79,12 +87,39 @@ export default function FreeSamplePapers() {
       />
       <Breadcrumbs items={breadcrumbItems} />
 
-      <div className="not-prose mb-10 border-l-4 border-primary bg-primary/[0.03] rounded-r-xl pl-7 pr-6 py-6">
+      <div className="not-prose mb-8 border-l-4 border-primary bg-primary/[0.03] rounded-r-xl pl-7 pr-6 py-6">
         <h1 className="text-4xl md:text-5xl font-bold text-primary font-serif tracking-tight mb-3" data-testid="heading-free-papers">
-          Free Bucks 11+ Sample Papers
+          Free Bucks 11+ Sample Papers — and 2,500+ Questions on the Platform
         </h1>
         <p className="text-xl text-slate-600 leading-relaxed">
-          Parents often search for <strong>past papers</strong> — official ones aren't released. These two free <strong>practice papers</strong> are the closest legal alternative: GL-style, printable, with worked answers. Download both below — no email required.
+          Parents search for <strong>past papers</strong> — official ones aren't released. You can download two free GL-style <strong>PDFs</strong> below, but serious preparation needs <strong>timed mocks, drills, and parent analytics</strong> on{" "}
+          <Link href={PLATFORM_SUITE_PATH} className="text-primary font-semibold hover:underline">
+            Bucks Plus Edge
+          </Link>
+          : <strong>2,500+ GL-style questions</strong>, readiness against 121, and a dashboard that shows exactly what to fix next.
+        </p>
+      </div>
+
+      <SeoPageProductLead />
+
+      <FreeToPlatformPanel freeOffer="2 free PDF practice papers (static, untimed)" className="mb-10" />
+
+      <div className="not-prose mb-6 rounded-2xl border border-slate-200 bg-slate-50/80 p-5 md:p-6">
+        <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary/60 mb-2">
+          Optional printable downloads
+        </p>
+        <h2 className="text-xl md:text-2xl font-bold font-serif text-primary mb-2">
+          Want something on paper? Download 2 free sample PDFs
+        </h2>
+        <p className="text-sm text-slate-600 leading-relaxed">
+          These are a useful first look at question style — 12 questions each, all four subjects, worked answers, no email required. For the full question bank, timed mocks, and parent dashboard, use the{" "}
+          <Link href={PLATFORM_SUITE_PATH} className="text-primary font-semibold hover:underline">
+            practice suite
+          </Link>{" "}
+          or{" "}
+          <Link href={FREE_PRACTICE_TEST_PATH} className="text-primary font-semibold hover:underline">
+            free practice test
+          </Link>.
         </p>
       </div>
 
@@ -134,22 +169,24 @@ export default function FreeSamplePapers() {
         ))}
       </div>
 
-      <p className="not-prose text-[11px] text-slate-400 text-center mb-8 leading-relaxed">
+      <p className="not-prose text-[11px] text-slate-400 text-center mb-6 leading-relaxed">
         These are independent practice resources produced by Bucks 11 Plus Tests. They are not official Buckinghamshire Secondary Transfer Test papers and are not produced by or affiliated with GL Assessment or Buckinghamshire Council.
       </p>
 
-      <FreeToPlatformStrip freeOffer="2 free PDF practice papers" />
+      <SeoContentAd variant="dashboard" />
 
       {/* Want them emailed? */}
-      <div className="not-prose mb-14">
+      <div className="not-prose mb-12">
         <LeadMagnetBlock source="seo:free-sample-papers" />
       </div>
 
+      <SeoContentAd variant="cta" />
+
       {/* Why digital goes further */}
-      <div className="prose prose-slate prose-lg max-w-none">
-        <h2 className="text-primary font-serif">Why the digital platform goes further</h2>
+      <div className={SEO_GUIDE_PROSE}>
+        <h2 className="text-primary font-serif">Why 2,500+ on-screen questions beat two PDFs</h2>
         <p>
-          Practice papers are a good start — working through questions on paper, against a clock, builds real familiarity with the format. But there's a limit to what a static paper can show you.
+          Practice papers are a fine starting point — working through questions on paper builds familiarity with the format. But there is a hard limit to what a static PDF can show you. The Bucks test is timed, audio-paced, and long. You need mocks, drills, instant feedback, and a parent dashboard — not just another worksheet to mark by hand.
         </p>
       </div>
 
@@ -165,7 +202,7 @@ export default function FreeSamplePapers() {
         ))}
       </div>
 
-      <FreeToPlatformPanel freeOffer="2 free PDF practice papers (static, untimed)" />
+      <GuideConversionBlock className="my-10" hideQuestions />
 
       <div className="not-prose my-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">
         <h3 className="text-lg font-semibold text-primary font-serif mb-3">More free 11+ resources</h3>

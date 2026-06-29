@@ -2,9 +2,12 @@ import { Link } from "wouter";
 import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { FreeToPlatformPanel, FreeToPlatformStrip } from "@/components/shared/FreeToPlatformPanel";
-import { LeadMagnetBlock } from "@/components/shared/LeadMagnetBlock";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 const breadcrumbItems = [
   { label: "Resources", href: "/buckinghamshire-11-plus-guide" },
@@ -13,7 +16,7 @@ const breadcrumbItems = [
 
 export default function PracticePapersFree() {
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title="Free Bucks 11+ Practice Papers — Where to Get GL-Style Material (2026)"
         description="Genuinely free Bucks 11+ practice papers and PDF downloads: what's available, what each is good for, and how to use them. Includes two free printable GL-style papers — no email required."
@@ -31,20 +34,26 @@ export default function PracticePapersFree() {
         </p>
       </div>
 
-      <FreeToPlatformStrip freeOffer="Free PDFs and a 12-question check" />
+
+      <SeoPageProductLead />
+      <FreeToPlatformStrip freeOffer="Free printable PDFs on our sample papers page" />
 
       <div className="not-prose my-6 rounded-xl border border-primary/15 bg-primary/[0.03] p-5">
-        <p className="text-sm font-bold text-primary mb-2">Fastest free download</p>
+        <p className="text-sm font-bold text-primary mb-2">Want something to print?</p>
         <p className="text-sm text-slate-600 mb-4 leading-relaxed">
-          Two printable GL-style practice papers (12 questions each, worked answers) —{" "}
-          <Link href="/bucks-11-plus-free-sample-papers" className="text-primary font-semibold hover:underline">download both PDFs now</Link>
-          {" "}with no email, or take the{" "}
-          <Link href="/free-diagnostic" className="text-primary font-semibold hover:underline">free timed readiness check</Link>.
+          Two printable GL-style practice papers (12 questions each, worked answers) live on our{" "}
+          <Link href="/bucks-11-plus-free-sample-papers" className="text-primary font-semibold hover:underline">
+            free sample papers page
+          </Link>
+          . For timed mocks, drills, and parent analytics, use the{" "}
+          <Link href="/11-plus-practice-suite" className="text-primary font-semibold hover:underline">
+            full practice suite
+          </Link>{" "}
+          or{" "}
+          <Link href="/free-diagnostic" className="text-primary font-semibold hover:underline">
+            free practice test
+          </Link>.
         </p>
-        <div className="flex flex-wrap gap-2">
-          <a href="/api/practice-paper/download" download="bucks-11-plus-free-practice-paper.pdf" className="inline-block rounded-lg bg-primary text-white text-xs font-bold px-4 py-2 hover:bg-primary/90">Paper 1 PDF</a>
-          <a href="/api/practice-paper-2/download" download="bucks-11-plus-free-practice-paper-2.pdf" className="inline-block rounded-lg bg-primary text-white text-xs font-bold px-4 py-2 hover:bg-primary/90">Paper 2 PDF</a>
-        </div>
       </div>
 
       <h2 className="text-primary font-serif">The Honest Picture</h2>
@@ -54,6 +63,8 @@ export default function PracticePapersFree() {
       <p>
         Below is everything we've found that is (a) genuinely free, (b) actually useful for the Bucks GL-style 11+, and (c) safe and legal to use.
       </p>
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">1. The Official Familiarisation Test</h2>
       <p>
@@ -78,9 +89,12 @@ export default function PracticePapersFree() {
         Free material gets you started; structured preparation needs volume, timing, and feedback. <Link href="/pricing" className="text-primary hover:underline">Bucks Plus Edge</Link> gives your child <strong>2,500+ interactive GL-style questions</strong> across all four domains — full 40- and 50-question timed mocks, Hard-level drills, instant explanations, and a parent dashboard that tracks gaps by question type. From <strong>£35/month</strong> or <strong>£279/year</strong>.
       </p>
 
-      <h2 className="text-primary font-serif">4. Publisher Free Samples</h2>
+      <h2 className="text-primary font-serif">4. Printable sample papers (optional)</h2>
       <p>
-        Most established 11+ print publishers offer free sample chapters from their workbooks online. They're useful for getting a feel for the question style before committing to a paid book. Search for "11+ GL free sample" — make sure any sample you download is explicitly labelled GL-style material rather than CEM (Bucks uses GL).
+        If you want something on paper, we publish two free GL-style sample PDFs on our{" "}
+        <Link href="/bucks-11-plus-free-sample-papers" className="text-primary hover:underline">free sample papers page</Link>.
+        They are useful for a first look at question style — but serious preparation needs timed on-screen practice, mocks, and feedback from{" "}
+        <Link href="/11-plus-practice-suite" className="text-primary hover:underline">Bucks Plus Edge</Link>.
       </p>
 
       <h2 className="text-primary font-serif">5. School Websites &amp; PTA Resources</h2>
@@ -99,16 +113,21 @@ export default function PracticePapersFree() {
       <p>For families on a tight budget, the following sequence using only free resources is genuinely useful:</p>
       <ol>
         <li><strong>Spring of Year 5:</strong> Take our free diagnostic to establish a baseline.</li>
-        <li><strong>Year 5 throughout:</strong> Build vocabulary through wide reading; daily mental arithmetic; publisher free samples to introduce question types.</li>
+        <li><strong>Year 5 throughout:</strong> Build vocabulary through wide reading; daily mental arithmetic; use our free diagnostic and targeted drills to introduce question types.</li>
         <li><strong>Summer holiday before Year 6:</strong> Sit the official Familiarisation Test under timed conditions; use Bucks Plus Edge drills to target weak areas identified in the diagnostic.</li>
         <li><strong>August / early September:</strong> Re-take the diagnostic to refresh the indicative readiness score and adjust focus in the final two weeks.</li>
       </ol>
       <p>
-        Families that progress beyond this typically invest in either one or two paid practice papers from established publishers (£10–£20 per book) or a structured online platform. Bucks Plus Edge is <strong>£35/month or £279/year</strong> — see <Link href="/pricing" className="text-primary hover:underline">pricing</Link> for the full 2,500+ question bank, mocks, and parent analytics.
+        Families that progress beyond free resources typically move to{" "}
+        <Link href="/11-plus-practice-suite" className="text-primary hover:underline">Bucks Plus Edge</Link> —{" "}
+        <strong>£35/month or £279/year</strong> for the full 2,500+ question bank, timed mocks, drills, and parent analytics.
+        See <Link href="/pricing" className="text-primary hover:underline">pricing</Link> for details.
       </p>
 
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
+
       <ChildExperienceCTA />
-      <LeadMagnetBlock source="seo:practice-papers-free" />
       <FreeToPlatformPanel freeOffer="free PDFs and a 12-question readiness check" />
 
       <div className="not-prose my-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">
@@ -120,7 +139,8 @@ export default function PracticePapersFree() {
           <li><Link href="/11-plus-synonyms-list" className="text-primary hover:underline">11+ synonyms list</Link></li>
           <li><Link href="/11-plus-tricky-words" className="text-primary hover:underline">11+ tricky vocabulary list</Link></li>
         </ul>
-      </div>
+      </div>      <SeoContentAd variant="cta" />
+
 
       <Disclaimer />
     </div>

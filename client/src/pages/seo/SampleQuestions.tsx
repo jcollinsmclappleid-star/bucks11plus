@@ -2,9 +2,13 @@ import { Link } from "wouter";
 import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { FreeToPlatformPanel, FreeToPlatformStrip } from "@/components/shared/FreeToPlatformPanel";
-import { PlatformPrepHero, SecondaryPdfDownloads } from "@/components/shared/PlatformPrepHero";
+import { PlatformPrepHero } from "@/components/shared/PlatformPrepHero";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 const breadcrumbItems = [
   { label: "Resources", href: "/buckinghamshire-11-plus-guide" },
@@ -122,7 +126,7 @@ const SAMPLES: Sample[] = [
 
 export default function SampleQuestions() {
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title="Bucks 11+ Sample Questions & Example Papers — 14 Worked GL-Style Answers"
         description="14 free Bucks 11+ sample questions with worked answers across VR, NVR, Maths and Comprehension. Plus download two free practice papers (PDF) — what parents search for instead of past papers."
@@ -149,6 +153,8 @@ export default function SampleQuestions() {
         </p>
       </div>
 
+
+      <SeoPageProductLead />
       <PlatformPrepHero context="sample-questions" />
 
       <p>
@@ -193,9 +199,12 @@ export default function SampleQuestions() {
         For a reliable readiness picture, <Link href="/pricing?autoCheckout=pack_plus" className="text-primary hover:underline font-semibold">start on the full platform</Link> — timed practice, mocks, and an indicative score against 121. The free 12-question check is a starting point, not a preparation plan.
       </p>
 
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
+
       <ChildExperienceCTA />
-      <FreeToPlatformPanel freeOffer="14 worked sample questions on this page" />
-      <SecondaryPdfDownloads />
+      <FreeToPlatformPanel freeOffer="14 worked sample questions on this page — printable PDFs on our sample papers page" />      <SeoContentAd variant="cta" />
+
       <Disclaimer />
     </div>
   );

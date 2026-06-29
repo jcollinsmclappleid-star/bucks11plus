@@ -225,9 +225,24 @@ export function InteractivePreviewFrame({
   );
 }
 
-type PanelShellProps = { className?: string; id?: string };
+type PanelShellProps = { className?: string; id?: string; compact?: boolean };
 
-export function PracticeTestsPanel({ className, id }: PanelShellProps) {
+function PanelScrollBody({
+  children,
+  maxHeight,
+  compact,
+}: {
+  children: ReactNode;
+  maxHeight: string;
+  compact?: boolean;
+}) {
+  if (compact) {
+    return <div className="bg-white px-3 py-2">{children}</div>;
+  }
+  return <ScrollablePanel maxHeight={maxHeight}>{children}</ScrollablePanel>;
+}
+
+export function PracticeTestsPanel({ className, id, compact }: PanelShellProps) {
   return (
     <div
       id={id ?? PLATFORM_ANCHORS.practiceTests}
@@ -240,7 +255,7 @@ export function PracticeTestsPanel({ className, id }: PanelShellProps) {
           Structured assessments to measure progress and recalibrate your forecast score.
         </p>
       </div>
-      <ScrollablePanel maxHeight="240px">
+      <PanelScrollBody maxHeight="240px" compact={compact}>
         <div className="grid grid-cols-2 gap-2">
           {[
             { name: "Mini Practice Test", time: "8 mins", qs: "12 Qs", free: true, btn: "Start Free Test", btnStyle: "bg-slate-900 text-white" },
@@ -267,7 +282,7 @@ export function PracticeTestsPanel({ className, id }: PanelShellProps) {
             </div>
           ))}
         </div>
-      </ScrollablePanel>
+      </PanelScrollBody>
       <div className="px-3 py-2 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-2">
         <span className="text-[10px] text-slate-500 font-medium">
           1 free mini test · 2 full practice tests · 3 mock exams · PDF report each
@@ -278,7 +293,7 @@ export function PracticeTestsPanel({ className, id }: PanelShellProps) {
   );
 }
 
-export function PracticePapersPanel({ className, id }: PanelShellProps) {
+export function PracticePapersPanel({ className, id, compact }: PanelShellProps) {
   return (
     <div
       id={id ?? PLATFORM_ANCHORS.practicePapers}
@@ -289,7 +304,7 @@ export function PracticePapersPanel({ className, id }: PanelShellProps) {
         <p className="text-[10px] font-bold text-slate-700 mb-0.5">Practice Papers</p>
         <p className="text-[9px] text-slate-400">Unlimited practice papers drawn from our full question bank.</p>
       </div>
-      <ScrollablePanel maxHeight="200px">
+      <PanelScrollBody maxHeight="200px" compact={compact}>
         <div className="grid grid-cols-3 gap-2">
           {[
             { name: "Quick Paper", icon: "⚡", time: "25 min", qs: "20 Qs", desc: "Focused paper across all 4 sections" },
@@ -309,7 +324,7 @@ export function PracticePapersPanel({ className, id }: PanelShellProps) {
             </div>
           ))}
         </div>
-      </ScrollablePanel>
+      </PanelScrollBody>
       <div className="px-3 py-2 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-2">
         <span className="text-[10px] text-slate-500 font-medium">
           Quick, Full & Mock formats · unlimited attempts · fresh questions each time
@@ -320,7 +335,7 @@ export function PracticePapersPanel({ className, id }: PanelShellProps) {
   );
 }
 
-export function PracticeDrillsPanel({ className, id }: PanelShellProps) {
+export function PracticeDrillsPanel({ className, id, compact }: PanelShellProps) {
   return (
     <div
       id={id ?? PLATFORM_ANCHORS.practiceBank}
@@ -347,7 +362,7 @@ export function PracticeDrillsPanel({ className, id }: PanelShellProps) {
           ))}
         </div>
       </div>
-      <ScrollablePanel maxHeight="380px">
+      <PanelScrollBody maxHeight="380px" compact={compact}>
         <div className="space-y-4 pb-4">
           {BANK_SUBJECTS.map((subj) => (
             <div key={subj.label}>
@@ -361,7 +376,7 @@ export function PracticeDrillsPanel({ className, id }: PanelShellProps) {
             </div>
           ))}
         </div>
-      </ScrollablePanel>
+      </PanelScrollBody>
       <div className="px-3 py-2 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-2">
         <span className="text-[10px] text-slate-500 font-medium">
           46 drills across 4 subjects · 2,500+ questions · adaptive difficulty · worked solutions

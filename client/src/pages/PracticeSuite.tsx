@@ -29,6 +29,7 @@ import {
   PLATFORM_LIBRARY_LABEL,
   PLATFORM_SUITE_PATH,
   PRICING_ANCHOR_SUBLINE,
+  PRICING_FROM_HEADLINE,
   SEE_PLANS_PRICING_CTA,
 } from "@/lib/marketing";
 import { getPageMeta } from "@/lib/pageMeta";
@@ -326,7 +327,7 @@ export default function PracticeSuite() {
               </ul>
             </div>
             <div className="rounded-2xl border border-amber-400/40 bg-amber-400/10 p-5">
-              <p className="text-xs font-bold uppercase tracking-widest text-amber-200 mb-3">Bucks Plus Edge — from £35/mo</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-amber-200 mb-3">Bucks Plus Edge — {PRICING_FROM_HEADLINE}</p>
               <ul className="space-y-2 text-sm text-white/90">
                 <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-amber-300 shrink-0" />Everything on this page — unlimited</li>
                 <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-amber-300 shrink-0" />Full & mock exams + PDF reports</li>

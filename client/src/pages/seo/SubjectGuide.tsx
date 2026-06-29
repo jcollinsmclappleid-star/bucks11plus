@@ -1,11 +1,14 @@
 import { Link } from "wouter";
 import { Seo } from "@/components/shared/Seo";
 import { ContentCTA } from "@/components/shared/ContentCTA";
-import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import NotFound from "@/pages/not-found";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 type Subject = "verbal-reasoning" | "non-verbal-reasoning" | "maths" | "comprehension";
 
@@ -263,7 +266,7 @@ export default function SubjectGuide({ subject }: { subject: Subject }) {
         </div>
       </div>
 
-      <div className="container mx-auto max-w-4xl px-4 py-12">
+      <div className="container mx-auto max-w-6xl px-4 py-12">
         <div className="mb-8 border-l-4 border-primary bg-primary/[0.03] rounded-r-xl pl-7 pr-6 py-6">
           <div className="inline-block bg-primary/10 text-primary text-xs font-medium px-3 py-1 rounded-full mb-3">
             Subject Guide
@@ -274,13 +277,9 @@ export default function SubjectGuide({ subject }: { subject: Subject }) {
           <p className="text-lg text-slate-600 leading-relaxed">{content.intro}</p>
         </div>
 
-        <SubscribeCTA />
+      <SeoPageProductLead />
 
-        <div className="prose prose-slate max-w-none
-          prose-h2:font-serif prose-h2:text-xl prose-h2:font-bold prose-h2:text-primary prose-h2:mt-10 prose-h2:mb-3
-          prose-h3:font-semibold prose-h3:text-base prose-h3:text-foreground prose-h3:mt-6 prose-h3:mb-2
-          prose-p:text-muted-foreground prose-p:leading-relaxed prose-p:mb-4
-          prose-li:text-muted-foreground prose-strong:text-foreground">
+        <div className={`${SEO_GUIDE_PROSE} prose-p:text-muted-foreground prose-li:text-muted-foreground prose-strong:text-foreground`}>
 
           <h2>Question Types in This Domain</h2>
           <div className="not-prose grid sm:grid-cols-2 gap-3 my-4">
@@ -296,6 +295,7 @@ export default function SubjectGuide({ subject }: { subject: Subject }) {
             <div key={i}>
               <h2>{section.heading}</h2>
               <p>{section.body}</p>
+              {i === 0 && <SeoContentAd variant="dashboard" />}
             </div>
           ))}
 
@@ -335,6 +335,9 @@ export default function SubjectGuide({ subject }: { subject: Subject }) {
 
         <ChildExperienceCTA />
         <ContentCTA heading="Find out which subject is the biggest lever" subhead="An 8-minute check ranks all four sections so you know exactly where to focus first." ctaLabel="See the priorities" />
+
+        <SeoContentAd variant="suite" />
+        <GuideConversionBlock className="my-10" hideQuestions />
 
         <div className="not-prose my-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">
           <h3 className="text-lg font-semibold text-primary font-serif mb-3">Drill Deeper</h3>
@@ -393,7 +396,8 @@ export default function SubjectGuide({ subject }: { subject: Subject }) {
             <li><Link href="/free-11-plus-resources" className="text-primary hover:underline">Complete Free 11+ Resources Library</Link></li>
             <li><Link href="/11-plus-mock-test-online-free" className="text-primary hover:underline">Free online 11+ mock test</Link></li>
           </ul>
-        </div>
+        </div>      <SeoContentAd variant="cta" />
+
 
         <Disclaimer />
       </div>

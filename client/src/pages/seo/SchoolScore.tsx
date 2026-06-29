@@ -6,6 +6,10 @@ import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
 import { grammarSchools, getSchoolBySlug } from "../../data/grammar-schools";
 import NotFound from "../not-found";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 export default function SchoolScore({ schoolSlug }: { schoolSlug: string }) {
   const school = getSchoolBySlug(schoolSlug);
@@ -24,7 +28,7 @@ export default function SchoolScore({ schoolSlug }: { schoolSlug: string }) {
   const others = grammarSchools.filter((s) => s.slug !== schoolSlug).slice(0, 8);
 
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title={metaTitle}
         description={metaDescription}
@@ -52,10 +56,14 @@ export default function SchoolScore({ schoolSlug }: { schoolSlug: string }) {
         </p>
       </div>
 
+      <SeoPageProductLead />
+
       <h2 className="text-primary font-serif">The Headline Number: 121</h2>
       <p>
         A child must achieve a standardised score of 121 or above on the Bucks Secondary Transfer Test to qualify for grammar school in Buckinghamshire. The standardised score combines results across Verbal Reasoning, Non-Verbal Reasoning, Mathematics and English Comprehension, weighted equally and adjusted for the child's age in months on the test date. There is no separate pass mark for {school.shortName} — every grammar school in the county uses the same threshold.
       </p>
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">Qualifying ≠ Being Offered a Place</h2>
       <p>{school.distanceContext}</p>
@@ -93,6 +101,9 @@ export default function SchoolScore({ schoolSlug }: { schoolSlug: string }) {
         ))}
       </div>
 
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
+
       <ChildExperienceCTA />
       <ContentCTA
         heading={`How is your child tracking toward 121 for ${school.shortName}?`}
@@ -113,7 +124,8 @@ export default function SchoolScore({ schoolSlug }: { schoolSlug: string }) {
             <div className="font-semibold text-primary font-serif">{o.shortName} 11+ Score</div>
           </Link>
         ))}
-      </div>
+      </div>      <SeoContentAd variant="cta" />
+
 
       <Disclaimer />
     </div>

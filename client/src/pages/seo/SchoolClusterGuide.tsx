@@ -2,10 +2,13 @@ import { Link } from "wouter";
 import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
-import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
 import NotFound from "@/pages/not-found";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 export type ClusterSlug = "south-bucks-grammar-schools" | "aylesbury-vale-grammar-schools" | "chiltern-grammar-schools";
 
@@ -116,7 +119,7 @@ export default function SchoolClusterGuide({ clusterSlug }: { clusterSlug: Clust
   ];
 
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title={`${cluster.title} (2026) – Bucks 11+ Schools, Catchments & Admissions`}
         description={`Complete guide to ${cluster.title}: the schools, their catchments, competitive landscape, and how to prepare for the Bucks 11+ in this area of Buckinghamshire.`}
@@ -143,10 +146,13 @@ export default function SchoolClusterGuide({ clusterSlug }: { clusterSlug: Clust
         </p>
       </div>
 
-      <SubscribeCTA />
+
+      <SeoPageProductLead />
 
       <h2 className="text-primary font-serif">Overview</h2>
       <p>{cluster.intro}</p>
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">The Schools in This Cluster</h2>
       <div className="not-prose overflow-x-auto my-8">
@@ -208,6 +214,9 @@ export default function SchoolClusterGuide({ clusterSlug }: { clusterSlug: Clust
         ))}
       </ul>
 
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
+
       <ChildExperienceCTA />
       <ContentCTA heading="Aiming for this cluster?" subhead="Get a practice score on the 121 scale — and the gaps you need to close." ctaLabel="Check readiness" />
 
@@ -219,7 +228,8 @@ export default function SchoolClusterGuide({ clusterSlug }: { clusterSlug: Clust
           <li><Link href="/bucks-11-plus-qualifying-score" className="text-primary hover:underline">The 121 Qualifying Score Explained</Link></li>
           <li><Link href="/bucks-11-plus-timeline" className="text-primary hover:underline">Admissions Timeline</Link></li>
         </ul>
-      </div>
+      </div>      <SeoContentAd variant="cta" />
+
 
       <Disclaimer />
     </div>

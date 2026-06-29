@@ -2,9 +2,12 @@ import { Link } from "wouter";
 import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
-import { SubscribeCTA } from "@/components/shared/SubscribeCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 const breadcrumbItems = [
   { label: "Resources", href: "/buckinghamshire-11-plus-guide" },
@@ -32,7 +35,7 @@ const faqItems = [
 
 export default function ExamsCompared() {
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title="Bucks 11+ vs CEM vs Kent 11+ – How They Differ (2026 Guide)"
         description="Compare the Bucks 11+ with the CEM 11+ and Kent 11+: producer, format, question style, qualifying scores, and what makes each different. Find out which test your area uses."
@@ -62,7 +65,8 @@ export default function ExamsCompared() {
         </p>
       </div>
 
-      <SubscribeCTA />
+
+      <SeoPageProductLead />
 
       <h2 className="text-primary font-serif">Why "The 11+" Isn't One Test</h2>
       <p>
@@ -71,6 +75,8 @@ export default function ExamsCompared() {
       <p>
         Two main organisations produce the papers used across the country: <strong>GL Assessment</strong> and the <strong>Centre for Evaluation and Monitoring (CEM)</strong>. Buckinghamshire and Kent both use GL Assessment, but with different papers, different qualifying thresholds, and different registration processes. Other counties — including parts of Birmingham, Reading, and the historic Northern Ireland AQE — have used CEM-style assessments. Preparation that is appropriate for one is not necessarily appropriate for the other.
       </p>
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">The Bucks 11+ at a Glance</h2>
       <ul>
@@ -143,6 +149,9 @@ export default function ExamsCompared() {
         To check: look up each grammar school you are interested in, find their admissions page, and confirm which test feeds into their qualifying decision. For Buckinghamshire grammar schools the test is always the same — the Bucks Secondary Transfer Test. See our <Link href="/bucks-grammar-schools" className="text-primary hover:underline">directory of all 13 Bucks grammar schools</Link>.
       </p>
 
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
+
       <ChildExperienceCTA />
       <ContentCTA heading="Take a Bucks-specific check" subhead="Other 11+ regions test differently. Get an 8-minute check designed for the Bucks Secondary Transfer Test." ctaLabel="Start the Bucks readiness check" />
 
@@ -154,7 +163,8 @@ export default function ExamsCompared() {
           <li><Link href="/bucks-grammar-schools" className="text-primary hover:underline">All 13 Bucks Grammar Schools</Link></li>
           <li><Link href="/bucks-11-plus-registration" className="text-primary hover:underline">How to Register for the Bucks 11+</Link></li>
         </ul>
-      </div>
+      </div>      <SeoContentAd variant="cta" />
+
 
       <Disclaimer />
     </div>

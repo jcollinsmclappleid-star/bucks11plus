@@ -4,9 +4,12 @@ import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
-import { SeoConversionPanel } from "@/components/shared/SeoConversionPanel";
 import { getQuestionType, QUESTION_TYPES } from "../../data/question-types";
 import NotFound from "../not-found";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 export default function QuestionTypeGuide({ slug }: { slug: string }) {
   const q = getQuestionType(slug);
@@ -21,7 +24,7 @@ export default function QuestionTypeGuide({ slug }: { slug: string }) {
   const others = QUESTION_TYPES.filter((x) => x.slug !== slug);
 
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title={q.metaTitle}
         description={q.metaDescription}
@@ -47,6 +50,8 @@ export default function QuestionTypeGuide({ slug }: { slug: string }) {
         <p className="text-xl text-slate-600 leading-relaxed">{q.intro}</p>
       </div>
 
+      <SeoPageProductLead />
+
       <h2 className="text-primary font-serif">Worked Example</h2>
       <div className="not-prose rounded-xl border border-slate-200 bg-white p-6 my-6">
         <p className="text-slate-800 font-medium mb-4">{q.example.prompt}</p>
@@ -64,10 +69,7 @@ export default function QuestionTypeGuide({ slug }: { slug: string }) {
         </div>
       </div>
 
-      <SeoConversionPanel
-        variant="question"
-        heading={`Find out if ${q.title.toLowerCase()} is costing your child marks.`}
-      />
+      <SeoContentAd variant="suite" />
 
       <h2 className="text-primary font-serif">Why This Question Type Is Hard</h2>
       <p>{q.whyHard}</p>
@@ -102,8 +104,12 @@ export default function QuestionTypeGuide({ slug }: { slug: string }) {
         ))}
       </div>
 
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
+
       <ChildExperienceCTA />
-      <ContentCTA heading="See which question types are costing marks" subhead="An 8-minute check breaks down performance by question type — not just an overall score." ctaLabel="Find the weak question types" />
+      <ContentCTA heading="See which question types are costing marks" subhead="An 8-minute check breaks down performance by question type — not just an overall score." ctaLabel="Find the weak question types" />      <SeoContentAd variant="cta" />
+
       <Disclaimer />
     </div>
   );

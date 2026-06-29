@@ -15,9 +15,11 @@ import { Button } from "@/components/ui/button";
 import { Seo } from "../components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "../components/shared/Breadcrumbs";
 import { DashboardPreviewForecast, DashboardPreviewPace, DashboardPreviewTrajectory } from "../components/shared/DashboardPreview";
-import { SeoConversionPanel, TutorCostComparison } from "../components/shared/SeoConversionPanel";
+import { TutorCostComparison } from "../components/shared/SeoConversionPanel";
+import { SeoPageProductLead } from "../components/shared/SeoPageProductLead";
+import { SeoContentAd } from "../components/shared/SeoContentAd";
 import { GuideConversionBlock } from "../components/shared/GuideConversionBlock";
-import { PLATFORM_PRACTICE_PAPERS_PATH, PLATFORM_PREVIEW_CTA } from "../lib/marketing";
+import { PLATFORM_PRACTICE_PAPERS_PATH, PLATFORM_PREVIEW_CTA, PLATFORM_SUITE_PATH, PRICING_FROM_HEADLINE } from "../lib/marketing";
 import { Disclaimer } from "../components/shared/Disclaimer";
 import { learnArticles, LEARN_CATEGORIES, getArticlesByCategory } from "../data/learn-articles";
 
@@ -130,6 +132,10 @@ export default function BucksGuide() {
         <Breadcrumbs items={breadcrumbItems} />
       </div>
 
+      <div className="container mx-auto max-w-6xl px-4 pb-6">
+        <SeoPageProductLead />
+      </div>
+
       <section className="relative bg-primary text-white">
         <div className="absolute inset-0 overflow-hidden bg-[radial-gradient(circle_at_top_right,rgba(245,158,11,0.18),transparent_34%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.08),transparent_30%)]" />
         <div className="container relative mx-auto grid max-w-6xl gap-10 px-4 pb-10 pt-14 sm:pb-14 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:pb-20 lg:pt-20">
@@ -146,17 +152,24 @@ export default function BucksGuide() {
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <Button variant="cta" size="lg" asChild className="px-7" data-testid="button-guide-hero-diagnostic">
                 <Link href="/free-diagnostic">
-                  Start free readiness check <ArrowRight className="ml-2 h-5 w-5" />
+                  Start free practice test <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="h-12 border-white/25 bg-white/5 px-7 font-semibold text-white hover:bg-white/10 hover:text-white" data-testid="button-guide-hero-deep-dive">
+              <Button asChild size="lg" variant="outline" className="h-12 border-white/25 bg-white/5 px-7 font-semibold text-white hover:bg-white/10 hover:text-white" data-testid="button-guide-hero-suite">
+                <Link href={PLATFORM_SUITE_PATH}>
+                  {PLATFORM_PREVIEW_CTA} <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+              </Button>
+            </div>
+            <div className="mt-3">
+              <Button asChild size="sm" variant="ghost" className="text-white/70 hover:text-white hover:bg-white/10" data-testid="button-guide-hero-deep-dive">
                 <a href="#deep-dive">
-                  Browse deep-dive guides <ChevronDown className="ml-2 h-5 w-5" />
+                  Browse deep-dive guides <ChevronDown className="ml-2 h-4 w-4" />
                 </a>
               </Button>
             </div>
             <p className="mt-4 text-sm text-white/45">
-              No account needed for the free check · Full platform from £35/month · Independent of GL Assessment and TBGS
+              No account needed for the free check · Full platform {PRICING_FROM_HEADLINE} · Independent of GL Assessment and TBGS
             </p>
           </div>
 
@@ -254,7 +267,7 @@ export default function BucksGuide() {
           </div>
         </section>
 
-        <SeoConversionPanel variant="guide" />
+        <SeoContentAd variant="full" />
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-lg shadow-slate-900/5 md:p-8">
           <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">

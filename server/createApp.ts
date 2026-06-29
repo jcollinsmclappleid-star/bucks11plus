@@ -107,25 +107,25 @@ let bootPromise: Promise<void> | null = null;
 function bootOnce(): Promise<void> {
   if (!bootPromise) {
     bootPromise = (async () => {
-      const tasks: Promise<unknown>[] = [seedDatabase(), initStripe()];
+      await Promise.allSettled([seedDatabase(), initStripe()]);
 
       if (!isVercel) {
-        tasks.push(ensureNvrGeneratorReseeds());
-        tasks.push(
-          ensureChromium().then(() => {
-            return import("./leadMagnet").then(({ getCachedPracticePaperPdf, getCachedPracticePaper2Pdf }) => {
+        void ensureNvrGeneratorReseeds().catch((err) =>
+          console.error("NVR reseed error:", err),
+        );
+        void ensureChromium()
+          .then(() =>
+            import("./leadMagnet").then(({ getCachedPracticePaperPdf, getCachedPracticePaper2Pdf }) => {
               getCachedPracticePaperPdf().catch((err) =>
                 console.error("[PDF] Paper 1 cache warm failed:", err?.message ?? err),
               );
               getCachedPracticePaper2Pdf().catch((err) =>
                 console.error("[PDF] Paper 2 cache warm failed:", err?.message ?? err),
               );
-            });
-          }),
-        );
+            }),
+          )
+          .catch((err) => console.error("[Chrome] init error:", err));
       }
-
-      await Promise.allSettled(tasks);
     })();
   }
   return bootPromise;

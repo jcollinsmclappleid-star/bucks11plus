@@ -5,6 +5,8 @@ import viteConfig from "../vite.config";
 import fs from "fs";
 import path from "path";
 import { nanoid } from "nanoid";
+import { getPageMeta } from "../client/src/lib/spaPageMeta";
+import { injectSpaMeta } from "./spaHtml";
 
 const viteLogger = createLogger();
 
@@ -48,6 +50,14 @@ export async function setupVite(server: Server, app: Express) {
         `src="/src/main.tsx"`,
         `src="/src/main.tsx?v=${nanoid()}"`,
       );
+
+      const pathname = new URL(url, "http://dev.local").pathname;
+      const dynamicMeta = (res.locals as { spaMeta?: import("../client/src/lib/spaPageMeta").PageMeta }).spaMeta;
+      const pageMeta = dynamicMeta ?? getPageMeta(pathname);
+      if (pageMeta) {
+        template = injectSpaMeta(template, pageMeta);
+      }
+
       const page = await vite.transformIndexHtml(url, template);
       res.status(200).set({ "Content-Type": "text/html" }).end(page);
     } catch (e) {

@@ -1,15 +1,35 @@
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
 import { TutorCostComparison } from "@/components/shared/SeoConversionPanel";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { getPageMeta } from "@/lib/spaPageMeta";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
-const breadcrumbItems = [
+const DEFAULT_BREADCRUMB = [
   { label: "Resources", href: "/buckinghamshire-11-plus-guide" },
   { label: "Cost of Preparation" },
 ];
+
+const TUTOR_BREADCRUMBS: Record<string, { label: string; href?: string }[]> = {
+  "/11-plus-tutors-buckinghamshire": [
+    { label: "Resources", href: "/buckinghamshire-11-plus-guide" },
+    { label: "11+ Tutors in Buckinghamshire" },
+  ],
+  "/11-plus-tutors-high-wycombe": [
+    { label: "Resources", href: "/buckinghamshire-11-plus-guide" },
+    { label: "11+ Tutors in High Wycombe" },
+  ],
+  "/11-plus-tutors-aylesbury": [
+    { label: "Resources", href: "/buckinghamshire-11-plus-guide" },
+    { label: "11+ Tutors in Aylesbury" },
+  ],
+};
 
 const faqItems = [
   {
@@ -31,12 +51,19 @@ const faqItems = [
 ];
 
 export default function TuitionCost() {
+  const [path] = useLocation();
+  const pageMeta = getPageMeta(path);
+  const breadcrumbItems = TUTOR_BREADCRUMBS[path] ?? DEFAULT_BREADCRUMB;
+  const seoTitle = pageMeta?.title ?? "Cost of Bucks 11 Plus Preparation (2026) – Tuition vs Online vs Self-Study";
+  const seoDescription = pageMeta?.description ?? "A clear breakdown of what Bucks 11+ preparation actually costs in 2026: private tutors, online platforms, practice books and self-study. Compare options and find the right value for your family.";
+  const canonicalPath = pageMeta?.path ?? "/bucks-11-plus-tuition-cost";
+
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
-        title="Cost of Bucks 11 Plus Preparation (2026) – Tuition vs Online vs Self-Study"
-        description="A clear breakdown of what Bucks 11+ preparation actually costs in 2026: private tutors, online platforms, practice books and self-study. Compare options and find the right value for your family."
-        canonicalPath="/bucks-11-plus-tuition-cost"
+        title={seoTitle}
+        description={seoDescription}
+        canonicalPath={canonicalPath}
         schema={[
           breadcrumbSchema(breadcrumbItems),
           {
@@ -62,12 +89,16 @@ export default function TuitionCost() {
         </p>
       </div>
 
+
+      <SeoPageProductLead />
       <TutorCostComparison />
 
       <h2 className="text-primary font-serif">What Does 11+ Preparation Typically Cost?</h2>
       <p>
         There is no single answer — preparation costs in Buckinghamshire span an order of magnitude. What you spend depends on the approach you take, how much of the work the parent is willing to oversee, and how long the preparation period lasts. The breakdown below covers the realistic 2026 cost of each main approach across a 12-month preparation cycle.
       </p>
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">Cost Breakdown by Approach</h2>
       <div className="not-prose overflow-x-auto my-8">
@@ -161,6 +192,9 @@ export default function TuitionCost() {
         For a deeper comparison of platforms versus tutors specifically, see our <a href="/11-plus-tutors-buckinghamshire" className="text-primary hover:underline">11+ tutors in Buckinghamshire guide</a>. To assess your child's current standing before deciding what to spend, take our <Link href="/free-diagnostic" className="text-primary hover:underline">free 8-minute readiness check</Link> — it produces a forecast score that helps you decide how much preparation is actually needed.
       </p>
 
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
+
       <ChildExperienceCTA />
       <ContentCTA heading="Before paying for tutoring, get a baseline" subhead="An 8-minute readiness check tells you exactly which sections need help — so any tutoring (or none) targets the right thing." ctaLabel="Get the baseline" />
 
@@ -172,7 +206,8 @@ export default function TuitionCost() {
           <li><Link href="/learn/how-to-prepare-for-the-bucks-11-plus-without-a-tutor" className="text-primary hover:underline">Preparing Without a Tutor</Link></li>
           <li><Link href="/how-to-pass-bucks-11-plus" className="text-primary hover:underline">How to Pass the Bucks 11+</Link></li>
         </ul>
-      </div>
+      </div>      <SeoContentAd variant="cta" />
+
 
       <Disclaimer />
     </div>

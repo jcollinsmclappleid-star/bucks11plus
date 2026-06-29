@@ -4,6 +4,10 @@ import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 const breadcrumbItems = [
   { label: "Resources", href: "/buckinghamshire-11-plus-guide" },
@@ -12,7 +16,7 @@ const breadcrumbItems = [
 
 export default function ResultsExplained() {
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title="Bucks 11 Plus Results – How to Understand Your Child's Score"
         description="A complete guide to interpreting Bucks 11+ results: what the standardised score means, what counts as qualifying, what borderline scores imply, and what to do next."
@@ -30,6 +34,8 @@ export default function ResultsExplained() {
         </p>
       </div>
 
+
+      <SeoPageProductLead />
       <h2 className="text-primary font-serif">What the Letter Tells You</h2>
       <p>
         The Bucks 11+ results letter shows a single number: your child's <strong>standardised score</strong>. This is the only score reported. There is no breakdown by section (Verbal Reasoning, Non-Verbal Reasoning, Maths, Comprehension), no raw mark, no percentile rank — just one figure, typically somewhere between 80 and 140.
@@ -37,6 +43,8 @@ export default function ResultsExplained() {
       <p>
         Alongside the score, the letter states whether the child has met the qualifying standard of 121. Children at 121 or above are eligible to be considered for any of the <Link href="/bucks-grammar-schools" className="text-primary hover:underline">13 Buckinghamshire grammar schools</Link>. Children below 121 have not qualified.
       </p>
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">How to Read the Score</h2>
       <p>
@@ -133,8 +141,12 @@ export default function ResultsExplained() {
         </Link>
       </div>
 
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
+
       <ChildExperienceCTA />
-      <ContentCTA heading="What would your child's result look like today?" subhead="An 8-minute check gives an indicative readiness score against 121 — see what to expect before the real letter arrives." ctaLabel="Get an indicative score" />
+      <ContentCTA heading="What would your child's result look like today?" subhead="An 8-minute check gives an indicative readiness score against 121 — see what to expect before the real letter arrives." ctaLabel="Get an indicative score" />      <SeoContentAd variant="cta" />
+
       <Disclaimer />
     </div>
   );

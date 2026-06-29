@@ -4,6 +4,10 @@ import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { ContentCTA } from "@/components/shared/ContentCTA";
 import { Disclaimer } from "@/components/shared/Disclaimer";
 import { ChildExperienceCTA } from "@/components/shared/ChildExperienceCTA";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SeoContentAd } from "@/components/shared/SeoContentAd";
+import { GuideConversionBlock } from "@/components/shared/GuideConversionBlock";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 const breadcrumbItems = [
   { label: "Resources", href: "/buckinghamshire-11-plus-guide" },
@@ -12,7 +16,7 @@ const breadcrumbItems = [
 
 export default function SelfStudyVsTutor() {
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-6xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title="Bucks 11 Plus: Self-Study vs Tutor – Honest Comparison"
         description="Self-study, online platforms or a private tutor for the Bucks 11+? Honest comparison of cost, time commitment, results expectations, and which works best for which families."
@@ -30,6 +34,8 @@ export default function SelfStudyVsTutor() {
         </p>
       </div>
 
+
+      <SeoPageProductLead />
       <h2 className="text-primary font-serif">The Three Real Options</h2>
       <ol>
         <li><strong>Parent-led self-study</strong> with print 11+ workbooks — typical cost £80–£200 over a year.</li>
@@ -39,6 +45,8 @@ export default function SelfStudyVsTutor() {
       <p>
         Most families end up using a combination — for example, an online platform for the bulk of practice with occasional tutor sessions for specific weak areas. The pure-tutor or pure-self-study options are less common than the headlines suggest.
       </p>
+
+      <SeoContentAd variant="dashboard" />
 
       <h2 className="text-primary font-serif">Side-by-Side Comparison</h2>
       <div className="not-prose overflow-x-auto my-6">
@@ -102,8 +110,12 @@ export default function SelfStudyVsTutor() {
         Many families assume that hiring a tutor is "the gold standard" and that self-study or online platforms are second-best. The data does not support this. A child working consistently for 60 minutes a day on a well-structured online platform usually outperforms a child seeing a tutor for one hour a week and doing little independent practice in between. Tutors are most effective as a complement to daily independent work — not as a replacement for it.
       </p>
 
+      <SeoContentAd variant="suite" />
+      <GuideConversionBlock className="my-10" hideQuestions />
+
       <ChildExperienceCTA />
-      <ContentCTA heading="Self-studying or tutoring? Get a baseline first." subhead="An 8-minute readiness check tells you if you're on track — whichever route you've chosen." ctaLabel="Get the baseline" />
+      <ContentCTA heading="Self-studying or tutoring? Get a baseline first." subhead="An 8-minute readiness check tells you if you're on track — whichever route you've chosen." ctaLabel="Get the baseline" />      <SeoContentAd variant="cta" />
+
       <Disclaimer />
     </div>
   );

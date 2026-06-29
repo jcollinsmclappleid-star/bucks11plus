@@ -3,6 +3,8 @@ import { Seo } from "../components/shared/Seo";
 import { ContentCTA } from "../components/shared/ContentCTA";
 import { Disclaimer } from "../components/shared/Disclaimer";
 import { Breadcrumbs, breadcrumbSchema } from "../components/shared/Breadcrumbs";
+import { SeoPageProductLead } from "@/components/shared/SeoPageProductLead";
+import { SEO_GUIDE_PROSE } from "@/lib/seoGuideProse";
 
 const faqItems = [
   {
@@ -34,7 +36,7 @@ const breadcrumbItems = [
 
 export default function GLAlignment() {
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-16 prose prose-slate prose-lg">
+    <div className={`container mx-auto max-w-4xl px-4 py-16 ${SEO_GUIDE_PROSE}`}>
       <Seo
         title="Bucks 11 Plus Subjects Explained – The Four GL Assessment Domains | Bucks 11 Plus Tests"
         description="Understand how the Bucks 11 Plus tests verbal reasoning, non-verbal reasoning, maths and English comprehension. See how our independently developed assessments cover the four GL Assessment domains and where children lose marks."
@@ -61,6 +63,8 @@ export default function GLAlignment() {
       <p className="text-xl text-muted-foreground lead">
         The Buckinghamshire Secondary Transfer Test is administered by GL Assessment and covers four domains. Our independently developed readiness checks cover all four of those GL Assessment domains — Verbal Reasoning, Non-Verbal Reasoning, Mathematics, and English Comprehension.
       </p>
+
+      <SeoPageProductLead />
 
       <div className="not-prose bg-amber-50 border border-amber-200 rounded-xl p-5 my-8">
         <p className="text-sm text-amber-900 font-medium mb-1">At a glance</p>
