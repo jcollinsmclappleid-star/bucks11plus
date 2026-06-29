@@ -9,6 +9,7 @@ import { TutorCostComparison } from "../components/shared/SeoConversionPanel";
 import { GuideConversionBlock } from "../components/shared/GuideConversionBlock";
 import { PlatformSuitePreview } from "../components/shared/PlatformSuitePreview";
 import { HeroQuickLinks } from "../components/shared/HeroQuickLinks";
+import { PricingLink } from "../components/shared/PricingLink";
 import {
   FREE_PRACTICE_TEST_CTA,
   FREE_PRACTICE_TEST_PATH,
@@ -16,8 +17,6 @@ import {
   PLATFORM_PRACTICE_PAPERS_PATH,
   PLATFORM_PREVIEW_CTA,
   PRACTICE_PAPERS_NAV_LABEL,
-  PRICING_ANNUAL_SAVINGS_NOTE,
-  PRICING_FROM_LABEL,
   platformPath,
 } from "../lib/marketing";
 import { scrollToAnchor } from "../lib/scrollToAnchor";
@@ -1769,8 +1768,8 @@ export default function Landing() {
             <p className="text-muted-foreground max-w-xl mx-auto">
               One tutor session a week at £40 is roughly{" "}
               <span className="line-through decoration-slate-400/80 text-slate-400">£160/month</span> (typical tutor cost).
-              Our platform is <strong className="text-emerald-700">£35/month</strong> or{" "}
-              <strong className="text-emerald-700">{PRICING_FROM_LABEL}</strong> on annual.
+              Our platform is <PricingLink preset="monthly" className="font-bold text-emerald-700" /> or{" "}
+              <PricingLink preset="fromLabel" className="font-bold text-emerald-700" /> on annual.
             </p>
           </div>
 
@@ -1817,15 +1816,21 @@ export default function Landing() {
             </div>
 
             <div className="flex flex-col rounded-2xl border-2 border-emerald-500 bg-emerald-50/30 shadow-md p-7 relative" data-testid="pricing-card-annual">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full whitespace-nowrap shadow-sm">Best Value — {PRICING_ANNUAL_SAVINGS_NOTE}</div>
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full whitespace-nowrap shadow-sm">
+                Best Value — <PricingLink preset="savings" className="text-white hover:underline" />
+              </div>
               <p className="text-xs font-bold uppercase tracking-wider text-emerald-800/80 mb-1">Annual</p>
               <p className="text-sm font-bold text-slate-800 mb-1">Bucks Plus Edge</p>
               <div className="flex items-end gap-1 mb-1">
                 <span className="text-4xl font-bold text-emerald-700">£279</span>
                 <span className="text-slate-500 text-sm mb-1">/year</span>
               </div>
-              <p className="text-sm font-bold text-emerald-800 mb-1">{PRICING_FROM_LABEL} · unlimited interactive practice</p>
-              <p className="text-xs text-emerald-700 font-semibold mb-1">{PRICING_ANNUAL_SAVINGS_NOTE}</p>
+              <p className="text-sm font-bold text-emerald-800 mb-1">
+                <PricingLink preset="fromLabel" className="text-emerald-800" /> · unlimited interactive practice
+              </p>
+              <p className="text-xs text-emerald-700 font-semibold mb-1">
+                <PricingLink preset="savings" className="text-emerald-700" />
+              </p>
               <p className="text-xs text-slate-400 mb-6">Cancel anytime · Money-back guarantee</p>
               <ul className="space-y-2 text-sm text-slate-700 mb-8 flex-1">
                 {[

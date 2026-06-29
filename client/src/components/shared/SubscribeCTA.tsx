@@ -7,8 +7,8 @@ import {
   FREE_PRACTICE_TEST_PATH,
   PLATFORM_PRACTICE_PAPERS_PATH,
   PLATFORM_PREVIEW_CTA,
-  PRICING_ANCHOR_SUBLINE,
 } from "@/lib/marketing";
+import { PricingLink } from "./PricingLink";
 
 const benefits = [
   "121-scale practice score forecast parents understand",
@@ -55,7 +55,7 @@ export function SubscribeCTA() {
           >
             <Link href={FREE_PRACTICE_TEST_PATH}>{FREE_PRACTICE_TEST_CTA}</Link>
           </Button>
-          <span className="text-white/45 text-xs sm:ml-1">{PRICING_ANCHOR_SUBLINE}</span>
+          <PricingLink preset="anchor" className="text-white/60 text-xs sm:ml-1 hover:text-white/80" />
         </div>
       </div>
 

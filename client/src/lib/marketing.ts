@@ -28,6 +28,9 @@ export const PLATFORM_LIBRARY_ACTION = "Browse library";
 
 export const HERO_QUICK_LINKS_HEADING = "Not sure where to start?";
 
+/** Canonical pricing page path. */
+export const PRICING_PATH = "/pricing";
+
 /** Paid conversion copy — keep pricing anchors consistent site-wide. */
 export const PRICING_MONTHLY_LABEL = "£35/month";
 export const PRICING_ANNUAL_LABEL = "£279/year";

@@ -7,11 +7,10 @@ import {
   FREE_PRACTICE_TEST_PATH,
   PLATFORM_SUITE_PATH,
   PLATFORM_PREVIEW_CTA,
-  PRICING_ANCHOR_SUBLINE,
   PRICING_ANNUAL_EQUIV_LABEL,
-  PRICING_FROM_HEADLINE,
   PRICING_MONTHLY_LABEL,
 } from "@/lib/marketing";
+import { PricingLink } from "./PricingLink";
 import { SampleQuestionsCarousel } from "./SampleQuestionsCarousel";
 import {
   ArrowRight,
@@ -157,7 +156,8 @@ export function SeoConversionPanel({
             </Button>
           </div>
           <p className="mt-4 text-xs text-white/45">
-            Free 12-question practice test · no account needed · {PRICING_ANCHOR_SUBLINE}
+            Free 12-question practice test · no account needed ·{" "}
+            <PricingLink preset="anchor" className="text-white/60 hover:text-white/80" />
           </p>
         </div>
         <div className="bg-slate-50 p-6 md:p-8">
@@ -218,7 +218,11 @@ const costRows = [
   {
     label: "Bucks Plus Edge — Annual",
     price: PRICING_ANNUAL_EQUIV_LABEL.replace("/month", "/mo"),
-    detail: `Same full platform, billed once a year. ${PRICING_FROM_HEADLINE}.`,
+    detail: (
+      <>
+        Same full platform, billed once a year. <PricingLink preset="fromHeadline" className="text-white/90 hover:underline" />.
+      </>
+    ),
     isTutorCost: false,
     featured: true,
   },
@@ -229,7 +233,7 @@ const costRows = [
     isTutorCost: false,
     featured: true,
   },
-];
+] as const;
 
 function TutorCostStrike({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
@@ -281,13 +285,15 @@ export function TutorCostComparison({ compact = false, variant = "default", flus
             Compared to a private 11+ tutor
           </p>
           <h2 className="mt-1 font-serif text-2xl font-bold text-primary md:text-3xl">
-            <TutorCostStrike>~£160/month</TutorCostStrike> for one hour a week. {PRICING_FROM_HEADLINE} for a full preparation platform.
+            <TutorCostStrike>~£160/month</TutorCostStrike> for one hour a week.{" "}
+            <PricingLink preset="fromHeadline" className="text-primary hover:underline" /> for a full preparation platform.
           </h2>
           <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600 md:text-base">
             Most families paying a tutor at <strong className="text-primary">£40/hr</strong> book at least one session a week — roughly{" "}
             <TutorCostStrike className="font-semibold">£160/month</TutorCostStrike>{" "}
             <span className="text-xs text-slate-500">(typical tutor cost)</span>. Bucks Plus Edge is modern, interactive 11+ practice: timed mocks, targeted drills,
-            instant explanations, and clear parent visibility — {PRICING_ANCHOR_SUBLINE}.
+            instant explanations, and clear parent visibility —{" "}
+            <PricingLink preset="anchor" className="text-emerald-800 hover:underline" />.
           </p>
         </div>
       </div>
@@ -300,7 +306,13 @@ export function TutorCostComparison({ compact = false, variant = "default", flus
           >
             <p className={`text-xs font-bold uppercase tracking-wide ${index >= 1 ? "text-amber-200" : "text-slate-500"}`}>{row.label}</p>
             <p className={`mt-2 text-2xl font-bold ${index >= 1 ? "text-white" : "text-primary"}`}>
-              {row.isTutorCost ? <TutorCostStrike>{row.price}</TutorCostStrike> : row.price}
+              {row.isTutorCost ? (
+                <TutorCostStrike>{row.price}</TutorCostStrike>
+              ) : (
+                <PricingLink className={`${index >= 1 ? "text-white" : "text-primary"} hover:underline`}>
+                  {row.price}
+                </PricingLink>
+              )}
             </p>
             <p className={`mt-2 text-xs leading-5 ${index >= 1 ? "text-white/80" : "text-slate-600"}`}>{row.detail}</p>
           </div>

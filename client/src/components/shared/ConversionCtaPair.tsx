@@ -6,10 +6,10 @@ import {
   FREE_PRACTICE_TEST_CTA,
   FREE_PRACTICE_TEST_PATH,
   GET_FULL_ACCESS_CTA,
-  PRICING_ANCHOR_SUBLINE,
   PRICING_UI,
   SEE_PLANS_PRICING_CTA,
 } from "@/lib/marketing";
+import { PricingLink } from "./PricingLink";
 
 type ConversionCtaPairProps = {
   /** Free test first — use on browse-page heroes and footers for cold traffic. */
@@ -116,7 +116,12 @@ export function ConversionCtaPair({
           </>
         )}
       </div>
-      {showPriceAnchor && <p className={anchorClass}>{PRICING_ANCHOR_SUBLINE}</p>}
+      {showPriceAnchor && (
+        <PricingLink
+          preset="anchor"
+          className={cn(anchorClass, "inline-block hover:underline")}
+        />
+      )}
     </div>
   );
 }

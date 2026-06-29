@@ -10,10 +10,9 @@ import {
   PLATFORM_LIBRARY_DESC,
   PLATFORM_LIBRARY_LABEL,
   PLATFORM_SUITE_PATH,
-  PRICING_ANCHOR_SUBLINE,
   PRICING_UI,
 } from "@/lib/marketing";
-import { scrollToAnchor } from "@/lib/scrollToAnchor";
+import { PricingLink } from "./PricingLink";
 
 type HeroQuickLinksProps = {
   variant?: "dark" | "light";
@@ -104,36 +103,39 @@ export function HeroQuickLinks({ variant = "dark", className = "" }: HeroQuickLi
                 : "text-amber-800 group-hover:text-amber-950";
 
             return (
-              <Link
+              <div
                 key={item.testId}
-                href={item.href}
                 data-testid={item.testId}
                 className={`group flex flex-col rounded-xl p-5 md:p-6 transition-all ${cardClass}`}
               >
-                <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-xl ${iconWrapClass}`}>
-                  <Icon className={`h-6 w-6 ${iconClass}`} />
-                </div>
-                <p className={`text-base font-bold leading-snug ${titleClass}`}>{item.title}</p>
-                <p className={`mt-1.5 text-sm leading-relaxed flex-1 ${descClass}`}>{item.desc}</p>
+                <Link
+                  href={item.href}
+                  className="flex flex-col flex-1 min-h-0"
+                >
+                  <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-xl ${iconWrapClass}`}>
+                    <Icon className={`h-6 w-6 ${iconClass}`} />
+                  </div>
+                  <p className={`text-base font-bold leading-snug ${titleClass}`}>{item.title}</p>
+                  <p className={`mt-1.5 text-sm leading-relaxed flex-1 ${descClass}`}>{item.desc}</p>
+                  {"trust" in item && item.trust && (
+                    <p className="mt-2 text-[11px] font-medium text-amber-950/60">{item.trust}</p>
+                  )}
+                  <span className={`mt-4 inline-flex items-center text-sm font-bold ${actionClass}`}>
+                    {item.action}{" "}
+                    <ArrowRight className="ml-1.5 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </span>
+                </Link>
                 {!isPrimary && (
-                  <p
+                  <PricingLink
+                    preset="anchor"
                     className={
                       isDark
-                        ? `mt-2 ${PRICING_UI.darkHeroSubline}`
-                        : `mt-2 text-xs font-bold ${PRICING_UI.subline}`
+                        ? `mt-2 ${PRICING_UI.darkHeroSubline} hover:underline`
+                        : `mt-2 text-xs font-bold ${PRICING_UI.subline} hover:underline`
                     }
-                  >
-                    {PRICING_ANCHOR_SUBLINE}
-                  </p>
+                  />
                 )}
-                {"trust" in item && item.trust && (
-                  <p className="mt-2 text-[11px] font-medium text-amber-950/60">{item.trust}</p>
-                )}
-                <span className={`mt-4 inline-flex items-center text-sm font-bold ${actionClass}`}>
-                  {item.action}{" "}
-                  <ArrowRight className="ml-1.5 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </span>
-              </Link>
+              </div>
             );
           })}
         </div>

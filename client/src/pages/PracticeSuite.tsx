@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ConversionCtaPair } from "@/components/shared/ConversionCtaPair";
+import { PricingLink } from "@/components/shared/PricingLink";
 import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import {
@@ -28,8 +29,6 @@ import {
   PLATFORM_ANCHORS,
   PLATFORM_LIBRARY_LABEL,
   PLATFORM_SUITE_PATH,
-  PRICING_ANCHOR_SUBLINE,
-  PRICING_FROM_HEADLINE,
   SEE_PLANS_PRICING_CTA,
 } from "@/lib/marketing";
 import { getPageMeta } from "@/lib/pageMeta";
@@ -327,7 +326,9 @@ export default function PracticeSuite() {
               </ul>
             </div>
             <div className="rounded-2xl border border-amber-400/40 bg-amber-400/10 p-5">
-              <p className="text-xs font-bold uppercase tracking-widest text-amber-200 mb-3">Bucks Plus Edge — {PRICING_FROM_HEADLINE}</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-amber-200 mb-3">
+                Bucks Plus Edge — <PricingLink preset="fromHeadline" className="text-amber-200 hover:underline" />
+              </p>
               <ul className="space-y-2 text-sm text-white/90">
                 <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-amber-300 shrink-0" />Everything on this page — unlimited</li>
                 <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-amber-300 shrink-0" />Full & mock exams + PDF reports</li>
@@ -336,7 +337,7 @@ export default function PracticeSuite() {
               <Button variant="cta" size="sm" className="mt-4" asChild data-testid="button-suite-compare-pricing">
                 <Link href="/pricing">{GET_FULL_ACCESS_CTA}</Link>
               </Button>
-              <p className="text-[11px] text-white/50 mt-2">{PRICING_ANCHOR_SUBLINE}</p>
+              <PricingLink preset="anchor" className="block text-[11px] text-white/50 mt-2 hover:text-white/70" />
             </div>
           </div>
         </div>

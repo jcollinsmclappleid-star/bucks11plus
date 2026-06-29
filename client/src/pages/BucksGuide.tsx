@@ -19,7 +19,8 @@ import { TutorCostComparison } from "../components/shared/SeoConversionPanel";
 import { SeoPageProductLead } from "../components/shared/SeoPageProductLead";
 import { SeoContentAd } from "../components/shared/SeoContentAd";
 import { GuideConversionBlock } from "../components/shared/GuideConversionBlock";
-import { PLATFORM_PRACTICE_PAPERS_PATH, PLATFORM_PREVIEW_CTA, PLATFORM_SUITE_PATH, PRICING_FROM_HEADLINE } from "../lib/marketing";
+import { PLATFORM_PRACTICE_PAPERS_PATH, PLATFORM_PREVIEW_CTA, PLATFORM_SUITE_PATH } from "../lib/marketing";
+import { PricingLink } from "../components/shared/PricingLink";
 import { Disclaimer } from "../components/shared/Disclaimer";
 import { learnArticles, LEARN_CATEGORIES, getArticlesByCategory } from "../data/learn-articles";
 
@@ -169,7 +170,8 @@ export default function BucksGuide() {
               </Button>
             </div>
             <p className="mt-4 text-sm text-white/45">
-              No account needed for the free check · Full platform {PRICING_FROM_HEADLINE} · Independent of GL Assessment and TBGS
+              No account needed for the free check · Full platform{" "}
+              <PricingLink preset="fromHeadline" className="text-white/70 hover:text-white/90" /> · Independent of GL Assessment and TBGS
             </p>
           </div>
 

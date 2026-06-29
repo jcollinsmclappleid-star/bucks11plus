@@ -6,11 +6,11 @@ import {
   FREE_PRACTICE_TEST_PATH,
   PLATFORM_PRACTICE_PAPERS_PATH,
   PLATFORM_PREVIEW_CTA,
-  PRICING_FROM_HEADLINE,
   PRICING_UI,
   SEE_PLANS_PRICING_CTA,
 } from "@/lib/marketing";
 import { SeoPricingBar } from "./SeoPricingTeaser";
+import { PricingLink } from "./PricingLink";
 
 type Props = {
   heading?: string;
@@ -47,7 +47,7 @@ export function ContentCTA({
         </p>
         {showPricing && (
           <p className={`text-xs font-semibold ${PRICING_UI.subline} mb-6`}>
-            Full platform access {PRICING_FROM_HEADLINE}
+            Full platform access <PricingLink preset="fromHeadline" className={PRICING_UI.subline} />
           </p>
         )}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 flex-wrap">

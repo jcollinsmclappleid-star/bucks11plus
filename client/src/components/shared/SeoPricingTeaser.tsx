@@ -5,14 +5,10 @@ import {
   FREE_PRACTICE_TEST_CTA,
   FREE_PRACTICE_TEST_PATH,
   GET_FULL_ACCESS_CTA,
-  PRICING_ANNUAL_LABEL,
-  PRICING_ANNUAL_SAVINGS_NOTE,
-  PRICING_FROM_HEADLINE,
-  PRICING_FROM_LABEL,
-  PRICING_MONTHLY_LABEL,
   PRICING_UI,
   SEE_PLANS_PRICING_CTA,
 } from "@/lib/marketing";
+import { PricingLink } from "./PricingLink";
 
 const highlights = [
   "2,500+ GL-style questions & full mock exams",
@@ -41,9 +37,16 @@ export function SeoPricingTeaser({ className = "", compact = false }: SeoPricing
             </p>
           </div>
           <h3 className={`text-xl md:text-2xl font-bold font-serif ${PRICING_UI.headline} leading-snug`}>
-            {compact
-              ? `Full Bucks 11+ preparation ${PRICING_FROM_HEADLINE}`
-              : `See exactly what you get — then subscribe ${PRICING_FROM_HEADLINE}`}
+            {compact ? (
+              <>
+                Full Bucks 11+ preparation <PricingLink preset="fromHeadline" className={PRICING_UI.headline} />
+              </>
+            ) : (
+              <>
+                See exactly what you get — then subscribe{" "}
+                <PricingLink preset="fromHeadline" className={PRICING_UI.headline} />
+              </>
+            )}
           </h3>
           <p className="mt-2 text-sm text-slate-600 leading-relaxed max-w-2xl">
             Browse the practice suite and parent dashboards below, try the free 12-question test, then unlock everything when you are ready.
@@ -62,12 +65,18 @@ export function SeoPricingTeaser({ className = "", compact = false }: SeoPricing
 
         <div className={`shrink-0 rounded-xl border ${PRICING_UI.innerCard} bg-white px-5 py-4 text-center shadow-sm lg:min-w-[230px]`}>
           <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1">From</p>
-          <p className={`text-3xl md:text-4xl font-bold font-serif ${PRICING_UI.price} leading-none`}>{PRICING_FROM_LABEL}</p>
-          <p className="mt-1.5 text-xs text-slate-500">on annual billing ({PRICING_ANNUAL_LABEL})</p>
-          <p className="mt-2 text-sm text-slate-600">
-            or <span className={`font-semibold ${PRICING_UI.priceMuted}`}>{PRICING_MONTHLY_LABEL}</span> monthly
+          <p className={`text-3xl md:text-4xl font-bold font-serif ${PRICING_UI.price} leading-none`}>
+            <PricingLink preset="fromLabel" className={PRICING_UI.price} />
           </p>
-          <p className={`text-[11px] font-medium mt-1.5 ${PRICING_UI.savings}`}>{PRICING_ANNUAL_SAVINGS_NOTE}</p>
+          <p className="mt-1.5 text-xs text-slate-500">
+            on annual billing (<PricingLink preset="annual" className="text-slate-500 hover:text-emerald-700" />)
+          </p>
+          <p className="mt-2 text-sm text-slate-600">
+            or <PricingLink preset="monthly" className={`font-semibold ${PRICING_UI.priceMuted}`} /> monthly
+          </p>
+          <p className={`text-[11px] font-medium mt-1.5 ${PRICING_UI.savings}`}>
+            <PricingLink preset="savings" className={PRICING_UI.savings} />
+          </p>
           <div className="mt-4 flex flex-col gap-2">
             <Button variant="cta" asChild className="w-full" data-testid="button-seo-pricing-teaser-plans">
               <Link href="/pricing">
@@ -105,10 +114,12 @@ export function SeoPricingBar({ className = "" }: { className?: string }) {
     >
       <div className="min-w-0">
         <p className={`text-lg md:text-xl font-bold font-serif ${PRICING_UI.headline} leading-tight`}>
-          Bucks Plus Edge — {PRICING_FROM_HEADLINE}
+          Bucks Plus Edge — <PricingLink preset="fromHeadline" className={PRICING_UI.headline} />
         </p>
         <p className={`mt-1 text-xs ${PRICING_UI.subline}`}>
-          {PRICING_ANNUAL_LABEL} billed annually · or {PRICING_MONTHLY_LABEL} monthly · {PRICING_ANNUAL_SAVINGS_NOTE}
+          <PricingLink preset="annual" className={PRICING_UI.subline} /> billed annually · or{" "}
+          <PricingLink preset="monthly" className={PRICING_UI.subline} /> monthly ·{" "}
+          <PricingLink preset="savings" className={PRICING_UI.subline} />
         </p>
       </div>
       <div className="flex flex-col sm:flex-row gap-2 shrink-0 w-full sm:w-auto">

@@ -10,10 +10,10 @@ import {
   FREE_PRACTICE_TEST_PATH,
   PLATFORM_LIBRARY_ACTION,
   PLATFORM_SUITE_PATH,
-  PRICING_ANCHOR_SUBLINE,
   PRICING_UI,
   SEE_PLANS_PRICING_CTA,
 } from "@/lib/marketing";
+import { PricingLink } from "./PricingLink";
 
 type ProductShowcaseBoxesProps = {
   className?: string;
@@ -194,7 +194,10 @@ export function ProductShowcaseBoxes({
                 {PLATFORM_LIBRARY_ACTION} <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
-            <p className={`text-center text-xs font-semibold ${PRICING_UI.subline}`}>{PRICING_ANCHOR_SUBLINE}</p>
+            <PricingLink
+              preset="anchor"
+              className={`block text-center text-xs font-semibold ${PRICING_UI.subline} hover:underline`}
+            />
             <p className="text-center">
               <Link href="/pricing" className="text-[11px] font-semibold text-slate-500 hover:text-emerald-700 transition-colors">
                 {SEE_PLANS_PRICING_CTA} →

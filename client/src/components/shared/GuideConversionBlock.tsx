@@ -9,11 +9,8 @@ import {
   FREE_PRACTICE_TEST_PATH,
   PLATFORM_PREVIEW_CTA,
   PLATFORM_SUITE_PATH,
-  PRICING_ANCHOR_SUBLINE,
-  PRICING_ANNUAL_LABEL,
-  PRICING_FROM_HEADLINE,
-  PRICING_MONTHLY_LABEL,
 } from "@/lib/marketing";
+import { PricingLink } from "./PricingLink";
 
 type GuideConversionBlockProps = {
   className?: string;
@@ -95,7 +92,9 @@ export function GuideConversionBlock({
           <p className="text-white/80 text-sm leading-relaxed mb-7 max-w-2xl">
             The children who qualify build <strong className="text-white">speed, accuracy, and stamina</strong> under timed GL-style conditions.
             Bucks Plus Edge includes 2,500+ questions, full mock exams, unlimited practice papers, targeted drills, and parent analytics —{" "}
-            <strong className="text-white">{PRICING_FROM_HEADLINE}</strong> ({PRICING_ANNUAL_LABEL}) or <strong className="text-white">{PRICING_MONTHLY_LABEL}</strong>.
+            <PricingLink preset="fromHeadline" className="text-white font-bold hover:underline" /> (
+            <PricingLink preset="annual" className="text-white font-bold hover:underline" />) or{" "}
+            <PricingLink preset="monthly" className="text-white font-bold hover:underline" />.
           </p>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 flex-wrap">
             <Button asChild variant="cta" data-testid="button-guide-conversion-platform">
