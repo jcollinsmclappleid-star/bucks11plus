@@ -1,11 +1,17 @@
-import { Link } from "wouter";
-import { ClipboardCheck, Layers, BarChart3, ArrowRight } from "lucide-react";
+import { Link, useLocation } from "wouter";
+import { ArrowRight, ClipboardCheck, Library } from "lucide-react";
 import {
+  FREE_PRACTICE_TEST_ACTION,
   FREE_PRACTICE_TEST_CTA,
+  FREE_PRACTICE_TEST_HERO_DESC,
   FREE_PRACTICE_TEST_PATH,
-  PRACTICE_PAPERS_NAV_LABEL,
-  platformPath,
+  HERO_QUICK_LINKS_HEADING,
+  PLATFORM_LIBRARY_ACTION,
+  PLATFORM_LIBRARY_DESC,
+  PLATFORM_LIBRARY_LABEL,
+  PLATFORM_SUITE_PATH,
 } from "@/lib/marketing";
+import { scrollToAnchor } from "@/lib/scrollToAnchor";
 
 type HeroQuickLinksProps = {
   variant?: "dark" | "light";
@@ -17,73 +23,107 @@ const links = [
     href: FREE_PRACTICE_TEST_PATH,
     icon: ClipboardCheck,
     title: FREE_PRACTICE_TEST_CTA,
-    desc: "12 questions · 8 minutes · no account",
-    accent: "text-emerald-400",
+    desc: FREE_PRACTICE_TEST_HERO_DESC,
+    action: FREE_PRACTICE_TEST_ACTION,
+    trust: "No card · No account · Takes 8 minutes",
+    primary: true,
     testId: "hero-quick-free-test",
   },
   {
-    href: platformPath("practicePapers"),
-    icon: Layers,
-    title: PRACTICE_PAPERS_NAV_LABEL,
-    desc: "Browse mocks, papers & 2,500+ drills",
-    accent: "text-amber-400",
-    testId: "hero-quick-practice-papers",
-  },
-  {
-    href: platformPath("parentDashboard"),
-    icon: BarChart3,
-    title: "Parent Dashboard",
-    desc: "See example 121-scale scores",
-    accent: "text-sky-400",
-    testId: "hero-quick-dashboard",
+    href: PLATFORM_SUITE_PATH,
+    icon: Library,
+    title: PLATFORM_LIBRARY_LABEL,
+    desc: PLATFORM_LIBRARY_DESC,
+    action: PLATFORM_LIBRARY_ACTION,
+    primary: false,
+    testId: "hero-quick-library",
   },
 ] as const;
 
 export function HeroQuickLinks({ variant = "dark", className = "" }: HeroQuickLinksProps) {
   const isDark = variant === "dark";
 
+  const panelClass = isDark
+    ? "border border-amber-400/35 bg-white/5 shadow-xl shadow-black/20"
+    : "border border-amber-200/80 bg-amber-50/50 shadow-lg";
+
+  const secondaryCardClass = isDark
+    ? "border border-amber-400/50 bg-amber-400/10 hover:border-amber-400/70 hover:bg-amber-400/18"
+    : "border border-amber-300/60 bg-white hover:border-amber-400 hover:bg-amber-50";
+
+  const primaryCardClass = isDark
+    ? "border-2 border-amber-300 bg-amber-400 hover:bg-amber-300 shadow-lg shadow-amber-900/30 ring-2 ring-amber-400/50"
+    : "border-2 border-amber-400 bg-amber-400 hover:bg-amber-300 shadow-lg ring-2 ring-amber-400/40";
+
   return (
-    <div className={className} data-testid="hero-quick-links">
-      <p
-        className={`text-center text-[10px] font-bold uppercase tracking-[0.2em] mb-3 ${
-          isDark ? "text-white/40" : "text-slate-400"
-        }`}
-      >
-        Start here
-      </p>
-      <div className="flex gap-3 overflow-x-auto pb-1 snap-x snap-mandatory overscroll-x-contain -mx-1 px-1 md:grid md:grid-cols-3 md:overflow-visible md:mx-0 md:px-0">
-        {links.map((item) => {
-          const Icon = item.icon;
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              data-testid={item.testId}
-              className={`group flex min-w-[200px] flex-1 snap-start flex-col rounded-2xl border p-4 transition-all md:min-w-0 ${
-                isDark
-                  ? "border-white/15 bg-white/10 hover:border-white/30 hover:bg-white/15"
-                  : "border-slate-200 bg-white shadow-sm hover:border-primary/30 hover:shadow-md"
-              }`}
-            >
-              <div className={`mb-3 flex h-10 w-10 items-center justify-center rounded-xl ${isDark ? "bg-white/10" : "bg-primary/10"}`}>
-                <Icon className={`h-5 w-5 ${isDark ? item.accent : "text-primary"}`} />
-              </div>
-              <p className={`text-sm font-bold leading-snug ${isDark ? "text-white" : "text-primary"}`}>
-                {item.title}
-              </p>
-              <p className={`mt-1 text-xs leading-relaxed flex-1 ${isDark ? "text-white/55" : "text-slate-500"}`}>
-                {item.desc}
-              </p>
-              <span
-                className={`mt-3 inline-flex items-center text-xs font-semibold ${
-                  isDark ? "text-amber-300/90 group-hover:text-amber-200" : "text-primary group-hover:underline"
-                }`}
+    <div className={`relative z-10 ${className}`} data-testid="hero-quick-links">
+      <div className={`rounded-2xl p-4 md:p-6 ${panelClass}`}>
+        <p
+          className={`text-center text-sm font-semibold mb-4 md:mb-5 ${
+            isDark ? "text-white/80" : "text-slate-700"
+          }`}
+        >
+          {HERO_QUICK_LINKS_HEADING}
+        </p>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 sm:items-stretch max-w-3xl mx-auto">
+          {links.map((item) => {
+            const Icon = item.icon;
+            const isPrimary = item.primary;
+            const cardClass = isPrimary ? primaryCardClass : secondaryCardClass;
+
+            const titleClass = isPrimary
+              ? "text-amber-950"
+              : isDark
+                ? "text-amber-50"
+                : "text-amber-950";
+
+            const descClass = isPrimary
+              ? "text-amber-950/75"
+              : isDark
+                ? "text-amber-100/75"
+                : "text-amber-900/70";
+
+            const iconWrapClass = isPrimary
+              ? "bg-amber-950/15"
+              : isDark
+                ? "bg-amber-400/30"
+                : "bg-amber-400/25";
+
+            const iconClass = isPrimary
+              ? "text-amber-950"
+              : isDark
+                ? "text-amber-100"
+                : "text-amber-800";
+
+            const actionClass = isPrimary
+              ? "text-amber-950 group-hover:text-amber-900"
+              : isDark
+                ? "text-amber-200 group-hover:text-white"
+                : "text-amber-800 group-hover:text-amber-950";
+
+            return (
+              <Link
+                key={item.testId}
+                href={item.href}
+                data-testid={item.testId}
+                className={`group flex flex-col rounded-xl p-5 md:p-6 transition-all ${cardClass}`}
               >
-                Open <ArrowRight className="ml-1 h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-              </span>
-            </Link>
-          );
-        })}
+                <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-xl ${iconWrapClass}`}>
+                  <Icon className={`h-6 w-6 ${iconClass}`} />
+                </div>
+                <p className={`text-base font-bold leading-snug ${titleClass}`}>{item.title}</p>
+                <p className={`mt-1.5 text-sm leading-relaxed flex-1 ${descClass}`}>{item.desc}</p>
+                {"trust" in item && item.trust && (
+                  <p className="mt-2 text-[11px] font-medium text-amber-950/60">{item.trust}</p>
+                )}
+                <span className={`mt-4 inline-flex items-center text-sm font-bold ${actionClass}`}>
+                  {item.action}{" "}
+                  <ArrowRight className="ml-1.5 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </span>
+              </Link>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

@@ -38,6 +38,7 @@ const isVercel = process.env.VERCEL === "1";
     },
     () => {
       log(`serving on port ${port}`);
+      log(`open http://localhost:${port}`, "dev");
     },
   );
 })();

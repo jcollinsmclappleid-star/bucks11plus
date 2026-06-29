@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle2, XCircle, MinusCircle, Target, BarChart3, Brain, Clock, Shield, Zap, BookOpen, TrendingUp, Star } from "lucide-react";
 import { Seo } from "../components/shared/Seo";
+import { getPageMeta } from "@/lib/pageMeta";
 
 const whyChooseFaqSchema = {
   "@context": "https://schema.org",
@@ -141,12 +142,14 @@ function ForecastPanel() {
 }
 
 export default function WhyChoosePlatform() {
+  const pageMeta = getPageMeta("/why-choose-bucks-11-plus-tests")!;
+
   return (
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
       <Seo
-        title="Practice Papers vs Platform for Bucks 11+? Use Both. | Bucks 11 Plus Tests"
-        description="Practice papers build stamina. The platform shows you which sub-topics are costing marks, your readiness estimate versus 121, and exactly what to fix next. Built exclusively for the Buckinghamshire 11+."
-        canonicalPath="/why-choose-bucks-11-plus-tests"
+        title={pageMeta.title}
+        description={pageMeta.description}
+        canonicalPath={pageMeta.path}
         schema={whyChooseFaqSchema}
       />
 

@@ -173,7 +173,7 @@ export default function QualifyingScore() {
         Our free readiness check produces an <strong>Indicative Practice Score</strong> shown on the 121 scale using GL-style question types and difficulty weightings. It is <strong>not</strong> an official GL Assessment standardised score, and achieving 121 on our check does not indicate that a child will achieve the same result on the official Secondary Transfer Test. GL Assessment uses proprietary age-standardised scoring tables that are not available to independent providers.
       </p>
       <p>
-        We use the 121 scale because it is the number every Bucks parent is working towards — it is a familiar reference point, not a prediction of GL's official number. Read the full methodology on our <Link href="/scoring-methodology" className="text-primary hover:underline">scoring methodology page</Link>.
+        We use the 121 scale because it is the number every Bucks parent is working towards — it is a familiar reference point, not a prediction of GL's official number. Read the full methodology on our <Link href="/how-forecast-works" className="text-primary hover:underline">scoring methodology page</Link>.
       </p>
 
       <ChildExperienceCTA />

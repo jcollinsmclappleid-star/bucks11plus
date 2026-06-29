@@ -1,6 +1,7 @@
 import { Link } from "wouter";
-import { ArrowRight, BarChart3, CheckCircle2, Layers } from "lucide-react";
+import { ArrowRight, BarChart3, CheckCircle2, Layers, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ConversionCtaPair } from "@/components/shared/ConversionCtaPair";
 import { Seo } from "@/components/shared/Seo";
 import { Breadcrumbs, breadcrumbSchema } from "@/components/shared/Breadcrumbs";
 import { DashboardPreviewForecast } from "@/components/shared/DashboardPreview";
@@ -9,12 +10,14 @@ import { PlatformSuitePreview } from "@/components/shared/PlatformSuitePreview";
 import { TutorCostComparison } from "@/components/shared/SeoConversionPanel";
 
 import {
-  FREE_PRACTICE_TEST_CTA,
-  FREE_PRACTICE_TEST_PATH,
+  GET_FULL_ACCESS_CTA,
   PLATFORM_ANCHORS,
+  PLATFORM_LIBRARY_LABEL,
   PLATFORM_PRACTICE_PAPERS_PATH,
-  PLATFORM_PREVIEW_CTA,
+  PLATFORM_SUITE_PATH,
+  SEE_PLANS_PRICING_CTA,
 } from "@/lib/marketing";
+import { getPageMeta } from "@/lib/pageMeta";
 
 const breadcrumbItems = [{ label: "11 Plus Practice Papers" }];
 
@@ -27,12 +30,14 @@ const highlights = [
 ];
 
 export default function PlatformPreview() {
+  const pageMeta = getPageMeta(PLATFORM_PRACTICE_PAPERS_PATH)!;
+
   return (
     <div className="min-h-screen bg-slate-50">
       <Seo
-        title="11 Plus Practice Papers — Mocks, Drills & Parent Dashboards | Bucks 11 Plus Tests"
-        description="Browse everything inside Bucks Plus Edge: practice tests, mock exams, unlimited practice papers, 2,500+ GL-style questions, and parent dashboards built for the Buckinghamshire 11+."
-        canonicalPath={PLATFORM_PRACTICE_PAPERS_PATH}
+        title={pageMeta.title}
+        description={pageMeta.description}
+        canonicalPath={pageMeta.path}
         schema={breadcrumbSchema(breadcrumbItems)}
       />
 
@@ -63,22 +68,15 @@ export default function PlatformPreview() {
                   </li>
                 ))}
               </ul>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Button variant="cta" size="lg" asChild data-testid="button-platform-hero-pricing">
-                  <Link href="/pricing">
-                    See plans &amp; pricing <ArrowRight className="ml-2 h-5 w-5" />
-                  </Link>
-                </Button>
-                <Button
-                  asChild
-                  size="lg"
-                  variant="outline"
-                  className="h-12 border-white/25 bg-white/5 px-7 font-semibold text-white hover:bg-white/10 hover:text-white"
-                  data-testid="button-platform-hero-free"
-                >
-                  <Link href={FREE_PRACTICE_TEST_PATH}>{FREE_PRACTICE_TEST_CTA}</Link>
-                </Button>
-              </div>
+              <ConversionCtaPair
+                className="mt-8"
+                leadWithFree
+                size="lg"
+                variant="dark"
+                pricingLabel={SEE_PLANS_PRICING_CTA}
+                pricingTestId="button-platform-hero-pricing"
+                freeTestId="button-platform-hero-free"
+              />
             </div>
             <div id={PLATFORM_ANCHORS.parentDashboard} className="scroll-mt-24 rounded-3xl border border-white/10 bg-white/95 p-4 shadow-2xl shadow-black/20">
               <DashboardPreviewForecast />
@@ -114,24 +112,35 @@ export default function PlatformPreview() {
 
         <TutorCostComparison flush />
 
+        <section className="rounded-2xl border-2 border-dashed border-primary/25 bg-primary/[0.03] p-6 md:p-8 text-center">
+          <Target className="h-6 w-6 text-primary mx-auto mb-3" />
+          <h2 className="font-serif text-xl font-bold text-primary mb-2">
+            Want to understand how diagnostics, papers &amp; drills work together?
+          </h2>
+          <p className="text-slate-600 text-sm mb-4 max-w-lg mx-auto">
+            This page shows what subscribers get. For a parent-focused walkthrough of when to use each mode of practice, visit the practice suite guide.
+          </p>
+          <Button variant="outline" asChild className="font-semibold border-primary/30 text-primary">
+            <Link href={PLATFORM_SUITE_PATH}>
+              {PLATFORM_LIBRARY_LABEL} <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
+        </section>
+
         <section className="rounded-3xl border border-primary/15 bg-primary p-8 md:p-10 text-center text-white">
           <h2 className="font-serif text-2xl md:text-3xl font-bold mb-3">Ready to start preparing?</h2>
           <p className="text-white/75 max-w-xl mx-auto mb-6 text-sm leading-relaxed">
             Try the free 12-question practice test first, or subscribe for full access to everything shown above.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Button variant="cta" size="lg" asChild data-testid="button-platform-footer-pricing">
-              <Link href="/pricing">Get full access <ArrowRight className="ml-2 h-4 w-4" /></Link>
-            </Button>
-            <Button
-              asChild
-              variant="outline"
-              className="h-12 border-white/25 text-white bg-transparent hover:bg-white/10 hover:text-white"
-              data-testid="button-platform-footer-free"
-            >
-              <Link href={FREE_PRACTICE_TEST_PATH}>{FREE_PRACTICE_TEST_CTA}</Link>
-            </Button>
-          </div>
+          <ConversionCtaPair
+            leadWithFree
+            size="lg"
+            layout="center"
+            variant="onPrimary"
+            pricingLabel={GET_FULL_ACCESS_CTA}
+            pricingTestId="button-platform-footer-pricing"
+            freeTestId="button-platform-footer-free"
+          />
         </section>
       </main>
     </div>

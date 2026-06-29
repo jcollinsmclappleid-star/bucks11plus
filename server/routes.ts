@@ -32,6 +32,9 @@ import {
   getResultsGuideHtml, getSampleQuestionsHtml, getScoreGuideHtml,
   getTutorsGuideHtml, getAppealsGuideHtml, getRegistrationDetailedHtml,
 } from "./ssrHighVolume";
+import { registerSpaMetaRoutes, sendSpaPage } from "./spaHtml";
+import { getPageMeta } from "../client/src/lib/spaPageMeta";
+import { isSsrSitemapPath, SSR_CONTENT_LASTMOD } from "./seoConfig";
 
 const PROGRAMME_TIERS = new Set([
   "pack_plus",
@@ -2537,6 +2540,10 @@ Disallow: /sign-in
 Disallow: /sign-up
 Disallow: /forgot-password
 Disallow: /reset-password
+Disallow: /free-results/
+Disallow: /checkout-success
+Disallow: /guide-print
+Disallow: /practice-paper-print
 `);
   });
 
@@ -2613,13 +2620,21 @@ Disallow: /reset-password
   app.get("/bucks-11-plus-score-calculator", (_req, res) => {
     res.redirect(301, "/bucks-11-plus-qualifying-score");
   });
+  app.get("/platform", (_req, res) => {
+    res.redirect(301, "/11-plus-practice-papers");
+  });
+  app.get("/scoring-methodology", (_req, res) => {
+    res.redirect(301, "/how-forecast-works");
+  });
+  app.get("/bucks-11-plus-practice-papers", (_req, res) => {
+    res.redirect(301, "/bucks-11-plus-past-papers");
+  });
 
   // ─── SSR high-volume pages ────────────────────────────────────────────────
   const highVolumeRoutes: Array<[string, () => string]> = [
     ["/bucks-11-plus-test-date-2026", getTestDate2026Html],
     ["/bucks-11-plus-test-date-2025", getTestDate2025Html],
     ["/bucks-11-plus-past-papers", getPastPapersHtml],
-    ["/bucks-11-plus-practice-papers", getPastPapersHtml],
     ["/bucks-11-plus-free-sample-papers", getFreeSamplePapersHtml],
     ["/bucks-11-plus-results", getResultsGuideHtml],
     ["/when-do-bucks-11-plus-results-come-out", getResultsGuideHtml],
@@ -2657,6 +2672,35 @@ Disallow: /reset-password
     res.send(html);
   });
 
+  // ─── SPA marketing pages: inject per-route meta into index.html for crawlers ─
+  // Registered after SSR routes so full HTML guides take precedence over SPA shells.
+  registerSpaMetaRoutes(app);
+
+  app.get("/parent-hub/:slug", async (req, res, next) => {
+    try {
+      const article = await storage.getArticleBySlug(req.params.slug);
+      if (!article) {
+        next();
+        return;
+      }
+      const path = `/parent-hub/${article.slug}`;
+      const published = article.publishedAt instanceof Date
+        ? article.publishedAt
+        : new Date(article.publishedAt);
+      const lastmod = published.toISOString().split("T")[0];
+      sendSpaPage(res, {
+        path,
+        title: `${article.title} | Bucks 11 Plus Tests Hub`,
+        description: article.excerpt,
+        h1: article.title,
+        intro: article.excerpt,
+        lastmod,
+      });
+    } catch (err) {
+      next(err);
+    }
+  });
+
   app.get("/sitemap.xml", async (_req, res) => {
     const baseUrl = "https://bucks11plustest.co.uk";
     const today = new Date().toISOString().split("T")[0];
@@ -2684,19 +2728,37 @@ Disallow: /reset-password
       "the-royal-latin-school",
     ];
 
-    let parentHubSlugs: string[] = [];
+    let parentHubArticles: Awaited<ReturnType<typeof storage.getArticles>> = [];
     try {
-      const hubArticles = await storage.getArticles();
-      parentHubSlugs = hubArticles.map(a => a.slug);
+      parentHubArticles = await storage.getArticles();
     } catch {
       // silently skip if DB unavailable
     }
 
-    interface SitemapEntry { path: string; priority: string; changefreq: string; }
+    interface SitemapEntry {
+      path: string;
+      priority: string;
+      changefreq: string;
+      /** ISO date when this URL's content last changed. Omit to use dynamic or registry rules. */
+      lastmod?: string;
+    }
+
+    function resolveSitemapLastmod(entry: SitemapEntry): string | undefined {
+      if (entry.lastmod) return entry.lastmod;
+      const spaMeta = getPageMeta(entry.path);
+      if (spaMeta?.lastmod) return spaMeta.lastmod;
+      if (isSsrSitemapPath(entry.path)) return SSR_CONTENT_LASTMOD;
+      if (entry.changefreq === "weekly") return today;
+      return undefined;
+    }
 
     const entries: SitemapEntry[] = [
       { path: "/", priority: "1.0", changefreq: "weekly" },
       { path: "/free-diagnostic", priority: "0.9", changefreq: "monthly" },
+      { path: "/11-plus-practice-papers", priority: "0.9", changefreq: "monthly" },
+      { path: "/11-plus-practice-suite", priority: "0.9", changefreq: "monthly" },
+      { path: "/why-choose-bucks-11-plus-tests", priority: "0.8", changefreq: "monthly" },
+      { path: "/site-links", priority: "0.7", changefreq: "monthly" },
       { path: "/pricing", priority: "0.8", changefreq: "monthly" },
       { path: "/how-it-works", priority: "0.8", changefreq: "monthly" },
       { path: "/how-forecast-works", priority: "0.8", changefreq: "monthly" },
@@ -2715,7 +2777,12 @@ Disallow: /reset-password
       { path: "/parent-hub", priority: "0.8", changefreq: "monthly" },
       { path: "/learn", priority: "0.8", changefreq: "weekly" },
       ...learnArticles.map(a => ({ path: `/learn/${a.slug}`, priority: "0.8", changefreq: "monthly" as const })),
-      ...parentHubSlugs.map(s => ({ path: `/parent-hub/${s}`, priority: "0.7", changefreq: "monthly" as const })),
+      ...parentHubArticles.map(a => ({
+        path: `/parent-hub/${a.slug}`,
+        priority: "0.7",
+        changefreq: "monthly" as const,
+        lastmod: (a.publishedAt instanceof Date ? a.publishedAt : new Date(a.publishedAt)).toISOString().split("T")[0],
+      })),
       ...townSlugs.map(t => ({ path: `/bucks-11-plus-${t}`, priority: "0.8", changefreq: "monthly" as const })),
       ...grammarSchoolSlugs.map(s => ({ path: `/grammar-schools/${s}`, priority: "0.8", changefreq: "monthly" as const })),
       { path: "/preparing-for-11-plus-year-4", priority: "0.8", changefreq: "monthly" },
@@ -2769,16 +2836,17 @@ Disallow: /reset-password
       { path: "/chiltern-grammar-schools", priority: "0.8", changefreq: "monthly" },
     ];
 
-    const staticContentLastmod = "2025-09-01";
-
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${entries.map(({ path, priority, changefreq }) => `  <url>
-    <loc>${baseUrl}${path}</loc>
-    <lastmod>${changefreq === "weekly" ? today : staticContentLastmod}</lastmod>
+${entries.map((entry) => {
+      const { path, priority, changefreq } = entry;
+      const lastmod = resolveSitemapLastmod(entry);
+      return `  <url>
+    <loc>${baseUrl}${path}</loc>${lastmod ? `\n    <lastmod>${lastmod}</lastmod>` : ""}
     <changefreq>${changefreq}</changefreq>
     <priority>${priority}</priority>
-  </url>`).join("\n")}
+  </url>`;
+    }).join("\n")}
 </urlset>`;
     res.setHeader("Content-Type", "application/xml");
     res.send(xml);

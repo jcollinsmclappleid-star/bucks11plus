@@ -2,17 +2,16 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Menu, ChevronDown } from "lucide-react";
 import { useAuth } from "../../lib/auth";
 import { useDisplayName } from "../../lib/childNames";
 import ChildSwitcher from "./ChildSwitcher";
-import { Menu } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import {
@@ -20,6 +19,7 @@ import {
   FREE_PRACTICE_TEST_PATH,
   PLATFORM_PRACTICE_PAPERS_PATH,
   PLATFORM_PREVIEW_CTA,
+  PLATFORM_SUITE_PATH,
   PRACTICE_PAPERS_NAV_LABEL,
 } from "@/lib/marketing";
 
@@ -33,17 +33,17 @@ const resourceLinks = [
   { href: "/bucks-grammar-schools", label: "Grammar Schools", desc: "All 13 Buckinghamshire grammar schools" },
 ];
 
-function DropdownItem({ href, label, desc }: { href: string; label: string; desc: string }) {
+function ResourceMenuItem({ href, label, desc }: { href: string; label: string; desc: string }) {
   return (
-    <NavigationMenuLink asChild>
+    <DropdownMenuItem asChild className="cursor-pointer p-0 focus:bg-transparent">
       <Link
         href={href}
-        className="block select-none rounded-md px-3 py-2.5 hover:bg-slate-50 transition-colors group"
+        className="block w-full select-none rounded-md px-3 py-2.5 hover:bg-slate-50 transition-colors group"
       >
         <div className="text-sm font-medium text-slate-800 group-hover:text-primary leading-none mb-1">{label}</div>
         <div className="text-xs text-slate-500 leading-snug">{desc}</div>
       </Link>
-    </NavigationMenuLink>
+    </DropdownMenuItem>
   );
 }
 
@@ -97,12 +97,15 @@ export default function Navbar() {
     return location === href;
   };
 
+  const onBrowsePage =
+    location === PLATFORM_SUITE_PATH || location === PLATFORM_PRACTICE_PAPERS_PATH;
+
   const triggerClass = cn(
     "h-auto bg-transparent px-2 py-1 text-sm font-medium text-slate-600 hover:text-primary hover:bg-transparent focus:bg-transparent data-[state=open]:bg-transparent data-[state=open]:text-primary transition-colors",
   );
 
   return (
-    <header className="border-b border-border/40 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 sticky top-0 z-50 overflow-x-hidden w-full">
+    <header className="border-b border-border/40 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 sticky top-0 z-50 w-full">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between max-w-6xl gap-2">
 
         {/* Logo */}
@@ -152,23 +155,23 @@ export default function Navbar() {
             ))}
 
             {/* Resources dropdown — all visitors */}
-            <NavigationMenu>
-              <NavigationMenuList>
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className={triggerClass} data-testid="nav-trigger-resources">
-                    Resources
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <div className="p-3 w-[300px]">
-                      <p className="px-3 pb-2 text-[10px] font-semibold uppercase tracking-widest text-slate-400">For Parents</p>
-                      {resourceLinks.map(l => (
-                        <DropdownItem key={l.href} {...l} />
-                      ))}
-                    </div>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                className={cn(triggerClass, "inline-flex items-center gap-0.5")}
+                data-testid="nav-trigger-resources"
+              >
+                Resources
+                <ChevronDown className="h-3 w-3 opacity-70" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-[300px] p-2 z-[100]">
+                <DropdownMenuLabel className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+                  For Parents
+                </DropdownMenuLabel>
+                {resourceLinks.map((l) => (
+                  <ResourceMenuItem key={l.href} {...l} />
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </nav>
 
@@ -199,9 +202,9 @@ export default function Navbar() {
                 <Link href="/sign-in">Sign In</Link>
               </Button>
               <Button variant="cta" size="sm" asChild data-testid="link-get-started">
-                <Link href={PLATFORM_PRACTICE_PAPERS_PATH}>
-                  <span className="hidden lg:inline">{PLATFORM_PREVIEW_CTA}</span>
-                  <span className="lg:hidden">Platform</span>
+                <Link href={onBrowsePage ? "/pricing" : PLATFORM_PRACTICE_PAPERS_PATH}>
+                  <span className="hidden lg:inline">{onBrowsePage ? "See plans & pricing" : PLATFORM_PREVIEW_CTA}</span>
+                  <span className="lg:hidden">{onBrowsePage ? "Pricing" : "Platform"}</span>
                 </Link>
               </Button>
             </>
@@ -313,7 +316,9 @@ export default function Navbar() {
                         <Link href="/sign-in" onClick={() => setOpen(false)}>Sign In</Link>
                       </Button>
                       <Button variant="cta" className="w-full" asChild>
-                        <Link href={PLATFORM_PRACTICE_PAPERS_PATH} onClick={() => setOpen(false)}>{PLATFORM_PREVIEW_CTA}</Link>
+                        <Link href={onBrowsePage ? "/pricing" : PLATFORM_PRACTICE_PAPERS_PATH} onClick={() => setOpen(false)}>
+                          {onBrowsePage ? "See plans & pricing" : PLATFORM_PREVIEW_CTA}
+                        </Link>
                       </Button>
                     </>
                   )}

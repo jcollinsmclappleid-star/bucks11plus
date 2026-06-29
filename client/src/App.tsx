@@ -60,7 +60,8 @@ import QuestionEditor from "./pages/admin/QuestionEditor";
 import ParentGuide from "./pages/ParentGuide";
 import WhyChoosePlatform from "./pages/WhyChoosePlatform";
 import PlatformPreview from "./pages/PlatformPreview";
-import { PLATFORM_PRACTICE_PAPERS_PATH, PLATFORM_PREVIEW_CTA, PRACTICE_PAPERS_NAV_LABEL, FREE_PRACTICE_TEST_PATH, FREE_PRACTICE_TEST_CTA } from "./lib/marketing";
+import PracticeSuite from "./pages/PracticeSuite";
+import { PLATFORM_PRACTICE_PAPERS_PATH, PLATFORM_PREVIEW_CTA, PLATFORM_SUITE_PATH, PLATFORM_LIBRARY_LABEL, PRACTICE_PAPERS_NAV_LABEL, FREE_PRACTICE_TEST_PATH, FREE_PRACTICE_TEST_CTA } from "./lib/marketing";
 import GuidePrint from "./pages/GuidePrint";
 import PracticePaperPrint from "./pages/PracticePaperPrint";
 import PracticePaperPrint2 from "./pages/PracticePaperPrint2";
@@ -130,6 +131,10 @@ function ScrollToTop() {
 }
 
 function MainLayout({ children }: { children: React.ReactNode }) {
+  const [location] = useLocation();
+  const onBrowsePage =
+    location === PLATFORM_SUITE_PATH || location === PLATFORM_PRACTICE_PAPERS_PATH;
+
   return (
     <div className="min-h-screen bg-background font-sans flex flex-col overflow-x-hidden w-full min-w-0">
       <ScrollToTop />
@@ -160,7 +165,9 @@ function MainLayout({ children }: { children: React.ReactNode }) {
                 className="h-11 border-primary-foreground/25 text-primary-foreground bg-transparent hover:bg-primary-foreground/10 hover:text-primary-foreground"
                 data-testid="button-footer-pricing"
               >
-                <Link href={PLATFORM_PRACTICE_PAPERS_PATH}>{PLATFORM_PREVIEW_CTA}</Link>
+                <Link href={onBrowsePage ? "/pricing" : PLATFORM_PRACTICE_PAPERS_PATH}>
+                  {onBrowsePage ? "See plans & pricing" : PLATFORM_PREVIEW_CTA}
+                </Link>
               </Button>
             </div>
           </div>
@@ -176,6 +183,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
               <li><Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
               <li><Link href="/how-it-works" className="hover:text-white transition-colors">How It Works</Link></li>
               <li><Link href={PLATFORM_PRACTICE_PAPERS_PATH} className="hover:text-white transition-colors">{PRACTICE_PAPERS_NAV_LABEL}</Link></li>
+              <li><Link href={PLATFORM_SUITE_PATH} className="hover:text-white transition-colors">{PLATFORM_LIBRARY_LABEL}</Link></li>
               <li><Link href={FREE_PRACTICE_TEST_PATH} className="hover:text-white transition-colors">{FREE_PRACTICE_TEST_CTA}</Link></li>
               <li><Link href="/why-choose-bucks-11-plus-tests" className="hover:text-white transition-colors">Why Choose Us</Link></li>
               <li><Link href="/bucks-gl-alignment" className="hover:text-white transition-colors">GL Assessment Domains</Link></li>
@@ -337,6 +345,7 @@ function Router() {
             <Route path="/how-it-works" component={HowItWorks} />
             <Route path="/platform"><Redirect to={PLATFORM_PRACTICE_PAPERS_PATH} /></Route>
             <Route path={PLATFORM_PRACTICE_PAPERS_PATH} component={PlatformPreview} />
+            <Route path={PLATFORM_SUITE_PATH} component={PracticeSuite} />
             <Route path="/why-choose-bucks-11-plus-tests" component={WhyChoosePlatform} />
             <Route path="/how-forecast-works" component={ScoringMethodology} />
             <Route path="/bucks-gl-alignment" component={GLAlignment} />

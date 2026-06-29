@@ -45,7 +45,7 @@ export default function ScoringMethodology() {
       <Seo
         title="Bucks 11 Plus Scoring Explained – What the 121 Standardised Score Means | Bucks 11 Plus Tests"
         description="How the Bucks 11 Plus 121 standardised score works and what our readiness forecast means for your child's grammar school application."
-        canonicalPath="/scoring-methodology"
+        canonicalPath="/how-forecast-works"
       />
 
       <div className="border-b border-border/60 pb-8">

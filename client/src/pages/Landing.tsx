@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle2, Target, Clock, BarChart3, Zap, Shield, Award, Star, ChevronUp, ChevronRight, TrendingUp, Brain, Layers, Hash, BookOpen, Trophy, Flame, Calendar, Sparkles, PlayCircle, GraduationCap, X, RotateCcw } from "lucide-react";
@@ -12,11 +12,13 @@ import { HeroQuickLinks } from "../components/shared/HeroQuickLinks";
 import {
   FREE_PRACTICE_TEST_CTA,
   FREE_PRACTICE_TEST_PATH,
+  PARENT_DASHBOARD_PREVIEW_ANCHOR,
   PLATFORM_PRACTICE_PAPERS_PATH,
   PLATFORM_PREVIEW_CTA,
   PRACTICE_PAPERS_NAV_LABEL,
   platformPath,
 } from "../lib/marketing";
+import { scrollToAnchor } from "../lib/scrollToAnchor";
 
 /* ─── PANEL COMPONENTS (used as platform visual mockups) ─── */
 
@@ -1098,6 +1100,13 @@ export default function Landing() {
   const { user } = useAuth();
   const [activeFeature, setActiveFeature] = useState(6);
 
+  useEffect(() => {
+    const hash = window.location.hash.replace(/^#/, "");
+    if (hash) {
+      requestAnimationFrame(() => scrollToAnchor(hash));
+    }
+  }, []);
+
   // Countdown / prep cycle messaging — shared via testDate.ts (see PrepUrgencyBanner)
 
   return (
@@ -1150,10 +1159,9 @@ export default function Landing() {
             </div>
           </div>
 
-          {/* Hero two-column layout */}
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          {/* Hero: headline + forecast side-by-side, then disclaimer, then quick links */}
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-x-16 lg:gap-y-10 items-start">
 
-            {/* Left: Headline + CTAs */}
             <div className="flex flex-col gap-6">
               <div>
                 <span className="inline-block text-xs font-semibold uppercase tracking-[0.2em] text-amber-400/80 mb-4">Built for the Buckinghamshire 11+</span>
@@ -1169,39 +1177,29 @@ export default function Landing() {
                 Bucks 11+ diagnostics, practice tests and mock exams that show exactly where marks are being lost. Pinpoint weak areas, prioritise what matters, and see clear parent dashboards — with 2,500+ GL-style questions for targeted practice.
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
-                <Button variant="cta" size="lg"  asChild data-testid="button-hero-primary">
+                <Button variant="cta" size="lg" asChild data-testid="button-hero-primary">
                   <Link href={FREE_PRACTICE_TEST_PATH}>
                     {FREE_PRACTICE_TEST_CTA} <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="h-12 px-6 text-base border-white/20 text-white hover:bg-white/10 font-semibold" asChild data-testid="button-hero-secondary">
-                  <Link href={PLATFORM_PRACTICE_PAPERS_PATH}>{PLATFORM_PREVIEW_CTA} <ArrowRight className="ml-2 h-5 w-5" /></Link>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="h-12 px-6 text-base border-white/20 text-white hover:bg-white/10 font-semibold"
+                  asChild
+                  data-testid="button-hero-secondary"
+                >
+                  <Link href={PLATFORM_PRACTICE_PAPERS_PATH}>
+                    {PLATFORM_PREVIEW_CTA} <ArrowRight className="ml-2 h-5 w-5" />
+                  </Link>
                 </Button>
               </div>
               <p className="text-xs text-white/50 -mt-2" data-testid="text-hero-cta-subtext">
-                No account needed · Browse practice papers, mocks &amp; drills before you subscribe
-              </p>
-              <p className="text-[11px] text-white/35 leading-snug -mt-1" data-testid="text-hero-disclaimer">
-                The practice score on the 121 scale is an independent practice indicator. It is not an official Buckinghamshire Secondary Transfer Test score or a guarantee of performance.
-              </p>
-              <div className="flex flex-wrap items-center gap-x-5 gap-y-2" data-testid="trust-signal-hero">
-                <div className="flex items-center gap-1.5 text-white/55 text-xs font-medium">
-                  <Shield className="h-3.5 w-3.5 text-emerald-400" />
-                  <span>3-day money-back guarantee</span>
-                </div>
-                <div className="flex items-center gap-1.5 text-white/55 text-xs font-medium">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
-                  <span>Cancel anytime</span>
-                </div>
-                <div className="text-white/40 text-xs">No account needed for the free check</div>
-              </div>
-              <p className="text-xs text-emerald-300/80 font-medium pt-1" data-testid="text-no-child-advertising">
-                We never use your child's data for advertising or behavioural profiling.
+                No account needed for the free test · Browse mocks &amp; 2,500+ questions below
               </p>
             </div>
 
-            {/* Right: Forecast mockup — visible on all sizes */}
-            <div className="block">
+            <div>
               <div className="relative max-w-md mx-auto lg:max-w-none overflow-hidden">
                 <div className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-amber-400/10 to-transparent blur-2xl" />
                 <div className="relative">
@@ -1212,7 +1210,27 @@ export default function Landing() {
             </div>
           </div>
 
-          <HeroQuickLinks variant="dark" className="mt-12 md:mt-14" />
+          <HeroQuickLinks variant="dark" className="mt-8 lg:mt-10" />
+
+          <div className="mt-8 flex flex-col gap-4 border-t border-white/10 pt-6">
+            <p className="text-[11px] text-white/50 leading-relaxed" data-testid="text-hero-disclaimer">
+              The practice score on the 121 scale is an independent practice indicator. It is not an official Buckinghamshire Secondary Transfer Test score or a guarantee of performance.
+            </p>
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2" data-testid="trust-signal-hero">
+              <div className="flex items-center gap-1.5 text-white/55 text-xs font-medium">
+                <Shield className="h-3.5 w-3.5 text-emerald-400" />
+                <span>3-day money-back guarantee</span>
+              </div>
+              <div className="flex items-center gap-1.5 text-white/55 text-xs font-medium">
+                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
+                <span>Cancel anytime</span>
+              </div>
+              <div className="text-white/40 text-xs">No account needed for the free check</div>
+            </div>
+            <p className="text-xs text-emerald-300/80 font-medium" data-testid="text-no-child-advertising">
+              We never use your child's data for advertising or behavioural profiling.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -1422,7 +1440,11 @@ export default function Landing() {
       </section>
 
       {/* ── SECTION 2A: INSIDE THE PLATFORM (DASHBOARD SHOWCASE) ── */}
-      <section className="relative py-16 md:py-24 overflow-hidden border-b border-border/30 bg-gradient-to-br from-primary to-[#1a3550]" data-testid="section-dashboard-showcase">
+      <section
+        id={PARENT_DASHBOARD_PREVIEW_ANCHOR}
+        className="relative py-16 md:py-24 overflow-hidden border-b border-border/30 bg-gradient-to-br from-primary to-[#1a3550] scroll-mt-24"
+        data-testid="section-dashboard-showcase"
+      >
         <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)", backgroundSize: "24px 24px" }} />
         <div className="container mx-auto max-w-6xl px-4 relative">
           <div className="text-center mb-12 md:mb-14">

@@ -2,7 +2,8 @@ import { Link } from "wouter";
 import { Seo } from "../components/shared/Seo";
 import { ArrowRight } from "lucide-react";
 import { learnArticles, LEARN_CATEGORIES, getArticlesByCategory } from "@/data/learn-articles";
-import { PLATFORM_PRACTICE_PAPERS_PATH } from "@/lib/marketing";
+import { PLATFORM_PRACTICE_PAPERS_PATH, PLATFORM_SUITE_PATH, PLATFORM_LIBRARY_LABEL } from "@/lib/marketing";
+import { getPageMeta } from "@/lib/pageMeta";
 
 interface SiteLink {
   title: string;
@@ -23,7 +24,8 @@ const sections: LinkSection[] = [
       { title: "Why Choose Us Over Practice Papers", description: "Platform vs practice papers — a direct comparison showing how intelligent diagnostics, parent analytics and a guided programme go beyond generic prep.", href: "/why-choose-bucks-11-plus-tests" },
       { title: "Pricing & Plans", description: "Compare all subscription tiers from the free readiness check through to the full Bucks Plus Edge annual plan.", href: "/pricing" },
       { title: "How It Works", description: "Understand how the platform forecasts your child's readiness using readiness checks across all four GL Assessment domains.", href: "/how-it-works" },
-      { title: "11 Plus Practice Papers", description: "Browse practice tests, mock exams, unlimited practice papers, and 2,500+ GL-style drills — the full subscriber library.", href: PLATFORM_PRACTICE_PAPERS_PATH },
+      { title: "11 Plus Practice Papers", description: "Dashboard preview, sample questions, and the full subscriber library — browse before you buy.", href: PLATFORM_PRACTICE_PAPERS_PATH },
+      { title: PLATFORM_LIBRARY_LABEL, description: "How diagnostics, practice papers, and drills work together as one preparation system.", href: PLATFORM_SUITE_PATH },
       { title: "Free Baseline Readiness Check", description: "Take a free 8-minute assessment to see where your child stands — no account needed.", href: "/free-diagnostic" },
       { title: "GL Assessment Domains", description: "Learn how our independently developed questions cover the four GL Assessment domains of the Buckinghamshire Secondary Transfer Test.", href: "/bucks-gl-alignment" },
     ],
@@ -132,12 +134,14 @@ const sections: LinkSection[] = [
 ];
 
 export default function SiteLinks() {
+  const pageMeta = getPageMeta("/site-links")!;
+
   return (
     <div className="container mx-auto max-w-4xl px-4 py-16">
       <Seo
-        title="All Pages & Resources | Bucks 11 Plus Preparation | Bucks 11 Plus Tests"
-        description="Browse all pages, tools, guides and resources on Bucks 11 Plus Tests — Bucks 11 Plus preparation platform for the Secondary Transfer Test."
-        canonicalPath="/site-links"
+        title={pageMeta.title}
+        description={pageMeta.description}
+        canonicalPath={pageMeta.path}
       />
 
       <h1 className="text-3xl md:text-4xl font-bold text-primary font-serif mb-4" data-testid="text-site-links-title">
