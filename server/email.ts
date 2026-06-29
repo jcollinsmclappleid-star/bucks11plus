@@ -305,6 +305,76 @@ export async function sendPurchaseNotificationEmail(
   }
 }
 
+const PURCHASE_PLAN_LABEL: Record<string, string> = {
+  pack_plus: "Bucks Plus Edge — Monthly (£35/month)",
+  pack_annual: "Bucks Plus Edge — Annual (£279/year)",
+  pack_monthly: "Bucks Plus Edge — Monthly",
+};
+
+async function purchaseConfirmationAlreadySent(checkoutSessionId: string): Promise<boolean> {
+  const [row] = await db
+    .select({ id: emailEvents.id })
+    .from(emailEvents)
+    .where(
+      and(
+        eq(emailEvents.emailType, "purchase_confirmation"),
+        sql`${emailEvents.metadata}->>'checkoutSessionId' = ${checkoutSessionId}`,
+      ),
+    )
+    .limit(1);
+  return Boolean(row);
+}
+
+/** Customer-facing payment confirmation (distinct from admin-only purchase notification). */
+export async function sendPurchaseConfirmationEmail(
+  email: string,
+  tier: string,
+  options: { amountPence?: number; checkoutSessionId?: string; userId?: string } = {},
+): Promise<boolean> {
+  const { amountPence, checkoutSessionId, userId } = options;
+  if (checkoutSessionId && (await purchaseConfirmationAlreadySent(checkoutSessionId))) {
+    console.log(`[PurchaseConfirm] Already sent for session ${checkoutSessionId}`);
+    return false;
+  }
+
+  const planName = PURCHASE_PLAN_LABEL[tier] || tier;
+  const amountStr = amountPence != null ? `£${(amountPence / 100).toFixed(2)}` : null;
+  const signInUrl = `${getBaseUrl()}/sign-in`;
+  const accountUrl = `${getBaseUrl()}/app`;
+
+  const html = `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.6;color:#1a1a2e;max-width:600px;margin:0 auto;padding:20px;">
+  <div style="text-align:center;margin-bottom:24px;">
+    <strong style="font-size:18px;color:#0d1f30;">Bucks 11 Plus Tests</strong>
+  </div>
+  <h2 style="color:#0d1f30;margin-bottom:8px;">Payment confirmed — thank you</h2>
+  <p>Your subscription to <strong>${planName}</strong> is active.</p>
+  ${amountStr ? `<p><strong>Amount paid:</strong> ${amountStr}</p>` : ""}
+  <p>You now have full access to Bucks Plus Edge — practice tests, parent insights, and targeted drills.</p>
+  <div style="text-align:center;margin:24px 0;">
+    <a href="${accountUrl}" style="display:inline-block;background:#0d1f30;color:white;padding:14px 28px;border-radius:6px;text-decoration:none;font-weight:bold;">Go to your dashboard</a>
+  </div>
+  <p style="font-size:13px;color:#64748b;">Sign in any time at <a href="${signInUrl}" style="color:#0d1f30;">${signInUrl}</a>. Manage billing from Account → Subscription.</p>
+  <p style="font-size:13px;color:#64748b;">3-day money-back guarantee · Cancel anytime from your account.</p>
+  <hr style="border:none;border-top:1px solid #e5e7eb;margin:32px 0 16px;">
+  <p style="font-size:11px;color:#9ca3af;text-align:center;">Bucks 11 Plus Tests · Operated by Ianson Systems Limited</p>
+</body>
+</html>`;
+
+  const sent = await sendEmail(email, `Payment confirmed — ${planName}`, html);
+  if (sent) {
+    await logEmailEvent(userId || `checkout:${checkoutSessionId || email}`, "purchase_confirmation", "sent", {
+      checkoutSessionId,
+      tier,
+      amountPence,
+    });
+    console.log(`[PurchaseConfirm] Sent to ${maskEmail(email)}`);
+  }
+  return sent;
+}
+
 export async function sendSubscriptionCancelledAdminEmail(
   email: string,
   tier: string,

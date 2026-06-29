@@ -1,44 +1,36 @@
-import fs from "fs";
-import path from "path";
 import type Stripe from "stripe";
 import { getUncachableStripeClient } from "./stripeClient";
-import { getBaseUrl, SUPPORT_EMAIL } from "./contactConfig";
+import { getBaseUrl } from "./contactConfig";
 
 export const STRIPE_DISPLAY_NAME = "Bucks 11 Plus Tests";
 const STRIPE_PRIMARY_COLOR = "#1e3a6e";
-const STRIPE_SECONDARY_COLOR = "#f59e0b";
 const STATEMENT_DESCRIPTOR = "BUCKS 11PLUS TESTS";
 
 let brandingPromise: Promise<void> | null = null;
 
-function resolveLogoPath(): string | null {
-  const candidates = [
-    path.join(process.cwd(), "client/public/logo-shield-sm.png"),
-    path.join(process.cwd(), "dist/public/logo-shield-sm.png"),
-  ];
-  for (const candidate of candidates) {
-    if (fs.existsSync(candidate)) return candidate;
-  }
-  return null;
+function checkoutLogoUrl(): string {
+  return `${getBaseUrl()}/logo-shield-sm.png`;
 }
 
-async function uploadBrandingFile(stripe: Stripe, logoPath: string, purpose: "business_logo" | "business_icon") {
-  const data = fs.readFileSync(logoPath);
-  return stripe.files.create({
-    purpose,
-    file: {
-      data,
-      name: path.basename(logoPath),
-      type: "image/png",
-    },
-  });
-}
-
-export function checkoutBrandingExtras(): Pick<Stripe.Checkout.SessionCreateParams, "custom_text"> {
+/** Per-session Checkout branding (works on standard Stripe accounts). */
+export function checkoutBrandingExtras(): Pick<
+  Stripe.Checkout.SessionCreateParams,
+  "custom_text" | "branding_settings"
+> {
+  const logoUrl = checkoutLogoUrl();
   return {
+    branding_settings: {
+      display_name: STRIPE_DISPLAY_NAME,
+      button_color: STRIPE_PRIMARY_COLOR,
+      logo: { type: "url", url: logoUrl },
+      icon: { type: "url", url: logoUrl },
+    },
     custom_text: {
       submit: {
         message: `Secure subscription to ${STRIPE_DISPLAY_NAME}`,
+      },
+      after_submit: {
+        message: `${STRIPE_DISPLAY_NAME} is operated by Ianson Systems Limited. Manage your subscription anytime from your account.`,
       },
     },
   };
@@ -51,66 +43,44 @@ export function scheduleStripeBranding(): void {
   });
 }
 
-export async function ensureStripeBranding(force = false): Promise<void> {
-  if (!force && brandingPromise) return brandingPromise;
+/**
+ * Standard Stripe accounts cannot update branding via accounts.update (Connect-only).
+ * Checkout uses per-session branding_settings; this logs dashboard gaps for receipts/invoices.
+ */
+export async function ensureStripeBranding(_force = false): Promise<void> {
+  if (brandingPromise) return brandingPromise;
 
   brandingPromise = (async () => {
-    console.log("[Stripe Branding] Starting…");
     const stripe = await getUncachableStripeClient();
-    console.log("[Stripe Branding] Fetching account…");
     const account = await stripe.accounts.retrieve();
-    const logoPath = resolveLogoPath();
-
     const businessProfile = account.business_profile;
     const branding = account.settings?.branding;
     const descriptor = account.settings?.payments?.statement_descriptor;
 
     const nameOk = businessProfile?.name === STRIPE_DISPLAY_NAME;
-    const urlOk = businessProfile?.url === getBaseUrl();
     const logoOk = Boolean(branding?.logo);
-    const iconOk = Boolean(branding?.icon);
-    const colorOk = branding?.primary_color?.toLowerCase() === STRIPE_PRIMARY_COLOR;
     const descriptorOk = descriptor === STATEMENT_DESCRIPTOR;
 
-    if (!force && nameOk && urlOk && logoOk && iconOk && colorOk && descriptorOk) {
-      console.log("[Stripe Branding] Already configured");
+    if (nameOk && logoOk && descriptorOk) {
+      console.log("[Stripe Branding] Dashboard branding looks good");
       return;
     }
 
-    const updates: Stripe.AccountUpdateParams = {
-      business_profile: {
-        name: STRIPE_DISPLAY_NAME,
-        url: getBaseUrl(),
-        support_email: SUPPORT_EMAIL,
-      },
-      settings: {
-        branding: {
-          primary_color: STRIPE_PRIMARY_COLOR,
-          secondary_color: STRIPE_SECONDARY_COLOR,
-        },
-        payments: {
-          statement_descriptor: STATEMENT_DESCRIPTOR,
-        },
-      },
-    };
-
-    if (logoPath) {
-      if (!logoOk || force) {
-        const logoFile = await uploadBrandingFile(stripe, logoPath, "business_logo");
-        updates.settings!.branding!.logo = logoFile.id;
-        console.log("[Stripe Branding] Uploaded logo");
-      }
-      if (!iconOk || force) {
-        const iconFile = await uploadBrandingFile(stripe, logoPath, "business_icon");
-        updates.settings!.branding!.icon = iconFile.id;
-        console.log("[Stripe Branding] Uploaded icon");
-      }
-    } else {
-      console.warn("[Stripe Branding] Logo file not found — skipping image upload");
+    const gaps: string[] = [];
+    if (!nameOk) {
+      gaps.push(`Public business name → "${STRIPE_DISPLAY_NAME}" (currently "${businessProfile?.name ?? "unset"}")`);
+    }
+    if (!logoOk) {
+      gaps.push(`Branding logo → upload ${checkoutLogoUrl()}`);
+    }
+    if (!descriptorOk) {
+      gaps.push(`Statement descriptor → "${STATEMENT_DESCRIPTOR}"`);
     }
 
-    await stripe.accounts.update(account.id, updates);
-    console.log(`[Stripe Branding] Account updated: ${STRIPE_DISPLAY_NAME} · ${getBaseUrl()}`);
+    console.log(
+      `[Stripe Branding] Checkout sessions use "${STRIPE_DISPLAY_NAME}" + shield logo. ` +
+        `Optional Stripe Dashboard updates: ${gaps.join("; ")}`,
+    );
   })().catch((err) => {
     brandingPromise = null;
     throw err;

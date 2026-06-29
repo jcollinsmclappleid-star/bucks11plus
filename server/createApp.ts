@@ -4,12 +4,9 @@ import { createServer, type Server } from "http";
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { seedDatabase, ensureNvrGeneratorReseeds } from "./seed";
-import { runMigrations } from "stripe-replit-sync";
 import { getStripeSync } from "./stripeClient";
 import { WebhookHandlers } from "./webhookHandlers";
-import { getBaseUrl } from "./contactConfig";
-import { seedStripeProducts } from "./stripeProducts";
-import { scheduleStripeBranding } from "./stripeBranding";
+import { initStripeCore } from "./stripeInit";
 import { processNurtureQueue } from "./leadMagnet";
 import { runEmailTriggers } from "./email";
 import { runRetentionSweep } from "./retention";
@@ -73,49 +70,18 @@ function redactForLog(value: unknown, depth = 0): unknown {
 }
 
 async function initStripe() {
-  if (isVercel) {
-    return;
-  }
-
-  const databaseUrl = process.env.DATABASE_URL;
-  if (!databaseUrl) {
-    console.warn("DATABASE_URL not set, skipping Stripe init");
-    return;
-  }
-
   try {
-    console.log("Initializing Stripe schema...");
-    await runMigrations({ databaseUrl, schema: "stripe" });
-    console.log("Stripe schema ready");
+    await initStripeCore();
 
-    const stripeSync = await getStripeSync();
-    const webhookUrl = `${getBaseUrl()}/api/stripe/webhook`;
-
-    try {
-      const { Pool } = await import("pg");
-      const pool = new Pool({ connectionString: databaseUrl });
-      await pool.query(`DELETE FROM stripe._managed_webhooks WHERE url != $1`, [webhookUrl]);
-      await pool.end();
-      const result = await stripeSync.findOrCreateManagedWebhook(webhookUrl);
-      console.log(`Webhook configured: ${result?.webhook?.url || webhookUrl}`);
-    } catch (webhookErr: any) {
-      console.warn("Webhook registration skipped:", webhookErr.message);
-      console.warn(`Register manually in Stripe Dashboard: ${webhookUrl}`);
-    }
-
-    try {
-      await seedStripeProducts();
-    } catch (productErr: any) {
-      console.warn("Stripe product seed skipped:", productErr.message);
-    }
-
-    scheduleStripeBranding();
-
-    try {
-      await stripeSync.syncBackfill();
-      console.log("Stripe data synced");
-    } catch (syncErr: any) {
-      console.error("Error syncing Stripe data:", syncErr.message);
+    if (!isVercel) {
+      const stripeSync = await getStripeSync();
+      try {
+        await stripeSync.syncBackfill();
+        console.log("Stripe data synced");
+      } catch (syncErr: unknown) {
+        const message = syncErr instanceof Error ? syncErr.message : String(syncErr);
+        console.error("Error syncing Stripe data:", message);
+      }
     }
   } catch (error) {
     console.error("Failed to initialize Stripe:", error);
@@ -141,10 +107,9 @@ let bootPromise: Promise<void> | null = null;
 function bootOnce(): Promise<void> {
   if (!bootPromise) {
     bootPromise = (async () => {
-      const tasks: Promise<unknown>[] = [seedDatabase()];
+      const tasks: Promise<unknown>[] = [seedDatabase(), initStripe()];
 
       if (!isVercel) {
-        tasks.unshift(initStripe());
         tasks.push(ensureNvrGeneratorReseeds());
         tasks.push(
           ensureChromium().then(() => {

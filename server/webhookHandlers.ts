@@ -5,7 +5,7 @@ import { users } from '@shared/schema';
 import { eq } from 'drizzle-orm';
 import { scrypt, randomBytes } from 'crypto';
 import { promisify } from 'util';
-import { sendAccountSetupEmail, sendPurchaseNotificationEmail, maskEmail } from './email';
+import { sendAccountSetupEmail, sendPurchaseNotificationEmail, sendPurchaseConfirmationEmail, maskEmail } from './email';
 
 const scryptAsync = promisify(scrypt);
 
@@ -123,6 +123,12 @@ export class WebhookHandlers {
 
     // Look up existing user
     const amountPence: number | undefined = typeof session.amount_total === 'number' ? session.amount_total : undefined;
+    const sessionId: string | undefined = typeof session.id === 'string' ? session.id : undefined;
+
+    sendPurchaseConfirmationEmail(customerEmail, tier, {
+      amountPence,
+      checkoutSessionId: sessionId,
+    }).catch(() => {});
 
     const existing = await storage.getUserByUsername(customerEmail);
     if (existing) {

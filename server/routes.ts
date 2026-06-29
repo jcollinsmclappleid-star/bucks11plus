@@ -8,7 +8,7 @@ import { scheduleStripeBranding, checkoutBrandingExtras } from "./stripeBranding
 import { sql, eq, and, desc, inArray } from "drizzle-orm";
 import { db } from "./db";
 import { computeAttemptMetrics, computeFullAnalytics, type AnswerRecord, type DrillAnswerRecord, type HistoricalMetrics } from "./metrics";
-import { sendDiagnosticCompleteEmail, sendAdminNotificationEmail, sendGuideDownloadAdminEmail, sendGuideDownloadUserEmail, sendSubscriptionCancelledAdminEmail, sendEmailVerificationEmail, generateEmailVerifyToken } from "./email";
+import { sendDiagnosticCompleteEmail, sendAdminNotificationEmail, sendGuideDownloadAdminEmail, sendGuideDownloadUserEmail, sendSubscriptionCancelledAdminEmail, sendEmailVerificationEmail, sendPurchaseConfirmationEmail, generateEmailVerifyToken } from "./email";
 import { timingSafeEqual } from "crypto";
 import { ensureChromium, getPdfRenderBaseUrl, launchBrowser, pdfCookieDomain } from "./chromium";
 import { learnArticles } from "../client/src/data/learn-articles";
@@ -640,6 +640,15 @@ export async function registerRoutes(
         amount: paidStr,
         timestamp: new Date(),
       }).catch(err => console.error('[AdminEmail] payment error:', err));
+
+      const customerEmail = (currentUser.email || currentUser.username || "").toLowerCase().trim();
+      if (customerEmail.includes("@")) {
+        sendPurchaseConfirmationEmail(customerEmail, tier, {
+          amountPence: paidPence,
+          checkoutSessionId: session_id,
+          userId: req.user!.id,
+        }).catch((err) => console.error("[PurchaseConfirm] error:", err));
+      }
 
       const programmeTiers = new Set(["programme8", "programme12", "programme16", "programme16_family", "programme24_plus"]);
       if (programmeTiers.has(tier)) {
